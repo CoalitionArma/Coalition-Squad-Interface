@@ -1,0 +1,17 @@
+ImageSetClass {
+ RefSize 272 272
+ Textures {
+  ImageSetTextureClass {
+   mpix 1
+   path "UI/Layouts/Modded/Textures/Compass_atlas.edds"
+  }
+ }
+ Images {
+  ImageSetDefClass compass_shadow264 {
+   Name "compass_shadow264"
+   Pos 3 4
+   Size 264 264
+   Flags 0
+  }
+ }
+}
