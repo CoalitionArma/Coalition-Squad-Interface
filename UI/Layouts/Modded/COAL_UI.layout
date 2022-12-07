@@ -21,23 +21,6 @@ FrameWidgetClass {
    Maximum 1
    Current 0
   }
-  ImageWidgetClass "{5B0D215E829C6D6C}" {
-   Name "Compass"
-   Slot FrameWidgetSlot "{5B0D215E829C6D4E}" {
-    Anchor 0.5 1 0.5 1
-    PositionX -90.38
-    OffsetLeft -90.38
-    PositionY -114.885
-    OffsetTop -114.885
-    SizeX 178.711
-    OffsetRight -88.331
-    SizeY 179.999
-    OffsetBottom -65.114
-   }
-   Texture "{9529B2DE8CDF47DC}UI/Layouts/Modded/Textures/Compass_atlas.edds"
-   Size 272 272
-   Mask "{26ECD3BDE41F8430}UI/Layouts/Modded/Textures/Compass_Alpha_atlas.edds"
-  }
   TextWidgetClass "{5B0B5E43BF732895}" {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
@@ -65,6 +48,23 @@ FrameWidgetClass {
     ShadowSize 32
     ShadowOffset 0 0
    }
+  }
+  ImageWidgetClass "{5B0E2819540F15FC}" {
+   Name "Compass"
+   Slot FrameWidgetSlot "{5B0D5D8ACA21795D}" {
+    Anchor 0.5 1 0.5 1
+    PositionX -117.119
+    OffsetLeft -117.119
+    PositionY -136.998
+    OffsetTop -136.998
+    SizeX 235
+    OffsetRight -117.881
+    SizeY 235
+    OffsetBottom -98.002
+   }
+   IsPixelPerfect 0
+   Texture "{C23DFB53C7CEC869}UI/layouts/Modded/Textures/Compass350_atlas.edds"
+   Size 356 356
   }
  }
 }
