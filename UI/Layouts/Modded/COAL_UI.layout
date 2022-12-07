@@ -1,55 +1,38 @@
 FrameWidgetClass {
  Name "rootFrame"
+ IsPixelPerfect 0
  Tooltip TextWidgetTooltip "{5B0A0BA709A901A7}" {
  }
  {
-  ProgressBarWidgetClass "{5B0D54DD8880DB5F}" {
-   Name "StamBar"
-   Slot FrameWidgetSlot "{5B0D54DD8880C4BA}" {
-    Anchor 0 1 0 1
-    PositionX 31.34
-    OffsetLeft 31.34
-    PositionY -22.89
-    OffsetTop -22.89
-    SizeX 214.911
-    OffsetRight -246.251
-    SizeY 5.91
-    OffsetBottom 16.98
-   }
-   Opacity 0
-   Color 0.045 0.045 0.045 1
-   Maximum 1
-   Current 0
-  }
-  ImageWidgetClass "{5B0D215E829C6D6C}" {
+  ImageWidgetClass "{5B0D5D8ACA217967}" {
    Name "Compass"
-   Slot FrameWidgetSlot "{5B0D215E829C6D4E}" {
+   Slot FrameWidgetSlot "{5B0D5D8ACA21795D}" {
     Anchor 0.5 1 0.5 1
-    PositionX -90.38
-    OffsetLeft -90.38
-    PositionY -114.885
-    OffsetTop -114.885
-    SizeX 178.711
-    OffsetRight -88.331
-    SizeY 179.999
-    OffsetBottom -65.114
+    PositionX -117.119
+    OffsetLeft -117.119
+    PositionY -136.998
+    OffsetTop -136.998
+    SizeX 235
+    OffsetRight -117.881
+    SizeY 235
+    OffsetBottom -98.002
    }
-   Texture "{9529B2DE8CDF47DC}UI/Layouts/Modded/Textures/Compass_atlas.edds"
-   Size 272 272
-   Mask "{26ECD3BDE41F8430}UI/Layouts/Modded/Textures/Compass_Alpha_atlas.edds"
+   IsPixelPerfect 0
+   Texture "{C23DFB53C7CEC869}UI/layouts/Modded/Textures/Compass350_atlas.edds"
+   Size 356 356
   }
   TextWidgetClass "{5B0B5E43BF732895}" {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
     Anchor 0.5 1 0.5 1
-    PositionX -90.063
-    OffsetLeft -90.063
-    PositionY -77.05
-    OffsetTop -77.05
-    SizeX 180
-    OffsetRight -89.936
-    SizeY 19.997
-    OffsetBottom 57.053
+    PositionX -89.954
+    OffsetLeft -89.954
+    PositionY -77.39
+    OffsetTop -77.39
+    SizeX 179.999
+    OffsetRight -90.045
+    SizeY 19.999
+    OffsetBottom 57.391
    }
    Opacity 0.984
    style debugUI

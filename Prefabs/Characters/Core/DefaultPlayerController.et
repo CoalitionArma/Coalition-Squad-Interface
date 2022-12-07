@@ -3,12 +3,8 @@ SCR_PlayerController {
  components {
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {
-    NJP_GUI_Compass "{5B0B7021131C905B}" {
-     m_LayoutPath "{09EFD372447A4DAC}UI/Layouts/Modded/COAL_UI.layout"
-    }
-    TNK_StamBar "{5B0D54DF1A4558C0}" {
-     m_LayoutPath "{09EFD372447A4DAC}UI/Layouts/Modded/COAL_UI.layout"
-     m_eLayer MEDIUM
+    COAL_GUI_Compass "{5B0D7262B3C40898}" {
+     m_LayoutPath "{6864FAA214A3DC4D}UI/layouts/Modded/COAL_UI.layout"
     }
    }
   }
