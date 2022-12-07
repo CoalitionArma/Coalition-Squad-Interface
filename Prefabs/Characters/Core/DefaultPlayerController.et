@@ -6,6 +6,10 @@ SCR_PlayerController {
     NJP_GUI_Compass "{5B0B7021131C905B}" {
      m_LayoutPath "{09EFD372447A4DAC}UI/Layouts/Modded/COAL_UI.layout"
     }
+    TNK_StamBar "{5B0D54DF1A4558C0}" {
+     m_LayoutPath "{09EFD372447A4DAC}UI/Layouts/Modded/COAL_UI.layout"
+     m_eLayer MEDIUM
+    }
    }
   }
  }

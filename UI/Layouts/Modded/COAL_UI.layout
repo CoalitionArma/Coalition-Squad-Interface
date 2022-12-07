@@ -3,6 +3,24 @@ FrameWidgetClass {
  Tooltip TextWidgetTooltip "{5B0A0BA709A901A7}" {
  }
  {
+  ProgressBarWidgetClass "{5B0D54DD8880DB5F}" {
+   Name "StamBar"
+   Slot FrameWidgetSlot "{5B0D54DD8880C4BA}" {
+    Anchor 0 1 0 1
+    PositionX 31.34
+    OffsetLeft 31.34
+    PositionY -22.89
+    OffsetTop -22.89
+    SizeX 214.911
+    OffsetRight -246.251
+    SizeY 5.91
+    OffsetBottom 16.98
+   }
+   Opacity 0
+   Color 0.045 0.045 0.045 1
+   Maximum 1
+   Current 0
+  }
   ImageWidgetClass "{5B0D215E829C6D6C}" {
    Name "Compass"
    Slot FrameWidgetSlot "{5B0D215E829C6D4E}" {
@@ -16,7 +34,7 @@ FrameWidgetClass {
     SizeY 179.999
     OffsetBottom -65.114
    }
-   Texture "{9529B2DE8CDF47DB}UI/Layouts/Modded/Textures/Compass_atlas.edds"
+   Texture "{9529B2DE8CDF47DC}UI/Layouts/Modded/Textures/Compass_atlas.edds"
    Size 272 272
    Mask "{26ECD3BDE41F8430}UI/Layouts/Modded/Textures/Compass_Alpha_atlas.edds"
   }
