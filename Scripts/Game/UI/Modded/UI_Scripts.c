@@ -5,6 +5,7 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 	private ProgressBarWidget StamBar = null;
 	private SCR_CharacterControllerComponent m_cCharacterController = null;
 	private bool stamBarVisible = false;
+	private int playerId;
 	
 	override void OnStartDraw(IEntity owner)
 	{
@@ -21,7 +22,6 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
-		
 		if (!m_wBearing ||!m_wCompass ) return;
 		private float yaw = GetBearing();
 		string Bearing_add = "";
@@ -35,7 +35,6 @@ class COAL_GUI_Compass: SCR_InfoDisplay
             if (!player) {
                 return;
             }
-        
             m_cCharacterController = SCR_CharacterControllerComponent.Cast(player.FindComponent(SCR_CharacterControllerComponent));
             if (!m_cCharacterController) return;
         };
@@ -113,4 +112,21 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 			hideBar(StamBar);
 		}
     }
-};
+	//Needs to be tested and optimized.
+	private array<EntityID> GetPlayerIDs()
+	{
+		array<int> players = new array<int>;
+		array<EntityID> playerIDs = new array<EntityID>;
+		PlayerManager mgr = GetGame().GetPlayerManager();
+		mgr.GetPlayers(players);
+		foreach(int player : players)
+		{
+			IEntity _player = mgr.GetPlayerControlledEntity(player);
+			if(!_player) continue;
+			playerIDs.Insert(_player.GetID());
+			
+		}
+		return playerIDs;
+	}
+		
+}
