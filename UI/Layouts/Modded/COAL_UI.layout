@@ -17,7 +17,7 @@ FrameWidgetClass {
     OffsetBottom 16.98
    }
    Opacity 0
-   Color 0.045 0.045 0.045 1
+   Color 0.042 0.042 0.042 0.078
    Maximum 1
    Current 0
   }
@@ -25,14 +25,14 @@ FrameWidgetClass {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
     Anchor 0.5 1 0.5 1
-    PositionX -90.063
-    OffsetLeft -90.063
-    PositionY -77.05
-    OffsetTop -77.05
-    SizeX 180
-    OffsetRight -89.936
+    PositionX -89.689
+    OffsetLeft -89.689
+    PositionY -87.74
+    OffsetTop -87.74
+    SizeX 179.999
+    OffsetRight -90.31
     SizeY 19.997
-    OffsetBottom 57.053
+    OffsetBottom 67.743
    }
    Opacity 0.984
    style debugUI
@@ -65,6 +65,486 @@ FrameWidgetClass {
    IsPixelPerfect 0
    Texture "{C23DFB53C7CEC869}UI/layouts/Modded/Textures/Compass350_atlas.edds"
    Size 356 356
+  }
+  ImageWidgetClass "{5B0E4364367464E3}" {
+   Name "Status0"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.24
+    OffsetLeft 132.24
+    PositionY -120
+    OffsetTop -120
+    SizeX 30
+    OffsetRight -162.24
+    SizeY 30
+    OffsetBottom 90
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD587DB56EE}" {
+   Name "Status1"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.3
+    OffsetLeft 132.3
+    PositionY -90.05
+    OffsetTop -90.05
+    SizeX 30
+    OffsetRight -162.3
+    SizeY 30
+    OffsetBottom 60.05
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD58362CE3F}" {
+   Name "Status2"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.24
+    OffsetLeft 132.24
+    PositionY -60.547
+    OffsetTop -60.547
+    SizeX 30
+    OffsetRight -162.24
+    SizeY 30.01
+    OffsetBottom 30.537
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5896F3A39}" {
+   Name "Status3"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.326
+    OffsetLeft 132.326
+    PositionY -30.738
+    OffsetTop -30.738
+    SizeX 30
+    OffsetRight -162.326
+    SizeY 30.01
+    OffsetBottom 0.728
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5DA54A993}" {
+   Name "Status4"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 365.092
+    OffsetLeft 365.092
+    PositionY -119.075
+    OffsetTop -119.075
+    SizeX 30
+    OffsetRight -395.092
+    SizeY 30.01
+    OffsetBottom 89.064
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5DA54A9DC}" {
+   Name "Status5"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 365.155
+    OffsetLeft 365.155
+    PositionY -89.818
+    OffsetTop -89.818
+    SizeX 30
+    OffsetRight -395.155
+    SizeY 30.01
+    OffsetBottom 59.808
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5DA54A61A}" {
+   Name "Status6"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 365.126
+    OffsetLeft 365.126
+    PositionY -59.997
+    OffsetTop -59.997
+    SizeX 30
+    OffsetRight -395.126
+    SizeY 30.01
+    OffsetBottom 29.987
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5DA54A651}" {
+   Name "Status7"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 365.119
+    OffsetLeft 365.119
+    PositionY -30.238
+    OffsetTop -30.238
+    SizeX 30
+    OffsetRight -395.119
+    SizeY 30.001
+    OffsetBottom 0.237
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5CDA271F2}" {
+   Name "Status8"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 597.958
+    OffsetLeft 597.958
+    PositionY -120.007
+    OffsetTop -120.007
+    SizeX 30
+    OffsetRight -627.958
+    SizeY 30.01
+    OffsetBottom 89.997
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5CDA271D0}" {
+   Name "Status9"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 597.98
+    OffsetLeft 597.98
+    PositionY -89.717
+    OffsetTop -89.717
+    SizeX 30
+    OffsetRight -627.98
+    SizeY 30.01
+    OffsetBottom 59.707
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5CDA271CA}" {
+   Name "Status10"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 597.898
+    OffsetLeft 597.898
+    PositionY -59.58
+    OffsetTop -59.58
+    SizeX 30
+    OffsetRight -627.898
+    SizeY 30.01
+    OffsetBottom 29.57
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5B0E4BD5CDA20E22}" {
+   Name "Status11"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 597.909
+    OffsetLeft 597.909
+    PositionY -29.849
+    OffsetTop -29.849
+    SizeX 30
+    OffsetRight -627.909
+    SizeY 30
+    OffsetBottom -0.151
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5B0E4BD5227829D1}" {
+   Name "Player0"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 164
+    OffsetLeft 164
+    PositionY -120
+    OffsetTop -120
+    SizeX 200
+    OffsetRight -364
+    SizeY 30
+    OffsetBottom 90
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD41D55853B}" {
+   Name "Player1"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 164
+    OffsetLeft 164
+    PositionY -89.836
+    OffsetTop -89.836
+    SizeX 200
+    OffsetRight -364
+    SizeY 30
+    OffsetBottom 59.836
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD41A42A9CF}" {
+   Name "Player2"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 164
+    OffsetLeft 164
+    PositionY -59.906
+    OffsetTop -59.906
+    SizeX 200
+    OffsetRight -364
+    SizeY 30
+    OffsetBottom 29.906
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD405927117}" {
+   Name "Player3"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 164
+    OffsetLeft 164
+    PositionY -29.861
+    OffsetTop -29.861
+    SizeX 200
+    OffsetRight -364
+    SizeY 30
+    OffsetBottom -0.139
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD401F3B62B}" {
+   Name "Player4"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 396.212
+    OffsetLeft 396.212
+    PositionY -120.144
+    OffsetTop -120.144
+    SizeX 200
+    OffsetRight -596.212
+    SizeY 30
+    OffsetBottom 90.144
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD43EDB058C}" {
+   Name "PLayer5"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 396.212
+    OffsetLeft 396.212
+    PositionY -89.999
+    OffsetTop -89.999
+    SizeX 200
+    OffsetRight -596.212
+    SizeY 30
+    OffsetBottom 59.999
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD439D8841D}" {
+   Name "Player6"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 396.212
+    OffsetLeft 396.212
+    PositionY -59.854
+    OffsetTop -59.854
+    SizeX 200
+    OffsetRight -596.212
+    SizeY 30
+    OffsetBottom 29.854
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD43BD747D3}" {
+   Name "Player7"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 396.12
+    OffsetLeft 396.12
+    PositionY -29.8
+    OffsetTop -29.8
+    SizeX 200
+    OffsetRight -596.12
+    SizeY 30
+    OffsetBottom -0.2
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD79FFBD7B2}" {
+   Name "Player8"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 629.261
+    OffsetLeft 629.261
+    PositionY -119.573
+    OffsetTop -119.573
+    SizeX 200
+    OffsetRight -829.261
+    SizeY 30
+    OffsetBottom 89.573
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD79FFBD788}" {
+   Name "Player9"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 629.261
+    OffsetLeft 629.261
+    PositionY -89.428
+    OffsetTop -89.428
+    SizeX 200
+    OffsetRight -829.261
+    SizeY 30
+    OffsetBottom 59.428
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD79FFBD7D2}" {
+   Name "Player10"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 629.261
+    OffsetLeft 629.261
+    PositionY -59.283
+    OffsetTop -59.283
+    SizeX 200
+    OffsetRight -829.261
+    SizeY 30
+    OffsetBottom 29.283
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
+  }
+  TextWidgetClass "{5B0E4BD79FFBD43A}" {
+   Name "Player11"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 629.169
+    OffsetLeft 629.169
+    PositionY -29.229
+    OffsetTop -29.229
+    SizeX 200
+    OffsetRight -829.169
+    SizeY 30
+    OffsetBottom -0.771
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+   }
   }
  }
 }
