@@ -74,186 +74,10 @@ FrameWidgetClass {
     OffsetLeft 132.24
     PositionY -120
     OffsetTop -120
-    SizeX 30
-    OffsetRight -162.24
-    SizeY 30
-    OffsetBottom 90
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD587DB56EE}" {
-   Name "Status1"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 132.3
-    OffsetLeft 132.3
-    PositionY -90.05
-    OffsetTop -90.05
-    SizeX 30
-    OffsetRight -162.3
-    SizeY 30
-    OffsetBottom 60.05
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD58362CE3F}" {
-   Name "Status2"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 132.24
-    OffsetLeft 132.24
-    PositionY -60.547
-    OffsetTop -60.547
-    SizeX 30
-    OffsetRight -162.24
-    SizeY 30.01
-    OffsetBottom 30.537
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5896F3A39}" {
-   Name "Status3"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 132.326
-    OffsetLeft 132.326
-    PositionY -30.738
-    OffsetTop -30.738
-    SizeX 30
-    OffsetRight -162.326
-    SizeY 30.01
-    OffsetBottom 0.728
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5DA54A993}" {
-   Name "Status4"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 365.092
-    OffsetLeft 365.092
-    PositionY -119.075
-    OffsetTop -119.075
-    SizeX 30
-    OffsetRight -395.092
-    SizeY 30.01
-    OffsetBottom 89.064
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5DA54A9DC}" {
-   Name "Status5"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 365.155
-    OffsetLeft 365.155
-    PositionY -89.818
-    OffsetTop -89.818
-    SizeX 30
-    OffsetRight -395.155
-    SizeY 30.01
-    OffsetBottom 59.808
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5DA54A61A}" {
-   Name "Status6"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 365.126
-    OffsetLeft 365.126
-    PositionY -59.997
-    OffsetTop -59.997
-    SizeX 30
-    OffsetRight -395.126
-    SizeY 30.01
-    OffsetBottom 29.987
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5DA54A651}" {
-   Name "Status7"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 365.119
-    OffsetLeft 365.119
-    PositionY -30.238
-    OffsetTop -30.238
-    SizeX 30
-    OffsetRight -395.119
-    SizeY 30.001
-    OffsetBottom 0.237
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5CDA271F2}" {
-   Name "Status8"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 597.958
-    OffsetLeft 597.958
-    PositionY -120.007
-    OffsetTop -120.007
-    SizeX 30
-    OffsetRight -627.958
-    SizeY 30.01
-    OffsetBottom 89.997
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5CDA271D0}" {
-   Name "Status9"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 597.98
-    OffsetLeft 597.98
-    PositionY -89.717
-    OffsetTop -89.717
-    SizeX 30
-    OffsetRight -627.98
-    SizeY 30.01
-    OffsetBottom 59.707
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5CDA271CA}" {
-   Name "Status10"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 597.898
-    OffsetLeft 597.898
-    PositionY -59.58
-    OffsetTop -59.58
-    SizeX 30
-    OffsetRight -627.898
-    SizeY 30.01
-    OffsetBottom 29.57
-   }
-   IsPixelPerfect 0
-   Opacity 0
-  }
-  ImageWidgetClass "{5B0E4BD5CDA20E22}" {
-   Name "Status11"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 597.909
-    OffsetLeft 597.909
-    PositionY -29.849
-    OffsetTop -29.849
-    SizeX 30
-    OffsetRight -627.909
-    SizeY 30
-    OffsetBottom -0.151
+    SizeX 19.819
+    OffsetRight -152.059
+    SizeY 19.124
+    OffsetBottom 100.876
    }
    IsPixelPerfect 0
    Opacity 0
@@ -262,14 +86,14 @@ FrameWidgetClass {
    Name "Player0"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 164
-    OffsetLeft 164
+    PositionX 152.198
+    OffsetLeft 152.198
     PositionY -120
     OffsetTop -120
-    SizeX 200
-    OffsetRight -364
-    SizeY 30
-    OffsetBottom 90
+    SizeX 145.662
+    OffsetRight -297.86
+    SizeY 19.124
+    OffsetBottom 100.876
    }
    IsPixelPerfect 0
    Text ""
@@ -282,18 +106,18 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD41D55853B}" {
+  TextWidgetClass "{5CD62587CDF68580}" {
    Name "Player1"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 164
-    OffsetLeft 164
-    PositionY -89.836
-    OffsetTop -89.836
-    SizeX 200
-    OffsetRight -364
-    SizeY 30
-    OffsetBottom 59.836
+    PositionX 152.206
+    OffsetLeft 152.206
+    PositionY -100.813
+    OffsetTop -100.813
+    SizeX 145.662
+    OffsetRight -297.868
+    SizeY 19.124
+    OffsetBottom 81.689
    }
    IsPixelPerfect 0
    Text ""
@@ -306,18 +130,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD41A42A9CF}" {
+  ImageWidgetClass "{5CD62587CDF685C6}" {
+   Name "Status1"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.248
+    OffsetLeft 132.248
+    PositionY -100.813
+    OffsetTop -100.813
+    SizeX 19.819
+    OffsetRight -152.067
+    SizeY 19.124
+    OffsetBottom 81.689
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD62587F27C22A0}" {
    Name "Player2"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 164
-    OffsetLeft 164
-    PositionY -59.906
-    OffsetTop -59.906
-    SizeX 200
-    OffsetRight -364
-    SizeY 30
-    OffsetBottom 29.906
+    PositionX 152.206
+    OffsetLeft 152.206
+    PositionY -62.634
+    OffsetTop -62.634
+    SizeX 145.662
+    OffsetRight -297.868
+    SizeY 19.124
+    OffsetBottom 43.51
    }
    IsPixelPerfect 0
    Text ""
@@ -330,18 +170,50 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD405927117}" {
+  ImageWidgetClass "{5CD62587F27C22C7}" {
+   Name "Status2"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.248
+    OffsetLeft 132.248
+    PositionY -62.634
+    OffsetTop -62.634
+    SizeX 19.819
+    OffsetRight -152.067
+    SizeY 19.124
+    OffsetBottom 43.51
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5CD62587F27C233A}" {
+   Name "Status3"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.24
+    OffsetLeft 132.24
+    PositionY -81.821
+    OffsetTop -81.821
+    SizeX 19.819
+    OffsetRight -152.059
+    SizeY 19.124
+    OffsetBottom 62.697
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD62587F27C230B}" {
    Name "Player3"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 164
-    OffsetLeft 164
-    PositionY -29.861
-    OffsetTop -29.861
-    SizeX 200
-    OffsetRight -364
-    SizeY 30
-    OffsetBottom -0.139
+    PositionX 152.198
+    OffsetLeft 152.198
+    PositionY -81.821
+    OffsetTop -81.821
+    SizeX 145.662
+    OffsetRight -297.86
+    SizeY 19.124
+    OffsetBottom 62.697
    }
    IsPixelPerfect 0
    Text ""
@@ -354,18 +226,18 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD401F3B62B}" {
+  TextWidgetClass "{5CD62587F82799FC}" {
    Name "Player4"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 396.212
-    OffsetLeft 396.212
-    PositionY -120.144
-    OffsetTop -120.144
-    SizeX 200
-    OffsetRight -596.212
-    SizeY 30
-    OffsetBottom 90.144
+    PositionX 152.206
+    OffsetLeft 152.206
+    PositionY -43.107
+    OffsetTop -43.107
+    SizeX 145.662
+    OffsetRight -297.868
+    SizeY 19.124
+    OffsetBottom 23.983
    }
    IsPixelPerfect 0
    Text ""
@@ -378,18 +250,50 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD43EDB058C}" {
-   Name "PLayer5"
+  ImageWidgetClass "{5CD62587F8279637}" {
+   Name "Status4"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.248
+    OffsetLeft 132.248
+    PositionY -43.107
+    OffsetTop -43.107
+    SizeX 19.819
+    OffsetRight -152.067
+    SizeY 19.124
+    OffsetBottom 23.983
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  ImageWidgetClass "{5CD62587F827962E}" {
+   Name "Status5"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 132.24
+    OffsetLeft 132.24
+    PositionY -23.541
+    OffsetTop -23.541
+    SizeX 19.819
+    OffsetRight -152.059
+    SizeY 19.124
+    OffsetBottom 4.417
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD62587F82796BC}" {
+   Name "Player5"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 396.212
-    OffsetLeft 396.212
-    PositionY -89.999
-    OffsetTop -89.999
-    SizeX 200
-    OffsetRight -596.212
-    SizeY 30
-    OffsetBottom 59.999
+    PositionX 152.198
+    OffsetLeft 152.198
+    PositionY -23.541
+    OffsetTop -23.541
+    SizeX 145.662
+    OffsetRight -297.86
+    SizeY 19.124
+    OffsetBottom 4.417
    }
    IsPixelPerfect 0
    Text ""
@@ -402,18 +306,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD439D8841D}" {
+  ImageWidgetClass "{5CD62587F827969E}" {
+   Name "Status6"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -120.445
+    OffsetTop -120.445
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.123
+    OffsetBottom 101.322
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD62587F82796E1}" {
    Name "Player6"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 396.212
-    OffsetLeft 396.212
-    PositionY -59.854
-    OffsetTop -59.854
-    SizeX 200
-    OffsetRight -596.212
-    SizeY 30
-    OffsetBottom 29.854
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -120.6
+    OffsetTop -120.6
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 101.476
    }
    IsPixelPerfect 0
    Text ""
@@ -426,18 +346,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD43BD747D3}" {
+  ImageWidgetClass "{5CD625870127D0BC}" {
+   Name "Status7"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -100.927
+    OffsetTop -100.927
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.123
+    OffsetBottom 81.804
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD625870127D0C8}" {
    Name "Player7"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 396.12
-    OffsetLeft 396.12
-    PositionY -29.8
-    OffsetTop -29.8
-    SizeX 200
-    OffsetRight -596.12
-    SizeY 30
-    OffsetBottom -0.2
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -101.082
+    OffsetTop -101.082
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 81.958
    }
    IsPixelPerfect 0
    Text ""
@@ -450,18 +386,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD79FFBD7B2}" {
+  ImageWidgetClass "{5CD625870D6B0B07}" {
+   Name "Status8"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -81.659
+    OffsetTop -81.659
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.123
+    OffsetBottom 62.536
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD625870D6B0BA9}" {
    Name "Player8"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 629.261
-    OffsetLeft 629.261
-    PositionY -119.573
-    OffsetTop -119.573
-    SizeX 200
-    OffsetRight -829.261
-    SizeY 30
-    OffsetBottom 89.573
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -81.814
+    OffsetTop -81.814
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 62.69
    }
    IsPixelPerfect 0
    Text ""
@@ -474,18 +426,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD79FFBD788}" {
+  ImageWidgetClass "{5CD625870FE11AA3}" {
+   Name "Status9"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -62.391
+    OffsetTop -62.391
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.123
+    OffsetBottom 43.269
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD625870FE11ACA}" {
    Name "Player9"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 629.261
-    OffsetLeft 629.261
-    PositionY -89.428
-    OffsetTop -89.428
-    SizeX 200
-    OffsetRight -829.261
-    SizeY 30
-    OffsetBottom 59.428
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -62.547
+    OffsetTop -62.547
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 43.423
    }
    IsPixelPerfect 0
    Text ""
@@ -498,18 +466,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD79FFBD7D2}" {
+  ImageWidgetClass "{5CD625870AA74003}" {
+   Name "Status10"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -43.374
+    OffsetTop -43.374
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.122
+    OffsetBottom 24.252
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD625870AA7409E}" {
    Name "Player10"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 629.261
-    OffsetLeft 629.261
-    PositionY -59.283
-    OffsetTop -59.283
-    SizeX 200
-    OffsetRight -829.261
-    SizeY 30
-    OffsetBottom 29.283
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -43.53
+    OffsetTop -43.53
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 24.406
    }
    IsPixelPerfect 0
    Text ""
@@ -522,18 +506,34 @@ FrameWidgetClass {
     Bold 1
    }
   }
-  TextWidgetClass "{5B0E4BD79FFBD43A}" {
+  ImageWidgetClass "{5CD625873745D0A8}" {
+   Name "Status11"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 301.894
+    OffsetLeft 301.894
+    PositionY -24.194
+    OffsetTop -24.194
+    SizeX 19.819
+    OffsetRight -321.713
+    SizeY 19.122
+    OffsetBottom 5.072
+   }
+   IsPixelPerfect 0
+   Opacity 0
+  }
+  TextWidgetClass "{5CD625873745D13D}" {
    Name "Player11"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 1 0.5 1
-    PositionX 629.169
-    OffsetLeft 629.169
-    PositionY -29.229
-    OffsetTop -29.229
-    SizeX 200
-    OffsetRight -829.169
-    SizeY 30
-    OffsetBottom -0.771
+    PositionX 322.232
+    OffsetLeft 322.232
+    PositionY -24.35
+    OffsetTop -24.35
+    SizeX 145.662
+    OffsetRight -467.894
+    SizeY 19.124
+    OffsetBottom 5.226
    }
    IsPixelPerfect 0
    Text ""
