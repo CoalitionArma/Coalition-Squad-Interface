@@ -5,53 +5,8 @@ class COAL_GUI: SCR_InfoDisplay
 	// Variables used on/for UI Components
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
-	protected TextWidget m_wBearing;
-	protected TextWidget Player0;
-	protected TextWidget Player1;
-	protected TextWidget Player2;
-	protected TextWidget Player3;
-	protected TextWidget Player4;
-	protected TextWidget Player5;
-	protected TextWidget Player6;
-	protected TextWidget Player7;
-	protected TextWidget Player8;
-	protected TextWidget Player9;
-	protected TextWidget Player10;
-	protected TextWidget Player11;
-	protected ImageWidget m_wCompass;
-	protected ImageWidget Status0;
-	protected ImageWidget Status1;
-	protected ImageWidget Status2;
-	protected ImageWidget Status3;
-	protected ImageWidget Status4;
-	protected ImageWidget Status5;
-	protected ImageWidget Status6;
-	protected ImageWidget Status7;
-	protected ImageWidget Status8;
-	protected ImageWidget Status9;
-	protected ImageWidget Status10;
-	protected ImageWidget Status11;
-	TextWidget tArray[] = {Player1,Player2,Player3,Player4,Player5,Player6,Player7,Player8,Player9,Player10,Player11};
-	ImageWidget iArray[] = {Status1,Status2,Status3,Status4,Status5,Status6,Status7,Status8,Status9,Status10,Status11};
-	private ref array<EEditableEntityLabel> m_RoleLabels = {};
-	private ProgressBarWidget StamBar = null;
-	private SCR_CharacterControllerComponent m_cCharacterController = null;
 	private bool stamBarVisible = false;
-	static Widget s_wDebugLayout;
-	//---------------------------------------------------------------------------------------------------------------------------------
-	
-	// When player is created
-	
-	//---------------------------------------------------------------------------------------------------------------------------------
-	override void OnStartDraw(IEntity owner)
-	{
-		super.OnStartDraw(owner);
-		
-		// Re-aquire UI widgets if they dont exist at the moment.
-		if (!m_wBearing) m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
-		if (!m_wCompass) m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
-		if (!StamBar) StamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
-    }
+	private int frame = 45;
 	//---------------------------------------------------------------------------------------------------------------------------------
 	
 	// Main loop that repeats every frame
@@ -59,149 +14,297 @@ class COAL_GUI: SCR_InfoDisplay
 	//---------------------------------------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
-		super.UpdateValues(owner, timeSlice);
-		
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 		
-		// Can't run shit if these dont exist better exit out quick.
-		if (!character || !m_wBearing || !m_wCompass) return;
-	
-		// Passes m_wBearing & m_wCompass onto the custom function SetBearingSetCompass().
-		SetBearingSetCompass(m_wBearing, m_wCompass);
+		// Get image Widgets
+		TextWidget Bearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
+		ImageWidget Compass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
+		ProgressBarWidget StamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 		
-		// Get Charachter Controller for locally played entity.
-		 m_cCharacterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
+		// Can't run if these dont exist better exit out.
+		if (!character || !Bearing || !Compass || !StamBar) return;
+	
+		// Sets Bearings text and the Compass direction
+		SetBearingSetCompass(Bearing, Compass);
+		
+		// Get Charachter Controller of the locally played entity.
+		SCR_CharacterControllerComponent m_cCharacterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
 		
 		if (!m_cCharacterController ) return;
-		// Use local Charachter Controller to get the current entity stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
-        OnStaminaChange(m_cCharacterController.GetStamina());
 		
-		// Get local played entitys PlayerID.
-		//int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(character);
+		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
+        OnStaminaChange(m_cCharacterController.GetStamina(), StamBar);
 		
-		//GroupDisplay(owner, playerID);
-
+		// Update group every 45 frames. (May lower to 30 depending on feedback from players with lower end PCs)
+		if (frame >= 45) {
+			
+			// Reset Frame Count
+			frame = 0;
+			
+			// Get Global Player Controller and Group Manager
+			SCR_PlayerController playerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
+			SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SCR_GroupsManagerComponent));
+			
+			if (!playerController || !groupManager) return;
+			
+			//Get list of all the player we have to parse through
+			//array<int> groupPlayersIDs = groupManager.GetPlayerGroup(playerController.GetPlayerId()).GetPlayerIDs();
+			array<int> groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
+			
+			// Count how many players we plan on parsing through.
+			int groupCount = groupPlayersIDs.Count();
+			
+			// Get current group leader
+			int groupLeaderID = groupManager.GetPlayerGroup(playerController.GetPlayerId()).GetLeaderID();
+			
+			// Parse through groupPlayersIDs and show players names and icons on the group display
+			GroupDisplay(groupLeaderID, groupCount, groupPlayersIDs);
+		} else {
+			// Add to Frame Count
+			frame++;
+		};
+		
+		super.UpdateValues(owner, timeSlice);
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------
 	
 	// Functions used for the UI
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
-
-	void GroupDisplay(IEntity owner, int playerID)
-	{
-		bool playerInGroup = SCR_AIGroup.Cast(owner).IsPlayerInGroup(playerID);
-		if (!playerInGroup) return;
-		
-		int groupCount = SCR_AIGroup.Cast(owner).GetAgentsCount();
-		array<int> groupPlayersID = SCR_AIGroup.Cast(owner).GetPlayerIDs();
-		int groupLeaderID = SCR_AIGroup.Cast(owner).GetLeaderID();
-		
-		PlayerManager pMan = GetGame().GetPlayerManager();
-		
-		if (!Player0) Player0 = TextWidget.Cast(m_wRoot.FindAnyWidget("Player0"));
-		if (!Status0) Status0 = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
-		string groupLeaderName = pMan.GetPlayerName(groupLeaderID);
-		Player0.SetText(groupLeaderName);
-		
-		for(int i = 0; i<=groupCount; i++) 
-		{
-			int localGroupPlayerID = groupPlayersID[i];
-			
-			ImageWidget statusDisplay = iArray[i];
-			TextWidget playerNameDisplay = tArray[i];
-			
-			string playerName = pMan.GetPlayerName(localGroupPlayerID);
-			IEntity playerEntity = pMan.GetPlayerControlledEntity(localGroupPlayerID); 
-			
-			playerNameDisplay.SetText(playerName);
-			
-			m_ItemResource = Resource.Load(playerEntity.GetItemResourceName());
-            IEntitySource entitySource = m_ItemResource.GetResource().ToEntitySource();
-			
-			//IEntitySource entitySource = playerEntity.GetResource().ToEntitySource();
-			
-			EWeaponType playerWeaponType = CheckWeapons(entitySource);
-			
-			switch (playerWeaponType)
+	void GroupDisplay(int groupLeaderID, int groupCount, array<int> groupPlayersIDs)
+	{	
+		//If person is only one in group, clear the group display
+		if (groupCount == 1) {
+			for(int e = 0; e<=18; e++)
 			{
-				case EWeaponType.WT_RIFLE : 
-				{
-					m_RoleLabels.Insert(EEditableEntityLabel.ROLE_RIFLEMAN);
-					break;
-				}
-				case EWeaponType.WT_MACHINEGUN : 
-				{
-					m_RoleLabels.Insert(EEditableEntityLabel.ROLE_MACHINEGUNNER);
-					break;
-				}
-				case EWeaponType.WT_ROCKETLAUNCHER : 
-				{
-					m_RoleLabels.Insert(EEditableEntityLabel.ROLE_ANTITANK);
-					break;
-				}
-				case EWeaponType.WT_GRENADELAUNCHER : 
-				{
-					m_RoleLabels.Insert(EEditableEntityLabel.ROLE_GRENADIER);
-					break;
-				}
-				case EWeaponType.WT_SNIPERRIFLE : 
-				{
-					m_RoleLabels.Insert(EEditableEntityLabel.ROLE_SHARPSHOOTER);
-					break;
-				}
-				default: 
-				{
-					break;
-				}
+				// Get group display widgets.
+				TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));
+				ImageWidget statusRemoveDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", e)));
+				
+				// Skip ahead to next for loop iteration if either of these are false.
+				if (!playerRemoveDisplay || !statusRemoveDisplay) continue;
+				
+				// Clear widgets.
+				playerRemoveDisplay.SetText("");
+				statusRemoveDisplay.SetOpacity(0);
 			}
-		}
-	}
-	
-	EWeaponType CheckWeapons(IEntitySource entitySource)
-	{
-		array<ref array<IEntityComponentSource>> weaponSlotComponents = {};
-		array<string> componentTypeArray = {"CharacterWeaponSlotComponent"};
-		int weaponSlotCount = SCR_BaseContainerTools.FindComponentSources(entitySource, componentTypeArray, weaponSlotComponents);
-		
-		array<IEntityComponentSource> weaponSlotComponentSources = weaponSlotComponents.Get(0);
-		
-		if (!weaponSlotComponentSources)
-		{
 			return;
+		};
+		
+		// Cannot guarantee that the player at 0 in groupPlayersIDs will always be the squad leader, so we find him in the group array and force him there.
+		int leaderIndex = groupPlayersIDs.Find(groupLeaderID);
+		groupPlayersIDs.Remove(leaderIndex);
+		
+		// Sort the array from player IDs. (typically comes out as the first to last players on the squad to connect)
+		groupPlayersIDs.Sort(true);
+		
+		// Push the Squad leader to the first Icon
+		groupPlayersIDs.InsertAt(groupLeaderID, 0);
+		
+		// Parse through current group array.
+		for(int i = 0; i<groupCount && i < 18; i++) 
+		{
+			// Get Target Players ID.
+			int localPlayerID = groupPlayersIDs[i];
+			
+			// Get target players entity and player name.
+			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
+			string playerName = GetGame().GetPlayerManager().GetPlayerName(localPlayerID);
+			
+			// Get group display widgets.
+			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
+			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
+			
+			// Skip ahead to next for loop iteration if any of whese are false.
+			if (!statusDisplay || !playerDisplay || !playerName || !localplayer) continue;
+			
+			// Set player text.
+			playerDisplay.SetText(playerName);
+			
+			//---------------------------------------------------------------------------------------------------------------------------------
+			// Color Teams
+			//---------------------------------------------------------------------------------------------------------------------------------
+			
+			//statusDisplay.SetColorInt(ARGB(255, 255, 160, 160))
+			
+			//---------------------------------------------------------------------------------------------------------------------------------
+			// Vehicle Icons, they supercede any specialty icons
+			//---------------------------------------------------------------------------------------------------------------------------------
+			
+			// Check if target player is even in a vehicle.
+			CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(localplayer.FindComponent(CompartmentAccessComponent));
+			if (compartmentAccess)
+			{
+				// Check target players current compartment.
+			   BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();  
+			    if (compartment)
+			    {
+					// Check target players current compartment type, then assign his icon.
+			        ECompartmentType compartmentType = SCR_CompartmentAccessComponent.GetCompartmentType(compartment);
+					switch (compartmentType)
+					{
+						// Passanger/Commander 
+						// ToDo: impliment Commander compartment detection and icon when/if it's added to the game
+						case ECompartmentType.Cargo : {
+							statusDisplay.SetOpacity(1);
+							statusDisplay.LoadImageTexture(0, "{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds");
+							break;
+						}
+						// Driver
+						case ECompartmentType.Pilot : {
+							statusDisplay.SetOpacity(1);
+							statusDisplay.LoadImageTexture(0, "{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds");
+							break;
+						}
+						// Gunner
+						case ECompartmentType.Turret : {
+							statusDisplay.SetOpacity(1);
+							statusDisplay.LoadImageTexture(0, "{3DAAB773C8C29812}Layouts\UI\Textures\Icons\imagegunner_ca.edds");
+							break;
+						}
+					}
+					// Skip ahead to next for loop iteration since we've done our job of setting the target players icon.
+					continue;
+			    };
+			};
+
+			//---------------------------------------------------------------------------------------------------------------------------------
+			//	Specialty Icons
+			//---------------------------------------------------------------------------------------------------------------------------------
+			
+			// Check if current target player is the current squad leader AND we're at the correct position.
+			if (localPlayerID == groupLeaderID && i == 0) 
+			{
+				// Set Squad Leader Icon
+				statusDisplay.SetOpacity(1);
+				statusDisplay.LoadImageTexture(0, "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds");
+				// Skip ahead to next for loop iteration since we've done our job of setting the target players icon.
+				continue;
+			};
+			
+			// Get target players inventory component
+			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
+			
+			// Get all of target players inventory items
+			array<IEntity> allPlayerItems = {};
+			characterInventory.GetAllRootItems(allPlayerItems);
+			
+			// Settup new arrays and variables
+			//
+			array<EWeaponType> WeaponTypeArray = new array<EWeaponType>();
+			array<SCR_EConsumableType> MedicalTypeArray = new array<SCR_EConsumableType>();
+			array<BaseMuzzleComponent> muzzles = {};
+			
+			EntityPrefabData prefabData;
+			string resourceName;
+			
+			// Parse through players entire inventory.
+			foreach (IEntity item : allPlayerItems)
+			{			
+				prefabData = item.GetPrefabData();
+					
+				// Ignore if no prefab data.
+				if (!prefabData) continue;
+					
+				resourceName = prefabData.GetPrefabName();
+				
+				// Ignore if no prefab resource name.
+				if (resourceName.IsEmpty()) continue;
+				
+				// Check if item is consumable (nearly always a medical item).
+				SCR_ConsumableItemComponent consumable = SCR_ConsumableItemComponent.Cast(item.FindComponent(SCR_ConsumableItemComponent));
+				if (consumable)
+				{
+					// Check items type.
+					SCR_EConsumableType medicalType = SCR_ConsumableItemComponent.Cast(consumable).GetConsumableType();
+					if (medicalType == SCR_EConsumableType.SALINE)
+					{
+						// Insert the valid item into the medical array so we can read it later.
+						MedicalTypeArray.Insert(medicalType);
+					};
+				};
+				
+				// Check if item is a Weapon.
+				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
+				if (weaponComp) {
+					
+					// Get the weapons type and insert it into the weapon array so we can read it later.
+					WeaponTypeArray.Insert(weaponComp.GetWeaponType());
+					
+					// Get muzzle types (so we can detect something like a underslung grenade launcher)
+					for (int m = 0, mCount = weaponComp.GetMuzzlesList(muzzles); m < mCount; m++)
+					{
+						// Convert muzzle types to weapon types and insert it into the weapon array so we can read it later. (ToDo: Not hardcoded?)
+						switch (muzzles[m].GetMuzzleType())
+						{
+							case EMuzzleType.MT_RPGMuzzle : {
+								WeaponTypeArray.Insert(EWeaponType.WT_ROCKETLAUNCHER);
+								break;
+							};
+							case EMuzzleType.MT_UGLMuzzle : {
+								WeaponTypeArray.Insert(EWeaponType.WT_GRENADELAUNCHER);
+								break;
+							};
+						}
+					}
+				};
+			};
+			
+			// Take all the data we just collected and assign players a icon based on if it exists in the weapon/medical arrays.
+			switch (true) 
+			{
+				// Medic
+				case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1) : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\iconmanmedic_ca.edds");
+					break;
+				};
+				// Sniper
+				case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1) : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{318B797C57BE3C29}Layouts\UI\Textures\Icons\iconmansniper_ca.edds");
+					break;
+				};
+				// MG	
+				case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1) : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{CCF40410BDB53870}Layouts\UI\Textures\Icons\iconmanmg_ca.edds");
+					break;
+				};
+				// RAT/MAT			
+				case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1) : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds");
+					break;
+				};
+				// GL
+				case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds");
+					break;
+				};
+				// No One Special (Loser)
+				default : {
+					statusDisplay.SetOpacity(1);
+					statusDisplay.LoadImageTexture(0, "{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds");
+				};
+			};
 		}
 		
-		foreach	(IEntityComponentSource weaponSlotComponent : weaponSlotComponentSources)
+		// Clear the group display bellow what we just populated, getting rid of any defunct player names/icons.
+		for(int e = groupCount; e<=18; e++) 
 		{
-			ResourceName weaponPrefab;
-			if (weaponSlotComponent.Get("WeaponTemplate", weaponPrefab))
-			{
-				if (!weaponPrefab)
-				{
-					continue;
-				}
-				
-				IEntitySource weaponSource = SCR_BaseContainerTools.FindEntitySource(Resource.Load(weaponPrefab));
-				if (!weaponSource)
-				{
-					continue;
-				}
-				
-				IEntityComponentSource weaponComponentSource = SCR_BaseContainerTools.FindComponentSource(weaponSource, "WeaponComponent");
-				if (!weaponComponentSource)
-				{
-					continue;
-				}
-				
-				EWeaponType weaponType = null;
-				if (weaponComponentSource.Get("WeaponType", weaponType))
-				{
-					return weaponType;
-				}
-				return weaponType;
-				
-			}
+			// Get group display widgets.
+			TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));
+			ImageWidget statusRemoveDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", e)));
+			
+			// Skip ahead to next for loop iteration if either of these are false.
+			if (!playerRemoveDisplay || !statusRemoveDisplay) continue;
+			
+			// Clear widgets.
+			playerRemoveDisplay.SetText("");
+			statusRemoveDisplay.SetOpacity(0);
 		}
 	}
 
@@ -264,9 +367,8 @@ class COAL_GUI: SCR_InfoDisplay
 		//fadeBar(StamBar, 0, 2);
 	}
 	
-	void OnStaminaChange(float value)
+	void OnStaminaChange(float value, ProgressBarWidget StamBar)
     {
-		StamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 		StamBar.SetCurrent(value);
 		//Print("Stamina: " + value);
 		//Print("stamBarVisible: " + stamBarVisible);
@@ -294,3 +396,19 @@ class COAL_GUI: SCR_InfoDisplay
 		}
     }
 };
+
+/*
+modded enum ChimeraMenuPreset {
+    ColorTeamSelection
+}
+
+
+class COAL_GUI_ColorTeamSelection: ChimeraMenuBase
+{
+	
+	
+};
+*/
+
+
+
