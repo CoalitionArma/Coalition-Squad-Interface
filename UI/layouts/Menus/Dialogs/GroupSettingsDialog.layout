@@ -1,0 +1,57 @@
+FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
+ {
+  SizeLayoutWidgetClass "{5CC296FE0BE2ED39}" {
+   Prefab "{5CC296FE0BE2ED39}"
+   {
+    OverlayWidgetClass "{5CC296FBD8B6CA52}" {
+     Prefab "{5CC296FBD8B6CA52}"
+     {
+      VerticalLayoutWidgetClass "{5CC296FBD8B6CA68}" {
+       Prefab "{5CC296FBD8B6CA68}"
+       {
+        HorizontalLayoutWidgetClass "{5CC296FBD8B6CA62}" {
+         Prefab "{5CC296FBD8B6CA62}"
+         {
+          OverlayWidgetClass "{5CC296FBE7B45399}" {
+           Prefab "{5CC296FBE7B45399}"
+           {
+            HorizontalLayoutWidgetClass "{5CC296FBE7B4539D}" {
+             Prefab "{5CC296FBE7B4539D}"
+             Slot OverlayWidgetSlot "{56D6D7CEE8C41B58}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+             {
+              ButtonWidgetClass "{5EB6780DD23793C9}" {
+               Name "ColorTeams"
+               Slot LayoutSlot "{5EB6780DD2379015}" {
+                HorizontalAlign 1
+                VerticalAlign 1
+               }
+               Color 0 0 0 0
+               {
+                ImageWidgetClass "{5EB6780DC42BB19E}" {
+                 Name "Image0"
+                 Slot ButtonWidgetSlot "{5EB6780DC42BB1E1}" {
+                  VerticalAlign 3
+                 }
+                 Color 0.761 0.386 0.078 1
+                 Texture "{F50EC6286B50C981}Layouts/UI/Textures/ColorTeamsButton.edds"
+                 Size 65 25
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
