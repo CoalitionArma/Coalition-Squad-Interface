@@ -3,8 +3,11 @@ SCR_PlayerController {
  components {
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {
-    COAL_GUI "{5B0E43609D61F295}" {
-     m_LayoutPath "{6864FAA214A3DC4E}UI/layouts/Modded/COAL_UI.layout"
+    COA_Compass "{5EBD2BF3690CAFEB}" {
+     m_LayoutPath "{6A51445F28C412B3}Layouts/UI/COA_Compass.layout"
+    }
+    COA_StaminaBar "{5EBD2BF354C82CE0}" {
+     m_LayoutPath "{AD61A34EB388CF6D}Layouts/UI/COA_StaminaBar.layout"
     }
    }
   }
