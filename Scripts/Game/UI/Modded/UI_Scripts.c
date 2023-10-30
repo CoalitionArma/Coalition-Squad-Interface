@@ -49,8 +49,8 @@ class COAL_GUI: SCR_InfoDisplay
 			if (!playerController || !groupManager) return;
 			
 			//Get list of all the player we have to parse through
-			//array<int> groupPlayersIDs = groupManager.GetPlayerGroup(playerController.GetPlayerId()).GetPlayerIDs();
-			array<int> groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
+			array<int> groupPlayersIDs = groupManager.GetPlayerGroup(playerController.GetPlayerId()).GetPlayerIDs();
+			//array<int> groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
 			
 			// Count how many players we plan on parsing through.
 			int groupCount = groupPlayersIDs.Count();
