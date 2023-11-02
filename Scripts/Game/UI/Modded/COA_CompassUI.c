@@ -2,8 +2,16 @@ class COA_Compass : SCR_InfoDisplay
 {
 	private TextWidget Bearing = null;
 	private ImageWidget Compass = null;
+	private bool isVisible = true;
 	private int groupRefresh = 45;
 	private int widgetRefresh = 360;
+	
+	override protected void OnInit(IEntity owner)
+	{
+		super.OnInit(owner);
+		GetGame().GetInputManager().AddActionListener("ToggleCompass", EActionTrigger.DOWN, ToggleCompass);
+
+	}
 	
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
@@ -304,6 +312,22 @@ class COA_Compass : SCR_InfoDisplay
 			}
 		};
 	};
+	
+	protected void ToggleCompass()
+	{
+		isVisible = !isVisible;
+		if(isVisible)
+		{
+			Compass.SetOpacity(1);
+			Bearing.SetOpacity(1);
+		}
+		else
+		{
+			Compass.SetOpacity(0);
+			Bearing.SetOpacity(0);
+		}
+		
+	}
 
 	protected void SetBearingSetCompass(TextWidget BearingRef, ImageWidget CompassRef)
 	{
