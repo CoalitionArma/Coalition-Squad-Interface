@@ -2,6 +2,7 @@ class COA_StaminaBar : SCR_InfoDisplay
 {
 	private ProgressBarWidget StamBar = null;
 	private bool stamBarVisible = true;
+	private bool stamBarEnabled = true;
 	private int widgetRefresh = 360;
 	
 	override protected void OnInit(IEntity owner)
@@ -49,15 +50,14 @@ class COA_StaminaBar : SCR_InfoDisplay
 		for(int i = 0; i < time; i++) 
 		{
 			widget.SetOpacity(change);
-			//Print("Opacity: " + widget.GetOpacity());
 			Sleep(1000); //sleep 1s
 		}
 	}
 	
 	protected void ToggleStamina()
 	{
-		stamBarVisible = !stamBarVisible;
-		if(stamBarVisible)
+		stamBarEnabled = !stamBarEnabled;
+		if(stamBarEnabled)
 		{
 			StamBar.SetOpacity(1);
 		}
@@ -70,26 +70,31 @@ class COA_StaminaBar : SCR_InfoDisplay
 	
 	void RevealBar(ProgressBarWidget widget) 
 	{
+		if(stamBarEnabled)
+		{
+		stamBarVisible = true;
 		widget.SetOpacity(0.5);
+		}
 		//FadeBar(stamBarRef, 0.5, 2);
 	}
 	
 	protected void HideBar(ProgressBarWidget widget) 
 	{
+		if(stamBarEnabled)
+		{
+		stamBarVisible = false;
 		widget.SetOpacity(0);
+		}
+
 		//FadeBar(stamBarRef, 0, 2);
 	}
 	
 	void OnStaminaChange(float value, ProgressBarWidget stamBarRef)
     {
-		if(!stamBarVisible)
+		if(!stamBarEnabled)
 		{
 			stamBarRef.SetOpacity(0);
 			return;
-		}
-		else
-		{
-			stamBarRef.SetOpacity(1);
 		}
 		stamBarRef.SetCurrent(value);
 		//Print("Stamina: " + value);
