@@ -10,12 +10,10 @@ class COA_StaminaBar : SCR_InfoDisplay
 		super.OnInit(owner);
 		GetGame().GetInputManager().AddActionListener("ToggleStamina", EActionTrigger.DOWN, ToggleStamina);
 		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext",3600000);
-
 	}
 	
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
-		
 		super.UpdateValues(owner, timeSlice);
 		
 		// Get local enity the player is controlling at the moment.
@@ -36,7 +34,6 @@ class COA_StaminaBar : SCR_InfoDisplay
 		
 		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
         OnStaminaChange(m_cCharacterController.GetStamina(), StamBar);
-		
 	}
 	
 	void FadeBar(ProgressBarWidget widget, float goToOpacity, int time) 
