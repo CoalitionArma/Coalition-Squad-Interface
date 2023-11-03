@@ -234,7 +234,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				arrStr.Insert(playerValueString);
 			};
 			
-			StaticArray.Sort(arrStr);
+			arrStr.Sort(false);
 			string masterString = "";
 			
 			foreach (string pStr : arrStr)
