@@ -37,7 +37,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 
 	override void EOnFrame(IEntity owner, float timeSlice)
 	{
-		if (!Replication.IsServer()) {ClearEventMask(GetOwner(), EntityEvent.FRAME);};
+		//if (!Replication.IsServer()) {ClearEventMask(GetOwner(), EntityEvent.FRAME);};
 		UpdateGroupValues();
 	};
 
@@ -54,6 +54,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 		foreach (SCR_AIGroup playersGroup : outAllGroups)
 		{
 			if (!playersGroup) continue;
+			string GrpString = playersGroup.ToString();
 			
 			array<string> groupStringArray = {};
 	
@@ -61,7 +62,11 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
 			//groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
 			
-			if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) continue;
+			if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) {
+				m_mGroupMasterMap.Remove(GrpString); 
+				m_mGroupMasterMap.Insert(GrpString, ""); 
+				continue;
+			};
 			
 			int groupLeaderID = playersGroup.GetLeaderID();
 	
@@ -207,7 +212,6 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				groupStringArray.Insert(playerString);
 			};
 			
-			string GrpString = playersGroup.ToString();
 			array<string> arrStr = {};
 			
 			foreach (int i, string playerGroupString : groupStringArray)
