@@ -4,6 +4,18 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 	protected ref map<string, string> m_mGroupMasterMap = new ref map<string, string>;
 	protected int m_iFrame = 30;
 
+	protected string m_sCargo = "{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds";
+	protected string m_sDriver = "{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds";
+	protected string m_sGunner = "{3DAAB773C8C29812}Layouts\UI\Textures\Icons\imagegunner_ca.edds";
+	protected string m_sSquadLeader = "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds";
+	protected string m_sTeamLeader = "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\iconmanteamleader_ca.edds";
+	protected string m_sMedic = "{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\iconmanmedic_ca.edds";
+	protected string m_sSniper = "{318B797C57BE3C29}Layouts\UI\Textures\Icons\iconmansniper_ca.edds";
+	protected string m_sMachineGunner = "{CCF40410BDB53870}Layouts\UI\Textures\Icons\iconmanmg_ca.edds";
+	protected string m_sAntiTank = "{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds";
+	protected string m_sGrenadier = "{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds";
+	protected string m_sMan = "{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds";
+
 	void UpdateUIvalue(int playerIDUI, string writeUpdate, string valueUpdate)
     {
 		string key = string.Format("%1 %2", playerIDUI, writeUpdate);
@@ -81,32 +93,18 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				if (compartmentAccess)
 				{
 					// Check target players current compartment.
-				    BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();  
-				    if (compartment)
-				    {
+					BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();  
+					if (compartment)
+					{
 						// Check target players current compartment type, then assign his icon.
-				        ECompartmentType compartmentType = SCR_CompartmentAccessComponent.GetCompartmentType(compartment);
+						ECompartmentType compartmentType = SCR_CompartmentAccessComponent.GetCompartmentType(compartment);
 						switch (compartmentType)
 						{
-							// Passanger/Commander 
-							// ToDo: impliment Commander compartment detection and icon when/if it's added to the game
-							case ECompartmentType.Cargo : {
-								iconArray.Insert("{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds");
-								break;
-							};
-							// Driver
-							case ECompartmentType.Pilot : {
-								iconArray.Insert("{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds");
-								
-								break;
-							};
-							// Gunner
-							case ECompartmentType.Turret : {
-								iconArray.Insert("{3DAAB773C8C29812}Layouts\UI\Textures\Icons\imagegunner_ca.edds");
-								break;
-							};
+							case ECompartmentType.Cargo  : { iconArray.Insert(m_sCargo);  break; };
+							case ECompartmentType.Pilot  : { iconArray.Insert(m_sDriver); break; };
+							case ECompartmentType.Turret : { iconArray.Insert(m_sGunner); break; };
 						};
-				    };
+					};
 				};
 				
 				//---------------------------------------------------------------------------------------------------------------------------------
@@ -118,34 +116,13 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				if (playerOverideIcon && iconArray.IsEmpty()) {
 					switch (playerOverideIcon) 
 						{
-						case "Team Lead" : {
-							iconArray.Insert("{6D45BA2CCC322312}Layouts\UI\Textures\Icons\iconmanteamleader_ca.edds");
-							break;
-						};
-						case "Medic" : {
-							iconArray.Insert("{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\iconmanmedic_ca.edds");
-							break;
-						};
-						case "Sniper" : {
-							iconArray.Insert("{318B797C57BE3C29}Layouts\UI\Textures\Icons\iconmansniper_ca.edds");
-							break;
-						};
-						case "Machine Gunner" : {
-							iconArray.Insert("{CCF40410BDB53870}Layouts\UI\Textures\Icons\iconmanmg_ca.edds");
-							break;
-						};		
-						case "Anti-Tank" : {
-							iconArray.Insert("{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds");
-							break;
-						};
-						case "Grenadier" : {
-							iconArray.Insert("{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds");
-							break;
-						};
-						case "Man" : {
-							iconArray.Insert("{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds");
-							break;
-						};
+						case "Team Lead"      : { iconArray.Insert(m_sTeamLeader);    break; };
+						case "Medic"          : { iconArray.Insert(m_sMedic);         break; };
+						case "Sniper"         : { iconArray.Insert(m_sSniper);        break; };
+						case "Machine Gunner" : { iconArray.Insert(m_sMachineGunner); break; };		
+						case "Anti-Tank"      : { iconArray.Insert(m_sAntiTank);      break; };
+						case "Grenadier"      : { iconArray.Insert(m_sGrenadier);     break; };
+						case "Man"            : { iconArray.Insert(m_sMan);           break; };
 					};
 				};
 	
@@ -157,7 +134,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				if (localPlayerID == groupLeaderID && iconArray.IsEmpty()) 
 				{
 					// Set Squad Leader Icon
-					iconArray.Insert("{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds");
+					iconArray.Insert(m_sSquadLeader);
 				};
 				
 				if (iconArray.IsEmpty()) {
@@ -218,34 +195,12 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 					switch (true) 
 					{
 						// Medic
-						case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1) : {
-							iconArray.Insert("{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\iconmanmedic_ca.edds");
-							break;
-						};
-						// Sniper
-						case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1) : {
-							iconArray.Insert("{318B797C57BE3C29}Layouts\UI\Textures\Icons\iconmansniper_ca.edds");
-							break;
-						};
-						// MG	
-						case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1) : {
-							iconArray.Insert("{CCF40410BDB53870}Layouts\UI\Textures\Icons\iconmanmg_ca.edds");
-							break;
-						};
-						// RAT/MAT			
-						case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1) : {
-							iconArray.Insert("{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds");
-							break;
-						};
-						// GL
-						case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : {
-							iconArray.Insert("{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds");
-							break;
-						};
-						// No One Special (Loser)
-						default : {
-							iconArray.Insert("{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds");
-						};
+						case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1)    : { iconArray.Insert(m_sMedic);         break; };
+						case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1)     : { iconArray.Insert(m_sSniper);        break; };
+						case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1)      : { iconArray.Insert(m_sMachineGunner); break; };		
+						case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1)  : { iconArray.Insert(m_sAntiTank);      break; };
+						case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : { iconArray.Insert(m_sGrenadier);     break; };
+						default                                                           : { iconArray.Insert(m_sMan);                  };
 					};
 				};
 				string playerString = string.Format("%1;%2;%3;",playerName, playerColorTeam, iconArray[0]);
@@ -261,14 +216,14 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				string icon = playerGroupString[2];
 				int value = 0;
 				
-				if (icon == "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds") {value = 10};
-				if (icon == "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\iconmanteamleader_ca.edds") {value++};
+				if (icon == m_sSquadLeader) {value = 10};
+				if (icon == m_sTeamLeader) {value++};
 				
 				switch (colorTeam) {
-					case "Red"    : {value = value + 4; break;};
-					case "Blue"   : {value = value + 3; break;};
-					case "Yellow" : {value = value + 2; break;};
-					case "Green"  : {value = value + 1; break;};
+					case "Red"    : {value = value + 4; break; };
+					case "Blue"   : {value = value + 3; break; };
+					case "Yellow" : {value = value + 2; break; };
+					case "Green"  : {value++;           break; };
 				};
 				
 				string playerValueString = string.Format("%1|%2|",value, playerGroupString);
