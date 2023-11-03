@@ -1,8 +1,17 @@
 class COA_StaminaBar : SCR_InfoDisplay
 {
 	private ProgressBarWidget StamBar = null;
-	private bool stamBarVisible = false;
+	private bool stamBarVisible = true;
+	private bool stamBarEnabled = true;
 	private int widgetRefresh = 360;
+	
+	override protected void OnInit(IEntity owner)
+	{
+		super.OnInit(owner);
+		GetGame().GetInputManager().AddActionListener("ToggleStamina", EActionTrigger.DOWN, ToggleStamina);
+		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext",3600000);
+
+	}
 	
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
@@ -41,28 +50,52 @@ class COA_StaminaBar : SCR_InfoDisplay
 		for(int i = 0; i < time; i++) 
 		{
 			widget.SetOpacity(change);
-			//Print("Opacity: " + widget.GetOpacity());
 			Sleep(1000); //sleep 1s
+		}
+	}
+	
+	protected void ToggleStamina()
+	{
+		stamBarEnabled = !stamBarEnabled;
+		if(stamBarEnabled)
+		{
+			StamBar.SetOpacity(1);
+		}
+		else
+		{
+			StamBar.SetOpacity(0);
 		}
 	}
 	
 	
 	void RevealBar(ProgressBarWidget widget) 
 	{
+		if(stamBarEnabled)
+		{
 		stamBarVisible = true;
 		widget.SetOpacity(0.5);
+		}
 		//FadeBar(stamBarRef, 0.5, 2);
 	}
 	
 	protected void HideBar(ProgressBarWidget widget) 
 	{
+		if(stamBarEnabled)
+		{
 		stamBarVisible = false;
 		widget.SetOpacity(0);
+		}
+
 		//FadeBar(stamBarRef, 0, 2);
 	}
 	
 	void OnStaminaChange(float value, ProgressBarWidget stamBarRef)
     {
+		if(!stamBarEnabled)
+		{
+			stamBarRef.SetOpacity(0);
+			return;
+		}
 		stamBarRef.SetCurrent(value);
 		//Print("Stamina: " + value);
 		//Print("stamBarVisible: " + stamBarVisible);
