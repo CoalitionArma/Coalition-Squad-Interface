@@ -21,12 +21,9 @@ class COA_StaminaBar : SCR_InfoDisplay
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 		
-		//Refresh base widgets every 360 frames
-		if (widgetRefresh >= 360) {
-			widgetRefresh = 0;
+		//Refresh base widget
+		if (!StamBar) {
 			StamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
-		} else {
-			widgetRefresh++;
 		};
 		
 		// Can't run if these dont exist better exit out.

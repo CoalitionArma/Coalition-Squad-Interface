@@ -1,3 +1,19 @@
-FrameWidgetClass "{5EB624489C47251C}" {
+FrameWidgetClass {
  Name "rootFrame"
+ {
+  ImageWidgetClass "{5EC651633FD7EAA1}" {
+   Name "Image0"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -47.134
+    OffsetLeft -47.134
+    PositionY -14.215
+    OffsetTop -14.215
+    SizeX 100
+    OffsetRight -52.866
+    SizeY 30
+    OffsetBottom -15.785
+   }
+  }
+ }
 }

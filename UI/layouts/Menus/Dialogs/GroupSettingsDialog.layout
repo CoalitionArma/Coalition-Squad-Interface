@@ -1,4 +1,4 @@
-FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
+FrameWidgetClass "{7C63AA7A1665759D}UI/layouts/Menus/Dialogs/GroupSettingsDialog.layout" : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
  {
   SizeLayoutWidgetClass "{5CC296FE0BE2ED39}" {
    Prefab "{5CC296FE0BE2ED39}"
