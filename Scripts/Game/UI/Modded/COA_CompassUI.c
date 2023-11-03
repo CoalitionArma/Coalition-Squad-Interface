@@ -3,8 +3,8 @@ class COA_Compass : SCR_InfoDisplay
 	private TextWidget Bearing = null;
 	private ImageWidget Compass = null;
 	private bool isVisible = true;
-	private int groupRefresh = 45;
-	private int widgetRefresh = 360;
+	private string groupStringStored = "N/A";
+	private int groupRefresh = 30;
 	
 	override protected void OnInit(IEntity owner)
 	{
@@ -21,13 +21,10 @@ class COA_Compass : SCR_InfoDisplay
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 		
-		//Refresh base widgets every 360 frames
-		if (widgetRefresh >= 360) {
-			widgetRefresh = 0;
+		//Refresh base widgets if we can't get them
+		if (!Bearing || !Compass) {
 			Bearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
 			Compass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
-		} else {
-			widgetRefresh++;
 		};
 		
 		// Can't run if these dont exist better exit out.
@@ -41,11 +38,9 @@ class COA_Compass : SCR_InfoDisplay
 		
 		if (!m_cCharacterController ) return;
 
-		// Update Group Display every 45 frames. (May lower to 30 depending on feedback from players with lower end PCs)
-		if (groupRefresh >= 45) {
-				
+		// Update Group Display every 35 frames.
+		if (groupRefresh >= 35) {	
 			groupRefresh = 0;
-			
 			// Get Global Player Controller and Group Manager.
 			SCR_PlayerController playerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 			SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SCR_GroupsManagerComponent));
@@ -56,29 +51,53 @@ class COA_Compass : SCR_InfoDisplay
 			SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerController.GetPlayerId());
 			
 			// If player doesn't have a group we can't do much, better check then clear their group display, just in case.
-			if (!playersGroup) {
-				ClearGroupDisplay(0, false);
-				return;
-			};
+			if (!playersGroup) {ClearGroupDisplay(0, false); return;};
 			
-			// Get list of all the players we have to parse through.
-			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
-			//array<int> groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
+			string groupString = groupManager.ReturnGroupMapValue(playersGroup.ToString());
 			
-			// Count how many players we plan on parsing through.
-			int groupCount = groupPlayersIDs.Count();
+			if (!groupString || groupString == "") {ClearGroupDisplay(0, false); return;};
 			
-			//If person is only one in group, check then clear the group display.
-			if (groupCount == 1 || groupCount == 0) {
-				ClearGroupDisplay(0, false);
-				return;
-			};
+			if (groupString == groupStringStored) return;
 			
-			// Get current group leader.
-			int groupLeaderID = playersGroup.GetLeaderID();
+			groupStringStored = groupString;
 			
-			// Parse through groupPlayersIDs and show players names and icons on the group display.
-			GroupDisplay(groupLeaderID, groupCount, groupPlayersIDs);
+			array<string> localGroupSplitString = {};
+			groupString.Split(";", localGroupSplitString, true);
+			
+			int groupCount = localGroupSplitString.Count();
+			groupCount = groupCount/3;
+			
+			int playerPlace = 0;
+
+			// Parse through current group array.
+			for(int i = 0; i<groupCount && i < 12; i++) 
+			{
+				string playerName = localGroupSplitString[playerPlace];
+				string colorTeam = localGroupSplitString[playerPlace + 1];
+				string icon = localGroupSplitString[playerPlace + 2];
+				
+				playerPlace = playerPlace + 3;
+			
+				// Get group display widgets.
+				TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
+				ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
+				
+				playerDisplay.SetText(playerName);
+				statusDisplay.SetOpacity(1);
+				statusDisplay.LoadImageTexture(0, icon);
+				
+				if (colorTeam) {
+					switch (colorTeam) 
+					{
+						case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 230, 0, 0));     playerDisplay.SetColorInt(ARGB(255, 230, 0, 0));     break;};
+						case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break;};
+						case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break;};
+						case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 230, 0));     playerDisplay.SetColorInt(ARGB(255, 0, 230, 0));     break;};
+						case "None"   : {statusDisplay.SetColorInt(ARGB(255, 255, 255, 255)); playerDisplay.SetColorInt(ARGB(255, 255, 255, 255)); break;};
+					};
+				};
+			};	
+			ClearGroupDisplay(groupCount, true);
 		} else {
 			groupRefresh++;
 		};
@@ -86,210 +105,9 @@ class COA_Compass : SCR_InfoDisplay
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
 	
-	// Functions used for the UI
+	// Group Display Additional Functions
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
-	protected void GroupDisplay(int groupLeaderID, int groupCount, array<int> groupPlayersIDs)
-	{	
-		// Cannot guarantee that the player at 0 in groupPlayersIDs will always be the squad leader, so we find him in the group array and force him there.
-		int leaderIndex = groupPlayersIDs.Find(groupLeaderID);
-		groupPlayersIDs.Remove(leaderIndex);
-		
-		// Sort the array from player IDs. (typically comes out as the first to last players on the squad to connect)
-		groupPlayersIDs.Sort(true);
-		
-		// Push the Squad leader to the first Icon.
-		groupPlayersIDs.InsertAt(groupLeaderID, 0);
-		
-		// Parse through current group array.
-		for(int i = 0; i<groupCount && i < 18; i++) 
-		{
-			// Get Target Players ID.
-			int localPlayerID = groupPlayersIDs[i];
-			
-			// Get target players entity and player name.
-			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
-			string playerName = GetGame().GetPlayerManager().GetPlayerName(localPlayerID);
-			
-			// Get group display widgets.
-			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
-			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
-			
-			// Skip ahead to next for-loop iteration if any of whese are false.
-			if (!statusDisplay || !playerDisplay || !playerName || !localplayer) continue;
-			
-			// Set player text.
-			playerDisplay.SetText(playerName);
-			
-			//---------------------------------------------------------------------------------------------------------------------------------
-			// Color Teams
-			//---------------------------------------------------------------------------------------------------------------------------------
-			
-			//statusDisplay.SetColorInt(ARGB(255, 255, 160, 160))
-			
-			//---------------------------------------------------------------------------------------------------------------------------------
-			// Vehicle Icons, they supercede any specialty icons
-			//---------------------------------------------------------------------------------------------------------------------------------
-			
-			// Check if target player is even in a vehicle.
-			CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(localplayer.FindComponent(CompartmentAccessComponent));
-			if (compartmentAccess)
-			{
-				// Check target players current compartment.
-			   BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();  
-			    if (compartment)
-			    {
-					// Check target players current compartment type, then assign his icon.
-			        ECompartmentType compartmentType = SCR_CompartmentAccessComponent.GetCompartmentType(compartment);
-					switch (compartmentType)
-					{
-						// Passanger/Commander 
-						// ToDo: impliment Commander compartment detection and icon when/if it's added to the game
-						case ECompartmentType.Cargo : {
-							statusDisplay.SetOpacity(1);
-							statusDisplay.LoadImageTexture(0, "{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds");
-							break;
-						}
-						// Driver
-						case ECompartmentType.Pilot : {
-							statusDisplay.SetOpacity(1);
-							statusDisplay.LoadImageTexture(0, "{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds");
-							break;
-						}
-						// Gunner
-						case ECompartmentType.Turret : {
-							statusDisplay.SetOpacity(1);
-							statusDisplay.LoadImageTexture(0, "{3DAAB773C8C29812}Layouts\UI\Textures\Icons\imagegunner_ca.edds");
-							break;
-						}
-					}
-					// Skip ahead to next for-loop iteration since we've done our job of setting the target players icon.
-					continue;
-			    };
-			};
-
-			//---------------------------------------------------------------------------------------------------------------------------------
-			//	Specialty Icons
-			//---------------------------------------------------------------------------------------------------------------------------------
-			
-			// Check if current target player is the current squad leader AND we're at the correct position.
-			if (localPlayerID == groupLeaderID && i == 0) 
-			{
-				// Set Squad Leader Icon
-				statusDisplay.SetOpacity(1);
-				statusDisplay.LoadImageTexture(0, "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds");
-				// Skip ahead to next for-loop iteration since we've done our job of setting the target players icon.
-				continue;
-			};
-			
-			// Get target players inventory component
-			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-			
-			// Get all of target players inventory items
-			array<IEntity> allPlayerItems = {};
-			characterInventory.GetAllRootItems(allPlayerItems);
-			
-			// Settup new arrays and variables
-			//
-			array<EWeaponType> WeaponTypeArray = new array<EWeaponType>();
-			array<SCR_EConsumableType> MedicalTypeArray = new array<SCR_EConsumableType>();
-			array<BaseMuzzleComponent> muzzles = {};
-			EntityPrefabData prefabData;
-			string resourceName;
-			
-			// Parse through players entire inventory.
-			foreach (IEntity item : allPlayerItems)
-			{			
-				prefabData = item.GetPrefabData();
-					
-				// Ignore if no prefab data.
-				if (!prefabData) continue;
-					
-				resourceName = prefabData.GetPrefabName();
-				
-				// Ignore if no prefab resource name.
-				if (resourceName.IsEmpty()) continue;
-				
-				// Check if item is consumable (nearly always a medical item).
-				SCR_ConsumableItemComponent consumable = SCR_ConsumableItemComponent.Cast(item.FindComponent(SCR_ConsumableItemComponent));
-				if (consumable)
-				{
-					// Check items type.
-					SCR_EConsumableType medicalType = SCR_ConsumableItemComponent.Cast(consumable).GetConsumableType();
-					if (medicalType == SCR_EConsumableType.SALINE)
-					{
-						// Insert the valid item into the medical array so we can read it later.
-						MedicalTypeArray.Insert(medicalType);
-					};
-				};
-				// Check if item is a Weapon.
-				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
-				if (weaponComp) {
-					
-					// Get the weapons type and insert it into the weapon array so we can read it later.
-					WeaponTypeArray.Insert(weaponComp.GetWeaponType());
-					
-					// Get muzzle types (so we can detect something like a underslung grenade launcher)
-					for (int m = 0, mCount = weaponComp.GetMuzzlesList(muzzles); m < mCount; m++)
-					{
-						// Convert muzzle types to weapon types and insert it into the weapon array so we can read it later. (ToDo: Not hardcoded?)
-						switch (muzzles[m].GetMuzzleType())
-						{
-							case EMuzzleType.MT_RPGMuzzle : {
-								WeaponTypeArray.Insert(EWeaponType.WT_ROCKETLAUNCHER);
-								break;
-							};
-							case EMuzzleType.MT_UGLMuzzle : {
-								WeaponTypeArray.Insert(EWeaponType.WT_GRENADELAUNCHER);
-								break;
-							};
-						}
-					}
-				};
-			};
-			// Take all the data we just collected and assign players a icon based on if it exists in the weapon/medical arrays.
-			switch (true) 
-			{
-				// Medic
-				case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1) : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\iconmanmedic_ca.edds");
-					break;
-				};
-				// Sniper
-				case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1) : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{318B797C57BE3C29}Layouts\UI\Textures\Icons\iconmansniper_ca.edds");
-					break;
-				};
-				// MG	
-				case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1) : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{CCF40410BDB53870}Layouts\UI\Textures\Icons\iconmanmg_ca.edds");
-					break;
-				};
-				// RAT/MAT			
-				case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1) : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds");
-					break;
-				};
-				// GL
-				case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds");
-					break;
-				};
-				// No One Special (Loser)
-				default : {
-					statusDisplay.SetOpacity(1);
-					statusDisplay.LoadImageTexture(0, "{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds");
-				};
-			};
-		}
-		// Clear the group display bellow what we just populated, getting rid of any defunct player names/icons.
-		ClearGroupDisplay(groupCount, true);
-	}
 	
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
@@ -305,13 +123,19 @@ class COA_Compass : SCR_InfoDisplay
 					
 				// Skip ahead to next for-loop iteration if either of these are false.
 				if (!playerRemoveDisplay || !statusRemoveDisplay) continue;
-					
+							
 				// Clear widgets.
 				playerRemoveDisplay.SetText("");
 				statusRemoveDisplay.SetOpacity(0);
 			}
 		};
 	};
+	
+	//---------------------------------------------------------------------------------------------------------------------------------
+	
+	// Compass Functions
+	
+	//---------------------------------------------------------------------------------------------------------------------------------
 	
 	protected void ToggleCompass()
 	{
@@ -358,5 +182,4 @@ class COA_Compass : SCR_InfoDisplay
 		// Set Bearing Text
 		BearingRef.SetText(bearingSTR);
 	}
-	
 }
