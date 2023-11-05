@@ -2,7 +2,8 @@ class COA_Compass : SCR_InfoDisplay
 {
 	private TextWidget Bearing = null;
 	private ImageWidget Compass = null;
-	private bool isVisible = true;
+	private bool CompassVisible = true;
+	private bool GroupDisplayVisible = true;
 	private string groupStringStored = "N/A";
 	private int groupRefresh = 30;
 	
@@ -10,12 +11,11 @@ class COA_Compass : SCR_InfoDisplay
 	{
 		super.OnInit(owner);
 		GetGame().GetInputManager().AddActionListener("ToggleCompass", EActionTrigger.DOWN, ToggleCompass);
-
+		GetGame().GetInputManager().AddActionListener("ToggleGroupDisplay", EActionTrigger.DOWN, ToggleGroupDisplay);
 	}
 	
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
-		
 		super.UpdateValues(owner, timeSlice);
 		
 		// Get local enity the player is controlling at the moment.
@@ -33,10 +33,10 @@ class COA_Compass : SCR_InfoDisplay
 		// Sets Bearings text and the Compass direction
 		SetBearingSetCompass(Bearing, Compass);
 		
-		// Get Charachter Controller of the locally played entity.
-		SCR_CharacterControllerComponent m_cCharacterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
-		
-		if (!m_cCharacterController ) return;
+		if(!GroupDisplayVisible) {
+			ClearGroupDisplay(0, true);
+			return;
+		};
 
 		// Update Group Display every 35 frames.
 		if (groupRefresh >= 35) {	
@@ -58,14 +58,13 @@ class COA_Compass : SCR_InfoDisplay
 			if (!groupString || groupString == "") {ClearGroupDisplay(0, false); return;};
 			
 			if (groupString == groupStringStored) return;
-			
 			groupStringStored = groupString;
 			
 			array<string> localGroupSplitString = {};
 			groupString.Split(";", localGroupSplitString, true);
 			
 			int groupCount = localGroupSplitString.Count();
-			groupCount = groupCount/3;
+			groupCount = groupCount/4;
 			
 			int playerPlace = 0;
 
@@ -76,7 +75,7 @@ class COA_Compass : SCR_InfoDisplay
 				string colorTeam = localGroupSplitString[playerPlace + 1];
 				string icon = localGroupSplitString[playerPlace + 2];
 				
-				playerPlace = playerPlace + 3;
+				playerPlace = playerPlace + 4;
 			
 				// Get group display widgets.
 				TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
@@ -137,10 +136,16 @@ class COA_Compass : SCR_InfoDisplay
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
 	
+	protected void ToggleGroupDisplay()
+	{
+		GroupDisplayVisible = !GroupDisplayVisible;
+		Print("test");
+	}
+	
 	protected void ToggleCompass()
 	{
-		isVisible = !isVisible;
-		if(isVisible)
+		CompassVisible = !CompassVisible;
+		if(CompassVisible)
 		{
 			Compass.SetOpacity(1);
 			Bearing.SetOpacity(1);
@@ -150,7 +155,6 @@ class COA_Compass : SCR_InfoDisplay
 			Compass.SetOpacity(0);
 			Bearing.SetOpacity(0);
 		}
-		
 	}
 
 	protected void SetBearingSetCompass(TextWidget BearingRef, ImageWidget CompassRef)

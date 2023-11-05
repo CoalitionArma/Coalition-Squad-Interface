@@ -61,7 +61,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 			// Get list of all the players we have to parse through.
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
 			//groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
-			
+
 			if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) {
 				m_mGroupMasterMap.Remove(GrpString); 
 				m_mGroupMasterMap.Insert(GrpString, ""); 
@@ -86,8 +86,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				//---------------------------------------------------------------------------------------------------------------------------------
 				
 				string playerColorTeam = ReturnUIValue(localPlayerID, "ColorTeam");
-				
-				if (!playerColorTeam) {playerColorTeam = "None"};
+				if (!playerColorTeam || playerColorTeam == "") {playerColorTeam = "None"};
 				
 				//---------------------------------------------------------------------------------------------------------------------------------
 				// Vehicle Icons, they supercede any other icon
@@ -116,9 +115,9 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				// Override regular Icons If Set By SL
 				//---------------------------------------------------------------------------------------------------------------------------------
 				
-				string playerOverideIcon =  ReturnUIValue(localPlayerID, "Icon");
+				string playerOverideIcon =  ReturnUIValue(localPlayerID, "ForcedIcon");
 				
-				if (playerOverideIcon && iconArray.IsEmpty()) {
+				if (playerOverideIcon && playerColorTeam != "" && iconArray.IsEmpty()) {
 					switch (playerOverideIcon) 
 						{
 						case "Team Lead"      : { iconArray.Insert(m_sTeamLeader);    break; };
@@ -140,6 +139,7 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 				{
 					// Set Squad Leader Icon
 					iconArray.Insert(m_sSquadLeader);
+					playerColorTeam = "None";
 				};
 				
 				if (iconArray.IsEmpty()) {
@@ -174,10 +174,8 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 						// Check if item is a Weapon.
 						WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
 						if (weaponComp) {
-							
 							// Get the weapons type and insert it into the weapon array so we can read it later.
 							WeaponTypeArray.Insert(weaponComp.GetWeaponType());
-							
 							// Get muzzle types (so we can detect something like a underslung grenade launcher)
 							for (int m = 0, mCount = weaponComp.GetMuzzlesList(muzzles); m < mCount; m++)
 							{
@@ -208,26 +206,47 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 						default                                                           : { iconArray.Insert(m_sMan);                  };
 					};
 				};
-				string playerString = string.Format("%1;%2;%3;",playerName, playerColorTeam, iconArray[0]);
+				string playerString = string.Format("%1;%2;%3;%4;",playerName, playerColorTeam, iconArray[0], localPlayerID);
 				groupStringArray.Insert(playerString);
+				
+				if (iconArray[0] != m_sCargo && iconArray[0] != m_sDriver && iconArray[0] != m_sGunner) {
+					string playerStoredIcon = ReturnUIValue(localPlayerID, "StoredIcon");
+					if (playerStoredIcon != iconArray[0]) {
+						UpdateUIvalue(localPlayerID, "StoredIcon", iconArray[0]);
+					};
+				}
 			};
 			
 			array<string> arrStr = {};
 			
 			foreach (int i, string playerGroupString : groupStringArray)
 			{
-				string colorTeam = playerGroupString[1];
-				string icon = playerGroupString[2];
+				array<string> pLocStrArr = {};
+				playerGroupString.Split(";", pLocStrArr, true);
+				string colorTeam = pLocStrArr[1];
+				string icon = pLocStrArr[2];
+				string locPlayerID = pLocStrArr[3];
+				int locPlayerIDInt = locPlayerID.ToInt();
 				int value = 0;
 				
-				if (icon == m_sSquadLeader) {value = 10};
-				if (icon == m_sTeamLeader) {value++};
-				
 				switch (colorTeam) {
-					case "Red"    : {value = value + 4; break; };
-					case "Blue"   : {value = value + 3; break; };
-					case "Yellow" : {value = value + 2; break; };
-					case "Green"  : {value++;           break; };
+					case "Red"    : {value =  2; break; };
+					case "Blue"   : {value =  4; break; };
+					case "Yellow" : {value =  6; break; };
+					case "Green"  : {value =  8; break; };
+					case "None"   : {value = -3; break; };
+				};
+				
+				
+				if (icon == m_sCargo || icon == m_sDriver || icon == m_sGunner) {
+					string playerSI = ReturnUIValue(locPlayerIDInt, "StoredIcon");
+					if (playerSI) {icon = playerSI};
+				};
+				
+				switch (true) {
+					case (icon == m_sSquadLeader)                       : {value = -1; break; };
+					case (icon == m_sTeamLeader && colorTeam == "None") : {value++;    break; };
+					case (icon == m_sTeamLeader && colorTeam != "None") : {value--;    break; };
 				};
 				
 				string playerValueString = string.Format("%1|%2|",value, playerGroupString);
