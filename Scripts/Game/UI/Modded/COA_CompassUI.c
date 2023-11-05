@@ -139,7 +139,6 @@ class COA_Compass : SCR_InfoDisplay
 	protected void ToggleGroupDisplay()
 	{
 		GroupDisplayVisible = !GroupDisplayVisible;
-		Print("test");
 	}
 	
 	protected void ToggleCompass()
