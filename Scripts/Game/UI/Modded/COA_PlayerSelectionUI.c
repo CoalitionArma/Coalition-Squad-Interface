@@ -54,14 +54,6 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 			return;
 		};
 		
-		playersGroup = groupManager.GetPlayerGroup(playerController.GetPlayerId());
-		
-		array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
-		if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) {
-			GetGame().GetMenuManager().CloseMenu(this);
-			return;
-		};
-		
 		for (int b = 0; b < 12; b++)
 		{
 			SCR_ButtonBaseComponent.GetButtonBase(string.Format("Button%1", b), m_wRoot).m_OnClicked.Insert(OnPlayerEntryClicked);
@@ -92,11 +84,17 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 	
 	protected void UpdatePlayerList()
 	{
+		playersGroup = groupManager.GetPlayerGroup(playerController.GetPlayerId());
+		
 		if (!playersGroup) return;
 
-		string groupString = groupManager.ReturnGroupMapValue(playersGroup.ToString());
+		groupString = groupManager.ReturnGroupMapValue(playersGroup.ToString());
 
-		if (!groupString || groupString == "") return;
+		if (!groupString || groupString == "") {
+			GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
+			GetGame().GetMenuManager().CloseMenu(this);
+			return;
+		};
 
 		if (groupString == groupStringStored) return;
 		groupStringStored = groupString;
