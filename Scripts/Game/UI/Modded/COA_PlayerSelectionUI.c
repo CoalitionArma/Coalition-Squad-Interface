@@ -22,6 +22,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
 	protected InputManager m_InputManager;
+	protected string groupString = "";
 	protected string groupStringStored = "N/A";
 	
 	protected int PlayerInt;
