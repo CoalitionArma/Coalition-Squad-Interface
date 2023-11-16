@@ -80,8 +80,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -104,8 +104,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -146,8 +146,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -188,8 +188,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -248,8 +248,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -290,8 +290,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -332,8 +332,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -374,8 +374,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -416,8 +416,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -458,8 +458,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -500,8 +500,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -542,8 +542,8 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 14
+   "Min Font Size" 14
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"

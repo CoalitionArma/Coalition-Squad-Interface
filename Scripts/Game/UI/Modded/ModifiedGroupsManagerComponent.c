@@ -1,8 +1,7 @@
 modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 {
-	protected ref map<string, string> m_mStoredPlayerValues = new ref map <string, string>;
-	protected ref map<string, string> m_mGroupMasterMap = new ref map<string, string>;
-	protected int m_iFrame = 30;
+	protected ref map<string,string> m_mLocallyStoredPlayerValues = new map <string,string>;
+	protected ref map<string,string> m_mGroupMasterMap = new map<string,string>;
 
 	protected string m_sCargo = "{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds";
 	protected string m_sDriver = "{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds";
@@ -15,90 +14,91 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 	protected string m_sAntiTank = "{DC86195B44F5A345}Layouts\UI\Textures\Icons\iconmanat_ca.edds";
 	protected string m_sGrenadier = "{B7757F2024A3DC87}Layouts\UI\Textures\Icons\iconmangrenadier_ca.edds";
 	protected string m_sMan = "{71ED761DF5BA041C}Layouts\UI\Textures\Icons\iconman_ca.edds";
-
+	
 	void UpdateUIvalue(int playerIDUI, string writeUpdate, string valueUpdate)
-    {
+	{
 		string key = string.Format("%1 %2", playerIDUI, writeUpdate);
-		m_mStoredPlayerValues.Remove(key);
-		m_mStoredPlayerValues.Insert(key, valueUpdate);
-	};
-	
+		m_mLocallyStoredPlayerValues.Remove(key);
+		m_mLocallyStoredPlayerValues.Insert(key, valueUpdate);
+	}
+
 	string ReturnUIValue(int playerIDUIReturn, string check)
-    {
+	{	
 		string checkKey = string.Format("%1 %2", playerIDUIReturn, check);
-		return m_mStoredPlayerValues.Get(checkKey);
-	};
+		return m_mLocallyStoredPlayerValues.Get(checkKey);
+	}
 	
+	void UpdateGroupMapValue(string GrpString, string masterString) 
+	{
+		m_mGroupMasterMap.Remove(GrpString);
+		m_mGroupMasterMap.Insert(GrpString, masterString);
+	}
+
 	string ReturnGroupMapValue(string groupReturn)
-    {
+	{
 		string localGroupString = m_mGroupMasterMap.Get(groupReturn);
 		return localGroupString;
-	};
+	}
 
-	override void EOnFrame(IEntity owner, float timeSlice)
+	override protected void OnPostInit(IEntity owner)
 	{
-		//if (!Replication.IsServer()) {ClearEventMask(GetOwner(), EntityEvent.FRAME);};
-		UpdateGroupValues();
-	};
-
-	void UpdateGroupValues()
+		super.OnPostInit(owner);
+		GetGame().GetCallqueue().CallLater(UpdateGroupValues, 65, true, owner);
+	}
+	
+	void UpdateGroupValues(IEntity owner)
 	{	
-		if (m_iFrame < 30) {m_iFrame++; return;};
-		
-		m_iFrame = 0;
-		
-		array <SCR_AIGroup> outAllGroups;
+		array<SCR_AIGroup> outAllGroups;
 
 		GetAllPlayableGroups(outAllGroups);
-		
+
 		foreach (SCR_AIGroup playersGroup : outAllGroups)
 		{
 			if (!playersGroup) continue;
 			string GrpString = playersGroup.ToString();
-			
+
 			array<string> groupStringArray = {};
-	
+
 			// Get list of all the players we have to parse through.
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
-			//groupPlayersIDs = {1,1,1,1,1,1}; //Debugging
-			
+			//groupPlayersIDs = {1, 1}; //Debugging
+
 			if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) {
-				m_mGroupMasterMap.Remove(GrpString); 
-				m_mGroupMasterMap.Insert(GrpString, ""); 
+				m_mGroupMasterMap.Remove(GrpString);
+				m_mGroupMasterMap.Insert(GrpString, "");
 				continue;
 			};
-			
+
 			int groupLeaderID = playersGroup.GetLeaderID();
 	
 			// Parse through current group array.
-			foreach(int localPlayerID : groupPlayersIDs) 
+			foreach (int localPlayerID : groupPlayersIDs)
 			{
 				// Get target players entity and player name.
 				IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
 				string playerName = GetGame().GetPlayerManager().GetPlayerName(localPlayerID);
 				array<string> iconArray = {};
-				
+
 				// Skip ahead to next for-loop iteration if any of these are false.
 				if (!playerName || !localplayer) continue;
-				
-				//---------------------------------------------------------------------------------------------------------------------------------
+
+				//------------------------------------------------------------------------------------------------
 				// Color Teams
-				//---------------------------------------------------------------------------------------------------------------------------------
-				
+				//------------------------------------------------------------------------------------------------
+
 				string playerColorTeam = ReturnUIValue(localPlayerID, "ColorTeam");
-				
-				if (!playerColorTeam) {playerColorTeam = "None"};
-				
-				//---------------------------------------------------------------------------------------------------------------------------------
+				if (!playerColorTeam || playerColorTeam == "") {playerColorTeam = "None"};
+
+				//------------------------------------------------------------------------------------------------
 				// Vehicle Icons, they supercede any other icon
-				//---------------------------------------------------------------------------------------------------------------------------------
-				
+				//------------------------------------------------------------------------------------------------
+
 				// Check if target player is in a vehicle.
 				CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(localplayer.FindComponent(CompartmentAccessComponent));
 				if (compartmentAccess)
 				{
 					// Check target players current compartment.
-					BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();  
+					BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 					if (compartment)
 					{
 						// Check target players current compartment type, then assign his icon.
@@ -111,54 +111,67 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 						};
 					};
 				};
+
+				//------------------------------------------------------------------------------------------------
+				// Set SL Icon
+				//------------------------------------------------------------------------------------------------
 				
-				//---------------------------------------------------------------------------------------------------------------------------------
+				// Check if current target player is the current squad leader.
+				if (localPlayerID == groupLeaderID && iconArray.IsEmpty())
+				{
+					// Set Squad Leader Icon
+					iconArray.Insert(m_sSquadLeader);
+					//playerColorTeam = "None";
+				};
+
+				//------------------------------------------------------------------------------------------------
 				// Override regular Icons If Set By SL
-				//---------------------------------------------------------------------------------------------------------------------------------
-				
-				string playerOverideIcon =  ReturnUIValue(localPlayerID, "Icon");
-				
-				if (playerOverideIcon && iconArray.IsEmpty()) {
-					switch (playerOverideIcon) 
+				//------------------------------------------------------------------------------------------------
+
+				string playerOverideIcon = ReturnUIValue(localPlayerID, "OverrideIcon");
+
+				if (playerOverideIcon && playerColorTeam != "" && iconArray.IsEmpty()) {
+					switch (playerOverideIcon)
 						{
 						case "Team Lead"      : { iconArray.Insert(m_sTeamLeader);    break; };
 						case "Medic"          : { iconArray.Insert(m_sMedic);         break; };
 						case "Sniper"         : { iconArray.Insert(m_sSniper);        break; };
-						case "Machine Gunner" : { iconArray.Insert(m_sMachineGunner); break; };		
+						case "Machine Gunner" : { iconArray.Insert(m_sMachineGunner); break; };
 						case "Anti-Tank"      : { iconArray.Insert(m_sAntiTank);      break; };
 						case "Grenadier"      : { iconArray.Insert(m_sGrenadier);     break; };
 						case "Man"            : { iconArray.Insert(m_sMan);           break; };
 					};
 				};
-	
-				//---------------------------------------------------------------------------------------------------------------------------------
+
+				//------------------------------------------------------------------------------------------------
 				//	Specialty Icons
-				//---------------------------------------------------------------------------------------------------------------------------------
-				
+				//------------------------------------------------------------------------------------------------
+
 				// Check if current target player is the current squad leader.
-				if (localPlayerID == groupLeaderID && iconArray.IsEmpty()) 
+				if (localPlayerID == groupLeaderID && iconArray.IsEmpty())
 				{
 					// Set Squad Leader Icon
 					iconArray.Insert(m_sSquadLeader);
+					//playerColorTeam = "None";
 				};
-				
+
 				if (iconArray.IsEmpty()) {
 					// Get target players inventory component
 					SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-					
+
 					// Get all of target players inventory items
 					array<IEntity> allPlayerItems = {};
 					characterInventory.GetAllRootItems(allPlayerItems);
-					
+
 					// Settup new arrays and variables
 					//
-					array<EWeaponType> WeaponTypeArray = new array<EWeaponType>();
-					array<SCR_EConsumableType> MedicalTypeArray = new array<SCR_EConsumableType>();
+					array<EWeaponType> WeaponTypeArray = {};
+					array<SCR_EConsumableType> MedicalTypeArray = {};
 					array<BaseMuzzleComponent> muzzles = {};
-					
+
 					// Parse through players entire inventory.
 					foreach (IEntity item : allPlayerItems)
-					{				
+					{
 						// Check if item is consumable (nearly always a medical item).
 						SCR_ConsumableItemComponent consumable = SCR_ConsumableItemComponent.Cast(item.FindComponent(SCR_ConsumableItemComponent));
 						if (consumable)
@@ -174,10 +187,8 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 						// Check if item is a Weapon.
 						WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
 						if (weaponComp) {
-							
 							// Get the weapons type and insert it into the weapon array so we can read it later.
 							WeaponTypeArray.Insert(weaponComp.GetWeaponType());
-							
 							// Get muzzle types (so we can detect something like a underslung grenade launcher)
 							for (int m = 0, mCount = weaponComp.GetMuzzlesList(muzzles); m < mCount; m++)
 							{
@@ -195,60 +206,79 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 								};
 							};
 						};
-					};	
+					};
 					// Take all the data we just collected and assign players a icon based on if it exists in the weapon/medical arrays.
-					switch (true) 
+					switch (true)
 					{
 						// Medic
 						case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1)    : { iconArray.Insert(m_sMedic);         break; };
 						case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1)     : { iconArray.Insert(m_sSniper);        break; };
-						case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1)      : { iconArray.Insert(m_sMachineGunner); break; };		
+						case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1)      : { iconArray.Insert(m_sMachineGunner); break; };
 						case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1)  : { iconArray.Insert(m_sAntiTank);      break; };
 						case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : { iconArray.Insert(m_sGrenadier);     break; };
-						default                                                           : { iconArray.Insert(m_sMan);                  };
+						default : { iconArray.Insert(m_sMan); };
 					};
 				};
-				string playerString = string.Format("%1;%2;%3;",playerName, playerColorTeam, iconArray[0]);
+				string playerString = string.Format("%1;%2;%3;%4;", playerName, playerColorTeam, iconArray[0], localPlayerID);
 				groupStringArray.Insert(playerString);
+
+				if (iconArray[0] != m_sCargo && iconArray[0] != m_sDriver && iconArray[0] != m_sGunner) {
+					string playerStoredIcon = ReturnUIValue(localPlayerID, "StoredIcon");
+					if (playerStoredIcon != iconArray[0]) {
+						UpdateUIvalue(localPlayerID, "StoredIcon", iconArray[0]);
+					};
+				}
 			};
-			
+
 			array<string> arrStr = {};
-			
+
 			foreach (int i, string playerGroupString : groupStringArray)
 			{
-				string colorTeam = playerGroupString[1];
-				string icon = playerGroupString[2];
+				array<string> pLocStrArr = {};
+				playerGroupString.Split(";", pLocStrArr, true);
+				string colorTeam = pLocStrArr[1];
+				string icon = pLocStrArr[2];
+				string locPlayerID = pLocStrArr[3];
+				int locPlayerIDInt = locPlayerID.ToInt();
 				int value = 0;
-				
-				if (icon == m_sSquadLeader) {value = 10};
-				if (icon == m_sTeamLeader) {value++};
-				
+
 				switch (colorTeam) {
-					case "Red"    : {value = value + 4; break; };
-					case "Blue"   : {value = value + 3; break; };
-					case "Yellow" : {value = value + 2; break; };
-					case "Green"  : {value++;           break; };
+					case "Red"    : { value = 2;  break; };
+					case "Blue"   : { value = 4;  break; };
+					case "Yellow" : { value = 6;  break; };
+					case "Green"  : { value = 8;  break; };
+					case "None"   : { value = -3; break; };
 				};
-				
-				string playerValueString = string.Format("%1|%2|",value, playerGroupString);
+
+
+				if (icon == m_sCargo || icon == m_sDriver || icon == m_sGunner) {
+					string playerSI = ReturnUIValue(locPlayerIDInt, "StoredIcon");
+					if (playerSI) {icon = playerSI};
+				};
+
+				switch (true) {
+					case (icon == m_sSquadLeader) : {value = -1; break; };
+					case (icon == m_sTeamLeader && colorTeam == "None") : {value++; break; };
+					case (icon == m_sTeamLeader && colorTeam != "None") : {value--; break; };
+				};
+
+				string playerValueString = string.Format("%1|%2|", value, playerGroupString);
 				arrStr.Insert(playerValueString);
 			};
-			
+
 			arrStr.Sort(false);
 			string masterString = "";
-			
+
 			foreach (string pStr : arrStr)
 			{
 				array<string> pStrArr = {};
 				pStr.Split("|", pStrArr, true);
 				masterString = masterString + pStrArr[1];
 			};
-			
+
 			string localGroupStringCheck = m_mGroupMasterMap.Get(GrpString);
-		
 			if (localGroupStringCheck && localGroupStringCheck == masterString) continue;
-			m_mGroupMasterMap.Remove(GrpString);
-			m_mGroupMasterMap.Insert(GrpString, masterString);
+			UpdateGroupMapValue(GrpString, masterString);
 		};
-	};
-};
+	}
+}
