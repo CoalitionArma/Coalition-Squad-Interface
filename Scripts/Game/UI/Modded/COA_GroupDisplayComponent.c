@@ -152,7 +152,6 @@ class COA_GroupDisplayComponent : ScriptComponent
 			characterInventory.GetAllRootItems(allPlayerItems);
 		
 			// Settup new arrays and variables
-			//
 			array<EWeaponType> WeaponTypeArray = {};
 			array<SCR_EConsumableType> MedicalTypeArray = {};
 			array<BaseMuzzleComponent> muzzles = {};
