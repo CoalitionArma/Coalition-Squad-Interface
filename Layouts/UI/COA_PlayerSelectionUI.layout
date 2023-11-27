@@ -132,7 +132,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
     }
    }
   }
@@ -193,7 +193,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AB197BECD}" {
     }
    }
   }
@@ -254,7 +254,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151ABC605797}" {
     }
    }
   }
@@ -315,7 +315,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151ABF1E29E6}" {
     }
    }
   }
@@ -376,7 +376,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AB9983D83}" {
     }
    }
   }
@@ -437,7 +437,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151ABBF71E0D}" {
     }
    }
   }
@@ -498,7 +498,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AA001848E}" {
     }
    }
   }
@@ -559,7 +559,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AA2EB333F}" {
     }
    }
   }
@@ -620,7 +620,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AAD1F2F67}" {
     }
    }
   }
@@ -681,7 +681,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AAFB29409}" {
     }
    }
   }
@@ -742,7 +742,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AA9AD83B1}" {
     }
    }
   }
@@ -803,7 +803,7 @@ FrameWidgetClass {
    }
    Color 0 0 0 0
    components {
-    SCR_ButtonBaseComponent "{5EC779036F67EB67}" {
+    SCR_InputButtonComponent "{5EE4151AD435F1DB}" {
     }
    }
   }
@@ -847,13 +847,9 @@ FrameWidgetClass {
      Clipping False
      Color 0 0 0 0
      components {
-      SCR_NavigationButtonComponent "{5ED01155922BAF1B}" {
-       m_BackgroundDefault 0 0 0 0.42
-       m_BackgroundHovered 0 0 0 0.42
-       m_bShowBorderOnHover 1
-       m_sLabel "#AR-Menu_Back"
+      SCR_InputButtonComponent "{5EE4151AD749241A}" {
        m_sActionName "MenuBack"
-       m_bUseActionColorization 1
+       m_sLabel "#AR-Workshop_ButtonCancel"
       }
      }
      "no focus" 1
@@ -873,27 +869,22 @@ FrameWidgetClass {
            Slot OverlayWidgetSlot "{5ED0135A53CDA91C}" {
            }
            {
-            RichTextWidgetClass "{5ED0135A53CDA85A}" {
-             Name "Action"
-             Slot LayoutSlot "{5ED0135A53CDA927}" {
-              HorizontalAlign 3
-              Padding 0 0 0 0
-              SizeMode Fill
+            ImageWidgetClass "{5EE531779E8C5272}" {
+             Name "Image0"
+             Slot LayoutSlot {
+              Padding -10 0 0 0
              }
-             Color 0.761 0.386 0.078 1
-             Text "<action name=\"VehicleEngineStart\"/>"
-             "Font Size" 16
-             "Min Font Size" 16
-             "Horizontal Alignment" Center
-             "Vertical Alignment" Center
+             Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
+             Image "backspace"
+             Size 64 64
             }
             RichTextWidgetClass "{5ED0135A53CDA858}" {
              Name "Text"
              Slot LayoutSlot "{5ED0135A53CDA99C}" {
-              Padding 0 0 0 0
+              Padding -10 0 0 0
               SizeMode Auto
              }
-             Text "Navigation button"
+             Text "Exit"
              "Font Size" 16
              "Min Font Size" 16
              "Vertical Alignment" Center
