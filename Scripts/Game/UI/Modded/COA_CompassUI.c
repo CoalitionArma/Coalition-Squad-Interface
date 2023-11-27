@@ -47,7 +47,7 @@ class COA_Compass : SCR_InfoDisplay
 			array<int> PlayerIDsArray = playersGroup.GetPlayerIDs();
 			int groupCount = PlayerIDsArray.Count();
 			
-			if (groupCount == 1 || groupCount == 0) {ClearGroupDisplay(0, false); return; };
+			if (groupCount <= 1) {ClearGroupDisplay(0, false); return; };
 			
 			array<string> PlayerGroupString = {};
 			
