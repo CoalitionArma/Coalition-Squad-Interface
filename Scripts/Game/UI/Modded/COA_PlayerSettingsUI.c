@@ -7,12 +7,11 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	protected XComboBoxWidget IconOveride;
 	protected ImageWidget Icon;
 	protected TextWidget PlayerName;
-
-	protected int PlayerInt;
+	
 	protected int SelectedPlayerID = 0;
-	protected SCR_PlayerController playerController = null;
-	protected SCR_GroupsManagerComponent groupManager = null;
+	protected COA_GroupDisplayManagerComponent groupManagerCOA = null;
 	protected SCR_AIGroup playersGroup = null;
+	protected COA_GroupDisplayComponent groupBackendComponent = null;
 
 	//------------------------------------------------------------------------------------------------
 	override void OnMenuOpen()
@@ -21,42 +20,65 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		
 		m_InputManager = GetGame().GetInputManager();
 		m_InputManager.AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
-		SCR_ButtonBaseComponent.GetButtonBase("Back", m_wRoot).m_OnClicked.Insert(OnMenuBack);
+		SCR_InputButtonComponent Back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
+		Back.m_OnClicked.Insert(OnMenuBack);
 
 		// Get Global Player Controller and Group Manager.
-		playerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
-		groupManager = SCR_GroupsManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SCR_GroupsManagerComponent));
-
-		if (!playerController || !groupManager) return;
-
-		playersGroup = groupManager.GetPlayerGroup(playerController.GetPlayerId());
+		groupManagerCOA = COA_GroupDisplayManagerComponent.GetInstance();
+		if (!groupManagerCOA) return;
 
 		IconOveride = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconOveride"));
 		PlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName"));
 		Icon = ImageWidget.Cast(m_wRoot.FindAnyWidget("Icon"));
 		
-		SCR_ButtonBaseComponent.GetButtonBase("ConfirmIOButton", m_wRoot).m_OnClicked.Insert(OnOverrideIconClicked);
-		SCR_ButtonBaseComponent.GetButtonBase("Red", m_wRoot).m_OnClicked.Insert(OnColorTeamClicked);
-		SCR_ButtonBaseComponent.GetButtonBase("Blue", m_wRoot).m_OnClicked.Insert(OnColorTeamClicked);
-		SCR_ButtonBaseComponent.GetButtonBase("Yellow", m_wRoot).m_OnClicked.Insert(OnColorTeamClicked);
-		SCR_ButtonBaseComponent.GetButtonBase("Green", m_wRoot).m_OnClicked.Insert(OnColorTeamClicked);
-		SCR_ButtonBaseComponent.GetButtonBase("None", m_wRoot).m_OnClicked.Insert(OnColorTeamClicked);
+		SCR_InputButtonComponent ConfirmIOButton = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_InputButtonComponent));
+		SCR_InputButtonComponent Red             = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Red").FindHandler(SCR_InputButtonComponent));
+		SCR_InputButtonComponent Blue            = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Blue").FindHandler(SCR_InputButtonComponent));		
+		SCR_InputButtonComponent Yellow          = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Yellow").FindHandler(SCR_InputButtonComponent));
+		SCR_InputButtonComponent Green           = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Green").FindHandler(SCR_InputButtonComponent));
+		SCR_InputButtonComponent None            = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("None").FindHandler(SCR_InputButtonComponent));
+		
+		ConfirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
+		Red.m_OnClicked.Insert(OnColorTeamClicked);
+		Blue.m_OnClicked.Insert(OnColorTeamClicked);
+		Yellow.m_OnClicked.Insert(OnColorTeamClicked);
+		Green.m_OnClicked.Insert(OnColorTeamClicked);
+		None.m_OnClicked.Insert(OnColorTeamClicked);
 	}
 	
-	void SetPlayerInt(int PI)
+	void SetPlayerStr(string PlayerStr)
 	{
-		PlayerInt = PI;
+		array<string> removeValueArray = {};
+		PlayerStr.Split("|", removeValueArray, false);
+		PlayerStr = removeValueArray[1];
+				
+		array<string> localPlayerStringSplit = {};
+		PlayerStr.Split(";", localPlayerStringSplit, false);
 		
-		UpdatePlayaerIcon();
+		string SelectedPlayerIDStr = localPlayerStringSplit[3];
+		SelectedPlayerID = SelectedPlayerIDStr.ToInt();
+		
+		UpdatePlayerIcon();
 	}
 
 	protected void OnColorTeamClicked(SCR_ButtonBaseComponent CTcomponent)
 	{
 		if (PlayerName.GetText() == "No Player Selected") return;
 		string ColorTeam = CTcomponent.GetRootWidget().GetName();
+		
+		switch (ColorTeam)
+		{
+			case "Red"    : {PlayerName.SetColorInt(ARGB(255, 200, 65, 65));   Icon.SetColorInt(ARGB(255, 200, 65, 65));   break; };
+			case "Blue"   : {PlayerName.SetColorInt(ARGB(255, 0, 92, 255));    Icon.SetColorInt(ARGB(255, 0, 92, 255));    break; };
+			case "Yellow" : {PlayerName.SetColorInt(ARGB(255, 230, 230, 0));   Icon.SetColorInt(ARGB(255, 230, 230, 0));   break; };
+			case "Green"  : {PlayerName.SetColorInt(ARGB(255, 0, 190, 85));    Icon.SetColorInt(ARGB(255, 0, 190, 85));    break; };
+			case "None"   : {PlayerName.SetColorInt(ARGB(255, 255, 255, 255)); Icon.SetColorInt(ARGB(255, 255, 255, 255)); break; };
+		};
+		
 		if (!SelectedPlayerID) return;
-		groupManager.UpdateUIvalue(SelectedPlayerID, "ColorTeam", ColorTeam);
-		GetGame().GetCallqueue().CallLater(UpdatePlayaerIcon, 685);
+		groupBackendComponent.Owner_UpdatePlayerMapValue(SelectedPlayerID, "ColorTeam", ColorTeam);
+		
+		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
 	}
 
 	protected void OnOverrideIconClicked()
@@ -77,26 +99,33 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		};
 
 		if (!SelectedPlayerID) return;
-		groupManager.UpdateUIvalue(SelectedPlayerID, "OverrideIcon", iconToOverrideStr);
-		GetGame().GetCallqueue().CallLater(UpdatePlayaerIcon, 685);
+		groupBackendComponent.Owner_UpdatePlayerMapValue(SelectedPlayerID, "OverrideIcon", iconToOverrideStr);
+		GetGame().GetCallqueue().CallLater(OnOverrideIconClickedSecondary, 225, true);
 	}
 	
-	protected void UpdatePlayaerIcon() 
+	protected void OnOverrideIconClickedSecondary() {
+		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
+		Icon.LoadImageTexture(0, iconOI);
+	};
+	
+	protected void UpdatePlayerIcon() 
 	{
-		string groupStringOI = groupManager.ReturnGroupMapValue(playersGroup.ToString());
+		groupBackendComponent = COA_GroupDisplayComponent.GetInstance();
 		
-		array<string> localGroupSplitStringOI = {};
-		groupStringOI.Split(";", localGroupSplitStringOI, true);
+		string PlayerString = groupManagerCOA.ReturnMapValue("PlayerGroupValues", SelectedPlayerID);
 		
-		int groupCountOI = localGroupSplitStringOI.Count();
-		groupCountOI = groupCountOI/ 4;
+		array<string> removeValueArray = {};
+		PlayerString.Split("|", removeValueArray, false);
+		PlayerString = removeValueArray[1];
+				
+		array<string> localPlayerStringSplit = {};
+		PlayerString.Split(";", localPlayerStringSplit, false);
 		
-		int playerPlaceOI = PlayerInt * 4;
+		string playerNameOI        = localPlayerStringSplit[0];
+		string ColorTeamOI         = localPlayerStringSplit[1];
+		string iconOverride        = localPlayerStringSplit[4];
 		
-		string playerNameOI = localGroupSplitStringOI[playerPlaceOI];
-		string ColorTeamOI = localGroupSplitStringOI[playerPlaceOI + 1];
-		string iconOI = localGroupSplitStringOI[playerPlaceOI + 2];
-		string SelectedPlayerIDStr = localGroupSplitStringOI[playerPlaceOI + 3];
+		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
 		
 		if (ColorTeamOI || ColorTeamOI != "") {
 			switch (ColorTeamOI)
@@ -108,16 +137,13 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 				case "None"   : {PlayerName.SetColorInt(ARGB(255, 255, 255, 255)); Icon.SetColorInt(ARGB(255, 255, 255, 255)); break; };
 			};
 		};
-		
-		SelectedPlayerID = SelectedPlayerIDStr.ToInt();
 
 		Icon.LoadImageTexture(0, iconOI);
 		PlayerName.SetText(playerNameOI);
-		
-		string playerOverideIconStr = groupManager.ReturnUIValue(SelectedPlayerID, "OverrideIcon");
-		if (playerOverideIconStr && playerOverideIconStr != "") {
+
+		if (iconOverride && iconOverride != "") {
 			int playerOverideIcon = 0;
-			switch (playerOverideIconStr)
+			switch (iconOverride)
 			{
 				case "Team Lead"      : {playerOverideIcon = 1; break; };
 				case "Medic"          : {playerOverideIcon = 2; break; };

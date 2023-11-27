@@ -3,8 +3,8 @@ class COA_Compass : SCR_InfoDisplay
 	private TextWidget Bearing = null;
 	private ImageWidget Compass = null;
 	private bool CompassVisible = true;
-	private string groupStringStored = "N/A";
-	private int groupRefresh = 30;
+	private string masterStringStored = "N/A";
+	private int groupRefresh = 44;
 
 	override protected void OnInit(IEntity owner)
 	{
@@ -31,44 +31,46 @@ class COA_Compass : SCR_InfoDisplay
 		// Sets Bearings text and the Compass direction
 		SetBearingSetCompass(Bearing, Compass);
 
-		// Update Group Display every 35 frames.
-		if (groupRefresh >= 35) {
+		// Update Group Display every 45 frames.
+		if (groupRefresh >= 45) {
 			groupRefresh = 0;
-			// Get Global Player Controller and Group Manager.
-			SCR_PlayerController playerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
-			SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SCR_GroupsManagerComponent));
 
-			// If for some reason the global player controller or group manager dont exist, better exit out. (and start praying to whatever god you beleve in)
-			if (!playerController || !groupManager) return;
-
-			SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerController.GetPlayerId());
+			SCR_GroupsManagerComponent vanillaGroupManager = SCR_GroupsManagerComponent.GetInstance();
+			COA_GroupDisplayManagerComponent groupManagerCOA = COA_GroupDisplayManagerComponent.GetInstance();
+			if (!vanillaGroupManager) return;
+		 
+			SCR_AIGroup playersGroup = vanillaGroupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
 			// If player doesn't have a group we can't do much, better check then clear their group display, just in case.
 			if (!playersGroup) {ClearGroupDisplay(0, false); return; };
+			
+			array<int> PlayerIDsArray = playersGroup.GetPlayerIDs();
+			int groupCount = PlayerIDsArray.Count();
+			
+			if (groupCount <= 1) {ClearGroupDisplay(0, false); return; };
+			
+			array<string> PlayerGroupString = {};
+			
+			foreach (int PlayerID : PlayerIDsArray) {
+				string PlayerStr = groupManagerCOA.ReturnMapValue("PlayerGroupValues", PlayerID);
+				if (!PlayerStr || PlayerStr == "") continue;
+				PlayerGroupString.Insert(PlayerStr);
+			}
+			
+			PlayerGroupString.Sort(false);
+			
+			foreach (int i, string PlayerString : PlayerGroupString) {
+				
+				array<string> removeValueArray = {};
+				PlayerString.Split("|", removeValueArray, false);
+				PlayerString = removeValueArray[1];
+				
+				array<string> localPlayerStringSplit = {};
+				PlayerString.Split(";", localPlayerStringSplit, false);
 
-			string groupString = groupManager.ReturnGroupMapValue(playersGroup.ToString());
-
-			if (!groupString || groupString == "") {ClearGroupDisplay(0, false); return; };
-
-			if (groupString == groupStringStored) return;
-			groupStringStored = groupString;
-
-			array<string> localGroupSplitString = {};
-			groupString.Split(";", localGroupSplitString, true);
-
-			int groupCount = localGroupSplitString.Count();
-			groupCount = groupCount/ 4;
-
-			int playerPlace = 0;
-
-			// Parse through current group array.
-			for (int i = 0; i<groupCount && i < 12; i++)
-			{
-				string playerName = localGroupSplitString[playerPlace];
-				string colorTeam = localGroupSplitString[playerPlace + 1];
-				string icon = localGroupSplitString[playerPlace + 2];
-
-				playerPlace = playerPlace + 4;
+				string playerName = localPlayerStringSplit[0];
+				string colorTeam  = localPlayerStringSplit[1];
+				string icon       = localPlayerStringSplit[2];
 
 				// Get group display widgets.
 				TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));

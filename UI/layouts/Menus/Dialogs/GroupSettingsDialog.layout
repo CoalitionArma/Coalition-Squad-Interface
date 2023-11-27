@@ -1,6 +1,6 @@
 FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
  {
-  ImageWidgetClass "{56D6D7CE83DA03EE}" {
+  OverlayWidgetClass "{56D6D7CE83DA03EE}" {
    Prefab "{56D6D7CE83DA03EE}"
    Slot FrameWidgetSlot "{5558C3118DE4FCC1}" {
     PositionX 0.915
@@ -40,10 +40,7 @@ FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialo
              }
              Color 0.761 0.386 0.078 0.287
              components {
-              SCR_ButtonBaseComponent "{5EC7790305D6FC3E}" {
-               m_BackgroundDefault 0 0 0 0.1
-               m_BackgroundHovered 0 0 0 0.3
-               m_bShowBorderOnHover 1
+              SCR_InputButtonComponent "{5EE4151C086E4B93}" {
               }
              }
              {

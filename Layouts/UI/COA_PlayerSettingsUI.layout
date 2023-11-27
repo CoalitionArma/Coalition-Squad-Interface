@@ -14,8 +14,8 @@ FrameWidgetClass {
     OffsetLeft -170.741
     PositionY -230.027
     OffsetTop -230.027
-    SizeX 360
-    OffsetRight -189.259
+    SizeX 342.177
+    OffsetRight -171.436
     SizeY 460.011
     OffsetBottom -229.984
    }
@@ -288,7 +288,7 @@ FrameWidgetClass {
    }
    Color 1 1 1 0.038
    components {
-    SCR_ButtonBaseComponent "{5EC77903595A2FFE}" {
+    SCR_InputButtonComponent "{5EE4151D557A9394}" {
     }
    }
   }
@@ -310,7 +310,7 @@ FrameWidgetClass {
    }
    Color 0.791 0 0 0.256
    components {
-    SCR_ButtonBaseComponent "{5EC7790347CE21E1}" {
+    SCR_InputButtonComponent "{5EE4151D58DE56B9}" {
     }
    }
   }
@@ -332,7 +332,7 @@ FrameWidgetClass {
    }
    Color 0 0.107 1 0.256
    components {
-    SCR_ButtonBaseComponent "{5EC779034D5977C6}" {
+    SCR_InputButtonComponent "{5EE4151D45C62B22}" {
     }
    }
   }
@@ -354,7 +354,7 @@ FrameWidgetClass {
    }
    Color 0.791 0.791 0 0.256
    components {
-    SCR_ButtonBaseComponent "{5EC7790349EE828A}" {
+    SCR_InputButtonComponent "{5EE4151D41A17436}" {
     }
    }
   }
@@ -376,7 +376,7 @@ FrameWidgetClass {
    }
    Color 0 0.791 0 0.256
    components {
-    SCR_ButtonBaseComponent "{5EC7790376681BE4}" {
+    SCR_InputButtonComponent "{5EE4151D4E06B6ED}" {
     }
    }
   }
@@ -398,7 +398,7 @@ FrameWidgetClass {
    }
    Color 0.159 0.159 0.159 0.119
    components {
-    SCR_ButtonBaseComponent "{5EC7790372B0EAA5}" {
+    SCR_InputButtonComponent "{5EE4151D4B4DD04B}" {
     }
    }
   }
@@ -411,33 +411,29 @@ FrameWidgetClass {
     OffsetLeft -165.917
     PositionY 195.317
     OffsetTop 195.317
-    SizeX 349.847
-    OffsetRight -183.93
+    SizeX 330.794
+    OffsetRight -164.877
     SizeY 30
     OffsetBottom -225.317
    }
    {
     ButtonWidgetClass "{5ED011542AE00770}" {
      Name "Back"
-     Slot LayoutSlot {
+     Slot LayoutSlot "{5EE22980A3A55CF7}" {
      }
      Clipping False
      Color 0 0 0 0
      components {
-      SCR_NavigationButtonComponent "{5ED01155922BAF1B}" {
-       m_BackgroundDefault 0 0 0 0.42
-       m_BackgroundHovered 0 0 0 0.42
-       m_bShowBorderOnHover 1
-       m_sLabel "#AR-Menu_Back"
+      SCR_InputButtonComponent "{5EE4151B2B2109C7}" {
        m_sActionName "MenuBack"
-       m_bUseActionColorization 1
+       m_sLabel "#AR-Workshop_ButtonCancel"
       }
      }
      "no focus" 1
      {
       SizeLayoutWidgetClass "{5ED01359CC01A70E}" {
        Name "SizeLayout"
-       Slot ButtonWidgetSlot {
+       Slot ButtonWidgetSlot "{5EE22980A3A561D1}" {
        }
        {
         OverlayWidgetClass "{5ED01359E12AA2D0}" {
@@ -447,30 +443,25 @@ FrameWidgetClass {
          {
           HorizontalLayoutWidgetClass "{5ED0135911AEE261}" {
            Name "HorizontalLayout"
-           Slot OverlayWidgetSlot {
+           Slot OverlayWidgetSlot "{5EE22980A3A57E1F}" {
            }
            {
-            RichTextWidgetClass "{5ED01155D84449D7}" {
-             Name "Action"
-             Slot LayoutSlot {
-              HorizontalAlign 3
-              Padding 0 0 0 0
-              SizeMode Fill
+            ImageWidgetClass "{5EE53176BDAAED9A}" {
+             Name "Image0"
+             Slot LayoutSlot "{5EE531A0E19BD8FC}" {
+              Padding -10 0 0 0
              }
-             Color 0.761 0.386 0.078 1
-             Text "<action name=\"VehicleEngineStart\"/>"
-             "Font Size" 16
-             "Min Font Size" 16
-             "Horizontal Alignment" Center
-             "Vertical Alignment" Center
+             Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
+             Image "backspace"
+             Size 64 64
             }
             RichTextWidgetClass "{5ED011555B1A8267}" {
              Name "Text"
-             Slot LayoutSlot {
-              Padding 0 0 0 0
+             Slot LayoutSlot "{5EE22980A3A57EBE}" {
+              Padding -10 0 0 0
               SizeMode Auto
              }
-             Text "Navigation button"
+             Text "Back"
              "Font Size" 16
              "Min Font Size" 16
              "Vertical Alignment" Center

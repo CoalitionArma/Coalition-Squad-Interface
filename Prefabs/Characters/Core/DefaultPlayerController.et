@@ -1,6 +1,8 @@
 SCR_PlayerController {
  ID "1A9BA6BEFA06E3B1"
  components {
+  COA_GroupDisplayComponent "{5EF16CD3BE1C0168}" {
+  }
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {
     COA_Compass "{5EBD2BF3690CAFEB}" {
