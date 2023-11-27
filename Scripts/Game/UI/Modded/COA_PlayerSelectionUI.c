@@ -101,7 +101,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		array<int> PlayerIDsArray = playersGroup.GetPlayerIDs();
 		int groupCount = PlayerIDsArray.Count();
 			
-		if (groupCount == 1 || groupCount == 0) {
+		if (groupCount <= 1) {
 			GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 			GetGame().GetMenuManager().CloseMenu(this);
 			return;  
