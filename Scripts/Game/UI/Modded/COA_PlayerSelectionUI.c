@@ -119,11 +119,11 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		foreach (int i, string PlayerString : PlayerGroupString) {
 				
 			array<string> removeValueArray = {};
-			PlayerString.Split("║", removeValueArray, false);
+			PlayerString.Split("╣", removeValueArray, false);
 			PlayerString = removeValueArray[1];
 				
 			array<string> localPlayerStringSplit = {};
-			PlayerString.Split("╣", localPlayerStringSplit, false);
+			PlayerString.Split("║", localPlayerStringSplit, false);
 			
 			string playerName       = localPlayerStringSplit[0];
 			string colorTeam        = localPlayerStringSplit[1];

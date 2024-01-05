@@ -41,9 +41,9 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	{	
 		if (!Replication.IsServer()) return;
 		
-		GetGame().GetCallqueue().CallLater(UpdateGroupInfoInAuthorityPlayerMap, 85, true);
+		GetGame().GetCallqueue().CallLater(UpdateGroupInfoInAuthorityPlayerMap, 125, true);
 		
-		GetGame().GetCallqueue().CallLater(UpdatePlayerArray, 125, true);
+		GetGame().GetCallqueue().CallLater(UpdatePlayerArray, 135, true);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -53,6 +53,26 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Clients
+	
+	protected void UpdateLocalPlayerMap()
+	{
+	 	foreach (string PlayerKeyAndValue : PlayerArray)
+		{
+			array<string> PlayerKeyAndValueSplit = {};
+			PlayerKeyAndValue.Split("╢", PlayerKeyAndValueSplit, false);
+						
+			m_mLocalPlayerMap.Set(PlayerKeyAndValueSplit[0], PlayerKeyAndValueSplit[1]);
+		};
+	}
+	
+	string ReturnLocalPlayerMapValue(string key, int playerID)
+	{	
+		string checkKey = string.Format("%1 %2", playerID, key);
+		
+		return m_mLocalPlayerMap.Get(checkKey);
+	}
+	
+	//- Server
 	
 	protected void UpdatePlayerArray()
 	{
@@ -66,32 +86,21 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 			TempPlayerArray.Insert(mapValueString);
 		};
 		PlayerArray = TempPlayerArray;
+		Replication.BumpMe();
 	}
-	
-	protected void UpdateLocalPlayerMap()
-	{
-	 	foreach (string PlayerKeyAndValue : PlayerArray)
-		{
-			array<string> PlayerKeyAndValueSplit = {};
-			PlayerKeyAndValue.Split("╢", PlayerKeyAndValueSplit, false);
-			
-			m_mLocalPlayerMap.Set(PlayerKeyAndValueSplit[0], PlayerKeyAndValueSplit[1]);
-		};
-	}
-	
-	string ReturnLocalPlayerMapValue(string key, int playerID)
-	{	
-		string checkKey = string.Format("%1 %2", playerID, key);
-		return m_mLocalPlayerMap.Get(checkKey);
-	}
-	
-	//- Server
 	
 	void UpdateAuthorityPlayerMap(int playerID, string write, string value)
 	{						
 		string key = string.Format("%1 %2", playerID, write);
 							
 		m_mAuthorityPlayerMap.Set(key, value);
+	}
+	
+	string ReturnAuthorityPlayerMapValue(string key, int playerID)
+	{	
+		string checkKey = string.Format("%1 %2", playerID, key);
+		
+		return m_mAuthorityPlayerMap.Get(checkKey);
 	}
 	
 	protected void UpdateGroupInfoInAuthorityPlayerMap()
@@ -112,8 +121,6 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	
 			// Get list of all the players we have to parse through.
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
-			
-			if (groupPlayersIDs.Count() == 1 || groupPlayersIDs.Count() == 0) continue;
 	
 			// Parse through current group array.
 			foreach(int localPlayerID : groupPlayersIDs) 
@@ -122,7 +129,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				string playerName = GetGame().GetPlayerManager().GetPlayerName(localPlayerID);
 	
 				// Skip ahead to next for-loop iteration if any of these are false.
-				if (!playerName || !localplayer) return;
+				if (!playerName || !localplayer) continue;
 				
 				array<string> iconArray = {};
 
@@ -130,7 +137,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				// Color Teams
 				//------------------------------------------------------------------------------------------------
 
-				string playerColorTeam = ReturnLocalPlayerMapValue("ColorTeam", localPlayerID);
+				string playerColorTeam = ReturnAuthorityPlayerMapValue("ColorTeam", localPlayerID);
 				if (!playerColorTeam || playerColorTeam == "") {playerColorTeam = "None"};
 
 				//------------------------------------------------------------------------------------------------
@@ -172,7 +179,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				// Override regular Icons If Set By SL
 				//------------------------------------------------------------------------------------------------
 
-				string playerOverideIcon = ReturnLocalPlayerMapValue("OverrideIcon", localPlayerID);
+				string playerOverideIcon = ReturnAuthorityPlayerMapValue("OverrideIcon", localPlayerID);
 	
 				if (playerOverideIcon && playerColorTeam != "" && iconArray.IsEmpty()) {
 					switch (playerOverideIcon)
@@ -251,10 +258,10 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				string icon = iconArray[0];
 				
 				string localPlayerIDStr = localPlayerID.ToString();
-				string playerString = string.Format("%1║%2║%3║%4║%5", playerName, playerColorTeam, icon, localPlayerID, playerOverideIcon);
+				string playerString = string.Format("%1║%2║%3║%4║%5║", playerName, playerColorTeam, icon, localPlayerID, playerOverideIcon);
 
 				if (icon != m_sCargo && icon != m_sDriver && icon != m_sGunner) {
-					string playerStoredIcon = ReturnLocalPlayerMapValue("StoredIcon", localPlayerID);
+					string playerStoredIcon = ReturnAuthorityPlayerMapValue("StoredIcon", localPlayerID);
 		
 						if (playerStoredIcon != icon) {
 						UpdateAuthorityPlayerMap(localPlayerID, "StoredIcon", icon);
@@ -272,7 +279,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				};
 
 				if (icon == m_sCargo || icon == m_sDriver || icon == m_sGunner) {
-					string playerSI = ReturnLocalPlayerMapValue("StoredIcon", localPlayerID);
+					string playerSI = ReturnAuthorityPlayerMapValue("StoredIcon", localPlayerID);
 					if (playerSI) {icon = playerSI};
 				};
 
@@ -281,8 +288,9 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 					case (icon == m_sTeamLeader && playerColorTeam == "None") : {value--; break; };
 					case (icon == m_sTeamLeader && playerColorTeam != "None") : {value++; break; };
 				};
+				
 
-				string playerValueString = string.Format("%1╣%2", value, playerString);
+				string playerValueString = string.Format("%1╣%2╣", value, playerString);
 				UpdateAuthorityPlayerMap(localPlayerID, "PlayerGroupValues", playerValueString);
 			};
 		};

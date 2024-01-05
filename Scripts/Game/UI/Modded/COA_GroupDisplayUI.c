@@ -58,15 +58,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		foreach (int i, string PlayerString : PlayerGroupStringArray) {
 				
 			array<string> removeValueArray = {};
-			PlayerString.Split("║", removeValueArray, true);
+			PlayerString.Split("╣", removeValueArray, true);
 			PlayerString = removeValueArray[1];
 				
-			if (removeValueArray.Count() < 2) continue;
-				
 			array<string> localPlayerStringSplit = {};
-			PlayerString.Split("╣", localPlayerStringSplit, false);
-				
-			if (localPlayerStringSplit.Count() < 5) continue;
+			PlayerString.Split("║", localPlayerStringSplit, false);
 
 			string playerName = localPlayerStringSplit[0];
 			string colorTeam  = localPlayerStringSplit[1];

@@ -49,11 +49,11 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	void SetPlayerStr(string PlayerStr)
 	{
 		array<string> removeValueArray = {};
-		PlayerStr.Split("║", removeValueArray, false);
+		PlayerStr.Split("╣", removeValueArray, false);
 		PlayerStr = removeValueArray[1];
 				
 		array<string> localPlayerStringSplit = {};
-		PlayerStr.Split("╣", localPlayerStringSplit, false);
+		PlayerStr.Split("║", localPlayerStringSplit, false);
 		
 		string SelectedPlayerIDStr = localPlayerStringSplit[3];
 		SelectedPlayerID = SelectedPlayerIDStr.ToInt();
@@ -115,11 +115,11 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		string PlayerString = groupManagerCOA.ReturnLocalPlayerMapValue("PlayerGroupValues", SelectedPlayerID);
 		
 		array<string> removeValueArray = {};
-		PlayerString.Split("║", removeValueArray, false);
+		PlayerString.Split("╣", removeValueArray, false);
 		PlayerString = removeValueArray[1];
 				
 		array<string> localPlayerStringSplit = {};
-		PlayerString.Split("╣", localPlayerStringSplit, false);
+		PlayerString.Split("║", localPlayerStringSplit, false);
 		
 		string playerNameOI        = localPlayerStringSplit[0];
 		string ColorTeamOI         = localPlayerStringSplit[1];
