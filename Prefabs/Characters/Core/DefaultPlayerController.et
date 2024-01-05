@@ -5,6 +5,9 @@ SCR_PlayerController {
   }
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {
+    COA_GroupDisplay "{5F05663BB0997EFB}" {
+     m_LayoutPath "{02CD6D23168020B1}Layouts/UI/COA_GroupDisplay.layout"
+    }
     COA_Compass "{5EBD2BF3690CAFEB}" {
      m_LayoutPath "{6A51445F28C412B3}Layouts/UI/COA_Compass.layout"
     }

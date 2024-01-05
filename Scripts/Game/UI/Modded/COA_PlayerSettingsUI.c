@@ -49,11 +49,11 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	void SetPlayerStr(string PlayerStr)
 	{
 		array<string> removeValueArray = {};
-		PlayerStr.Split("|", removeValueArray, false);
+		PlayerStr.Split("╣", removeValueArray, false);
 		PlayerStr = removeValueArray[1];
 				
 		array<string> localPlayerStringSplit = {};
-		PlayerStr.Split(";", localPlayerStringSplit, false);
+		PlayerStr.Split("║", localPlayerStringSplit, false);
 		
 		string SelectedPlayerIDStr = localPlayerStringSplit[3];
 		SelectedPlayerID = SelectedPlayerIDStr.ToInt();
@@ -78,7 +78,7 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		if (!SelectedPlayerID) return;
 		groupBackendComponent.Owner_UpdatePlayerMapValue(SelectedPlayerID, "ColorTeam", ColorTeam);
 		
-		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
+		string iconOI = groupManagerCOA.ReturnLocalPlayerMapValue("StoredIcon", SelectedPlayerID);
 	}
 
 	protected void OnOverrideIconClicked()
@@ -104,7 +104,7 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	}
 	
 	protected void OnOverrideIconClickedSecondary() {
-		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
+		string iconOI = groupManagerCOA.ReturnLocalPlayerMapValue("StoredIcon", SelectedPlayerID);
 		Icon.LoadImageTexture(0, iconOI);
 	};
 	
@@ -112,20 +112,20 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	{
 		groupBackendComponent = COA_GroupDisplayComponent.GetInstance();
 		
-		string PlayerString = groupManagerCOA.ReturnMapValue("PlayerGroupValues", SelectedPlayerID);
+		string PlayerString = groupManagerCOA.ReturnLocalPlayerMapValue("PlayerGroupValues", SelectedPlayerID);
 		
 		array<string> removeValueArray = {};
-		PlayerString.Split("|", removeValueArray, false);
+		PlayerString.Split("╣", removeValueArray, false);
 		PlayerString = removeValueArray[1];
 				
 		array<string> localPlayerStringSplit = {};
-		PlayerString.Split(";", localPlayerStringSplit, false);
+		PlayerString.Split("║", localPlayerStringSplit, false);
 		
 		string playerNameOI        = localPlayerStringSplit[0];
 		string ColorTeamOI         = localPlayerStringSplit[1];
 		string iconOverride        = localPlayerStringSplit[4];
 		
-		string iconOI = groupManagerCOA.ReturnMapValue("StoredIcon", SelectedPlayerID);
+		string iconOI = groupManagerCOA.ReturnLocalPlayerMapValue("StoredIcon", SelectedPlayerID);
 		
 		if (ColorTeamOI || ColorTeamOI != "") {
 			switch (ColorTeamOI)

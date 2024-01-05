@@ -1,15 +1,13 @@
 class COA_StaminaBar : SCR_InfoDisplay
 {
 	private ProgressBarWidget StamBar = null;
-	private bool stamBarVisible = true;
 	private bool stamBarEnabled = true;
-	private int widgetRefresh = 360;
 
 	override protected void OnInit(IEntity owner)
 	{
 		super.OnInit(owner);
 		GetGame().GetInputManager().AddActionListener("ToggleStamina", EActionTrigger.DOWN, ToggleStamina);
-		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext", 3600000);
+		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext", 36000000);
 	}
 
 	override protected void UpdateValues(IEntity owner, float timeSlice)
@@ -23,7 +21,7 @@ class COA_StaminaBar : SCR_InfoDisplay
 		if (!StamBar) {
 			StamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 		};
-
+		
 		// Can't run if these dont exist better exit out.
 		if (!character || !StamBar) return;
 
@@ -33,86 +31,50 @@ class COA_StaminaBar : SCR_InfoDisplay
 		if (!m_cCharacterController) return;
 
 		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
-		OnStaminaChange(m_cCharacterController.GetStamina(), StamBar);
+		OnStaminaChange(m_cCharacterController.GetStamina());
 	}
-
-	void FadeBar(ProgressBarWidget widget, float goToOpacity, int time)
-	{
-		float currentOpacity = widget.GetOpacity();
-		float change = (currentOpacity + goToOpacity) / time; //fix
-
-		for (int i = 0; i < time; i++)
-		{
-			widget.SetOpacity(change);
-			Sleep(1000); //sleep 1s
-		}
-	}
-
+	
 	protected void ToggleStamina()
 	{
 		stamBarEnabled = !stamBarEnabled;
-		if (stamBarEnabled)
-		{
-			StamBar.SetOpacity(1);
-		}
-		else
-		{
-			StamBar.SetOpacity(0);
-		}
 	}
 
-	void RevealBar(ProgressBarWidget widget)
+	void RevealBar(float currentOpacity)
 	{
-		if (stamBarEnabled)
-		{
-		stamBarVisible = true;
-		widget.SetOpacity(0.5);
-		}
-		//FadeBar(stamBarRef, 0.5, 2);
+		float setOpacity = currentOpacity +0.005;
+		StamBar.SetOpacity(setOpacity);
 	}
 
-	protected void HideBar(ProgressBarWidget widget)
+	protected void HideBar(float currentOpacity)
 	{
-		if (stamBarEnabled)
-		{
-		stamBarVisible = false;
-		widget.SetOpacity(0);
-		}
-
-		//FadeBar(stamBarRef, 0, 2);
+		float setOpacity = currentOpacity -0.005;
+		StamBar.SetOpacity(setOpacity);
 	}
 
-	void OnStaminaChange(float value, ProgressBarWidget stamBarRef)
+	void OnStaminaChange(float stamina)
 	{
 		if (!stamBarEnabled)
 		{
-			stamBarRef.SetOpacity(0);
+			StamBar.SetOpacity(0);
 			return;
 		}
-		stamBarRef.SetCurrent(value);
-		//Print("Stamina: " + value);
-		//Print("stamBarVisible: " + stamBarVisible);
+		StamBar.SetCurrent(stamina);
 
 		// Color
-		// I couldnt get the switch statement to work. I hate this.
-		if (value < 0.7 && value > 0.3)
+		switch (true)
 		{
-			stamBarRef.SetColor(new Color(0.091997, 0.083009, 0.035996, 1.000000));
-		} else if (value < 0.3)
-		{
-			stamBarRef.SetColor(new Color(0.188724, 0.046860, 0.037476, 1.000000));
-		} else // Aka above 70%
-		{
-			stamBarRef.SetColor(new Color(0.035996, 0.091997, 0.050004, 1.000000));
-		}
+			case (stamina < 0.7 && stamina > 0.3) : { StamBar.SetColor(new Color(0.091997, 0.083009, 0.035996, 1.000000)); break; };
+			case (stamina < 0.3)                  : { StamBar.SetColor(new Color(0.188724, 0.046860, 0.037476, 1.000000)); break; };
+			default                               : { StamBar.SetColor(new Color(0.035996, 0.091997, 0.050004, 1.000000)); break; };
+		};
+		
+		float currentOpacity = StamBar.GetOpacity();
 
 		// Opacity
-		if (value < 1 && !stamBarVisible)
+		switch (true)
 		{
-			RevealBar(stamBarRef);
-		} else if (value == 1 && stamBarVisible)
-		{
-			HideBar(stamBarRef);
-		}
+			case (stamina < 1 && currentOpacity < 0.82) : { RevealBar(currentOpacity); break;};
+			case (stamina == 1 && currentOpacity > 0)   : { HideBar(currentOpacity);   break;};
+		};
 	}
 }
