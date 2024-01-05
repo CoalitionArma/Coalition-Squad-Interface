@@ -66,6 +66,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 			TempPlayerArray.Insert(mapValueString);
 		};
 		PlayerArray = TempPlayerArray;
+		Replication.BumpMe();
 	}
 	
 	protected void UpdateLocalPlayerMap()
