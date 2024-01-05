@@ -1,4 +1,4 @@
-# Coalition Reforger Framework - CRF
+# Coalition Squad Interface - CSI
 <img src="http://coalitiongroup.net/coalition.png">
 
 [![COALITION DISCORD](https://img.shields.io/badge/COALITION_Discord-blue)](https://discord.gg/the-coalition)
