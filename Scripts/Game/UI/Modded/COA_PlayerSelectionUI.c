@@ -110,7 +110,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		PlayerGroupString = {};
 			
 		foreach (int PlayerID : PlayerIDsArray) {
-			string PlayerStr = groupManagerCOA.ReturnMapValue("PlayerGroupValues", PlayerID);
+			string PlayerStr = groupManagerCOA.ReturnLocalPlayerMapValue("PlayerGroupValues", PlayerID);
 			PlayerGroupString.Insert(PlayerStr);
 		}
 			
@@ -119,18 +119,18 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		foreach (int i, string PlayerString : PlayerGroupString) {
 				
 			array<string> removeValueArray = {};
-			PlayerString.Split("|", removeValueArray, false);
+			PlayerString.Split("║", removeValueArray, false);
 			PlayerString = removeValueArray[1];
 				
 			array<string> localPlayerStringSplit = {};
-			PlayerString.Split(";", localPlayerStringSplit, false);
+			PlayerString.Split("╣", localPlayerStringSplit, false);
 			
 			string playerName       = localPlayerStringSplit[0];
 			string colorTeam        = localPlayerStringSplit[1];
 			string localPlayerIDStr = localPlayerStringSplit[3];
 			int localPlayerID = localPlayerIDStr.ToInt();
 			
-			string icon = groupManagerCOA.ReturnMapValue("StoredIcon", localPlayerID);
+			string icon = groupManagerCOA.ReturnLocalPlayerMapValue("StoredIcon", localPlayerID);
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
