@@ -246,12 +246,12 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 					// Take all the data we just collected and assign players a icon based on if it exists in the weapon/medical arrays.
 					switch (true)
 					{
-						case (MedicalTypeArray.Find(SCR_EConsumableType.SALINE) != -1)    : { iconArray.Insert(m_sMedic);         break; };
-						case (WeaponTypeArray.Find(EWeaponType.WT_SNIPERRIFLE) != -1)     : { iconArray.Insert(m_sSniper);        break; };
-						case (WeaponTypeArray.Find(EWeaponType.WT_MACHINEGUN) != -1)      : { iconArray.Insert(m_sMachineGunner); break; };
-						case (WeaponTypeArray.Find(EWeaponType.WT_ROCKETLAUNCHER) != -1)  : { iconArray.Insert(m_sAntiTank);      break; };
-						case (WeaponTypeArray.Find(EWeaponType.WT_GRENADELAUNCHER) != -1) : { iconArray.Insert(m_sGrenadier);     break; };
-						default                                                           : { iconArray.Insert(m_sMan);                  };
+						case (MedicalTypeArray.Contains(SCR_EConsumableType.SALINE))    : { iconArray.Insert(m_sMedic);         break; };
+						case (WeaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : { iconArray.Insert(m_sSniper);        break; };
+						case (WeaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : { iconArray.Insert(m_sMachineGunner); break; };
+						case (WeaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : { iconArray.Insert(m_sAntiTank);      break; };
+						case (WeaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : { iconArray.Insert(m_sGrenadier);     break; };
+						default                                                         : { iconArray.Insert(m_sMan);                  };
 					};
 				};
 		
