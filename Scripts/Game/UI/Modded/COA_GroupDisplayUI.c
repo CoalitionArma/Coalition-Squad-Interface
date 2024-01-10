@@ -13,6 +13,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{
 		super.OnInit(owner);
 		GetGame().GetInputManager().AddActionListener("ToggleGroupDisplay", EActionTrigger.DOWN, ToggleGroupDisplay);
+		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, PlayerSelectionMenu);
 	}
 	
 	override protected void UpdateValues(IEntity owner, float timeSlice)
@@ -48,6 +49,8 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		array<string> PlayerGroupStringArray = {};
 			
 		foreach (int PlayerID : PlayerIDsArray) {
+			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(PlayerID);
+			if (!localplayer) continue;
 			string PlayerStr = groupManagerCOA.ReturnLocalPlayerMapValue("PlayerGroupValues", PlayerID);
 			if (!PlayerStr || PlayerStr == "") continue;
 			PlayerGroupStringArray.Insert(PlayerStr);
@@ -81,7 +84,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			playerDisplay.GetTextSize(sx, yx);
 			
 			if (sx > 145) {
-			  	for (int e = 0; sx > 138.5; e++)
+			  	for (int e = 0; sx > 132.5; e++)
 				{
 					int playerNameLength = playerName.Length();
 					playerNameLength = playerNameLength - 1;
@@ -102,7 +105,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 					case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
 					case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
 					case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-					case "None"   : {statusDisplay.SetColorInt(ARGB(255, 255, 255, 255)); playerDisplay.SetColorInt(ARGB(255, 255, 255, 255)); break; };
+					case "None"   : {statusDisplay.SetColorInt(ARGB(235, 235, 235, 255)); playerDisplay.SetColorInt(ARGB(235, 235, 235, 255)); break; };
 				};
 			};
 		};
@@ -126,7 +129,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		ImageWidget DisplayCheck = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
 		int Check = DisplayCheck.GetOpacity();
 		if (Check == 1 || forceClear) {
-			for (int e = positionToStartClearing; e<=12; e++)
+			for (int e = positionToStartClearing; e<=19; e++)
 			{
 				// Get group display widgets.
 				TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));
@@ -140,5 +143,16 @@ class COA_GroupDisplay : SCR_InfoDisplay
 				statusRemoveDisplay.SetOpacity(0);
 			}
 		};
-	};
+	}
+	
+	//------------------------------------------------------------------------------------------------
+
+	// Additionals
+	
+	//------------------------------------------------------------------------------------------------
+		
+	protected void PlayerSelectionMenu()
+	{	
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionUI);
+	}
 }

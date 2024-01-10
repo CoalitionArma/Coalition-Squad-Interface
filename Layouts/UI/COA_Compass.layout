@@ -5,17 +5,17 @@ FrameWidgetClass {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
     Anchor 0.5 1 0.5 1
-    PositionX -90.662
-    OffsetLeft -90.662
-    PositionY -83.958
-    OffsetTop -83.958
+    PositionX -89.176
+    OffsetLeft -89.176
+    PositionY -112.978
+    OffsetTop -112.978
     SizeX 179.999
-    OffsetRight -89.337
+    OffsetRight -90.823
     SizeY 19.997
-    OffsetBottom 63.961
+    OffsetBottom 92.981
    }
    Opacity 0.984
-   Color 0.644 0.644 0.644 1
+   Color 0.831 0.831 0.831 1
    style debugUI
    Text "000"
    "Font Size" 18
@@ -27,25 +27,28 @@ FrameWidgetClass {
     ForceFont 1
     OutlineSize 2
     ShadowSize 32
-    ShadowOffset 0 0
+    ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{5EBD2BF287B38BFC}" {
+  ImageWidgetClass "{605034196C0C5E97}" {
    Name "Compass"
    Slot FrameWidgetSlot "{5B0D5D8ACA21795D}" {
-    Anchor 0.5 1 0.5 1
-    PositionX -118.092
-    OffsetLeft -118.092
-    PositionY -133.216
-    OffsetTop -133.216
-    SizeX 235
-    OffsetRight -116.908
-    SizeY 234.999
-    OffsetBottom -101.783
+    Anchor 0.5 0.999 0.501 1
+    PositionX -115.572
+    OffsetLeft -115.572
+    PositionY -151.862
+    OffsetTop -151.862
+    SizeX 232.582
+    OffsetRight -117.01
+    SizeY 234.34
+    OffsetBottom -82.478
    }
    IsPixelPerfect 0
+   Color 0.831 0.831 0.831 1
    Texture "{2F9C9EB034556A4E}Layouts/UI/Textures/Compass350_atlas.edds"
    Size 984 989
+   "Shadow Offset" 0 0
+   "Shadow Size Increase" 0 0
   }
  }
 }

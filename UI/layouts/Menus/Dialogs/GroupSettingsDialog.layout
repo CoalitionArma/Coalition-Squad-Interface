@@ -38,7 +38,7 @@ FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialo
              Tooltip TextWidgetTooltip "{5EC77B6EAF3AE23E}" {
               Text "Squad Color Team Settings"
              }
-             Color 0.761 0.386 0.078 0.287
+             Color 0.761 0.386 0.078 0
              components {
               SCR_InputButtonComponent "{5EE4151C086E4B93}" {
               }
@@ -51,6 +51,9 @@ FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialo
                Color 0.761 0.386 0.078 1
                Texture "{F50EC6286B50C981}Layouts/UI/Textures/ColorTeamsButton.edds"
                Size 65 25
+               "Shadow Offset" 0.5 0.5
+               "Shadow Size Increase" 0.5 0.5
+               "Shadow Color" 0.007 0.007 0.007 1
               }
              }
             }
