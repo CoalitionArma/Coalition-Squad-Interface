@@ -63,7 +63,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		if ((playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedIcon == "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\iconmanleader_ca.edds") || storedIcon == "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\iconmanteamleader_ca.edds")
 		{
 			UpdatePlayerList();
-			GetGame().GetCallqueue().CallLater(UpdatePlayerList, 225, true);
+			GetGame().GetCallqueue().CallLater(UpdatePlayerList, 365, true);
 		} else {
 			OnMenuBack();
 			return;
@@ -156,6 +156,11 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 	
 	protected void UpdatePlayerList()
 	{		
+		PlayerIDsArray = playersGroup.GetPlayerIDs();
+		groupCount = PlayerIDsArray.Count();
+			
+		if (groupCount <= 1) {OnMenuBack(); return;};
+		
 		PlayerGroupString = {};
 			
 		foreach (int PlayerID : PlayerIDsArray) {
