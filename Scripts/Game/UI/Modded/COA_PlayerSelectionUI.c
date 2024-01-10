@@ -80,7 +80,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 	{	
 		m_wRoot = GetRootWidget();
 		
-		for (int b = 0; b < 19; b++)
+		for (int b = 0; b <= 19; b++)
 		{
 			SCR_InputButtonComponent buttonList = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget(string.Format("Button%1", b)).FindHandler(SCR_InputButtonComponent));
 			buttonList.m_OnClicked.Insert(OnPlayerEntryClicked);

@@ -58,7 +58,7 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	void ShowAdvSettings()
 	{
 		
-		for (int b = 0; b < 12; b++)
+		for (int b = 0; b <= 12; b++)
 		{
 			ImageWidget Background = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Background%1", b)));
 			Background.SetOpacity(1);
