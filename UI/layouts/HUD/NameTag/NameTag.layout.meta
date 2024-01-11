@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{703ABED1095791F4}UI/layouts/HUD/NameTag/NameTag.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}
