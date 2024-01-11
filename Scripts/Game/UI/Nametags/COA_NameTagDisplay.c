@@ -20,9 +20,6 @@ modded class SCR_NameTagDisplay
 			SCR_NameTagData tag = m_aUninitializedTags[0];
 			tag.InitTag(this, entity, s_NametagCfg, true);
 			m_CurrentPlayerTag = tag;
-			// Add group name to player tag
-			m_wPlayerGroup = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerGroup"));
-			m_wPlayerGroup.SetText(tag.m_sGroupName);
 			
 			m_aNameTags.Insert(tag);
 			m_aNameTagEntities.Insert(entity, tag);
@@ -56,6 +53,9 @@ modded class SCR_NameTagDisplay
 			m_aNameTags.Insert(tag);
 			m_aNameTagEntities.Insert(entity, tag);
 			m_aUninitializedTags.Remove(0);
+			// Add group name to player tag
+			m_wPlayerGroup = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerGroup"));
+			m_wPlayerGroup.SetText(tag.m_sGroupName);
 		}
 	}
 };

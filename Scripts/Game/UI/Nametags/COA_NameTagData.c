@@ -25,33 +25,38 @@ modded class SCR_NameTagData
 		return m_sGroupName;
 	}
 	
-	// Set group name so we can display in the layout
-	override void SetGroup(SCR_AIGroup group)
-	{
-		if (group)
+	override void GetName(out string name, out notnull array<string> nameParams)
+	{		
+		if (m_eType == ENameTagEntityType.PLAYER)
 		{
-			m_iGroupID = group.GetGroupID();
-			m_sGroupName = group.GetCustomNameWithOriginal();
-			if (m_bIsCurrentPlayer)
+			PlayerManager playerMgr = GetGame().GetPlayerManager();
+			if (playerMgr)
+				m_sName = playerMgr.GetPlayerName(m_iPlayerID);
+			else 
+				m_sName = "No player manager!"
+		}
+		else if (m_eType == ENameTagEntityType.AI)
+		{
+			SCR_CharacterIdentityComponent scrCharIdentity = SCR_CharacterIdentityComponent.Cast(m_Entity.FindComponent(SCR_CharacterIdentityComponent));
+			if (scrCharIdentity)
 			{
-				m_NTDisplay.CleanupAllTags();	// cleanup other tags because we need to compare groups again
-				return;
+				scrCharIdentity.GetFormattedFullName(m_sName, m_aNameParams);
 			}
+			else
+			{
+				CharacterIdentityComponent charIdentity = CharacterIdentityComponent.Cast(m_Entity.FindComponent(CharacterIdentityComponent));
+				if (charIdentity && charIdentity.GetIdentity())
+					m_sName = charIdentity.GetIdentity().GetName();
+				else 
+					m_sName = "No character identity!";
+			}
+		}
 		
-			if (m_NTDisplay.m_CurrentPlayerTag.m_iGroupID == m_iGroupID)
-				ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);
-		}
-		else
-		{
-			m_iGroupID = -1;
-			if (m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
-				DeactivateEntityState(ENameTagEntityState.GROUP_MEMBER);
-			
-			if (m_bIsCurrentPlayer)
-				m_NTDisplay.CleanupAllTags();
-			
-			return;
-		}
+		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
+		m_sGroupName = "Test";
+		
+		name = m_sName;
+		nameParams.Copy(m_aNameParams);
 	}
 	
 	// Overriding this whole thing to force these fucking tags to the body
