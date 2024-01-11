@@ -1,0 +1,78 @@
+FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
+ {
+  OverlayWidgetClass "{56D6D7CE83DA03EE}" {
+   Prefab "{56D6D7CE83DA03EE}"
+   Slot FrameWidgetSlot "{5558C3118DE4FCC1}" {
+    PositionX 0.915
+    PositionY 5.49
+    SizeX 0
+    SizeY 0
+   }
+  }
+  SizeLayoutWidgetClass "{5CC296FE0BE2ED39}" {
+   Prefab "{5CC296FE0BE2ED39}"
+   {
+    OverlayWidgetClass "{5CC296FBD8B6CA52}" {
+     Prefab "{5CC296FBD8B6CA52}"
+     {
+      ImageWidgetClass "{5CC296FBD8B6CA6A}" {
+       Prefab "{5CC296FBD8B6CA6A}"
+       Slot OverlayWidgetSlot "{5558A7C18E7F73F5}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+       }
+      }
+      VerticalLayoutWidgetClass "{5CC296FBD8B6CA68}" {
+       Prefab "{5CC296FBD8B6CA68}"
+       {
+        HorizontalLayoutWidgetClass "{5CC296FBD8B6CA62}" {
+         Prefab "{5CC296FBD8B6CA62}"
+         {
+          OverlayWidgetClass "{5CC296FBE7B45399}" {
+           Prefab "{5CC296FBE7B45399}"
+           {
+            ButtonWidgetClass "{5EB6780DD23793C9}" {
+             Name "ColorTeams"
+             Slot OverlayWidgetSlot "{5ED0114A00D1A010}" {
+             }
+             Tooltip TextWidgetTooltip "{5EC77B6EAF3AE23E}" {
+              Text "Squad Color Team Settings"
+             }
+             Color 0.761 0.386 0.078 0
+             components {
+              SCR_InputButtonComponent "{5EE4151C086E4B93}" {
+              }
+             }
+             {
+              ImageWidgetClass "{5EB6780DC42BB19E}" {
+               Name "Image0"
+               Slot ButtonWidgetSlot "{5ED011501F23425C}" {
+               }
+               Color 0.761 0.386 0.078 1
+               Texture "{F50EC6286B50C981}Layouts/UI/Textures/ColorTeamsButton.edds"
+               Size 65 25
+               "Shadow Offset" 0.5 0.5
+               "Shadow Size Increase" 0.5 0.5
+               "Shadow Color" 0.007 0.007 0.007 1
+              }
+             }
+            }
+            HorizontalLayoutWidgetClass "{5CC296FBE7B4539D}" {
+             Prefab "{5CC296FBE7B4539D}"
+             Slot OverlayWidgetSlot "{56D6D7CEE8C41B58}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

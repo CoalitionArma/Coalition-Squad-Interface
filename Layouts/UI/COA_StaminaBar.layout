@@ -1,0 +1,23 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ProgressBarWidgetClass "{5EBD2BF29F9A8646}" {
+   Name "StamBar"
+   Slot FrameWidgetSlot "{5B0D54DD8880C4BA}" {
+    Anchor 0 1 0 1
+    PositionX 4.251
+    OffsetLeft 4.251
+    PositionY -10.044
+    OffsetTop -10.044
+    SizeX 214.911
+    OffsetRight -219.162
+    SizeY 5.91
+    OffsetBottom 4.134
+   }
+   Opacity 0
+   Color 0.042 0.042 0.042 0.078
+   Maximum 1
+   Current 0
+  }
+ }
+}
