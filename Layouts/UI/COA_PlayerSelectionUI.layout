@@ -20,6 +20,7 @@ FrameWidgetClass {
     OffsetBottom -454.026
    }
    Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
   }
   ImageWidgetClass "{5ED010DDFD01FDCF}" {
    Name "Pretty"
@@ -38,6 +39,7 @@ FrameWidgetClass {
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
    Image "settings"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{5ED010DDFD01FDCE}" {
    Prefab "{5CC296FBD8B6CA6C}"
@@ -59,6 +61,7 @@ FrameWidgetClass {
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
     Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
    }
   }
   WindowWidgetClass "{5ED010DDFD01FA34}" {
@@ -92,6 +95,9 @@ FrameWidgetClass {
    Text "// Select A Player To Edit"
    "Font Size" 14
    "Min Font Size" 14
+   FontProperties FontProperties "{605B121A62611D32}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   HorizontalLayoutWidgetClass "{5ED0135A53CDA9AF}" {
    Prefab "{5CC296FBD8B6CA62}"
@@ -145,6 +151,7 @@ FrameWidgetClass {
              Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
              Image "backspace"
              Size 64 64
+             "Shadow Offset" 0.5 0.5
             }
             RichTextWidgetClass "{5ED0135A53CDA858}" {
              Name "Text"
@@ -156,6 +163,9 @@ FrameWidgetClass {
              "Font Size" 16
              "Min Font Size" 16
              "Vertical Alignment" Center
+             FontProperties FontProperties "{605B121A692D4BDF}" {
+              ShadowOffset 0.5 0.5
+             }
             }
            }
           }
@@ -184,6 +194,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{5ED010DDFD01FA2F}" {
    Name "Player0"
@@ -207,6 +218,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{5ED010DDFD01FA2E}" {
@@ -245,6 +257,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{60503473C08C9366}" {
    Name "Player1"
@@ -268,6 +281,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{60503473C08C93F7}" {
@@ -306,6 +320,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347315D36DDE}" {
    Name "Player2"
@@ -329,6 +344,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347315D36A7C}" {
@@ -367,6 +383,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347315D36A92}" {
    Name "Player3"
@@ -390,6 +407,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347315D36AE2}" {
@@ -428,6 +446,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347319EF6FAA}" {
    Name "Player4"
@@ -451,6 +470,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347319EF6FCC}" {
@@ -489,6 +509,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347319EF6C63}" {
    Name "Player5"
@@ -512,6 +533,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347319EF6C48}" {
@@ -550,6 +572,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347319EF6CFC}" {
    Name "Player6"
@@ -573,6 +596,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347319EF6CD8}" {
@@ -611,6 +635,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{6050347319EF6D7E}" {
    Name "Player7"
@@ -634,6 +659,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{6050347319EF6D5B}" {
@@ -672,6 +698,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B6836E0}" {
    Name "Player8"
@@ -695,6 +722,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B68370A}" {
@@ -733,6 +761,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B6837AB}" {
    Name "Player9"
@@ -756,6 +785,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B6837E2}" {
@@ -794,6 +824,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B68340F}" {
    Name "Player10"
@@ -817,6 +848,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B683452}" {
@@ -855,6 +887,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B6834D0}" {
    Name "Player11"
@@ -878,6 +911,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B68353B}" {
@@ -916,6 +950,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B683555}" {
    Name "Player12"
@@ -939,6 +974,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B6835BC}" {
@@ -977,6 +1013,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B683228}" {
    Name "Player13"
@@ -1000,6 +1037,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B683271}" {
@@ -1038,6 +1076,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B6832D7}" {
    Name "Player14"
@@ -1061,6 +1100,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B683329}" {
@@ -1099,6 +1139,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034730B6833A5}" {
    Name "Player15"
@@ -1122,6 +1163,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034730B683383}" {
@@ -1160,6 +1202,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034735F9A9AA8}" {
    Name "Player16"
@@ -1183,6 +1226,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034735F9A9B39}" {
@@ -1221,6 +1265,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034735F9A9B58}" {
    Name "Player17"
@@ -1244,6 +1289,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034735F9A9BAA}" {
@@ -1282,6 +1328,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034735F9A9836}" {
    Name "Player18"
@@ -1305,6 +1352,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034735F9A981F}" {
@@ -1343,6 +1391,7 @@ FrameWidgetClass {
    Opacity 0
    Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{605034735F9A98B2}" {
    Name "Player19"
@@ -1366,6 +1415,7 @@ FrameWidgetClass {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
+    ShadowOffset 0.5 0.5
    }
   }
   ButtonWidgetClass "{605034735F9A989C}" {
@@ -1402,6 +1452,7 @@ FrameWidgetClass {
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
   }
   ImageWidgetClass "{60541EA825E6044D}" {
    Name "Pretty0"
@@ -1442,6 +1493,7 @@ FrameWidgetClass {
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
     Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
    }
   }
   XComboBoxWidgetClass "{60541EA982535213}" {
@@ -1482,6 +1534,9 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    Wrap 1
+   FontProperties FontProperties "{605B121A53F7C70F}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   ButtonWidgetClass "{60541EA9BBE51211}" {
    Name "ConfirmMaxPlayers"
@@ -1524,6 +1579,7 @@ FrameWidgetClass {
    Texture "{2770916767B4AB81}UI/Imagesets/buttons/pc_buttons.imageset"
    Image "Enter"
    Size 42 42
+   "Shadow Offset" 0.5 0.5
   }
  }
 }

@@ -1,13 +1,13 @@
 class COA_Compass : SCR_InfoDisplay
 {
-	private TextWidget Bearing = null;
-	private ImageWidget Compass = null;
-	private bool CompassVisible = true;
+	private TextWidget m_wBearing = null;
+	private ImageWidget m_wCompass = null;
+	private bool m_bCompassVisible = true;
 
 	override protected void OnInit(IEntity owner)
 	{
 		super.OnInit(owner);
-		GetGame().GetInputManager().AddActionListener("ToggleCompass", EActionTrigger.DOWN, ToggleCompass);
+		GetGame().GetInputManager().AddActionListener("Togglem_wCompass", EActionTrigger.DOWN, Togglem_wCompass);
 	}
 
 	override protected void UpdateValues(IEntity owner, float timeSlice)
@@ -15,42 +15,42 @@ class COA_Compass : SCR_InfoDisplay
 		super.UpdateValues(owner, timeSlice);
 
 		//Refresh base widgets if we can't get them
-		if (!Bearing || !Compass) {
-			Bearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
-			Compass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
+		if (!m_wBearing || !m_wCompass) {
+			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
+			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
 		};
 		
-		if (CompassVisible)
+		if (m_bCompassVisible)
 		{
-			Compass.SetOpacity(1);
-			Bearing.SetOpacity(1);
+			m_wCompass.SetOpacity(1);
+			m_wBearing.SetOpacity(1);
 		}
 		else
 		{
-			Compass.SetOpacity(0);
-			Bearing.SetOpacity(0);
+			m_wCompass.SetOpacity(0);
+			m_wBearing.SetOpacity(0);
 			return;
 		}
 
 		// Can't run if these dont exist better exit out.
-		if (!Bearing || !Compass) return;
+		if (!m_wBearing || !m_wCompass) return;
 
-		// Sets Bearings text and the Compass direction
-		SetBearingSetCompass(Bearing, Compass);
+		// Sets m_wBearings text and the m_wCompass direction
+		Setm_wBearingAndm_wCompass(m_wBearing, m_wCompass);
 	}
 
 	//------------------------------------------------------------------------------------------------
 
-	// Compass Functions
+	// m_wCompass Functions
 
 	//------------------------------------------------------------------------------------------------
 
-	protected void ToggleCompass()
+	protected void Togglem_wCompass()
 	{
-		CompassVisible = !CompassVisible;
+		m_bCompassVisible = !m_bCompassVisible;
 	}
 
-	protected void SetBearingSetCompass(TextWidget BearingRef, ImageWidget CompassRef)
+	protected void Setm_wBearingAndm_wCompass(TextWidget m_wBearingRef, ImageWidget m_wCompassRef)
 	{
 		// Get current world
 		World world = GetGame().GetWorld();
@@ -66,17 +66,17 @@ class COA_Compass : SCR_InfoDisplay
 		// Returns absolute value of yaw
 		if (yaw < 0) { yaw = 360 - Math.AbsFloat(yaw); }
 
-		// Rotate Compass texture to current bearing direction (yaw)
-		CompassRef.SetRotation(-yaw);
+		// Rotate m_wCompass texture to current m_wBearing direction (yaw)
+		m_wCompassRef.SetRotation(-yaw);
 
-		// Set Bearing so if yaw outputs 6 it'll read 006
-		string bearingAdd = "";
+		// Set m_wBearing so if yaw outputs 6 it'll read 006
+		string m_wBearingAdd = "";
 		// I love this.
-		if (yaw >= 0 & yaw < 10) { bearingAdd = "00"; }
-		if (yaw >= 10 & yaw < 100) { bearingAdd = "0"; }
-		string bearingSTR = bearingAdd + (yaw.ToString());
+		if (yaw >= 0 & yaw < 10) { m_wBearingAdd = "00"; }
+		if (yaw >= 10 & yaw < 100) { m_wBearingAdd = "0"; }
+		string m_wBearingSTR = m_wBearingAdd + (yaw.ToString());
 
-		// Set Bearing Text
-		BearingRef.SetText(bearingSTR);
+		// Set m_wBearing Text
+		m_wBearingRef.SetText(m_wBearingSTR);
 	}
 }
