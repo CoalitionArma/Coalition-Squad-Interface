@@ -25,9 +25,9 @@ FrameWidgetClass {
    FontProperties FontProperties "{5B0C606254D4404C}" {
     Font "{0E041C5B1F27DCEA}ui/fonts/robotomono_msdf_28.fnt"
     ForceFont 1
-    OutlineSize 2
+    OutlineSize 1
     ShadowSize 32
-    ShadowOffset 0.5 0.5
+    ShadowOffset 0.85 0.85
    }
   }
   ImageWidgetClass "{605034196C0C5E97}" {

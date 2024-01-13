@@ -20,6 +20,7 @@ FrameWidgetClass {
     OffsetBottom -220.641
    }
    Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{5ED010D84219987D}" {
    Name "Color Team Text"
@@ -38,6 +39,9 @@ FrameWidgetClass {
    Text "// Set Color Team"
    "Font Size" 12
    "Min Font Size" 12
+   FontProperties FontProperties "{60587BCB22D7A1C8}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{5ED010D861AD1015}" {
    Name "Override Icon Text"
@@ -56,6 +60,9 @@ FrameWidgetClass {
    Text "// Override Icon"
    "Font Size" 12
    "Min Font Size" 12
+   FontProperties FontProperties "{60587BCB2098979A}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   ImageWidgetClass "{5EC77B6D3C4B6F2D}" {
    Name "Pretty"
@@ -74,6 +81,7 @@ FrameWidgetClass {
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
    Image "settings"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{5EC77B6C95919105}" {
    Prefab "{5CC296FBD8B6CA6C}"
@@ -93,6 +101,7 @@ FrameWidgetClass {
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
     Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
    }
   }
   ImageWidgetClass "{5EC77B6C5671FF7D}" {
@@ -212,6 +221,8 @@ FrameWidgetClass {
    }
    Texture "{71ED761DF5BA041C}Layouts/UI/Textures/Icons/iconman_ca.edds"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
+   "Shadow Size Increase" 1 1
   }
   TextWidgetClass "{5EC77AE9FA911A1F}" {
    Name "PlayerName"
@@ -230,6 +241,12 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BCBC751C206}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowOffset 0.5 0.5
+   }
   }
   XComboBoxWidgetClass "{5EC77B6095B7A4A8}" {
    Name "IconOveride"
@@ -455,6 +472,7 @@ FrameWidgetClass {
              Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
              Image "backspace"
              Size 64 64
+             "Shadow Offset" 0.5 0.5
             }
             RichTextWidgetClass "{5ED011555B1A8267}" {
              Name "Text"
@@ -466,6 +484,7 @@ FrameWidgetClass {
              "Font Size" 16
              "Min Font Size" 16
              "Vertical Alignment" Center
+             "Shadow Offset" 0.5 0.5
             }
            }
           }
@@ -492,6 +511,7 @@ FrameWidgetClass {
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
   }
   ButtonWidgetClass "{604F4D6FF9C3B934}" {
    Name "PromoteToSL"
@@ -620,6 +640,9 @@ FrameWidgetClass {
    "Font Size" 12
    "Min Font Size" 12
    "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC88455F923}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   ButtonWidgetClass "{604F4D6F182A3D59}" {
    Name "PromoteToTL"
@@ -750,6 +773,9 @@ FrameWidgetClass {
    "Font Size" 12
    "Min Font Size" 12
    "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC89FCF66A9}" {
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60503593856FF8D2}" {
    Name "PrettyText0"
@@ -771,6 +797,7 @@ FrameWidgetClass {
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
     Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
    }
   }
   ImageWidgetClass "{60503593856FF961}" {
@@ -791,6 +818,7 @@ FrameWidgetClass {
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
    Image "settings"
    Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
   ButtonWidgetClass "{605035931933B04B}" {
    Name "Kick"
@@ -917,6 +945,9 @@ FrameWidgetClass {
    "Font Size" 12
    "Min Font Size" 12
    "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC887F2FD1C}" {
+    ShadowOffset 0.5 0.5
+   }
   }
  }
 }

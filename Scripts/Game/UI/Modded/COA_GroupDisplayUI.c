@@ -1,7 +1,9 @@
 class COA_GroupDisplay : SCR_InfoDisplay
 {	
-	private int groupRefresh = 30;
-	protected bool GroupDisplayVisable = true;
+	private int m_iGroupDisplayRefresh = 44;
+	protected bool m_bGroupDisplayVisable = true;
+	
+	COA_GroupDisplayManagerComponent customGroupManager = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -20,84 +22,49 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (groupRefresh < 35) {
-			groupRefresh++; 
+		// Only update the group displpay every 45 frames.
+		if (m_iGroupDisplayRefresh < 45) {
+			m_iGroupDisplayRefresh++; 
 			return;
 		};
 		
-		groupRefresh = 0;
+		m_iGroupDisplayRefresh = 0;
 		
-		if (!GroupDisplayVisable) {
+		if (!m_bGroupDisplayVisable) {
 			ClearGroupDisplay(0, true);
 			return;
 		};
 		
-		SCR_GroupsManagerComponent vanillaGroupManager = SCR_GroupsManagerComponent.GetInstance();
-		COA_GroupDisplayManagerComponent groupManagerCOA = COA_GroupDisplayManagerComponent.GetInstance();
-		if (!vanillaGroupManager) return;
+		if (!customGroupManager) {
+			customGroupManager = COA_GroupDisplayManagerComponent.GetInstance();
+		};
 		 
-		SCR_AIGroup playersGroup = vanillaGroupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		array<string> groupArray = customGroupManager.GetLocalGroupArray();
+			
+		foreach (int i, string playerStringToSplit : groupArray) {
+			
+			array<string> playerSplitArray = {};
+			playerStringToSplit.Split("╣", playerSplitArray, false);
+			
+			// Get all values we need to display this player.
+			int playerID = playerSplitArray[1].ToInt();
+			string colorTeam = playerSplitArray[2];
+			string icon = playerSplitArray[3];
 
-		// If player doesn't have a group we can't do much, better check then clear their group display, just in case.
-		if (!playersGroup) {ClearGroupDisplay(0, false); return; };
-			
-		array<int> PlayerIDsArray = playersGroup.GetPlayerIDs();
-		int groupCount = PlayerIDsArray.Count();
-			
-		if (groupCount <= 1) {ClearGroupDisplay(0, false); return;};
-			
-		array<string> PlayerGroupStringArray = {};
-			
-		foreach (int PlayerID : PlayerIDsArray) {
-			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(PlayerID);
-			if (!localplayer) continue;
-			string PlayerStr = groupManagerCOA.ReturnLocalPlayerMapValue("PlayerGroupValues", PlayerID);
-			if (!PlayerStr || PlayerStr == "") continue;
-			PlayerGroupStringArray.Insert(PlayerStr);
-		}
-			
-		PlayerGroupStringArray.Sort(false);
-			
-		foreach (int i, string PlayerString : PlayerGroupStringArray) {
-				
-			array<string> removeValueArray = {};
-			PlayerString.Split("╣", removeValueArray, true);
-			PlayerString = removeValueArray[1];
-				
-			array<string> localPlayerStringSplit = {};
-			PlayerString.Split("║", localPlayerStringSplit, false);
-
-			string playerName = localPlayerStringSplit[0];
-			string colorTeam  = localPlayerStringSplit[1];
-			string icon       = localPlayerStringSplit[2];
+			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
+			
+			// Check if we need to add ... to the end of players names.
+			playerName = CheckEllipsis(135, playerDisplay, playerName);
 
 			playerDisplay.SetText(playerName);
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, icon);
-				
-			float sx = 0;
-			float yx = 0;
-			playerDisplay.GetTextSize(sx, yx);
-			
-			if (sx > 145) {
-			  	for (int e = 0; sx > 132.5; e++)
-				{
-					int playerNameLength = playerName.Length();
-					playerNameLength = playerNameLength - 1;
-					playerName = playerName.Substring(0, playerNameLength);
-						
-					//Players display wont visually update until the UpdateValues function ends, so they don't see this.
-					playerDisplay.SetText(playerName);
-					playerDisplay.GetTextSize(sx, yx);
-				};
-				playerName = string.Format("%1...", playerName);
-				playerDisplay.SetText(playerName);
-			};
 
+			// Set color team.
 			if (colorTeam) {
 				switch (colorTeam)
 				{
@@ -109,7 +76,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 				};
 			};
 		};
-		ClearGroupDisplay(groupCount, true);
+		ClearGroupDisplay(groupArray.Count(), true);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -120,16 +87,16 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	
 	protected void ToggleGroupDisplay()
 	{
-		GroupDisplayVisable = !GroupDisplayVisable;
+		m_bGroupDisplayVisable = !m_bGroupDisplayVisable;
 	}
 
-	void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
+	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
 		//Check if there's anything to clear
-		ImageWidget DisplayCheck = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
-		int Check = DisplayCheck.GetOpacity();
-		if (Check == 1 || forceClear) {
-			for (int e = positionToStartClearing; e<=19; e++)
+		ImageWidget displayCheck = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
+		int check = displayCheck.GetOpacity();
+		if (check == 1 || forceClear) {
+			for (int e = positionToStartClearing; e <= 19; e++)
 			{
 				// Get group display widgets.
 				TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));
@@ -155,4 +122,25 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{	
 		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionUI);
 	}
+	
+	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
+	{	
+		float sx = 0;
+		float yx = 0;
+		nameWidget.GetTextSize(sx, yx);
+		
+		if (sx > maxLength) {
+			for (int e = 0; sx > maxLength - 3.5; e++)
+			{
+				int nameLength = name.Length();
+				nameLength = nameLength - 1;
+				name = name.Substring(0, nameLength);
+
+				nameWidget.SetText(name);
+				nameWidget.GetTextSize(sx, yx);
+			};
+			name = string.Format("%1...", name);
+		};
+		return name;
+	};
 }

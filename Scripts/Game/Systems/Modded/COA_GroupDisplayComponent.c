@@ -19,7 +19,7 @@ class COA_GroupDisplayComponent : ScriptComponent
 	
 	//------------------------------------------------------------------------------------------------
 
-	// Functions for Player Settings replication
+	// Functions for Group/Player Settings replication
 	
 	//------------------------------------------------------------------------------------------------
 	
@@ -33,8 +33,8 @@ class COA_GroupDisplayComponent : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
-		SCR_GroupsManagerComponent vanillaGroupManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_AIGroup playersGroup = vanillaGroupManager.GetPlayerGroup(playerID);
+		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
+		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 		playersGroup.SetGroupLeader(playerID);
 	}
 	
@@ -48,8 +48,8 @@ class COA_GroupDisplayComponent : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
-		SCR_GroupsManagerComponent vanillaGroupManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_AIGroup playersGroup = vanillaGroupManager.GetPlayerGroup(playerID);
+		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
+		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 		playersGroup.SetMaxMembers(maxMembers);
 	}
 	
@@ -74,23 +74,22 @@ class COA_GroupDisplayComponent : ScriptComponent
 		playerGroupController.RequestJoinGroup(newGroup.GetGroupID());
 	}
 	
-	
 	//------------------------------------------------------------------------------------------------
 
 	// Functions for Group Display replication
 	
 	//------------------------------------------------------------------------------------------------
 	
-	void Owner_UpdatePlayerMapValue(int playerID, string writeUpdate, string valueUpdate)
+	void Owner_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{	
-		Rpc(RpcAsk_UpdatePlayerMapValue, playerID, writeUpdate, valueUpdate);
+		Rpc(RpcAsk_UpdatePlayerMapValue, groupID, playerID, write, value);
 	}
 	
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerMapValue(int playerID, string writeUpdate, string valueUpdate)
+	protected void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{
 		COA_GroupDisplayManagerComponent groupBackendManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
 		if (groupBackendManagerComponent)
-			groupBackendManagerComponent.UpdateAuthorityPlayerMap(playerID, writeUpdate, valueUpdate);
+			groupBackendManagerComponent.UpdateAuthorityPlayerMap(groupID, playerID, write, value);
 	}
 };
