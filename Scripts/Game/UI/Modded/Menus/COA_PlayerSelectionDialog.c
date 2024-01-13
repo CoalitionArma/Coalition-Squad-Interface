@@ -1,6 +1,6 @@
 modded enum ChimeraMenuPreset {
-	COA_PlayerSettingsUI,
-	COA_PlayerSelectionUI
+	COA_PlayerSettingsDialog,
+	COA_PlayerSelectionDialog
 }
 
 modded class GroupSettingsDialogUI : DialogUI
@@ -15,11 +15,11 @@ modded class GroupSettingsDialogUI : DialogUI
 	protected void CTButtonClicked()
 	{
 		GetGame().GetMenuManager().CloseMenu(this);
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionUI);
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
 	}
 }
 
-class COA_PlayerSelectionUI : ChimeraMenuBase
+class COA_PlayerSelectionDialog : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
 	
@@ -61,7 +61,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		
 		string storedSpecialtyIcon = customGroupManager.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
-		if ((playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\Iconmanteamleader_ca.edds")
+		if ((playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
 		{
 			UpdatePlayerList();
 		} else {
@@ -69,7 +69,7 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 			return;
 		};
 		
-		if (playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\Iconmanleader_ca.edds")
+		if (playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
 		{
 			ShowGroupSettings();
 		}
@@ -243,8 +243,8 @@ class COA_PlayerSelectionUI : ChimeraMenuBase
 		
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		
-		MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSettingsUI, 0, true);
-		COA_PlayerSettingsUI colorTeamMenu = COA_PlayerSettingsUI.Cast(menu);
+		MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSettingsDialog, 0, true);
+		COA_PlayerSettingsDialog colorTeamMenu = COA_PlayerSettingsDialog.Cast(menu);
 		
 		colorTeamMenu.SetPlayerStr(m_aGroupArray[playerInt]);
 	}

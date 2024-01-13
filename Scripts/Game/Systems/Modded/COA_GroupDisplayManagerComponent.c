@@ -4,17 +4,17 @@ class COA_GroupDisplayManagerComponentClass: SCR_BaseGameModeComponentClass {};
 class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 {	
 	// All Icons we could possibly want to give the player and/or to use for other functions.
-	protected string m_sCargo         = "{B910A93F355F168C}Layouts\UI\Textures\Icons\imagecargo_ca.edds";
-	protected string m_sDriver        = "{C2B2F451FB157A89}Layouts\UI\Textures\Icons\imagedriver_ca.edds";
-	protected string m_sGunner        = "{3DAAB773C8C29812}Layouts\UI\Textures\Icons\imagegunner_ca.edds";
-	protected string m_sSquadLeader   = "{5ECE094ED4662B33}Layouts\UI\Textures\Icons\Iconmanleader_ca.edds";
-	protected string m_sTeamLeader    = "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\Iconmanteamleader_ca.edds";
-	protected string m_sMedic         = "{01F2523A4EE5C48B}Layouts\UI\Textures\Icons\Iconmanmedic_ca.edds";
-	protected string m_sSniper        = "{318B797C57BE3C29}Layouts\UI\Textures\Icons\Iconmansniper_ca.edds";
-	protected string m_sMachineGunner = "{CCF40410BDB53870}Layouts\UI\Textures\Icons\Iconmanmg_ca.edds";
-	protected string m_sAntiTank      = "{DC86195B44F5A345}Layouts\UI\Textures\Icons\Iconmanat_ca.edds";
-	protected string m_sGrenadier     = "{B7757F2024A3DC87}Layouts\UI\Textures\Icons\Iconmangrenadier_ca.edds";
-	protected string m_sMan           = "{71ED761DF5BA041C}Layouts\UI\Textures\Icons\Iconman_ca.edds";
+	protected string m_sCargo         = "{B910A93F355F168C}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
+	protected string m_sDriver        = "{C2B2F451FB157A89}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
+	protected string m_sGunner        = "{3DAAB773C8C29812}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
+	protected string m_sSquadLeader   = "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
+	protected string m_sTeamLeader    = "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
+	protected string m_sMedic         = "{01F2523A4EE5C48B}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
+	protected string m_sSniper        = "{318B797C57BE3C29}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
+	protected string m_sMachineGunner = "{CCF40410BDB53870}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
+	protected string m_sAntiTank      = "{DC86195B44F5A345}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
+	protected string m_sGrenadier     = "{B7757F2024A3DC87}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
+	protected string m_sMan           = "{71ED761DF5BA041C}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
 	
 	// A hashmap that is modified only on the authority.
 	protected ref map<string,string> m_mAuthorityPlayerMap = new map<string,string>;
@@ -130,15 +130,15 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		int groupID = playersGroup.GetGroupID();
 		
 		// If group count is less than what we need, better clear the array so players clear their displays.
-		if (groupCount <= 1) {
-			m_aLocalGroupArray.Clear();
-			return;
-		}
+		if (groupCount <= 1) {m_aLocalGroupArray.Clear(); return;};
 		
 		// Settup a temp array we'll use to keep all changes local so if a player calls for m_aLocalGroupArray it isn't in the middle of being updated.
 		array<string> tempLocalGroupArray = {};
 			
 		foreach (int playerID : playerIDsArray) {
+			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID);
+			if (!localplayer) continue;
+			
 			string colorTeam   = ReturnLocalPlayerMapValue(groupID, playerID, "ColorTeam");
 			string icon        = ReturnLocalPlayerMapValue(groupID, playerID, "DisplayIcon");
 			string playerValue = ReturnLocalPlayerMapValue(groupID, playerID, "PlayerValue");
@@ -150,6 +150,8 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 			string playerStr = string.Format("%1╣%2╣%3╣%4", playerValue, playerID, colorTeam, icon);
 			tempLocalGroupArray.Insert(playerStr);
 		}
+		
+		if (tempLocalGroupArray.Count() <= 1) {m_aLocalGroupArray.Clear(); return;};
 			
 		tempLocalGroupArray.Sort(false);
 		m_aLocalGroupArray = tempLocalGroupArray;

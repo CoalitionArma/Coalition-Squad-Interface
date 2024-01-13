@@ -1,4 +1,4 @@
-class COA_PlayerSettingsUI : ChimeraMenuBase
+class COA_PlayerSettingsDialog : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
 
@@ -39,6 +39,9 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		m_wPlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName"));
 		m_wIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("Icon"));
 		
+		GetGame().GetCallqueue().CallLater(UpdatePlayerIcon, 215, true);
+		GetGame().GetCallqueue().CallLater(UpdateIconOverride, 145);
+		
 		SCR_InputButtonComponent ConfirmIOButton = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_InputButtonComponent));
 		SCR_InputButtonComponent Red             = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Red").FindHandler(SCR_InputButtonComponent));
 		SCR_InputButtonComponent Blue            = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Blue").FindHandler(SCR_InputButtonComponent));		
@@ -56,10 +59,6 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 		groupManager = SCR_GroupsManagerComponent.GetInstance();
 		SCR_AIGroup OpeningPlayersGroup = groupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		if (OpeningPlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId())) ShowAdvSettings();
-		
-		GetGame().GetCallqueue().CallLater(UpdatePlayerIcon, 215, true);
-		
-		UpdateIconOverride();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -114,19 +113,19 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	{
 		string iconOverride = customGroupManager.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon");
 	
-		if (iconOverride && iconOverride != "") {
-			int playerOverideIcon = 0;
-			switch (iconOverride)
-			{
-				case "Medic"          : {playerOverideIcon = 1; break; };
-				case "Sniper"         : {playerOverideIcon = 2; break; };
-				case "Machine Gunner" : {playerOverideIcon = 3; break; };
-				case "Anti-Tank"      : {playerOverideIcon = 4; break; };
-				case "Grenadier"      : {playerOverideIcon = 5; break; };
-				case "Man"            : {playerOverideIcon = 6; break; };
-			};
-			m_wIconOveride.SetCurrentItem(playerOverideIcon);
+		int playerOverideIcon = 0;
+		
+		switch (iconOverride)
+		{
+			case "Medic"          : {playerOverideIcon = 1; break;};
+			case "Sniper"         : {playerOverideIcon = 2; break;};
+			case "Machine Gunner" : {playerOverideIcon = 3; break;};
+			case "Anti-Tank"      : {playerOverideIcon = 4; break;};
+			case "Grenadier"      : {playerOverideIcon = 5; break;};
+			case "Man"            : {playerOverideIcon = 6; break;};
 		};
+		
+		m_wIconOveride.SetCurrentItem(playerOverideIcon);
 	};
 	
 	//------------------------------------------------------------------------------------------------
@@ -207,9 +206,9 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 
 	protected void OnOverrideIconClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected") return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
-		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\Iconmanteamleader_ca.edds") return;
+		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") return;
 		
 		int iconToOverride = m_wIconOveride.GetCurrentItem();
 		string iconToOverrideStr = "";
@@ -230,7 +229,7 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	
 	protected void OnPromoteToSLClicked()
 	{
-		if (playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
 		groupBackendComponent.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
 		GetGame().GetMenuManager().CloseAllMenus();
@@ -238,9 +237,9 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	
 	protected void OnPromoteToTLClicked()
 	{
-		if (playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
-		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}Layouts\UI\Textures\Icons\Iconmanteamleader_ca.edds") {
+		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") {
 			groupBackendComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon", "Auto");
 			return;
 		};
@@ -249,7 +248,7 @@ class COA_PlayerSettingsUI : ChimeraMenuBase
 	
 	protected void OnKickClicked()
 	{
-		if (playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || playersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
 		groupBackendComponent.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);
