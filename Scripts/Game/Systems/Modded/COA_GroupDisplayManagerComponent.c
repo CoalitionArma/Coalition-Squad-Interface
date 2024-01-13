@@ -6,7 +6,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	// All Icons we could possibly want to give the player and/or to use for other functions.
 	protected string m_sCargo         = "{B910A93F355F168C}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
 	protected string m_sDriver        = "{C2B2F451FB157A89}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
-	protected string m_sGunner        = "{3DAAB773C8C29812}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds\imagegunner_ca.edds";
+	protected string m_sGunner        = "{3DAAB773C8C29812}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
 	protected string m_sSquadLeader   = "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
 	protected string m_sTeamLeader    = "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
 	protected string m_sMedic         = "{01F2523A4EE5C48B}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
