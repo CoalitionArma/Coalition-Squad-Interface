@@ -120,7 +120,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		
 	protected void PlayerSelectionMenu()
 	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionUI);
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
 	}
 	
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
