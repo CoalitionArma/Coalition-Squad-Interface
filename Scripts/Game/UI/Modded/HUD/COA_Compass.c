@@ -7,7 +7,7 @@ class COA_Compass : SCR_InfoDisplay
 	override protected void OnInit(IEntity owner)
 	{
 		super.OnInit(owner);
-		GetGame().GetInputManager().AddActionListener("Togglem_wCompass", EActionTrigger.DOWN, Togglem_wCompass);
+		GetGame().GetInputManager().AddActionListener("ToggleCompass", EActionTrigger.DOWN, ToggleCompass);
 	}
 
 	override protected void UpdateValues(IEntity owner, float timeSlice)
@@ -36,7 +36,7 @@ class COA_Compass : SCR_InfoDisplay
 		if (!m_wBearing || !m_wCompass) return;
 
 		// Sets m_wBearings text and the m_wCompass direction
-		Setm_wBearingAndm_wCompass(m_wBearing, m_wCompass);
+		SetBearingAndCompass();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -45,12 +45,12 @@ class COA_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
-	protected void Togglem_wCompass()
+	protected void ToggleCompass()
 	{
 		m_bCompassVisible = !m_bCompassVisible;
 	}
 
-	protected void Setm_wBearingAndm_wCompass(TextWidget m_wBearingRef, ImageWidget m_wCompassRef)
+	protected void SetBearingAndCompass()
 	{
 		// Get current world
 		World world = GetGame().GetWorld();
@@ -67,16 +67,16 @@ class COA_Compass : SCR_InfoDisplay
 		if (yaw < 0) { yaw = 360 - Math.AbsFloat(yaw); }
 
 		// Rotate m_wCompass texture to current m_wBearing direction (yaw)
-		m_wCompassRef.SetRotation(-yaw);
+		m_wCompass.SetRotation(-yaw);
 
 		// Set m_wBearing so if yaw outputs 6 it'll read 006
-		string m_wBearingAdd = "";
+		string bearingAdd = "";
 		// I love this.
-		if (yaw >= 0 & yaw < 10) { m_wBearingAdd = "00"; }
-		if (yaw >= 10 & yaw < 100) { m_wBearingAdd = "0"; }
-		string m_wBearingSTR = m_wBearingAdd + (yaw.ToString());
+		if (yaw >= 0 & yaw < 10) { bearingAdd = "00"; }
+		if (yaw >= 10 & yaw < 100) { bearingAdd = "0"; }
+		string bearingStr = bearingAdd + (yaw.ToString());
 
 		// Set m_wBearing Text
-		m_wBearingRef.SetText(m_wBearingSTR);
+		m_wBearing.SetText(bearingStr);
 	}
 }

@@ -30,7 +30,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	protected ref array<string> m_aPlayerArray = new array<string>;
 	
 	// The vanilla group manager.
-	protected SCR_GroupsManagerComponent groupManager = null;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -49,6 +49,8 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	
 	override protected void OnPostInit(IEntity owner)
 	{	
+		super.OnPostInit(owner);
+		
 		if (Replication.IsClient()) {
 			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 450, true);
 		};
@@ -56,6 +58,20 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		if (Replication.IsServer()) {
 			GetGame().GetCallqueue().CallLater(UpdateGroupInfoInAuthorityPlayerMap, 435, true);
 			GetGame().GetCallqueue().CallLater(UpdatePlayerArray, 425, true);
+		};
+	}
+	
+	override protected void OnGameEnd()
+	{	
+		super.OnGameEnd();
+		
+		if (Replication.IsClient()) {
+			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
+		};
+		
+		if (Replication.IsServer()) {
+			GetGame().GetCallqueue().Remove(UpdateGroupInfoInAuthorityPlayerMap);
+			GetGame().GetCallqueue().Remove(UpdatePlayerArray);
 		};
 	}
 	
@@ -116,11 +132,11 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	
 	protected void UpdateLocalGroupArray()
 	{
-		if (!groupManager)
-			groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!m_GroupsManagerComponent)
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
 		// Get players current group.
-		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
 		if (!playersGroup) return;
 		
@@ -197,13 +213,13 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		array<SCR_AIGroup> outAllGroups;
 
 		// Get base group manager component
-		if (!groupManager)
-			groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!m_GroupsManagerComponent)
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
-		if (!groupManager) return;
+		if (!m_GroupsManagerComponent) return;
 		
 		// Get all groups
-		groupManager.GetAllPlayableGroups(outAllGroups);
+		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
 		
 		foreach (SCR_AIGroup playersGroup : outAllGroups)
 		{

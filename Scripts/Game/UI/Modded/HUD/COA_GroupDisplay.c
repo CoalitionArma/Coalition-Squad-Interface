@@ -3,7 +3,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	private int m_iGroupDisplayRefresh = 44;
 	protected bool m_bGroupDisplayVisable = true;
 	
-	COA_GroupDisplayManagerComponent customGroupManager = null;
+	COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -35,11 +35,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			return;
 		};
 		
-		if (!customGroupManager) {
-			customGroupManager = COA_GroupDisplayManagerComponent.GetInstance();
+		if (!m_GroupDisplayManagerComponent) {
+			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
 		};
 		 
-		array<string> groupArray = customGroupManager.GetLocalGroupArray();
+		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
 			
 		foreach (int i, string playerStringToSplit : groupArray) {
 			
