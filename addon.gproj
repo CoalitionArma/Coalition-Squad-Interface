@@ -1,20 +1,20 @@
 GameProject {
- ID "CoalitionUIMod"
+ ID "CoalitionSquadInterface"
  GUID "5B0D1E4380971EBD"
- TITLE "Coalition Squad Interface"
+ TITLE "CSI - COALITION Squad Interface"
  Dependencies {
   "58D0FB3206B6F859"
  }
  Configurations {
   GameProjectConfig PC {
   }
-  GameProjectConfig HEADLESS {
-  }
   GameProjectConfig XBOX_ONE {
   }
   GameProjectConfig XBOX_SERIES {
   }
   GameProjectConfig PS4 {
+  }
+  GameProjectConfig HEADLESS {
   }
  }
 }
