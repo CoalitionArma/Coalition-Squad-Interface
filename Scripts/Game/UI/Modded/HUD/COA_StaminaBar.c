@@ -1,8 +1,14 @@
 class COA_StaminaBar : SCR_InfoDisplay
 {
-	private ProgressBarWidget m_wStamBar = null;
+	protected ProgressBarWidget m_wStamBar = null;
 	private bool m_bStamBarEnabled = true;
 
+	//------------------------------------------------------------------------------------------------
+
+	// Override/static functions
+
+	//------------------------------------------------------------------------------------------------
+	
 	override protected void OnInit(IEntity owner)
 	{
 		super.OnInit(owner);
@@ -10,6 +16,7 @@ class COA_StaminaBar : SCR_InfoDisplay
 		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext", 36000000);
 	}
 
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
@@ -34,23 +41,32 @@ class COA_StaminaBar : SCR_InfoDisplay
 		OnStaminaChange(characterController.GetStamina());
 	}
 	
+	//------------------------------------------------------------------------------------------------
+
+	// Stamina Bar Functions
+
+	//------------------------------------------------------------------------------------------------
+	
 	protected void ToggleStamina()
 	{
 		m_bStamBarEnabled = !m_bStamBarEnabled;
 	}
 
+	//------------------------------------------------------------------------------------------------
 	void RevealBar(float currentOpacity)
 	{
 		float setOpacity = currentOpacity +0.005;
 		m_wStamBar.SetOpacity(setOpacity);
 	}
 
+	//------------------------------------------------------------------------------------------------
 	protected void HideBar(float currentOpacity)
 	{
 		float setOpacity = currentOpacity -0.005;
 		m_wStamBar.SetOpacity(setOpacity);
 	}
 
+	//------------------------------------------------------------------------------------------------
 	void OnStaminaChange(float stamina)
 	{
 		if (!m_bStamBarEnabled)

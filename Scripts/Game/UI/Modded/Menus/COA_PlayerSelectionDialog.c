@@ -8,8 +8,8 @@ modded class GroupSettingsDialogUI : DialogUI
 	override void OnMenuOpen()
 	{
 		super.OnMenuOpen();
-		SCR_InputButtonComponent ColorTeams = SCR_InputButtonComponent.Cast(GetRootWidget().FindAnyWidget("ColorTeams").FindHandler(SCR_InputButtonComponent));
-		ColorTeams.m_OnClicked.Insert(CTButtonClicked);
+		SCR_InputButtonComponent colorTeams = SCR_InputButtonComponent.Cast(GetRootWidget().FindAnyWidget("ColorTeams").FindHandler(SCR_InputButtonComponent));
+		colorTeams.m_OnClicked.Insert(CTButtonClicked);
 	}
 	
 	protected void CTButtonClicked()
@@ -21,16 +21,15 @@ modded class GroupSettingsDialogUI : DialogUI
 
 class COA_PlayerSelectionDialog : ChimeraMenuBase
 {
-	protected Widget m_wRoot;
+	protected SCR_AIGroup m_PlayersGroup = null;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
+	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
-	protected XComboBoxWidget m_wMaxPlayers = null;
+	private Widget m_wRoot;
+	private XComboBoxWidget m_wMaxPlayers = null;
 	
-	protected SCR_PlayerController playerController = null;
-	protected SCR_GroupsManagerComponent groupManager = null;
-	protected COA_GroupDisplayManagerComponent customGroupManager = null;
-	protected SCR_AIGroup playersGroup = null;
-	protected int m_iGroupCount = 0;
-	protected ref array<string> m_aGroupArray = {};
+	private int m_iGroupCount;
+	private ref array<string> m_aGroupArray;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -40,28 +39,30 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	
 	override void OnMenuShow() 
 	{	
+		super.OnMenuShow();
+		
 		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		
 		m_wRoot = GetRootWidget();
 		
 		// Get Global Player Controller and Group Manager.
-		groupManager = SCR_GroupsManagerComponent.GetInstance();
-		customGroupManager = COA_GroupDisplayManagerComponent.GetInstance();
+		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
 
-		if (!groupManager || !customGroupManager) {OnMenuBack(); return;};
+		if (!m_GroupsManagerComponent || !m_GroupDisplayManagerComponent) {OnMenuBack(); return;};
 		
-		playersGroup = groupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
-		if (!playersGroup) {OnMenuBack(); return;};
+		if (!m_PlayersGroup) {OnMenuBack(); return;};
 		
-		array<int> playerIDsArray = playersGroup.GetPlayerIDs();
+		array<int> playerIDsArray = m_PlayersGroup.GetPlayerIDs();
 		m_iGroupCount = playerIDsArray.Count();
 			
 		if (m_iGroupCount <= 1) {OnMenuBack(); return;};
 		
-		string storedSpecialtyIcon = customGroupManager.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
+		string storedSpecialtyIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
-		if ((playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
+		if ((m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
 		{
 			UpdatePlayerList();
 		} else {
@@ -69,7 +70,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			return;
 		};
 		
-		if (playersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
+		if (m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
 		{
 			ShowGroupSettings();
 		}
@@ -77,8 +78,11 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		GetGame().GetCallqueue().CallLater(UpdatePlayerList, 425, true);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override void OnMenuInit()
 	{	
+		super.OnMenuInit();
+		
 		m_wRoot = GetRootWidget();
 		
 		for (int b = 0; b <= 19; b++)
@@ -87,8 +91,8 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			buttonList.m_OnClicked.Insert(OnPlayerEntryClicked);
 		};
 				
-		SCR_InputButtonComponent Back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
-		Back.m_OnClicked.Insert(OnMenuBack);
+		SCR_InputButtonComponent back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
+		back.m_OnClicked.Insert(OnMenuBack);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -99,7 +103,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	
 	protected void UpdatePlayerList()
 	{		
-		m_aGroupArray = customGroupManager.GetLocalGroupArray();
+		m_aGroupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
 			
 		if (m_aGroupArray.Count() <= 1) {OnMenuBack(); return;};
 		
@@ -134,7 +138,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 					case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
 					case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
 					case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-					case "None"   : {statusDisplay.SetColorInt(ARGB(235, 235, 235, 255)); playerDisplay.SetColorInt(ARGB(235, 235, 235, 255)); break; };
+					case "None"   : {statusDisplay.SetColorInt(ARGB(255, 215, 215, 215)); playerDisplay.SetColorInt(ARGB(255, 215, 215, 215)); break; };
 				};
 			};
 		};
@@ -153,6 +157,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		}
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
 	{	
 		float sx = 0;
@@ -182,10 +187,12 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	
 	protected void OnMenuBack()
 	{
+		GetGame().GetCallqueue().Remove(UpdatePlayerList);
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		GetGame().GetMenuManager().CloseMenu(this);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	void ShowGroupSettings()
 	{
 		ImageWidget background0           = ImageWidget.Cast(m_wRoot.FindAnyWidget("Background0"));
@@ -208,7 +215,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		confirmMaxPlayers.SetOpacity(1);
 		m_wMaxPlayers.SetOpacity(1);
 		
-		int maxMembers = playersGroup.GetMaxMembers();
+		int maxMembers = m_PlayersGroup.GetMaxMembers();
 		maxMembers = maxMembers - 1;
 		
 		m_wMaxPlayers.SetCurrentItem(maxMembers);
@@ -231,6 +238,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		groupBackendComponent.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), maxMembers);
 	};
 		
+	//------------------------------------------------------------------------------------------------
 	protected void OnPlayerEntryClicked(SCR_ButtonBaseComponent component)
 	{
 		string playerIntStr = component.GetRootWidget().GetName();

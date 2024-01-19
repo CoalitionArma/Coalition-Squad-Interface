@@ -30,7 +30,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	protected ref array<string> m_aPlayerArray = new array<string>;
 	
 	// The vanilla group manager.
-	protected SCR_GroupsManagerComponent groupManager = null;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -47,8 +47,11 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 			return null;
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
 	{	
+		super.OnPostInit(owner);
+		
 		if (Replication.IsClient()) {
 			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 450, true);
 		};
@@ -60,13 +63,28 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	override protected void OnGameEnd()
+	{	
+		super.OnGameEnd();
+		
+		if (Replication.IsClient()) {
+			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
+		};
+		
+		if (Replication.IsServer()) {
+			GetGame().GetCallqueue().Remove(UpdateGroupInfoInAuthorityPlayerMap);
+			GetGame().GetCallqueue().Remove(UpdatePlayerArray);
+		};
+	}
+	
+	//------------------------------------------------------------------------------------------------
 
 	// Functions to replicate and store values to each clients m_mLocalPlayerMap
 
 	//------------------------------------------------------------------------------------------------
 	
 	//- Authority & Client -\\
-	
+	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerArray()
 	{
 		// Create a temp array so we arent broadcasting for each change to m_aPlayerArray.
@@ -87,7 +105,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	}
 	
 	//- Client -\\
-	
+	//------------------------------------------------------------------------------------------------
 	protected void UpdateLocalPlayerMapAndGroupArray()
 	{
 		// Fill m_mLocalPlayerMap with all keys and values from m_mAuthorityPlayerMap.
@@ -99,6 +117,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		};
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	string ReturnLocalPlayerMapValue(int groupID, int playerID, string key)
 	{	
 		// Get the players key 
@@ -113,14 +132,14 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Client -\\
-	
+	//------------------------------------------------------------------------------------------------
 	protected void UpdateLocalGroupArray()
 	{
-		if (!groupManager)
-			groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!m_GroupsManagerComponent)
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
 		// Get players current group.
-		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
 		if (!playersGroup) return;
 		
@@ -157,6 +176,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		m_aLocalGroupArray = tempLocalGroupArray;
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	TStringArray GetLocalGroupArray()
 	{	
 		return m_aLocalGroupArray;
@@ -169,7 +189,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Authority -\\
-	
+	//------------------------------------------------------------------------------------------------
 	void UpdateAuthorityPlayerMap(int groupID, int playerID, string write, string value)
 	{						
 		// The key we are gonna use that keeps everything locallied to the group and player, so we don't get any cross-contamination between groups or players.
@@ -177,6 +197,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		m_mAuthorityPlayerMap.Set(key, value);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	string ReturnAuthorityPlayerMapValue(int groupID, int playerID, string key)
 	{	
 		// Get the players key 
@@ -191,19 +212,19 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Authority -\\
-	
+	//------------------------------------------------------------------------------------------------
 	protected void UpdateGroupInfoInAuthorityPlayerMap()
 	{	
 		array<SCR_AIGroup> outAllGroups;
 
 		// Get base group manager component
-		if (!groupManager)
-			groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!m_GroupsManagerComponent)
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
-		if (!groupManager) return;
+		if (!m_GroupsManagerComponent) return;
 		
 		// Get all groups
-		groupManager.GetAllPlayableGroups(outAllGroups);
+		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
 		
 		foreach (SCR_AIGroup playersGroup : outAllGroups)
 		{
@@ -374,6 +395,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		};
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	int DeterminePlayerValue(int groupID, int playerID, string colorTeam)
 	{
 		// Settup value variable.

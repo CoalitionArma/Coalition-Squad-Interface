@@ -2,8 +2,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 {	
 	private int m_iGroupDisplayRefresh = 44;
 	protected bool m_bGroupDisplayVisable = true;
-	
-	COA_GroupDisplayManagerComponent customGroupManager = null;
+	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -18,6 +17,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, PlayerSelectionMenu);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
@@ -35,12 +35,12 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			return;
 		};
 		
-		if (!customGroupManager) {
-			customGroupManager = COA_GroupDisplayManagerComponent.GetInstance();
+		if (!m_GroupDisplayManagerComponent) {
+			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
 		};
 		 
-		array<string> groupArray = customGroupManager.GetLocalGroupArray();
-			
+		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
+		
 		foreach (int i, string playerStringToSplit : groupArray) {
 			
 			array<string> playerSplitArray = {};
@@ -65,15 +65,13 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			statusDisplay.LoadImageTexture(0, icon);
 
 			// Set color team.
-			if (colorTeam) {
-				switch (colorTeam)
-				{
-					case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 200, 65, 65));   playerDisplay.SetColorInt(ARGB(255, 200, 65, 65));   break; };
-					case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
-					case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
-					case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-					case "None"   : {statusDisplay.SetColorInt(ARGB(235, 235, 235, 255)); playerDisplay.SetColorInt(ARGB(235, 235, 235, 255)); break; };
-				};
+			switch (colorTeam)
+			{
+				case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 200, 65, 65));   playerDisplay.SetColorInt(ARGB(255, 200, 65, 65));   break; };
+				case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
+				case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
+				case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
+				case "None"   : {statusDisplay.SetColorInt(ARGB(255, 215, 215, 215)); playerDisplay.SetColorInt(ARGB(255, 215, 215, 215)); break; };
 			};
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
@@ -90,6 +88,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		m_bGroupDisplayVisable = !m_bGroupDisplayVisable;
 	}
 
+	//------------------------------------------------------------------------------------------------
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
 		//Check if there's anything to clear
@@ -123,6 +122,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
 	{	
 		float sx = 0;
