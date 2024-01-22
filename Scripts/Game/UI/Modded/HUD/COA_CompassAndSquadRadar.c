@@ -7,7 +7,7 @@ class COA_Compass : SCR_InfoDisplay
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	protected SCR_AIGroup m_PlayersGroup = null;
 	
-	private int m_iSquadRadarRefresh;
+	private float m_fYaw;
 	private vector m_vOwnerOrigin;
 	private bool m_bCompassVisible = true;
 	private ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
@@ -65,14 +65,7 @@ class COA_Compass : SCR_InfoDisplay
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
 		
-		// Only update the group displpay every 5 frames.
-		if (m_iSquadRadarRefresh <= 5) {
-			m_iSquadRadarRefresh++; 
-			return;
-		};
-		
 		SquadRadarSearch();
-		m_iSquadRadarRefresh = 0;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -91,7 +84,7 @@ class COA_Compass : SCR_InfoDisplay
 	{	
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return;
-		float yaw = playerControllerComponent.GetAimingDirectionWorld().VectorToAngles()[0];
+		m_fYaw = playerControllerComponent.GetAimingDirectionWorld().VectorToAngles()[0];
 		
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(m_ChimeraCharacter.FindComponent(CompartmentAccessComponent));
 		if (compartmentAccess)
@@ -102,14 +95,14 @@ class COA_Compass : SCR_InfoDisplay
 				vector transform[4];
 				GetGame().GetWorld().GetCurrentCamera(transform);
 
-				yaw = -Math3D.MatrixToAngles(transform)[0];
+				m_fYaw = -Math3D.MatrixToAngles(transform)[0];
 			};
 		}
 		
-		int yawInt = -yaw;
+		int yawInt = -m_fYaw;
 		if (yawInt < 0) { yawInt = 360 - Math.AbsFloat(yawInt); };
 		
-		m_wCompass.SetRotation(yaw);
+		m_wCompass.SetRotation(m_fYaw);
 
 		// Set m_wBearing so if yaw outputs 6 it'll read 006
 		string bearingAdd = "";
@@ -143,15 +136,17 @@ class COA_Compass : SCR_InfoDisplay
 		
 		m_aAllPlayersWithinRange = {};
 		
-		if (!groupArray || groupArray.Count() <= 1) {
-			ClearSquadRadar(0);
-			return;
-		};
+		// FOR DEBUG, UNCOMMENT FOR RELEASE
+		//if (!groupArray || groupArray.Count() <= 1) {
+		//	ClearSquadRadar(0);
+		//	return;
+		//};
 		
-		SetSquadRadarImage(0, m_ChimeraCharacter);
+		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
+		SetSquadRadarImage(radarlocalPlayer, m_ChimeraCharacter, 1);
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
-		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, 35, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
+		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, 18, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
 		
 		UpdateSquadRadarPositions();
 	}
@@ -174,31 +169,69 @@ class COA_Compass : SCR_InfoDisplay
 	protected void UpdateSquadRadarPositions()
 	{
 		int posToStartClearing = 0;
+		//foreach (SCR_ChimeraCharacter playerCharacter 
 		foreach (int i, SCR_ChimeraCharacter playerCharacter : m_aAllPlayersWithinRange)
 		{
-			i = i + 1;	
-	
-			vector processEntityOrigin = playerCharacter.GetOrigin();
+			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
+			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 		
-			float distance = vector.Distance(m_vOwnerOrigin, processEntityOrigin);
+			// Get Distance
+			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
+			float disT = dis * 4.25;
+			
+			// Get Direction
+			vector dirV = vector.Direction(m_vOwnerOrigin, playerCharacterOrigin);
+			float dir = dirV.ToYaw();
+			
+			
+			// Unity Meathod
+			// https://subscription.packtpub.com/book/game-development/9781784391362/1/ch01lvl1sec20/displaying-a-radar-to-indicate-the-relative-locations-of-objects
+			// Get Relative Direction
+			// find angle from player to target
+			//float angleToTarget = Math.Atan2(playerCharacterOrigin[0], playerCharacterOrigin[2]) * Math.RAD2DEG;
+
+			// subtract player angle, to get relative angle to VObject
+			// subtract 90
+			// (so 0 degrees (same direction as player) is UP)
+			//float angleRadarDegrees =  angleToTarget - m_fYaw - 90;
+			
+			// DUI Meathod
+			// Get Relative Direction
+			float relDir = Math.Mod(((dir - m_fYaw) + 360), 360);
+			relDir = Math.Mod(relDir - (dir * 2), 360);
+			
+			float x = (Math.Sin(relDir * 0.01) * disT) - 11.25;
+			float y = (Math.Cos(relDir * 0.01) * disT) - 11.25;
+			
+			Print(dis);
+			Print(dir);
+			Print(relDir);
+			//Print(angleRadarDegrees);
+			//Print(angleToTarget);
+			Print("------------------------------------------");
+			Print(x);
+			Print(y);
 		
-			SetSquadRadarImage(i, playerCharacter);
+			FrameSlot.SetPos(radarPlayer, x, y);
+			
+			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 6, 0));
 			posToStartClearing = i;
 		};
 		ClearSquadRadar(posToStartClearing + 1);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void SetSquadRadarImage(int radarPlayerWidgetInt, SCR_ChimeraCharacter playerCharacter)
+	protected void SetSquadRadarImage(ImageWidget radarPlayer, SCR_ChimeraCharacter playerCharacter, float opacity)
 	{
-		ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", radarPlayerWidgetInt)));
-		
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		
 		string colorTeam = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), processEntityID, "ColorTeam");
 		string icon      = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), processEntityID, "DisplayIcon");
 		
-		radarPlayer.SetOpacity(1);
+		// FOR DEBUG, COMMENT FOR RELEASE
+		if (!icon || icon == "") return;
+		
+		radarPlayer.SetOpacity(opacity);
 		radarPlayer.LoadImageTexture(0, icon);
 		
 		switch (colorTeam)
@@ -210,8 +243,8 @@ class COA_Compass : SCR_InfoDisplay
 			case "None"   : {radarPlayer.SetColorInt(ARGB(185, 235, 235, 235)); break;};
 		};
 		
-		if (radarPlayerWidgetInt != 0)
-			radarPlayer.SetRotation(GetPlayersYaw(playerCharacter));
+		if (playerCharacter != m_ChimeraCharacter)
+			radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - m_fYaw), 360));
 	}
 	
 	//------------------------------------------------------------------------------------------------
