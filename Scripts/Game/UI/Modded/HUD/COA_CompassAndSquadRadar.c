@@ -28,20 +28,12 @@ class COA_Compass : SCR_InfoDisplay
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
-		
-		if (!m_GroupsManagerComponent)
-			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		if (!m_GroupDisplayManagerComponent)
-			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
-		
-		// Get players current group.
-		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
 		//Refresh base widgets if we can't get them
 		if (!m_wBearing || !m_wCompass) {
 			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
 			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
+			return;
 		};
 		
 		if (m_bCompassVisible)
@@ -56,14 +48,26 @@ class COA_Compass : SCR_InfoDisplay
 			ClearSquadRadar(0);
 			return;
 		}
-
-		// Can't run if these dont exist better exit out.
-		if (!m_wBearing || !m_wCompass) return;
 		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
 
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
+		
+		if (!m_GroupsManagerComponent) {
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+			return;
+		};
+		
+		if (!m_GroupDisplayManagerComponent) {
+			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
+			return;
+		};
+		
+		// Get players current group.
+		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		
+		if (!m_PlayersGroup) return;
 		
 		SquadRadarSearch();
 	}
@@ -158,7 +162,7 @@ class COA_Compass : SCR_InfoDisplay
 		if (!playerCharacter || playerCharacter == m_ChimeraCharacter) return true;
 		
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
-		if(!processEntityID || !m_PlayersGroup.IsPlayerInGroup(processEntityID))return true;
+		if(!processEntityID || !m_PlayersGroup.IsPlayerInGroup(processEntityID)) return true;
 		
 		m_aAllPlayersWithinRange.Insert(playerCharacter);
 
