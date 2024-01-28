@@ -45,7 +45,7 @@ class COA_Compass : SCR_InfoDisplay
 		{
 			m_wCompass.SetOpacity(0);
 			m_wBearing.SetOpacity(0);
-			ClearSquadRadar(0);
+			//ClearSquadRadar(0);
 			return;
 		}
 		
@@ -53,7 +53,7 @@ class COA_Compass : SCR_InfoDisplay
 
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
-		
+
 		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			return;
@@ -187,7 +187,6 @@ class COA_Compass : SCR_InfoDisplay
 			vector dirV = vector.Direction(m_vOwnerOrigin, playerCharacterOrigin);
 			float dir = dirV.ToYaw();
 			
-			
 			// Unity Meathod
 			// https://subscription.packtpub.com/book/game-development/9781784391362/1/ch01lvl1sec20/displaying-a-radar-to-indicate-the-relative-locations-of-objects
 			// Get Relative Direction
@@ -237,15 +236,7 @@ class COA_Compass : SCR_InfoDisplay
 		
 		radarPlayer.SetOpacity(opacity);
 		radarPlayer.LoadImageTexture(0, icon);
-		
-		switch (colorTeam)
-		{
-			case "Red"    : {radarPlayer.SetColorInt(ARGB(185, 200, 65, 65));   break;};
-			case "Blue"   : {radarPlayer.SetColorInt(ARGB(185, 0, 92, 255));    break;};
-			case "Yellow" : {radarPlayer.SetColorInt(ARGB(185, 230, 230, 0));   break;};
-			case "Green"  : {radarPlayer.SetColorInt(ARGB(185, 0, 190, 85));    break;};
-			case "None"   : {radarPlayer.SetColorInt(ARGB(185, 235, 235, 235)); break;};
-		};
+		radarPlayer.SetColorInt(colorTeam.ToInt());
 		
 		if (playerCharacter != m_ChimeraCharacter)
 			radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - m_fYaw), 360));

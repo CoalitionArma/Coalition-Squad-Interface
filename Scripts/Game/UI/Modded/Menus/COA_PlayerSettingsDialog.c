@@ -1,5 +1,11 @@
 class COA_PlayerSettingsDialog : ChimeraMenuBase
 {	
+	protected string m_sCTRed    = ARGB(255, 200, 65, 65).ToString();
+	protected string m_sCTBlue   = ARGB(255, 0, 92, 255).ToString();
+	protected string m_sCTYellow = ARGB(255, 230, 230, 0).ToString();
+	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
+	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
+	
 	protected SCR_AIGroup m_PlayersGroup = null;
 	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	protected COA_GroupDisplayComponent m_GroupDisplayComponent = null;
@@ -94,19 +100,10 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 		string colorTeam  = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam");
 		
 		m_sStoredSpecialtIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
-		
-		if (colorTeam || colorTeam != "") {
-			switch (colorTeam)
-			{
-				case "Red"    : {m_wPlayerName.SetColorInt(ARGB(255, 200, 65, 65));   m_wIcon.SetColorInt(ARGB(255, 200, 65, 65));   break;};
-				case "Blue"   : {m_wPlayerName.SetColorInt(ARGB(255, 0, 92, 255));    m_wIcon.SetColorInt(ARGB(255, 0, 92, 255));    break;};
-				case "Yellow" : {m_wPlayerName.SetColorInt(ARGB(255, 230, 230, 0));   m_wIcon.SetColorInt(ARGB(255, 230, 230, 0));   break;};
-				case "Green"  : {m_wPlayerName.SetColorInt(ARGB(255, 0, 190, 85));    m_wIcon.SetColorInt(ARGB(255, 0, 190, 85));    break;};
-				case "None"   : {m_wPlayerName.SetColorInt(ARGB(255, 215, 215, 215)); m_wIcon.SetColorInt(ARGB(255, 215, 215, 215)); break;};
-			};
-		};
-
+		 
+		m_wIcon.SetColorInt(colorTeam.ToInt());
 		m_wIcon.LoadImageTexture(0, m_sStoredSpecialtIcon);
+		m_wPlayerName.SetColorInt(colorTeam.ToInt());   
 		m_wPlayerName.SetText(playerName);
 	}
 	
@@ -201,10 +198,23 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 	protected void OnColorTeamClicked(SCR_ButtonBaseComponent CTcomponent)
 	{
 		if (m_wPlayerName.GetText() == "No Player Selected") return;
-		string colorTeam = CTcomponent.GetRootWidget().GetName();
+		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();
 		
 		if (!m_iSelectedPlayerID) return;
-		m_GroupDisplayComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam", colorTeam);
+		
+		string colorTeamIntStr = m_sCTNone;
+		if (colorTeamButtonName || colorTeamButtonName != "") {
+			switch (colorTeamButtonName)
+			{
+				case "Red"    : {colorTeamIntStr = m_sCTRed;    break;};
+				case "Blue"   : {colorTeamIntStr = m_sCTBlue;   break;};
+				case "Yellow" : {colorTeamIntStr = m_sCTYellow; break;};
+				case "Green"  : {colorTeamIntStr = m_sCTGreen;  break;};
+				case "None"   : {colorTeamIntStr = m_sCTNone;   break;};
+			};
+		};
+		
+		m_GroupDisplayComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam", colorTeamIntStr);
 		
 		m_sStoredSpecialtIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
 	}

@@ -37,6 +37,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		
 		if (!m_GroupDisplayManagerComponent) {
 			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
+			return;
 		};
 		 
 		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
@@ -60,19 +61,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			// Check if we need to add ... to the end of players names.
 			playerName = CheckEllipsis(135, playerDisplay, playerName);
 
+			playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
+			statusDisplay.SetColorInt(colorTeam.ToInt());
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, icon);
-
-			// Set color team.
-			switch (colorTeam)
-			{
-				case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 200, 65, 65));   playerDisplay.SetColorInt(ARGB(255, 200, 65, 65));   break; };
-				case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
-				case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
-				case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-				case "None"   : {statusDisplay.SetColorInt(ARGB(255, 215, 215, 215)); playerDisplay.SetColorInt(ARGB(255, 215, 215, 215)); break; };
-			};
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
 	}

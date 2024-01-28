@@ -5,20 +5,20 @@ FrameWidgetClass {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -24.949
-    OffsetLeft -24.949
-    PositionY -117.961
-    OffsetTop -117.961
-    SizeX 50.023
-    OffsetRight -25.074
-    SizeY 15.358
-    OffsetBottom 102.603
+    PositionX -25.093
+    OffsetLeft -25.093
+    PositionY -119.351
+    OffsetTop -119.351
+    SizeX 50
+    OffsetRight -24.907
+    SizeY 18
+    OffsetBottom 101.351
    }
    Opacity 0.984
    style debugUI
    Text "000"
-   "Font Size" 15
-   "Min Font Size" 15
+   "Font Size" 16
+   "Min Font Size" 16
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0C606254D4404C}" {
