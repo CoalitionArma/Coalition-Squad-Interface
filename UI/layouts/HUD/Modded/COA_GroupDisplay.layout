@@ -24,14 +24,14 @@ FrameWidgetClass {
    Name "Player0"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.846
-    OffsetLeft 148.846
-    PositionY -81.556
-    OffsetTop -81.556
+    PositionX 148.737
+    OffsetLeft 148.737
+    PositionY -82.247
+    OffsetTop -82.247
     SizeX 135
-    OffsetRight -283.846
+    OffsetRight -283.737
     SizeY 14
-    OffsetBottom 67.556
+    OffsetBottom 68.247
    }
    IsPixelPerfect 0
    Text ""
@@ -71,12 +71,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 148.702
     OffsetLeft 148.702
-    PositionY -56.957
-    OffsetTop -56.957
+    PositionY -57.257
+    OffsetTop -57.257
     SizeX 135
     OffsetRight -283.702
     SizeY 14
-    OffsetBottom 42.957
+    OffsetBottom 43.257
    }
    IsPixelPerfect 0
    Text ""
@@ -114,14 +114,14 @@ FrameWidgetClass {
    Name "Player2"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.735
-    OffsetLeft 148.735
-    PositionY -32.17
-    OffsetTop -32.17
+    PositionX 148.935
+    OffsetLeft 148.935
+    PositionY -32.27
+    OffsetTop -32.27
     SizeX 135
-    OffsetRight -283.735
+    OffsetRight -283.935
     SizeY 13.999
-    OffsetBottom 18.171
+    OffsetBottom 18.271
    }
    IsPixelPerfect 0
    Text ""
@@ -206,12 +206,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 148.825
     OffsetLeft 148.825
-    PositionY 18.203
-    OffsetTop 18.203
+    PositionY 17.703
+    OffsetTop 17.703
     SizeX 135
     OffsetRight -283.825
     SizeY 14
-    OffsetBottom -32.203
+    OffsetBottom -31.703
    }
    IsPixelPerfect 0
    Text ""
@@ -249,14 +249,14 @@ FrameWidgetClass {
    Name "Player5"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.681
-    OffsetLeft 313.681
-    PositionY -81.556
-    OffsetTop -81.556
+    PositionX 313.572
+    OffsetLeft 313.572
+    PositionY -82.247
+    OffsetTop -82.247
     SizeX 135
-    OffsetRight -448.681
+    OffsetRight -448.572
     SizeY 14
-    OffsetBottom 67.556
+    OffsetBottom 68.247
    }
    IsPixelPerfect 0
    Text ""
@@ -296,12 +296,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 313.715
     OffsetLeft 313.715
-    PositionY -56.957
-    OffsetTop -56.957
+    PositionY -57.257
+    OffsetTop -57.257
     SizeX 135
     OffsetRight -448.715
     SizeY 14
-    OffsetBottom 42.957
+    OffsetBottom 43.257
    }
    IsPixelPerfect 0
    Text ""
@@ -339,14 +339,14 @@ FrameWidgetClass {
    Name "Player7"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.748
-    OffsetLeft 313.748
-    PositionY -32.17
-    OffsetTop -32.17
+    PositionX 313.948
+    OffsetLeft 313.948
+    PositionY -32.27
+    OffsetTop -32.27
     SizeX 135
-    OffsetRight -448.748
+    OffsetRight -448.948
     SizeY 13.999
-    OffsetBottom 18.171
+    OffsetBottom 18.271
    }
    IsPixelPerfect 0
    Text ""
@@ -431,12 +431,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 313.838
     OffsetLeft 313.838
-    PositionY 18.203
-    OffsetTop 18.203
+    PositionY 17.703
+    OffsetTop 17.703
     SizeX 135
     OffsetRight -448.838
     SizeY 14
-    OffsetBottom -32.203
+    OffsetBottom -31.703
    }
    IsPixelPerfect 0
    Text ""
@@ -474,14 +474,14 @@ FrameWidgetClass {
    Name "Player10"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 478.914
-    OffsetLeft 478.914
-    PositionY -81.556
-    OffsetTop -81.556
+    PositionX 479.167
+    OffsetLeft 479.167
+    PositionY -82.247
+    OffsetTop -82.247
     SizeX 135
-    OffsetRight -613.914
+    OffsetRight -614.167
     SizeY 14
-    OffsetBottom 67.556
+    OffsetBottom 68.247
    }
    IsPixelPerfect 0
    Text ""
@@ -521,12 +521,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 478.948
     OffsetLeft 478.948
-    PositionY -56.957
-    OffsetTop -56.957
+    PositionY -57.257
+    OffsetTop -57.257
     SizeX 135
     OffsetRight -613.948
     SizeY 14
-    OffsetBottom 42.957
+    OffsetBottom 43.257
    }
    IsPixelPerfect 0
    Text ""
@@ -564,14 +564,14 @@ FrameWidgetClass {
    Name "Player12"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 478.981
-    OffsetLeft 478.981
-    PositionY -32.17
-    OffsetTop -32.17
+    PositionX 479.181
+    OffsetLeft 479.181
+    PositionY -32.27
+    OffsetTop -32.27
     SizeX 135
-    OffsetRight -613.981
+    OffsetRight -614.181
     SizeY 13.999
-    OffsetBottom 18.171
+    OffsetBottom 18.271
    }
    IsPixelPerfect 0
    Text ""
@@ -656,12 +656,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 479.071
     OffsetLeft 479.071
-    PositionY 18.203
-    OffsetTop 18.203
+    PositionY 17.703
+    OffsetTop 17.703
     SizeX 135
     OffsetRight -614.071
     SizeY 14
-    OffsetBottom -32.203
+    OffsetBottom -31.703
    }
    IsPixelPerfect 0
    Text ""
@@ -699,14 +699,14 @@ FrameWidgetClass {
    Name "Player15"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.707
-    OffsetLeft 643.707
-    PositionY -81.47
-    OffsetTop -81.47
+    PositionX 643.598
+    OffsetLeft 643.598
+    PositionY -82.161
+    OffsetTop -82.161
     SizeX 135
-    OffsetRight -778.707
+    OffsetRight -778.598
     SizeY 14
-    OffsetBottom 67.47
+    OffsetBottom 68.161
    }
    IsPixelPerfect 0
    Text ""
@@ -746,12 +746,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 643.741
     OffsetLeft 643.741
-    PositionY -56.871
-    OffsetTop -56.871
+    PositionY -57.171
+    OffsetTop -57.171
     SizeX 135
     OffsetRight -778.741
     SizeY 14
-    OffsetBottom 42.871
+    OffsetBottom 43.171
    }
    IsPixelPerfect 0
    Text ""
@@ -789,14 +789,14 @@ FrameWidgetClass {
    Name "Player17"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.774
-    OffsetLeft 643.774
-    PositionY -32.084
-    OffsetTop -32.084
+    PositionX 643.974
+    OffsetLeft 643.974
+    PositionY -32.184
+    OffsetTop -32.184
     SizeX 135
-    OffsetRight -778.774
+    OffsetRight -778.974
     SizeY 13.999
-    OffsetBottom 18.085
+    OffsetBottom 18.185
    }
    IsPixelPerfect 0
    Text ""
@@ -881,12 +881,12 @@ FrameWidgetClass {
     Anchor 0.5 0.965 0.5 0.965
     PositionX 643.864
     OffsetLeft 643.864
-    PositionY 18.288
-    OffsetTop 18.288
+    PositionY 17.788
+    OffsetTop 17.788
     SizeX 135
     OffsetRight -778.864
-    SizeY 14
-    OffsetBottom -32.289
+    SizeY 14.001
+    OffsetBottom -31.789
    }
    IsPixelPerfect 0
    Text ""

@@ -1,6 +1,6 @@
 class COA_GroupDisplay : SCR_InfoDisplay
 {	
-	private int m_iGroupDisplayRefresh = 44;
+	private int m_iGroupDisplayRefresh;
 	protected bool m_bGroupDisplayVisable = true;
 	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
@@ -22,8 +22,8 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		// Only update the group displpay every 45 frames.
-		if (m_iGroupDisplayRefresh < 45) {
+		// Only update the group displpay every 15 frames.
+		if (m_iGroupDisplayRefresh < 15) {
 			m_iGroupDisplayRefresh++; 
 			return;
 		};

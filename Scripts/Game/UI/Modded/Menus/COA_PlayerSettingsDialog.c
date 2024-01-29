@@ -11,14 +11,14 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 	protected COA_GroupDisplayComponent m_GroupDisplayComponent = null;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	
-	private Widget m_wRoot;
-	private XComboBoxWidget m_wIconOveride;
-	private ImageWidget m_wIcon;
-	private TextWidget m_wPlayerName;
+	protected Widget m_wRoot;
+	protected XComboBoxWidget m_wIconOveride;
+	protected ImageWidget m_wIcon;
+	protected TextWidget m_wPlayerName;
 	
-	private int m_iSelectedPlayerID;
-	private int m_iGroupID;
-	private string m_sStoredSpecialtIcon;
+	protected int m_iSelectedPlayerID;
+	protected int m_iGroupID;
+	protected string m_sStoredSpecialtIcon;
 
 	//------------------------------------------------------------------------------------------------
 

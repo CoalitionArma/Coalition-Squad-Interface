@@ -7,10 +7,10 @@ class COA_Compass : SCR_InfoDisplay
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	protected SCR_AIGroup m_PlayersGroup = null;
 	
-	private float m_fYaw;
-	private vector m_vOwnerOrigin;
-	private bool m_bCompassVisible = true;
-	private ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
+	protected float m_fYaw;
+	protected vector m_vOwnerOrigin;
+	protected bool m_bCompassVisible = true;
+	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -45,11 +45,13 @@ class COA_Compass : SCR_InfoDisplay
 		{
 			m_wCompass.SetOpacity(0);
 			m_wBearing.SetOpacity(0);
-			//ClearSquadRadar(0);
+			ClearSquadRadar(0);
 			return;
 		}
 		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
+		
+		if (!m_ChimeraCharacter) return;
 
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
@@ -67,7 +69,10 @@ class COA_Compass : SCR_InfoDisplay
 		// Get players current group.
 		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
-		if (!m_PlayersGroup) return;
+		if (!m_PlayersGroup) {
+			ClearSquadRadar(0);
+			return;
+		};
 		
 		SquadRadarSearch();
 	}
@@ -126,25 +131,14 @@ class COA_Compass : SCR_InfoDisplay
 	
 	protected void SquadRadarSearch() {
 		
-		if (!m_bCompassVisible)
-		{
-			m_wCompass.SetOpacity(0);
-			m_wBearing.SetOpacity(0);
-			ClearSquadRadar(0);
-			return;
-		}
-		
-		if (!m_GroupDisplayManagerComponent) return;
-		
 		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
 		
 		m_aAllPlayersWithinRange = {};
 		
-		// FOR DEBUG, UNCOMMENT FOR RELEASE
-		//if (!groupArray || groupArray.Count() <= 1) {
-		//	ClearSquadRadar(0);
-		//	return;
-		//};
+		if (!groupArray || groupArray.Count() <= 1) {
+			ClearSquadRadar(0);
+			return;
+		};
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
 		SetSquadRadarImage(radarlocalPlayer, m_ChimeraCharacter, 1);
@@ -173,7 +167,6 @@ class COA_Compass : SCR_InfoDisplay
 	protected void UpdateSquadRadarPositions()
 	{
 		int posToStartClearing = 0;
-		//foreach (SCR_ChimeraCharacter playerCharacter 
 		foreach (int i, SCR_ChimeraCharacter playerCharacter : m_aAllPlayersWithinRange)
 		{
 			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
@@ -181,39 +174,19 @@ class COA_Compass : SCR_InfoDisplay
 		
 			// Get Distance
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
-			float disT = dis * 4.25;
+			float disT = dis * 4.345;
 			
 			// Get Direction
-			vector dirV = vector.Direction(m_vOwnerOrigin, playerCharacterOrigin);
+			vector dirV = vector.Direction(playerCharacterOrigin, m_vOwnerOrigin);
 			float dir = dirV.ToYaw();
-			
-			// Unity Meathod
-			// https://subscription.packtpub.com/book/game-development/9781784391362/1/ch01lvl1sec20/displaying-a-radar-to-indicate-the-relative-locations-of-objects
-			// Get Relative Direction
-			// find angle from player to target
-			//float angleToTarget = Math.Atan2(playerCharacterOrigin[0], playerCharacterOrigin[2]) * Math.RAD2DEG;
 
-			// subtract player angle, to get relative angle to VObject
-			// subtract 90
-			// (so 0 degrees (same direction as player) is UP)
-			//float angleRadarDegrees =  angleToTarget - m_fYaw - 90;
-			
-			// DUI Meathod
 			// Get Relative Direction
 			float relDir = Math.Mod(((dir - m_fYaw) + 360), 360);
 			relDir = Math.Mod(relDir - (dir * 2), 360);
+			relDir = relDir * Math.DEG2RAD;
 			
-			float x = (Math.Sin(relDir * 0.01) * disT) - 11.25;
-			float y = (Math.Cos(relDir * 0.01) * disT) - 11.25;
-			
-			Print(dis);
-			Print(dir);
-			Print(relDir);
-			//Print(angleRadarDegrees);
-			//Print(angleToTarget);
-			Print("------------------------------------------");
-			Print(x);
-			Print(y);
+			float x = (Math.Sin(relDir) * disT) - 9.75;
+			float y = (Math.Cos(relDir) * disT) - 9.75;
 		
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
@@ -231,9 +204,6 @@ class COA_Compass : SCR_InfoDisplay
 		string colorTeam = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), processEntityID, "ColorTeam");
 		string icon      = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), processEntityID, "DisplayIcon");
 		
-		// FOR DEBUG, COMMENT FOR RELEASE
-		if (!icon || icon == "") return;
-		
 		radarPlayer.SetOpacity(opacity);
 		radarPlayer.LoadImageTexture(0, icon);
 		radarPlayer.SetColorInt(colorTeam.ToInt());
@@ -248,7 +218,6 @@ class COA_Compass : SCR_InfoDisplay
 		AimingComponent playerControllerComponent = playerCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return 0;
 		float yaw = playerControllerComponent.GetAimingDirectionWorld().VectorToAngles()[0];
-		yaw = -yaw;
 		
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
 		if (compartmentAccess)
@@ -265,6 +234,11 @@ class COA_Compass : SCR_InfoDisplay
 	//------------------------------------------------------------------------------------------------
 	protected void ClearSquadRadar(int positionToStartClearing)
 	{
+		if (positionToStartClearing == 0) {
+			ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
+			radarlocalPlayer.SetOpacity(0);
+		};
+		
 		for (int e = positionToStartClearing; e <= 19; e++)
 		{
 			ImageWidget removeRadarPlayerWidget = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", e)));

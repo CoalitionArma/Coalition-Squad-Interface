@@ -25,11 +25,11 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
-	private Widget m_wRoot;
-	private XComboBoxWidget m_wMaxPlayers = null;
+	protected Widget m_wRoot;
+	protected XComboBoxWidget m_wMaxPlayers = null;
 	
-	private int m_iGroupCount;
-	private ref array<string> m_aGroupArray;
+	protected int m_iGroupCount;
+	protected ref array<string> m_aGroupArray;
 	
 	//------------------------------------------------------------------------------------------------
 

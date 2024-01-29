@@ -17,8 +17,8 @@ FrameWidgetClass {
    Opacity 0.984
    style debugUI
    Text "000"
-   "Font Size" 16
-   "Min Font Size" 16
+   "Font Size" 15
+   "Min Font Size" 15
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0C606254D4404C}" {
@@ -52,17 +52,18 @@ FrameWidgetClass {
    Name "LocalPlayer"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
-    PositionY -11.25
-    OffsetTop -11.3
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -11.2
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY -9.75
+    OffsetTop -9.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -9.8
    }
    IsPixelPerfect 0
    Opacity 0
+   Color 0.68 0.68 0.68 1
    Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
@@ -71,14 +72,14 @@ FrameWidgetClass {
    Name "RadarPlayer0"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.369
-    OffsetRight -11.1
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -90,14 +91,14 @@ FrameWidgetClass {
    Name "RadarPlayer1"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -109,14 +110,14 @@ FrameWidgetClass {
    Name "RadarPlayer2"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -128,14 +129,14 @@ FrameWidgetClass {
    Name "RadarPlayer3"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -147,14 +148,14 @@ FrameWidgetClass {
    Name "RadarPlayer4"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -166,14 +167,14 @@ FrameWidgetClass {
    Name "RadarPlayer5"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -185,14 +186,14 @@ FrameWidgetClass {
    Name "RadarPlayer6"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -204,14 +205,14 @@ FrameWidgetClass {
    Name "RadarPlayer7"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -223,14 +224,14 @@ FrameWidgetClass {
    Name "RadarPlayer8"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -242,14 +243,14 @@ FrameWidgetClass {
    Name "RadarPlayer9"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
-    PositionY 13.96
-    OffsetTop 14
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.34
-    OffsetBottom -36.3
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -261,14 +262,14 @@ FrameWidgetClass {
    Name "RadarPlayer10"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -280,14 +281,14 @@ FrameWidgetClass {
    Name "RadarPlayer11"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -299,14 +300,14 @@ FrameWidgetClass {
    Name "RadarPlayer12"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -318,14 +319,14 @@ FrameWidgetClass {
    Name "RadarPlayer13"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -337,14 +338,14 @@ FrameWidgetClass {
    Name "RadarPlayer14"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -356,14 +357,14 @@ FrameWidgetClass {
    Name "RadarPlayer15"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -375,14 +376,14 @@ FrameWidgetClass {
    Name "RadarPlayer16"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -394,14 +395,14 @@ FrameWidgetClass {
    Name "RadarPlayer17"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -413,14 +414,14 @@ FrameWidgetClass {
    Name "RadarPlayer18"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -432,14 +433,14 @@ FrameWidgetClass {
    Name "RadarPlayer19"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.965 0.5 0.965
-    PositionX -11.25
-    OffsetLeft -11.3
+    PositionX -9.75
+    OffsetLeft -9.8
     PositionY 13.8
     OffsetTop 13.8
-    SizeX 22.5
-    OffsetRight -11.3
-    SizeY 22.5
-    OffsetBottom -36.3
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
    }
    IsPixelPerfect 0
    Opacity 0

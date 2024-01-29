@@ -1,7 +1,7 @@
 class COA_StaminaBar : SCR_InfoDisplay
 {
 	protected ProgressBarWidget m_wStamBar = null;
-	private bool m_bStamBarEnabled = true;
+	protected bool m_bStamBarEnabled = true;
 
 	//------------------------------------------------------------------------------------------------
 
