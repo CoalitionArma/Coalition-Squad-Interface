@@ -84,6 +84,20 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		};
 	}
 	
+	override protected void OnGameEnd()
+	{	
+		super.OnGameEnd();
+		
+		if (Replication.IsClient()) {
+			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
+		};
+		
+		if (Replication.IsServer()) {
+			GetGame().GetCallqueue().Remove(UpdateGroupInfoInAuthorityPlayerMap);
+			GetGame().GetCallqueue().Remove(UpdatePlayerArray);
+		};
+	}
+	
 	//------------------------------------------------------------------------------------------------
 
 	// Functions to replicate and store values to each clients m_mLocalPlayerMap
@@ -149,10 +163,11 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateLocalGroupArray()
 	{
-		if (!m_GroupsManagerComponent)
+		// Get base group manager component
+		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		if (!m_GroupsManagerComponent) return;
+			return;
+		};
 
 		// Get players current group.
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
@@ -248,10 +263,10 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		array<SCR_AIGroup> outAllGroups;
 
 		// Get base group manager component
-		if (!m_GroupsManagerComponent)
+		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		if (!m_GroupsManagerComponent) return;
+			return;
+		};
 		
 		// Get all groups
 		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
