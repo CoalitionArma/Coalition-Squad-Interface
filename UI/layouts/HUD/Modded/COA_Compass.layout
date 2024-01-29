@@ -4,22 +4,21 @@ FrameWidgetClass {
   TextWidgetClass "{5EBD2BF287B38B83}" {
    Name "Bearing"
    Slot FrameWidgetSlot "{5B0B5E43BF7328FD}" {
-    Anchor 0.5 1 0.5 1
-    PositionX -89.176
-    OffsetLeft -89.176
-    PositionY -112.978
-    OffsetTop -112.978
-    SizeX 179.999
-    OffsetRight -90.823
-    SizeY 19.997
-    OffsetBottom 92.981
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -25.093
+    OffsetLeft -25.093
+    PositionY -119.351
+    OffsetTop -119.351
+    SizeX 50
+    OffsetRight -24.907
+    SizeY 18
+    OffsetBottom 101.351
    }
    Opacity 0.984
-   Color 0.831 0.831 0.831 1
    style debugUI
    Text "000"
-   "Font Size" 18
-   "Min Font Size" 18
+   "Font Size" 15
+   "Min Font Size" 15
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0C606254D4404C}" {
@@ -27,28 +26,428 @@ FrameWidgetClass {
     ForceFont 1
     OutlineSize 1
     ShadowSize 32
-    ShadowOffset 0.85 0.85
+    ShadowOffset 1.25 1.25
    }
   }
   ImageWidgetClass "{605034196C0C5E97}" {
    Name "Compass"
    Slot FrameWidgetSlot "{5B0D5D8ACA21795D}" {
-    Anchor 0.5 0.999 0.501 1
-    PositionX -115.572
-    OffsetLeft -115.572
-    PositionY -151.862
-    OffsetTop -151.862
-    SizeX 232.582
-    OffsetRight -117.01
-    SizeY 234.34
-    OffsetBottom -82.478
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -102.742
+    OffsetLeft -102.742
+    PositionY -102.6
+    OffsetTop -102.6
+    SizeX 205
+    OffsetRight -102.258
+    SizeY 205
+    OffsetBottom -102.4
    }
    IsPixelPerfect 0
-   Color 0.831 0.831 0.831 1
-   Texture "{2F9C9EB034556A4E}Layouts/UI/Textures/Compass350_atlas.edds"
-   Size 984 989
+   Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/compass_shadow360.edds"
+   Size 264 264
    "Shadow Offset" 0 0
    "Shadow Size Increase" 0 0
+  }
+  ImageWidgetClass "{606750C5B1FAA48F}" {
+   Name "LocalPlayer"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY -9.75
+    OffsetTop -9.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -9.8
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Color 0.68 0.68 0.68 1
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0ED450BE9B}" {
+   Name "RadarPlayer0"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A2F}" {
+   Name "RadarPlayer1"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A37}" {
+   Name "RadarPlayer2"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04DDF}" {
+   Name "RadarPlayer3"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04DF8}" {
+   Name "RadarPlayer4"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04D86}" {
+   Name "RadarPlayer5"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04DA2}" {
+   Name "RadarPlayer6"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04D42}" {
+   Name "RadarPlayer7"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04CCC}" {
+   Name "RadarPlayer8"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04C95}" {
+   Name "RadarPlayer9"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A8F}" {
+   Name "RadarPlayer10"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A97}" {
+   Name "RadarPlayer11"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04ABF}" {
+   Name "RadarPlayer12"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A58}" {
+   Name "RadarPlayer13"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A61}" {
+   Name "RadarPlayer14"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04B0D}" {
+   Name "RadarPlayer15"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04B23}" {
+   Name "RadarPlayer16"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04AC9}" {
+   Name "RadarPlayer17"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04AE7}" {
+   Name "RadarPlayer18"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60642D0D9EE04A05}" {
+   Name "RadarPlayer19"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.965 0.5 0.965
+    PositionX -9.75
+    OffsetLeft -9.8
+    PositionY 13.8
+    OffsetTop 13.8
+    SizeX 19.5
+    OffsetRight -9.8
+    SizeY 19.5
+    OffsetBottom -33.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Color 0.68 0.68 0.753 0.725
+   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
   }
  }
 }

@@ -21,15 +21,15 @@ modded class GroupSettingsDialogUI : DialogUI
 
 class COA_PlayerSelectionDialog : ChimeraMenuBase
 {
-	protected Widget m_wRoot;
-	protected XComboBoxWidget m_wMaxPlayers = null;
-	
-	protected int m_iGroupCount = 0;
-	protected ref array<string> m_aGroupArray = {};
-
 	protected SCR_AIGroup m_PlayersGroup = null;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
 	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
+	
+	protected Widget m_wRoot;
+	protected XComboBoxWidget m_wMaxPlayers = null;
+	
+	protected int m_iGroupCount;
+	protected ref array<string> m_aGroupArray;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -78,6 +78,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		GetGame().GetCallqueue().CallLater(UpdatePlayerList, 425, true);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override void OnMenuInit()
 	{	
 		super.OnMenuInit();
@@ -125,21 +126,11 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			// Check if we need to add ... to the end of players names.
 			playerName = CheckEllipsis(175, playerDisplay, playerName);
 
+		  playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
+			statusDisplay.SetColorInt(colorTeam.ToInt());
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, icon);
-
-			// Set color team.
-			if (colorTeam) {
-				switch (colorTeam)
-				{
-					case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 200, 65, 65));   playerDisplay.SetColorInt(ARGB(255, 200, 65, 65));   break; };
-					case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
-					case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
-					case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-					case "None"   : {statusDisplay.SetColorInt(ARGB(235, 235, 235, 255)); playerDisplay.SetColorInt(ARGB(235, 235, 235, 255)); break; };
-				};
-			};
 		};
 		for (int e = m_aGroupArray.Count(); e <= 19; e++)
 		{
@@ -156,6 +147,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		}
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
 	{	
 		float sx = 0;
@@ -190,6 +182,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		GetGame().GetMenuManager().CloseMenu(this);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	void ShowGroupSettings()
 	{
 		ImageWidget background0           = ImageWidget.Cast(m_wRoot.FindAnyWidget("Background0"));
@@ -235,6 +228,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		groupBackendComponent.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), maxMembers);
 	};
 		
+	//------------------------------------------------------------------------------------------------
 	protected void OnPlayerEntryClicked(SCR_ButtonBaseComponent component)
 	{
 		string playerIntStr = component.GetRootWidget().GetName();

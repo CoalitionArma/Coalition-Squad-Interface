@@ -24,12 +24,13 @@ class COA_GroupDisplayComponent : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Promote Player To SL -\\
-	
+	//------------------------------------------------------------------------------------------------
 	void Owner_PromotePlayerToSL(int playerID)
 	{	
 		Rpc(RpcAsk_PromotePlayerToSL, playerID);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
@@ -39,12 +40,13 @@ class COA_GroupDisplayComponent : ScriptComponent
 	}
 	
 	//- Set Max Group Members -\\
-	
+	//------------------------------------------------------------------------------------------------
 	void Owner_SetMaxGroupMembers(int playerID, int maxMembers)
 	{	
 		Rpc(RpcAsk_SetMaxGroupMembers, playerID, maxMembers);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
@@ -54,12 +56,13 @@ class COA_GroupDisplayComponent : ScriptComponent
 	}
 	
 	//- Remove Player From Group -\\
-	
+	//------------------------------------------------------------------------------------------------
 	void Owner_RemovePlayerFromGroup(int playerID)
 	{	
 		Rpc(RpcAsk_RemovePlayerFromGroup, playerID);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_RemovePlayerFromGroup(int playerID)
 	{
@@ -79,12 +82,13 @@ class COA_GroupDisplayComponent : ScriptComponent
 	// Functions for Group Display replication
 	
 	//------------------------------------------------------------------------------------------------
-	
+
 	void Owner_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{	
 		Rpc(RpcAsk_UpdatePlayerMapValue, groupID, playerID, write, value);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{

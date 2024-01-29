@@ -1,9 +1,8 @@
 class COA_GroupDisplay : SCR_InfoDisplay
 {	
-	private int m_iGroupDisplayRefresh = 44;
+	private int m_iGroupDisplayRefresh;
 	protected bool m_bGroupDisplayVisable = true;
-	
-	COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
+	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -18,12 +17,13 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, PlayerSelectionMenu);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		// Only update the group displpay every 45 frames.
-		if (m_iGroupDisplayRefresh < 45) {
+		// Only update the group displpay every 15 frames.
+		if (m_iGroupDisplayRefresh < 15) {
 			m_iGroupDisplayRefresh++; 
 			return;
 		};
@@ -37,10 +37,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		
 		if (!m_GroupDisplayManagerComponent) {
 			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
+			return;
 		};
 		 
 		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
-			
+		
 		foreach (int i, string playerStringToSplit : groupArray) {
 			
 			array<string> playerSplitArray = {};
@@ -60,21 +61,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			// Check if we need to add ... to the end of players names.
 			playerName = CheckEllipsis(135, playerDisplay, playerName);
 
+			playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
+			statusDisplay.SetColorInt(colorTeam.ToInt());
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, icon);
-
-			// Set color team.
-			if (colorTeam) {
-				switch (colorTeam)
-				{
-					case "Red"    : {statusDisplay.SetColorInt(ARGB(255, 200, 65, 65));   playerDisplay.SetColorInt(ARGB(255, 200, 65, 65));   break; };
-					case "Blue"   : {statusDisplay.SetColorInt(ARGB(255, 0, 92, 255));    playerDisplay.SetColorInt(ARGB(255, 0, 92, 255));    break; };
-					case "Yellow" : {statusDisplay.SetColorInt(ARGB(255, 230, 230, 0));   playerDisplay.SetColorInt(ARGB(255, 230, 230, 0));   break; };
-					case "Green"  : {statusDisplay.SetColorInt(ARGB(255, 0, 190, 85));    playerDisplay.SetColorInt(ARGB(255, 0, 190, 85));    break; };
-					case "None"   : {statusDisplay.SetColorInt(ARGB(235, 235, 235, 255)); playerDisplay.SetColorInt(ARGB(235, 235, 235, 255)); break; };
-				};
-			};
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
 	}
@@ -90,6 +81,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		m_bGroupDisplayVisable = !m_bGroupDisplayVisable;
 	}
 
+	//------------------------------------------------------------------------------------------------
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
 		//Check if there's anything to clear
@@ -123,6 +115,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
 	{	
 		float sx = 0;

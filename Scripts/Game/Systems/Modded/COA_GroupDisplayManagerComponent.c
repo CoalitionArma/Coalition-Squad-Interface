@@ -16,6 +16,13 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	protected string m_sGrenadier     = "{B7757F2024A3DC87}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
 	protected string m_sMan           = "{71ED761DF5BA041C}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
 	
+	// All Color Teams
+	protected string m_sCTRed    = ARGB(255, 200, 65, 65).ToString();
+	protected string m_sCTBlue   = ARGB(255, 0, 92, 255).ToString();
+	protected string m_sCTYellow = ARGB(255, 230, 230, 0).ToString();
+	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
+	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
+	
 	// A hashmap that is modified only on the authority.
 	protected ref map<string,string> m_mAuthorityPlayerMap = new map<string,string>;
 	
@@ -26,7 +33,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	protected ref array<string> m_aLocalGroupArray = new array<string>;
 	
 	// A array we use primarily for replication of m_mAuthorityPlayerMap to m_mLocalPlayerMap.
-	[RplProp(onRplName: "UpdateLocalPlayerMapAndGroupArray")]
+	[RplProp(onRplName: "UpdateLocalPlayerMap")]
 	protected ref array<string> m_aPlayerArray = new array<string>;
 	
 	// The vanilla group manager.
@@ -47,17 +54,33 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 			return null;
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
 	{	
 		super.OnPostInit(owner);
 		
 		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 450, true);
+			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 445, true);
 		};
 		
 		if (Replication.IsServer()) {
-			GetGame().GetCallqueue().CallLater(UpdateGroupInfoInAuthorityPlayerMap, 435, true);
-			GetGame().GetCallqueue().CallLater(UpdatePlayerArray, 425, true);
+			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 435, true);
+			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 21000000, true); // Updates every 35min (21000000ms)
+		};
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void OnGameEnd()
+	{	
+		super.OnGameEnd();
+		
+		if (Replication.IsClient()) {
+			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
+		};
+		
+		if (Replication.IsServer()) {
+			GetGame().GetCallqueue().Remove(UpdateAllAuthorityPlayerMapValues);
+			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
 		};
 	}
 	
@@ -81,8 +104,18 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 
 	//------------------------------------------------------------------------------------------------
 	
-	//- Authority & Client -\\
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	string ReturnLocalPlayerMapValue(int groupID, int playerID, string key)
+	{	
+		// Get the players key 
+		key = string.Format("%1 %2 %3", groupID, playerID, key);
+		return m_mLocalPlayerMap.Get(key);
+	}
 	
+	
+	//- Authority & Client -\\
+	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerArray()
 	{
 		// Create a temp array so we arent broadcasting for each change to m_aPlayerArray.
@@ -103,8 +136,8 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	}
 	
 	//- Client -\\
-	
-	protected void UpdateLocalPlayerMapAndGroupArray()
+	//------------------------------------------------------------------------------------------------
+	protected void UpdateLocalPlayerMap()
 	{
 		// Fill m_mLocalPlayerMap with all keys and values from m_mAuthorityPlayerMap.
 	 	foreach (string playerKeyAndValueToSplit : m_aPlayerArray)
@@ -115,25 +148,26 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		};
 	}
 	
-	string ReturnLocalPlayerMapValue(int groupID, int playerID, string key)
-	{	
-		// Get the players key 
-		key = string.Format("%1 %2 %3", groupID, playerID, key);
-		return m_mLocalPlayerMap.Get(key);
-	}
-	
 	//------------------------------------------------------------------------------------------------
 
 	// Functions to sort and store the current group array we want to show on players screens.
 
 	//------------------------------------------------------------------------------------------------
 	
-	//- Client -\\
+	TStringArray GetLocalGroupArray()
+	{	
+		return m_aLocalGroupArray;
+	}
 	
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
 	protected void UpdateLocalGroupArray()
 	{
-		if (!m_GroupsManagerComponent)
+		// Get base group manager component
+		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+			return;
+		};
 
 		// Get players current group.
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
@@ -173,11 +207,6 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		m_aLocalGroupArray = tempLocalGroupArray;
 	};
 	
-	TStringArray GetLocalGroupArray()
-	{	
-		return m_aLocalGroupArray;
-	}
-	
 	//------------------------------------------------------------------------------------------------
 
 	// Functions to update m_mAuthorityPlayerMap.
@@ -185,7 +214,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	
 	//- Authority -\\
-	
+	//------------------------------------------------------------------------------------------------
 	void UpdateAuthorityPlayerMap(int groupID, int playerID, string write, string value)
 	{						
 		// The key we are gonna use that keeps everything locallied to the group and player, so we don't get any cross-contamination between groups or players.
@@ -193,30 +222,51 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		m_mAuthorityPlayerMap.Set(key, value);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	string ReturnAuthorityPlayerMapValue(int groupID, int playerID, string key)
 	{	
-		// Get the players key 
+		// Get the players key
 		key = string.Format("%1 %2 %3", groupID, playerID, key);
 		return m_mAuthorityPlayerMap.Get(key);
 	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void CleanUpAuthorityPlayerMap()
+	{
+		map<string,string> tempMap = new map<string,string>;
+		array<int> outPlayers = new array<int>;
+		
+		GetGame().GetPlayerManager().GetPlayers(outPlayers);
+		foreach (int playerID : outPlayers) {
+			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
+			if (!playersGroup) continue;
+			
+			int groupID = playersGroup.GetGroupID();
+			
+			string colorTeam = ReturnAuthorityPlayerMapValue(groupID, playerID, "ColorTeam");
+			string key = string.Format("%1 %2 %3", groupID, playerID, "ColorTeam");
+			tempMap.Set(key, colorTeam);
+			
+			string overrideIcon = ReturnAuthorityPlayerMapValue(groupID, playerID, "OverrideIcon");
+			string key2 = string.Format("%1 %2 %3", groupID, playerID, "OverrideIcon");
+			tempMap.Set(key2, overrideIcon);
+		};
+		
+		m_mAuthorityPlayerMap.Clear();
+		
+		m_mAuthorityPlayerMap = tempMap;
+	}
 
 	//------------------------------------------------------------------------------------------------
-
-	// Functions for the primary loop that determines a players icon and value.
-
-	//------------------------------------------------------------------------------------------------
-	
-	//- Authority -\\
-	
-	protected void UpdateGroupInfoInAuthorityPlayerMap()
+	protected void UpdateAllAuthorityPlayerMapValues()
 	{	
 		array<SCR_AIGroup> outAllGroups;
 
 		// Get base group manager component
-		if (!m_GroupsManagerComponent)
+		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		if (!m_GroupsManagerComponent) return;
+			return;
+		};
 		
 		// Get all groups
 		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
@@ -248,7 +298,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				//------------------------------------------------------------------------------------------------
 
 				string playerColorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam");
-				if (!playerColorTeam || playerColorTeam == "") UpdateAuthorityPlayerMap(groupID, localPlayerID, "ColorTeam", "None");
+				if (!playerColorTeam || playerColorTeam == "") UpdateAuthorityPlayerMap(groupID, localPlayerID, "ColorTeam", m_sCTNone);
 
 				//------------------------------------------------------------------------------------------------
 				// Vehicle Icons, they supercede any other Icon
@@ -388,8 +438,12 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				UpdateAuthorityPlayerMap(groupID, localPlayerID, "PlayerValue", playerValue.ToString());
 			};
 		};
+		
+		//Once we've updated all values, propagate them to all clients with UpdatePlayerArray.
+		UpdatePlayerArray();
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	int DeterminePlayerValue(int groupID, int playerID, string colorTeam)
 	{
 		// Settup value variable.
@@ -400,19 +454,19 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 
 		// Sort player by their color so we can group color teams together (a lil bit racist).
 		switch (colorTeam) {
-			case "Red"    : {value = -3;  break;};
-			case "Blue"   : {value = -5;  break;};
-			case "Yellow" : {value = -7;  break;};
-			case "Green"  : {value = -9;  break;};
-			case "None"   : {value = 2;   break;};
+			case m_sCTRed    : {value = -3;  break;};
+			case m_sCTBlue   : {value = -5;  break;};
+			case m_sCTYellow : {value = -7;  break;};
+			case m_sCTGreen  : {value = -9;  break;};
+			case m_sCTNone   : {value = 2;   break;};
 		};
 				
 		switch (true) {
 			// If the players is currently the SL, make him the most valuable player in the list
 			case (icon == m_sSquadLeader)                       : {value = -1; break;};
 			// Add/Remove value from a player if they're a Team Lead
-			case (icon == m_sTeamLeader && colorTeam == "None") : {value--;    break;};
-			case (icon == m_sTeamLeader && colorTeam != "None") : {value++;    break;};
+			case (icon == m_sTeamLeader && colorTeam == m_sCTNone) : {value--;    break;};
+			case (icon == m_sTeamLeader && colorTeam != m_sCTNone) : {value++;    break;};
 		};
 		
 		// Return how valuable the player is
