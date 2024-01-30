@@ -10,14 +10,14 @@ FrameWidgetClass {
    Name "Background"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -125.576
-    OffsetLeft -125.576
-    PositionY -405.166
-    OffsetTop -405.166
+    PositionX -124.936
+    OffsetLeft -124.936
+    PositionY -470.672
+    OffsetTop -470.672
     SizeX 250
-    OffsetRight -124.424
-    SizeY 859.192
-    OffsetBottom -454.026
+    OffsetRight -125.064
+    SizeY 931.189
+    OffsetBottom -460.517
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
@@ -26,14 +26,14 @@ FrameWidgetClass {
    Name "Pretty"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -125.71
-    OffsetLeft -125.71
-    PositionY -405.237
-    OffsetTop -405.237
+    PositionX -125.601
+    OffsetLeft -125.601
+    PositionY -470.743
+    OffsetTop -470.743
     SizeX 40.001
-    OffsetRight 85.709
+    OffsetRight 85.6
     SizeY 40
-    OffsetBottom 365.237
+    OffsetBottom 430.743
    }
    Color 0.761 0.386 0.078 1
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
@@ -46,14 +46,14 @@ FrameWidgetClass {
    Name "PrettyText"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -85.795
-    OffsetLeft -85.795
-    PositionY -395.43
-    OffsetTop -395.43
+    PositionX -85.686
+    OffsetLeft -85.686
+    PositionY -460.936
+    OffsetTop -460.936
     SizeX 174.4
-    OffsetRight -88.605
+    OffsetRight -88.714
     SizeY 20.256
-    OffsetBottom 375.174
+    OffsetBottom 440.68
    }
    Text "Player Selection"
    "Font Size" 32
@@ -68,28 +68,28 @@ FrameWidgetClass {
    Name "Window6"
    Slot FrameWidgetSlot "{5EC77B60F536B906}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -115.114
-    OffsetLeft -115.114
-    PositionY -334.354
-    OffsetTop -334.354
+    PositionX -115.005
+    OffsetLeft -115.005
+    PositionY -399.86
+    OffsetTop -399.86
     SizeX 229.111
-    OffsetRight -113.997
-    SizeY 752.102
-    OffsetBottom -417.748
+    OffsetRight -114.106
+    SizeY 824.755
+    OffsetBottom -424.895
    }
   }
   TextWidgetClass "{5ED010D95799228B}" {
    Name "Override Icon Text"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -115.301
-    OffsetLeft -115.301
-    PositionY -351.31
-    OffsetTop -351.31
+    PositionX -115.192
+    OffsetLeft -115.192
+    PositionY -416.816
+    OffsetTop -416.816
     SizeX 228.197
-    OffsetRight -112.896
+    OffsetRight -113.005
     SizeY 13.806
-    OffsetBottom 337.504
+    OffsetBottom 403.01
    }
    Color 0.761 0.386 0.078 1
    Text "// Select A Player To Edit"
@@ -104,14 +104,14 @@ FrameWidgetClass {
    Name "Footer"
    Slot FrameWidgetSlot "{5ED0135883D931D3}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -115.889
-    OffsetLeft -115.889
-    PositionY 423.239
-    OffsetTop 423.239
+    PositionX -115.051
+    OffsetLeft -115.051
+    PositionY 430.702
+    OffsetTop 430.702
     SizeX 239.663
-    OffsetRight -123.774
+    OffsetRight -124.612
     SizeY 30
-    OffsetBottom -453.239
+    OffsetBottom -460.702
    }
    {
     ButtonWidgetClass "{5ED0135A53CDA9AD}" {
@@ -177,1266 +177,6 @@ FrameWidgetClass {
     }
    }
   }
-  ImageWidgetClass "{5ED010DDFD01FA20}" {
-   Name "Status0"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.405
-    OffsetLeft -110.405
-    PositionY -331.808
-    OffsetTop -331.808
-    SizeX 38.5
-    OffsetRight 71.905
-    SizeY 38.5
-    OffsetBottom 293.308
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{5ED010DDFD01FA2F}" {
-   Name "Player0"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.805
-    OffsetLeft -71.805
-    PositionY -324.308
-    OffsetTop -324.308
-    SizeX 180
-    OffsetRight -108.195
-    SizeY 22.5
-    OffsetBottom 301.808
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{5ED010DDFD01FA2E}" {
-   Name "Button0"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.792
-    OffsetLeft -110.792
-    PositionY -332.133
-    OffsetTop -332.133
-    SizeX 219.922
-    OffsetRight -109.13
-    SizeY 39.268
-    OffsetBottom 292.865
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{60503473C08C92AB}" {
-   Name "Status1"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.405
-    OffsetLeft -110.405
-    PositionY -294.645
-    OffsetTop -294.645
-    SizeX 38.5
-    OffsetRight 71.905
-    SizeY 38.5
-    OffsetBottom 256.145
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{60503473C08C9366}" {
-   Name "Player1"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.805
-    OffsetLeft -71.805
-    PositionY -287.145
-    OffsetTop -287.145
-    SizeX 180
-    OffsetRight -108.195
-    SizeY 22.5
-    OffsetBottom 264.645
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{60503473C08C93F7}" {
-   Name "Button1"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.792
-    OffsetLeft -110.792
-    PositionY -294.97
-    OffsetTop -294.97
-    SizeX 219.922
-    OffsetRight -109.13
-    SizeY 39.268
-    OffsetBottom 255.702
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347315D36D5E}" {
-   Name "Status2"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.361
-    OffsetLeft -110.361
-    PositionY -257.58
-    OffsetTop -257.58
-    SizeX 38.501
-    OffsetRight 71.861
-    SizeY 38.5
-    OffsetBottom 219.08
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347315D36DDE}" {
-   Name "Player2"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.76
-    OffsetLeft -71.76
-    PositionY -250.08
-    OffsetTop -250.08
-    SizeX 179.999
-    OffsetRight -108.239
-    SizeY 22.5
-    OffsetBottom 227.58
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347315D36A7C}" {
-   Name "Button2"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.748
-    OffsetLeft -110.748
-    PositionY -257.905
-    OffsetTop -257.905
-    SizeX 219.922
-    OffsetRight -109.174
-    SizeY 39.268
-    OffsetBottom 218.637
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347315D36A43}" {
-   Name "Status3"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.361
-    OffsetLeft -110.361
-    PositionY -220.417
-    OffsetTop -220.417
-    SizeX 38.501
-    OffsetRight 71.861
-    SizeY 38.5
-    OffsetBottom 181.917
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347315D36A92}" {
-   Name "Player3"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.76
-    OffsetLeft -71.76
-    PositionY -212.917
-    OffsetTop -212.917
-    SizeX 179.999
-    OffsetRight -108.239
-    SizeY 22.5
-    OffsetBottom 190.417
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347315D36AE2}" {
-   Name "Button3"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.748
-    OffsetLeft -110.748
-    PositionY -220.742
-    OffsetTop -220.742
-    SizeX 219.922
-    OffsetRight -109.174
-    SizeY 39.268
-    OffsetBottom 181.474
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347319EF6F22}" {
-   Name "Status4"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.387
-    OffsetLeft -110.387
-    PositionY -183.251
-    OffsetTop -183.251
-    SizeX 38.5
-    OffsetRight 71.887
-    SizeY 38.499
-    OffsetBottom 144.751
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347319EF6FAA}" {
-   Name "Player4"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.787
-    OffsetLeft -71.787
-    PositionY -175.751
-    OffsetTop -175.751
-    SizeX 180
-    OffsetRight -108.213
-    SizeY 22.499
-    OffsetBottom 153.252
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347319EF6FCC}" {
-   Name "Button4"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.774
-    OffsetLeft -110.774
-    PositionY -183.576
-    OffsetTop -183.576
-    SizeX 219.922
-    OffsetRight -109.148
-    SizeY 39.267
-    OffsetBottom 144.308
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347319EF6C15}" {
-   Name "Status5"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.387
-    OffsetLeft -110.387
-    PositionY -146.087
-    OffsetTop -146.087
-    SizeX 38.5
-    OffsetRight 71.887
-    SizeY 38.5
-    OffsetBottom 107.588
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347319EF6C63}" {
-   Name "Player5"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.787
-    OffsetLeft -71.787
-    PositionY -138.587
-    OffsetTop -138.587
-    SizeX 180
-    OffsetRight -108.213
-    SizeY 22.499
-    OffsetBottom 116.088
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347319EF6C48}" {
-   Name "Button5"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.774
-    OffsetLeft -110.774
-    PositionY -146.413
-    OffsetTop -146.413
-    SizeX 219.922
-    OffsetRight -109.148
-    SizeY 39.268
-    OffsetBottom 107.145
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347319EF6C96}" {
-   Name "Status6"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.343
-    OffsetLeft -110.343
-    PositionY -109.023
-    OffsetTop -109.023
-    SizeX 38.501
-    OffsetRight 71.842
-    SizeY 38.5
-    OffsetBottom 70.523
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347319EF6CFC}" {
-   Name "Player6"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.742
-    OffsetLeft -71.742
-    PositionY -101.523
-    OffsetTop -101.523
-    SizeX 179.999
-    OffsetRight -108.257
-    SizeY 22.5
-    OffsetBottom 79.023
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347319EF6CD8}" {
-   Name "Button6"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.73
-    OffsetLeft -110.73
-    PositionY -109.348
-    OffsetTop -109.348
-    SizeX 219.922
-    OffsetRight -109.192
-    SizeY 39.268
-    OffsetBottom 70.08
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{6050347319EF6D2F}" {
-   Name "Status7"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.343
-    OffsetLeft -110.343
-    PositionY -71.86
-    OffsetTop -71.86
-    SizeX 38.501
-    OffsetRight 71.842
-    SizeY 38.5
-    OffsetBottom 33.36
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{6050347319EF6D7E}" {
-   Name "Player7"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.742
-    OffsetLeft -71.742
-    PositionY -64.36
-    OffsetTop -64.36
-    SizeX 179.999
-    OffsetRight -108.257
-    SizeY 22.5
-    OffsetBottom 41.86
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{6050347319EF6D5B}" {
-   Name "Button7"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.73
-    OffsetLeft -110.73
-    PositionY -72.185
-    OffsetTop -72.185
-    SizeX 219.922
-    OffsetRight -109.192
-    SizeY 39.268
-    OffsetBottom 32.917
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B683630}" {
-   Name "Status8"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.31
-    OffsetLeft -110.31
-    PositionY -35.089
-    OffsetTop -35.089
-    SizeX 38.5
-    OffsetRight 71.81
-    SizeY 38.5
-    OffsetBottom -3.411
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B6836E0}" {
-   Name "Player8"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.71
-    OffsetLeft -71.71
-    PositionY -27.589
-    OffsetTop -27.589
-    SizeX 180
-    OffsetRight -108.29
-    SizeY 22.5
-    OffsetBottom 5.089
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B68370A}" {
-   Name "Button8"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.697
-    OffsetLeft -110.697
-    PositionY -35.414
-    OffsetTop -35.414
-    SizeX 219.922
-    OffsetRight -109.225
-    SizeY 39.268
-    OffsetBottom -3.854
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B683750}" {
-   Name "Status9"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.31
-    OffsetLeft -110.31
-    PositionY 2.074
-    OffsetTop 2.074
-    SizeX 38.5
-    OffsetRight 71.81
-    SizeY 38.5
-    OffsetBottom -40.574
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B6837AB}" {
-   Name "Player9"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.71
-    OffsetLeft -71.71
-    PositionY 9.574
-    OffsetTop 9.574
-    SizeX 180
-    OffsetRight -108.29
-    SizeY 22.5
-    OffsetBottom -32.074
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B6837E2}" {
-   Name "Button9"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.697
-    OffsetLeft -110.697
-    PositionY 1.749
-    OffsetTop 1.749
-    SizeX 219.922
-    OffsetRight -109.225
-    SizeY 39.268
-    OffsetBottom -41.017
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B6837CB}" {
-   Name "Status10"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.266
-    OffsetLeft -110.266
-    PositionY 39.139
-    OffsetTop 39.139
-    SizeX 38.501
-    OffsetRight 71.765
-    SizeY 38.5
-    OffsetBottom -77.639
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B68340F}" {
-   Name "Player10"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.665
-    OffsetLeft -71.665
-    PositionY 46.639
-    OffsetTop 46.639
-    SizeX 179.999
-    OffsetRight -108.334
-    SizeY 22.5
-    OffsetBottom -69.139
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B683452}" {
-   Name "Button10"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.653
-    OffsetLeft -110.653
-    PositionY 38.814
-    OffsetTop 38.814
-    SizeX 219.922
-    OffsetRight -109.269
-    SizeY 39.268
-    OffsetBottom -78.082
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B6834BB}" {
-   Name "Status11"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.266
-    OffsetLeft -110.266
-    PositionY 76.302
-    OffsetTop 76.302
-    SizeX 38.501
-    OffsetRight 71.765
-    SizeY 38.5
-    OffsetBottom -114.802
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B6834D0}" {
-   Name "Player11"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.665
-    OffsetLeft -71.665
-    PositionY 83.802
-    OffsetTop 83.802
-    SizeX 179.999
-    OffsetRight -108.334
-    SizeY 22.5
-    OffsetBottom -106.302
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B68353B}" {
-   Name "Button11"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.653
-    OffsetLeft -110.653
-    PositionY 75.977
-    OffsetTop 75.977
-    SizeX 219.922
-    OffsetRight -109.269
-    SizeY 39.268
-    OffsetBottom -115.245
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B683505}" {
-   Name "Status12"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.292
-    OffsetLeft -110.292
-    PositionY 113.468
-    OffsetTop 113.468
-    SizeX 38.5
-    OffsetRight 71.792
-    SizeY 38.499
-    OffsetBottom -151.967
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B683555}" {
-   Name "Player12"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.692
-    OffsetLeft -71.692
-    PositionY 120.968
-    OffsetTop 120.968
-    SizeX 180
-    OffsetRight -108.308
-    SizeY 22.499
-    OffsetBottom -143.467
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B6835BC}" {
-   Name "Button12"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.679
-    OffsetLeft -110.679
-    PositionY 113.143
-    OffsetTop 113.143
-    SizeX 219.922
-    OffsetRight -109.243
-    SizeY 39.268
-    OffsetBottom -152.411
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B6835D6}" {
-   Name "Status13"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.292
-    OffsetLeft -110.292
-    PositionY 150.632
-    OffsetTop 150.632
-    SizeX 38.5
-    OffsetRight 71.792
-    SizeY 38.499
-    OffsetBottom -189.131
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B683228}" {
-   Name "Player13"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.692
-    OffsetLeft -71.692
-    PositionY 158.132
-    OffsetTop 158.132
-    SizeX 180
-    OffsetRight -108.308
-    SizeY 22.499
-    OffsetBottom -180.631
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B683271}" {
-   Name "Button13"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.679
-    OffsetLeft -110.679
-    PositionY 150.306
-    OffsetTop 150.306
-    SizeX 219.922
-    OffsetRight -109.243
-    SizeY 39.268
-    OffsetBottom -189.574
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B68325A}" {
-   Name "Status14"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.248
-    OffsetLeft -110.248
-    PositionY 187.696
-    OffsetTop 187.696
-    SizeX 38.501
-    OffsetRight 71.747
-    SizeY 38.5
-    OffsetBottom -226.196
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B6832D7}" {
-   Name "Player14"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.647
-    OffsetLeft -71.647
-    PositionY 195.196
-    OffsetTop 195.196
-    SizeX 179.999
-    OffsetRight -108.352
-    SizeY 22.5
-    OffsetBottom -217.696
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B683329}" {
-   Name "Button14"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.635
-    OffsetLeft -110.635
-    PositionY 187.371
-    OffsetTop 187.371
-    SizeX 219.922
-    OffsetRight -109.287
-    SizeY 39.268
-    OffsetBottom -226.639
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034730B683374}" {
-   Name "Status15"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.248
-    OffsetLeft -110.248
-    PositionY 224.859
-    OffsetTop 224.859
-    SizeX 38.501
-    OffsetRight 71.747
-    SizeY 38.5
-    OffsetBottom -263.359
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034730B6833A5}" {
-   Name "Player15"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.647
-    OffsetLeft -71.647
-    PositionY 232.359
-    OffsetTop 232.359
-    SizeX 179.999
-    OffsetRight -108.352
-    SizeY 22.5
-    OffsetBottom -254.859
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034730B683383}" {
-   Name "Button15"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.635
-    OffsetLeft -110.635
-    PositionY 224.534
-    OffsetTop 224.534
-    SizeX 219.922
-    OffsetRight -109.287
-    SizeY 39.268
-    OffsetBottom -263.802
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034735F9A9A2E}" {
-   Name "Status16"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.22
-    OffsetLeft -110.22
-    PositionY 262.558
-    OffsetTop 262.558
-    SizeX 38.5
-    OffsetRight 71.72
-    SizeY 38.499
-    OffsetBottom -301.057
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034735F9A9AA8}" {
-   Name "Player16"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.62
-    OffsetLeft -71.62
-    PositionY 270.058
-    OffsetTop 270.058
-    SizeX 180
-    OffsetRight -108.38
-    SizeY 22.499
-    OffsetBottom -292.557
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034735F9A9B39}" {
-   Name "Button16"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.607
-    OffsetLeft -110.607
-    PositionY 262.233
-    OffsetTop 262.233
-    SizeX 219.922
-    OffsetRight -109.315
-    SizeY 39.268
-    OffsetBottom -301.501
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034735F9A9B0D}" {
-   Name "Status17"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.22
-    OffsetLeft -110.22
-    PositionY 299.723
-    OffsetTop 299.723
-    SizeX 38.5
-    OffsetRight 71.72
-    SizeY 38.498
-    OffsetBottom -338.221
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034735F9A9B58}" {
-   Name "Player17"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.62
-    OffsetLeft -71.62
-    PositionY 307.223
-    OffsetTop 307.223
-    SizeX 180
-    OffsetRight -108.38
-    SizeY 22.498
-    OffsetBottom -329.721
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034735F9A9BAA}" {
-   Name "Button17"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.607
-    OffsetLeft -110.607
-    PositionY 299.396
-    OffsetTop 299.396
-    SizeX 219.922
-    OffsetRight -109.315
-    SizeY 39.268
-    OffsetBottom -338.664
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034735F9A9BFF}" {
-   Name "Status18"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.176
-    OffsetLeft -110.176
-    PositionY 336.786
-    OffsetTop 336.786
-    SizeX 38.501
-    OffsetRight 71.675
-    SizeY 38.5
-    OffsetBottom -375.286
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034735F9A9836}" {
-   Name "Player18"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.575
-    OffsetLeft -71.575
-    PositionY 344.286
-    OffsetTop 344.286
-    SizeX 179.999
-    OffsetRight -108.424
-    SizeY 22.5
-    OffsetBottom -366.786
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034735F9A981F}" {
-   Name "Button18"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.563
-    OffsetLeft -110.563
-    PositionY 336.461
-    OffsetTop 336.461
-    SizeX 219.922
-    OffsetRight -109.359
-    SizeY 39.268
-    OffsetBottom -375.729
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
-  ImageWidgetClass "{605034735F9A987B}" {
-   Name "Status19"
-   Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.176
-    OffsetLeft -110.176
-    PositionY 373.949
-    OffsetTop 373.949
-    SizeX 38.501
-    OffsetRight 71.675
-    SizeY 38.5
-    OffsetBottom -412.449
-   }
-   IsPixelPerfect 0
-   Opacity 0
-   Texture "{5ECE094ED4662B33}Layouts/UI/Textures/Icons/iconmanleader_ca.edds"
-   Size 64 64
-   "Shadow Offset" 0.5 0.5
-  }
-  TextWidgetClass "{605034735F9A98B2}" {
-   Name "Player19"
-   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -71.575
-    OffsetLeft -71.575
-    PositionY 381.449
-    OffsetTop 381.449
-    SizeX 179.999
-    OffsetRight -108.424
-    SizeY 22.5
-    OffsetBottom -403.949
-   }
-   IsPixelPerfect 0
-   Text ""
-   "Font Size" 20
-   "Min Font Size" 20
-   "Vertical Alignment" Center
-   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
-    ForceFont 1
-    Bold 1
-    ShadowOffset 0.5 0.5
-   }
-  }
-  ButtonWidgetClass "{605034735F9A989C}" {
-   Name "Button19"
-   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -110.563
-    OffsetLeft -110.563
-    PositionY 373.624
-    OffsetTop 373.624
-    SizeX 219.922
-    OffsetRight -109.359
-    SizeY 39.268
-    OffsetBottom -412.892
-   }
-   Color 0 0 0 0
-   components {
-    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
-    }
-   }
-  }
   ImageWidgetClass "{60541EA825E6056E}" {
    Name "Background0"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
@@ -1496,25 +236,6 @@ FrameWidgetClass {
     ShadowOffset 0.5 0.5
    }
   }
-  XComboBoxWidgetClass "{60541EA982535213}" {
-   Name "MaxPlayers"
-   Slot FrameWidgetSlot "{60541EA98253527D}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX 147.814
-    OffsetLeft 147.814
-    PositionY 20.262
-    OffsetTop 20.262
-    SizeX 148.681
-    OffsetRight -296.495
-    SizeY 40.806
-    OffsetBottom -61.068
-   }
-   Opacity 0
-   "Font Size" 36
-   items {
-    "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20"
-   }
-  }
   TextWidgetClass "{60541EA825E60507}" {
    Name "ConfirmMaxPlayersText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
@@ -1536,6 +257,45 @@ FrameWidgetClass {
    Wrap 1
    FontProperties FontProperties "{605B121A53F7C70F}" {
     ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{60541EA9BBE512B8}" {
+   Name "ConfirmMaxPlayersIcon"
+   Slot FrameWidgetSlot "{5EC77AD0E60C9BA4}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 298.262
+    OffsetLeft 298.262
+    PositionY 20.707
+    OffsetTop 20.707
+    SizeX 54.013
+    OffsetRight -352.275
+    SizeY 40.915
+    OffsetBottom -61.622
+   }
+   Opacity 0
+   Color 1 1 1 0.263
+   Texture "{2770916767B4AB81}UI/Imagesets/buttons/pc_buttons.imageset"
+   Image "Enter"
+   Size 42 42
+   "Shadow Offset" 0.5 0.5
+  }
+  XComboBoxWidgetClass "{60541EA982535213}" {
+   Name "MaxPlayers"
+   Slot FrameWidgetSlot "{60541EA98253527D}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 147.814
+    OffsetLeft 147.814
+    PositionY 20.262
+    OffsetTop 20.262
+    SizeX 148.681
+    OffsetRight -296.495
+    SizeY 40.806
+    OffsetBottom -61.068
+   }
+   Opacity 0
+   "Font Size" 36
+   items {
+    "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "43" "44" "45" "46" "47" "48" "49" "50" "51" "52" "53" "54" "55" "56" "57" "58" "59" "60" "61" "62" "63" "64" "65" "66" "67" "68" "69" "70" "71" "72" "73" "74" "75" "76" "77" "78" "79" "80" "81" "82" "83" "84" "85" "86" "87" "88" "89" "90" "91" "92" "93" "94" "95" "96" "97" "98" "99"
    }
   }
   ButtonWidgetClass "{60541EA9BBE51211}" {
@@ -1561,25 +321,1605 @@ FrameWidgetClass {
     }
    }
   }
-  ImageWidgetClass "{60541EA9BBE512B8}" {
-   Name "ConfirmMaxPlayersIcon"
-   Slot FrameWidgetSlot "{5EC77AD0E60C9BA4}" {
+  ImageWidgetClass "{607B53D75DDB81B6}" {
+   Name "Status0"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 298.262
-    OffsetLeft 298.262
-    PositionY 20.707
-    OffsetTop 20.707
-    SizeX 54.013
-    OffsetRight -352.275
-    SizeY 40.915
-    OffsetBottom -61.622
+    PositionX -108.968
+    OffsetLeft -108.968
+    PositionY -394.287
+    OffsetTop -394.287
+    SizeX 26
+    OffsetRight 82.968
+    SizeY 26
+    OffsetBottom 368.287
    }
+   IsPixelPerfect 0
    Opacity 0
-   Color 1 1 1 0.263
-   Texture "{2770916767B4AB81}UI/Imagesets/buttons/pc_buttons.imageset"
-   Image "Enter"
-   Size 42 42
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
    "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D75DDB9E24}" {
+   Name "Player0"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -82.926
+    OffsetLeft -82.926
+    PositionY -389.228
+    OffsetTop -389.228
+    SizeX 193.598
+    OffsetRight -110.672
+    SizeY 24.522
+    OffsetBottom 364.706
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{5ED010DDFD01FA2E}" {
+   Name "Button0"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.49
+    OffsetLeft -112.49
+    PositionY -397.368
+    OffsetTop -397.368
+    SizeX 222.933
+    OffsetRight -110.443
+    SizeY 32.682
+    OffsetBottom 364.686
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D64738C851}" {
+   Name "Status1"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -108.968
+    OffsetLeft -108.968
+    PositionY -361.586
+    OffsetTop -361.586
+    SizeX 26
+    OffsetRight 82.968
+    SizeY 26
+    OffsetBottom 335.586
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D64738C8D8}" {
+   Name "Player1"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -82.926
+    OffsetLeft -82.926
+    PositionY -356.527
+    OffsetTop -356.527
+    SizeX 193.598
+    OffsetRight -110.672
+    SizeY 24.522
+    OffsetBottom 332.005
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D64738C978}" {
+   Name "Button1"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.49
+    OffsetLeft -112.49
+    PositionY -364.667
+    OffsetTop -364.667
+    SizeX 222.933
+    OffsetRight -110.443
+    SizeY 32.682
+    OffsetBottom 331.985
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D64232DFB4}" {
+   Name "Player2"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -82.926
+    OffsetLeft -82.926
+    PositionY -323.847
+    OffsetTop -323.847
+    SizeX 193.598
+    OffsetRight -110.672
+    SizeY 24.522
+    OffsetBottom 299.325
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D64232DED8}" {
+   Name "Status2"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -108.968
+    OffsetLeft -108.968
+    PositionY -328.906
+    OffsetTop -328.906
+    SizeX 26
+    OffsetRight 82.968
+    SizeY 26
+    OffsetBottom 302.906
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D64232DC8B}" {
+   Name "Button2"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.49
+    OffsetLeft -112.49
+    PositionY -331.987
+    OffsetTop -331.987
+    SizeX 222.933
+    OffsetRight -110.443
+    SizeY 32.682
+    OffsetBottom 299.305
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D4C15A12AE}" {
+   Name "Status3"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.066
+    OffsetLeft -109.066
+    PositionY -296.129
+    OffsetTop -296.129
+    SizeX 26
+    OffsetRight 83.065
+    SizeY 26
+    OffsetBottom 270.129
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D4C15A132C}" {
+   Name "Player3"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.023
+    OffsetLeft -83.023
+    PositionY -291.07
+    OffsetTop -291.07
+    SizeX 193.598
+    OffsetRight -110.574
+    SizeY 24.522
+    OffsetBottom 266.548
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D4C15A13A8}" {
+   Name "Button3"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.588
+    OffsetLeft -112.588
+    PositionY -299.21
+    OffsetTop -299.21
+    SizeX 222.933
+    OffsetRight -110.345
+    SizeY 32.682
+    OffsetBottom 266.528
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D4C15A13F6}" {
+   Name "Status4"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.066
+    OffsetLeft -109.066
+    PositionY -263.428
+    OffsetTop -263.428
+    SizeX 26
+    OffsetRight 83.065
+    SizeY 26
+    OffsetBottom 237.428
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D4C15A13DB}" {
+   Name "Player4"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.023
+    OffsetLeft -83.023
+    PositionY -258.369
+    OffsetTop -258.369
+    SizeX 193.598
+    OffsetRight -110.574
+    SizeY 24.522
+    OffsetBottom 233.847
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D4C15A1022}" {
+   Name "Button4"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.588
+    OffsetLeft -112.588
+    PositionY -266.509
+    OffsetTop -266.509
+    SizeX 222.933
+    OffsetRight -110.345
+    SizeY 32.682
+    OffsetBottom 233.827
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D4C15A100D}" {
+   Name "Player5"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.023
+    OffsetLeft -83.023
+    PositionY -225.689
+    OffsetTop -225.689
+    SizeX 193.598
+    OffsetRight -110.574
+    SizeY 24.522
+    OffsetBottom 201.167
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D4C15A1062}" {
+   Name "Status5"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.066
+    OffsetLeft -109.066
+    PositionY -230.748
+    OffsetTop -230.748
+    SizeX 26
+    OffsetRight 83.065
+    SizeY 26
+    OffsetBottom 204.748
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D4C15A1043}" {
+   Name "Button5"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.588
+    OffsetLeft -112.588
+    PositionY -233.829
+    OffsetTop -233.829
+    SizeX 222.933
+    OffsetRight -110.345
+    SizeY 32.682
+    OffsetBottom 201.147
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D404B53053}" {
+   Name "Status6"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.164
+    OffsetLeft -109.164
+    PositionY -197.962
+    OffsetTop -197.962
+    SizeX 26
+    OffsetRight 83.164
+    SizeY 26
+    OffsetBottom 171.962
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D404B530DF}" {
+   Name "Player6"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.122
+    OffsetLeft -83.122
+    PositionY -192.903
+    OffsetTop -192.903
+    SizeX 193.598
+    OffsetRight -110.476
+    SizeY 24.522
+    OffsetBottom 168.381
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D404B53176}" {
+   Name "Button6"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.686
+    OffsetLeft -112.686
+    PositionY -201.043
+    OffsetTop -201.043
+    SizeX 222.933
+    OffsetRight -110.247
+    SizeY 32.682
+    OffsetBottom 168.361
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D404B53151}" {
+   Name "Status7"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.164
+    OffsetLeft -109.164
+    PositionY -165.261
+    OffsetTop -165.261
+    SizeX 26
+    OffsetRight 83.164
+    SizeY 26
+    OffsetBottom 139.261
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D404B531A7}" {
+   Name "Player7"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.122
+    OffsetLeft -83.122
+    PositionY -160.202
+    OffsetTop -160.202
+    SizeX 193.598
+    OffsetRight -110.476
+    SizeY 24.522
+    OffsetBottom 135.68
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D404B53186}" {
+   Name "Button7"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.686
+    OffsetLeft -112.686
+    PositionY -168.342
+    OffsetTop -168.342
+    SizeX 222.933
+    OffsetRight -110.247
+    SizeY 32.682
+    OffsetBottom 135.66
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D404B531E0}" {
+   Name "Player8"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.122
+    OffsetLeft -83.122
+    PositionY -127.522
+    OffsetTop -127.522
+    SizeX 193.598
+    OffsetRight -110.476
+    SizeY 24.522
+    OffsetBottom 103
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D404B531C4}" {
+   Name "Status8"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.164
+    OffsetLeft -109.164
+    PositionY -132.581
+    OffsetTop -132.581
+    SizeX 26
+    OffsetRight 83.164
+    SizeY 26
+    OffsetBottom 106.581
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D404B5CE27}" {
+   Name "Button8"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.686
+    OffsetLeft -112.686
+    PositionY -135.662
+    OffsetTop -135.662
+    SizeX 222.933
+    OffsetRight -110.247
+    SizeY 32.682
+    OffsetBottom 102.98
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D404B5CE07}" {
+   Name "Status9"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.262
+    OffsetLeft -109.262
+    PositionY -99.804
+    OffsetTop -99.804
+    SizeX 26
+    OffsetRight 83.262
+    SizeY 26
+    OffsetBottom 73.804
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D404B5CE68}" {
+   Name "Player9"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.22
+    OffsetLeft -83.22
+    PositionY -94.745
+    OffsetTop -94.745
+    SizeX 193.598
+    OffsetRight -110.378
+    SizeY 24.522
+    OffsetBottom 70.223
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D404B5CE4C}" {
+   Name "Button9"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.784
+    OffsetLeft -112.784
+    PositionY -102.885
+    OffsetTop -102.885
+    SizeX 222.933
+    OffsetRight -110.149
+    SizeY 32.682
+    OffsetBottom 70.203
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D404B5CEA4}" {
+   Name "Status10"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.262
+    OffsetLeft -109.262
+    PositionY -67.103
+    OffsetTop -67.103
+    SizeX 26
+    OffsetRight 83.262
+    SizeY 26
+    OffsetBottom 41.102
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D404B5CED0}" {
+   Name "Player10"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.22
+    OffsetLeft -83.22
+    PositionY -62.044
+    OffsetTop -62.044
+    SizeX 193.598
+    OffsetRight -110.378
+    SizeY 24.522
+    OffsetBottom 37.521
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D404B5CF4B}" {
+   Name "Button10"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.784
+    OffsetLeft -112.784
+    PositionY -70.184
+    OffsetTop -70.184
+    SizeX 222.933
+    OffsetRight -110.149
+    SizeY 32.682
+    OffsetBottom 37.501
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D404B5CFA8}" {
+   Name "Player11"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.22
+    OffsetLeft -83.22
+    PositionY -29.363
+    OffsetTop -29.363
+    SizeX 193.598
+    OffsetRight -110.378
+    SizeY 24.522
+    OffsetBottom 4.841
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D404B5CF8F}" {
+   Name "Status11"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.262
+    OffsetLeft -109.262
+    PositionY -34.422
+    OffsetTop -34.422
+    SizeX 26
+    OffsetRight 83.262
+    SizeY 26
+    OffsetBottom 8.422
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D404B5CFE4}" {
+   Name "Button11"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.784
+    OffsetLeft -112.784
+    PositionY -37.503
+    OffsetTop -37.503
+    SizeX 222.933
+    OffsetRight -110.149
+    SizeY 32.682
+    OffsetBottom 4.821
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D403A48947}" {
+   Name "Status12"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.294
+    OffsetLeft -109.294
+    PositionY -1.915
+    OffsetTop -1.915
+    SizeX 26
+    OffsetRight 83.294
+    SizeY 26
+    OffsetBottom -24.085
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D403A489CF}" {
+   Name "Player12"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.252
+    OffsetLeft -83.252
+    PositionY 3.144
+    OffsetTop 3.144
+    SizeX 193.598
+    OffsetRight -110.346
+    SizeY 24.522
+    OffsetBottom -27.666
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D403A48666}" {
+   Name "Button12"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.816
+    OffsetLeft -112.816
+    PositionY -4.996
+    OffsetTop -4.996
+    SizeX 222.933
+    OffsetRight -110.117
+    SizeY 32.682
+    OffsetBottom -27.686
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D403A48643}" {
+   Name "Status13"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.294
+    OffsetLeft -109.294
+    PositionY 30.786
+    OffsetTop 30.786
+    SizeX 26
+    OffsetRight 83.294
+    SizeY 26
+    OffsetBottom -56.786
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D403A48697}" {
+   Name "Player13"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.252
+    OffsetLeft -83.252
+    PositionY 35.845
+    OffsetTop 35.845
+    SizeX 193.598
+    OffsetRight -110.346
+    SizeY 24.522
+    OffsetBottom -60.367
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D403A486F6}" {
+   Name "Button13"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.816
+    OffsetLeft -112.816
+    PositionY 27.705
+    OffsetTop 27.705
+    SizeX 222.933
+    OffsetRight -110.117
+    SizeY 32.682
+    OffsetBottom -60.387
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D403A486D2}" {
+   Name "Player14"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.252
+    OffsetLeft -83.252
+    PositionY 68.525
+    OffsetTop 68.525
+    SizeX 193.598
+    OffsetRight -110.346
+    SizeY 24.522
+    OffsetBottom -93.047
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D403A48738}" {
+   Name "Status14"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.294
+    OffsetLeft -109.294
+    PositionY 63.466
+    OffsetTop 63.466
+    SizeX 26
+    OffsetRight 83.294
+    SizeY 26
+    OffsetBottom -89.466
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D403A48719}" {
+   Name "Button14"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.816
+    OffsetLeft -112.816
+    PositionY 60.385
+    OffsetTop 60.385
+    SizeX 222.933
+    OffsetRight -110.117
+    SizeY 32.682
+    OffsetBottom -93.067
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D403A4877F}" {
+   Name "Status15"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.392
+    OffsetLeft -109.392
+    PositionY 96.243
+    OffsetTop 96.243
+    SizeX 26
+    OffsetRight 83.392
+    SizeY 26
+    OffsetBottom -122.243
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D403A487C6}" {
+   Name "Player15"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.35
+    OffsetLeft -83.35
+    PositionY 101.302
+    OffsetTop 101.302
+    SizeX 193.598
+    OffsetRight -110.248
+    SizeY 24.522
+    OffsetBottom -125.824
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D403A4847D}" {
+   Name "Button15"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.914
+    OffsetLeft -112.914
+    PositionY 93.162
+    OffsetTop 93.162
+    SizeX 222.933
+    OffsetRight -110.019
+    SizeY 32.682
+    OffsetBottom -125.844
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D403A48452}" {
+   Name "Status16"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.392
+    OffsetLeft -109.392
+    PositionY 128.944
+    OffsetTop 128.944
+    SizeX 26
+    OffsetRight 83.392
+    SizeY 25.999
+    OffsetBottom -154.943
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D403A484BB}" {
+   Name "Player16"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.35
+    OffsetLeft -83.35
+    PositionY 134.003
+    OffsetTop 134.003
+    SizeX 193.598
+    OffsetRight -110.248
+    SizeY 24.521
+    OffsetBottom -158.524
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D403A4849F}" {
+   Name "Button16"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.914
+    OffsetLeft -112.914
+    PositionY 125.863
+    OffsetTop 125.863
+    SizeX 222.933
+    OffsetRight -110.019
+    SizeY 32.681
+    OffsetBottom -158.544
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D403A484FA}" {
+   Name "Player17"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.35
+    OffsetLeft -83.35
+    PositionY 166.682
+    OffsetTop 166.682
+    SizeX 193.598
+    OffsetRight -110.248
+    SizeY 24.522
+    OffsetBottom -191.204
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D403A4853D}" {
+   Name "Status17"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.392
+    OffsetLeft -109.392
+    PositionY 161.623
+    OffsetTop 161.623
+    SizeX 26
+    OffsetRight 83.392
+    SizeY 26
+    OffsetBottom -187.623
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D403A4851F}" {
+   Name "Button17"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.914
+    OffsetLeft -112.914
+    PositionY 158.542
+    OffsetTop 158.542
+    SizeX 222.933
+    OffsetRight -110.019
+    SizeY 32.682
+    OffsetBottom -191.224
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D40A7894C7}" {
+   Name "Status18"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.418
+    OffsetLeft -109.418
+    PositionY 194.29
+    OffsetTop 194.29
+    SizeX 26
+    OffsetRight 83.418
+    SizeY 26
+    OffsetBottom -220.29
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D40A789545}" {
+   Name "Player18"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.376
+    OffsetLeft -83.376
+    PositionY 199.349
+    OffsetTop 199.349
+    SizeX 193.598
+    OffsetRight -110.222
+    SizeY 24.522
+    OffsetBottom -223.871
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D40A7895F2}" {
+   Name "Button18"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.94
+    OffsetLeft -112.94
+    PositionY 191.209
+    OffsetTop 191.209
+    SizeX 222.933
+    OffsetRight -109.993
+    SizeY 32.682
+    OffsetBottom -223.891
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D40A7895DD}" {
+   Name "Status19"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.418
+    OffsetLeft -109.418
+    PositionY 226.991
+    OffsetTop 226.991
+    SizeX 26
+    OffsetRight 83.418
+    SizeY 26
+    OffsetBottom -252.991
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D40A78922C}" {
+   Name "Player19"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.376
+    OffsetLeft -83.376
+    PositionY 232.05
+    OffsetTop 232.05
+    SizeX 193.598
+    OffsetRight -110.222
+    SizeY 24.522
+    OffsetBottom -256.572
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D40A789208}" {
+   Name "Button19"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.94
+    OffsetLeft -112.94
+    PositionY 223.91
+    OffsetTop 223.91
+    SizeX 222.933
+    OffsetRight -109.993
+    SizeY 32.682
+    OffsetBottom -256.592
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D40A789253}" {
+   Name "Player20"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.376
+    OffsetLeft -83.376
+    PositionY 264.73
+    OffsetTop 264.73
+    SizeX 193.598
+    OffsetRight -110.222
+    SizeY 24.522
+    OffsetBottom -289.252
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D40A7892B6}" {
+   Name "Status20"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.418
+    OffsetLeft -109.418
+    PositionY 259.671
+    OffsetTop 259.671
+    SizeX 26
+    OffsetRight 83.418
+    SizeY 26
+    OffsetBottom -285.671
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D40A789291}" {
+   Name "Button20"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -112.94
+    OffsetLeft -112.94
+    PositionY 256.59
+    OffsetTop 256.59
+    SizeX 222.933
+    OffsetRight -109.993
+    SizeY 32.682
+    OffsetBottom -289.272
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D40A7892F6}" {
+   Name "Status21"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.516
+    OffsetLeft -109.516
+    PositionY 292.448
+    OffsetTop 292.448
+    SizeX 26
+    OffsetRight 83.516
+    SizeY 26
+    OffsetBottom -318.448
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D40A7892C2}" {
+   Name "Player21"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.474
+    OffsetLeft -83.474
+    PositionY 297.507
+    OffsetTop 297.507
+    SizeX 193.598
+    OffsetRight -110.124
+    SizeY 24.522
+    OffsetBottom -322.029
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D40A789325}" {
+   Name "Button21"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -113.038
+    OffsetLeft -113.038
+    PositionY 289.367
+    OffsetTop 289.367
+    SizeX 222.933
+    OffsetRight -109.895
+    SizeY 32.682
+    OffsetBottom -322.049
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  ImageWidgetClass "{607B53D40A78931A}" {
+   Name "Status22"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.516
+    OffsetLeft -109.516
+    PositionY 325.149
+    OffsetTop 325.149
+    SizeX 26
+    OffsetRight 83.516
+    SizeY 25.999
+    OffsetBottom -351.148
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D40A789367}" {
+   Name "Player22"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.474
+    OffsetLeft -83.474
+    PositionY 330.208
+    OffsetTop 330.208
+    SizeX 193.598
+    OffsetRight -110.124
+    SizeY 24.521
+    OffsetBottom -354.729
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{607B53D40A7893A8}" {
+   Name "Button22"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -113.038
+    OffsetLeft -113.038
+    PositionY 322.068
+    OffsetTop 322.068
+    SizeX 222.933
+    OffsetRight -109.895
+    SizeY 32.681
+    OffsetBottom -354.749
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D40A7893F6}" {
+   Name "Player23"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.474
+    OffsetLeft -83.474
+    PositionY 362.887
+    OffsetTop 362.887
+    SizeX 193.598
+    OffsetRight -110.124
+    SizeY 24.522
+    OffsetBottom -387.409
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D40A7893D2}" {
+   Name "Status23"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.516
+    OffsetLeft -109.516
+    PositionY 357.828
+    OffsetTop 357.828
+    SizeX 26
+    OffsetRight 83.516
+    SizeY 26
+    OffsetBottom -383.828
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D40A789037}" {
+   Name "Button23"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -113.038
+    OffsetLeft -113.038
+    PositionY 354.747
+    OffsetTop 354.747
+    SizeX 222.933
+    OffsetRight -109.895
+    SizeY 32.682
+    OffsetBottom -387.429
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
+  }
+  TextWidgetClass "{607B53D43FBDF543}" {
+   Name "Player24"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -83.474
+    OffsetLeft -83.474
+    PositionY 395.734
+    OffsetTop 395.734
+    SizeX 193.598
+    OffsetRight -110.124
+    SizeY 24.522
+    OffsetBottom -420.256
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D43FBDF5E0}" {
+   Name "Status24"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -109.516
+    OffsetLeft -109.516
+    PositionY 390.675
+    OffsetTop 390.675
+    SizeX 26
+    OffsetRight 83.516
+    SizeY 26
+    OffsetBottom -416.675
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{607B53D43FBDF250}" {
+   Name "Button24"
+   Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -113.038
+    OffsetLeft -113.038
+    PositionY 387.594
+    OffsetTop 387.594
+    SizeX 222.933
+    OffsetRight -109.895
+    SizeY 32.682
+    OffsetBottom -420.276
+   }
+   Color 0 0 0 0
+   components {
+    SCR_InputButtonComponent "{5EE4151AB675F5EB}" {
+    }
+   }
   }
  }
 }

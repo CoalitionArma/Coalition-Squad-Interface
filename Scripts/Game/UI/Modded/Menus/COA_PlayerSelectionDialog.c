@@ -62,7 +62,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		
 		string storedSpecialtyIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
-		if ((m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
+		if ((m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
 		{
 			UpdatePlayerList();
 		} else {
@@ -70,7 +70,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			return;
 		};
 		
-		if (m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
+		if (m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
 		{
 			ShowGroupSettings();
 		}
@@ -85,7 +85,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		
 		m_wRoot = GetRootWidget();
 		
-		for (int b = 0; b <= 19; b++)
+		for (int b = 0; b <= 24; b++)
 		{
 			SCR_InputButtonComponent buttonList = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget(string.Format("Button%1", b)).FindHandler(SCR_InputButtonComponent));
 			buttonList.m_OnClicked.Insert(OnPlayerEntryClicked);
@@ -115,7 +115,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
 			string colorTeam = playerSplitArray[2];
-			string icon = playerSplitArray[3];
+			string icon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
@@ -124,7 +124,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 			
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(175, playerDisplay, playerName);
+			playerName = CheckEllipsis(192, playerDisplay, playerName);
 
 		  playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
@@ -132,7 +132,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, icon);
 		};
-		for (int e = m_aGroupArray.Count(); e <= 19; e++)
+		for (int e = m_aGroupArray.Count(); e <= 24; e++)
 		{
 			// Get group display widgets.
 			TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));

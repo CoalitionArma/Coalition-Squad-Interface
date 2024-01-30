@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{B7757F2024A3DC87}Layouts/UI/Textures/Icons/iconmangrenadier_ca.edds"
+ Name "{FBC8C841728649FC}UI/Textures/HUD/Modded/Icons/iconmangrenadier_ca.edds"
  Configurations {
   PNGResourceClass PC : "{EAB5DE3219F9CBA8}Configs/System/ResourceTypes/PC/TextureColorMap.conf" {
   }

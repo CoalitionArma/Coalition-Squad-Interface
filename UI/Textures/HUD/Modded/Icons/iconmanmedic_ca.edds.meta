@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{01F2523A4EE5C48B}Layouts/UI/Textures/Icons/iconmanmedic_ca.edds"
+ Name "{C74F2DD12FEBFEB9}UI/Textures/HUD/Modded/Icons/iconmanmedic_ca.edds"
  Configurations {
   PNGResourceClass PC : "{EAB5DE3219F9CBA8}Configs/System/ResourceTypes/PC/TextureColorMap.conf" {
   }

@@ -4,39 +4,39 @@ FrameWidgetClass {
   ImageWidgetClass "{5F046ED416EC0FC8}" {
    Name "Status0"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 124.248
-    OffsetLeft 124.248
-    PositionY -87.338
-    OffsetTop -87.338
-    SizeX 24.5
-    OffsetRight -148.748
-    SizeY 24.5
-    OffsetBottom 62.838
+    Anchor 0.5 1 0.5 1
+    PositionX 89.351
+    OffsetLeft 89.351
+    PositionY -135.74
+    OffsetTop -135.74
+    SizeX 16.9
+    OffsetRight -106.251
+    SizeY 17.3
+    OffsetBottom 118.44
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
   TextWidgetClass "{5F046ED416EC0C36}" {
    Name "Player0"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.737
-    OffsetLeft 148.737
-    PositionY -82.247
-    OffsetTop -82.247
-    SizeX 135
-    OffsetRight -283.737
-    SizeY 14
-    OffsetBottom 68.247
+    Anchor 0.5 1 0.5 1
+    PositionX 106.272
+    OffsetLeft 106.272
+    PositionY -133.035
+    OffsetTop -133.035
+    SizeX 110
+    OffsetRight -216.272
+    SizeY 16.444
+    OffsetBottom 116.591
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
@@ -46,858 +46,1083 @@ FrameWidgetClass {
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60502E9D3ABB0D85}" {
+  ImageWidgetClass "{607B53D14911EEC5}" {
    Name "Status1"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 124.248
-    OffsetLeft 124.248
-    PositionY -62.885
-    OffsetTop -62.885
-    SizeX 24.5
-    OffsetRight -148.748
-    SizeY 24.5
-    OffsetBottom 38.385
+    Anchor 0.5 1 0.5 1
+    PositionX 89.218
+    OffsetLeft 89.218
+    PositionY -112.697
+    OffsetTop -112.697
+    SizeX 16.899
+    OffsetRight -106.117
+    SizeY 17.299
+    OffsetBottom 95.398
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{60502E9D3ABB0A72}" {
+  TextWidgetClass "{607B53D14911EF46}" {
    Name "Player1"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.702
-    OffsetLeft 148.702
-    PositionY -57.257
-    OffsetTop -57.257
-    SizeX 135
-    OffsetRight -283.702
-    SizeY 14
-    OffsetBottom 43.257
+    Anchor 0.5 1 0.5 1
+    PositionX 106.138
+    OffsetLeft 106.138
+    PositionY -109.992
+    OffsetTop -109.992
+    SizeX 110.001
+    OffsetRight -216.139
+    SizeY 16.443
+    OffsetBottom 93.549
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60502E9D200E565C}" {
+  ImageWidgetClass "{607B53D08F95CD0D}" {
    Name "Status2"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 124.248
-    OffsetLeft 124.248
-    PositionY -38.385
-    OffsetTop -38.385
-    SizeX 24.5
-    OffsetRight -148.748
-    SizeY 24.5
-    OffsetBottom 13.885
+    Anchor 0.5 1 0.5 1
+    PositionX 89.174
+    OffsetLeft 89.174
+    PositionY -89.389
+    OffsetTop -89.389
+    SizeX 16.9
+    OffsetRight -106.074
+    SizeY 17.3
+    OffsetBottom 72.089
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{60502E9D200E56D2}" {
+  TextWidgetClass "{607B53D08F95CD81}" {
    Name "Player2"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.935
-    OffsetLeft 148.935
-    PositionY -32.27
-    OffsetTop -32.27
-    SizeX 135
-    OffsetRight -283.935
-    SizeY 13.999
-    OffsetBottom 18.271
+    Anchor 0.5 1 0.5 1
+    PositionX 106.095
+    OffsetLeft 106.095
+    PositionY -86.684
+    OffsetTop -86.684
+    SizeX 110
+    OffsetRight -216.095
+    SizeY 16.444
+    OffsetBottom 70.24
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60502E9D23845025}" {
+  ImageWidgetClass "{607B53D08F95CDEE}" {
    Name "Status3"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 124.3
-    OffsetLeft 124.3
-    PositionY -13.888
-    OffsetTop -13.888
-    SizeX 24.5
-    OffsetRight -148.8
-    SizeY 24.5
-    OffsetBottom -10.612
+    Anchor 0.5 1 0.5 1
+    PositionX 89.24
+    OffsetLeft 89.24
+    PositionY -65.879
+    OffsetTop -65.879
+    SizeX 16.9
+    OffsetRight -106.14
+    SizeY 17.299
+    OffsetBottom 48.58
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{60502E9D238450A7}" {
+  TextWidgetClass "{607B53D08F95CA33}" {
    Name "Player3"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.846
-    OffsetLeft 148.846
-    PositionY -7.381
-    OffsetTop -7.381
-    SizeX 135
-    OffsetRight -283.846
-    SizeY 14
-    OffsetBottom -6.619
+    Anchor 0.5 1 0.5 1
+    PositionX 106.161
+    OffsetLeft 106.161
+    PositionY -63.174
+    OffsetTop -63.174
+    SizeX 110.001
+    OffsetRight -216.162
+    SizeY 16.443
+    OffsetBottom 46.73
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60502E9D2DB9EF50}" {
+  ImageWidgetClass "{607B53D0B24AE122}" {
    Name "Status4"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 124.3
-    OffsetLeft 124.3
-    PositionY 10.653
-    OffsetTop 10.653
-    SizeX 24.5
-    OffsetRight -148.8
-    SizeY 24.5
-    OffsetBottom -35.153
+    Anchor 0.5 1 0.5 1
+    PositionX 89.44
+    OffsetLeft 89.44
+    PositionY -42.749
+    OffsetTop -42.749
+    SizeX 16.9
+    OffsetRight -106.34
+    SizeY 17.299
+    OffsetBottom 25.45
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{60502E9D2DB9EFD1}" {
+  TextWidgetClass "{607B53D0B24AE1BC}" {
    Name "Player4"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 148.825
-    OffsetLeft 148.825
-    PositionY 17.703
-    OffsetTop 17.703
-    SizeX 135
-    OffsetRight -283.825
-    SizeY 14
-    OffsetBottom -31.703
+    Anchor 0.5 1 0.5 1
+    PositionX 106.361
+    OffsetLeft 106.361
+    PositionY -40.044
+    OffsetTop -40.044
+    SizeX 110.001
+    OffsetRight -216.362
+    SizeY 16.443
+    OffsetBottom 23.601
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501028218FE1}" {
+  ImageWidgetClass "{607B53D7970B9016}" {
    Name "Status5"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 289.261
-    OffsetLeft 289.261
-    PositionY -87.338
-    OffsetTop -87.338
-    SizeX 24.5
-    OffsetRight -313.761
-    SizeY 24.5
-    OffsetBottom 62.838
+    Anchor 0.5 1 0.5 1
+    PositionX 219.42
+    OffsetLeft 219.42
+    PositionY -135.517
+    OffsetTop -135.517
+    SizeX 16.9
+    OffsetRight -236.32
+    SizeY 17.3
+    OffsetBottom 118.217
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501028218C4D}" {
+  TextWidgetClass "{607B53D7970B909C}" {
    Name "Player5"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.572
-    OffsetLeft 313.572
-    PositionY -82.247
-    OffsetTop -82.247
-    SizeX 135
-    OffsetRight -448.572
-    SizeY 14
-    OffsetBottom 68.247
+    Anchor 0.5 1 0.5 1
+    PositionX 236.341
+    OffsetLeft 236.341
+    PositionY -132.812
+    OffsetTop -132.812
+    SizeX 110
+    OffsetRight -346.341
+    SizeY 16.444
+    OffsetBottom 116.368
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501028218C9C}" {
+  ImageWidgetClass "{607B53D7970B90EF}" {
    Name "Status6"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 289.261
-    OffsetLeft 289.261
-    PositionY -62.885
-    OffsetTop -62.885
-    SizeX 24.5
-    OffsetRight -313.761
-    SizeY 24.5
-    OffsetBottom 38.385
+    Anchor 0.5 1 0.5 1
+    PositionX 219.287
+    OffsetLeft 219.287
+    PositionY -112.474
+    OffsetTop -112.474
+    SizeX 16.899
+    OffsetRight -236.186
+    SizeY 17.299
+    OffsetBottom 95.174
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501028218CD4}" {
+  TextWidgetClass "{607B53D7970B913A}" {
    Name "Player6"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.715
-    OffsetLeft 313.715
-    PositionY -57.257
-    OffsetTop -57.257
-    SizeX 135
-    OffsetRight -448.715
-    SizeY 14
-    OffsetBottom 43.257
+    Anchor 0.5 1 0.5 1
+    PositionX 236.207
+    OffsetLeft 236.207
+    PositionY -109.769
+    OffsetTop -109.769
+    SizeX 110.001
+    OffsetRight -346.208
+    SizeY 16.443
+    OffsetBottom 93.325
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501028218D3A}" {
+  ImageWidgetClass "{607B53D7970B9119}" {
    Name "Status7"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 289.261
-    OffsetLeft 289.261
-    PositionY -38.385
-    OffsetTop -38.385
-    SizeX 24.5
-    OffsetRight -313.761
-    SizeY 24.5
-    OffsetBottom 13.885
+    Anchor 0.5 1 0.5 1
+    PositionX 219.243
+    OffsetLeft 219.243
+    PositionY -89.165
+    OffsetTop -89.165
+    SizeX 16.9
+    OffsetRight -236.143
+    SizeY 17.3
+    OffsetBottom 71.865
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501028218D7D}" {
+  TextWidgetClass "{607B53D7970B9168}" {
    Name "Player7"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.948
-    OffsetLeft 313.948
-    PositionY -32.27
-    OffsetTop -32.27
-    SizeX 135
-    OffsetRight -448.948
-    SizeY 13.999
-    OffsetBottom 18.271
+    Anchor 0.5 1 0.5 1
+    PositionX 236.164
+    OffsetLeft 236.164
+    PositionY -86.46
+    OffsetTop -86.46
+    SizeX 110
+    OffsetRight -346.164
+    SizeY 16.444
+    OffsetBottom 70.016
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501028218D40}" {
+  ImageWidgetClass "{607B53D7970B91B6}" {
    Name "Status8"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 289.313
-    OffsetLeft 289.313
-    PositionY -13.888
-    OffsetTop -13.888
-    SizeX 24.5
-    OffsetRight -313.813
-    SizeY 24.5
-    OffsetBottom -10.612
+    Anchor 0.5 1 0.5 1
+    PositionX 219.309
+    OffsetLeft 219.309
+    PositionY -65.655
+    OffsetTop -65.655
+    SizeX 16.9
+    OffsetRight -236.209
+    SizeY 17.299
+    OffsetBottom 48.356
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501028218D90}" {
+  TextWidgetClass "{607B53D7970B919A}" {
    Name "Player8"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.859
-    OffsetLeft 313.859
-    PositionY -7.381
-    OffsetTop -7.381
-    SizeX 135
-    OffsetRight -448.859
-    SizeY 14
-    OffsetBottom -6.619
+    Anchor 0.5 1 0.5 1
+    PositionX 236.23
+    OffsetLeft 236.23
+    PositionY -62.95
+    OffsetTop -62.95
+    SizeX 110.001
+    OffsetRight -346.231
+    SizeY 16.444
+    OffsetBottom 46.506
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501028218DF8}" {
+  ImageWidgetClass "{607B53D7970B91F8}" {
    Name "Status9"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 289.313
-    OffsetLeft 289.313
-    PositionY 10.653
-    OffsetTop 10.653
-    SizeX 24.5
-    OffsetRight -313.813
-    SizeY 24.5
-    OffsetBottom -35.153
+    Anchor 0.5 1 0.5 1
+    PositionX 219.509
+    OffsetLeft 219.509
+    PositionY -42.525
+    OffsetTop -42.525
+    SizeX 16.9
+    OffsetRight -236.409
+    SizeY 17.299
+    OffsetBottom 25.226
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501028218DCB}" {
+  TextWidgetClass "{607B53D7970BAE31}" {
    Name "Player9"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 313.838
-    OffsetLeft 313.838
-    PositionY 17.703
-    OffsetTop 17.703
-    SizeX 135
-    OffsetRight -448.838
-    SizeY 14
-    OffsetBottom -31.703
+    Anchor 0.5 1 0.5 1
+    PositionX 236.43
+    OffsetLeft 236.43
+    PositionY -39.82
+    OffsetTop -39.82
+    SizeX 110.001
+    OffsetRight -346.431
+    SizeY 16.443
+    OffsetBottom 23.377
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501056B29A2D}" {
+  ImageWidgetClass "{607B53D79EAAF41F}" {
    Name "Status10"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 454.494
-    OffsetLeft 454.494
-    PositionY -87.338
-    OffsetTop -87.338
-    SizeX 24.5
-    OffsetRight -478.994
-    SizeY 24.5
-    OffsetBottom 62.838
+    Anchor 0.5 1 0.5 1
+    PositionX 349.577
+    OffsetLeft 349.577
+    PositionY -135.539
+    OffsetTop -135.539
+    SizeX 16.9
+    OffsetRight -366.477
+    SizeY 17.3
+    OffsetBottom 118.239
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501056B29AA9}" {
+  TextWidgetClass "{607B53D79EAAF49B}" {
    Name "Player10"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 479.167
-    OffsetLeft 479.167
-    PositionY -82.247
-    OffsetTop -82.247
-    SizeX 135
-    OffsetRight -614.167
-    SizeY 14
-    OffsetBottom 68.247
+    Anchor 0.5 1 0.5 1
+    PositionX 366.498
+    OffsetLeft 366.498
+    PositionY -132.834
+    OffsetTop -132.834
+    SizeX 110
+    OffsetRight -476.498
+    SizeY 16.444
+    OffsetBottom 116.39
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501056B29AF2}" {
+  ImageWidgetClass "{607B53D79EAAF4E5}" {
    Name "Status11"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 454.494
-    OffsetLeft 454.494
-    PositionY -62.885
-    OffsetTop -62.885
-    SizeX 24.5
-    OffsetRight -478.994
-    SizeY 24.5
-    OffsetBottom 38.385
+    Anchor 0.5 1 0.5 1
+    PositionX 349.444
+    OffsetLeft 349.444
+    PositionY -112.496
+    OffsetTop -112.496
+    SizeX 16.899
+    OffsetRight -366.343
+    SizeY 17.3
+    OffsetBottom 95.196
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501056B29AC8}" {
+  TextWidgetClass "{607B53D79EAAF4CB}" {
    Name "Player11"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 478.948
-    OffsetLeft 478.948
-    PositionY -57.257
-    OffsetTop -57.257
-    SizeX 135
-    OffsetRight -613.948
-    SizeY 14
-    OffsetBottom 43.257
+    Anchor 0.5 1 0.5 1
+    PositionX 366.364
+    OffsetLeft 366.364
+    PositionY -109.791
+    OffsetTop -109.791
+    SizeX 110.001
+    OffsetRight -476.365
+    SizeY 16.444
+    OffsetBottom 93.347
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501056B29B15}" {
+  ImageWidgetClass "{607B53D79EAAF52D}" {
    Name "Status12"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 454.494
-    OffsetLeft 454.494
-    PositionY -38.385
-    OffsetTop -38.385
-    SizeX 24.5
-    OffsetRight -478.994
-    SizeY 24.5
-    OffsetBottom 13.885
+    Anchor 0.5 1 0.5 1
+    PositionX 349.4
+    OffsetLeft 349.4
+    PositionY -89.187
+    OffsetTop -89.187
+    SizeX 16.9
+    OffsetRight -366.3
+    SizeY 17.3
+    OffsetBottom 71.887
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501056B29B62}" {
+  TextWidgetClass "{607B53D79EAAF564}" {
    Name "Player12"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 479.181
-    OffsetLeft 479.181
-    PositionY -32.27
-    OffsetTop -32.27
-    SizeX 135
-    OffsetRight -614.181
-    SizeY 13.999
-    OffsetBottom 18.271
+    Anchor 0.5 1 0.5 1
+    PositionX 366.321
+    OffsetLeft 366.321
+    PositionY -86.482
+    OffsetTop -86.482
+    SizeX 110
+    OffsetRight -476.321
+    SizeY 16.444
+    OffsetBottom 70.038
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501056B29B43}" {
+  ImageWidgetClass "{607B53D79EAAF544}" {
    Name "Status13"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 454.546
-    OffsetLeft 454.546
-    PositionY -13.888
-    OffsetTop -13.888
-    SizeX 24.5
-    OffsetRight -479.046
-    SizeY 24.5
-    OffsetBottom -10.612
+    Anchor 0.5 1 0.5 1
+    PositionX 349.466
+    OffsetLeft 349.466
+    PositionY -65.677
+    OffsetTop -65.677
+    SizeX 16.9
+    OffsetRight -366.366
+    SizeY 17.299
+    OffsetBottom 48.378
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501056B29BAA}" {
+  TextWidgetClass "{607B53D79EAAF587}" {
    Name "Player13"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 479.092
-    OffsetLeft 479.092
-    PositionY -7.381
-    OffsetTop -7.381
-    SizeX 135
-    OffsetRight -614.092
-    SizeY 14
-    OffsetBottom -6.619
+    Anchor 0.5 1 0.5 1
+    PositionX 366.387
+    OffsetLeft 366.387
+    PositionY -62.972
+    OffsetTop -62.972
+    SizeX 110.001
+    OffsetRight -476.388
+    SizeY 16.444
+    OffsetBottom 46.528
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501056B29BF2}" {
+  ImageWidgetClass "{607B53D79EAAF5F9}" {
    Name "Status14"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 454.546
-    OffsetLeft 454.546
-    PositionY 10.653
-    OffsetTop 10.653
-    SizeX 24.5
-    OffsetRight -479.046
-    SizeY 24.5
-    OffsetBottom -35.153
+    Anchor 0.5 1 0.5 1
+    PositionX 349.666
+    OffsetLeft 349.666
+    PositionY -42.547
+    OffsetTop -42.547
+    SizeX 16.9
+    OffsetRight -366.566
+    SizeY 17.299
+    OffsetBottom 25.248
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501056B29BDB}" {
+  TextWidgetClass "{607B53D79EAAF5C5}" {
    Name "Player14"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 479.071
-    OffsetLeft 479.071
-    PositionY 17.703
-    OffsetTop 17.703
-    SizeX 135
-    OffsetRight -614.071
-    SizeY 14
-    OffsetBottom -31.703
+    Anchor 0.5 1 0.5 1
+    PositionX 366.587
+    OffsetLeft 366.587
+    PositionY -39.842
+    OffsetTop -39.842
+    SizeX 110.001
+    OffsetRight -476.588
+    SizeY 16.443
+    OffsetBottom 23.399
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501059817B02}" {
+  ImageWidgetClass "{607B53D787B39435}" {
    Name "Status15"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 619.287
-    OffsetLeft 619.287
-    PositionY -87.253
-    OffsetTop -87.253
-    SizeX 24.5
-    OffsetRight -643.787
-    SizeY 24.5
-    OffsetBottom 62.752
+    Anchor 0.5 1 0.5 1
+    PositionX 484.49
+    OffsetLeft 484.49
+    PositionY -135.323
+    OffsetTop -135.323
+    SizeX 16.9
+    OffsetRight -501.39
+    SizeY 17.3
+    OffsetBottom 118.023
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501059817BDA}" {
+  TextWidgetClass "{607B53D787B3944B}" {
    Name "Player15"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.598
-    OffsetLeft 643.598
-    PositionY -82.161
-    OffsetTop -82.161
-    SizeX 135
-    OffsetRight -778.598
-    SizeY 14
-    OffsetBottom 68.161
+    Anchor 0.5 1 0.5 1
+    PositionX 501.411
+    OffsetLeft 501.411
+    PositionY -132.618
+    OffsetTop -132.618
+    SizeX 110
+    OffsetRight -611.411
+    SizeY 16.444
+    OffsetBottom 116.174
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{6078501059817813}" {
+  ImageWidgetClass "{607B53D787B39496}" {
    Name "Status16"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 619.287
-    OffsetLeft 619.287
-    PositionY -62.799
-    OffsetTop -62.799
-    SizeX 24.5
-    OffsetRight -643.787
-    SizeY 24.5
-    OffsetBottom 38.299
+    Anchor 0.5 1 0.5 1
+    PositionX 484.357
+    OffsetLeft 484.357
+    PositionY -112.28
+    OffsetTop -112.28
+    SizeX 16.899
+    OffsetRight -501.255
+    SizeY 17.3
+    OffsetBottom 94.98
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{607850105981786D}" {
+  TextWidgetClass "{607B53D787B394FE}" {
    Name "Player16"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.741
-    OffsetLeft 643.741
-    PositionY -57.171
-    OffsetTop -57.171
-    SizeX 135
-    OffsetRight -778.741
-    SizeY 14
-    OffsetBottom 43.171
+    Anchor 0.5 1 0.5 1
+    PositionX 501.276
+    OffsetLeft 501.276
+    PositionY -109.575
+    OffsetTop -109.575
+    SizeX 110.001
+    OffsetRight -611.278
+    SizeY 16.444
+    OffsetBottom 93.131
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60785010598178B7}" {
+  ImageWidgetClass "{607B53D787B394DE}" {
    Name "Status17"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 619.287
-    OffsetLeft 619.287
-    PositionY -38.299
-    OffsetTop -38.299
-    SizeX 24.5
-    OffsetRight -643.787
-    SizeY 24.5
-    OffsetBottom 13.799
+    Anchor 0.5 1 0.5 1
+    PositionX 484.313
+    OffsetLeft 484.313
+    PositionY -88.971
+    OffsetTop -88.971
+    SizeX 16.9
+    OffsetRight -501.213
+    SizeY 17.3
+    OffsetBottom 71.671
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{607850105981788D}" {
+  TextWidgetClass "{607B53D787B39524}" {
    Name "Player17"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.974
-    OffsetLeft 643.974
-    PositionY -32.184
-    OffsetTop -32.184
-    SizeX 135
-    OffsetRight -778.974
-    SizeY 13.999
-    OffsetBottom 18.185
+    Anchor 0.5 1 0.5 1
+    PositionX 501.234
+    OffsetLeft 501.234
+    PositionY -86.266
+    OffsetTop -86.266
+    SizeX 110
+    OffsetRight -611.234
+    SizeY 16.444
+    OffsetBottom 69.822
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{60785010598178EB}" {
+  ImageWidgetClass "{607B53D787B39504}" {
    Name "Status18"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 619.339
-    OffsetLeft 619.339
-    PositionY -13.802
-    OffsetTop -13.802
-    SizeX 24.5
-    OffsetRight -643.839
-    SizeY 24.5
-    OffsetBottom -10.698
+    Anchor 0.5 1 0.5 1
+    PositionX 484.379
+    OffsetLeft 484.379
+    PositionY -65.461
+    OffsetTop -65.461
+    SizeX 16.9
+    OffsetRight -501.279
+    SizeY 17.299
+    OffsetBottom 48.162
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501059817925}" {
+  TextWidgetClass "{607B53D787B39561}" {
    Name "Player18"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.885
-    OffsetLeft 643.885
-    PositionY -7.295
-    OffsetTop -7.295
-    SizeX 135
-    OffsetRight -778.885
-    SizeY 14
-    OffsetBottom -6.705
+    Anchor 0.5 1 0.5 1
+    PositionX 501.299
+    OffsetLeft 501.299
+    PositionY -62.756
+    OffsetTop -62.756
+    SizeX 110.001
+    OffsetRight -611.301
+    SizeY 16.444
+    OffsetBottom 46.312
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }
-  ImageWidgetClass "{607850105981790C}" {
+  ImageWidgetClass "{607B53D787B39545}" {
    Name "Status19"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 619.339
-    OffsetLeft 619.339
-    PositionY 10.738
-    OffsetTop 10.738
-    SizeX 24.5
-    OffsetRight -643.839
-    SizeY 24.5
-    OffsetBottom -35.239
+    Anchor 0.5 1 0.5 1
+    PositionX 484.578
+    OffsetLeft 484.578
+    PositionY -42.331
+    OffsetTop -42.331
+    SizeX 16.9
+    OffsetRight -501.479
+    SizeY 17.299
+    OffsetBottom 25.032
    }
    IsPixelPerfect 0
    Opacity 0
-   Texture "{5ECE094ED4662B33}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5
   }
-  TextWidgetClass "{6078501059817959}" {
+  TextWidgetClass "{607B53D787B395A2}" {
    Name "Player19"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
-    Anchor 0.5 0.965 0.5 0.965
-    PositionX 643.864
-    OffsetLeft 643.864
-    PositionY 17.788
-    OffsetTop 17.788
-    SizeX 135
-    OffsetRight -778.864
-    SizeY 14.001
-    OffsetBottom -31.789
+    Anchor 0.5 1 0.5 1
+    PositionX 501.5
+    OffsetLeft 501.5
+    PositionY -39.626
+    OffsetTop -39.626
+    SizeX 110.001
+    OffsetRight -611.5
+    SizeY 16.443
+    OffsetBottom 23.183
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 11
+   "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
     Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
     ForceFont 1
     Bold 1
-    ShadowSize 32
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E2653AB}" {
+   Name "Status20"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 614.457
+    OffsetLeft 614.457
+    PositionY -135.643
+    OffsetTop -135.643
+    SizeX 16.9
+    OffsetRight -631.357
+    SizeY 17.3
+    OffsetBottom 118.343
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26502D}" {
+   Name "Player20"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 631.378
+    OffsetLeft 631.378
+    PositionY -132.938
+    OffsetTop -132.938
+    SizeX 110
+    OffsetRight -741.378
+    SizeY 16.444
+    OffsetBottom 116.494
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265076}" {
+   Name "Status21"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 614.324
+    OffsetLeft 614.324
+    PositionY -112.6
+    OffsetTop -112.6
+    SizeX 16.898
+    OffsetRight -631.222
+    SizeY 17.301
+    OffsetBottom 95.3
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E2650BF}" {
+   Name "Player21"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 631.243
+    OffsetLeft 631.243
+    PositionY -109.895
+    OffsetTop -109.895
+    SizeX 110.002
+    OffsetRight -741.245
+    SizeY 16.444
+    OffsetBottom 93.451
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265090}" {
+   Name "Status22"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 614.28
+    OffsetLeft 614.28
+    PositionY -89.291
+    OffsetTop -89.291
+    SizeX 16.9
+    OffsetRight -631.18
+    SizeY 17.3
+    OffsetBottom 71.991
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E2650E6}" {
+   Name "Player22"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 631.201
+    OffsetLeft 631.201
+    PositionY -86.586
+    OffsetTop -86.586
+    SizeX 110
+    OffsetRight -741.201
+    SizeY 16.444
+    OffsetBottom 70.142
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E2650DC}" {
+   Name "Status23"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 614.346
+    OffsetLeft 614.346
+    PositionY -65.781
+    OffsetTop -65.781
+    SizeX 16.9
+    OffsetRight -631.246
+    SizeY 17.299
+    OffsetBottom 48.482
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26513B}" {
+   Name "Player23"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 631.266
+    OffsetLeft 631.266
+    PositionY -63.076
+    OffsetTop -63.076
+    SizeX 110.002
+    OffsetRight -741.268
+    SizeY 16.444
+    OffsetBottom 46.632
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265105}" {
+   Name "Status24"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 614.545
+    OffsetLeft 614.545
+    PositionY -42.651
+    OffsetTop -42.651
+    SizeX 16.901
+    OffsetRight -631.446
+    SizeY 17.299
+    OffsetBottom 25.352
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26516C}" {
+   Name "Player24"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 631.467
+    OffsetLeft 631.467
+    PositionY -39.946
+    OffsetTop -39.946
+    SizeX 110
+    OffsetRight -741.467
+    SizeY 16.443
+    OffsetBottom 23.503
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
     ShadowOffset 0.5 0.5
    }
   }

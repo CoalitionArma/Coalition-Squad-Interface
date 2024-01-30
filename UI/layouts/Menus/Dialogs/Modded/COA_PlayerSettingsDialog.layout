@@ -210,17 +210,17 @@ FrameWidgetClass {
    Name "Icon"
    Slot FrameWidgetSlot "{5EC77B609A838859}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -85.419
-    OffsetLeft -85.419
-    PositionY -176.22
-    OffsetTop -176.22
-    SizeX 172.065
-    OffsetRight -86.646
-    SizeY 162.92
-    OffsetBottom 13.3
+    PositionX -71
+    OffsetLeft -71
+    PositionY -190
+    OffsetTop -190
+    SizeX 142
+    OffsetRight -71
+    SizeY 142
+    OffsetBottom 48
    }
-   Texture "{71ED761DF5BA041C}Layouts/UI/Textures/Icons/iconman_ca.edds"
-   Size 64 64
+   Texture "{25A0BFBD75253292}UI/Textures/HUD/Modded/Icons/iconman_ca.edds"
+   Size 48 48
    "Shadow Offset" 0.5 0.5
    "Shadow Size Increase" 1 1
   }
@@ -617,7 +617,7 @@ FrameWidgetClass {
     OffsetBottom 130.658
    }
    Opacity 0
-   Texture "{5C682305CA5C9594}Layouts/UI/Textures/PromoteToSLButton.edds"
+   Texture "{5C682305CA5C9594}UI/Textures/Menu/Modded/PromoteToSLButton.edds"
    Size 145 50
    "Shadow Offset" 0.5 0.5
   }
@@ -750,7 +750,7 @@ FrameWidgetClass {
     OffsetBottom 60.257
    }
    Opacity 0
-   Texture "{E2B4282BA87BDD67}Layouts/UI/Textures/PromoteToTLButton.edds"
+   Texture "{E2B4282BA87BDD67}UI/Textures/Menu/Modded/PromoteToTLButton.edds"
    Size 145 50
    "Shadow Offset" 0.5 0.5
   }
@@ -922,7 +922,7 @@ FrameWidgetClass {
     OffsetBottom -11.54
    }
    Opacity 0
-   Texture "{C6E80921A68B03AF}Layouts/UI/Textures/Kick.edds"
+   Texture "{C6E80921A68B03AF}UI/Textures/Menu/Modded/Kick.edds"
    Size 145 50
    "Shadow Offset" 0.5 0.5
   }

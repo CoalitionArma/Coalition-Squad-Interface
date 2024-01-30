@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{6D45BA2CCC322312}Layouts/UI/Textures/Icons/iconmanteamleader_ca.edds"
+ Name "{D1A273A0110C4D5C}UI/Textures/HUD/Modded/Icons/iconmanteamleader_ca.edds"
  Configurations {
   PNGResourceClass PC : "{EAB5DE3219F9CBA8}Configs/System/ResourceTypes/PC/TextureColorMap.conf" {
   }

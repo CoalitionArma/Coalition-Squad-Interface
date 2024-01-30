@@ -59,7 +59,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 			
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(135, playerDisplay, playerName);
+			playerName = CheckEllipsis(110, playerDisplay, playerName);
 
 			playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
@@ -88,7 +88,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		ImageWidget displayCheck = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
 		int check = displayCheck.GetOpacity();
 		if (check == 1 || forceClear) {
-			for (int e = positionToStartClearing; e <= 19; e++)
+			for (int e = positionToStartClearing; e <= 24; e++)
 			{
 				// Get group display widgets.
 				TextWidget playerRemoveDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", e)));

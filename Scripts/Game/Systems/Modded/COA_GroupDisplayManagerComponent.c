@@ -4,17 +4,17 @@ class COA_GroupDisplayManagerComponentClass: SCR_BaseGameModeComponentClass {};
 class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 {	
 	// All Icons we could possibly want to give the player and/or to use for other functions.
-	protected string m_sCargo         = "{B910A93F355F168C}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
-	protected string m_sDriver        = "{C2B2F451FB157A89}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
-	protected string m_sGunner        = "{3DAAB773C8C29812}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
-	protected string m_sSquadLeader   = "{5ECE094ED4662B33}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
-	protected string m_sTeamLeader    = "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
-	protected string m_sMedic         = "{01F2523A4EE5C48B}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
-	protected string m_sSniper        = "{318B797C57BE3C29}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
-	protected string m_sMachineGunner = "{CCF40410BDB53870}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
-	protected string m_sAntiTank      = "{DC86195B44F5A345}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
-	protected string m_sGrenadier     = "{B7757F2024A3DC87}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
-	protected string m_sMan           = "{71ED761DF5BA041C}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
+	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
+	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
+	protected string m_sGunner        = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
+	protected string m_sSquadLeader   = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
+	protected string m_sTeamLeader    = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
+	protected string m_sMedic         = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
+	protected string m_sSniper        = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
+	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
+	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
+	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
+	protected string m_sMan           = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
 	
 	// All Color Teams
 	protected string m_sCTRed    = ARGB(255, 200, 65, 65).ToString();
@@ -81,20 +81,6 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		if (Replication.IsServer()) {
 			GetGame().GetCallqueue().Remove(UpdateAllAuthorityPlayerMapValues);
 			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
-		};
-	}
-	
-	override protected void OnGameEnd()
-	{	
-		super.OnGameEnd();
-		
-		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
-		};
-		
-		if (Replication.IsServer()) {
-			GetGame().GetCallqueue().Remove(UpdateGroupInfoInAuthorityPlayerMap);
-			GetGame().GetCallqueue().Remove(UpdatePlayerArray);
 		};
 	}
 	
