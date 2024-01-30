@@ -174,7 +174,7 @@ class COA_Compass : SCR_InfoDisplay
 		
 			// Get Distance
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
-			float disT = dis * 4.345;
+			float disT = dis * 2.7725;
 			
 			// Get Direction
 			vector dirV = vector.Direction(playerCharacterOrigin, m_vOwnerOrigin);
@@ -185,12 +185,12 @@ class COA_Compass : SCR_InfoDisplay
 			relDir = Math.Mod(relDir - (dir * 2), 360);
 			relDir = relDir * Math.DEG2RAD;
 			
-			float x = (Math.Sin(relDir) * disT) - 9.75;
-			float y = (Math.Cos(relDir) * disT) - 9.75;
+			float x = (Math.Sin(relDir) * disT) - 6;
+			float y = (Math.Cos(relDir) * disT) - 88;
 		
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
-			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 6, 0));
+			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 4, 0));
 			posToStartClearing = i;
 		};
 		ClearSquadRadar(posToStartClearing + 1);
@@ -208,8 +208,7 @@ class COA_Compass : SCR_InfoDisplay
 		radarPlayer.LoadImageTexture(0, icon);
 		radarPlayer.SetColorInt(colorTeam.ToInt());
 		
-		if (playerCharacter != m_ChimeraCharacter)
-			radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - m_fYaw), 360));
+		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - m_fYaw), 360));
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -239,7 +238,7 @@ class COA_Compass : SCR_InfoDisplay
 			radarlocalPlayer.SetOpacity(0);
 		};
 		
-		for (int e = positionToStartClearing; e <= 19; e++)
+		for (int e = positionToStartClearing; e <= 24; e++)
 		{
 			ImageWidget removeRadarPlayerWidget = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", e)));
 			if (!removeRadarPlayerWidget) continue;

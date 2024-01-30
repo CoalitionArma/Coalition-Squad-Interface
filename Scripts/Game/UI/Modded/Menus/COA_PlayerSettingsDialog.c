@@ -100,23 +100,8 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 		string colorTeam  = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam");
 		
 		m_sStoredSpecialtIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
-<<<<<<< HEAD
 		 
 		m_wIcon.SetColorInt(colorTeam.ToInt());
-=======
-		
-		if (colorTeam || colorTeam != "") {
-			switch (colorTeam)
-			{
-				case "Red"    : {m_wPlayerName.SetColorInt(ARGB(255, 200, 65, 65));   m_wIcon.SetColorInt(ARGB(255, 200, 65, 65));   break;};
-				case "Blue"   : {m_wPlayerName.SetColorInt(ARGB(255, 0, 92, 255));    m_wIcon.SetColorInt(ARGB(255, 0, 92, 255));    break;};
-				case "Yellow" : {m_wPlayerName.SetColorInt(ARGB(255, 230, 230, 0));   m_wIcon.SetColorInt(ARGB(255, 230, 230, 0));   break;};
-				case "Green"  : {m_wPlayerName.SetColorInt(ARGB(255, 0, 190, 85));    m_wIcon.SetColorInt(ARGB(255, 0, 190, 85));    break;};
-				case "None"   : {m_wPlayerName.SetColorInt(ARGB(255, 235, 235, 235)); m_wIcon.SetColorInt(ARGB(255, 235, 235, 235)); break;};
-			};
-		};
-
->>>>>>> release
 		m_wIcon.LoadImageTexture(0, m_sStoredSpecialtIcon);
 		m_wPlayerName.SetColorInt(colorTeam.ToInt());   
 		m_wPlayerName.SetText(playerName);
@@ -216,7 +201,6 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();
 		
 		if (!m_iSelectedPlayerID) return;
-<<<<<<< HEAD
 		
 		string colorTeamIntStr = m_sCTNone;
 		if (colorTeamButtonName || colorTeamButtonName != "") {
@@ -232,10 +216,6 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 		
 		m_GroupDisplayComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam", colorTeamIntStr);
 		
-=======
-		m_GroupDisplayComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam", colorTeam);
-		
->>>>>>> release
 		m_sStoredSpecialtIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
 	}
 
@@ -244,7 +224,7 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 	{
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
-		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") return;
+		if (m_sStoredSpecialtIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") return;
 		
 		int iconToOverride = m_wIconOveride.GetCurrentItem();
 		string iconToOverrideStr = "";
@@ -277,7 +257,7 @@ class COA_PlayerSettingsDialog : ChimeraMenuBase
 	{
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
-		if (m_sStoredSpecialtIcon == "{6D45BA2CCC322312}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") {
+		if (m_sStoredSpecialtIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") {
 			m_GroupDisplayComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon", "Auto");
 			return;
 		};
