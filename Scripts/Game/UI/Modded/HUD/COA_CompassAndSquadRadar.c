@@ -8,6 +8,7 @@ class COA_Compass : SCR_InfoDisplay
 	protected SCR_AIGroup m_PlayersGroup = null;
 	
 	protected float m_fYaw;
+	protected float m_fStoredYaw;
 	protected vector m_vOwnerOrigin;
 	protected bool m_bCompassVisible = true;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
@@ -93,26 +94,30 @@ class COA_Compass : SCR_InfoDisplay
 	{	
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return;
-		m_fYaw = playerControllerComponent.GetAimingDirectionWorld().VectorToAngles()[0];
+		
+		// Freelook Direction
+		float altYaw = playerControllerComponent.GetAimingDirection().ToYaw();
 		
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(m_ChimeraCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess)
+		if (!compartmentAccess) return;
+		
+		BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
+		if (compartment || altYaw > 0)
 		{
-			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment)
-			{
-				vector transform[4];
-				GetGame().GetWorld().GetCurrentCamera(transform);
+			vector transform[4];
+			GetGame().GetWorld().GetCurrentCamera(transform);
 
-				m_fYaw = -Math3D.MatrixToAngles(transform)[0];
-			};
-		}
+			m_fYaw = -Math3D.MatrixToAngles(transform)[0];
+			if (compartment) m_fStoredYaw = m_fYaw;
+		} else {
+			m_fYaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
+			m_fStoredYaw = m_fYaw;
+		};
 		
 		int yawInt = -m_fYaw;
 		if (yawInt < 0) { yawInt = 360 - Math.AbsFloat(yawInt); };
 		
 		m_wCompass.SetRotation(m_fYaw);
-
 		// Set m_wBearing so if yaw outputs 6 it'll read 006
 		string bearingAdd = "";
 		// I love this.
@@ -141,7 +146,7 @@ class COA_Compass : SCR_InfoDisplay
 		};
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-		SetSquadRadarImage(radarlocalPlayer, m_ChimeraCharacter, 1);
+		SetSquadRadarImage(radarlocalPlayer, m_ChimeraCharacter, 1, m_fStoredYaw);
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, 18, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
@@ -190,14 +195,14 @@ class COA_Compass : SCR_InfoDisplay
 		
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
-			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 4, 0));
+			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 4, 0), m_fYaw);
 			posToStartClearing = i;
 		};
 		ClearSquadRadar(posToStartClearing + 1);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void SetSquadRadarImage(ImageWidget radarPlayer, SCR_ChimeraCharacter playerCharacter, float opacity)
+	protected void SetSquadRadarImage(ImageWidget radarPlayer, SCR_ChimeraCharacter playerCharacter, float opacity, float yaw)
 	{
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		
@@ -208,7 +213,7 @@ class COA_Compass : SCR_InfoDisplay
 		radarPlayer.LoadImageTexture(0, icon);
 		radarPlayer.SetColorInt(colorTeam.ToInt());
 		
-		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - m_fYaw), 360));
+		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - yaw), 360));
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -216,7 +221,8 @@ class COA_Compass : SCR_InfoDisplay
 	{
 		AimingComponent playerControllerComponent = playerCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return 0;
-		float yaw = playerControllerComponent.GetAimingDirectionWorld().VectorToAngles()[0];
+		
+		float yaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
 		
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
 		if (compartmentAccess)
@@ -224,7 +230,7 @@ class COA_Compass : SCR_InfoDisplay
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 			if (compartment)
 			{
-				yaw = playerCharacter.GetYawPitchRoll()[0];
+				yaw = -playerCharacter.GetYawPitchRoll()[0];
 			};
 		}
 		return yaw;
