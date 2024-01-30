@@ -14,7 +14,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{
 		super.OnInit(owner);
 		GetGame().GetInputManager().AddActionListener("ToggleGroupDisplay", EActionTrigger.DOWN, ToggleGroupDisplay);
-		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, PlayerSelectionMenu);
+		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	
 	//------------------------------------------------------------------------------------------------
 		
-	protected void PlayerSelectionMenu()
+	protected void TogglePlayerSelectionMenu()
 	{	
 		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
 	}

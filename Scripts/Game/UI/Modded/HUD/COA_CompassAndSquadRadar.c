@@ -196,9 +196,9 @@ class COA_Compass : SCR_InfoDisplay
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
 			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, 18, 4, 0), m_fYaw);
-			posToStartClearing = i;
+			posToStartClearing = i + 1;
 		};
-		ClearSquadRadar(posToStartClearing + 1);
+		ClearSquadRadar(posToStartClearing);
 	}
 	
 	//------------------------------------------------------------------------------------------------
