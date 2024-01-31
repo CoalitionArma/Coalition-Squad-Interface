@@ -1,0 +1,953 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ Slot LayoutSlot "{5ED010F0B952536D}" {
+ }
+ Tooltip TextWidgetTooltip "{5EC7785961170EC8}" {
+ }
+ Color 1 1 1 0
+ {
+  ImageWidgetClass "{5EC651633FD7EAA1}" {
+   Name "Background"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -169.066
+    OffsetLeft -169.066
+    PositionY -229.172
+    OffsetTop -229.172
+    SizeX 342.177
+    OffsetRight -173.111
+    SizeY 449.813
+    OffsetBottom -220.641
+   }
+   Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{5ED010D84219987D}" {
+   Name "Color Team Text"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -154.577
+    OffsetLeft -154.577
+    PositionY 51.424
+    OffsetTop 51.424
+    SizeX 306.674
+    OffsetRight -152.097
+    SizeY 13.806
+    OffsetBottom -65.23
+   }
+   Color 0.761 0.386 0.078 1
+   Text "// Set Color Team"
+   "Font Size" 12
+   "Min Font Size" 12
+   FontProperties FontProperties "{60587BCB22D7A1C8}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  TextWidgetClass "{5ED010D861AD1015}" {
+   Name "Override Icon Text"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -154.595
+    OffsetLeft -154.595
+    PositionY -5.012
+    OffsetTop -5.012
+    SizeX 306.408
+    OffsetRight -151.813
+    SizeY 13.806
+    OffsetBottom -8.794
+   }
+   Color 0.761 0.386 0.078 1
+   Text "// Override Icon"
+   "Font Size" 12
+   "Min Font Size" 12
+   FontProperties FontProperties "{60587BCB2098979A}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{5EC77B6D3C4B6F2D}" {
+   Name "Pretty"
+   Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -169.499
+    OffsetLeft -169.499
+    PositionY -228.654
+    OffsetTop -228.654
+    SizeX 40
+    OffsetRight 129.499
+    SizeY 40
+    OffsetBottom 188.654
+   }
+   Color 0.761 0.386 0.078 1
+   Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+   Image "settings"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{5EC77B6C95919105}" {
+   Prefab "{5CC296FBD8B6CA6C}"
+   Name "PrettyText"
+   Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -129.306
+    OffsetLeft -129.306
+    PositionY -224.35
+    OffsetTop -224.35
+    SizeX 174.369
+    OffsetRight -45.063
+    SizeY 30
+    OffsetBottom 194.35
+   }
+   Text "Player Settings"
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5EC77B6CA687BBE6}" {
+    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{5EC77B6C5671FF7D}" {
+   Name "NoneImage"
+   Slot FrameWidgetSlot "{5EC77B6C5671FF50}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -143.751
+    OffsetLeft -143.751
+    PositionY 73.026
+    OffsetTop 73.026
+    SizeX 98.87
+    OffsetRight 44.881
+    SizeY 105.604
+    OffsetBottom -178.63
+   }
+   Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+   Image "disable"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  WindowWidgetClass "{5EC77B62A515EEB7}" {
+   Name "Window1"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -40.089
+    OffsetLeft -40.089
+    PositionY 73.422
+    OffsetTop 73.422
+    SizeX 90
+    OffsetRight -49.911
+    SizeY 50
+    OffsetBottom -123.422
+   }
+  }
+  WindowWidgetClass "{5EC77B62AC637243}" {
+   Name "Window2"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -40.189
+    OffsetLeft -40.189
+    PositionY 129.631
+    OffsetTop 129.631
+    SizeX 90
+    OffsetRight -49.811
+    SizeY 49.8
+    OffsetBottom -179.431
+   }
+  }
+  WindowWidgetClass "{5EC77B62AA76B302}" {
+   Name "Window3"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 55.411
+    OffsetLeft 55.411
+    PositionY 129.431
+    OffsetTop 129.431
+    SizeX 90.001
+    OffsetRight -145.412
+    SizeY 50
+    OffsetBottom -179.431
+   }
+  }
+  WindowWidgetClass "{5EC77B62D6F82516}" {
+   Name "Window4"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 55.311
+    OffsetLeft 55.311
+    PositionY 73.531
+    OffsetTop 73.531
+    SizeX 90.001
+    OffsetRight -145.312
+    SizeY 50
+    OffsetBottom -123.531
+   }
+  }
+  WindowWidgetClass "{5EC77B62D2E03CB9}" {
+   Name "Window5"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -145.009
+    OffsetLeft -145.009
+    PositionY 73.051
+    OffsetTop 73.051
+    SizeX 100.648
+    OffsetRight 44.361
+    SizeY 106.383
+    OffsetBottom -179.434
+   }
+  }
+  WindowWidgetClass "{5EC77B60F536B8F8}" {
+   Name "Window0"
+   Slot FrameWidgetSlot "{5EC77B60F536B906}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -151.573
+    OffsetLeft -151.573
+    PositionY 68.507
+    OffsetTop 68.507
+    SizeX 304.112
+    OffsetRight -152.539
+    SizeY 117.203
+    OffsetBottom -185.71
+   }
+  }
+  ImageWidgetClass "{5EC77B609A838867}" {
+   Name "Icon"
+   Slot FrameWidgetSlot "{5EC77B609A838859}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -71
+    OffsetLeft -71
+    PositionY -190
+    OffsetTop -190
+    SizeX 142
+    OffsetRight -71
+    SizeY 142
+    OffsetBottom 48
+   }
+   Texture "{25A0BFBD75253292}UI/Textures/HUD/Modded/Icons/iconman_ca.edds"
+   Size 48 48
+   "Shadow Offset" 0.5 0.5
+   "Shadow Size Increase" 1 1
+  }
+  TextWidgetClass "{5EC77AE9FA911A1F}" {
+   Name "PlayerName"
+   Slot FrameWidgetSlot "{5EC77AE9FA911A77}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -155.376
+    OffsetLeft -155.376
+    PositionY -42.885
+    OffsetTop -42.885
+    SizeX 311.033
+    OffsetRight -155.657
+    SizeY 30
+    OffsetBottom 12.885
+   }
+   Text "No Player Selected"
+   "Min Font Size" 16
+   "Horizontal Alignment" Center
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BCBC751C206}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowOffset 0.5 0.5
+   }
+  }
+  XComboBoxWidgetClass "{5EC77B6095B7A4A8}" {
+   Name "IconOveride"
+   Slot FrameWidgetSlot "{5EC77B6095B7A4F3}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -154.364
+    OffsetLeft -154.364
+    PositionY 11.958
+    OffsetTop 11.958
+    SizeX 266.02
+    OffsetRight -111.656
+    SizeY 30
+    OffsetBottom -41.958
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E0C8DDE34}" {
+    Text "Force Icon on Player"
+   }
+   FontProperties FontProperties "{5EC77B557AF5C054}" {
+   }
+   items {
+    "Auto" "Medic" "Sniper" "Machine Gunner" "Anti-Tank" "Grenadier" "Man"
+   }
+  }
+  ImageWidgetClass "{5EC77AD0E60C948B}" {
+   Name "ConfirmIOImage"
+   Slot FrameWidgetSlot "{5EC77AD0E60C9BA4}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 112.861
+    OffsetLeft 112.861
+    PositionY 12.017
+    OffsetTop 12.017
+    SizeX 39.027
+    OffsetRight -151.888
+    SizeY 30
+    OffsetBottom -42.017
+   }
+   Color 1 1 1 0.263
+   Texture "{2770916767B4AB81}UI/Imagesets/buttons/pc_buttons.imageset"
+   Image "Enter"
+   Size 42 42
+  }
+  ButtonWidgetClass "{5EC77AD01504BED9}" {
+   Name "ConfirmIOButton"
+   Slot FrameWidgetSlot "{5EC77AD01504BD34}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 115.666
+    OffsetLeft 115.666
+    PositionY 14.748
+    OffsetTop 14.748
+    SizeX 31.953
+    OffsetRight -147.619
+    SizeY 25.1
+    OffsetBottom -39.848
+   }
+   Tooltip TextWidgetTooltip "{5EC77AD384C80313}" {
+    Text "Confirm Icon Override"
+   }
+   Color 1 1 1 0.038
+   components {
+    SCR_InputButtonComponent "{5EE4151D557A9394}" {
+    }
+   }
+  }
+  ButtonWidgetClass "{5EC77B78C18FDC3E}" {
+   Name "Red"
+   Slot FrameWidgetSlot "{5EC77B78C18FDC1C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -38.718
+    OffsetLeft -38.718
+    PositionY 74.247
+    OffsetTop 74.247
+    SizeX 87.205
+    OffsetRight -48.487
+    SizeY 48.34
+    OffsetBottom -122.587
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E3F50AC40}" {
+    Text "Assign Red Color Team"
+   }
+   Color 0.791 0 0 0.256
+   components {
+    SCR_InputButtonComponent "{5EE4151D58DE56B9}" {
+    }
+   }
+  }
+  ButtonWidgetClass "{5EC77B78E8A01D0A}" {
+   Name "Blue"
+   Slot FrameWidgetSlot "{5EC77B78C18FDC1C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 56.748
+    OffsetLeft 56.748
+    PositionY 73.433
+    OffsetTop 73.433
+    SizeX 87.297
+    OffsetRight -144.045
+    SizeY 48.657
+    OffsetBottom -122.09
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E266996DD}" {
+    Text "Assign Blue Color Team"
+   }
+   Color 0 0.107 1 0.256
+   components {
+    SCR_InputButtonComponent "{5EE4151D45C62B22}" {
+    }
+   }
+  }
+  ButtonWidgetClass "{5EC77B78016F0527}" {
+   Name "Yellow"
+   Slot FrameWidgetSlot "{5EC77B78C18FDC1C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -39.137
+    OffsetLeft -39.137
+    PositionY 129.904
+    OffsetTop 129.904
+    SizeX 87.895
+    OffsetRight -48.758
+    SizeY 48.779
+    OffsetBottom -178.683
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E21D4ABF6}" {
+    Text "Assign Yellow Color Team"
+   }
+   Color 0.791 0.791 0 0.256
+   components {
+    SCR_InputButtonComponent "{5EE4151D41A17436}" {
+    }
+   }
+  }
+  ButtonWidgetClass "{5EC77B780C772A19}" {
+   Name "Green"
+   Slot FrameWidgetSlot "{5EC77B78C18FDC1C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 56.605
+    OffsetLeft 56.605
+    PositionY 129.88
+    OffsetTop 129.88
+    SizeX 86.775
+    OffsetRight -143.38
+    SizeY 48.215
+    OffsetBottom -178.095
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E2DE6E808}" {
+    Text "Assign Green Color Team"
+   }
+   Color 0 0.791 0 0.256
+   components {
+    SCR_InputButtonComponent "{5EE4151D4E06B6ED}" {
+    }
+   }
+  }
+  ButtonWidgetClass "{5EC77B782C0E76A0}" {
+   Name "None"
+   Slot FrameWidgetSlot "{5EC77B78C18FDC1C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -144.695
+    OffsetLeft -144.695
+    PositionY 72.943
+    OffsetTop 72.943
+    SizeX 99.784
+    OffsetRight 44.911
+    SizeY 105.959
+    OffsetBottom -178.902
+   }
+   Tooltip TextWidgetTooltip "{5EC77B4E321036DA}" {
+    Text "Clear Color Team"
+   }
+   Color 0.159 0.159 0.159 0.119
+   components {
+    SCR_InputButtonComponent "{5EE4151D4B4DD04B}" {
+    }
+   }
+  }
+  HorizontalLayoutWidgetClass "{5ED0135883D91C50}" {
+   Prefab "{5CC296FBD8B6CA62}"
+   Name "Footer"
+   Slot FrameWidgetSlot "{5ED0135883D931D3}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -158.054
+    OffsetLeft -158.054
+    PositionY 188.529
+    OffsetTop 188.529
+    SizeX 330.793
+    OffsetRight -172.739
+    SizeY 30.455
+    OffsetBottom -218.984
+   }
+   {
+    ButtonWidgetClass "{5ED011542AE00770}" {
+     Name "Back"
+     Slot LayoutSlot "{5EE22980A3A55CF7}" {
+     }
+     Clipping False
+     Color 0 0 0 0
+     components {
+      SCR_InputButtonComponent "{5EE4151B2B2109C7}" {
+       m_sActionName "MenuBack"
+       m_sLabel "#AR-Workshop_ButtonCancel"
+      }
+     }
+     "no focus" 1
+     {
+      SizeLayoutWidgetClass "{5ED01359CC01A70E}" {
+       Name "SizeLayout"
+       Slot ButtonWidgetSlot "{5EE22980A3A561D1}" {
+       }
+       {
+        OverlayWidgetClass "{5ED01359E12AA2D0}" {
+         Name "Overlay"
+         Slot AlignableSlot "{5ED01359EC39F162}" {
+         }
+         {
+          HorizontalLayoutWidgetClass "{5ED0135911AEE261}" {
+           Name "HorizontalLayout"
+           Slot OverlayWidgetSlot "{5EE22980A3A57E1F}" {
+           }
+           {
+            ImageWidgetClass "{5EE53176BDAAED9A}" {
+             Name "Image0"
+             Slot LayoutSlot "{5EE531A0E19BD8FC}" {
+              Padding -10 0 0 0
+             }
+             Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
+             Image "backspace"
+             Size 64 64
+             "Shadow Offset" 0.5 0.5
+            }
+            RichTextWidgetClass "{5ED011555B1A8267}" {
+             Name "Text"
+             Slot LayoutSlot "{5EE22980A3A57EBE}" {
+              Padding -10 0 0 0
+              SizeMode Auto
+             }
+             Text "Back"
+             "Font Size" 16
+             "Min Font Size" 16
+             "Vertical Alignment" Center
+             "Shadow Offset" 0.5 0.5
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+  ImageWidgetClass "{605035926F91EF39}" {
+   Name "Background0"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 199.899
+    OffsetLeft 199.899
+    PositionY -229.728
+    OffsetTop -229.728
+    SizeX 146.257
+    OffsetRight -346.156
+    SizeY 244.836
+    OffsetBottom -15.108
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{604F4D6FF9C3B934}" {
+   Name "PromoteToSL"
+   Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 206.257
+    OffsetLeft 206.257
+    PositionY -180.731
+    OffsetTop -180.731
+    SizeX 132.979
+    OffsetRight -339.236
+    SizeY 47.241
+    OffsetBottom 133.49
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Clipping False
+   Color 0.165 0.672 0.202 0.063
+   components {
+    SCR_InputButtonComponent "{60503592B8ECCB15}" {
+    }
+   }
+  }
+  ImageWidgetClass "{605035F212BB7F14}" {
+   Name "Background1"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 202.101
+    OffsetLeft 202.101
+    PositionY -187.182
+    OffsetTop -187.182
+    SizeX 11.678
+    OffsetRight -213.779
+    SizeY 13.797
+    OffsetBottom 173.384
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{605035F262AEE834}" {
+   Name "Background2"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 331.297
+    OffsetLeft 331.297
+    PositionY -141.114
+    OffsetTop -141.114
+    SizeX 11.792
+    OffsetRight -343.089
+    SizeY 10.25
+    OffsetBottom 130.865
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{605035FD9514B0C6}" {
+   Name "Background4"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 201.711
+    OffsetLeft 201.711
+    PositionY -140.593
+    OffsetTop -140.593
+    SizeX 12.608
+    OffsetRight -214.319
+    SizeY 9.704
+    OffsetBottom 130.889
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{605035F39C66C8F3}" {
+   Name "Background3"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 330.517
+    OffsetLeft 330.517
+    PositionY -183.469
+    OffsetTop -183.469
+    SizeX 13.108
+    OffsetRight -343.625
+    SizeY 10.104
+    OffsetBottom 173.366
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{6050358F4FF96275}" {
+   Name "PromoteToSLIcon"
+   Slot FrameWidgetSlot "{605035F2D9835241}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 203.352
+    OffsetLeft 203.352
+    PositionY -182.861
+    OffsetTop -182.861
+    SizeX 139.733
+    OffsetRight -343.085
+    SizeY 52.203
+    OffsetBottom 130.658
+   }
+   Opacity 0
+   Texture "{5C682305CA5C9594}UI/Textures/Menu/Modded/PromoteToSLButton.edds"
+   Size 145 50
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{604F4D6D081AE877}" {
+   Name "PromoteToSLText"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 206.39
+    OffsetLeft 206.39
+    PositionY -197.387
+    OffsetTop -197.387
+    SizeX 127.507
+    OffsetRight -333.897
+    SizeY 14.324
+    OffsetBottom 183.063
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "// Promote To Squad Lead"
+   "Font Size" 12
+   "Min Font Size" 12
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC88455F923}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ButtonWidgetClass "{604F4D6F182A3D59}" {
+   Name "PromoteToTL"
+   Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 205.538
+    OffsetLeft 205.538
+    PositionY -110.562
+    OffsetTop -110.562
+    SizeX 135.99
+    OffsetRight -341.528
+    SizeY 46.727
+    OffsetBottom 63.836
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Clipping False
+   Color 0.068 0.231 0.371 0.063
+   components {
+    SCR_InputButtonComponent "{60503592B79A001B}" {
+     m_bShowBorderOnFocus 0
+     m_iHeightInPixel 40
+    }
+   }
+  }
+  ImageWidgetClass "{605035F3DFA5B218}" {
+   Name "Background8"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 201.152
+    OffsetLeft 201.152
+    PositionY -114.974
+    OffsetTop -114.974
+    SizeX 12.491
+    OffsetRight -213.643
+    SizeY 13.826
+    OffsetBottom 101.148
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{605035F3DFA5B5A1}" {
+   Name "Background7"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 199.892
+    OffsetLeft 199.892
+    PositionY -70.292
+    OffsetTop -70.292
+    SizeX 13.391
+    OffsetRight -213.283
+    SizeY 12.026
+    OffsetBottom 58.266
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{605035F3DFA5B551}" {
+   Name "Background6"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 332.481
+    OffsetLeft 332.481
+    PositionY -114.895
+    OffsetTop -114.895
+    SizeX 12.606
+    OffsetRight -345.087
+    SizeY 13.033
+    OffsetBottom 101.862
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{605035F3DFA5B6DD}" {
+   Name "Background5"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 333.922
+    OffsetLeft 333.922
+    PositionY -72.401
+    OffsetTop -72.401
+    SizeX 11.201
+    OffsetRight -345.123
+    SizeY 9.753
+    OffsetBottom 62.648
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{6050358FED8298C4}" {
+   Name "PromoteToTLIcon"
+   Slot FrameWidgetSlot "{605035F3B302C8FC}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 203.297
+    OffsetLeft 203.297
+    PositionY -113.476
+    OffsetTop -113.476
+    SizeX 140.641
+    OffsetRight -343.938
+    SizeY 53.22
+    OffsetBottom 60.257
+   }
+   Opacity 0
+   Texture "{E2B4282BA87BDD67}UI/Textures/Menu/Modded/PromoteToTLButton.edds"
+   Size 145 50
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{604F4D6D24F350ED}" {
+   Name "PromoteToTLText"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 206.392
+    OffsetLeft 206.392
+    PositionY -127.77
+    OffsetTop -127.77
+    SizeX 135.102
+    OffsetRight -341.494
+    SizeY 14.258
+    OffsetBottom 113.512
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "// Toggle Team Lead"
+   "Font Size" 12
+   "Min Font Size" 12
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC89FCF66A9}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  TextWidgetClass "{60503593856FF8D2}" {
+   Name "PrettyText0"
+   Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 225.52
+    OffsetLeft 225.52
+    PositionY -229
+    OffsetTop -229
+    SizeX 109.932
+    OffsetRight -335.452
+    SizeY 23.659
+    OffsetBottom 205.341
+   }
+   Opacity 0
+   Text "Advanced Settings"
+   "Font Size" 14
+   "Min Font Size" 8
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5EC77B6CA687BBE6}" {
+    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{60503593856FF961}" {
+   Name "Pretty0"
+   Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 200.061
+    OffsetLeft 200.061
+    PositionY -229.756
+    OffsetTop -229.756
+    SizeX 25.181
+    OffsetRight -225.242
+    SizeY 23.874
+    OffsetBottom 205.882
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+   Image "settings"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  ButtonWidgetClass "{605035931933B04B}" {
+   Name "Kick"
+   Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 204.85
+    OffsetLeft 204.85
+    PositionY -39.837
+    OffsetTop -39.837
+    SizeX 136.256
+    OffsetRight -341.106
+    SizeY 47.165
+    OffsetBottom -7.328
+   }
+   Opacity 0
+   Color 0.68 0.005 0.006 0.063
+   components {
+    SCR_InputButtonComponent "{60503592B79A001B}" {
+    }
+   }
+  }
+  ImageWidgetClass "{605035F492C6C929}" {
+   Name "Background9"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 332.247
+    OffsetLeft 332.247
+    PositionY 0.076
+    OffsetTop 0.076
+    SizeX 12.391
+    OffsetRight -344.638
+    SizeY 10.528
+    OffsetBottom -10.604
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{605035F492C6C960}" {
+   Name "Background10"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 330.979
+    OffsetLeft 330.979
+    PositionY -44.721
+    OffsetTop -44.721
+    SizeX 13.489
+    OffsetRight -344.468
+    SizeY 11.336
+    OffsetBottom 33.385
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{605035F492C6C9B3}" {
+   Name "Background11"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 200.591
+    OffsetLeft 200.591
+    PositionY 1.181
+    OffsetTop 1.181
+    SizeX 10.051
+    OffsetRight -210.642
+    SizeY 8.528
+    OffsetBottom -9.709
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 45
+  }
+  ImageWidgetClass "{605035F492C6C99C}" {
+   Name "Background12"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 199.637
+    OffsetLeft 199.637
+    PositionY -44.759
+    OffsetTop -44.759
+    SizeX 13.891
+    OffsetRight -213.528
+    SizeY 13.026
+    OffsetBottom 31.733
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   Rotation 125
+  }
+  ImageWidgetClass "{605035931933B04A}" {
+   Name "KickIcon"
+   Slot FrameWidgetSlot "{605035F3263CC379}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 202.902
+    OffsetLeft 202.902
+    PositionY -43.099
+    OffsetTop -43.099
+    SizeX 140.36
+    OffsetRight -343.262
+    SizeY 54.64
+    OffsetBottom -11.54
+   }
+   Opacity 0
+   Texture "{C6E80921A68B03AF}UI/Textures/Menu/Modded/Kick.edds"
+   Size 145 50
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{604F4D6C620AD487}" {
+   Name "KickText"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 206.149
+    OffsetLeft 206.149
+    PositionY -56.409
+    OffsetTop -56.409
+    SizeX 124.273
+    OffsetRight -330.422
+    SizeY 13.418
+    OffsetBottom 42.991
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "// Kick From Group"
+   "Font Size" 12
+   "Min Font Size" 12
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{60587BC887F2FD1C}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+ }
+}

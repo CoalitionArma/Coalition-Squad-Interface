@@ -1,0 +1,1130 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ImageWidgetClass "{5F046ED416EC0FC8}" {
+   Name "Status0"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 89.351
+    OffsetLeft 89.351
+    PositionY -135.74
+    OffsetTop -135.74
+    SizeX 16.9
+    OffsetRight -106.251
+    SizeY 17.3
+    OffsetBottom 118.44
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{5F046ED416EC0C36}" {
+   Name "Player0"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 106.272
+    OffsetLeft 106.272
+    PositionY -133.035
+    OffsetTop -133.035
+    SizeX 110
+    OffsetRight -216.272
+    SizeY 16.444
+    OffsetBottom 116.591
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D14911EEC5}" {
+   Name "Status1"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 89.218
+    OffsetLeft 89.218
+    PositionY -112.697
+    OffsetTop -112.697
+    SizeX 16.899
+    OffsetRight -106.117
+    SizeY 17.299
+    OffsetBottom 95.398
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D14911EF46}" {
+   Name "Player1"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 106.138
+    OffsetLeft 106.138
+    PositionY -109.992
+    OffsetTop -109.992
+    SizeX 110.001
+    OffsetRight -216.139
+    SizeY 16.443
+    OffsetBottom 93.549
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D08F95CD0D}" {
+   Name "Status2"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 89.174
+    OffsetLeft 89.174
+    PositionY -89.389
+    OffsetTop -89.389
+    SizeX 16.9
+    OffsetRight -106.074
+    SizeY 17.3
+    OffsetBottom 72.089
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D08F95CD81}" {
+   Name "Player2"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 106.095
+    OffsetLeft 106.095
+    PositionY -86.684
+    OffsetTop -86.684
+    SizeX 110
+    OffsetRight -216.095
+    SizeY 16.444
+    OffsetBottom 70.24
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D08F95CDEE}" {
+   Name "Status3"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 89.24
+    OffsetLeft 89.24
+    PositionY -65.879
+    OffsetTop -65.879
+    SizeX 16.9
+    OffsetRight -106.14
+    SizeY 17.299
+    OffsetBottom 48.58
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D08F95CA33}" {
+   Name "Player3"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 106.161
+    OffsetLeft 106.161
+    PositionY -63.174
+    OffsetTop -63.174
+    SizeX 110.001
+    OffsetRight -216.162
+    SizeY 16.443
+    OffsetBottom 46.73
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D0B24AE122}" {
+   Name "Status4"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 89.44
+    OffsetLeft 89.44
+    PositionY -42.749
+    OffsetTop -42.749
+    SizeX 16.9
+    OffsetRight -106.34
+    SizeY 17.299
+    OffsetBottom 25.45
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D0B24AE1BC}" {
+   Name "Player4"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 106.361
+    OffsetLeft 106.361
+    PositionY -40.044
+    OffsetTop -40.044
+    SizeX 110.001
+    OffsetRight -216.362
+    SizeY 16.443
+    OffsetBottom 23.601
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D7970B9016}" {
+   Name "Status5"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 219.42
+    OffsetLeft 219.42
+    PositionY -135.517
+    OffsetTop -135.517
+    SizeX 16.9
+    OffsetRight -236.32
+    SizeY 17.3
+    OffsetBottom 118.217
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D7970B909C}" {
+   Name "Player5"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 236.341
+    OffsetLeft 236.341
+    PositionY -132.812
+    OffsetTop -132.812
+    SizeX 110
+    OffsetRight -346.341
+    SizeY 16.444
+    OffsetBottom 116.368
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D7970B90EF}" {
+   Name "Status6"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 219.287
+    OffsetLeft 219.287
+    PositionY -112.474
+    OffsetTop -112.474
+    SizeX 16.899
+    OffsetRight -236.186
+    SizeY 17.299
+    OffsetBottom 95.174
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D7970B913A}" {
+   Name "Player6"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 236.207
+    OffsetLeft 236.207
+    PositionY -109.769
+    OffsetTop -109.769
+    SizeX 110.001
+    OffsetRight -346.208
+    SizeY 16.443
+    OffsetBottom 93.325
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D7970B9119}" {
+   Name "Status7"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 219.243
+    OffsetLeft 219.243
+    PositionY -89.165
+    OffsetTop -89.165
+    SizeX 16.9
+    OffsetRight -236.143
+    SizeY 17.3
+    OffsetBottom 71.865
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D7970B9168}" {
+   Name "Player7"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 236.164
+    OffsetLeft 236.164
+    PositionY -86.46
+    OffsetTop -86.46
+    SizeX 110
+    OffsetRight -346.164
+    SizeY 16.444
+    OffsetBottom 70.016
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D7970B91B6}" {
+   Name "Status8"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 219.309
+    OffsetLeft 219.309
+    PositionY -65.655
+    OffsetTop -65.655
+    SizeX 16.9
+    OffsetRight -236.209
+    SizeY 17.299
+    OffsetBottom 48.356
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D7970B919A}" {
+   Name "Player8"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 236.23
+    OffsetLeft 236.23
+    PositionY -62.95
+    OffsetTop -62.95
+    SizeX 110.001
+    OffsetRight -346.231
+    SizeY 16.444
+    OffsetBottom 46.506
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D7970B91F8}" {
+   Name "Status9"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 219.509
+    OffsetLeft 219.509
+    PositionY -42.525
+    OffsetTop -42.525
+    SizeX 16.9
+    OffsetRight -236.409
+    SizeY 17.299
+    OffsetBottom 25.226
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D7970BAE31}" {
+   Name "Player9"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 236.43
+    OffsetLeft 236.43
+    PositionY -39.82
+    OffsetTop -39.82
+    SizeX 110.001
+    OffsetRight -346.431
+    SizeY 16.443
+    OffsetBottom 23.377
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D79EAAF41F}" {
+   Name "Status10"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 349.577
+    OffsetLeft 349.577
+    PositionY -135.539
+    OffsetTop -135.539
+    SizeX 16.9
+    OffsetRight -366.477
+    SizeY 17.3
+    OffsetBottom 118.239
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D79EAAF49B}" {
+   Name "Player10"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 366.498
+    OffsetLeft 366.498
+    PositionY -132.834
+    OffsetTop -132.834
+    SizeX 110
+    OffsetRight -476.498
+    SizeY 16.444
+    OffsetBottom 116.39
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D79EAAF4E5}" {
+   Name "Status11"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 349.444
+    OffsetLeft 349.444
+    PositionY -112.496
+    OffsetTop -112.496
+    SizeX 16.899
+    OffsetRight -366.343
+    SizeY 17.3
+    OffsetBottom 95.196
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D79EAAF4CB}" {
+   Name "Player11"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 366.364
+    OffsetLeft 366.364
+    PositionY -109.791
+    OffsetTop -109.791
+    SizeX 110.001
+    OffsetRight -476.365
+    SizeY 16.444
+    OffsetBottom 93.347
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D79EAAF52D}" {
+   Name "Status12"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 349.4
+    OffsetLeft 349.4
+    PositionY -89.187
+    OffsetTop -89.187
+    SizeX 16.9
+    OffsetRight -366.3
+    SizeY 17.3
+    OffsetBottom 71.887
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D79EAAF564}" {
+   Name "Player12"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 366.321
+    OffsetLeft 366.321
+    PositionY -86.482
+    OffsetTop -86.482
+    SizeX 110
+    OffsetRight -476.321
+    SizeY 16.444
+    OffsetBottom 70.038
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D79EAAF544}" {
+   Name "Status13"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 349.466
+    OffsetLeft 349.466
+    PositionY -65.677
+    OffsetTop -65.677
+    SizeX 16.9
+    OffsetRight -366.366
+    SizeY 17.299
+    OffsetBottom 48.378
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D79EAAF587}" {
+   Name "Player13"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 366.387
+    OffsetLeft 366.387
+    PositionY -62.972
+    OffsetTop -62.972
+    SizeX 110.001
+    OffsetRight -476.388
+    SizeY 16.444
+    OffsetBottom 46.528
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D79EAAF5F9}" {
+   Name "Status14"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 349.666
+    OffsetLeft 349.666
+    PositionY -42.547
+    OffsetTop -42.547
+    SizeX 16.9
+    OffsetRight -366.566
+    SizeY 17.299
+    OffsetBottom 25.248
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D79EAAF5C5}" {
+   Name "Player14"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 366.587
+    OffsetLeft 366.587
+    PositionY -39.842
+    OffsetTop -39.842
+    SizeX 110.001
+    OffsetRight -476.588
+    SizeY 16.443
+    OffsetBottom 23.399
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D787B39435}" {
+   Name "Status15"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 479.227
+    OffsetLeft 479.227
+    PositionY -135.753
+    OffsetTop -135.753
+    SizeX 16.9
+    OffsetRight -496.127
+    SizeY 17.3
+    OffsetBottom 118.453
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D787B3944B}" {
+   Name "Player15"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 496.148
+    OffsetLeft 496.148
+    PositionY -133.048
+    OffsetTop -133.048
+    SizeX 110
+    OffsetRight -606.148
+    SizeY 16.444
+    OffsetBottom 116.604
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D787B39496}" {
+   Name "Status16"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 479.094
+    OffsetLeft 479.094
+    PositionY -112.71
+    OffsetTop -112.71
+    SizeX 16.898
+    OffsetRight -495.992
+    SizeY 17.3
+    OffsetBottom 95.41
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D787B394FE}" {
+   Name "Player16"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 496.013
+    OffsetLeft 496.013
+    PositionY -110.005
+    OffsetTop -110.005
+    SizeX 110.002
+    OffsetRight -606.015
+    SizeY 16.444
+    OffsetBottom 93.561
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D787B394DE}" {
+   Name "Status17"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 479.05
+    OffsetLeft 479.05
+    PositionY -89.401
+    OffsetTop -89.401
+    SizeX 16.9
+    OffsetRight -495.95
+    SizeY 17.3
+    OffsetBottom 72.101
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D787B39524}" {
+   Name "Player17"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 495.971
+    OffsetLeft 495.971
+    PositionY -86.696
+    OffsetTop -86.696
+    SizeX 110
+    OffsetRight -605.971
+    SizeY 16.444
+    OffsetBottom 70.252
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D787B39504}" {
+   Name "Status18"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 479.116
+    OffsetLeft 479.116
+    PositionY -65.891
+    OffsetTop -65.891
+    SizeX 16.9
+    OffsetRight -496.016
+    SizeY 17.299
+    OffsetBottom 48.592
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D787B39561}" {
+   Name "Player18"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 496.036
+    OffsetLeft 496.036
+    PositionY -63.186
+    OffsetTop -63.186
+    SizeX 110.002
+    OffsetRight -606.038
+    SizeY 16.444
+    OffsetBottom 46.742
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D787B39545}" {
+   Name "Status19"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 479.315
+    OffsetLeft 479.315
+    PositionY -42.761
+    OffsetTop -42.761
+    SizeX 16.901
+    OffsetRight -496.216
+    SizeY 17.299
+    OffsetBottom 25.462
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D787B395A2}" {
+   Name "Player19"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 496.237
+    OffsetLeft 496.237
+    PositionY -40.056
+    OffsetTop -40.056
+    SizeX 110
+    OffsetRight -606.237
+    SizeY 16.443
+    OffsetBottom 23.613
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E2653AB}" {
+   Name "Status20"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 609.194
+    OffsetLeft 609.194
+    PositionY -136.073
+    OffsetTop -136.073
+    SizeX 16.9
+    OffsetRight -626.094
+    SizeY 17.3
+    OffsetBottom 118.773
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26502D}" {
+   Name "Player20"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 626.115
+    OffsetLeft 626.115
+    PositionY -133.368
+    OffsetTop -133.368
+    SizeX 110
+    OffsetRight -736.115
+    SizeY 16.444
+    OffsetBottom 116.924
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265076}" {
+   Name "Status21"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 609.061
+    OffsetLeft 609.061
+    PositionY -113.03
+    OffsetTop -113.03
+    SizeX 16.898
+    OffsetRight -625.959
+    SizeY 17.3
+    OffsetBottom 95.73
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E2650BF}" {
+   Name "Player21"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 625.98
+    OffsetLeft 625.98
+    PositionY -110.325
+    OffsetTop -110.325
+    SizeX 110.002
+    OffsetRight -735.982
+    SizeY 16.444
+    OffsetBottom 93.881
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265090}" {
+   Name "Status22"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 609.017
+    OffsetLeft 609.017
+    PositionY -89.721
+    OffsetTop -89.721
+    SizeX 16.9
+    OffsetRight -625.917
+    SizeY 17.3
+    OffsetBottom 72.421
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E2650E6}" {
+   Name "Player22"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 625.938
+    OffsetLeft 625.938
+    PositionY -87.016
+    OffsetTop -87.016
+    SizeX 110
+    OffsetRight -735.938
+    SizeY 16.444
+    OffsetBottom 70.572
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E2650DC}" {
+   Name "Status23"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 609.083
+    OffsetLeft 609.083
+    PositionY -66.211
+    OffsetTop -66.211
+    SizeX 16.9
+    OffsetRight -625.983
+    SizeY 17.299
+    OffsetBottom 48.912
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26513B}" {
+   Name "Player23"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 626.003
+    OffsetLeft 626.003
+    PositionY -63.506
+    OffsetTop -63.506
+    SizeX 110.002
+    OffsetRight -736.005
+    SizeY 16.444
+    OffsetBottom 47.062
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+  ImageWidgetClass "{607B53D78E265105}" {
+   Name "Status24"
+   Slot FrameWidgetSlot "{5B0E436436746530}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 609.282
+    OffsetLeft 609.282
+    PositionY -43.081
+    OffsetTop -43.081
+    SizeX 16.901
+    OffsetRight -626.183
+    SizeY 17.299
+    OffsetBottom 25.782
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{607B53D78E26516C}" {
+   Name "Player24"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 626.204
+    OffsetLeft 626.204
+    PositionY -40.376
+    OffsetTop -40.376
+    SizeX 110
+    OffsetRight -736.204
+    SizeY 16.443
+    OffsetBottom 23.933
+   }
+   IsPixelPerfect 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
+ }
+}
