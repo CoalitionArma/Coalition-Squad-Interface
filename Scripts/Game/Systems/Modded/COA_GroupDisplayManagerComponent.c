@@ -449,7 +449,8 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 				
 		switch (true) {
 			// If the players is currently the SL, make him the most valuable player in the list
-			case (icon == m_sSquadLeader)                       : {value = -1; break;};
+			case (icon == m_sSquadLeader)                          : {value = -1; break;};
+			
 			// Add/Remove value from a player if they're a Team Lead
 			case (icon == m_sTeamLeader && colorTeam == m_sCTNone) : {value--;    break;};
 			case (icon == m_sTeamLeader && colorTeam != m_sCTNone) : {value++;    break;};
