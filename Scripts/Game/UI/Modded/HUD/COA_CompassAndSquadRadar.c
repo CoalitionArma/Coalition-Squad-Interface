@@ -143,7 +143,7 @@ class COA_Compass : SCR_InfoDisplay
 		};
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-		SetSquadRadarImage(radarlocalPlayer, m_ChimeraCharacter, 1, m_fStoredYaw);
+		SetSquadRadarImage(radarlocalPlayer, 1, m_fStoredYaw, m_ChimeraCharacter);
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		
@@ -185,7 +185,7 @@ class COA_Compass : SCR_InfoDisplay
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
 			float disT = dis * 2.35;
 			
-			if (IsPlayerInVehicle(playerCharacter)) offset = 87.15;
+			if (IsPlayerInVehicle(playerCharacter)) offset = 87;
 			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 7.175;
 			
 			// Get Direction
@@ -202,14 +202,14 @@ class COA_Compass : SCR_InfoDisplay
 		
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
-			SetSquadRadarImage(radarPlayer, playerCharacter, Math.Map(dis, 0, m_iSearchRadius, 4, 0), m_fYaw);
+			SetSquadRadarImage(radarPlayer, Math.Map(dis, 0, m_iSearchRadius, 4, 0), m_fYaw, playerCharacter);
 			posToStartClearing = i + 1;
 		};
 		ClearSquadRadar(posToStartClearing);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void SetSquadRadarImage(ImageWidget radarPlayer, SCR_ChimeraCharacter playerCharacter, float opacity, float yaw)
+	protected void SetSquadRadarImage(ImageWidget radarPlayer, float opacity, float yaw, SCR_ChimeraCharacter playerCharacter)
 	{
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		int groupID = m_PlayersGroup.GetGroupID();
@@ -221,7 +221,7 @@ class COA_Compass : SCR_InfoDisplay
 		int valueInt = value.ToInt();
 		
 		if (valueInt == 1) valueInt = -10;
-		if (valueInt <= 2) valueInt = -11;
+		if (valueInt >= 2) valueInt = -11;
 		
 		radarPlayer.SetOpacity(opacity);
 		radarPlayer.LoadImageTexture(0, icon);
