@@ -1,7 +1,7 @@
 [ComponentEditorProps(category: "GameScripted/Callsign", description: "")]
-class COA_GroupDisplayManagerComponentClass: SCR_BaseGameModeComponentClass {};
+class CSI_AuthorityComponentClass: SCR_BaseGameModeComponentClass {};
 
-class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
+class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 {	
 	// All Icons we could possibly want to give the player and/or to use for other functions.
 	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
@@ -22,6 +22,21 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	protected string m_sCTYellow = ARGB(255, 230, 230, 0).ToString();
 	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
 	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
+	
+	//Server Overrides
+	protected int m_iCompassVisibleServerOverride;
+	protected int m_iSquadRadarVisibleServerOverride;
+	protected int m_iGroupDisplayVisibleServerOverride;
+	protected int m_iStaminaBarVisibleServerOverride;
+	protected int m_iNametagsVisibleServerOverride;
+	protected int m_iRankVisibleServerOverride;
+	
+	// A hashmap that is modified only on the authority.
+	protected ref map<string,int> m_mUpdateAuthoritySettingsMap = new map<string,int>;
+	
+	// A array we use to broadcast whenever a change happens to any of the server overrides.
+	[RplProp()]
+	protected ref array<int> m_aServerOverridesArray = new array<int>;
 	
 	// A hashmap that is modified only on the authority.
 	protected ref map<string,string> m_mAuthorityPlayerMap = new map<string,string>;
@@ -45,11 +60,11 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 
 	//------------------------------------------------------------------------------------------------
 
-	static COA_GroupDisplayManagerComponent GetInstance() 
+	static CSI_AuthorityComponent GetInstance() 
 	{
 		BaseGameMode gameMode = GetGame().GetGameMode();
 		if (gameMode)
-			return COA_GroupDisplayManagerComponent.Cast(gameMode.FindComponent(COA_GroupDisplayManagerComponent));
+			return CSI_AuthorityComponent.Cast(gameMode.FindComponent(CSI_AuthorityComponent));
 		else
 			return null;
 	}
@@ -60,14 +75,16 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		super.OnPostInit(owner);
 		
 		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 445, true);
+			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 550, true);
 		};
 		
 		if (Replication.IsServer()) {
-			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 435, true);
+			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 500, true);
+			GetGame().GetCallqueue().CallLater(CheckAuthoritySettings, 5000, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 21000000, true); // Updates every 35min (21000000ms)
+			GetGame().GetCallqueue().CallLater(SetupAuthoritySettings, 250);
 		};
-	}
+	} 
 	
 	//------------------------------------------------------------------------------------------------
 	override protected void OnGameEnd()
@@ -80,9 +97,88 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		
 		if (Replication.IsServer()) {
 			GetGame().GetCallqueue().Remove(UpdateAllAuthorityPlayerMapValues);
+			GetGame().GetCallqueue().Remove(CheckAuthoritySettings);
 			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
 		};
 	}
+	
+	//------------------------------------------------------------------------------------------------
+
+	// Functions to change/get Server Override Settings
+	
+	//------------------------------------------------------------------------------------------------
+	
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	TIntArray ReturnAuthoritySettings()
+	{
+		return m_aServerOverridesArray;
+	}
+	
+	//- Authority -\\
+	//------------------------------------------------------------------------------------------------
+	void UpdateAuthoritySetting(string setting, int value)
+	{
+		m_mUpdateAuthoritySettingsMap.Set(setting, value);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void CheckAuthoritySettings()
+	{
+		if (m_mUpdateAuthoritySettingsMap.Count() > 0) {
+			for (int i = 0; i < m_mUpdateAuthoritySettingsMap.Count(); i++)
+			{
+				string setting = m_mUpdateAuthoritySettingsMap.GetKey(i);
+				int value = m_mUpdateAuthoritySettingsMap.Get(setting);
+			
+				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
+			};
+			m_mUpdateAuthoritySettingsMap.Clear();
+			GetGame().UserSettingsChanged();
+			GetGame().SaveUserSettings();
+		};
+		
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisibleServerOverride",      m_iCompassVisibleServerOverride);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisibleServerOverride",   m_iSquadRadarVisibleServerOverride);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisibleServerOverride", m_iGroupDisplayVisibleServerOverride);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("staminaBarVisibleServerOverride",   m_iStaminaBarVisibleServerOverride);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsVisibleServerOverride",     m_iNametagsVisibleServerOverride);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisibleServerOverride",         m_iRankVisibleServerOverride);
+		
+		m_aServerOverridesArray = {
+			m_iCompassVisibleServerOverride,
+			m_iSquadRadarVisibleServerOverride,
+			m_iGroupDisplayVisibleServerOverride,
+			m_iStaminaBarVisibleServerOverride,
+			m_iNametagsVisibleServerOverride,
+			m_iRankVisibleServerOverride
+		};
+		
+		Replication.BumpMe();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void SetupAuthoritySettings()
+	{
+		bool serverSetupCompleted;
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("serverSetupCompleted", serverSetupCompleted);
+		
+		// -1 = server override not active.
+		//  0 = server override active (false).
+		//  1 = server override active (true).
+		if (!serverSetupCompleted) {
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("compassVisibleServerOverride",      -1);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("squadRadarVisibleServerOverride",   -1);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("groupDisplayVisibleServerOverride", -1);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("staminaBarVisibleServerOverride",   -1);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsVisibleServerOverride",     -1);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("rankVisibleServerOverride",         -1);
+			
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("serverSetupCompleted", true);
+			GetGame().UserSettingsChanged();
+			GetGame().SaveUserSettings();
+		};
+	};
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -140,12 +236,13 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 
 	//------------------------------------------------------------------------------------------------
 	
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
 	TStringArray GetLocalGroupArray()
 	{	
 		return m_aLocalGroupArray;
 	}
 	
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateLocalGroupArray()
 	{
@@ -168,7 +265,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 		// If group count is less than what we need, better clear the array so players clear their displays.
 		if (groupCount <= 1) {m_aLocalGroupArray.Clear(); return;};
 		
-		// Settup a temp array we'll use to keep all changes local so if a player calls for m_aLocalGroupArray it isn't in the middle of being updated.
+		// Setup a temp array we'll use to keep all changes local so if a player calls for m_aLocalGroupArray it isn't in the middle of being updated.
 		array<string> tempLocalGroupArray = {};
 			
 		foreach (int playerID : playerIDsArray) {
@@ -351,7 +448,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 					array<IEntity> allPlayerItems = {};
 					characterInventory.GetAllRootItems(allPlayerItems);
 		
-					// Settup new arrays and variables
+					// Setup new arrays and variables
 					array<EWeaponType> weaponTypeArray = {};
 					array<SCR_EConsumableType> medicalTypeArray = {};
 					array<BaseMuzzleComponent> muzzles = {};
@@ -432,7 +529,7 @@ class COA_GroupDisplayManagerComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	int DeterminePlayerValue(int groupID, int playerID, string colorTeam)
 	{
-		// Settup value variable.
+		// Setup value variable.
 		int value = 0;
 		
 		// Get player StoredSpecialtyIcon so we aren't influenced if the player is in a vehicle.
