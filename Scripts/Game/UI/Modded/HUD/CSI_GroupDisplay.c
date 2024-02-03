@@ -1,8 +1,10 @@
-class COA_GroupDisplay : SCR_InfoDisplay
+class CSI_GroupDisplay : SCR_InfoDisplay
 {	
-	private int m_iGroupDisplayRefresh;
-	protected bool m_bGroupDisplayVisable = true;
-	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
+	protected int m_iGroupDisplayVisible;
+	protected int m_iRankVisible;
+	protected CSI_AuthorityComponent m_AuthorityComponent;
+	
+	protected int m_iCheckSettingsFrame = 65;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -13,7 +15,8 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	override protected void OnInit(IEntity owner)
 	{
 		super.OnInit(owner);
-		GetGame().GetInputManager().AddActionListener("ToggleGroupDisplay", EActionTrigger.DOWN, ToggleGroupDisplay);
+		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext", 36000000);
+		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 	}
 	
@@ -22,25 +25,36 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		// Only update the group displpay every 15 frames.
-		if (m_iGroupDisplayRefresh < 15) {
-			m_iGroupDisplayRefresh++; 
+		if (!m_AuthorityComponent) {
+			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			return;
 		};
 		
-		m_iGroupDisplayRefresh = 0;
+		if (m_iCheckSettingsFrame >= 65) {
+			m_iCheckSettingsFrame = 0;
+			int groupDisplayVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[2];
+			switch (groupDisplayVisibleServerOverride)
+			{
+				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisible", m_iGroupDisplayVisible); break;};
+				case (0) : { m_iGroupDisplayVisible = 0; break;};
+				case (1) : { m_iGroupDisplayVisible = 1; break;};
+			};
+			
+			int rankVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[5];
+			switch (rankVisibleServerOverride)
+			{
+				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", m_iRankVisible); break;};
+				case (0)  : { m_iRankVisible = 0; break;};
+				case (1)  : { m_iRankVisible = 1; break;};
+			};
+		} else { m_iCheckSettingsFrame++; };
 		
-		if (!m_bGroupDisplayVisable) {
+		if (m_iGroupDisplayVisible == 0) {
 			ClearGroupDisplay(0, true);
 			return;
 		};
-		
-		if (!m_GroupDisplayManagerComponent) {
-			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
-			return;
-		};
 		 
-		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
+		array<string> groupArray = m_AuthorityComponent.GetLocalGroupArray();
 		
 		foreach (int i, string playerStringToSplit : groupArray) {
 			
@@ -53,6 +67,11 @@ class COA_GroupDisplay : SCR_InfoDisplay
 			string icon = playerSplitArray[3];
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
+			
+			if (m_iRankVisible == 1) {
+				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
+				playerName = string.Format("[%1] %2", rank, playerName);
+			}
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
@@ -75,13 +94,7 @@ class COA_GroupDisplay : SCR_InfoDisplay
 	// Functions for updating the group display
 	
 	//------------------------------------------------------------------------------------------------
-	
-	protected void ToggleGroupDisplay()
-	{
-		m_bGroupDisplayVisable = !m_bGroupDisplayVisable;
-	}
 
-	//------------------------------------------------------------------------------------------------
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
 		//Check if there's anything to clear
@@ -112,7 +125,12 @@ class COA_GroupDisplay : SCR_InfoDisplay
 		
 	protected void TogglePlayerSelectionMenu()
 	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+	}
+	
+	protected void ToggleCSISettingsMenu()
+	{	
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_SettingsDialog);
 	}
 	
 	//------------------------------------------------------------------------------------------------

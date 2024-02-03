@@ -1,18 +1,23 @@
-class COA_Compass : SCR_InfoDisplay
+class CSI_Compass : SCR_InfoDisplay
 {
-	protected TextWidget m_wBearing = null;
-	protected ImageWidget m_wCompass = null;
-	protected SCR_ChimeraCharacter m_ChimeraCharacter = null;
-	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
-	protected SCR_AIGroup m_PlayersGroup = null;
+	protected TextWidget m_wBearing;
+	protected ImageWidget m_wCompass;
+	protected SCR_ChimeraCharacter m_ChimeraCharacter;
+	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	protected SCR_AIGroup m_PlayersGroup;
 	
 	protected float m_fYaw;
 	protected float m_fStoredYaw;
 	protected float m_iSearchRadius;
 	protected vector m_vOwnerOrigin;
-	protected bool m_bCompassVisible = true;
+	protected int m_iCompassVisible;
+	protected int m_iSquadRadarVisible;
+	protected int m_iSquadRadarIconSize;
+	protected string m_sCompassTexture;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
+	
+	protected int m_iCheckSettingsFrame = 65;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -20,16 +25,38 @@ class COA_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 	
-	override protected void OnInit(IEntity owner)
-	{
-		super.OnInit(owner);
-		GetGame().GetInputManager().AddActionListener("ToggleCompass", EActionTrigger.DOWN, ToggleCompass);
-	}
-
 	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
+				
+		if (!m_AuthorityComponent) {
+			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+			return;
+		};
+		
+		if (m_iCheckSettingsFrame >= 65) {
+			m_iCheckSettingsFrame = 0;
+			
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassTexture", m_sCompassTexture);
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarIconSize", m_iSquadRadarIconSize);
+			
+			int compassVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[0];
+			switch (compassVisibleServerOverride)
+			{
+				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisible", m_iCompassVisible); break;};
+				case (0)  : { m_iCompassVisible = 0; break;};
+				case (1)  : { m_iCompassVisible = 1; break;};
+			};
+			
+			int squadRadarVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[1];
+			switch (squadRadarVisibleServerOverride)
+			{
+				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisible", m_iSquadRadarVisible); break;};
+				case (0)  : { m_iSquadRadarVisible = 0; break;};
+				case (1)  : { m_iSquadRadarVisible = 1; break;};
+			};
+		} else { m_iCheckSettingsFrame++; };
 
 		//Refresh base widgets if we can't get them
 		if (!m_wBearing || !m_wCompass) {
@@ -38,18 +65,12 @@ class COA_Compass : SCR_InfoDisplay
 			return;
 		};
 		
-		if (m_bCompassVisible)
-		{
-			m_wCompass.SetOpacity(1);
-			m_wBearing.SetOpacity(1);
-		}
-		else
-		{
-			m_wCompass.SetOpacity(0);
-			m_wBearing.SetOpacity(0);
+		if (m_iCompassVisible == 0) {
+			m_wCompass.SetOpacity(m_iCompassVisible);
+			m_wBearing.SetOpacity(m_iCompassVisible);
 			ClearSquadRadar(-1);
 			return;
-		}
+		};
 		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
 		
@@ -57,17 +78,17 @@ class COA_Compass : SCR_InfoDisplay
 
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
+		
+		if (m_iSquadRadarVisible == 0) {
+			ClearSquadRadar(-1);
+			return;
+		};
 
 		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			return;
 		};
-		
-		if (!m_GroupDisplayManagerComponent) {
-			m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
-			return;
-		};
-		
+				
 		// Get players current group.
 		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
@@ -85,14 +106,13 @@ class COA_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
-	protected void ToggleCompass()
-	{
-		m_bCompassVisible = !m_bCompassVisible;
-	}
-
-	//------------------------------------------------------------------------------------------------
 	protected void SetBearingAndCompass()
 	{	
+		m_wCompass.SetOpacity(m_iCompassVisible);
+		m_wBearing.SetOpacity(m_iCompassVisible);
+		
+		m_wCompass.LoadImageTexture(0, m_sCompassTexture);
+		
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return;
 		
@@ -133,7 +153,7 @@ class COA_Compass : SCR_InfoDisplay
 	
 	protected void SquadRadarSearch() {
 		
-		array<string> groupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
+		array<string> groupArray = m_AuthorityComponent.GetLocalGroupArray();
 		
 		m_aAllPlayersWithinRange = {};
 		
@@ -142,8 +162,10 @@ class COA_Compass : SCR_InfoDisplay
 			return;
 		};
 		
+		float widthAndHeight = 12 * (m_iSquadRadarIconSize * 0.01);
+		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-		SetSquadRadarImage(radarlocalPlayer, 1, m_fStoredYaw, m_ChimeraCharacter);
+		SetSquadRadarImage(radarlocalPlayer, widthAndHeight, 1, m_fStoredYaw, m_ChimeraCharacter);
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		
@@ -180,6 +202,8 @@ class COA_Compass : SCR_InfoDisplay
 			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 			
 			int offset = 88;
+			
+			float widthAndHeight = 12 * (m_iSquadRadarIconSize * 0.01);
 		
 			// Get Distance
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
@@ -197,26 +221,26 @@ class COA_Compass : SCR_InfoDisplay
 			relDir = Math.Mod(relDir - (dir * 2), 360);
 			relDir = relDir * Math.DEG2RAD;
 			
-			float x = (Math.Sin(relDir) * disT) - 6;
+			float x = (Math.Sin(relDir) * disT) - widthAndHeight/2;
 			float y = (Math.Cos(relDir) * disT) - offset;
 		
 			FrameSlot.SetPos(radarPlayer, x, y);
 			
-			SetSquadRadarImage(radarPlayer, Math.Map(dis, 0, m_iSearchRadius, 4, 0), m_fYaw, playerCharacter);
+			SetSquadRadarImage(radarPlayer, widthAndHeight, Math.Map(dis, 0, m_iSearchRadius, 4, 0), m_fYaw, playerCharacter);
 			posToStartClearing = i + 1;
 		};
 		ClearSquadRadar(posToStartClearing);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void SetSquadRadarImage(ImageWidget radarPlayer, float opacity, float yaw, SCR_ChimeraCharacter playerCharacter)
+	protected void SetSquadRadarImage(ImageWidget radarPlayer, float widthAndHeight, float opacity, float yaw, SCR_ChimeraCharacter playerCharacter)
 	{
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		int groupID = m_PlayersGroup.GetGroupID();
 		
-		string colorTeam = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
-		string value     = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PlayerValue");
-		string icon      = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
+		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
+		string value     = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PlayerValue");
+		string icon      = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
 		
 		int valueInt = value.ToInt();
 		
@@ -227,6 +251,7 @@ class COA_Compass : SCR_InfoDisplay
 		radarPlayer.LoadImageTexture(0, icon);
 		radarPlayer.SetZOrder(valueInt);
 		radarPlayer.SetColorInt(colorTeam.ToInt());
+		FrameSlot.SetSize(radarPlayer, widthAndHeight, widthAndHeight);
 		
 		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - yaw), 360));
 	}

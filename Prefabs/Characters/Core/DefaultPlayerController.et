@@ -1,18 +1,18 @@
 SCR_PlayerController {
  ID "1A9BA6BEFA06E3B1"
  components {
-  COA_GroupDisplayComponent "{5EF16CD3BE1C0168}" {
+  CSI_ClientComponent "{60841BBB128E36A1}" {
   }
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {
-    COA_GroupDisplay "{5F05663BB0997EFB}" {
-     m_LayoutPath "{02CD6D23168020B1}Layouts/UI/COA_GroupDisplay.layout"
+    CSI_Compass "{60841BBD365594AA}" {
+     m_LayoutPath "{6A51445F28C412B3}UI/layouts/HUD/Modded/CSI_Compass.layout"
     }
-    COA_Compass "{5EBD2BF3690CAFEB}" {
-     m_LayoutPath "{6A51445F28C412B3}Layouts/UI/COA_Compass.layout"
+    CSI_GroupDisplay "{60841BBD376A489A}" {
+     m_LayoutPath "{02CD6D23168020B1}UI/layouts/HUD/Modded/CSI_GroupDisplay.layout"
     }
-    COA_StaminaBar "{5EBD2BF354C82CE0}" {
-     m_LayoutPath "{AD61A34EB388CF6D}Layouts/UI/COA_StaminaBar.layout"
+    CSI_StaminaBar "{60841BBD3049AE0C}" {
+     m_LayoutPath "{AD61A34EB388CF6D}UI/layouts/HUD/Modded/CSI_StaminaBar.layout"
     }
    }
   }

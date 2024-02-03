@@ -18,8 +18,8 @@ FrameWidgetClass {
    Opacity 0.984
    style debugUI
    Text "000"
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 13
+   "Min Font Size" 13
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0C606254D4404C}" {

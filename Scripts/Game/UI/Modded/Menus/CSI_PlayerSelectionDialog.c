@@ -1,8 +1,3 @@
-modded enum ChimeraMenuPreset {
-	COA_PlayerSettingsDialog,
-	COA_PlayerSelectionDialog
-}
-
 modded class GroupSettingsDialogUI : DialogUI
 {
 	override void OnMenuOpen()
@@ -15,18 +10,18 @@ modded class GroupSettingsDialogUI : DialogUI
 	protected void CTButtonClicked()
 	{
 		GetGame().GetMenuManager().CloseMenu(this);
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSelectionDialog);
+		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
 	}
 }
 
-class COA_PlayerSelectionDialog : ChimeraMenuBase
+class CSI_PlayerSelectionDialog : ChimeraMenuBase
 {
-	protected SCR_AIGroup m_PlayersGroup = null;
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
-	protected COA_GroupDisplayManagerComponent m_GroupDisplayManagerComponent = null;
+	protected SCR_AIGroup m_PlayersGroup;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	protected CSI_AuthorityComponent m_AuthorityComponent;
 	
 	protected Widget m_wRoot;
-	protected XComboBoxWidget m_wMaxPlayers = null;
+	protected XComboBoxWidget m_wMaxPlayers;
 	
 	protected int m_iGroupCount;
 	protected ref array<string> m_aGroupArray;
@@ -47,9 +42,9 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		
 		// Get Global Player Controller and Group Manager.
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		m_GroupDisplayManagerComponent = COA_GroupDisplayManagerComponent.GetInstance();
+		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 
-		if (!m_GroupsManagerComponent || !m_GroupDisplayManagerComponent) {OnMenuBack(); return;};
+		if (!m_GroupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
 		
 		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
@@ -60,7 +55,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			
 		if (m_iGroupCount <= 1) {OnMenuBack(); return;};
 		
-		string storedSpecialtyIcon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
+		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
 		if ((m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
 		{
@@ -103,7 +98,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	
 	protected void UpdatePlayerList()
 	{		
-		m_aGroupArray = m_GroupDisplayManagerComponent.GetLocalGroupArray();
+		m_aGroupArray = m_AuthorityComponent.GetLocalGroupArray();
 			
 		if (m_aGroupArray.Count() <= 1) {OnMenuBack(); return;};
 		
@@ -115,7 +110,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
 			string colorTeam = playerSplitArray[2];
-			string icon = m_GroupDisplayManagerComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
+			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
@@ -191,7 +186,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		TextWidget confirmMaxPlayersText  = TextWidget.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayersText"));		
 		ImageWidget confirmMaxPlayersIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayersIcon"));
 		ButtonWidget confirmMaxPlayers    = ButtonWidget.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayers"));
-		m_wMaxPlayers                        = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("MaxPlayers"));
+		m_wMaxPlayers                     = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("MaxPlayers"));
 		
 		
 		SCR_InputButtonComponent confirmMaxPlayersComp = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayers").FindHandler(SCR_InputButtonComponent));
@@ -206,9 +201,7 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		m_wMaxPlayers.SetOpacity(1);
 		
 		int maxMembers = m_PlayersGroup.GetMaxMembers();
-		maxMembers = maxMembers - 1;
-		
-		m_wMaxPlayers.SetCurrentItem(maxMembers);
+		m_wMaxPlayers.SetCurrentItem(maxMembers - 1);
 	};
 	
 	//------------------------------------------------------------------------------------------------
@@ -219,13 +212,12 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 	
 	protected void OnConfirmMaxPlayersClicked()
 	{
-		COA_GroupDisplayComponent groupBackendComponent = COA_GroupDisplayComponent.GetInstance();
+		CSI_ClientComponent groupBackendComponent = CSI_ClientComponent.GetInstance();
 		
-		int maxMembers = m_wMaxPlayers.GetCurrentItem();
-		
-		maxMembers = maxMembers + 1;
-		
-		groupBackendComponent.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), maxMembers);
+		if (groupBackendComponent) {
+			int maxMembers = m_wMaxPlayers.GetCurrentItem();
+			groupBackendComponent.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), maxMembers + 1);
+		};
 	};
 		
 	//------------------------------------------------------------------------------------------------
@@ -241,8 +233,8 @@ class COA_PlayerSelectionDialog : ChimeraMenuBase
 		
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		
-		MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.COA_PlayerSettingsDialog, 0, true);
-		COA_PlayerSettingsDialog colorTeamMenu = COA_PlayerSettingsDialog.Cast(menu);
+		MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsDialog, 0, true);
+		CSI_PlayerSettingsDialog colorTeamMenu = CSI_PlayerSettingsDialog.Cast(menu);
 		
 		colorTeamMenu.SetPlayerStr(m_aGroupArray[playerInt]);
 	}
