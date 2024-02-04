@@ -3,8 +3,6 @@
 //! Attached to SCR_HUDManagerComponent which is a component of SCR_PlayerController
 modded class SCR_NameTagDisplay
 {																
-	TextWidget m_wPlayerGroup;
-	
 	override protected void InitializeTag(IEntity entity, bool friendlyOnly = true)
 	{
 		if (!m_wRoot)
@@ -54,7 +52,8 @@ modded class SCR_NameTagDisplay
 			m_aNameTagEntities.Insert(entity, tag);
 			m_aUninitializedTags.Remove(0);
 			// Add group name to player tag
-			m_wPlayerGroup = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerGroup"));
+			PrintFormat("Group name: %1",tag.m_sGroupName);
+			TextWidget m_wPlayerGroup = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerGroupName"));
 			m_wPlayerGroup.SetText(tag.m_sGroupName);
 		}
 	}

@@ -9,7 +9,6 @@ enum ECOATagEntityState: ENameTagEntityState
 modded class SCR_NameTagData
 {
 	ECOATagEntityState m_eEntityStateFlags;
-	SCR_GroupPreset gp;
 	string m_sGroupName;
 	
 	override void InitDefaults()
@@ -20,20 +19,16 @@ modded class SCR_NameTagData
 		m_eAttachedToLast = ENameTagPosition.BODY;
 	}
 	
-	string GetGroupName()
-	{
-		return m_sGroupName;
-	}
-	
 	override void GetName(out string name, out notnull array<string> nameParams)
-	{		
+	{
+		SCR_AIGroup group = m_GroupManager.FindGroup(m_iGroupID);
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
 			PlayerManager playerMgr = GetGame().GetPlayerManager();
 			if (playerMgr)
 				m_sName = playerMgr.GetPlayerName(m_iPlayerID);
 			else 
-				m_sName = "No player manager!"
+				m_sName = "No player manager!";
 		}
 		else if (m_eType == ENameTagEntityType.AI)
 		{
@@ -49,11 +44,14 @@ modded class SCR_NameTagData
 					m_sName = charIdentity.GetIdentity().GetName();
 				else 
 					m_sName = "No character identity!";
+				
 			}
 		}
 		
-		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
-		m_sGroupName = "Test";
+		if (group) 
+			m_sGroupName = group.GetCustomNameWithOriginal();
+		else
+			m_sGroupName = "Unknown Group";
 		
 		name = m_sName;
 		nameParams.Copy(m_aNameParams);

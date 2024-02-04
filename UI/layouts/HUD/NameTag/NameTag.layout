@@ -17,7 +17,7 @@ FrameWidgetClass {
      }
      {
       TextWidgetClass "{605607D06C552ED4}" {
-       Name "PlayerGroup"
+       Name "PlayerGroupName"
        Slot FrameWidgetSlot "{605607D06C552E2E}" {
         Anchor 0 0 0 0
         OffsetLeft 0
