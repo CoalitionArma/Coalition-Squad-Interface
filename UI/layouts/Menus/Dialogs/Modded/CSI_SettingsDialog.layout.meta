@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{839BE65A40890AB4}UI/layouts/Menus/Dialogs/Modded/COA_CSISettingsDialog.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}
