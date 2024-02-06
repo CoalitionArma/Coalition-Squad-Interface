@@ -6,6 +6,11 @@ enum ECOATagEntityState: ENameTagEntityState
 	YELLOW_TEAM		= 1<<10
 };
 
+enum ECOANameTagFlags: ENameTagFlags
+{
+	GROUP_UPDATE 		= 1<<13		// request group update
+};
+
 modded class SCR_NameTagData
 {
 	ECOATagEntityState m_eEntityStateFlags;
@@ -19,42 +24,18 @@ modded class SCR_NameTagData
 		m_eAttachedToLast = ENameTagPosition.BODY;
 	}
 	
-	override void GetName(out string name, out notnull array<string> nameParams)
+	string GetGroupName()
 	{
+		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.FindGroup(m_iGroupID);
-		if (m_eType == ENameTagEntityType.PLAYER)
-		{
-			PlayerManager playerMgr = GetGame().GetPlayerManager();
-			if (playerMgr)
-				m_sName = playerMgr.GetPlayerName(m_iPlayerID);
-			else 
-				m_sName = "No player manager!";
-		}
-		else if (m_eType == ENameTagEntityType.AI)
-		{
-			SCR_CharacterIdentityComponent scrCharIdentity = SCR_CharacterIdentityComponent.Cast(m_Entity.FindComponent(SCR_CharacterIdentityComponent));
-			if (scrCharIdentity)
-			{
-				scrCharIdentity.GetFormattedFullName(m_sName, m_aNameParams);
-			}
-			else
-			{
-				CharacterIdentityComponent charIdentity = CharacterIdentityComponent.Cast(m_Entity.FindComponent(CharacterIdentityComponent));
-				if (charIdentity && charIdentity.GetIdentity())
-					m_sName = charIdentity.GetIdentity().GetName();
-				else 
-					m_sName = "No character identity!";
-				
-			}
-		}
 		
 		if (group) 
 			m_sGroupName = group.GetCustomNameWithOriginal();
 		else
-			m_sGroupName = "Unknown Group";
+			m_sGroupName = "";
 		
-		name = m_sName;
-		nameParams.Copy(m_aNameParams);
+		PrintFormat("[CSI NT] Group name: %1",m_sGroupName);
+		return m_sGroupName;
 	}
 	
 	// Overriding this whole thing to force these fucking tags to the body
