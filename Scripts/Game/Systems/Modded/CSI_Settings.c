@@ -1,52 +1,46 @@
 class CSI_GameSettings: ModuleGameSettings
 {
 	[Attribute()]
-	int compassVisible;
+	string compassVisible;
 	
 	[Attribute()]
 	string compassTexture;
 	
 	[Attribute()]
-	int squadRadarVisible;
+	string squadRadarVisible;
 	
 	[Attribute()]
-	int groupDisplayVisible;
+	string groupDisplayVisible;
 	
 	[Attribute()]
-	int staminaBarVisible;
+	string staminaBarVisible;
 	
 	[Attribute()]
-	int nametagsVisible;
+	string nametagsVisible;
 	
 	[Attribute()]
-	int rankVisible;
+	string rankVisible;
 	
 	[Attribute()]
-	float squadRadarIconSize;
-
-	[Attribute()]
-	bool clientSetupCompleted;
+	int squadRadarIconSize;
 	
 	//Server Overrides
 	
 	[Attribute()]
-	int compassVisibleServerOverride;
+	string compassVisibleServerOverride;
 	
 	[Attribute()]
-	int squadRadarVisibleServerOverride;
+	string squadRadarVisibleServerOverride;
 
 	[Attribute()]
-	int groupDisplayVisibleServerOverride;
+	string groupDisplayVisibleServerOverride;
 	
 	[Attribute()]
-	int staminaBarVisibleServerOverride;
+	string staminaBarVisibleServerOverride;
 	
 	[Attribute()]
-	int nametagsVisibleServerOverride;
+	string nametagsVisibleServerOverride;
 
 	[Attribute()]
-	int rankVisibleServerOverride;
-	
-	[Attribute()]
-	bool serverSetupCompleted;
+	string rankVisibleServerOverride;
 }
