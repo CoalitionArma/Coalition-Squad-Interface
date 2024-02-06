@@ -4,6 +4,7 @@ class CSI_Compass : SCR_InfoDisplay
 	protected ImageWidget m_wCompass;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientComponent m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected SCR_AIGroup m_PlayersGroup;
 	
@@ -11,8 +12,8 @@ class CSI_Compass : SCR_InfoDisplay
 	protected float m_fStoredYaw;
 	protected float m_iSearchRadius;
 	protected vector m_vOwnerOrigin;
-	protected int m_iCompassVisible;
-	protected int m_iSquadRadarVisible;
+	protected string m_sCompassVisible;
+	protected string m_sSquadRadarVisible;
 	protected int m_iSquadRadarIconSize;
 	protected string m_sCompassTexture;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
@@ -35,26 +36,32 @@ class CSI_Compass : SCR_InfoDisplay
 			return;
 		};
 		
+		if (!m_ClientComponent) {
+			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			return;
+		};
+		
 		if (m_iCheckSettingsFrame >= 65) {
 			m_iCheckSettingsFrame = 0;
 			
 			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassTexture", m_sCompassTexture);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarIconSize", m_iSquadRadarIconSize);
+			if (m_sCompassTexture == "") m_sCompassTexture = "{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds";
 			
-			int compassVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[0];
-			switch (compassVisibleServerOverride)
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarIconSize", m_iSquadRadarIconSize);
+			if (m_iSquadRadarIconSize == 0) m_iSquadRadarIconSize = 100;
+			
+			string compassVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[0];
+			switch (true)
 			{
-				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisible", m_iCompassVisible); break;};
-				case (0)  : { m_iCompassVisible = 0; break;};
-				case (1)  : { m_iCompassVisible = 1; break;};
+				case(compassVisibleSO == "true" || compassVisibleSO == "false") : { m_sCompassVisible = compassVisibleSO; break; };
+				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisible", m_sCompassVisible); break; };
 			};
 			
-			int squadRadarVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[1];
-			switch (squadRadarVisibleServerOverride)
+			string squadRadarVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[1];
+			switch (true)
 			{
-				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisible", m_iSquadRadarVisible); break;};
-				case (0)  : { m_iSquadRadarVisible = 0; break;};
-				case (1)  : { m_iSquadRadarVisible = 1; break;};
+				case(squadRadarVisibleSO == "true" || squadRadarVisibleSO == "false") : { m_sSquadRadarVisible = squadRadarVisibleSO; break; };
+				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisible", m_sSquadRadarVisible); break; };
 			};
 		} else { m_iCheckSettingsFrame++; };
 
@@ -65,9 +72,9 @@ class CSI_Compass : SCR_InfoDisplay
 			return;
 		};
 		
-		if (m_iCompassVisible == 0) {
-			m_wCompass.SetOpacity(m_iCompassVisible);
-			m_wBearing.SetOpacity(m_iCompassVisible);
+		if (m_sCompassVisible == "false") {
+			m_wCompass.SetOpacity(0);
+			m_wBearing.SetOpacity(0);
 			ClearSquadRadar(-1);
 			return;
 		};
@@ -79,7 +86,7 @@ class CSI_Compass : SCR_InfoDisplay
 		// Sets m_wBearings text and the m_wCompass direction
 		SetBearingAndCompass();
 		
-		if (m_iSquadRadarVisible == 0) {
+		if (m_sSquadRadarVisible == "false") {
 			ClearSquadRadar(-1);
 			return;
 		};
@@ -108,8 +115,8 @@ class CSI_Compass : SCR_InfoDisplay
 
 	protected void SetBearingAndCompass()
 	{	
-		m_wCompass.SetOpacity(m_iCompassVisible);
-		m_wBearing.SetOpacity(m_iCompassVisible);
+		m_wCompass.SetOpacity(1);
+		m_wBearing.SetOpacity(1);
 		
 		m_wCompass.LoadImageTexture(0, m_sCompassTexture);
 		
@@ -153,7 +160,7 @@ class CSI_Compass : SCR_InfoDisplay
 	
 	protected void SquadRadarSearch() {
 		
-		array<string> groupArray = m_AuthorityComponent.GetLocalGroupArray();
+		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
 		
 		m_aAllPlayersWithinRange = {};
 		

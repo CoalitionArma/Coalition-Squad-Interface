@@ -1,8 +1,9 @@
 class CSI_GroupDisplay : SCR_InfoDisplay
 {	
-	protected int m_iGroupDisplayVisible;
-	protected int m_iRankVisible;
+	protected string m_sGroupDisplayVisible;
+	protected string m_sRankVisible;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientComponent m_ClientComponent;
 	
 	protected int m_iCheckSettingsFrame = 65;
 	
@@ -11,16 +12,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	// override/static functions
 
 	//------------------------------------------------------------------------------------------------
-
-	override protected void OnInit(IEntity owner)
-	{
-		super.OnInit(owner);
-		GetGame().GetInputManager().ActivateContext("CoalitionSquadInterfaceContext", 36000000);
-		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
-		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
-	}
 	
-	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
@@ -30,34 +22,36 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			return;
 		};
 		
+		if (!m_ClientComponent) {
+			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			return;
+		};
+		
 		if (m_iCheckSettingsFrame >= 65) {
 			m_iCheckSettingsFrame = 0;
-			int groupDisplayVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[2];
-			switch (groupDisplayVisibleServerOverride)
+			string groupDisplayVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[2];
+			switch (true)
 			{
-				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisible", m_iGroupDisplayVisible); break;};
-				case (0) : { m_iGroupDisplayVisible = 0; break;};
-				case (1) : { m_iGroupDisplayVisible = 1; break;};
+				case(groupDisplayVisibleSO == "true" || groupDisplayVisibleSO == "false") : { m_sGroupDisplayVisible = groupDisplayVisibleSO; break; };
+				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisible", m_sGroupDisplayVisible); break; };
 			};
 			
-			int rankVisibleServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[5];
-			switch (rankVisibleServerOverride)
-			{
-				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", m_iRankVisible); break;};
-				case (0)  : { m_iRankVisible = 0; break;};
-				case (1)  : { m_iRankVisible = 1; break;};
+			string rankVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[5];
+			switch (true)
+			{				
+				case(rankVisibleSO == "true" || rankVisibleSO == "false") : { m_sRankVisible = rankVisibleSO; break; };
+				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", m_sRankVisible); break; };
 			};
 		} else { m_iCheckSettingsFrame++; };
 		
-		if (m_iGroupDisplayVisible == 0) {
+		if (m_sGroupDisplayVisible == "false") {
 			ClearGroupDisplay(0, true);
 			return;
 		};
 		 
-		array<string> groupArray = m_AuthorityComponent.GetLocalGroupArray();
+		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
 		
 		foreach (int i, string playerStringToSplit : groupArray) {
-			
 			array<string> playerSplitArray = {};
 			playerStringToSplit.Split("╣", playerSplitArray, false);
 			
@@ -68,7 +62,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 			
-			if (m_iRankVisible == 1) {
+			if (m_sRankVisible == "true") {
 				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
 				playerName = string.Format("[%1] %2", rank, playerName);
 			}
@@ -122,18 +116,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	// Additionals
 	
 	//------------------------------------------------------------------------------------------------
-		
-	protected void TogglePlayerSelectionMenu()
-	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
-	}
 	
-	protected void ToggleCSISettingsMenu()
-	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_SettingsDialog);
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
 	{	
 		float sx = 0;

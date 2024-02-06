@@ -19,6 +19,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	protected SCR_AIGroup m_PlayersGroup;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientComponent m_ClientComponent;
 	
 	protected Widget m_wRoot;
 	protected XComboBoxWidget m_wMaxPlayers;
@@ -43,6 +44,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		// Get Global Player Controller and Group Manager.
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
 		if (!m_GroupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
 		
@@ -98,7 +100,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	
 	protected void UpdatePlayerList()
 	{		
-		m_aGroupArray = m_AuthorityComponent.GetLocalGroupArray();
+		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 			
 		if (m_aGroupArray.Count() <= 1) {OnMenuBack(); return;};
 		
