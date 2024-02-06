@@ -1,7 +1,7 @@
 class CSI_StaminaBar : SCR_InfoDisplay
 {
 	protected ProgressBarWidget m_wStamBar;
-	protected int m_iStamBarVisible;
+	protected string m_sStamBarVisible;
 	
 	protected int m_iCheckSettingsFrame = 65;
 
@@ -21,23 +21,29 @@ class CSI_StaminaBar : SCR_InfoDisplay
 			CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
 			if (!authorityComponent) return;
 			
-			int staminaBarVisibleServerOverride = authorityComponent.ReturnAuthoritySettings()[3];
-			switch (staminaBarVisibleServerOverride)
+			string staminaBarVisibleSO = authorityComponent.ReturnAuthoritySettings()[3];
+			switch (true)
 			{
-				case (-1) : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("staminaBarVisible", m_iStamBarVisible); break;};
-				case (0) : { m_iStamBarVisible = 0; break;};
-				case (1) : { m_iStamBarVisible = 1; break;};
+				case(staminaBarVisibleSO == "true" || staminaBarVisibleSO == "false") : { m_sStamBarVisible = staminaBarVisibleSO; break; };
+				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("staminaBarVisible", m_sStamBarVisible); break; };
 			};
 		} else { m_iCheckSettingsFrame++; };
 		
-		// Get local enity the player is controlling at the moment.
-		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
-
+		
 		//Refresh base widget
 		if (!m_wStamBar) {
 			m_wStamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 			return;
 		};
+		
+		if (m_sStamBarVisible == "false")
+		{
+			m_wStamBar.SetOpacity(0);
+			return;
+		}
+		
+		// Get local enity the player is controlling at the moment.
+		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 		
 		// Can't run if these dont exist better exit out.
 		if (!character) return;
@@ -73,11 +79,6 @@ class CSI_StaminaBar : SCR_InfoDisplay
 	//------------------------------------------------------------------------------------------------
 	void OnStaminaChange(float stamina)
 	{
-		if (m_iStamBarVisible == 0)
-		{
-			m_wStamBar.SetOpacity(0);
-			return;
-		}
 		m_wStamBar.SetCurrent(stamina);
 
 		// Color

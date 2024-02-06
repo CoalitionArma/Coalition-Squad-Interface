@@ -225,7 +225,7 @@ FrameWidgetClass {
     SizeY 60
     OffsetBottom -126.496
    }
-   Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/compass_shadow360.edds"
+   Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/Compasses/compass_shadow360.edds"
    Size 264 264
   }
   ImageWidgetClass "{60841B7152DF918C}" {

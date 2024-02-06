@@ -23,29 +23,18 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
 	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
 	
-	//Server Overrides
-	protected int m_iCompassVisibleServerOverride;
-	protected int m_iSquadRadarVisibleServerOverride;
-	protected int m_iGroupDisplayVisibleServerOverride;
-	protected int m_iStaminaBarVisibleServerOverride;
-	protected int m_iNametagsVisibleServerOverride;
-	protected int m_iRankVisibleServerOverride;
-	
 	// A hashmap that is modified only on the authority.
-	protected ref map<string,int> m_mUpdateAuthoritySettingsMap = new map<string,int>;
+	protected ref map<string,string> m_mUpdateAuthoritySettingsMap = new map<string,string>;
 	
 	// A array we use to broadcast whenever a change happens to any of the server overrides.
 	[RplProp()]
-	protected ref array<int> m_aServerOverridesArray = new array<int>;
+	protected ref array<string> m_aServerOverridesArray = new array<string>;
 	
 	// A hashmap that is modified only on the authority.
 	protected ref map<string,string> m_mAuthorityPlayerMap = new map<string,string>;
 	
 	// A hashmap that is modified only on each client by a .BumpMe from the authority.
 	protected ref map<string,string> m_mLocalPlayerMap = new map<string,string>;
-	
-	// A array where we keep the local clients current group stored and sorted by the value determined for each player.
-	protected ref array<string> m_aLocalGroupArray = new array<string>;
 	
 	// A array we use primarily for replication of m_mAuthorityPlayerMap to m_mLocalPlayerMap.
 	[RplProp(onRplName: "UpdateLocalPlayerMap")]
@@ -74,15 +63,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{	
 		super.OnPostInit(owner);
 		
-		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 550, true);
-		};
-		
 		if (Replication.IsServer()) {
 			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 500, true);
 			GetGame().GetCallqueue().CallLater(CheckAuthoritySettings, 5000, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 21000000, true); // Updates every 35min (21000000ms)
-			GetGame().GetCallqueue().CallLater(SetupAuthoritySettings, 250);
 		};
 	} 
 	
@@ -90,10 +74,6 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	override protected void OnGameEnd()
 	{	
 		super.OnGameEnd();
-		
-		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().Remove(UpdateLocalGroupArray);
-		};
 		
 		if (Replication.IsServer()) {
 			GetGame().GetCallqueue().Remove(UpdateAllAuthorityPlayerMapValues);
@@ -110,14 +90,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
-	TIntArray ReturnAuthoritySettings()
+	TStringArray ReturnAuthoritySettings()
 	{
 		return m_aServerOverridesArray;
 	}
 	
 	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
-	void UpdateAuthoritySetting(string setting, int value)
+	void UpdateAuthoritySetting(string setting, string value)
 	{
 		m_mUpdateAuthoritySettingsMap.Set(setting, value);
 	}
@@ -129,7 +109,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			for (int i = 0; i < m_mUpdateAuthoritySettingsMap.Count(); i++)
 			{
 				string setting = m_mUpdateAuthoritySettingsMap.GetKey(i);
-				int value = m_mUpdateAuthoritySettingsMap.Get(setting);
+				string value = m_mUpdateAuthoritySettingsMap.Get(setting);
 			
 				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
 			};
@@ -137,48 +117,19 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			GetGame().UserSettingsChanged();
 			GetGame().SaveUserSettings();
 		};
-		
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisibleServerOverride",      m_iCompassVisibleServerOverride);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisibleServerOverride",   m_iSquadRadarVisibleServerOverride);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisibleServerOverride", m_iGroupDisplayVisibleServerOverride);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("staminaBarVisibleServerOverride",   m_iStaminaBarVisibleServerOverride);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsVisibleServerOverride",     m_iNametagsVisibleServerOverride);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisibleServerOverride",         m_iRankVisibleServerOverride);
-		
-		m_aServerOverridesArray = {
-			m_iCompassVisibleServerOverride,
-			m_iSquadRadarVisibleServerOverride,
-			m_iGroupDisplayVisibleServerOverride,
-			m_iStaminaBarVisibleServerOverride,
-			m_iNametagsVisibleServerOverride,
-			m_iRankVisibleServerOverride
-		};
+
+		m_aServerOverridesArray.Clear();
+		array<string> serverOverridesArray = {"compassVisibleServerOverride", "squadRadarVisibleServerOverride", "groupDisplayVisibleServerOverride", "staminaBarVisibleServerOverride", "nametagsVisibleServerOverride", "rankVisibleServerOverride"};
+		foreach (string serverOverride : serverOverridesArray)
+		{
+			string value = "";
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(serverOverride, value);
+			if (value == "") value = "N/A";
+			m_aServerOverridesArray.Insert(value)
+		}
 		
 		Replication.BumpMe();
 	}
-	
-	//------------------------------------------------------------------------------------------------
-	protected void SetupAuthoritySettings()
-	{
-		bool serverSetupCompleted;
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("serverSetupCompleted", serverSetupCompleted);
-		
-		// -1 = server override not active.
-		//  0 = server override active (false).
-		//  1 = server override active (true).
-		if (!serverSetupCompleted) {
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("compassVisibleServerOverride",      -1);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("squadRadarVisibleServerOverride",   -1);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("groupDisplayVisibleServerOverride", -1);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("staminaBarVisibleServerOverride",   -1);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsVisibleServerOverride",     -1);
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("rankVisibleServerOverride",         -1);
-			
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("serverSetupCompleted", true);
-			GetGame().UserSettingsChanged();
-			GetGame().SaveUserSettings();
-		};
-	};
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -232,73 +183,13 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	
 	//------------------------------------------------------------------------------------------------
 
-	// Functions to sort and store the current group array we want to show on players screens.
-
-	//------------------------------------------------------------------------------------------------
-	
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	TStringArray GetLocalGroupArray()
-	{	
-		return m_aLocalGroupArray;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	protected void UpdateLocalGroupArray()
-	{
-		// Get base group manager component
-		if (!m_GroupsManagerComponent) {
-			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-			return;
-		};
-
-		// Get players current group.
-		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		
-		if (!playersGroup) return;
-		
-		array<int> playerIDsArray = playersGroup.GetPlayerIDs();
-		int groupCount = playerIDsArray.Count();
-		
-		int groupID = playersGroup.GetGroupID();
-		
-		// If group count is less than what we need, better clear the array so players clear their displays.
-		if (groupCount <= 1) {m_aLocalGroupArray.Clear(); return;};
-		
-		// Setup a temp array we'll use to keep all changes local so if a player calls for m_aLocalGroupArray it isn't in the middle of being updated.
-		array<string> tempLocalGroupArray = {};
-			
-		foreach (int playerID : playerIDsArray) {
-			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID);
-			if (!localplayer) continue;
-			
-			string colorTeam   = ReturnLocalPlayerMapValue(groupID, playerID, "ColorTeam");
-			string icon        = ReturnLocalPlayerMapValue(groupID, playerID, "DisplayIcon");
-			string playerValue = ReturnLocalPlayerMapValue(groupID, playerID, "PlayerValue");
-			
-			// If any of the above variables don't exist, better continue onto the next loop.
-			if (!colorTeam || colorTeam == "" || !icon || icon == "" || !playerValue || playerValue == "") continue;
-			
-			// Format a string with what we need for displaying a player.
-			string playerStr = string.Format("%1╣%2╣%3╣%4", playerValue, playerID, colorTeam, icon);
-			tempLocalGroupArray.Insert(playerStr);
-		}
-		
-		if (tempLocalGroupArray.Count() <= 1) {m_aLocalGroupArray.Clear(); return;};
-			
-		tempLocalGroupArray.Sort(false);
-		m_aLocalGroupArray = tempLocalGroupArray;
-	};
-	
-	//------------------------------------------------------------------------------------------------
-
 	// Functions to update m_mAuthorityPlayerMap.
 
 	//------------------------------------------------------------------------------------------------
 	
 	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
-	void UpdateAuthorityPlayerMap(int groupID, int playerID, string write, string value)
+	void UpdateAuthorityPlayerMapValue(int groupID, int playerID, string write, string value)
 	{						
 		// The key we are gonna use that keeps everything locallied to the group and player, so we don't get any cross-contamination between groups or players.
 		string key = string.Format("%1 %2 %3", groupID, playerID, write);
@@ -381,7 +272,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				//------------------------------------------------------------------------------------------------
 
 				string playerColorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam");
-				if (!playerColorTeam || playerColorTeam == "") UpdateAuthorityPlayerMap(groupID, localPlayerID, "ColorTeam", m_sCTNone);
+				if (!playerColorTeam || playerColorTeam == "") UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam", m_sCTNone);
 
 				//------------------------------------------------------------------------------------------------
 				// Vehicle Icons, they supercede any other Icon
@@ -501,24 +392,24 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				string icon = iconArray[0];
 				
 				// Update the Icon we show on players screens.
-				UpdateAuthorityPlayerMap(groupID, localPlayerID, "DisplayIcon", icon);
+				UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "DisplayIcon", icon);
 		
 				// If player is not in a vehicle seat, make sure to store their Icon so we can use it for other menus/sorting of the players.
 				if (icon != m_sCargo && icon != m_sDriver && icon != m_sGunner) {
 					string playerStoredSpecialtyIcon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "StoredSpecialtyIcon");
 					
 					// In case player spawns in a vehicle/state where we can't read his inventory, use m_sMan to keep all menus/functions happy.
-					if (!playerStoredSpecialtyIcon || playerStoredSpecialtyIcon == "") UpdateAuthorityPlayerMap(groupID, localPlayerID, "StoredSpecialtyIcon", m_sMan);
+					if (!playerStoredSpecialtyIcon || playerStoredSpecialtyIcon == "") UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "StoredSpecialtyIcon", m_sMan);
 					
 					// Update StoredSpecialtyIcon.
-					UpdateAuthorityPlayerMap(groupID, localPlayerID, "StoredSpecialtyIcon", icon);
+					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "StoredSpecialtyIcon", icon);
 				}
 				
 				// Determine players value by their color team and icon so we can sort players from most to least valuable in the group display (definitely not racist).
 				int playerValue = DeterminePlayerValue(groupID, localPlayerID, playerColorTeam);
 				
 				// Update PlayerValue
-				UpdateAuthorityPlayerMap(groupID, localPlayerID, "PlayerValue", playerValue.ToString());
+				UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PlayerValue", playerValue.ToString());
 			};
 		};
 		
