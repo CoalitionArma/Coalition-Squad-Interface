@@ -17,14 +17,11 @@ modded class GroupSettingsDialogUI : DialogUI
 class CSI_PlayerSelectionDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected CSI_ClientComponent m_ClientComponent;
 	
 	protected Widget m_wRoot;
 	protected XComboBoxWidget m_wMaxPlayers;
-	
-	protected int m_iGroupCount;
 	protected ref array<string> m_aGroupArray;
 	
 	//------------------------------------------------------------------------------------------------
@@ -42,20 +39,15 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		m_wRoot = GetRootWidget();
 		
 		// Get Global Player Controller and Group Manager.
-		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
-		if (!m_GroupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
+		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 		
-		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		
-		if (!m_PlayersGroup) {OnMenuBack(); return;};
-		
-		array<int> playerIDsArray = m_PlayersGroup.GetPlayerIDs();
-		m_iGroupCount = playerIDsArray.Count();
-			
-		if (m_iGroupCount <= 1) {OnMenuBack(); return;};
+		if (!m_aGroupArray || m_aGroupArray.Count() <= 0) {
+			OnMenuBack();
+			return;
+		};
 		
 		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
@@ -102,12 +94,12 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	{		
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 			
-		if (m_aGroupArray.Count() <= 1) {OnMenuBack(); return;};
+		if (m_aGroupArray.Count() <= 0) {OnMenuBack(); return;};
 		
 		foreach (int i, string playerStringToSplit : m_aGroupArray) {
 			
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("╣", playerSplitArray, false);
+			playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
 			
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();

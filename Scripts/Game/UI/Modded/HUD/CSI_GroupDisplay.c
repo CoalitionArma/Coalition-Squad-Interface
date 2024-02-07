@@ -51,9 +51,14 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		 
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
 		
+		if (!groupArray || groupArray.Count() <= 1) {
+			ClearGroupDisplay(0, true);
+			return;
+		};
+		
 		foreach (int i, string playerStringToSplit : groupArray) {
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("╣", playerSplitArray, false);
+			playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
 			
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();

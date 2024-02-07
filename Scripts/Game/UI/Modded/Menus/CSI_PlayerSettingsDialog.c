@@ -77,7 +77,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	void SetPlayerStr(string playerStringToSplit)
 	{	
 		array<string> playerSplitArray = {};
-		playerStringToSplit.Split("╣", playerSplitArray, false);
+		playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
 		string playerIDString = playerSplitArray[1];
 		
 		m_iSelectedPlayerID = playerIDString.ToInt();

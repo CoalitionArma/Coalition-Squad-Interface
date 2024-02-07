@@ -159,7 +159,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			string key = m_mAuthorityPlayerMap.GetKey(i);
 			string value = m_mAuthorityPlayerMap.Get(key);
 			
-			tempPlayerArray.Insert(string.Format("%1║%2", key, value));
+			tempPlayerArray.Insert(string.Format("%1«╗╣║╝»%2", key, value));
 		};
 		
 		// Replicate m_aPlayerArray to all clients.
@@ -175,7 +175,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	 	foreach (string playerKeyAndValueToSplit : m_aPlayerArray)
 		{		
 			array<string> playerKeyAndValueArray = {};
-			playerKeyAndValueToSplit.Split("║", playerKeyAndValueArray, false);
+			playerKeyAndValueToSplit.Split("«╗╣║╝»", playerKeyAndValueArray, false);
 			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
 		};
 	}
@@ -233,13 +233,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllAuthorityPlayerMapValues()
 	{	
-		array<SCR_AIGroup> outAllGroups;
 
 		// Get base group manager component
 		if (!m_GroupsManagerComponent) {
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			return;
 		};
+		
+		array<SCR_AIGroup> outAllGroups;
 		
 		// Get all groups
 		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
@@ -255,6 +256,9 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			
 			// Get Group ID
 			int groupID = playersGroup.GetGroupID();
+			
+			array<string> tempLocalGroupArray = {};
+			string groupString = "";
 	
 			// Parse through current group array.
 			foreach(int localPlayerID : groupPlayersIDs) 
@@ -271,7 +275,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				//------------------------------------------------------------------------------------------------
 
 				string playerColorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam");
-				if (!playerColorTeam || playerColorTeam == "") UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam", m_sCTNone);
+				if (!playerColorTeam || playerColorTeam == "") {
+					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam", m_sCTNone);
+					playerColorTeam = m_sCTNone;
+				}
 
 				//------------------------------------------------------------------------------------------------
 				// Vehicle Icons, they supercede any other Icon
@@ -409,7 +416,25 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				
 				// Update PlayerValue
 				UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PlayerValue", playerValue.ToString());
+				
+				// Format a string with what we need for displaying a player.
+				string playerStr = string.Format("%1«╣║╢║»%2«╣║╢║»%3«╣║╢║»%4", playerValue, localPlayerID, playerColorTeam, icon);
+				
+				tempLocalGroupArray.Insert(playerStr);
 			};
+			
+			tempLocalGroupArray.Sort(false);
+			
+			foreach (string playerStr : tempLocalGroupArray) {
+				if(groupString == "") { 
+					groupString = playerStr; 
+				} else {
+					groupString = string.Format("%1╗«╢║╖»╝%2", groupString, playerStr);
+				};
+			}
+			
+			// Update GroupString.
+			UpdateAuthorityPlayerMapValue(groupID, -1, "GroupString", groupString);
 		};
 		
 		//Once we've updated all values, propagate them to all clients with UpdatePlayerArray.

@@ -57,36 +57,20 @@ class CSI_ClientComponent : ScriptComponent
 		
 		if (!playersGroup) return;
 		
-		array<int> playerIDsArray = playersGroup.GetPlayerIDs();
-		int groupCount = playerIDsArray.Count();
-		
+		array<string> tempLocalGroupArray = {};
 		int groupID = playersGroup.GetGroupID();
 		
-		// If group count is less than what we need, better clear the array so players clear their displays.
-		if (groupCount <= 1) {m_aLocalGroupArray.Clear(); return;};
+		string groupString = authorityComponent.ReturnLocalPlayerMapValue(groupID, -1, "GroupString");
 		
-		// Setup a temp array we'll use to keep all changes local so if a player calls for m_aLocalGroupArray it isn't in the middle of being updated.
-		array<string> tempLocalGroupArray = {};
-			
-		foreach (int playerID : playerIDsArray) {
-			IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID);
-			if (!localplayer) continue;
-			
-			string colorTeam   = authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "ColorTeam");
-			string icon        = authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "DisplayIcon");
-			string playerValue = authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "PlayerValue");
-			
-			// If any of the above variables don't exist, better continue onto the next loop.
-			if (!colorTeam || colorTeam == "" || !icon || icon == "" || !playerValue || playerValue == "") continue;
-			
-			// Format a string with what we need for displaying a player.
-			string playerStr = string.Format("%1╣%2╣%3╣%4", playerValue, playerID, colorTeam, icon);
-			tempLocalGroupArray.Insert(playerStr);
-		}
+		if (groupString == "") return;
 		
-		if (tempLocalGroupArray.Count() <= 1) {m_aLocalGroupArray.Clear(); return;};
-			
-		tempLocalGroupArray.Sort(false);
+		array<string> outGroupStrArray = {};
+		groupString.Split("╗«╢║╖»╝", outGroupStrArray, false);
+		
+		foreach (string playerString : outGroupStrArray) { 
+			tempLocalGroupArray.Insert(playerString);
+		};
+
 		m_aLocalGroupArray = tempLocalGroupArray;
 	};
 	
