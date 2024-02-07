@@ -172,7 +172,14 @@ class CSI_Compass : SCR_InfoDisplay
 		float widthAndHeight = 12 * (m_iSquadRadarIconSize * 0.01);
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-		SetSquadRadarImage(radarlocalPlayer, widthAndHeight, 1, m_fStoredYaw, m_ChimeraCharacter);
+		
+		string squadRadarSelfIconVisible = "";
+		int opacity = 1;
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarSelfIconVisible", squadRadarSelfIconVisible);
+		
+		if (squadRadarSelfIconVisible == "false") opacity = 0;
+		
+		SetSquadRadarImage(radarlocalPlayer, widthAndHeight, opacity, m_fStoredYaw, m_ChimeraCharacter);
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		
