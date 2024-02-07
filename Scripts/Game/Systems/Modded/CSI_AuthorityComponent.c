@@ -119,12 +119,11 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		};
 
 		m_aServerOverridesArray.Clear();
-		array<string> serverOverridesArray = {"compassVisibleServerOverride", "squadRadarVisibleServerOverride", "groupDisplayVisibleServerOverride", "staminaBarVisibleServerOverride", "nametagsVisibleServerOverride", "rankVisibleServerOverride"};
+		array<string> serverOverridesArray = {"compassVisibleServerOverride", "squadRadarVisibleServerOverride", "groupDisplayVisibleServerOverride", "staminaBarVisibleServerOverride", "nametagsVisibleServerOverride", "rankVisibleServerOverride", "nametagsRangeServerOverride"};
 		foreach (string serverOverride : serverOverridesArray)
 		{
 			string value = "";
 			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(serverOverride, value);
-			if (value == "") value = "N/A";
 			m_aServerOverridesArray.Insert(value)
 		}
 		

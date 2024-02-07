@@ -176,9 +176,9 @@ class CSI_Compass : SCR_InfoDisplay
 		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		
-		m_iSearchRadius = 21;
+		m_iSearchRadius = 24;
 		
-		if (IsPlayerInVehicle(m_ChimeraCharacter)) m_iSearchRadius = 7;
+		if (IsPlayerInVehicle(m_ChimeraCharacter)) m_iSearchRadius = 8;
 		
 		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, m_iSearchRadius, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
 		
@@ -214,10 +214,10 @@ class CSI_Compass : SCR_InfoDisplay
 		
 			// Get Distance
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
-			float disT = dis * 2.35;
+			float disT = dis * 2.0;
 			
 			if (IsPlayerInVehicle(playerCharacter)) offset = 87;
-			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 7.175;
+			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 6.475;
 			
 			// Get Direction
 			vector dirV = vector.Direction(playerCharacterOrigin, m_vOwnerOrigin);

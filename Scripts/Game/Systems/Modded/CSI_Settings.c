@@ -24,6 +24,12 @@ class CSI_GameSettings: ModuleGameSettings
 	[Attribute()]
 	int squadRadarIconSize;
 	
+	[Attribute()]
+	string nametagsPosition;
+	
+	[Attribute()]
+	int nametagsRange;
+	
 	//Server Overrides
 	
 	[Attribute()]
@@ -43,4 +49,7 @@ class CSI_GameSettings: ModuleGameSettings
 
 	[Attribute()]
 	string rankVisibleServerOverride;
+	
+	[Attribute()]
+	string nametagsRangeServerOverride;
 }

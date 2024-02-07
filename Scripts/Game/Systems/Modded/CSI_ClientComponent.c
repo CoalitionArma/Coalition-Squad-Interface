@@ -25,11 +25,9 @@ class CSI_ClientComponent : ScriptComponent
 	{	
 		super.OnPostInit(owner);
 		
-		if (Replication.IsClient()) {
-			GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 525, true);
-			GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
-			GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
-		};
+		GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 525, true);
+		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
+		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 	}
 	
 	//------------------------------------------------------------------------------------------------
