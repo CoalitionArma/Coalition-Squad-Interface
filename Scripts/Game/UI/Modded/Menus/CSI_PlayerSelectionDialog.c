@@ -39,12 +39,17 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		m_wRoot = GetRootWidget();
 		
 		// Get Global Player Controller and Group Manager.
+		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
+		if (!groupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
+		
+		m_PlayersGroup = groupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 		
-		if (!m_aGroupArray || m_aGroupArray.Count() <= 0) {
+		if (!m_PlayersGroup || !m_aGroupArray || m_aGroupArray.Count() <= 0) {
 			OnMenuBack();
 			return;
 		};
