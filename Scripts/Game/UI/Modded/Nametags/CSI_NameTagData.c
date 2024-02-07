@@ -27,25 +27,24 @@ modded class SCR_NameTagData
 	string GetGroupName()
 	{
 		// TODO: Better AI handling
-		SCR_AIGroup group = m_GroupManager.FindGroup(m_iGroupID);
+		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 		
-		if (group) 
+		if (!group) return "";
+		
+		string groupName = group.GetCustomName();
+			
+		if (groupName == "") 
 		{
-			string groupName = group.GetCustomName();
-			
-			if (groupName == "") 
-			{
-				string company, platoon, squad, character, format;
-				group.GetCallsigns(company, platoon, squad, character, format);
-				string originalName, newName;
+			string company, platoon, squad, character, format;
+			group.GetCallsigns(company, platoon, squad, character, format);
+			string originalName, newName;
 				
-				originalName = string.Format(format, company, platoon, squad, character);
+			originalName = string.Format(format, company, platoon, squad, character);
 				
-				groupName = originalName;
-			};
+			groupName = originalName;
+		};
 			
-			m_sGroupName = groupName;
-		} else {m_sGroupName = "";};
+		m_sGroupName = groupName;
 		
 		return m_sGroupName;
 	}
@@ -56,7 +55,11 @@ modded class SCR_NameTagData
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 		if (!m_AuthorityComponent) return 0;
 		
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "ColorTeam");
+		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
+		
+		if (!group) return ARGB(255, 225, 225, 225);
+		
+		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");
 		
 		if (colorTeam == "" || !(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)) return ARGB(255, 225, 225, 225);
 		
@@ -70,8 +73,10 @@ modded class SCR_NameTagData
 		
 		if (m_sNametagsPos == "HEAD") {
 			m_eAttachedTo = ENameTagPosition.HEAD;
+			m_eAttachedToLast = ENameTagPosition.HEAD;
 		} else {
 			m_eAttachedTo = ENameTagPosition.BODY;
+			m_eAttachedToLast = ENameTagPosition.BODY;
 		};
 	}
 	
@@ -81,15 +86,13 @@ modded class SCR_NameTagData
 	{
 		if (m_sNametagsPos == "HEAD") {
 			m_eAttachedTo = ENameTagPosition.HEAD;
+			m_eAttachedToLast = ENameTagPosition.HEAD;
 		} else {
 			m_eAttachedTo = ENameTagPosition.BODY;
+			m_eAttachedToLast = ENameTagPosition.BODY;
 		};
-		
-		gradualChange = false;
+
 		m_fTimeSlicePosChange = 0;
 		m_vTagWorldPosLast = m_vTagWorldPos;
-		
-		if (!gradualChange)
-			m_eAttachedToLast = pos;
 	}
 }
