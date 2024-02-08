@@ -109,6 +109,30 @@ modded class SCR_NameTagData
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	override void SetGroup(SCR_AIGroup group)
+	{
+		if (group)
+		{
+			m_iGroupID = group.GetGroupID();
+			if (m_bIsCurrentPlayer)
+			{
+				m_NTDisplay.CleanupAllTags();	// cleanup other tags because we need to compare groups again
+				return;
+			}
+		}
+		else
+		{
+			m_iGroupID = -1;
+
+			if (m_bIsCurrentPlayer)
+				m_NTDisplay.CleanupAllTags();
+		}
+		
+		if (m_VehicleParent && m_VehicleParent.m_MainTag == this)	// update vehicle parent as well if this tag is its main tag
+			m_VehicleParent.m_Flags |= ENameTagFlags.NAME_UPDATE;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	string GetGroupName()
 	{
 		// TODO: Better AI handling
@@ -141,12 +165,13 @@ modded class SCR_NameTagData
 		if (!m_AuthorityComponent) return 0;
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
+		SCR_AIGroup localGroup = m_GroupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
-		if (!group) return ARGB(255, 225, 225, 225);
+		if (!group || !localGroup) return 0;
 		
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");
+		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(localGroup.GetGroupID(), m_iPlayerID, "ColorTeam");
 		
-		if (colorTeam == "" || !(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)) return ARGB(255, 225, 225, 225);
+		if (colorTeam == "" || localGroup != group  || (m_ePriorityEntityState & ENameTagEntityState.VON)) return 0;
 		
 		m_iColorTeamInt = colorTeam.ToInt();
 		return m_iColorTeamInt;

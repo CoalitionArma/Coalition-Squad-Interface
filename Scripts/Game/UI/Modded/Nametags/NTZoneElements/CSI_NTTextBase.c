@@ -3,7 +3,7 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 class CSI_NTGroupName : SCR_NTTextBase
 {
-	protected int updateFrame = 15;
+	protected int updateFrame = 45;
 	
 	//------------------------------------------------------------------------------------------------
  	string GetGroupText(SCR_NameTagData data)
@@ -24,7 +24,7 @@ class CSI_NTGroupName : SCR_NTTextBase
 	{
 		super.UpdateElement(data, index);
 		
-		if (updateFrame < 15) {
+		if (updateFrame < 45) {
 			updateFrame++;
 			return;
 		};
@@ -40,8 +40,6 @@ class CSI_NTGroupName : SCR_NTTextBase
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName
 {
-	protected int updateFrame = 30;
-	
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerColorTeamInt(SCR_NameTagData data)
 	{	
@@ -51,7 +49,7 @@ modded class SCR_NTName
 	//------------------------------------------------------------------------------------------------
 	void SetPlayerColorTeam(SCR_NameTagData data, int colorTeam, int index) 
 	{
-		if (!data.m_aNametagElements[index]) return;
+		if (!data.m_aNametagElements[index] || colorTeam == 0) return;
 	
 		TextWidget.Cast( data.m_aNametagElements[index] ).SetColorInt(colorTeam);
 	}
@@ -60,13 +58,6 @@ modded class SCR_NTName
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
 		super.UpdateElement(data, index);
-		
-		if (updateFrame < 30) {
-			updateFrame++;
-			return;
-		};
-		
-		updateFrame = 0;
 		
 		data.UpdateAttatchedTo();
 		
