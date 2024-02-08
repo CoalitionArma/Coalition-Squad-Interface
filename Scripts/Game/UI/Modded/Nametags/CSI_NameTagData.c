@@ -70,8 +70,7 @@ modded class SCR_NameTagData
 				};
 				if (roleNametagVisible == "true") 
 				{
-					SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
-					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "DisplayIcon");		
+					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");		
 					switch (icon) {
 						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break;};
 						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break;};
@@ -109,30 +108,6 @@ modded class SCR_NameTagData
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	override void SetGroup(SCR_AIGroup group)
-	{
-		if (group)
-		{
-			m_iGroupID = group.GetGroupID();
-			if (m_bIsCurrentPlayer)
-			{
-				m_NTDisplay.CleanupAllTags();	// cleanup other tags because we need to compare groups again
-				return;
-			}
-		}
-		else
-		{
-			m_iGroupID = -1;
-
-			if (m_bIsCurrentPlayer)
-				m_NTDisplay.CleanupAllTags();
-		}
-		
-		if (m_VehicleParent && m_VehicleParent.m_MainTag == this)	// update vehicle parent as well if this tag is its main tag
-			m_VehicleParent.m_Flags |= ENameTagFlags.NAME_UPDATE;
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	string GetGroupName()
 	{
 		// TODO: Better AI handling
@@ -160,18 +135,13 @@ modded class SCR_NameTagData
 	
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerColorTeam()
-	{
+	{	
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		if (!m_AuthorityComponent) return 0;
+		if (!m_AuthorityComponent) return -1;
 		
-		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
-		SCR_AIGroup localGroup = m_GroupManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "ColorTeam");
 		
-		if (!group || !localGroup) return 0;
-		
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(localGroup.GetGroupID(), m_iPlayerID, "ColorTeam");
-		
-		if (colorTeam == "" || localGroup != group  || (m_ePriorityEntityState & ENameTagEntityState.VON)) return 0;
+		if (colorTeam == "" || !(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON)) return -1;
 		
 		m_iColorTeamInt = colorTeam.ToInt();
 		return m_iColorTeamInt;
