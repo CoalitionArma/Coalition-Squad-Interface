@@ -254,6 +254,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			// Get list of all the players we have to parse through.
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
 			
+			groupPlayersIDs = {2,1,1,1,1,1,1,1,1,1};
+			
 			// Get Group ID
 			int groupID = playersGroup.GetGroupID();
 			

@@ -5,14 +5,14 @@ FrameWidgetClass {
    Name "StamBar"
    Slot FrameWidgetSlot "{5B0D54DD8880C4BA}" {
     Anchor 0 1 0 1
-    PositionX 4.251
-    OffsetLeft 4.251
-    PositionY -10.044
-    OffsetTop -10.044
-    SizeX 214.911
-    OffsetRight -219.162
-    SizeY 5.91
-    OffsetBottom 4.134
+    PositionX 1.309
+    OffsetLeft 1.3
+    PositionY -7.429
+    OffsetTop -7.4
+    SizeX 230
+    OffsetRight -231.3
+    SizeY 6
+    OffsetBottom 1.4
    }
    Opacity 0
    Color 0.042 0.042 0.042 0.078

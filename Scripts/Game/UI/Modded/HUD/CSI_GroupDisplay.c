@@ -70,7 +70,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			if (m_sRankVisible == "true") {
 				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
 				playerName = string.Format("%1 %2", rank, playerName);
-			}
+			};
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));

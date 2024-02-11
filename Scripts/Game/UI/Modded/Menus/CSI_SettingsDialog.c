@@ -53,11 +53,12 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		if (!authorityComponent) return;
 		
 		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
-		SCR_InputButtonComponent back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
-		back.m_OnClicked.Insert(OnMenuBack);
-		
-		SCR_InputButtonComponent apply = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Apply").FindHandler(SCR_InputButtonComponent));
-		apply.m_OnClicked.Insert(ApplySettings);
+		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
+		cancel.m_OnClicked.Insert(OnMenuBack);
+
+		GetGame().GetInputManager().AddActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
+		SCR_InputButtonComponent confirm = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Confirm").FindHandler(SCR_InputButtonComponent));
+		confirm.m_OnClicked.Insert(ApplySettings);
 		
 		float squadRadarIconSize = 100;
 		m_wIconSizeWidget = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconScaleXComboBox"));
@@ -216,7 +217,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 			default  : { 
 				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsRange", nametagsRange); 
 				// default state
-				m_wNametagsRangeWidget.SetCurrentItem(1);
+				m_wNametagsRangeWidget.SetCurrentItem(6);
 				
 				if (nametagsRange > 0 ) {
 					m_wNametagsRangeWidget.SetCurrentItem((nametagsRange / 5) - 1);
@@ -288,6 +289,16 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		m_wRankVisibleWidgetSO.SetOpacity(1);
 		m_wRoleNametagVisibleSO.SetOpacity(1);
 		m_wNametagsRangeSO.SetOpacity(1);
+		
+		m_wCompassVisibleWidgetSO.SetEnabled(true);
+		m_wSquadRadarVisibleWidgetSO.SetEnabled(true);
+		m_wGroupDisplayVisibleWidgetSO.SetEnabled(true);
+		m_wStaminaBarVisibleWidgetSO.SetEnabled(true);
+		m_wNametagsVisibleWidgetSO.SetEnabled(true);
+		m_wRankVisibleWidgetSO.SetEnabled(true);
+		m_wRoleNametagVisibleSO.SetEnabled(true);
+		m_wNametagsRangeSO.SetEnabled(true);
+		
 		backgroundServerOverride.SetOpacity(1);
 		prettyServerOverride.SetOpacity(1);
 		prettyTextServerOverride.SetOpacity(1);
@@ -425,6 +436,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	protected void OnMenuBack()
 	{
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
+		GetGame().GetInputManager().RemoveActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
 		GetGame().GetMenuManager().CloseAllMenus();
 	}
 }

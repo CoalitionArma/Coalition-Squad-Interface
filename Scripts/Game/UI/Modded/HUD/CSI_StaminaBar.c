@@ -94,7 +94,7 @@ class CSI_StaminaBar : SCR_InfoDisplay
 		// Opacity
 		switch (true)
 		{
-			case (stamina < 1 && currentOpacity < 0.82) : { RevealBar(currentOpacity); break;};
+			case (stamina < 1 && currentOpacity < 0.92) : { RevealBar(currentOpacity); break;};
 			case (stamina == 1 && currentOpacity > 0)   : { HideBar(currentOpacity);   break;};
 		};
 	}

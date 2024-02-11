@@ -184,7 +184,20 @@ class CSI_ClientComponent : ScriptComponent
 	
 	protected void TogglePlayerSelectionMenu()
 	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
+		string storedSpecialtyIcon = authorityComponent.ReturnLocalPlayerMapValue(SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
+		
+		if ((SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || (storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")) 
+		{
+			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+			return;
+		} else {
+			MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsDialog, 0, true);
+			CSI_PlayerSettingsDialog colorTeamMenu = CSI_PlayerSettingsDialog.Cast(menu);
+		
+			colorTeamMenu.SetPlayerStr(string.Format("PlayerID«╣║╢║»%1", SCR_PlayerController.GetLocalPlayerId()));
+			return;
+		};
 	}
 	
 	//------------------------------------------------------------------------------------------------

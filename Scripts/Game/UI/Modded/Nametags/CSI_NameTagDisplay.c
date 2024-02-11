@@ -42,7 +42,7 @@ modded class SCR_NameTagDisplay
 				default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsRange", m_iNametagsRange); break; };
 			};
 		
-			if(m_iNametagsRange == 0) m_iNametagsRange = 10;
+			if(m_iNametagsRange == 0) m_iNametagsRange = 35;
 			if (m_sNametagsVisible == "false") m_iNametagsRange = 1;
 
 			foreach(SCR_NameTagZone nTZone : GetNametagZones()) {
