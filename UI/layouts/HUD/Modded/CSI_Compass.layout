@@ -1,5 +1,7 @@
 FrameWidgetClass {
  Name "rootFrame"
+ Slot LayoutSlot "{609373B275AC9C10}" {
+ }
  {
   TextWidgetClass "{5EBD2BF287B38B83}" {
    Name "Bearing"
@@ -7,12 +9,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -25
     OffsetLeft -25
-    PositionY -164.439
-    OffsetTop -164.439
+    PositionY -153
+    OffsetTop -153
     SizeX 50
     OffsetRight -25
     SizeY 18
-    OffsetBottom 146.439
+    OffsetBottom 135
    }
    "Z Order" -100
    Opacity 0.984
@@ -36,16 +38,16 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -66
     OffsetLeft -66
-    PositionY -146.5
-    OffsetTop -146.5
+    PositionY -135
+    OffsetTop -135
     SizeX 132
     OffsetRight -66
     SizeY 132
-    OffsetBottom 14.5
+    OffsetBottom 3
    }
    "Z Order" -100
    IsPixelPerfect 0
-   Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/compass_shadow360.edds"
+   Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/Compasses/compass_shadow360.edds"
    Size 264 264
    "Shadow Offset" 0 0
    "Shadow Size Increase" 0 0
@@ -56,12 +58,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -76,12 +78,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -95,12 +97,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -114,12 +116,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -133,12 +135,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -152,12 +154,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -171,12 +173,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -190,12 +192,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -209,12 +211,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -228,12 +230,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -247,12 +249,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -266,12 +268,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -285,12 +287,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -304,12 +306,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -323,12 +325,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -342,12 +344,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -361,12 +363,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -380,12 +382,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -399,12 +401,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -418,12 +420,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -437,12 +439,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -457,12 +459,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -477,12 +479,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -497,12 +499,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -517,12 +519,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0
@@ -537,12 +539,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -6
     OffsetLeft -6
-    PositionY -88
-    OffsetTop -88
+    PositionY -75
+    OffsetTop -75
     SizeX 12
     OffsetRight -6
     SizeY 12
-    OffsetBottom 76
+    OffsetBottom 63
    }
    IsPixelPerfect 0
    Opacity 0

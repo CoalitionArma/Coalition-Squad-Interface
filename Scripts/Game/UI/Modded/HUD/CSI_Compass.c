@@ -215,7 +215,7 @@ class CSI_Compass : SCR_InfoDisplay
 			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
 			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 			
-			int offset = 88;
+			int offset = 75;
 			
 			float widthAndHeight = 12 * (m_iSquadRadarIconSize * 0.01);
 		
@@ -223,7 +223,7 @@ class CSI_Compass : SCR_InfoDisplay
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
 			float disT = dis * 2.0;
 			
-			if (IsPlayerInVehicle(playerCharacter)) offset = 87;
+			if (IsPlayerInVehicle(playerCharacter)) offset = 74;
 			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 6.475;
 			
 			// Get Direction
@@ -253,7 +253,7 @@ class CSI_Compass : SCR_InfoDisplay
 		int groupID = m_PlayersGroup.GetGroupID();
 		
 		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
-		string value     = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PlayerValue");
+		string value     = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, processEntityID, "PlayerValue");
 		string icon      = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
 		
 		int valueInt = value.ToInt();

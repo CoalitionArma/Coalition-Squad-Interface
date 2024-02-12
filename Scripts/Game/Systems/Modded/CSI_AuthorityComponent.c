@@ -64,7 +64,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		super.OnPostInit(owner);
 		
 		if (Replication.IsServer()) {
-			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 500, true);
+			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 300, true);
 			GetGame().GetCallqueue().CallLater(CheckAuthoritySettings, 5000, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 21000000, true); // Updates every 35min (21000000ms)
 		};
@@ -119,7 +119,18 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		};
 
 		m_aServerOverridesArray.Clear();
-		array<string> serverOverridesArray = {"compassVisibleServerOverride", "squadRadarVisibleServerOverride", "groupDisplayVisibleServerOverride", "staminaBarVisibleServerOverride", "nametagsVisibleServerOverride", "rankVisibleServerOverride", "nametagsRangeServerOverride", "roleNametagVisibleServerOverride"};
+		array<string> serverOverridesArray = 
+		{
+			"compassVisibleServerOverride", 
+			"squadRadarVisibleServerOverride", 
+			"groupDisplayVisibleServerOverride", 
+			"staminaBarVisibleServerOverride", 
+			"nametagsVisibleServerOverride", 
+			"rankVisibleServerOverride", 
+			"nametagsRangeServerOverride", 
+			"roleNametagVisibleServerOverride",
+			"personalColorTeamMenuEnabledServerOverride"
+		};
 		foreach (string serverOverride : serverOverridesArray)
 		{
 			string value = "";
@@ -159,7 +170,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			string key = m_mAuthorityPlayerMap.GetKey(i);
 			string value = m_mAuthorityPlayerMap.Get(key);
 			
-			tempPlayerArray.Insert(string.Format("%1«╗╣║╝»%2", key, value));
+			tempPlayerArray.Insert(string.Format("%1╪%2", key, value));
 		};
 		
 		// Replicate m_aPlayerArray to all clients.
@@ -175,7 +186,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	 	foreach (string playerKeyAndValueToSplit : m_aPlayerArray)
 		{		
 			array<string> playerKeyAndValueArray = {};
-			playerKeyAndValueToSplit.Split("«╗╣║╝»", playerKeyAndValueArray, false);
+			playerKeyAndValueToSplit.Split("╪", playerKeyAndValueArray, false);
 			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
 		};
 	}
@@ -415,12 +426,15 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				int playerValue = DeterminePlayerValue(groupID, localPlayerID, playerColorTeam);
 				
 				// Update PlayerValue
-				UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PlayerValue", playerValue.ToString());
+				UpdateAuthorityPlayerMapValue(-1, localPlayerID, "PlayerValue", playerValue.ToString());
 				
-				// Format a string with what we need for displaying a player.
-				string playerStr = string.Format("%1«╣║╢║»%2«╣║╢║»%3«╣║╢║»%4", playerValue, localPlayerID, playerColorTeam, icon);
+				// Format a string with what we need for displaying/sorting a player.
+				string playerStr = string.Format("%1╣%2", playerValue, localPlayerID);
 				
 				tempLocalGroupArray.Insert(playerStr);
+				
+				// Update PlayerRank
+				UpdateAuthorityPlayerMapValue(-1, localPlayerID, "PlayerRank", SCR_CharacterRankComponent.GetCharacterRankNameShort(localplayer));
 			};
 			
 			tempLocalGroupArray.Sort(false);
@@ -429,7 +443,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				if(groupString == "") { 
 					groupString = playerStr; 
 				} else {
-					groupString = string.Format("%1╗«╢║╖»╝%2", groupString, playerStr);
+					groupString = string.Format("%1║%2", groupString, playerStr);
 				};
 			}
 			

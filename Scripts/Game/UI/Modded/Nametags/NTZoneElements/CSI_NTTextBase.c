@@ -40,18 +40,28 @@ class CSI_NTGroupName : SCR_NTTextBase
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName
 {
+	protected string storedColorTeam;
+	
 	//------------------------------------------------------------------------------------------------
-	int GetPlayerColorTeamInt(SCR_NameTagData data)
+	string GetPlayerColorTeamInt(SCR_NameTagData data)
 	{	
 		return data.GetPlayerColorTeam();
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void SetPlayerColorTeam(SCR_NameTagData data, int colorTeam, int index) 
+	void SetPlayerColorTeam(SCR_NameTagData data, string colorTeam, int index) 
 	{
-		if (!data.m_aNametagElements[index] || colorTeam == -1) return;
-	
-		TextWidget.Cast( data.m_aNametagElements[index] ).SetColorInt(colorTeam);
+		if (colorTeam == "-1") return;
+		if (!data.m_aNametagElements[index] || colorTeam == "") {
+			if (storedColorTeam == "") return;
+			TextWidget.Cast( data.m_aNametagElements[index] ).SetColorInt(storedColorTeam.ToInt());
+			return;
+		};
+		
+		storedColorTeam = colorTeam;
+		Print(storedColorTeam);
+		
+		TextWidget.Cast( data.m_aNametagElements[index] ).SetColorInt(colorTeam.ToInt());
 	}
 	
 	//------------------------------------------------------------------------------------------------

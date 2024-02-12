@@ -5,6 +5,7 @@ class CSI_ClientComponent : ScriptComponent
 {	
 	// A array where we keep the local clients current group stored and sorted by the value determined for each player.
 	protected ref array<string> m_aLocalGroupArray = new array<string>;
+	string m_sPersonalColorTeamMenuEnabled;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ class CSI_ClientComponent : ScriptComponent
 	{	
 		super.OnPostInit(owner);
 		
-		GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 525, true);
+		GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 325, true);
 		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 	}
@@ -65,7 +66,7 @@ class CSI_ClientComponent : ScriptComponent
 		if (groupString == "") return;
 		
 		array<string> outGroupStrArray = {};
-		groupString.Split("╗«╢║╖»╝", outGroupStrArray, false);
+		groupString.Split("║", outGroupStrArray, false);
 		
 		foreach (string playerString : outGroupStrArray) { 
 			tempLocalGroupArray.Insert(playerString);
@@ -184,7 +185,27 @@ class CSI_ClientComponent : ScriptComponent
 	
 	protected void TogglePlayerSelectionMenu()
 	{	
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
+		string storedSpecialtyIcon = authorityComponent.ReturnLocalPlayerMapValue(SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
+		
+		string personalColorTeamMenuEnabledSO = authorityComponent.ReturnAuthoritySettings()[8];
+		switch (true)
+		{
+			case(personalColorTeamMenuEnabledSO == "true" || personalColorTeamMenuEnabledSO == "false") : { m_sPersonalColorTeamMenuEnabled = personalColorTeamMenuEnabledSO; break; };
+			default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("personalColorTeamMenuEnabled", m_sPersonalColorTeamMenuEnabled); break; };
+		};
+		
+		if (m_sPersonalColorTeamMenuEnabled == "false" || (SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || (storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")) 
+		{
+			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+			return;
+		} else {
+			MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsDialog, 0, true);
+			CSI_PlayerSettingsDialog colorTeamMenu = CSI_PlayerSettingsDialog.Cast(menu);
+		
+			colorTeamMenu.SetPlayerStr(string.Format("PlayerID╣%1", SCR_PlayerController.GetLocalPlayerId()));
+			return;
+		};
 	}
 	
 	//------------------------------------------------------------------------------------------------

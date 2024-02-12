@@ -36,6 +36,9 @@ class CSI_GameSettings: ModuleGameSettings
 	[Attribute()]
 	string roleNametagVisible;
 	
+	[Attribute()]
+	string personalColorTeamMenuEnabled;
+	
 	//Server Overrides
 	
 	[Attribute()]
@@ -61,4 +64,7 @@ class CSI_GameSettings: ModuleGameSettings
 	
 	[Attribute()]
 	string roleNametagVisibleServerOverride;
+	
+	[Attribute()]
+	string personalColorTeamMenuEnabledServerOverride
 }

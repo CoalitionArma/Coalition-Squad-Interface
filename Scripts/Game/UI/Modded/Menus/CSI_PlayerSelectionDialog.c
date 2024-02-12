@@ -4,7 +4,7 @@ modded class GroupSettingsDialogUI : DialogUI
 	{
 		super.OnMenuOpen();
 		SCR_InputButtonComponent colorTeams = SCR_InputButtonComponent.Cast(GetRootWidget().FindAnyWidget("ColorTeams").FindHandler(SCR_InputButtonComponent));
-		colorTeams.m_OnClicked.Insert(CTButtonClicked);
+		colorTeams.m_OnActivated.Insert(CTButtonClicked);
 	}
 	
 	protected void CTButtonClicked()
@@ -23,6 +23,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	protected Widget m_wRoot;
 	protected XComboBoxWidget m_wMaxPlayers;
 	protected ref array<string> m_aGroupArray;
+	protected string m_sRankVisible;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -81,12 +82,12 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		
 		for (int b = 0; b <= 24; b++)
 		{
-			SCR_InputButtonComponent buttonList = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget(string.Format("Button%1", b)).FindHandler(SCR_InputButtonComponent));
+			SCR_ModularButtonComponent buttonList = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget(string.Format("Button%1", b)).FindHandler(SCR_ModularButtonComponent));
 			buttonList.m_OnClicked.Insert(OnPlayerEntryClicked);
 		};
 				
-		SCR_InputButtonComponent back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
-		back.m_OnClicked.Insert(OnMenuBack);
+		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
+		cancel.m_OnClicked.Insert(OnMenuBack);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -96,7 +97,14 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	
 	protected void UpdatePlayerList()
-	{		
+	{				
+		string rankVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[5];
+		switch (true)
+		{				
+			case(rankVisibleSO == "true" || rankVisibleSO == "false") : { m_sRankVisible = rankVisibleSO; break; };
+			default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", m_sRankVisible); break; };
+		};
+		
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 			
 		if (m_aGroupArray.Count() <= 0) {OnMenuBack(); return;};
@@ -104,11 +112,11 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		foreach (int i, string playerStringToSplit : m_aGroupArray) {
 			
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
+			playerStringToSplit.Split("╣", playerSplitArray, false);
 			
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = playerSplitArray[2];
+			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "ColorTeam");
 			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
@@ -117,8 +125,13 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 			
+			if (m_sRankVisible == "true") {
+				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
+				playerName = string.Format("%1 %2", rank, playerName);
+			};
+			
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(192, playerDisplay, playerName);
+			playerName = CheckEllipsis(190, playerDisplay, playerName);
 
 		  playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
@@ -188,7 +201,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		m_wMaxPlayers                     = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("MaxPlayers"));
 		
 		
-		SCR_InputButtonComponent confirmMaxPlayersComp = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayers").FindHandler(SCR_InputButtonComponent));
+		SCR_ModularButtonComponent confirmMaxPlayersComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmMaxPlayers").FindHandler(SCR_ModularButtonComponent));
 		confirmMaxPlayersComp.m_OnClicked.Insert(OnConfirmMaxPlayersClicked);
 		
 		background0.SetOpacity(1);
@@ -198,6 +211,9 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		confirmMaxPlayersIcon.SetOpacity(1);
 		confirmMaxPlayers.SetOpacity(1);
 		m_wMaxPlayers.SetOpacity(1);
+		
+		confirmMaxPlayers.SetEnabled(true);
+		m_wMaxPlayers.SetEnabled(true);
 		
 		int maxMembers = m_PlayersGroup.GetMaxMembers();
 		m_wMaxPlayers.SetCurrentItem(maxMembers - 1);
@@ -220,7 +236,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	};
 		
 	//------------------------------------------------------------------------------------------------
-	protected void OnPlayerEntryClicked(SCR_ButtonBaseComponent component)
+	protected void OnPlayerEntryClicked(SCR_ModularButtonComponent component)
 	{
 		string playerIntStr = component.GetRootWidget().GetName();
 		

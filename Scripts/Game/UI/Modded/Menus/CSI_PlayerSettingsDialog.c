@@ -19,6 +19,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	protected int m_iSelectedPlayerID;
 	protected int m_iGroupID;
 	protected string m_sStoredSpecialtIcon;
+	protected string m_sRankVisible;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -33,8 +34,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		m_wRoot = GetRootWidget();
 
 		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
-		SCR_InputButtonComponent back = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Back").FindHandler(SCR_InputButtonComponent));
-		back.m_OnClicked.Insert(OnMenuBack);
+		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
+		cancel.m_OnClicked.Insert(OnMenuBack);
 		
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
@@ -49,12 +50,12 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		GetGame().GetCallqueue().CallLater(UpdatePlayerIcon, 215, true);
 		GetGame().GetCallqueue().CallLater(UpdateIconOverride, 145);
 		
-		SCR_InputButtonComponent confirmIOButton = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent red             = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Red").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent blue            = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Blue").FindHandler(SCR_InputButtonComponent));		
-		SCR_InputButtonComponent yellow          = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Yellow").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent green           = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Green").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent none            = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("None").FindHandler(SCR_InputButtonComponent));
+		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent red             = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Red").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent blue            = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Blue").FindHandler(SCR_ModularButtonComponent));		
+		SCR_ModularButtonComponent yellow          = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Yellow").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent green           = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Green").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent none            = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("None").FindHandler(SCR_ModularButtonComponent));
 		
 		confirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
 		red.m_OnClicked.Insert(OnColorTeamClicked);
@@ -77,7 +78,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	void SetPlayerStr(string playerStringToSplit)
 	{	
 		array<string> playerSplitArray = {};
-		playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
+		playerStringToSplit.Split("╣", playerSplitArray, false);
 		string playerIDString = playerSplitArray[1];
 		
 		m_iSelectedPlayerID = playerIDString.ToInt();
@@ -99,7 +100,21 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		string playerName = GetGame().GetPlayerManager().GetPlayerName(m_iSelectedPlayerID);
 		string colorTeam  = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam");
 		
-		m_sStoredSpecialtIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
+		m_sStoredSpecialtIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon"); 
+		
+		if (m_sStoredSpecialtIcon == "" || colorTeam == "") return;
+		
+		string rankVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[5];
+		switch (true)
+		{				
+			case(rankVisibleSO == "true" || rankVisibleSO == "false") : { m_sRankVisible = rankVisibleSO; break; };
+			default : { GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", m_sRankVisible); break; };
+		};
+		
+		if (m_sRankVisible == "true") {
+			string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(m_iSelectedPlayerID));
+			playerName = string.Format("%1 %2", rank, playerName);
+		};
 		 
 		m_wIcon.SetColorInt(colorTeam.ToInt());
 		m_wIcon.LoadImageTexture(0, m_sStoredSpecialtIcon);
@@ -113,6 +128,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
 		string iconOverride = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon");
+		
+		if (iconOverride == "") return;
 	
 		int playerOverideIcon = 0;	
 		switch (iconOverride)
@@ -175,14 +192,16 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		ButtonWidget promoteToSL = ButtonWidget.Cast(m_wRoot.FindAnyWidget("PromoteToSL"));
 		ButtonWidget promoteToTL = ButtonWidget.Cast(m_wRoot.FindAnyWidget("PromoteToTL"));
 		ButtonWidget kick = ButtonWidget.Cast(m_wRoot.FindAnyWidget("Kick"));
-		
+		promoteToSL.SetEnabled(true);
+		promoteToTL.SetEnabled(true);
+		kick.SetEnabled(true);
 		promoteToSL.SetOpacity(1);
 		promoteToTL.SetOpacity(1);
 		kick.SetOpacity(1);
 		
-		SCR_InputButtonComponent promoteToSLComp = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToSL").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent promoteToTLComp = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToTL").FindHandler(SCR_InputButtonComponent));
-		SCR_InputButtonComponent kickComp = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Kick").FindHandler(SCR_InputButtonComponent));
+		SCR_ModularButtonComponent promoteToSLComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToSL").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent promoteToTLComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToTL").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent kickComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Kick").FindHandler(SCR_ModularButtonComponent));
 		
 		promoteToSLComp.m_OnClicked.Insert(OnPromoteToSLClicked);
 		promoteToTLComp.m_OnClicked.Insert(OnPromoteToTLClicked);
@@ -195,7 +214,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	
-	protected void OnColorTeamClicked(SCR_ButtonBaseComponent CTcomponent)
+	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
 		if (m_wPlayerName.GetText() == "No Player Selected") return;
 		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();

@@ -50,34 +50,37 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		};
 		 
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
+		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
-		if (!groupArray || groupArray.Count() <= 1) {
+		if (!groupArray || groupArray.Count() <= 1 || !groupsManagerComponent) {
 			ClearGroupDisplay(0, true);
 			return;
 		};
 		
+		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		
 		foreach (int i, string playerStringToSplit : groupArray) {
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
+			playerStringToSplit.Split("╣", playerSplitArray, false);
 			
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = playerSplitArray[2];
-			string icon = playerSplitArray[3];
+			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "ColorTeam");
+			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DisplayIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 			
 			if (m_sRankVisible == "true") {
-				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
+				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");
 				playerName = string.Format("%1 %2", rank, playerName);
-			}
+			};
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 			
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(110, playerDisplay, playerName);
+			playerName = CheckEllipsis(106, playerDisplay, playerName);
 
 			playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);

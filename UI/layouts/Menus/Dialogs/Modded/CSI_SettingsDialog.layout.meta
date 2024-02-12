@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{839BE65A40890AB4}UI/layouts/Menus/Dialogs/Modded/COA_CSISettingsDialog.layout"
+ Name "{839BE65A40890AB4}UI/layouts/Menus/Dialogs/Modded/CSI_SettingsDialog.layout"
  Configurations {
   LayoutResourceClass PC {
   }

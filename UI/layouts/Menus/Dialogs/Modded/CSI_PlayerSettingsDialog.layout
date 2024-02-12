@@ -2,22 +2,20 @@ FrameWidgetClass {
  Name "rootFrame"
  Slot LayoutSlot "{5ED010F0B952536D}" {
  }
- Tooltip TextWidgetTooltip "{5EC7785961170EC8}" {
- }
  Color 1 1 1 0
  {
   ImageWidgetClass "{5EC651633FD7EAA1}" {
    Name "Background"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -169.066
-    OffsetLeft -169.066
-    PositionY -229.172
-    OffsetTop -229.172
-    SizeX 342.177
-    OffsetRight -173.111
-    SizeY 449.813
-    OffsetBottom -220.641
+    PositionX -163.897
+    OffsetLeft -163.897
+    PositionY -230.053
+    OffsetTop -230.053
+    SizeX 328.433
+    OffsetRight -164.536
+    SizeY 454.227
+    OffsetBottom -224.174
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
@@ -26,11 +24,11 @@ FrameWidgetClass {
    Name "Color Team Text"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -154.577
-    OffsetLeft -154.577
+    PositionX -151.457
+    OffsetLeft -151.457
     PositionY 51.424
     OffsetTop 51.424
-    SizeX 306.674
+    SizeX 303.554
     OffsetRight -152.097
     SizeY 13.806
     OffsetBottom -65.23
@@ -47,11 +45,11 @@ FrameWidgetClass {
    Name "Override Icon Text"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -154.595
-    OffsetLeft -154.595
+    PositionX -151.804
+    OffsetLeft -151.804
     PositionY -5.012
     OffsetTop -5.012
-    SizeX 306.408
+    SizeX 303.617
     OffsetRight -151.813
     SizeY 13.806
     OffsetBottom -8.794
@@ -68,14 +66,14 @@ FrameWidgetClass {
    Name "Pretty"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -169.499
-    OffsetLeft -169.499
-    PositionY -228.654
-    OffsetTop -228.654
+    PositionX -164.204
+    OffsetLeft -164.204
+    PositionY -230.242
+    OffsetTop -230.242
     SizeX 40
-    OffsetRight 129.499
+    OffsetRight 124.204
     SizeY 40
-    OffsetBottom 188.654
+    OffsetBottom 190.242
    }
    Color 0.761 0.386 0.078 1
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
@@ -88,14 +86,14 @@ FrameWidgetClass {
    Name "PrettyText"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -129.306
-    OffsetLeft -129.306
-    PositionY -224.35
-    OffsetTop -224.35
+    PositionX -124.011
+    OffsetLeft -124.011
+    PositionY -225.938
+    OffsetTop -225.938
     SizeX 174.369
-    OffsetRight -45.063
+    OffsetRight -50.358
     SizeY 30
-    OffsetBottom 194.35
+    OffsetBottom 195.938
    }
    Text "Player Settings"
    "Vertical Alignment" Center
@@ -210,12 +208,12 @@ FrameWidgetClass {
    Name "Icon"
    Slot FrameWidgetSlot "{5EC77B609A838859}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -71
-    OffsetLeft -71
+    PositionX -72.82
+    OffsetLeft -72.82
     PositionY -190
     OffsetTop -190
     SizeX 142
-    OffsetRight -71
+    OffsetRight -69.18
     SizeY 142
     OffsetBottom 48
    }
@@ -228,12 +226,12 @@ FrameWidgetClass {
    Name "PlayerName"
    Slot FrameWidgetSlot "{5EC77AE9FA911A77}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -155.376
-    OffsetLeft -155.376
+    PositionX -151.556
+    OffsetLeft -151.556
     PositionY -42.885
     OffsetTop -42.885
-    SizeX 311.033
-    OffsetRight -155.657
+    SizeX 303.311
+    OffsetRight -151.755
     SizeY 30
     OffsetBottom 12.885
    }
@@ -252,17 +250,18 @@ FrameWidgetClass {
    Name "IconOveride"
    Slot FrameWidgetSlot "{5EC77B6095B7A4F3}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -154.364
-    OffsetLeft -154.364
+    PositionX -151.573
+    OffsetLeft -151.573
     PositionY 11.958
     OffsetTop 11.958
-    SizeX 266.02
+    SizeX 263.229
     OffsetRight -111.656
     SizeY 30
     OffsetBottom -41.958
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E0C8DDE34}" {
-    Text "Force Icon on Player"
+   components {
+    SCR_ComboBoxComponent "{6093726C5F548801}" {
+    }
    }
    FontProperties FontProperties "{5EC77B557AF5C054}" {
    }
@@ -301,12 +300,9 @@ FrameWidgetClass {
     SizeY 25.1
     OffsetBottom -39.848
    }
-   Tooltip TextWidgetTooltip "{5EC77AD384C80313}" {
-    Text "Confirm Icon Override"
-   }
-   Color 1 1 1 0.038
+   Color 1 1 1 0.098
    components {
-    SCR_InputButtonComponent "{5EE4151D557A9394}" {
+    SCR_ModularButtonComponent "{6093726F48F28B6C}" {
     }
    }
   }
@@ -323,12 +319,9 @@ FrameWidgetClass {
     SizeY 48.34
     OffsetBottom -122.587
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E3F50AC40}" {
-    Text "Assign Red Color Team"
-   }
    Color 0.791 0 0 0.256
    components {
-    SCR_InputButtonComponent "{5EE4151D58DE56B9}" {
+    SCR_ModularButtonComponent "{6093726F7CD4B297}" {
     }
    }
   }
@@ -345,12 +338,9 @@ FrameWidgetClass {
     SizeY 48.657
     OffsetBottom -122.09
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E266996DD}" {
-    Text "Assign Blue Color Team"
-   }
    Color 0 0.107 1 0.256
    components {
-    SCR_InputButtonComponent "{5EE4151D45C62B22}" {
+    SCR_ModularButtonComponent "{6093726F7FB66145}" {
     }
    }
   }
@@ -367,12 +357,9 @@ FrameWidgetClass {
     SizeY 48.779
     OffsetBottom -178.683
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E21D4ABF6}" {
-    Text "Assign Yellow Color Team"
-   }
    Color 0.791 0.791 0 0.256
    components {
-    SCR_InputButtonComponent "{5EE4151D41A17436}" {
+    SCR_ModularButtonComponent "{6093726F7BC3D9C6}" {
     }
    }
   }
@@ -389,12 +376,9 @@ FrameWidgetClass {
     SizeY 48.215
     OffsetBottom -178.095
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E2DE6E808}" {
-    Text "Assign Green Color Team"
-   }
    Color 0 0.791 0 0.256
    components {
-    SCR_InputButtonComponent "{5EE4151D4E06B6ED}" {
+    SCR_ModularButtonComponent "{6093726F67AB9945}" {
     }
    }
   }
@@ -411,88 +395,9 @@ FrameWidgetClass {
     SizeY 105.959
     OffsetBottom -178.902
    }
-   Tooltip TextWidgetTooltip "{5EC77B4E321036DA}" {
-    Text "Clear Color Team"
-   }
    Color 0.159 0.159 0.159 0.119
    components {
-    SCR_InputButtonComponent "{5EE4151D4B4DD04B}" {
-    }
-   }
-  }
-  HorizontalLayoutWidgetClass "{5ED0135883D91C50}" {
-   Prefab "{5CC296FBD8B6CA62}"
-   Name "Footer"
-   Slot FrameWidgetSlot "{5ED0135883D931D3}" {
-    Anchor 0.5 0.5 0.5 0.5
-    PositionX -158.054
-    OffsetLeft -158.054
-    PositionY 188.529
-    OffsetTop 188.529
-    SizeX 330.793
-    OffsetRight -172.739
-    SizeY 30.455
-    OffsetBottom -218.984
-   }
-   {
-    ButtonWidgetClass "{5ED011542AE00770}" {
-     Name "Back"
-     Slot LayoutSlot "{5EE22980A3A55CF7}" {
-     }
-     Clipping False
-     Color 0 0 0 0
-     components {
-      SCR_InputButtonComponent "{5EE4151B2B2109C7}" {
-       m_sActionName "MenuBack"
-       m_sLabel "#AR-Workshop_ButtonCancel"
-      }
-     }
-     "no focus" 1
-     {
-      SizeLayoutWidgetClass "{5ED01359CC01A70E}" {
-       Name "SizeLayout"
-       Slot ButtonWidgetSlot "{5EE22980A3A561D1}" {
-       }
-       {
-        OverlayWidgetClass "{5ED01359E12AA2D0}" {
-         Name "Overlay"
-         Slot AlignableSlot "{5ED01359EC39F162}" {
-         }
-         {
-          HorizontalLayoutWidgetClass "{5ED0135911AEE261}" {
-           Name "HorizontalLayout"
-           Slot OverlayWidgetSlot "{5EE22980A3A57E1F}" {
-           }
-           {
-            ImageWidgetClass "{5EE53176BDAAED9A}" {
-             Name "Image0"
-             Slot LayoutSlot "{5EE531A0E19BD8FC}" {
-              Padding -10 0 0 0
-             }
-             Texture "{188C606CD79F9FDC}UI/Textures/Icons/icons_keyboard/icons_keyboard.imageset"
-             Image "backspace"
-             Size 64 64
-             "Shadow Offset" 0.5 0.5
-            }
-            RichTextWidgetClass "{5ED011555B1A8267}" {
-             Name "Text"
-             Slot LayoutSlot "{5EE22980A3A57EBE}" {
-              Padding -10 0 0 0
-              SizeMode Auto
-             }
-             Text "Back"
-             "Font Size" 16
-             "Min Font Size" 16
-             "Vertical Alignment" Center
-             "Shadow Offset" 0.5 0.5
-            }
-           }
-          }
-         }
-        }
-       }
-      }
-     }
+    SCR_ModularButtonComponent "{6093726F6CB0CD80}" {
     }
    }
   }
@@ -500,14 +405,14 @@ FrameWidgetClass {
    Name "Background0"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 199.899
-    OffsetLeft 199.899
-    PositionY -229.728
-    OffsetTop -229.728
+    PositionX 167.333
+    OffsetLeft 167.333
+    PositionY -210.051
+    OffsetTop -210.051
     SizeX 146.257
-    OffsetRight -346.156
+    OffsetRight -313.59
     SizeY 244.836
-    OffsetBottom -15.108
+    OffsetBottom -34.785
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -517,21 +422,22 @@ FrameWidgetClass {
    Name "PromoteToSL"
    Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 206.257
-    OffsetLeft 206.257
-    PositionY -180.731
-    OffsetTop -180.731
+    PositionX 173.691
+    OffsetLeft 173.691
+    PositionY -161.054
+    OffsetTop -161.054
     SizeX 132.979
-    OffsetRight -339.236
+    OffsetRight -306.67
     SizeY 47.241
-    OffsetBottom 133.49
+    OffsetBottom 113.813
    }
+   "Is Enabled" 0
    IsPixelPerfect 0
    Opacity 0
    Clipping False
    Color 0.165 0.672 0.202 0.063
    components {
-    SCR_InputButtonComponent "{60503592B8ECCB15}" {
+    SCR_ModularButtonComponent "{6093726F6FBD3379}" {
     }
    }
   }
@@ -539,14 +445,14 @@ FrameWidgetClass {
    Name "Background1"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 202.101
-    OffsetLeft 202.101
-    PositionY -187.182
-    OffsetTop -187.182
+    PositionX 169.535
+    OffsetLeft 169.535
+    PositionY -167.505
+    OffsetTop -167.505
     SizeX 11.678
-    OffsetRight -213.779
-    SizeY 13.797
-    OffsetBottom 173.384
+    OffsetRight -181.213
+    SizeY 13.798
+    OffsetBottom 153.707
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -556,14 +462,14 @@ FrameWidgetClass {
    Name "Background2"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 331.297
-    OffsetLeft 331.297
-    PositionY -141.114
-    OffsetTop -141.114
+    PositionX 298.731
+    OffsetLeft 298.731
+    PositionY -121.437
+    OffsetTop -121.437
     SizeX 11.792
-    OffsetRight -343.089
-    SizeY 10.25
-    OffsetBottom 130.865
+    OffsetRight -310.523
+    SizeY 10.249
+    OffsetBottom 111.188
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -573,14 +479,14 @@ FrameWidgetClass {
    Name "Background4"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 201.711
-    OffsetLeft 201.711
-    PositionY -140.593
-    OffsetTop -140.593
+    PositionX 169.145
+    OffsetLeft 169.145
+    PositionY -120.916
+    OffsetTop -120.916
     SizeX 12.608
-    OffsetRight -214.319
+    OffsetRight -181.753
     SizeY 9.704
-    OffsetBottom 130.889
+    OffsetBottom 111.212
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -590,14 +496,14 @@ FrameWidgetClass {
    Name "Background3"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 330.517
-    OffsetLeft 330.517
-    PositionY -183.469
-    OffsetTop -183.469
+    PositionX 297.951
+    OffsetLeft 297.951
+    PositionY -163.792
+    OffsetTop -163.792
     SizeX 13.108
-    OffsetRight -343.625
-    SizeY 10.104
-    OffsetBottom 173.366
+    OffsetRight -311.059
+    SizeY 10.103
+    OffsetBottom 153.689
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -607,14 +513,14 @@ FrameWidgetClass {
    Name "PromoteToSLIcon"
    Slot FrameWidgetSlot "{605035F2D9835241}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 203.352
-    OffsetLeft 203.352
-    PositionY -182.861
-    OffsetTop -182.861
+    PositionX 170.786
+    OffsetLeft 170.786
+    PositionY -163.184
+    OffsetTop -163.184
     SizeX 139.733
-    OffsetRight -343.085
+    OffsetRight -310.519
     SizeY 52.203
-    OffsetBottom 130.658
+    OffsetBottom 110.981
    }
    Opacity 0
    Texture "{5C682305CA5C9594}UI/Textures/Menu/Modded/PromoteToSLButton.edds"
@@ -625,14 +531,14 @@ FrameWidgetClass {
    Name "PromoteToSLText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 206.39
-    OffsetLeft 206.39
-    PositionY -197.387
-    OffsetTop -197.387
+    PositionX 173.824
+    OffsetLeft 173.824
+    PositionY -177.71
+    OffsetTop -177.71
     SizeX 127.507
-    OffsetRight -333.897
+    OffsetRight -301.331
     SizeY 14.324
-    OffsetBottom 183.063
+    OffsetBottom 163.386
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -648,23 +554,22 @@ FrameWidgetClass {
    Name "PromoteToTL"
    Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 205.538
-    OffsetLeft 205.538
-    PositionY -110.562
-    OffsetTop -110.562
+    PositionX 172.972
+    OffsetLeft 172.972
+    PositionY -90.885
+    OffsetTop -90.885
     SizeX 135.99
-    OffsetRight -341.528
-    SizeY 46.727
-    OffsetBottom 63.836
+    OffsetRight -308.962
+    SizeY 46.726
+    OffsetBottom 44.159
    }
+   "Is Enabled" 0
    IsPixelPerfect 0
    Opacity 0
    Clipping False
    Color 0.068 0.231 0.371 0.063
    components {
-    SCR_InputButtonComponent "{60503592B79A001B}" {
-     m_bShowBorderOnFocus 0
-     m_iHeightInPixel 40
+    SCR_ModularButtonComponent "{6093726F6AA3820F}" {
     }
    }
   }
@@ -672,14 +577,14 @@ FrameWidgetClass {
    Name "Background8"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 201.152
-    OffsetLeft 201.152
-    PositionY -114.974
-    OffsetTop -114.974
+    PositionX 168.586
+    OffsetLeft 168.586
+    PositionY -95.297
+    OffsetTop -95.297
     SizeX 12.491
-    OffsetRight -213.643
+    OffsetRight -181.077
     SizeY 13.826
-    OffsetBottom 101.148
+    OffsetBottom 81.471
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -689,14 +594,14 @@ FrameWidgetClass {
    Name "Background7"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 199.892
-    OffsetLeft 199.892
-    PositionY -70.292
-    OffsetTop -70.292
+    PositionX 167.326
+    OffsetLeft 167.326
+    PositionY -50.615
+    OffsetTop -50.615
     SizeX 13.391
-    OffsetRight -213.283
+    OffsetRight -180.717
     SizeY 12.026
-    OffsetBottom 58.266
+    OffsetBottom 38.589
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -706,14 +611,14 @@ FrameWidgetClass {
    Name "Background6"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 332.481
-    OffsetLeft 332.481
-    PositionY -114.895
-    OffsetTop -114.895
+    PositionX 299.915
+    OffsetLeft 299.915
+    PositionY -95.218
+    OffsetTop -95.218
     SizeX 12.606
-    OffsetRight -345.087
+    OffsetRight -312.521
     SizeY 13.033
-    OffsetBottom 101.862
+    OffsetBottom 82.185
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -723,14 +628,14 @@ FrameWidgetClass {
    Name "Background5"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 333.922
-    OffsetLeft 333.922
-    PositionY -72.401
-    OffsetTop -72.401
+    PositionX 301.356
+    OffsetLeft 301.356
+    PositionY -52.724
+    OffsetTop -52.724
     SizeX 11.201
-    OffsetRight -345.123
+    OffsetRight -312.557
     SizeY 9.753
-    OffsetBottom 62.648
+    OffsetBottom 42.971
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -740,14 +645,14 @@ FrameWidgetClass {
    Name "PromoteToTLIcon"
    Slot FrameWidgetSlot "{605035F3B302C8FC}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 203.297
-    OffsetLeft 203.297
-    PositionY -113.476
-    OffsetTop -113.476
+    PositionX 170.731
+    OffsetLeft 170.731
+    PositionY -93.799
+    OffsetTop -93.799
     SizeX 140.641
-    OffsetRight -343.938
-    SizeY 53.22
-    OffsetBottom 60.257
+    OffsetRight -311.372
+    SizeY 53.219
+    OffsetBottom 40.58
    }
    Opacity 0
    Texture "{E2B4282BA87BDD67}UI/Textures/Menu/Modded/PromoteToTLButton.edds"
@@ -758,14 +663,14 @@ FrameWidgetClass {
    Name "PromoteToTLText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 206.392
-    OffsetLeft 206.392
-    PositionY -127.77
-    OffsetTop -127.77
+    PositionX 173.826
+    OffsetLeft 173.826
+    PositionY -108.093
+    OffsetTop -108.093
     SizeX 135.102
-    OffsetRight -341.494
+    OffsetRight -308.928
     SizeY 14.258
-    OffsetBottom 113.512
+    OffsetBottom 93.835
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -781,14 +686,14 @@ FrameWidgetClass {
    Name "PrettyText0"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 225.52
-    OffsetLeft 225.52
-    PositionY -229
-    OffsetTop -229
+    PositionX 192.954
+    OffsetLeft 192.954
+    PositionY -209.323
+    OffsetTop -209.323
     SizeX 109.932
-    OffsetRight -335.452
+    OffsetRight -302.886
     SizeY 23.659
-    OffsetBottom 205.341
+    OffsetBottom 185.664
    }
    Opacity 0
    Text "Advanced Settings"
@@ -804,14 +709,14 @@ FrameWidgetClass {
    Name "Pretty0"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 200.061
-    OffsetLeft 200.061
-    PositionY -229.756
-    OffsetTop -229.756
+    PositionX 167.495
+    OffsetLeft 167.495
+    PositionY -210.079
+    OffsetTop -210.079
     SizeX 25.181
-    OffsetRight -225.242
+    OffsetRight -192.676
     SizeY 23.874
-    OffsetBottom 205.882
+    OffsetBottom 186.205
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -824,19 +729,20 @@ FrameWidgetClass {
    Name "Kick"
    Slot FrameWidgetSlot "{604F4D6FF9C3B919}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 204.85
-    OffsetLeft 204.85
-    PositionY -39.837
-    OffsetTop -39.837
+    PositionX 172.284
+    OffsetLeft 172.284
+    PositionY -20.16
+    OffsetTop -20.16
     SizeX 136.256
-    OffsetRight -341.106
+    OffsetRight -308.54
     SizeY 47.165
-    OffsetBottom -7.328
+    OffsetBottom -27.005
    }
+   "Is Enabled" 0
    Opacity 0
    Color 0.68 0.005 0.006 0.063
    components {
-    SCR_InputButtonComponent "{60503592B79A001B}" {
+    SCR_ModularButtonComponent "{6093726E95C17FCB}" {
     }
    }
   }
@@ -844,14 +750,14 @@ FrameWidgetClass {
    Name "Background9"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 332.247
-    OffsetLeft 332.247
-    PositionY 0.076
-    OffsetTop 0.076
+    PositionX 299.681
+    OffsetLeft 299.681
+    PositionY 19.753
+    OffsetTop 19.753
     SizeX 12.391
-    OffsetRight -344.638
+    OffsetRight -312.072
     SizeY 10.528
-    OffsetBottom -10.604
+    OffsetBottom -30.281
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -861,14 +767,14 @@ FrameWidgetClass {
    Name "Background10"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 330.979
-    OffsetLeft 330.979
-    PositionY -44.721
-    OffsetTop -44.721
+    PositionX 298.413
+    OffsetLeft 298.413
+    PositionY -25.044
+    OffsetTop -25.044
     SizeX 13.489
-    OffsetRight -344.468
+    OffsetRight -311.902
     SizeY 11.336
-    OffsetBottom 33.385
+    OffsetBottom 13.708
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -878,14 +784,14 @@ FrameWidgetClass {
    Name "Background11"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 200.591
-    OffsetLeft 200.591
-    PositionY 1.181
-    OffsetTop 1.181
+    PositionX 168.025
+    OffsetLeft 168.025
+    PositionY 20.858
+    OffsetTop 20.858
     SizeX 10.051
-    OffsetRight -210.642
+    OffsetRight -178.076
     SizeY 8.528
-    OffsetBottom -9.709
+    OffsetBottom -29.386
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -895,14 +801,14 @@ FrameWidgetClass {
    Name "Background12"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 199.637
-    OffsetLeft 199.637
-    PositionY -44.759
-    OffsetTop -44.759
+    PositionX 167.071
+    OffsetLeft 167.071
+    PositionY -25.082
+    OffsetTop -25.082
     SizeX 13.891
-    OffsetRight -213.528
+    OffsetRight -180.962
     SizeY 13.026
-    OffsetBottom 31.733
+    OffsetBottom 12.056
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -912,14 +818,14 @@ FrameWidgetClass {
    Name "KickIcon"
    Slot FrameWidgetSlot "{605035F3263CC379}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 202.902
-    OffsetLeft 202.902
-    PositionY -43.099
-    OffsetTop -43.099
+    PositionX 170.336
+    OffsetLeft 170.336
+    PositionY -23.422
+    OffsetTop -23.422
     SizeX 140.36
-    OffsetRight -343.262
-    SizeY 54.64
-    OffsetBottom -11.54
+    OffsetRight -310.696
+    SizeY 54.639
+    OffsetBottom -31.217
    }
    Opacity 0
    Texture "{C6E80921A68B03AF}UI/Textures/Menu/Modded/Kick.edds"
@@ -930,14 +836,14 @@ FrameWidgetClass {
    Name "KickText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 206.149
-    OffsetLeft 206.149
-    PositionY -56.409
-    OffsetTop -56.409
+    PositionX 173.583
+    OffsetLeft 173.583
+    PositionY -36.732
+    OffsetTop -36.732
     SizeX 124.273
-    OffsetRight -330.422
+    OffsetRight -297.856
     SizeY 13.418
-    OffsetBottom 42.991
+    OffsetBottom 23.314
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -947,6 +853,62 @@ FrameWidgetClass {
    "Vertical Alignment" Center
    FontProperties FontProperties "{60587BC887F2FD1C}" {
     ShadowOffset 0.5 0.5
+   }
+  }
+  HorizontalLayoutWidgetClass "{609373606B03A052}" {
+   Name "Footer"
+   Slot FrameWidgetSlot "{60937360A8396184}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -151.358
+    OffsetLeft -151.358
+    PositionY 187.044
+    OffsetTop 187.044
+    SizeX 303.702
+    OffsetRight -152.344
+    SizeY 30
+    OffsetBottom -217.044
+   }
+   components {
+    SCR_DynamicFooterComponent "{60937360D117117F}" {
+     m_sLeftFooter "ButtonsLeft"
+     m_sRightFooter "ButtonsRight"
+    }
+   }
+   {
+    OverlayWidgetClass "{609373606B03A051}" {
+     Name "Overlay"
+     Slot LayoutSlot "{609373606B03A525}" {
+      SizeMode Fill
+     }
+     {
+      HorizontalLayoutWidgetClass "{609373606B03A05F}" {
+       Name "ButtonsLeft"
+       Slot OverlayWidgetSlot "{609373606B03A57A}" {
+        HorizontalAlign 0
+        VerticalAlign 3
+       }
+       {
+        ButtonWidgetClass "{609373606B03A05D}" : "{0114A06AD44D49BD}UI/layouts/WidgetLibrary/Buttons/DialogButtonCancel.layout" {
+         Name "Cancel"
+         Slot LayoutSlot "{5CC2F7A314C9440B}" {
+         }
+         components {
+          SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
+           m_sLabel "Exit"
+          }
+         }
+        }
+       }
+      }
+      HorizontalLayoutWidgetClass "{609373606B03A046}" {
+       Name "ButtonsRight"
+       Slot OverlayWidgetSlot "{609373606B03A224}" {
+        HorizontalAlign 2
+        VerticalAlign 3
+       }
+      }
+     }
+    }
    }
   }
  }
