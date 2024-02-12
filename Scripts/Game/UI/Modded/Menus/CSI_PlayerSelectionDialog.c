@@ -112,11 +112,11 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		foreach (int i, string playerStringToSplit : m_aGroupArray) {
 			
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
+			playerStringToSplit.Split("╣", playerSplitArray, false);
 			
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = playerSplitArray[2];
+			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "ColorTeam");
 			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
@@ -131,7 +131,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			};
 			
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(192, playerDisplay, playerName);
+			playerName = CheckEllipsis(190, playerDisplay, playerName);
 
 		  playerDisplay.SetColorInt(colorTeam.ToInt());
 			playerDisplay.SetText(playerName);
@@ -241,8 +241,6 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		string playerIntStr = component.GetRootWidget().GetName();
 		
 		int playerInt = playerIntStr.ToInt(offset: 6);
-		
-		Print(playerInt);
 		
 		ImageWidget statusDisplayList = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", playerInt)));
 		int playerOInt = statusDisplayList.GetOpacity();

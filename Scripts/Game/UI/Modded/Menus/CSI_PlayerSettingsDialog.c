@@ -78,7 +78,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	void SetPlayerStr(string playerStringToSplit)
 	{	
 		array<string> playerSplitArray = {};
-		playerStringToSplit.Split("«╣║╢║»", playerSplitArray, false);
+		playerStringToSplit.Split("╣", playerSplitArray, false);
 		string playerIDString = playerSplitArray[1];
 		
 		m_iSelectedPlayerID = playerIDString.ToInt();
@@ -101,6 +101,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		string colorTeam  = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "ColorTeam");
 		
 		m_sStoredSpecialtIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon"); 
+		
+		if (m_sStoredSpecialtIcon == "" || colorTeam == "") return;
 		
 		string rankVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[5];
 		switch (true)
@@ -126,6 +128,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
 		
 		string iconOverride = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon");
+		
+		if (iconOverride == "") return;
 	
 		int playerOverideIcon = 0;	
 		switch (iconOverride)

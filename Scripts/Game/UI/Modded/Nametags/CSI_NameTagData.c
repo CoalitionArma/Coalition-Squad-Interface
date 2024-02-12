@@ -1,5 +1,7 @@
 modded class SCR_NameTagData
 {
+	const vector BODY_OFFSET = "0 -0.2 0";			// tag visual position offset for body
+	
 	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
 	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
 	protected string m_sGunner        = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
@@ -10,14 +12,10 @@ modded class SCR_NameTagData
 	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
 	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
 	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
-	protected string m_sMan           = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
 	
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected string m_sGroupName;
-	protected int m_iColorTeamInt;
 	protected string m_sNametagsPos;
-	protected string m_sNametagsVisible;	
-	protected int m_iNametagsRange;	
 	
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
@@ -63,9 +61,10 @@ modded class SCR_NameTagData
 			if (playerMgr)
 			{
 				m_sName = playerMgr.GetPlayerName(m_iPlayerID);
+				
 				if (rankVisible == "true") 
 				{
-					string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(m_iPlayerID));
+					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PlayerRank");
 					m_sName = string.Format("%1 %2", rank, m_sName);
 				};
 				if (roleNametagVisible == "true") 
@@ -73,15 +72,15 @@ modded class SCR_NameTagData
 					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");		
 					switch (icon) {
 						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break;};
-						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break;};
-						case m_sGunner        : { m_sName = string.Format("%1 [GUN]", m_sName); break;};
-						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]", m_sName);  break;};
-						case m_sTeamLeader    : { m_sName = string.Format("%1 [FTL]", m_sName);  break;};
+						case m_sDriver        : { m_sName = string.Format("%1 [DVR]", m_sName); break;};
+						case m_sGunner        : { m_sName = string.Format("%1 [GNR]", m_sName); break;};
+						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]",  m_sName); break;};
+						case m_sTeamLeader    : { m_sName = string.Format("%1 [FTL]", m_sName); break;};
 						case m_sMedic         : { m_sName = string.Format("%1 [MED]", m_sName); break;};
 						case m_sSniper        : { m_sName = string.Format("%1 [SNP]", m_sName); break;};
-						case m_sMachineGunner : { m_sName = string.Format("%1 [AR]", m_sName);  break;};
+						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]",  m_sName); break;};
 						case m_sAntiTank      : { m_sName = string.Format("%1 [RAT]", m_sName); break;};
-						case m_sGrenadier     : { m_sName = string.Format("%1 [GL]", m_sName);  break;};
+						case m_sGrenadier     : { m_sName = string.Format("%1 [GRN]", m_sName); break;};
 					}
 				};
 			} else { m_sName = "No player manager!" };
@@ -134,17 +133,15 @@ modded class SCR_NameTagData
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	int GetPlayerColorTeam()
+	string GetPlayerColorTeam()
 	{	
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		if (!m_AuthorityComponent) return -1;
+				
+		if (!m_AuthorityComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "-1";
 		
 		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "ColorTeam");
 		
-		if (colorTeam == "" || !(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON)) return -1;
-		
-		m_iColorTeamInt = colorTeam.ToInt();
-		return m_iColorTeamInt;
+		return colorTeam;
 	}
 	
 	void UpdateAttatchedTo() 

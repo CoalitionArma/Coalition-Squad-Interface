@@ -16,8 +16,8 @@ FrameWidgetClass {
     OffsetTop -470.672
     SizeX 250
     OffsetRight -125.064
-    SizeY 931.189
-    OffsetBottom -460.517
+    SizeY 934.147
+    OffsetBottom -463.475
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
