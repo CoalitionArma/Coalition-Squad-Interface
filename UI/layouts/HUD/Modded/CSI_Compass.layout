@@ -67,7 +67,6 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Opacity 0
-   Color 0.68 0.68 0.68 1
    Texture "{039CA0681094CD28}UI/Textures/HUD/Modded/Icons/iconmanleader_ca.edds"
    Size 64 64
    "Shadow Offset" 0.5 0.5

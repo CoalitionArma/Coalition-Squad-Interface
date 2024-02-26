@@ -4,10 +4,11 @@ modded enum ChimeraMenuPreset {
 	CSI_SettingsDialog
 }
 
-class CSI_SettingsDialog : ChimeraMenuBase 
+class CSI_SettingsDialog : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
-	
+	protected CSI_ClientComponent m_ClientComponent;
+
 	protected string m_sCompassVisibleSO;
 	protected string m_sSquadRadarVisibleSO;
 	protected string m_sGroupDisplayVisibleSO;
@@ -16,8 +17,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	protected string m_sRankVisibleSO;
 	protected int m_iNametagsRangeSO;
 	protected string m_sRoleNametagVisibleSO;
-	protected string m_sPersonalColorTeamMenuEnabledSO;
-	
+	protected string m_sPersonalColorTeamMenuSO;
+
 	protected CheckBoxWidget m_wCompassVisibleWidget;
 	protected CheckBoxWidget m_wSquadRadarVisibleWidget;
 	protected CheckBoxWidget m_wGroupDisplayVisibleWidget;
@@ -29,8 +30,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	protected XComboBoxWidget m_wNametagsPosWidget;
 	protected CheckBoxWidget m_wRoleNametagVisibleWidget;
 	protected CheckBoxWidget m_wSquadRadarSelfIconVisibleWidget;
-	protected CheckBoxWidget m_wPersonalColorTeamMenuEnabledWidget;
-	
+	protected CheckBoxWidget m_wPersonalColorTeamMenuWidget;
+
 	protected CheckBoxWidget m_wCompassVisibleWidgetSO;
 	protected CheckBoxWidget m_wSquadRadarVisibleWidgetSO;
 	protected CheckBoxWidget m_wGroupDisplayVisibleWidgetSO;
@@ -39,22 +40,26 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	protected CheckBoxWidget m_wRankVisibleWidgetSO;
 	protected CheckBoxWidget m_wNametagsRangeSO;
 	protected CheckBoxWidget m_wRoleNametagVisibleSO;
-	protected CheckBoxWidget m_wPersonalColorTeamMenuEnabledSO;
+	protected CheckBoxWidget m_wPersonalColorTeamMenuSO;
 
 	//------------------------------------------------------------------------------------------------
 
 	// Override/static functions
 
 	//------------------------------------------------------------------------------------------------
-	
+
 	override void OnMenuOpen()
 	{
 		super.OnMenuOpen();
-		
+
 		m_wRoot = GetRootWidget();
+
+		m_ClientComponent = CSI_ClientComponent.GetInstance();
+		if (!m_ClientComponent) return;
+
 		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
 		if (!authorityComponent) return;
-		
+
 		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
 		cancel.m_OnClicked.Insert(OnMenuBack);
@@ -62,150 +67,151 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		GetGame().GetInputManager().AddActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
 		SCR_InputButtonComponent confirm = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Confirm").FindHandler(SCR_InputButtonComponent));
 		confirm.m_OnActivated.Insert(ApplySettings);
-		
-		float squadRadarIconSize = 100;
+
+		string squadRadarIconSizeStr = m_ClientComponent.ReturnLocalCSISettings()[9];
 		m_wIconSizeWidget = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconScaleXComboBox"));
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarIconSize", squadRadarIconSize);
-		if (squadRadarIconSize == 0) squadRadarIconSize = 100; 
-		m_wIconSizeWidget.SetCurrentItem((squadRadarIconSize/5) - 10);
-		
+		int squadRadarIconSize = 100;
+		if (squadRadarIconSizeStr != "") {
+			squadRadarIconSize = squadRadarIconSizeStr.ToInt();
+		};
+
+		if (squadRadarIconSize == 0) squadRadarIconSize = 100;
+		m_wIconSizeWidget.SetCurrentItem((squadRadarIconSize/ 5) - 10);
+
 		m_wNametagsPosWidget = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagsPosXComboBox"));
 		string nametagsPosition = "";
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsPosition", nametagsPosition);
-		if (nametagsPosition == "HEAD") 
+		nametagsPosition = m_ClientComponent.ReturnLocalCSISettings()[11];
+		if (nametagsPosition == "HEAD")
 		{
 			m_wNametagsPosWidget.SetCurrentItem(1);
 		} else {
 			m_wNametagsPosWidget.SetCurrentItem(0);
 		};
-		
+
 		m_wSquadRadarSelfIconVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("squadRadarSelfIconVisibleCheckBox"));
 		string squadRadarSelfIconVisible = "";
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarSelfIconVisible", squadRadarSelfIconVisible);
-		if (squadRadarSelfIconVisible == "false") 
+		squadRadarSelfIconVisible = m_ClientComponent.ReturnLocalCSISettings()[10];
+		if (squadRadarSelfIconVisible == "false")
 		{
 			m_wSquadRadarSelfIconVisibleWidget.SetChecked(false);
 		} else {
 			m_wSquadRadarSelfIconVisibleWidget.SetChecked(true);
 		};
-		 
-		// ToDo: Impliment this
-		//GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassTexture", m_sCompassTexture);
-		
+
 		m_wCompassVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("CompassVisibleCheckBox"));
 		m_sCompassVisibleSO = authorityComponent.ReturnAuthoritySettings()[0];
 		string compassVisible = "";
 		switch (m_sCompassVisibleSO)
 		{
-			case ("false") : { m_wCompassVisibleWidget.SetChecked(false); m_wCompassVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wCompassVisibleWidget.SetChecked(true);  m_wCompassVisibleWidget.SetEnabled(false); m_wCompassVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("compassVisible", compassVisible); 
+			case ("false") : { m_wCompassVisibleWidget.SetChecked(false); m_wCompassVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wCompassVisibleWidget.SetChecked(true); m_wCompassVisibleWidget.SetEnabled(false); m_wCompassVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
 				// default state
 				m_wCompassVisibleWidget.SetChecked(true);
-				
+
 				if (compassVisible == "false") {
 					m_wCompassVisibleWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-			
+
 		m_wSquadRadarVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("SquadRadarVisibleCheckBox"));
 		m_sSquadRadarVisibleSO = authorityComponent.ReturnAuthoritySettings()[1];
 		string squadRadarVisible = "";
 		switch (m_sSquadRadarVisibleSO)
 		{
-			case ("false") : { m_wSquadRadarVisibleWidget.SetChecked(false); m_wSquadRadarVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wSquadRadarVisibleWidget.SetChecked(true);  m_wSquadRadarVisibleWidget.SetEnabled(false); m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("squadRadarVisible", squadRadarVisible); 
+			case ("false") : { m_wSquadRadarVisibleWidget.SetChecked(false); m_wSquadRadarVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wSquadRadarVisibleWidget.SetChecked(true); m_wSquadRadarVisibleWidget.SetEnabled(false); m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 				// default state
 				m_wSquadRadarVisibleWidget.SetChecked(true);
-				
+
 				if (squadRadarVisible == "false") {
 					m_wSquadRadarVisibleWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-		
+
 		m_wGroupDisplayVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("GroupDisplayVisibleCheckBox"));
 		m_sGroupDisplayVisibleSO = authorityComponent.ReturnAuthoritySettings()[2];
 		string groupDisplayVisible = "";
 		switch (m_sGroupDisplayVisibleSO)
 		{
-			case ("false") : { m_wGroupDisplayVisibleWidget.SetChecked(false); m_wGroupDisplayVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wGroupDisplayVisibleWidget.SetChecked(true);  m_wGroupDisplayVisibleWidget.SetEnabled(false); m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("groupDisplayVisible", groupDisplayVisible); 
+			case ("false") : { m_wGroupDisplayVisibleWidget.SetChecked(false); m_wGroupDisplayVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wGroupDisplayVisibleWidget.SetChecked(true); m_wGroupDisplayVisibleWidget.SetEnabled(false); m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
 				// default state
 				m_wGroupDisplayVisibleWidget.SetChecked(true);
-				
+
 				if (groupDisplayVisible == "false") {
 					m_wGroupDisplayVisibleWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-		
+
 		m_wStaminaBarVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("StaminaBarVisibleCheckBox"));
 		m_sStaminaBarVisibleSO = authorityComponent.ReturnAuthoritySettings()[3];
 		string staminaBarVisible = "";
 		switch (m_sStaminaBarVisibleSO)
 		{
-			case ("false") : { m_wStaminaBarVisibleWidget.SetChecked(false); m_wStaminaBarVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wStaminaBarVisibleWidget.SetChecked(true);  m_wStaminaBarVisibleWidget.SetEnabled(false); m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("staminaBarVisible", staminaBarVisible); 
+			case ("false") : { m_wStaminaBarVisibleWidget.SetChecked(false); m_wStaminaBarVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wStaminaBarVisibleWidget.SetChecked(true); m_wStaminaBarVisibleWidget.SetEnabled(false); m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				staminaBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
 				// default state
 				m_wStaminaBarVisibleWidget.SetChecked(true);
-				
+
 				if (staminaBarVisible == "false") {
 					m_wStaminaBarVisibleWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-		
+
 		m_wNametagsVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagsVisibleCheckbox"));
 		m_sNametagsVisibleSO = authorityComponent.ReturnAuthoritySettings()[4];
 		string nametagsVisible = "";
 		switch (m_sNametagsVisibleSO)
 		{
-			case ("false") : { m_wNametagsVisibleWidget.SetChecked(false); m_wNametagsVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wNametagsVisibleWidget.SetChecked(true);  m_wNametagsVisibleWidget.SetEnabled(false); m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsVisible", nametagsVisible); 
+			case ("false") : { m_wNametagsVisibleWidget.SetChecked(false); m_wNametagsVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wNametagsVisibleWidget.SetChecked(true); m_wNametagsVisibleWidget.SetEnabled(false); m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];
 				// default state
 				m_wNametagsVisibleWidget.SetChecked(true);
-				
+
 				if (nametagsVisible == "false") {
 					m_wNametagsVisibleWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-		
+
 		m_wRankVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("RankVisibleCheckBox"));
 		m_sRankVisibleSO = authorityComponent.ReturnAuthoritySettings()[5];
 		string rankVisible = "";
 		switch (m_sRankVisibleSO)
 		{
-			case ("false") : { m_wRankVisibleWidget.SetChecked(false); m_wRankVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wRankVisibleWidget.SetChecked(true);  m_wRankVisibleWidget.SetEnabled(false); m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("rankVisible", rankVisible); 
+			case ("false") : { m_wRankVisibleWidget.SetChecked(false); m_wRankVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wRankVisibleWidget.SetChecked(true); m_wRankVisibleWidget.SetEnabled(false); m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 				// default state
 				m_wRankVisibleWidget.SetChecked(false);
-				
+
 				if (rankVisible == "true") {
 					m_wRankVisibleWidget.SetChecked(true);
 				};
 				break;
 			};
 		};
-		
+
 		m_wNametagsRangeWidget = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagsRangeXComboBox"));
 		string nametagsRangeSOString = authorityComponent.ReturnAuthoritySettings()[6];
 		if (nametagsRangeSOString != "") {
@@ -213,84 +219,85 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		} else {
 			m_iNametagsRangeSO = 0;
 		};
-		int nametagsRange = 0;
+		string nametagsRangeStr = "";
 		switch (true)
 		{
-			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem(m_iNametagsRangeSO / 5); m_wNametagsRangeWidget.SetEnabled(false); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("nametagsRange", nametagsRange); 
+			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem(m_iNametagsRangeSO / 5); m_wNametagsRangeWidget.SetEnabled(false); break; };
+			default : {
+				nametagsRangeStr = m_ClientComponent.ReturnLocalCSISettings()[6];
+				int nametagsRange = nametagsRangeStr.ToInt();
 				// default state
 				m_wNametagsRangeWidget.SetCurrentItem(6);
-				
-				if (nametagsRange > 0 ) {
+
+				if (nametagsRange > 0) {
 					m_wNametagsRangeWidget.SetCurrentItem((nametagsRange / 5) - 1);
 				};
 				break;
 			};
 		};
-		
+
 		m_wRoleNametagVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("roleNametagVisibleCheckbox"));
 		m_sRoleNametagVisibleSO = authorityComponent.ReturnAuthoritySettings()[7];
 		string roleNametagVisible = "";
 		switch (m_sRoleNametagVisibleSO)
 		{
-			case ("false") : { m_wRoleNametagVisibleWidget.SetChecked(false); m_wRoleNametagVisibleWidget.SetEnabled(false); break;};
-			case ("true") : { m_wRoleNametagVisibleWidget.SetChecked(true);  m_wRoleNametagVisibleWidget.SetEnabled(false); m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("roleNametagVisible", roleNametagVisible); 
+			case ("false") : { m_wRoleNametagVisibleWidget.SetChecked(false); m_wRoleNametagVisibleWidget.SetEnabled(false); break; };
+			case ("true") : { m_wRoleNametagVisibleWidget.SetChecked(true); m_wRoleNametagVisibleWidget.SetEnabled(false); m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
 				// default state
 				m_wRoleNametagVisibleWidget.SetChecked(false);
-				
+
 				if (roleNametagVisible == "true") {
 					m_wRoleNametagVisibleWidget.SetChecked(true);
 				};
 				break;
 			};
 		};
-		
-		m_wPersonalColorTeamMenuEnabledWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("personalColorTeamMenuCheckBox"));
-		m_sPersonalColorTeamMenuEnabledSO = authorityComponent.ReturnAuthoritySettings()[8];
+
+		m_wPersonalColorTeamMenuWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("PersonalColorTeamMenuCheckbox"));
+		m_sPersonalColorTeamMenuSO = authorityComponent.ReturnAuthoritySettings()[8];
 		string personalColorTeamMenuEnabled = "";
-		switch (m_sPersonalColorTeamMenuEnabledSO)
+		switch (m_sPersonalColorTeamMenuSO)
 		{
-			case ("false") : { m_wPersonalColorTeamMenuEnabledWidget.SetChecked(false); m_wPersonalColorTeamMenuEnabledWidget.SetEnabled(false); break;};
-			case ("true") : { m_wPersonalColorTeamMenuEnabledWidget.SetChecked(true);  m_wPersonalColorTeamMenuEnabledWidget.SetEnabled(false); m_wPersonalColorTeamMenuEnabledWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
-			default  : { 
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get("personalColorTeamMenuEnabled", personalColorTeamMenuEnabled); 
+			case ("false") : { m_wPersonalColorTeamMenuWidget.SetChecked(false); m_wPersonalColorTeamMenuWidget.SetEnabled(false); break; };
+			case ("true") : { m_wPersonalColorTeamMenuWidget.SetChecked(true); m_wPersonalColorTeamMenuWidget.SetEnabled(false); m_wPersonalColorTeamMenuWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			default : {
+				personalColorTeamMenuEnabled = m_ClientComponent.ReturnLocalCSISettings()[8];
 				// default state
-				m_wPersonalColorTeamMenuEnabledWidget.SetChecked(true);
-				
+				m_wPersonalColorTeamMenuWidget.SetChecked(true);
+
 				if (personalColorTeamMenuEnabled == "false") {
-					m_wPersonalColorTeamMenuEnabledWidget.SetChecked(false);
+					m_wPersonalColorTeamMenuWidget.SetChecked(false);
 				};
 				break;
 			};
 		};
-		
+
 		if (SCR_Global.IsAdmin()) ShowServerOverrideMenu();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 
 	// Additional menu functions
 
 	//------------------------------------------------------------------------------------------------
-	
-	protected void ShowServerOverrideMenu() 
+
+	protected void ShowServerOverrideMenu()
 	{
 		m_wCompassVisibleWidgetSO                = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("compassVisibleServerOverride"));
 		m_wSquadRadarVisibleWidgetSO             = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("squadRadarVisibleServerOverride"));
 		m_wGroupDisplayVisibleWidgetSO           = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("groupDisplayVisibleServerOverride"));
 		m_wStaminaBarVisibleWidgetSO             = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("staminaBarVisibleServerOverride"));
-		m_wNametagsVisibleWidgetSO       		     = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("nametagsVisibleServerOverride"));
+		m_wNametagsVisibleWidgetSO               = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("nametagsVisibleServerOverride"));
 		m_wRankVisibleWidgetSO                   = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("showRankServerOverride"));
 		m_wNametagsRangeSO                       = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("nametagsRangeServerOverride"));
 		m_wRoleNametagVisibleSO                  = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("roleNametagVisibleServerOverride"));
-		m_wPersonalColorTeamMenuEnabledSO        = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("personalColorTeamMenuServerOverride"));
-		
+		m_wPersonalColorTeamMenuSO               = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("personalColorTeamMenuServerOverride"));
+
 		ImageWidget backgroundServerOverride     = ImageWidget.Cast(m_wRoot.FindAnyWidget("BackgroundServerOverride"));
 		ImageWidget prettyServerOverride         = ImageWidget.Cast(m_wRoot.FindAnyWidget("PrettyServerOverride"));
-		
+
 		TextWidget prettyTextServerOverride      = TextWidget.Cast(m_wRoot.FindAnyWidget("PrettyTextServerOverride"));
 		TextWidget prettyTextServerOverrideOne   = TextWidget.Cast(m_wRoot.FindAnyWidget("PrettyTextServerOverride1"));
 		TextWidget prettyTextServerOverrideTwo   = TextWidget.Cast(m_wRoot.FindAnyWidget("PrettyTextServerOverride2"));
@@ -303,7 +310,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		TextWidget seperatorServerOverrideThree  = TextWidget.Cast(m_wRoot.FindAnyWidget("SeperatorServerOverride3"));
 		TextWidget seperatorServerOverrideFour   = TextWidget.Cast(m_wRoot.FindAnyWidget("SeperatorServerOverride4"));
 
-		
+
 		m_wCompassVisibleWidgetSO.SetOpacity(1);
 		m_wSquadRadarVisibleWidgetSO.SetOpacity(1);
 		m_wGroupDisplayVisibleWidgetSO.SetOpacity(1);
@@ -312,8 +319,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		m_wRankVisibleWidgetSO.SetOpacity(1);
 		m_wRoleNametagVisibleSO.SetOpacity(1);
 		m_wNametagsRangeSO.SetOpacity(1);
-		m_wPersonalColorTeamMenuEnabledSO.SetOpacity(1);
-		
+		m_wPersonalColorTeamMenuSO.SetOpacity(1);
+
 		m_wCompassVisibleWidgetSO.SetEnabled(true);
 		m_wSquadRadarVisibleWidgetSO.SetEnabled(true);
 		m_wGroupDisplayVisibleWidgetSO.SetEnabled(true);
@@ -322,8 +329,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		m_wRankVisibleWidgetSO.SetEnabled(true);
 		m_wRoleNametagVisibleSO.SetEnabled(true);
 		m_wNametagsRangeSO.SetEnabled(true);
-		m_wPersonalColorTeamMenuEnabledSO.SetEnabled(true);
-		
+		m_wPersonalColorTeamMenuSO.SetEnabled(true);
+
 		backgroundServerOverride.SetOpacity(1);
 		prettyServerOverride.SetOpacity(1);
 		prettyTextServerOverride.SetOpacity(1);
@@ -337,7 +344,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		seperatorServerOverrideTwo.SetOpacity(1);
 		seperatorServerOverrideThree.SetOpacity(1);
 		seperatorServerOverrideFour.SetOpacity(1);
-	
+
 		if (m_sCompassVisibleSO == "true" || m_sCompassVisibleSO == "false") m_wCompassVisibleWidgetSO.SetChecked(true);
 		if (m_sSquadRadarVisibleSO == "true" || m_sSquadRadarVisibleSO == "false") m_wSquadRadarVisibleWidgetSO.SetChecked(true);
 		if (m_sGroupDisplayVisibleSO == "true" || m_sGroupDisplayVisibleSO == "false") m_wGroupDisplayVisibleWidgetSO.SetChecked(true);
@@ -346,130 +353,125 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		if (m_sRankVisibleSO == "true" || m_sRankVisibleSO == "false") m_wRankVisibleWidgetSO.SetChecked(true);
 		if (m_sRoleNametagVisibleSO == "true" || m_sRoleNametagVisibleSO == "false") m_wRoleNametagVisibleSO.SetChecked(true);
 		if (m_iNametagsRangeSO > 0) m_wNametagsRangeSO.SetChecked(true);
-		if (m_sPersonalColorTeamMenuEnabledSO == "true" || m_sPersonalColorTeamMenuEnabledSO == "false") m_wPersonalColorTeamMenuEnabledSO.SetChecked(true);
+		if (m_sPersonalColorTeamMenuSO == "true" || m_sPersonalColorTeamMenuSO == "false") m_wPersonalColorTeamMenuSO.SetChecked(true);
 	};
-	
+
 	protected void ApplySettings()
-	{		
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("compassVisible",               m_wCompassVisibleWidget.IsChecked().ToString());
-	//	GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("compassTexture",   	           "{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds");
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("squadRadarVisible",            m_wSquadRadarVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("groupDisplayVisible",          m_wGroupDisplayVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("staminaBarVisible",            m_wStaminaBarVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsVisible",              m_wNametagsVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("rankVisible",                  m_wRankVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("squadRadarIconSize",           (m_wIconSizeWidget.GetCurrentItem() * 5) + 50);
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsRange",                ((m_wNametagsRangeWidget.GetCurrentItem() + 1) * 5));
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("roleNametagVisible",           m_wRoleNametagVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("squadRadarSelfIconVisible",    m_wSquadRadarSelfIconVisibleWidget.IsChecked().ToString());
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("personalColorTeamMenuEnabled", m_wPersonalColorTeamMenuEnabledWidget.IsChecked().ToString());
-		
+	{
+		m_ClientComponent.ChangeLocalCSISetting("compassVisible",            m_wCompassVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarVisible",         m_wSquadRadarVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("groupDisplayVisible",       m_wGroupDisplayVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("staminaBarVisible",         m_wStaminaBarVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("nametagsVisible",           m_wNametagsVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("rankVisible",               m_wRankVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarIconSize",        ((m_wIconSizeWidget.GetCurrentItem() * 5) + 50).ToString());
+		m_ClientComponent.ChangeLocalCSISetting("nametagsRange",             ((m_wNametagsRangeWidget.GetCurrentItem() + 1) * 5).ToString());
+		m_ClientComponent.ChangeLocalCSISetting("roleNametagVisible",        m_wRoleNametagVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarSelfIconVisible", m_wSquadRadarSelfIconVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("personalColorTeamMenu",     m_wPersonalColorTeamMenuWidget.IsChecked().ToString());
+
 		if (m_wNametagsPosWidget.GetCurrentItem() == 0) {
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsPosition", "BODY");
+			m_ClientComponent.ChangeLocalCSISetting("nametagsPosition", "BODY");
 		} else {
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set("nametagsPosition", "HEAD");
+			m_ClientComponent.ChangeLocalCSISetting("nametagsPosition", "HEAD");
 		};
-		
+
 		if (SCR_Global.IsAdmin()) ApplyAdminSettings();
-		
-		GetGame().UserSettingsChanged();
-		GetGame().SaveUserSettings();
 	}
-		
+
 	protected void ApplyAdminSettings()
 	{
-		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		if (!clientComponent) return;
-		
+		if (!m_ClientComponent) return;
+
 		if (m_wCompassVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("compassVisibleServerOverride", m_wCompassVisibleWidget.IsChecked().ToString()); 
+			m_ClientComponent.Owner_ChangeAuthoritySetting("compassVisibleServerOverride", m_wCompassVisibleWidget.IsChecked().ToString());
 			m_wCompassVisibleWidget.SetEnabled(false);
 			if (m_wCompassVisibleWidget.IsChecked()) { m_wCompassVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("compassVisibleServerOverride", "N/A");
-			m_wCompassVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));	
+			m_ClientComponent.Owner_ChangeAuthoritySetting("compassVisibleServerOverride", "N/A");
+			m_wCompassVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wCompassVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wSquadRadarVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("squadRadarVisibleServerOverride", m_wSquadRadarVisibleWidget.IsChecked().ToString()); 
-			m_wSquadRadarVisibleWidget.SetEnabled(false); 
-			if (m_wSquadRadarVisibleWidget.IsChecked()) { m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };				
+			m_ClientComponent.Owner_ChangeAuthoritySetting("squadRadarVisibleServerOverride", m_wSquadRadarVisibleWidget.IsChecked().ToString());
+			m_wSquadRadarVisibleWidget.SetEnabled(false);
+			if (m_wSquadRadarVisibleWidget.IsChecked()) { m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("squadRadarVisibleServerOverride", "N/A");
-			m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("squadRadarVisibleServerOverride", "N/A");
+			m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wSquadRadarVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wGroupDisplayVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("groupDisplayVisibleServerOverride", m_wGroupDisplayVisibleWidget.IsChecked().ToString());
+			m_ClientComponent.Owner_ChangeAuthoritySetting("groupDisplayVisibleServerOverride", m_wGroupDisplayVisibleWidget.IsChecked().ToString());
 			m_wGroupDisplayVisibleWidget.SetEnabled(false);
 			if (m_wGroupDisplayVisibleWidget.IsChecked()) { m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("groupDisplayVisibleServerOverride", "N/A");
+			m_ClientComponent.Owner_ChangeAuthoritySetting("groupDisplayVisibleServerOverride", "N/A");
 			m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wGroupDisplayVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wStaminaBarVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("staminaBarVisibleServerOverride", m_wStaminaBarVisibleWidget.IsChecked().ToString()); 
-			m_wStaminaBarVisibleWidget.SetEnabled(false); 
+			m_ClientComponent.Owner_ChangeAuthoritySetting("staminaBarVisibleServerOverride", m_wStaminaBarVisibleWidget.IsChecked().ToString());
+			m_wStaminaBarVisibleWidget.SetEnabled(false);
 			if (m_wStaminaBarVisibleWidget.IsChecked()) { m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("staminaBarVisibleServerOverride", "N/A"); 
-			m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("staminaBarVisibleServerOverride", "N/A");
+			m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wStaminaBarVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wNametagsVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("nametagsVisibleServerOverride", m_wNametagsVisibleWidget.IsChecked().ToString());
-			m_wNametagsVisibleWidget.SetEnabled(false); 
-			if (m_wNametagsVisibleWidget.IsChecked()) { m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsVisibleServerOverride", m_wNametagsVisibleWidget.IsChecked().ToString());
+			m_wNametagsVisibleWidget.SetEnabled(false);
+			if (m_wNametagsVisibleWidget.IsChecked()) { m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); };
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("nametagsVisibleServerOverride", "N/A"); 
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsVisibleServerOverride", "N/A");
 			m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wNametagsVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wRankVisibleWidgetSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("rankVisibleServerOverride", m_wRankVisibleWidget.IsChecked().ToString()); 
-			m_wRankVisibleWidget.SetEnabled(false);	
-			if (m_wRankVisibleWidget.IsChecked()) { m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95));	};		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("rankVisibleServerOverride", m_wRankVisibleWidget.IsChecked().ToString());
+			m_wRankVisibleWidget.SetEnabled(false);
+			if (m_wRankVisibleWidget.IsChecked()) { m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95));	};
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("rankVisibleServerOverride", "N/A");
-			m_wRankVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));	
+			m_ClientComponent.Owner_ChangeAuthoritySetting("rankVisibleServerOverride", "N/A");
+			m_wRankVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wRankVisibleWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wNametagsRangeSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", (m_wNametagsRangeWidget.GetCurrentItem() * 5).ToString()); 
-			m_wNametagsRangeWidget.SetEnabled(false);		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", (m_wNametagsRangeWidget.GetCurrentItem() * 5).ToString());
+			m_wNametagsRangeWidget.SetEnabled(false);
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", "0");
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", "0");
 			m_wNametagsRangeWidget.SetEnabled(true);
 		};
-		
+
 		if (m_wRoleNametagVisibleSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("roleNametagVisibleServerOverride", m_wRoleNametagVisibleWidget.IsChecked().ToString()); 
-			m_wRoleNametagVisibleWidget.SetEnabled(false);	
-			if (m_wRoleNametagVisibleWidget.IsChecked()) { m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95));	};		
+			m_ClientComponent.Owner_ChangeAuthoritySetting("roleNametagVisibleServerOverride", m_wRoleNametagVisibleWidget.IsChecked().ToString());
+			m_wRoleNametagVisibleWidget.SetEnabled(false);
+			if (m_wRoleNametagVisibleWidget.IsChecked()) { m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95));	};
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("roleNametagVisibleServerOverride", "N/A");
-			m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));	
+			m_ClientComponent.Owner_ChangeAuthoritySetting("roleNametagVisibleServerOverride", "N/A");
+			m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 255, 255, 255));
 			m_wRoleNametagVisibleWidget.SetEnabled(true);
 		};
-		
-		if (m_wPersonalColorTeamMenuEnabledSO.IsChecked()) {
-			clientComponent.Owner_ChangeAuthoritySetting("personalColorTeamMenuEnabledServerOverride", m_wPersonalColorTeamMenuEnabledWidget.IsChecked().ToString()); 
-			m_wPersonalColorTeamMenuEnabledWidget.SetEnabled(false);	
-			if (m_wPersonalColorTeamMenuEnabledWidget.IsChecked()) { m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95));	};		
+
+		if (m_wPersonalColorTeamMenuSO.IsChecked()) {
+			m_ClientComponent.Owner_ChangeAuthoritySetting("personalColorTeamMenuServerOverride", m_wPersonalColorTeamMenuWidget.IsChecked().ToString());
+			m_wPersonalColorTeamMenuWidget.SetEnabled(false);
+			if (m_wPersonalColorTeamMenuWidget.IsChecked()) { m_wPersonalColorTeamMenuWidget.SetColorInt(ARGB(255, 95, 95, 95));	};
 		} else {
-			clientComponent.Owner_ChangeAuthoritySetting("personalColorTeamMenuEnabledServerOverride", "N/A");
-			m_wPersonalColorTeamMenuEnabledWidget.SetColorInt(ARGB(255, 255, 255, 255));	
-			m_wPersonalColorTeamMenuEnabledWidget.SetEnabled(true);
+			m_ClientComponent.Owner_ChangeAuthoritySetting("personalColorTeamMenuServerOverride", "N/A");
+			m_wPersonalColorTeamMenuWidget.SetColorInt(ARGB(255, 255, 255, 255));
+			m_wPersonalColorTeamMenuWidget.SetEnabled(true);
 		};
 	}
-	
+
 	protected void OnMenuBack()
 	{
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
