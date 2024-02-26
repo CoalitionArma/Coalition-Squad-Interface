@@ -2,16 +2,16 @@ modded class SCR_NameTagData
 {
 	const vector BODY_OFFSET = "0 -0.2 0";			// tag visual position offset for body
 
-	protected string m_sCargo = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
-	protected string m_sDriver = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
-	protected string m_sGunner = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
-	protected string m_sSquadLeader = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
-	protected string m_sTeamLeader = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
-	protected string m_sMedic = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
-	protected string m_sSniper = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
+	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
+	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
+	protected string m_sGunner        = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
+	protected string m_sSquadLeader   = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
+	protected string m_sTeamLeader    = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
+	protected string m_sMedic         = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
+	protected string m_sMarksman      = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
 	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
-	protected string m_sAntiTank = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
-	protected string m_sGrenadier = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
+	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
+	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
 
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected CSI_ClientComponent m_ClientComponent;
@@ -65,16 +65,16 @@ modded class SCR_NameTagData
 				{
 					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");
 					switch (icon) {
-						case m_sCargo : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
-						case m_sDriver : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
-						case m_sGunner : { m_sName = string.Format("%1 [GNR]", m_sName); break; };
-						case m_sSquadLeader : { m_sName = string.Format("%1 [SL]", m_sName); break; };
-						case m_sTeamLeader : { m_sName = string.Format("%1 [FTL]", m_sName); break; };
-						case m_sMedic : { m_sName = string.Format("%1 [MED]", m_sName); break; };
-						case m_sSniper : { m_sName = string.Format("%1 [DMR]", m_sName); break; };
-						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]", m_sName); break; };
-						case m_sAntiTank : { m_sName = string.Format("%1 [RAT]", m_sName); break; };
-						case m_sGrenadier : { m_sName = string.Format("%1 [GRN]", m_sName); break; };
+						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
+						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
+						case m_sGunner        : { m_sName = string.Format("%1 [GNR]", m_sName); break; };
+						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]", m_sName);  break; };
+						case m_sTeamLeader    : { m_sName = string.Format("%1 [FTL]", m_sName); break; };
+						case m_sMedic         : { m_sName = string.Format("%1 [MED]", m_sName); break; };
+						case m_sMarksman      : { m_sName = string.Format("%1 [MRK]", m_sName); break; };
+						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]", m_sName);  break; };
+						case m_sAntiTank      : { m_sName = string.Format("%1 [AT]", m_sName);  break; };
+						case m_sGrenadier     : { m_sName = string.Format("%1 [GRN]", m_sName); break; };
 					}
 				};
 			} else { m_sName = "No player manager!" };

@@ -10,7 +10,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	protected string m_sSquadLeader   = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
 	protected string m_sTeamLeader    = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
 	protected string m_sMedic         = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
-	protected string m_sSniper        = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
+	protected string m_sMarksman      = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
 	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
 	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
 	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
@@ -340,7 +340,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 					{
 						case "Team Lead"      : {specialtyIcon = m_sTeamLeader;    break; };
 						case "Medic"          : {specialtyIcon = m_sMedic;         break; };
-						case "Sniper"         : {specialtyIcon = m_sSniper;        break; };
+						case "Marksman"       : {specialtyIcon = m_sMarksman;      break; };
 						case "Machine Gunner" : {specialtyIcon = m_sMachineGunner; break; };
 						case "Anti-Tank"      : {specialtyIcon = m_sAntiTank;      break; };
 						case "Grenadier"      : {specialtyIcon = m_sGrenadier;     break; };
@@ -401,7 +401,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 					switch (true)
 					{
 						case (medicalTypeArray.Contains(SCR_EConsumableType.SALINE))    : {specialtyIcon = m_sMedic;         break; };
-						case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : {specialtyIcon = m_sSniper;        break; };
+						case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : {specialtyIcon = m_sMarksman;      break; };
 						case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : {specialtyIcon = m_sMachineGunner; break; };
 						case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : {specialtyIcon = m_sAntiTank;      break; };
 						case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : {specialtyIcon = m_sGrenadier;     break; };

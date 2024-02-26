@@ -1,10 +1,10 @@
 class CSI_PlayerSettingsDialog : ChimeraMenuBase
 {
-	protected string m_sCTRed = ARGB(255, 200, 65, 65).ToString();
-	protected string m_sCTBlue = ARGB(255, 0, 92, 255).ToString();
+	protected string m_sCTRed    = ARGB(255, 200, 65, 65).ToString();
+	protected string m_sCTBlue   = ARGB(255, 0, 92, 255).ToString();
 	protected string m_sCTYellow = ARGB(255, 230, 230, 0).ToString();
-	protected string m_sCTGreen = ARGB(255, 0, 190, 85).ToString();
-	protected string m_sCTNone = ARGB(255, 215, 215, 215).ToString();
+	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
+	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
 
 	protected SCR_AIGroup m_PlayersGroup;
 	protected CSI_ClientComponent m_ClientComponent;
@@ -129,7 +129,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		switch (iconOverride)
 		{
 			case "Medic"          : {playerOverideIcon = 1; break; };
-			case "Sniper"         : {playerOverideIcon = 2; break; };
+			case "Marksman"       : {playerOverideIcon = 2; break; };
 			case "Machine Gunner" : {playerOverideIcon = 3; break; };
 			case "Anti-Tank"      : {playerOverideIcon = 4; break; };
 			case "Grenadier"      : {playerOverideIcon = 5; break; };
@@ -235,9 +235,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnOverrideIconClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
-
-		if (m_sStoredSpecialtIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID) || m_sStoredSpecialtIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds") return;
 
 		int iconToOverride = m_wIconOveride.GetCurrentItem();
 		string iconToOverrideStr = "";
@@ -245,7 +243,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		{
 			case 0 : {iconToOverrideStr = "";               break; };
 			case 1 : {iconToOverrideStr = "Medic";          break; };
-			case 2 : {iconToOverrideStr = "Sniper";         break; };
+			case 2 : {iconToOverrideStr = "Marksman";       break; };
 			case 3 : {iconToOverrideStr = "Machine Gunner"; break; };
 			case 4 : {iconToOverrideStr = "Anti-Tank";      break; };
 			case 5 : {iconToOverrideStr = "Grenadier";      break; };
