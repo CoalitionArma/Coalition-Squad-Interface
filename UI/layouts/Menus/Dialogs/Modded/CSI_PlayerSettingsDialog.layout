@@ -250,17 +250,25 @@ FrameWidgetClass {
    Name "IconOveride"
    Slot FrameWidgetSlot "{5EC77B6095B7A4F3}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -151.573
-    OffsetLeft -151.573
-    PositionY 11.958
-    OffsetTop 11.958
+    PositionX -152.053
+    OffsetLeft -152.053
+    PositionY 12.004
+    OffsetTop 12.004
     SizeX 263.229
-    OffsetRight -111.656
-    SizeY 30
-    OffsetBottom -41.958
+    OffsetRight -111.176
+    SizeY 29.999
+    OffsetBottom -42.003
    }
    components {
     SCR_ComboBoxComponent "{6093726C5F548801}" {
+    }
+    ButtonComponent "{60B40B7B41F8F1C5}" {
+     m_ColorButtonDefault 1 1 1 0.608
+     m_ColorButtonFocused 1 1 1 1
+     m_ColorButtonPressed 1 1 1 1
+     m_ColorButtonDisabled 1 1 1 0.608
+     m_ColorButtonHovered 1 1 1 1
+     m_ColorButtonHoveredFocused 1 1 1 1
     }
    }
    FontProperties FontProperties "{5EC77B557AF5C054}" {
