@@ -167,6 +167,8 @@ class CSI_Compass : SCR_InfoDisplay
 		m_iSearchRadius = 24;
 
 		if (IsPlayerInVehicle(m_ChimeraCharacter)) m_iSearchRadius = 8;
+		
+		FrameSlot.SetPos(radarlocalPlayer, -widthAndHeight/2, -75);
 
 		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, m_iSearchRadius, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
 
@@ -216,7 +218,7 @@ class CSI_Compass : SCR_InfoDisplay
 			relDir = Math.Mod(relDir - (dir * 2), 360);
 			relDir = relDir * Math.DEG2RAD;
 
-			float x = (Math.Sin(relDir) * disT) - widthAndHeight/ 2;
+			float x = (Math.Sin(relDir) * disT) - widthAndHeight/2;
 			float y = (Math.Cos(relDir) * disT) - offset;
 
 			FrameSlot.SetPos(radarPlayer, x, y);

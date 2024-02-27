@@ -68,12 +68,12 @@ modded class SCR_NameTagData
 						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
 						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
 						case m_sGunner        : { m_sName = string.Format("%1 [GNR]", m_sName); break; };
-						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]", m_sName);  break; };
+						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]",  m_sName); break; };
 						case m_sTeamLeader    : { m_sName = string.Format("%1 [FTL]", m_sName); break; };
 						case m_sMedic         : { m_sName = string.Format("%1 [MED]", m_sName); break; };
 						case m_sMarksman      : { m_sName = string.Format("%1 [MRK]", m_sName); break; };
-						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]", m_sName);  break; };
-						case m_sAntiTank      : { m_sName = string.Format("%1 [AT]", m_sName);  break; };
+						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]",  m_sName); break; };
+						case m_sAntiTank      : { m_sName = string.Format("%1 [AT]",  m_sName); break; };
 						case m_sGrenadier     : { m_sName = string.Format("%1 [GRN]", m_sName); break; };
 					}
 				};
