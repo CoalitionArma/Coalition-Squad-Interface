@@ -1,6 +1,6 @@
 modded class SCR_NameTagData
 {
-	const vector BODY_OFFSET = "0 -0.2 0";			// tag visual position offset for body
+	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body
 
 	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
 	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
@@ -15,7 +15,6 @@ modded class SCR_NameTagData
 
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected CSI_ClientComponent m_ClientComponent;
-	protected string m_sGroupName;
 	protected string m_sNametagsPos;
 
 	//------------------------------------------------------------------------------------------------
@@ -42,11 +41,15 @@ modded class SCR_NameTagData
 	{
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-			if (!m_AuthorityComponent) return;
+			if (!m_AuthorityComponent) {
+				m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+				return;
+			};
 
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
-			if (!m_ClientComponent) return;
+			if (!m_ClientComponent) {
+				m_ClientComponent = CSI_ClientComponent.GetInstance();
+				return;
+			};
 
 			string roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
 			string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
@@ -59,7 +62,8 @@ modded class SCR_NameTagData
 				if (rankVisible == "true")
 				{
 					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PlayerRank");
-					m_sName = string.Format("%1 %2", rank, m_sName);
+					if (rank != "") 
+						m_sName = string.Format("%1 %2", rank, m_sName);
 				};
 				if (roleNametagVisible == "true")
 				{
@@ -121,21 +125,19 @@ modded class SCR_NameTagData
 			groupName = originalName;
 		};
 
-		m_sGroupName = groupName;
-
-		return m_sGroupName;
+		return groupName;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	string GetPlayerColorTeam()
-	{
+	{		
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		
+		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!m_AuthorityComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "-1";
+		if (!group || !m_AuthorityComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "";
 
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "ColorTeam");
-
-		return colorTeam;
+		return m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");;
 	}
 
 	void UpdateAttatchedTo()

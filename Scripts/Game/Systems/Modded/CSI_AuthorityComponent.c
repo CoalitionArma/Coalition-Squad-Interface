@@ -66,7 +66,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		if (Replication.IsServer()) {
 			CheckAuthoritySettings();
 
-			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 500, true);
+			GetGame().GetCallqueue().CallLater(UpdateAllAuthorityPlayerMapValues, 250, true);
 			GetGame().GetCallqueue().CallLater(CheckAuthoritySettings, 5000, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 1200000, true); // Updates every 20min (1200000ms)
 		};
@@ -405,15 +405,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 						case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : {specialtyIcon = m_sMachineGunner; break; };
 						case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : {specialtyIcon = m_sAntiTank;      break; };
 						case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : {specialtyIcon = m_sGrenadier;     break; };
-						default : {specialtyIcon = m_sMan; };
+						default                                                         : {specialtyIcon = m_sMan; };
 					};
 				};
 
-				if (vehicleIcon != "") {
+				if (vehicleIcon != "") 
 					displayIcon = vehicleIcon;
-				} else {
+				else 
 					displayIcon = specialtyIcon;
-				};
 
 				// Update the Icon we show on players screens.
 				UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "DisplayIcon", displayIcon);
@@ -439,11 +438,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			tempLocalGroupArray.Sort(false);
 
 			foreach (string playerStr : tempLocalGroupArray) {
-				if (groupString == "") {
+				if (groupString == "") 
 					groupString = playerStr;
-				} else {
+				else
 					groupString = string.Format("%1║%2", groupString, playerStr);
-				};
 			}
 
 			// Update GroupString.
