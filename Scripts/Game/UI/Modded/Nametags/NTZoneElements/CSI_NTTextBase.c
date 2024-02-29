@@ -3,20 +3,20 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 class CSI_NTGroupName : SCR_NTTextBase
 {
-	protected int updateFrame = 45;
+	protected int m_iUpdateFrame = 45;
 
 	//------------------------------------------------------------------------------------------------
-	string GetGroupText(SCR_NameTagData data)
+	string GetGroupNameStr(SCR_NameTagData data)
 	{
 		return data.GetGroupName();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void SetGroupText(SCR_NameTagData data, string text, int index)
+	void SetGroupText(SCR_NameTagData data, string groupName, int index)
 	{
 		if (!data.m_aNametagElements[index]) return;
 
-		TextWidget.Cast(data.m_aNametagElements[index]).SetText(text);
+		TextWidget.Cast(data.m_aNametagElements[index]).SetText(groupName);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -24,14 +24,14 @@ class CSI_NTGroupName : SCR_NTTextBase
 	{
 		super.UpdateElement(data, index);
 
-		if (updateFrame < 45) {
-			updateFrame++;
+		if (m_iUpdateFrame < 45) {
+			m_iUpdateFrame++;
 			return;
 		};
 
-		updateFrame = 0;
+		m_iUpdateFrame = 0;
 
-		SetGroupText(data, GetGroupText(data), index);
+		SetGroupText(data, GetGroupNameStr(data), index);
 	}
 }
 
@@ -40,10 +40,8 @@ class CSI_NTGroupName : SCR_NTTextBase
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName
 {
-	protected string storedColorTeam;
-
 	//------------------------------------------------------------------------------------------------
-	string GetPlayerColorTeamInt(SCR_NameTagData data)
+	string GetPlayerColorTeamStr(SCR_NameTagData data)
 	{
 		return data.GetPlayerColorTeam();
 	}
@@ -51,15 +49,7 @@ modded class SCR_NTName
 	//------------------------------------------------------------------------------------------------
 	void SetPlayerColorTeam(SCR_NameTagData data, string colorTeam, int index)
 	{
-		if (colorTeam == "-1") return;
-		if (!data.m_aNametagElements[index] || colorTeam == "") {
-			if (storedColorTeam == "") return;
-			TextWidget.Cast(data.m_aNametagElements[index]).SetColorInt(storedColorTeam.ToInt());
-			return;
-		};
-
-		storedColorTeam = colorTeam;
-
+		if (colorTeam == "") return;
 		TextWidget.Cast(data.m_aNametagElements[index]).SetColorInt(colorTeam.ToInt());
 	}
 
@@ -83,6 +73,6 @@ modded class SCR_NTName
 			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
 		}
 
-		SetPlayerColorTeam(data, GetPlayerColorTeamInt(data), index);
+		SetPlayerColorTeam(data, GetPlayerColorTeamStr(data), index);
 	};
 }

@@ -68,14 +68,14 @@ FrameWidgetClass {
    Name "Window6"
    Slot FrameWidgetSlot "{5EC77B60F536B906}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -115.005
-    OffsetLeft -115.005
-    PositionY -399.86
-    OffsetTop -399.86
-    SizeX 229.111
-    OffsetRight -114.106
-    SizeY 824.755
-    OffsetBottom -424.895
+    PositionX -114.77
+    OffsetLeft -114.77
+    PositionY -398.76
+    OffsetTop -398.76
+    SizeX 228.104
+    OffsetRight -113.334
+    SizeY 821.245
+    OffsetBottom -422.485
    }
   }
   TextWidgetClass "{5ED010D95799228B}" {
@@ -505,14 +505,14 @@ FrameWidgetClass {
    Name "Button3"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.588
-    OffsetLeft -112.588
-    PositionY -299.21
-    OffsetTop -299.21
+    PositionX -112.488
+    OffsetLeft -112.488
+    PositionY -299.31
+    OffsetTop -299.31
     SizeX 222.933
-    OffsetRight -110.345
+    OffsetRight -110.445
     SizeY 32.682
-    OffsetBottom 266.528
+    OffsetBottom 266.628
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -540,14 +540,14 @@ FrameWidgetClass {
    Name "Status3"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.066
-    OffsetLeft -109.066
-    PositionY -296.129
-    OffsetTop -296.129
+    PositionX -108.966
+    OffsetLeft -108.966
+    PositionY -296.229
+    OffsetTop -296.229
     SizeX 26.001
-    OffsetRight 83.065
+    OffsetRight 82.965
     SizeY 26
-    OffsetBottom 270.129
+    OffsetBottom 270.229
    }
    IsPixelPerfect 0
    Opacity 0
@@ -559,14 +559,14 @@ FrameWidgetClass {
    Name "Player3"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.023
-    OffsetLeft -83.023
-    PositionY -291.07
-    OffsetTop -291.07
+    PositionX -82.923
+    OffsetLeft -82.923
+    PositionY -291.17
+    OffsetTop -291.17
     SizeX 193.597
-    OffsetRight -110.574
+    OffsetRight -110.674
     SizeY 24.522
-    OffsetBottom 266.548
+    OffsetBottom 266.648
    }
    IsPixelPerfect 0
    Text ""
@@ -585,14 +585,14 @@ FrameWidgetClass {
    Name "Button4"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.588
-    OffsetLeft -112.588
-    PositionY -266.509
-    OffsetTop -266.509
+    PositionX -112.488
+    OffsetLeft -112.488
+    PositionY -266.609
+    OffsetTop -266.609
     SizeX 222.933
-    OffsetRight -110.345
+    OffsetRight -110.445
     SizeY 32.682
-    OffsetBottom 233.827
+    OffsetBottom 233.927
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -620,14 +620,14 @@ FrameWidgetClass {
    Name "Status4"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.066
-    OffsetLeft -109.066
-    PositionY -263.428
-    OffsetTop -263.428
+    PositionX -108.966
+    OffsetLeft -108.966
+    PositionY -263.528
+    OffsetTop -263.528
     SizeX 26.001
-    OffsetRight 83.065
+    OffsetRight 82.965
     SizeY 26
-    OffsetBottom 237.428
+    OffsetBottom 237.528
    }
    IsPixelPerfect 0
    Opacity 0
@@ -639,14 +639,14 @@ FrameWidgetClass {
    Name "Player4"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.023
-    OffsetLeft -83.023
-    PositionY -258.369
-    OffsetTop -258.369
+    PositionX -82.923
+    OffsetLeft -82.923
+    PositionY -258.469
+    OffsetTop -258.469
     SizeX 193.597
-    OffsetRight -110.574
+    OffsetRight -110.674
     SizeY 24.522
-    OffsetBottom 233.847
+    OffsetBottom 233.947
    }
    IsPixelPerfect 0
    Text ""
@@ -667,12 +667,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -112.552
     OffsetLeft -112.552
-    PositionY -233.846
-    OffsetTop -233.846
+    PositionY -233.946
+    OffsetTop -233.946
     SizeX 222.933
     OffsetRight -110.381
     SizeY 32.682
-    OffsetBottom 201.164
+    OffsetBottom 201.264
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -702,12 +702,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -109.03
     OffsetLeft -109.03
-    PositionY -230.765
-    OffsetTop -230.765
+    PositionY -230.865
+    OffsetTop -230.865
     SizeX 26.001
     OffsetRight 83.029
     SizeY 26
-    OffsetBottom 204.765
+    OffsetBottom 204.865
    }
    IsPixelPerfect 0
    Opacity 0
@@ -721,12 +721,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -82.988
     OffsetLeft -82.988
-    PositionY -225.706
-    OffsetTop -225.706
+    PositionY -225.806
+    OffsetTop -225.806
     SizeX 193.598
     OffsetRight -110.61
     SizeY 24.522
-    OffsetBottom 201.184
+    OffsetBottom 201.284
    }
    IsPixelPerfect 0
    Text ""
@@ -747,12 +747,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -112.552
     OffsetLeft -112.552
-    PositionY -201.145
-    OffsetTop -201.145
+    PositionY -201.345
+    OffsetTop -201.345
     SizeX 222.933
     OffsetRight -110.381
     SizeY 32.682
-    OffsetBottom 168.463
+    OffsetBottom 168.663
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -782,12 +782,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -109.03
     OffsetLeft -109.03
-    PositionY -198.064
-    OffsetTop -198.064
+    PositionY -198.264
+    OffsetTop -198.264
     SizeX 26.001
     OffsetRight 83.029
     SizeY 26
-    OffsetBottom 172.064
+    OffsetBottom 172.264
    }
    IsPixelPerfect 0
    Opacity 0
@@ -801,12 +801,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -82.988
     OffsetLeft -82.988
-    PositionY -193.005
-    OffsetTop -193.005
+    PositionY -193.205
+    OffsetTop -193.205
     SizeX 193.598
     OffsetRight -110.61
     SizeY 24.522
-    OffsetBottom 168.483
+    OffsetBottom 168.683
    }
    IsPixelPerfect 0
    Text ""
@@ -827,12 +827,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -112.552
     OffsetLeft -112.552
-    PositionY -168.465
-    OffsetTop -168.465
+    PositionY -168.665
+    OffsetTop -168.665
     SizeX 222.933
     OffsetRight -110.381
     SizeY 32.682
-    OffsetBottom 135.783
+    OffsetBottom 135.983
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -862,12 +862,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -82.988
     OffsetLeft -82.988
-    PositionY -160.325
-    OffsetTop -160.325
+    PositionY -160.525
+    OffsetTop -160.525
     SizeX 193.598
     OffsetRight -110.61
     SizeY 24.522
-    OffsetBottom 135.803
+    OffsetBottom 136.003
    }
    IsPixelPerfect 0
    Text ""
@@ -888,12 +888,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -109.03
     OffsetLeft -109.03
-    PositionY -165.384
-    OffsetTop -165.384
+    PositionY -165.584
+    OffsetTop -165.584
     SizeX 26.001
     OffsetRight 83.029
     SizeY 26
-    OffsetBottom 139.384
+    OffsetBottom 139.584
    }
    IsPixelPerfect 0
    Opacity 0
@@ -905,14 +905,14 @@ FrameWidgetClass {
    Name "Button8"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.65
-    OffsetLeft -112.65
-    PositionY -135.688
-    OffsetTop -135.688
+    PositionX -112.55
+    OffsetLeft -112.55
+    PositionY -135.988
+    OffsetTop -135.988
     SizeX 222.933
-    OffsetRight -110.283
+    OffsetRight -110.383
     SizeY 32.682
-    OffsetBottom 103.006
+    OffsetBottom 103.306
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -940,14 +940,14 @@ FrameWidgetClass {
    Name "Status8"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.128
-    OffsetLeft -109.128
-    PositionY -132.607
-    OffsetTop -132.607
+    PositionX -109.028
+    OffsetLeft -109.028
+    PositionY -132.907
+    OffsetTop -132.907
     SizeX 26.002
-    OffsetRight 83.126
+    OffsetRight 83.026
     SizeY 26
-    OffsetBottom 106.607
+    OffsetBottom 106.907
    }
    IsPixelPerfect 0
    Opacity 0
@@ -959,14 +959,14 @@ FrameWidgetClass {
    Name "Player8"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.085
-    OffsetLeft -83.085
-    PositionY -127.548
-    OffsetTop -127.548
+    PositionX -82.985
+    OffsetLeft -82.985
+    PositionY -127.848
+    OffsetTop -127.848
     SizeX 193.597
-    OffsetRight -110.512
+    OffsetRight -110.612
     SizeY 24.522
-    OffsetBottom 103.026
+    OffsetBottom 103.326
    }
    IsPixelPerfect 0
    Text ""
@@ -985,14 +985,14 @@ FrameWidgetClass {
    Name "Button9"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.65
-    OffsetLeft -112.65
-    PositionY -102.987
-    OffsetTop -102.987
+    PositionX -112.55
+    OffsetLeft -112.55
+    PositionY -103.287
+    OffsetTop -103.287
     SizeX 222.933
-    OffsetRight -110.283
+    OffsetRight -110.383
     SizeY 32.682
-    OffsetBottom 70.305
+    OffsetBottom 70.605
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1020,14 +1020,14 @@ FrameWidgetClass {
    Name "Status9"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.128
-    OffsetLeft -109.128
-    PositionY -99.906
-    OffsetTop -99.906
+    PositionX -109.028
+    OffsetLeft -109.028
+    PositionY -100.206
+    OffsetTop -100.206
     SizeX 26.002
-    OffsetRight 83.126
+    OffsetRight 83.026
     SizeY 26
-    OffsetBottom 73.906
+    OffsetBottom 74.206
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1039,14 +1039,14 @@ FrameWidgetClass {
    Name "Player9"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.085
-    OffsetLeft -83.085
-    PositionY -94.847
-    OffsetTop -94.847
+    PositionX -82.985
+    OffsetLeft -82.985
+    PositionY -95.147
+    OffsetTop -95.147
     SizeX 193.597
-    OffsetRight -110.512
+    OffsetRight -110.612
     SizeY 24.522
-    OffsetBottom 70.325
+    OffsetBottom 70.625
    }
    IsPixelPerfect 0
    Text ""
@@ -1065,14 +1065,14 @@ FrameWidgetClass {
    Name "Button10"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.685
-    OffsetLeft -112.685
-    PositionY -70.32
-    OffsetTop -70.32
+    PositionX -112.485
+    OffsetLeft -112.485
+    PositionY -70.62
+    OffsetTop -70.62
     SizeX 222.933
-    OffsetRight -110.248
+    OffsetRight -110.448
     SizeY 32.682
-    OffsetBottom 37.638
+    OffsetBottom 37.938
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1100,14 +1100,14 @@ FrameWidgetClass {
    Name "Status10"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.163
-    OffsetLeft -109.163
-    PositionY -67.239
-    OffsetTop -67.239
+    PositionX -108.963
+    OffsetLeft -108.963
+    PositionY -67.539
+    OffsetTop -67.539
     SizeX 26
-    OffsetRight 83.163
+    OffsetRight 82.963
     SizeY 26
-    OffsetBottom 41.239
+    OffsetBottom 41.539
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1119,14 +1119,14 @@ FrameWidgetClass {
    Name "Player10"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.121
-    OffsetLeft -83.121
-    PositionY -62.18
-    OffsetTop -62.18
+    PositionX -82.921
+    OffsetLeft -82.921
+    PositionY -62.48
+    OffsetTop -62.48
     SizeX 193.598
-    OffsetRight -110.477
+    OffsetRight -110.677
     SizeY 24.522
-    OffsetBottom 37.658
+    OffsetBottom 37.958
    }
    IsPixelPerfect 0
    Text ""
@@ -1145,14 +1145,14 @@ FrameWidgetClass {
    Name "Button11"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.685
-    OffsetLeft -112.685
-    PositionY -37.619
-    OffsetTop -37.619
+    PositionX -112.485
+    OffsetLeft -112.485
+    PositionY -37.919
+    OffsetTop -37.919
     SizeX 222.933
-    OffsetRight -110.248
+    OffsetRight -110.448
     SizeY 32.682
-    OffsetBottom 4.937
+    OffsetBottom 5.237
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1180,14 +1180,14 @@ FrameWidgetClass {
    Name "Status11"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.163
-    OffsetLeft -109.163
-    PositionY -34.538
-    OffsetTop -34.538
+    PositionX -108.963
+    OffsetLeft -108.963
+    PositionY -34.838
+    OffsetTop -34.838
     SizeX 26
-    OffsetRight 83.163
+    OffsetRight 82.963
     SizeY 26
-    OffsetBottom 8.538
+    OffsetBottom 8.838
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1199,14 +1199,14 @@ FrameWidgetClass {
    Name "Player11"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.121
-    OffsetLeft -83.121
-    PositionY -29.479
-    OffsetTop -29.479
+    PositionX -82.921
+    OffsetLeft -82.921
+    PositionY -29.779
+    OffsetTop -29.779
     SizeX 193.598
-    OffsetRight -110.477
+    OffsetRight -110.677
     SizeY 24.522
-    OffsetBottom 4.957
+    OffsetBottom 5.257
    }
    IsPixelPerfect 0
    Text ""
@@ -1225,14 +1225,14 @@ FrameWidgetClass {
    Name "Button12"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.685
-    OffsetLeft -112.685
-    PositionY -4.939
-    OffsetTop -4.939
+    PositionX -112.485
+    OffsetLeft -112.485
+    PositionY -5.239
+    OffsetTop -5.239
     SizeX 222.933
-    OffsetRight -110.248
+    OffsetRight -110.448
     SizeY 32.682
-    OffsetBottom -27.743
+    OffsetBottom -27.443
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1260,14 +1260,14 @@ FrameWidgetClass {
    Name "Player12"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.121
-    OffsetLeft -83.121
-    PositionY 3.201
-    OffsetTop 3.201
+    PositionX -82.921
+    OffsetLeft -82.921
+    PositionY 2.901
+    OffsetTop 2.901
     SizeX 193.598
-    OffsetRight -110.477
+    OffsetRight -110.677
     SizeY 24.522
-    OffsetBottom -27.723
+    OffsetBottom -27.423
    }
    IsPixelPerfect 0
    Text ""
@@ -1286,14 +1286,14 @@ FrameWidgetClass {
    Name "Status12"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.163
-    OffsetLeft -109.163
-    PositionY -1.858
-    OffsetTop -1.858
+    PositionX -108.963
+    OffsetLeft -108.963
+    PositionY -2.158
+    OffsetTop -2.158
     SizeX 26
-    OffsetRight 83.163
+    OffsetRight 82.963
     SizeY 26
-    OffsetBottom -24.142
+    OffsetBottom -23.842
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1305,14 +1305,14 @@ FrameWidgetClass {
    Name "Button13"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.783
-    OffsetLeft -112.783
-    PositionY 27.838
-    OffsetTop 27.838
+    PositionX -112.483
+    OffsetLeft -112.483
+    PositionY 27.438
+    OffsetTop 27.438
     SizeX 222.933
-    OffsetRight -110.15
+    OffsetRight -110.45
     SizeY 32.682
-    OffsetBottom -60.52
+    OffsetBottom -60.12
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1340,14 +1340,14 @@ FrameWidgetClass {
    Name "Status13"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.261
-    OffsetLeft -109.261
-    PositionY 30.919
-    OffsetTop 30.919
+    PositionX -108.961
+    OffsetLeft -108.961
+    PositionY 30.519
+    OffsetTop 30.519
     SizeX 26.001
-    OffsetRight 83.26
+    OffsetRight 82.96
     SizeY 26
-    OffsetBottom -56.919
+    OffsetBottom -56.519
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1359,14 +1359,14 @@ FrameWidgetClass {
    Name "Player13"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.218
-    OffsetLeft -83.218
-    PositionY 35.978
-    OffsetTop 35.978
+    PositionX -82.918
+    OffsetLeft -82.918
+    PositionY 35.578
+    OffsetTop 35.578
     SizeX 193.597
-    OffsetRight -110.379
+    OffsetRight -110.679
     SizeY 24.522
-    OffsetBottom -60.5
+    OffsetBottom -60.1
    }
    IsPixelPerfect 0
    Text ""
@@ -1385,14 +1385,14 @@ FrameWidgetClass {
    Name "Button14"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.783
-    OffsetLeft -112.783
-    PositionY 60.539
-    OffsetTop 60.539
+    PositionX -112.483
+    OffsetLeft -112.483
+    PositionY 60.139
+    OffsetTop 60.139
     SizeX 222.933
-    OffsetRight -110.15
+    OffsetRight -110.45
     SizeY 32.682
-    OffsetBottom -93.221
+    OffsetBottom -92.821
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1420,14 +1420,14 @@ FrameWidgetClass {
    Name "Status14"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.261
-    OffsetLeft -109.261
-    PositionY 63.62
-    OffsetTop 63.62
+    PositionX -108.961
+    OffsetLeft -108.961
+    PositionY 63.22
+    OffsetTop 63.22
     SizeX 26.001
-    OffsetRight 83.26
+    OffsetRight 82.96
     SizeY 26
-    OffsetBottom -89.62
+    OffsetBottom -89.22
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1439,14 +1439,14 @@ FrameWidgetClass {
    Name "Player14"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.218
-    OffsetLeft -83.218
-    PositionY 68.679
-    OffsetTop 68.679
+    PositionX -82.918
+    OffsetLeft -82.918
+    PositionY 68.279
+    OffsetTop 68.279
     SizeX 193.597
-    OffsetRight -110.379
+    OffsetRight -110.679
     SizeY 24.522
-    OffsetBottom -93.201
+    OffsetBottom -92.801
    }
    IsPixelPerfect 0
    Text ""
@@ -1465,14 +1465,14 @@ FrameWidgetClass {
    Name "Button15"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.747
-    OffsetLeft -112.747
-    PositionY 93.202
-    OffsetTop 93.202
+    PositionX -112.547
+    OffsetLeft -112.547
+    PositionY 92.802
+    OffsetTop 92.802
     SizeX 222.933
-    OffsetRight -110.186
+    OffsetRight -110.386
     SizeY 32.682
-    OffsetBottom -125.884
+    OffsetBottom -125.484
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1500,14 +1500,14 @@ FrameWidgetClass {
    Name "Status15"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.225
-    OffsetLeft -109.225
-    PositionY 96.283
-    OffsetTop 96.283
+    PositionX -109.025
+    OffsetLeft -109.025
+    PositionY 95.883
+    OffsetTop 95.883
     SizeX 26.001
-    OffsetRight 83.224
+    OffsetRight 83.024
     SizeY 26
-    OffsetBottom -122.283
+    OffsetBottom -121.883
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1519,14 +1519,14 @@ FrameWidgetClass {
    Name "Player15"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.183
-    OffsetLeft -83.183
-    PositionY 101.342
-    OffsetTop 101.342
+    PositionX -82.983
+    OffsetLeft -82.983
+    PositionY 100.942
+    OffsetTop 100.942
     SizeX 193.598
-    OffsetRight -110.415
+    OffsetRight -110.615
     SizeY 24.522
-    OffsetBottom -125.864
+    OffsetBottom -125.464
    }
    IsPixelPerfect 0
    Text ""
@@ -1545,14 +1545,14 @@ FrameWidgetClass {
    Name "Button16"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.747
-    OffsetLeft -112.747
-    PositionY 125.903
-    OffsetTop 125.903
+    PositionX -112.547
+    OffsetLeft -112.547
+    PositionY 125.503
+    OffsetTop 125.503
     SizeX 222.933
-    OffsetRight -110.186
+    OffsetRight -110.386
     SizeY 32.682
-    OffsetBottom -158.585
+    OffsetBottom -158.185
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1580,14 +1580,14 @@ FrameWidgetClass {
    Name "Status16"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.225
-    OffsetLeft -109.225
-    PositionY 128.984
-    OffsetTop 128.984
+    PositionX -109.025
+    OffsetLeft -109.025
+    PositionY 128.584
+    OffsetTop 128.584
     SizeX 26.001
-    OffsetRight 83.224
+    OffsetRight 83.024
     SizeY 26
-    OffsetBottom -154.984
+    OffsetBottom -154.584
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1599,14 +1599,14 @@ FrameWidgetClass {
    Name "Player16"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.183
-    OffsetLeft -83.183
-    PositionY 134.043
-    OffsetTop 134.043
+    PositionX -82.983
+    OffsetLeft -82.983
+    PositionY 133.643
+    OffsetTop 133.643
     SizeX 193.598
-    OffsetRight -110.415
+    OffsetRight -110.615
     SizeY 24.522
-    OffsetBottom -158.565
+    OffsetBottom -158.165
    }
    IsPixelPerfect 0
    Text ""
@@ -1625,14 +1625,14 @@ FrameWidgetClass {
    Name "Button17"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.747
-    OffsetLeft -112.747
-    PositionY 158.583
-    OffsetTop 158.583
+    PositionX -112.547
+    OffsetLeft -112.547
+    PositionY 158.183
+    OffsetTop 158.183
     SizeX 222.933
-    OffsetRight -110.186
+    OffsetRight -110.386
     SizeY 32.682
-    OffsetBottom -191.265
+    OffsetBottom -190.865
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1660,14 +1660,14 @@ FrameWidgetClass {
    Name "Player17"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.183
-    OffsetLeft -83.183
-    PositionY 166.723
-    OffsetTop 166.723
+    PositionX -82.983
+    OffsetLeft -82.983
+    PositionY 166.323
+    OffsetTop 166.323
     SizeX 193.598
-    OffsetRight -110.415
+    OffsetRight -110.615
     SizeY 24.522
-    OffsetBottom -191.245
+    OffsetBottom -190.845
    }
    IsPixelPerfect 0
    Text ""
@@ -1686,14 +1686,14 @@ FrameWidgetClass {
    Name "Status17"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.225
-    OffsetLeft -109.225
-    PositionY 161.664
-    OffsetTop 161.664
+    PositionX -109.025
+    OffsetLeft -109.025
+    PositionY 161.264
+    OffsetTop 161.264
     SizeX 26.001
-    OffsetRight 83.224
+    OffsetRight 83.024
     SizeY 26
-    OffsetBottom -187.664
+    OffsetBottom -187.264
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1705,14 +1705,14 @@ FrameWidgetClass {
    Name "Button18"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.845
-    OffsetLeft -112.845
-    PositionY 191.36
-    OffsetTop 191.36
+    PositionX -112.545
+    OffsetLeft -112.545
+    PositionY 190.86
+    OffsetTop 190.86
     SizeX 222.933
-    OffsetRight -110.088
+    OffsetRight -110.388
     SizeY 32.682
-    OffsetBottom -224.042
+    OffsetBottom -223.542
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1740,14 +1740,14 @@ FrameWidgetClass {
    Name "Status18"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.323
-    OffsetLeft -109.323
-    PositionY 194.441
-    OffsetTop 194.441
+    PositionX -109.023
+    OffsetLeft -109.023
+    PositionY 193.941
+    OffsetTop 193.941
     SizeX 26.002
-    OffsetRight 83.321
+    OffsetRight 83.021
     SizeY 26
-    OffsetBottom -220.441
+    OffsetBottom -219.941
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1759,14 +1759,14 @@ FrameWidgetClass {
    Name "Player18"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.28
-    OffsetLeft -83.28
-    PositionY 199.5
-    OffsetTop 199.5
+    PositionX -82.98
+    OffsetLeft -82.98
+    PositionY 199
+    OffsetTop 199
     SizeX 193.597
-    OffsetRight -110.317
+    OffsetRight -110.617
     SizeY 24.522
-    OffsetBottom -224.022
+    OffsetBottom -223.522
    }
    IsPixelPerfect 0
    Text ""
@@ -1785,14 +1785,14 @@ FrameWidgetClass {
    Name "Button19"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.845
-    OffsetLeft -112.845
-    PositionY 224.061
-    OffsetTop 224.061
+    PositionX -112.545
+    OffsetLeft -112.545
+    PositionY 223.561
+    OffsetTop 223.561
     SizeX 222.933
-    OffsetRight -110.088
+    OffsetRight -110.388
     SizeY 32.682
-    OffsetBottom -256.743
+    OffsetBottom -256.243
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1820,14 +1820,14 @@ FrameWidgetClass {
    Name "Status19"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.323
-    OffsetLeft -109.323
-    PositionY 227.142
-    OffsetTop 227.142
+    PositionX -109.023
+    OffsetLeft -109.023
+    PositionY 226.642
+    OffsetTop 226.642
     SizeX 26.002
-    OffsetRight 83.321
+    OffsetRight 83.021
     SizeY 26
-    OffsetBottom -253.142
+    OffsetBottom -252.642
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1839,14 +1839,14 @@ FrameWidgetClass {
    Name "Player19"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.28
-    OffsetLeft -83.28
-    PositionY 232.201
-    OffsetTop 232.201
+    PositionX -82.98
+    OffsetLeft -82.98
+    PositionY 231.701
+    OffsetTop 231.701
     SizeX 193.597
-    OffsetRight -110.317
+    OffsetRight -110.617
     SizeY 24.522
-    OffsetBottom -256.723
+    OffsetBottom -256.223
    }
    IsPixelPerfect 0
    Text ""
@@ -1865,14 +1865,14 @@ FrameWidgetClass {
    Name "Button20"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.829
-    OffsetLeft -112.829
-    PositionY 256.758
-    OffsetTop 256.758
+    PositionX -112.529
+    OffsetLeft -112.529
+    PositionY 256.258
+    OffsetTop 256.258
     SizeX 222.933
-    OffsetRight -110.104
+    OffsetRight -110.404
     SizeY 32.682
-    OffsetBottom -289.44
+    OffsetBottom -288.94
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1900,14 +1900,14 @@ FrameWidgetClass {
    Name "Status20"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.307
-    OffsetLeft -109.307
-    PositionY 259.839
-    OffsetTop 259.839
+    PositionX -109.007
+    OffsetLeft -109.007
+    PositionY 259.339
+    OffsetTop 259.339
     SizeX 26.001
-    OffsetRight 83.306
+    OffsetRight 83.006
     SizeY 26
-    OffsetBottom -285.839
+    OffsetBottom -285.339
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1919,14 +1919,14 @@ FrameWidgetClass {
    Name "Player20"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.265
-    OffsetLeft -83.265
-    PositionY 264.898
-    OffsetTop 264.898
+    PositionX -82.965
+    OffsetLeft -82.965
+    PositionY 264.398
+    OffsetTop 264.398
     SizeX 193.598
-    OffsetRight -110.333
+    OffsetRight -110.633
     SizeY 24.522
-    OffsetBottom -289.42
+    OffsetBottom -288.92
    }
    IsPixelPerfect 0
    Text ""
@@ -1945,14 +1945,14 @@ FrameWidgetClass {
    Name "Button21"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.829
-    OffsetLeft -112.829
-    PositionY 289.459
-    OffsetTop 289.459
+    PositionX -112.529
+    OffsetLeft -112.529
+    PositionY 288.959
+    OffsetTop 288.959
     SizeX 222.933
-    OffsetRight -110.104
+    OffsetRight -110.404
     SizeY 32.682
-    OffsetBottom -322.141
+    OffsetBottom -321.641
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -1980,14 +1980,14 @@ FrameWidgetClass {
    Name "Status21"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.307
-    OffsetLeft -109.307
-    PositionY 292.54
-    OffsetTop 292.54
+    PositionX -109.007
+    OffsetLeft -109.007
+    PositionY 292.04
+    OffsetTop 292.04
     SizeX 26.001
-    OffsetRight 83.306
+    OffsetRight 83.006
     SizeY 26
-    OffsetBottom -318.54
+    OffsetBottom -318.04
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1999,14 +1999,14 @@ FrameWidgetClass {
    Name "Player21"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.265
-    OffsetLeft -83.265
-    PositionY 297.599
-    OffsetTop 297.599
+    PositionX -82.965
+    OffsetLeft -82.965
+    PositionY 297.099
+    OffsetTop 297.099
     SizeX 193.598
-    OffsetRight -110.333
+    OffsetRight -110.633
     SizeY 24.522
-    OffsetBottom -322.121
+    OffsetBottom -321.621
    }
    IsPixelPerfect 0
    Text ""
@@ -2025,14 +2025,14 @@ FrameWidgetClass {
    Name "Button22"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.829
-    OffsetLeft -112.829
-    PositionY 322.139
-    OffsetTop 322.139
+    PositionX -112.529
+    OffsetLeft -112.529
+    PositionY 321.639
+    OffsetTop 321.639
     SizeX 222.933
-    OffsetRight -110.104
+    OffsetRight -110.404
     SizeY 32.682
-    OffsetBottom -354.821
+    OffsetBottom -354.321
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -2060,14 +2060,14 @@ FrameWidgetClass {
    Name "Player22"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.265
-    OffsetLeft -83.265
-    PositionY 330.279
-    OffsetTop 330.279
+    PositionX -83.065
+    OffsetLeft -83.065
+    PositionY 329.779
+    OffsetTop 329.779
     SizeX 193.598
-    OffsetRight -110.333
+    OffsetRight -110.533
     SizeY 24.522
-    OffsetBottom -354.801
+    OffsetBottom -354.301
    }
    IsPixelPerfect 0
    Text ""
@@ -2086,14 +2086,14 @@ FrameWidgetClass {
    Name "Status22"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.307
-    OffsetLeft -109.307
-    PositionY 325.22
-    OffsetTop 325.22
+    PositionX -109.007
+    OffsetLeft -109.007
+    PositionY 324.72
+    OffsetTop 324.72
     SizeX 26.001
-    OffsetRight 83.306
+    OffsetRight 83.006
     SizeY 26
-    OffsetBottom -351.22
+    OffsetBottom -350.72
    }
    IsPixelPerfect 0
    Opacity 0
@@ -2105,14 +2105,14 @@ FrameWidgetClass {
    Name "Button23"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.927
-    OffsetLeft -112.927
-    PositionY 354.916
-    OffsetTop 354.916
+    PositionX -112.527
+    OffsetLeft -112.527
+    PositionY 354.316
+    OffsetTop 354.316
     SizeX 222.933
-    OffsetRight -110.006
+    OffsetRight -110.406
     SizeY 32.682
-    OffsetBottom -387.598
+    OffsetBottom -386.998
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -2140,14 +2140,14 @@ FrameWidgetClass {
    Name "Status23"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.405
-    OffsetLeft -109.405
-    PositionY 357.997
-    OffsetTop 357.997
-    SizeX 26.002
-    OffsetRight 83.404
+    PositionX -109.005
+    OffsetLeft -109.005
+    PositionY 357.397
+    OffsetTop 357.397
+    SizeX 26.001
+    OffsetRight 83.004
     SizeY 26
-    OffsetBottom -383.997
+    OffsetBottom -383.397
    }
    IsPixelPerfect 0
    Opacity 0
@@ -2159,14 +2159,14 @@ FrameWidgetClass {
    Name "Player23"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.362
-    OffsetLeft -83.362
-    PositionY 363.056
-    OffsetTop 363.056
+    PositionX -82.962
+    OffsetLeft -82.962
+    PositionY 362.456
+    OffsetTop 362.456
     SizeX 193.597
-    OffsetRight -110.235
+    OffsetRight -110.635
     SizeY 24.522
-    OffsetBottom -387.578
+    OffsetBottom -386.978
    }
    IsPixelPerfect 0
    Text ""
@@ -2185,14 +2185,14 @@ FrameWidgetClass {
    Name "Button24"
    Slot FrameWidgetSlot "{5EC77AEE26119A4A}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -112.927
-    OffsetLeft -112.927
-    PositionY 387.617
-    OffsetTop 387.617
+    PositionX -112.527
+    OffsetLeft -112.527
+    PositionY 386.917
+    OffsetTop 386.917
     SizeX 222.933
-    OffsetRight -110.006
+    OffsetRight -110.406
     SizeY 32.682
-    OffsetBottom -420.299
+    OffsetBottom -419.599
    }
    Color 0.048 0.068 0.093 0.15
    components {
@@ -2220,14 +2220,14 @@ FrameWidgetClass {
    Name "Status24"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -109.405
-    OffsetLeft -109.405
-    PositionY 390.698
-    OffsetTop 390.698
-    SizeX 26.002
-    OffsetRight 83.404
+    PositionX -109.005
+    OffsetLeft -109.005
+    PositionY 389.998
+    OffsetTop 389.998
+    SizeX 26.001
+    OffsetRight 83.004
     SizeY 26
-    OffsetBottom -416.698
+    OffsetBottom -415.998
    }
    IsPixelPerfect 0
    Opacity 0
@@ -2239,14 +2239,14 @@ FrameWidgetClass {
    Name "Player24"
    Slot FrameWidgetSlot "{5B0E4BD522782625}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -83.362
-    OffsetLeft -83.362
-    PositionY 395.757
-    OffsetTop 395.757
+    PositionX -82.962
+    OffsetLeft -82.962
+    PositionY 395.057
+    OffsetTop 395.057
     SizeX 193.597
-    OffsetRight -110.235
+    OffsetRight -110.635
     SizeY 24.522
-    OffsetBottom -420.279
+    OffsetBottom -419.579
    }
    IsPixelPerfect 0
    Text ""

@@ -54,7 +54,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 			if (rankVisible == "true") {
 				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");
-				playerName = string.Format("%1 %2", rank, playerName);
+				if (rank != "") 
+					playerName = string.Format("%1 %2", rank, playerName);
 			};
 
 			// Get group display widgets.
