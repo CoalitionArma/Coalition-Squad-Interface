@@ -24,7 +24,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		string nametagsRange = m_ClientComponent.ReturnLocalCSISettings()[6];
 		string nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];
 
-		if (nametagsRange == "") nametagsRange = "35";
+		if (nametagsRange.IsEmpty()) nametagsRange = "35";
 		if (nametagsVisible == "false") nametagsRange = "1";
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) {

@@ -49,7 +49,7 @@ modded class SCR_NTName
 	//------------------------------------------------------------------------------------------------
 	void SetPlayerColorTeam(SCR_NameTagData data, string colorTeam, int index)
 	{
-		if (colorTeam == "") return;
+		if (colorTeam.IsEmpty()) return;
 		TextWidget.Cast(data.m_aNametagElements[index]).SetColorInt(colorTeam.ToInt());
 	}
 
@@ -65,7 +65,7 @@ modded class SCR_NTName
 
 		GetText(data, name, nameParams);
 
-		if (name == string.Empty)
+		if (name.IsEmpty())
 			SetText(data, "GETNAME_ERROR", nameParams, index);
 		else
 		{

@@ -1,3 +1,4 @@
+
 modded class SCR_ProfaneFilter
 {
 	//todo@mour:speedrun solution, look into performance!!!
@@ -669,3 +670,4 @@ modded class SCR_ProfaneFilter
 												"精薄",
 												"輪姦"};
 };
+

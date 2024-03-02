@@ -39,7 +39,7 @@ class CSI_Compass : SCR_InfoDisplay
 		};
 
 		m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[12];
-		if (m_sCompassTexture == "") m_sCompassTexture = "{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds";
+		if (m_sCompassTexture.IsEmpty()) m_sCompassTexture = "{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds";
 
 		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[9];
 		if (m_sSquadRadarIconSize == "") m_sSquadRadarIconSize = "100";

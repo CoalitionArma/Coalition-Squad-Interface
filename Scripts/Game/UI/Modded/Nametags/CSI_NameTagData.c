@@ -114,7 +114,7 @@ modded class SCR_NameTagData
 
 		string groupName = group.GetCustomName();
 
-		if (groupName == "")
+		if (groupName.IsEmpty())
 		{
 			string company, platoon, squad, character, format;
 			group.GetCallsigns(company, platoon, squad, character, format);

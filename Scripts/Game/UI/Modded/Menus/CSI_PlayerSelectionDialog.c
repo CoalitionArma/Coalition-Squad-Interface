@@ -125,7 +125,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			};
 
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(190, playerDisplay, playerName);
+			playerName = CheckEllipsis(190, playerName);
 
 			playerDisplay.SetText(playerName);
 			playerDisplay.SetColorInt(colorTeam.ToInt());
@@ -149,11 +149,14 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	};
 
 	//------------------------------------------------------------------------------------------------
-	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
+	string CheckEllipsis(float maxLength, string name)
 	{
 		float sx = 0;
 		float yx = 0;
-		nameWidget.GetTextSize(sx, yx);
+		
+		TextWidget testWidget = TextWidget.Cast(m_wRoot.FindAnyWidget("TestPlayerName"));
+		testWidget.SetText(name);
+		testWidget.GetTextSize(sx, yx);
 
 		if (sx > maxLength) {
 			for (int e = 0; sx > maxLength - 3.5; e++)
@@ -162,8 +165,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 				nameLength = nameLength - 1;
 				name = name.Substring(0, nameLength);
 
-				nameWidget.SetText(name);
-				nameWidget.GetTextSize(sx, yx);
+				testWidget.SetText(name);
+				testWidget.GetTextSize(sx, yx);
 			};
 			name = string.Format("%1...", name);
 		};

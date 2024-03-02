@@ -222,7 +222,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string nametagsRangeStr = "";
 		switch (true)
 		{
-			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem(m_iNametagsRangeSO / 5); m_wNametagsRangeWidget.SetEnabled(false); break; };
+			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem((m_iNametagsRangeSO / 5) - 1); m_wNametagsRangeWidget.SetEnabled(false); break; };
 			default : {
 				nametagsRangeStr = m_ClientComponent.ReturnLocalCSISettings()[6];
 				int nametagsRange = nametagsRangeStr.ToInt();
@@ -444,10 +444,10 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		if (m_wNametagsRangeSO.IsChecked()) {
-			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", (m_wNametagsRangeWidget.GetCurrentItem() * 5).ToString());
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", ((m_wNametagsRangeWidget.GetCurrentItem() + 1) * 5).ToString());
 			m_wNametagsRangeWidget.SetEnabled(false);
 		} else {
-			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", "0");
+			m_ClientComponent.Owner_ChangeAuthoritySetting("nametagsRangeServerOverride", "N/A");
 			m_wNametagsRangeWidget.SetEnabled(true);
 		};
 

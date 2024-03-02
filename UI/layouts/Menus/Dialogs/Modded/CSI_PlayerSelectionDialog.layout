@@ -2317,5 +2317,32 @@ FrameWidgetClass {
     }
    }
   }
+  TextWidgetClass "{60C34B8ED3AFA21F}" {
+   Name "TestPlayerName"
+   Slot FrameWidgetSlot "{5B0E4BD522782625}" {
+    Anchor 1 1 1 1
+    PositionX -109.991
+    OffsetLeft -109.991
+    PositionY -16.456
+    OffsetTop -16.456
+    SizeX 110
+    OffsetRight -0.009
+    SizeY 16.444
+    OffsetBottom 0.012
+   }
+   IsPixelPerfect 0
+   Opacity 0
+   Text ""
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
+    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    ForceFont 1
+    Bold 1
+    ShadowSize 31
+    ShadowOffset 0.5 0.5
+   }
+  }
  }
 }

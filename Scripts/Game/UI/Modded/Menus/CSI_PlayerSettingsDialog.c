@@ -101,7 +101,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		m_sStoredSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "StoredSpecialtyIcon");
 
-		if (m_sStoredSpecialtyIcon == "" || colorTeam == "") return;
+		if (m_sStoredSpecialtyIcon.IsEmpty() || colorTeam.IsEmpty()) return;
 
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 

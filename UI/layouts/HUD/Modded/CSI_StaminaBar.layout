@@ -18,6 +18,7 @@ FrameWidgetClass {
    Color 0.042 0.042 0.042 0.078
    Maximum 1
    Current 0
+   "Draw Background" 0
   }
  }
 }

@@ -71,7 +71,7 @@ class CSI_ClientComponent : ScriptComponent
 
 		string groupString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, -1, "GroupString");
 
-		if (groupString == "") return;
+		if (groupString.IsEmpty()) return;
 
 		array<string> outGroupStrArray = {};
 		groupString.Split("║", outGroupStrArray, false);
@@ -165,7 +165,7 @@ class CSI_ClientComponent : ScriptComponent
 			};
 			switch (true)
 			{
-				case((settingType == "str" && (settingServerOverride == "true" || settingServerOverride == "false")) || (settingType == "int" && !(settingServerOverride == "" || settingServerOverride == "0"))) : {settingValue = settingServerOverride; break; };
+				case((settingType == "str" && (settingServerOverride == "true" || settingServerOverride == "false")) || (settingType == "int" && !(settingServerOverride == "" || settingServerOverride == "N/A"))) : {settingValue = settingServerOverride; break; };
 				default : {GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(setting, settingValue); break; };
 			};
 			tempLocalCSISettingsArray.Insert(settingValue);

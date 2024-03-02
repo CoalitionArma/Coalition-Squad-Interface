@@ -290,7 +290,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				//------------------------------------------------------------------------------------------------
 
 				string playerColorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam");
-				if (!playerColorTeam || playerColorTeam == "") {
+				if (!playerColorTeam || playerColorTeam.IsEmpty()) {
 					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "ColorTeam", m_sCTNone);
 					playerColorTeam = m_sCTNone;
 				}
@@ -335,7 +335,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 				string playerOverideIcon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "OverrideIcon");
 
-				if (playerOverideIcon && specialtyIcon == "") {
+				if (playerOverideIcon && specialtyIcon.IsEmpty()) {
 					switch (playerOverideIcon)
 					{
 						case "Team Lead"      : {specialtyIcon = m_sTeamLeader;    break; };
@@ -352,7 +352,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				//	Specialty Icons
 				//------------------------------------------------------------------------------------------------
 
-				if (specialtyIcon == "") {
+				if (specialtyIcon.IsEmpty()) {
 					// Get players inventory component
 					SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
 
@@ -438,7 +438,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			tempLocalGroupArray.Sort(false);
 
 			foreach (string playerStr : tempLocalGroupArray) {
-				if (groupString == "") 
+				if (groupString.IsEmpty()) 
 					groupString = playerStr;
 				else
 					groupString = string.Format("%1║%2", groupString, playerStr);

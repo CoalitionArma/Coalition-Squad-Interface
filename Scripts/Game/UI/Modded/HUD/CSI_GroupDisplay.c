@@ -2,6 +2,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 {
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected CSI_ClientComponent m_ClientComponent;
+	protected int m_iCurrentFrame = 45;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -12,6 +13,13 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
+		
+		if (m_iCurrentFrame < 20) {
+			m_iCurrentFrame++;
+			return;
+		};
+
+		m_iCurrentFrame = 0;
 
 		if (!m_AuthorityComponent) {
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
@@ -63,7 +71,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 
 			// Check if we need to add ... to the end of players names.
-			playerName = CheckEllipsis(106, playerDisplay, playerName);
+			playerName = CheckEllipsis(106, playerName);
 
 			playerDisplay.SetText(playerName);
 			playerDisplay.SetColorInt(colorTeam.ToInt());
@@ -108,11 +116,14 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
-	string CheckEllipsis(float maxLength, TextWidget nameWidget, string name)
+	string CheckEllipsis(float maxLength, string name)
 	{
 		float sx = 0;
 		float yx = 0;
-		nameWidget.GetTextSize(sx, yx);
+		
+		TextWidget testWidget = TextWidget.Cast(m_wRoot.FindAnyWidget("TestPlayerName"));
+		testWidget.SetText(name);
+		testWidget.GetTextSize(sx, yx);
 
 		if (sx > maxLength) {
 			for (int e = 0; sx > maxLength - 3.5; e++)
@@ -121,8 +132,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 				nameLength = nameLength - 1;
 				name = name.Substring(0, nameLength);
 
-				nameWidget.SetText(name);
-				nameWidget.GetTextSize(sx, yx);
+				testWidget.SetText(name);
+				testWidget.GetTextSize(sx, yx);
 			};
 			name = string.Format("%1...", name);
 		};
