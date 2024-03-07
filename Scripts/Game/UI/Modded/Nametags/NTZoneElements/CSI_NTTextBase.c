@@ -3,8 +3,6 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 class CSI_NTGroupName : SCR_NTTextBase
 {
-	protected int m_iUpdateFrame = 45;
-
 	//------------------------------------------------------------------------------------------------
 	string GetGroupNameStr(SCR_NameTagData data)
 	{
@@ -15,7 +13,6 @@ class CSI_NTGroupName : SCR_NTTextBase
 	void SetGroupText(SCR_NameTagData data, string groupName, int index)
 	{
 		if (!data.m_aNametagElements[index]) return;
-
 		TextWidget.Cast(data.m_aNametagElements[index]).SetText(groupName);
 	}
 
@@ -23,14 +20,6 @@ class CSI_NTGroupName : SCR_NTTextBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
 		super.UpdateElement(data, index);
-
-		if (m_iUpdateFrame < 45) {
-			m_iUpdateFrame++;
-			return;
-		};
-
-		m_iUpdateFrame = 0;
-
 		SetGroupText(data, GetGroupNameStr(data), index);
 	}
 }

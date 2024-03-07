@@ -423,7 +423,7 @@ FrameWidgetClass {
     OffsetTop -90.23
     SizeX 206.073
     OffsetRight -97.634
-    SizeY 27.7
+    SizeY 27.699
     OffsetBottom 62.531
    }
    Text "Nametags Visible"
@@ -519,7 +519,7 @@ FrameWidgetClass {
     OffsetTop -55.238
     SizeX 206.073
     OffsetRight -97.634
-    SizeY 27.7
+    SizeY 27.699
     OffsetBottom 27.539
    }
    Text "Role In Nametags"
@@ -589,11 +589,11 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX 106.984
     OffsetLeft 106.984
-    PositionY -263.506
-    OffsetTop -263.506
+    PositionY -273.843
+    OffsetTop -273.843
     SizeX 100.254
     OffsetRight -207.238
-    SizeY 553.846
+    SizeY 564.183
     OffsetBottom -290.34
    }
    Opacity 0
@@ -606,12 +606,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX 106.816
     OffsetLeft 106.816
-    PositionY -262.811
-    OffsetTop -262.811
+    PositionY -273.781
+    OffsetTop -273.781
     SizeX 22.161
     OffsetRight -128.977
     SizeY 20.283
-    OffsetBottom 242.528
+    OffsetBottom 253.498
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -626,12 +626,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX 128.887
     OffsetLeft 128.887
-    PositionY -262.803
-    OffsetTop -262.803
+    PositionY -273.773
+    OffsetTop -273.773
     SizeX 75.606
     OffsetRight -204.493
     SizeY 20.257
-    OffsetBottom 242.546
+    OffsetBottom 253.516
    }
    Opacity 0
    Text "Server Override"
@@ -1393,6 +1393,210 @@ FrameWidgetClass {
    }
    components {
     ButtonComponent "{60B40B7B1C652F7E}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  ImageWidgetClass "{60CD25C09515F1A3}" {
+   Name "BackgroundServerDefaults"
+   Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 209.619
+    OffsetLeft 209.619
+    PositionY -273.807
+    OffsetTop -273.807
+    SizeX 100.254
+    OffsetRight -309.873
+    SizeY 157.686
+    OffsetBottom 116.121
+   }
+   Opacity 0
+   Color 0.007 0.012 0.014 1
+   "Shadow Offset" 0.5 0.5
+  }
+  ImageWidgetClass "{60CD25C095158E5B}" {
+   Name "PrettyServerDefaults"
+   Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 209.451
+    OffsetLeft 209.451
+    PositionY -273.555
+    OffsetTop -273.555
+    SizeX 22.161
+    OffsetRight -231.612
+    SizeY 20.283
+    OffsetBottom 253.272
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+   Image "settings"
+   Size 64 64
+   "Shadow Offset" 0.5 0.5
+  }
+  TextWidgetClass "{60CD25C095158E9F}" {
+   Name "PrettyTextServerDefaults0"
+   Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 231.522
+    OffsetLeft 231.522
+    PositionY -273.547
+    OffsetTop -273.547
+    SizeX 78.377
+    OffsetRight -309.899
+    SizeY 20.257
+    OffsetBottom 253.29
+   }
+   Opacity 0
+   Text "Override Defaults"
+   "Font Size" 11
+   "Min Font Size" 11
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{5EC77B6CA687BBE6}" {
+    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    ShadowOffset 0.5 0.5
+   }
+  }
+  TextWidgetClass "{60CD25C095158E03}" {
+   Name "PrettyTextServerDefaults1"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 211.3
+    OffsetLeft 211.3
+    PositionY -183.988
+    OffsetTop -183.988
+    SizeX 95.475
+    OffsetRight -306.775
+    SizeY 19.679
+    OffsetBottom 164.309
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "// Set Selected Settings as Default"
+   "Font Size" 10
+   "Min Font Size" 10
+   Wrap 1
+   FontProperties FontProperties "{605B121A62611D32}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  TextWidgetClass "{60CD25C095158E37}" {
+   Name "SeperatorServerDefaults0"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 211.108
+    OffsetLeft 211.108
+    PositionY -164.311
+    OffsetTop -164.311
+    SizeX 95.635
+    OffsetRight -306.743
+    SizeY 5.312
+    OffsetBottom 158.999
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "-----------------------------"
+   "Font Size" 14
+   "Min Font Size" 14
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{605B121A62611D32}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  CheckBoxWidgetClass "{60CD25C088A39829}" {
+   Name "ServerDefaults"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 247.624
+    OffsetLeft 247.624
+    PositionY -156.07
+    OffsetTop -156.07
+    SizeX 35
+    OffsetRight -282.624
+    SizeY 35
+    OffsetBottom 121.07
+   }
+   "Is Enabled" 0
+   Opacity 0
+   components {
+    ButtonComponent "{60B40B7B25526E04}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  TextWidgetClass "{60CD25CE34B4B56C}" {
+   Name "PrettyTextServerDefaults2"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 210.97
+    OffsetLeft 210.97
+    PositionY -251.423
+    OffsetTop -251.423
+    SizeX 95.475
+    OffsetRight -306.445
+    SizeY 22.046
+    OffsetBottom 229.377
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "// Turn On/Off Default Settings Override"
+   "Font Size" 10
+   "Min Font Size" 10
+   Wrap 1
+   FontProperties FontProperties "{605B121A62611D32}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  TextWidgetClass "{60CD25CE34B4B513}" {
+   Name "SeperatorServerDefaults1"
+   Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 211.068
+    OffsetLeft 211.068
+    PositionY -229.396
+    OffsetTop -229.396
+    SizeX 95.635
+    OffsetRight -306.703
+    SizeY 5.313
+    OffsetBottom 224.083
+   }
+   Opacity 0
+   Color 0.761 0.386 0.078 1
+   Text "-----------------------------"
+   "Font Size" 14
+   "Min Font Size" 14
+   "Vertical Alignment" Center
+   FontProperties FontProperties "{605B121A62611D32}" {
+    ShadowOffset 0.5 0.5
+   }
+  }
+  CheckBoxWidgetClass "{60CD25CE34B4B4AC}" {
+   Name "ServerDefaultsActive"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 247.484
+    OffsetLeft 247.484
+    PositionY -220.711
+    OffsetTop -220.711
+    SizeX 35
+    OffsetRight -282.484
+    SizeY 35
+    OffsetBottom 185.711
+   }
+   "Is Enabled" 0
+   Opacity 0
+   components {
+    ButtonComponent "{60B40B7B25526E04}" {
      m_ColorButtonDefault 1 1 1 1
      m_ColorButtonFocused 0.761 0.392 0.078 1
      m_ColorButtonPressed 1 0.597 0.205 1
