@@ -4,25 +4,19 @@
 
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
-	protected CSI_AuthorityComponent m_AuthorityComponent;
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_GameModeComponent m_GameModeComponent;
 
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
 		super.DisplayUpdate(owner, timeSlice);
 		
-		if (!m_AuthorityComponent) {
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		if (!m_GameModeComponent) {
+			m_GameModeComponent = CSI_GameModeComponent.GetInstance();
 			return;
 		};
 
-		if (!m_ClientComponent) {
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
-			return;
-		};
-
-		string nametagsRange = m_ClientComponent.ReturnLocalCSISettings()[6];
-		string nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];
+		string nametagsRange = m_GameModeComponent.ReturnLocalCSISettings()[6];
+		string nametagsVisible = m_GameModeComponent.ReturnLocalCSISettings()[4];
 
 		if (nametagsRange.IsEmpty()) nametagsRange = "35";
 		if (nametagsVisible == "false") nametagsRange = "1";

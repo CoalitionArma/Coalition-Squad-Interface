@@ -1,70 +1,102 @@
 class CSI_GameSettings : ModuleGameSettings
 {
-	[Attribute()]
+	[Attribute("")]
 	string compassVisible;
 
-	[Attribute()]
+	[Attribute("{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds")]
 	string compassTexture;
 
-	[Attribute()]
+	[Attribute("")]
 	string squadRadarVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string groupDisplayVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string staminaBarVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string nametagsVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string rankVisible;
 
-	[Attribute()]
+	[Attribute("100")]
 	string squadRadarIconSize;
 
-	[Attribute()]
+	[Attribute("BODY")]
 	string nametagsPosition;
 
-	[Attribute()]
+	[Attribute("")]
 	string nametagsRange;
 
-	[Attribute()]
+	[Attribute("true")]
 	string squadRadarSelfIconVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string roleNametagVisible;
 
-	[Attribute()]
+	[Attribute("")]
 	string personalColorTeamMenu;
 
 	//Server Overrides
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string compassVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string squadRadarVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string groupDisplayVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string staminaBarVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string nametagsVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string rankVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string nametagsRangeServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string roleNametagVisibleServerOverride;
 
-	[Attribute()]
+	[Attribute("N/A")]
 	string personalColorTeamMenuServerOverride;
+	
+	//Server Defaults
+	
+	[Attribute("false")]
+	string serverDefaultsActive;
+
+	[Attribute("true")]
+	string compassVisibleServerDefault;
+
+	[Attribute("true")]
+	string squadRadarVisibleServerDefault;
+
+	[Attribute("true")]
+	string groupDisplayVisibleServerDefault;
+
+	[Attribute("true")]
+	string staminaBarVisibleServerDefault;
+
+	[Attribute("true")]
+	string nametagsVisibleServerDefault;
+
+	[Attribute("false")]
+	string rankVisibleServerDefault;
+
+	[Attribute("35")]
+	string nametagsRangeServerDefault;
+
+	[Attribute("false")]
+	string roleNametagVisibleServerDefault;
+
+	[Attribute("true")]
+	string personalColorTeamMenuServerDefault;
 }

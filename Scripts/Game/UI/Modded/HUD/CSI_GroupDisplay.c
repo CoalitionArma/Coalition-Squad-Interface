@@ -1,6 +1,6 @@
 class CSI_GroupDisplay : SCR_InfoDisplay
 {
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_GameModeComponent m_GameModeComponent;
 	protected CSI_ClientComponent m_ClientComponent;
 	protected int m_iCurrentFrame = 45;
 
@@ -21,8 +21,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 		m_iCurrentFrame = 0;
 
-		if (!m_AuthorityComponent) {
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		if (!m_GameModeComponent) {
+			m_GameModeComponent = CSI_GameModeComponent.GetInstance();
 			return;
 		};
 
@@ -31,8 +31,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			return;
 		};
 
-		string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
-		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
+		string groupDisplayVisible = m_GameModeComponent.ReturnLocalCSISettings()[2];
+		string rankVisible = m_GameModeComponent.ReturnLocalCSISettings()[5];
 
 		if (groupDisplayVisible == "false") {
 			ClearGroupDisplay(0, true);
@@ -55,13 +55,13 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "ColorTeam");
-			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DisplayIcon");
+			string colorTeam = m_GameModeComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "ColorTeam");
+			string icon = m_GameModeComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DisplayIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
 			if (rankVisible == "true") {
-				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");
+				string rank = m_GameModeComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");
 				if (rank != "") 
 					playerName = string.Format("%1 %2", rank, playerName);
 			};

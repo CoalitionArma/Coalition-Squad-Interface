@@ -1,6 +1,6 @@
 class CSI_StaminaBar : SCR_InfoDisplay
 {
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_GameModeComponent m_GameModeComponent;
 	protected ProgressBarWidget m_wStamBar;
 
 	//------------------------------------------------------------------------------------------------
@@ -13,12 +13,12 @@ class CSI_StaminaBar : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 
-		if (!m_ClientComponent) {
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
+		if (!m_GameModeComponent) {
+			m_GameModeComponent = CSI_GameModeComponent.GetInstance();
 			return;
 		};
 
-		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
+		string stamBarVisible = m_GameModeComponent.ReturnLocalCSISettings()[3];
 
 		//Refresh base widget
 		if (!m_wStamBar) {

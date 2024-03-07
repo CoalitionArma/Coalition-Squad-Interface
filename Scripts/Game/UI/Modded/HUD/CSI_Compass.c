@@ -3,7 +3,7 @@ class CSI_Compass : SCR_InfoDisplay
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_GameModeComponent m_GameModeComponent;
 	protected CSI_ClientComponent m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected SCR_AIGroup m_PlayersGroup;
@@ -28,8 +28,8 @@ class CSI_Compass : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 
-		if (!m_AuthorityComponent) {
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		if (!m_GameModeComponent) {
+			m_GameModeComponent = CSI_GameModeComponent.GetInstance();
 			return;
 		};
 
@@ -38,14 +38,11 @@ class CSI_Compass : SCR_InfoDisplay
 			return;
 		};
 
-		m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[12];
-		if (m_sCompassTexture.IsEmpty()) m_sCompassTexture = "{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds";
+		m_sCompassTexture = m_GameModeComponent.ReturnLocalCSISettings()[12];
+		m_sSquadRadarIconSize = m_GameModeComponent.ReturnLocalCSISettings()[9];
 
-		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[9];
-		if (m_sSquadRadarIconSize == "") m_sSquadRadarIconSize = "100";
-
-		string compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
-		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
+		string compassVisible = m_GameModeComponent.ReturnLocalCSISettings()[0];
+		string squadRadarVisible = m_GameModeComponent.ReturnLocalCSISettings()[1];
 
 		//Refresh base widgets if we can't get them
 		if (!m_wBearing || !m_wCompass) {
@@ -156,7 +153,7 @@ class CSI_Compass : SCR_InfoDisplay
 
 		string squadRadarSelfIconVisible = "";
 		int opacity = 1;
-		squadRadarSelfIconVisible = m_ClientComponent.ReturnLocalCSISettings()[10];
+		squadRadarSelfIconVisible = m_GameModeComponent.ReturnLocalCSISettings()[10];
 
 		if (squadRadarSelfIconVisible == "false") opacity = 0;
 
@@ -235,9 +232,9 @@ class CSI_Compass : SCR_InfoDisplay
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		int groupID = m_PlayersGroup.GetGroupID();
 
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
-		string value = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, processEntityID, "PlayerValue");
-		string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
+		string colorTeam = m_GameModeComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
+		string value = m_GameModeComponent.ReturnLocalPlayerMapValue(-1, processEntityID, "PlayerValue");
+		string icon = m_GameModeComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
 
 		if (colorTeam == "" || value == "" || icon == "") return;
 
