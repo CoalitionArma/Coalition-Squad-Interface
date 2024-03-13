@@ -10,41 +10,41 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	protected CSI_ClientComponent m_ClientComponent;
 	protected CSI_GameModeComponent m_GameModeComponent;
 
-	protected string m_sCompassVisibleSO;
-	protected string m_sSquadRadarVisibleSO;
-	protected string m_sGroupDisplayVisibleSO;
-	protected string m_sStaminaBarVisibleSO;
-	protected string m_sNametagsVisibleSO;
-	protected string m_sRankVisibleSO;
 	protected int m_iNametagsRangeSO;
-	protected string m_sRoleNametagVisibleSO;
-	protected string m_sPersonalColorTeamMenuSO;
-
-	protected CheckBoxWidget m_wCompassVisibleWidget;
-	protected CheckBoxWidget m_wSquadRadarVisibleWidget;
-	protected CheckBoxWidget m_wGroupDisplayVisibleWidget;
-	protected CheckBoxWidget m_wStaminaBarVisibleWidget;
-	protected CheckBoxWidget m_wNametagsVisibleWidget;
-	protected CheckBoxWidget m_wRankVisibleWidget;
-	protected XComboBoxWidget m_wIconSizeWidget;
-	protected XComboBoxWidget m_wNametagsRangeWidget;
-	protected XComboBoxWidget m_wNametagsPosWidget;
-	protected CheckBoxWidget m_wRoleNametagVisibleWidget;
-	protected CheckBoxWidget m_wSquadRadarSelfIconVisibleWidget;
-	protected CheckBoxWidget m_wPersonalColorTeamMenuWidget;
-
-	protected CheckBoxWidget m_wCompassVisibleWidgetSO;
-	protected CheckBoxWidget m_wSquadRadarVisibleWidgetSO;
-	protected CheckBoxWidget m_wGroupDisplayVisibleWidgetSO;
-	protected CheckBoxWidget m_wStaminaBarVisibleWidgetSO;
-	protected CheckBoxWidget m_wNametagsVisibleWidgetSO;
-	protected CheckBoxWidget m_wRankVisibleWidgetSO;
-	protected CheckBoxWidget m_wNametagsRangeSO;
-	protected CheckBoxWidget m_wRoleNametagVisibleSO;
-	protected CheckBoxWidget m_wPersonalColorTeamMenuSO;
 	
-	protected CheckBoxWidget m_wServerDefaults;
-	protected CheckBoxWidget m_wServerDefaultsActive;
+	protected string m_sCompassVisibleSO
+					,m_sSquadRadarVisibleSO
+					,m_sGroupDisplayVisibleSO
+					,m_sStaminaBarVisibleSO
+					,m_sNametagsVisibleSO
+					,m_sRankVisibleSO
+					,m_sRoleNametagVisibleSO
+					,m_sPersonalColorTeamMenuSO;	
+
+	protected CheckBoxWidget m_wCompassVisibleWidget
+							,m_wSquadRadarVisibleWidget
+							,m_wGroupDisplayVisibleWidget
+							,m_wStaminaBarVisibleWidget
+							,m_wNametagsVisibleWidget
+							,m_wRankVisibleWidget
+							,m_wRoleNametagVisibleWidget
+							,m_wSquadRadarSelfIconVisibleWidget
+							,m_wPersonalColorTeamMenuWidget
+							,m_wCompassVisibleWidgetSO
+							,m_wSquadRadarVisibleWidgetSO
+							,m_wGroupDisplayVisibleWidgetSO
+							,m_wStaminaBarVisibleWidgetSO
+							,m_wNametagsVisibleWidgetSO
+							,m_wRankVisibleWidgetSO
+							,m_wNametagsRangeSO
+							,m_wRoleNametagVisibleSO
+							,m_wPersonalColorTeamMenuSO
+							,m_wServerDefaults
+							,m_wServerDefaultsActive;
+
+	protected XComboBoxWidget m_wIconSizeWidget
+							,m_wNametagsRangeWidget
+							,m_wNametagsPosWidget;
 
 	//------------------------------------------------------------------------------------------------
 
