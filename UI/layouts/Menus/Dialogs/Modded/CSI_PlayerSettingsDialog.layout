@@ -34,7 +34,7 @@ FrameWidgetClass {
     OffsetBottom -65.23
    }
    Color 0.761 0.386 0.078 1
-   Text "// Set Color Team"
+   Text "#CSI-Player_Settings_Color_Teams_Set_Subtitle"
    "Font Size" 12
    "Min Font Size" 12
    FontProperties FontProperties "{60587BCB22D7A1C8}" {
@@ -55,7 +55,7 @@ FrameWidgetClass {
     OffsetBottom -8.794
    }
    Color 0.761 0.386 0.078 1
-   Text "// Override Icon"
+   Text "#CSI-Player_Settings_Override_Icon_Subtitle"
    "Font Size" 12
    "Min Font Size" 12
    FontProperties FontProperties "{60587BCB2098979A}" {
@@ -95,7 +95,7 @@ FrameWidgetClass {
     SizeY 30
     OffsetBottom 195.938
    }
-   Text "Player Settings"
+   Text "#CSI-Player_Settings_Title"
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
     Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
@@ -235,7 +235,7 @@ FrameWidgetClass {
     SizeY 30
     OffsetBottom 12.885
    }
-   Text "No Player Selected"
+   Text "#CSI-Player_Settings_No_Player_Selected"
    "Min Font Size" 16
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
