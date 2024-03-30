@@ -129,7 +129,7 @@ FrameWidgetClass {
     OffsetBottom -240.534
    }
    Color 0.761 0.386 0.078 1
-   Text "// Compass Settings"
+   Text "#CSI-Ingame_Settings_Compass_Settings_Subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
@@ -172,7 +172,7 @@ FrameWidgetClass {
     OffsetBottom -56.655
    }
    Color 0.761 0.386 0.078 1
-   Text "// Group Display Settings"
+   Text "#CSI-Ingame_Settings_Group_Display_Settings_Subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
@@ -215,7 +215,7 @@ FrameWidgetClass {
     OffsetBottom 229.805
    }
    Color 0.761 0.386 0.078 1
-   Text "// General Settings"
+   Text "#CSI-Ingame_Settings_Subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
@@ -258,7 +258,7 @@ FrameWidgetClass {
     OffsetBottom 99.831
    }
    Color 0.761 0.386 0.078 1
-   Text "// Nametag Settings"
+   Text "#CSI-Ingame_Settings_Nametag_Settings_Subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
@@ -279,7 +279,7 @@ FrameWidgetClass {
     OffsetBottom -116.503
    }
    Color 0.761 0.386 0.078 1
-   Text "// Squad Radar Settings"
+   Text "#CSI-Ingame_Settings_Squad_Radar_Settings_Subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
@@ -340,7 +340,7 @@ FrameWidgetClass {
     SizeY 20.256
     OffsetBottom 265.986
    }
-   Text "CSI Settings"
+   Text "#CSI-Ingame_Settings_Title"
    "Font Size" 32
    "Min Font Size" 18
    "Vertical Alignment" Center
@@ -362,7 +362,7 @@ FrameWidgetClass {
     SizeY 27.713
     OffsetBottom -276.829
    }
-   Text "Compass Visible"
+   Text "#CSI-Ingame_Settings_Compass_Visible_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E080F5D3795}" {
@@ -378,7 +378,7 @@ FrameWidgetClass {
     SizeY 27.713
     OffsetBottom -152.746
    }
-   Text "Squad Radar Visible"
+   Text "#CSI-Ingame_Settings_Squad_Radar_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E080A63F42F}" {
@@ -394,7 +394,7 @@ FrameWidgetClass {
     SizeY 27.713
     OffsetBottom -93.412
    }
-   Text "Group Display Visible"
+   Text "#CSI-Ingame_Settings_Group_Display_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E08346E61B6}" {
@@ -410,7 +410,7 @@ FrameWidgetClass {
     SizeY 27.713
     OffsetBottom 192.215
    }
-   Text "Stamina Bar Visible"
+   Text "#CSI-Ingame_Settings_Stamina_Bar_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E0836767C08}" {
@@ -426,7 +426,7 @@ FrameWidgetClass {
     SizeY 27.699
     OffsetBottom 62.531
    }
-   Text "Nametags Visible"
+   Text "#CSI-Ingame_Settings_Nametags_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{608E21CB3599021B}" {
@@ -442,7 +442,7 @@ FrameWidgetClass {
     SizeY 27.701
     OffsetBottom -6.829
    }
-   Text "Nametags Position"
+   Text "#CSI-Ingame_Settings_Nametags_Position_Selector"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{608E21CB3739F2E2}" {
@@ -458,7 +458,7 @@ FrameWidgetClass {
     SizeY 27.699
     OffsetBottom -38.678
    }
-   Text "Nametags Range"
+   Text "#CSI-Ingame_Settings_Nametags_Range_Selector"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E0832BE9956}" {
@@ -474,7 +474,7 @@ FrameWidgetClass {
     SizeY 27.7
     OffsetBottom 157.652
    }
-   Text "Rank Visible"
+   Text "#CSI-Ingame_Settings_Rank_Visible_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60833E087A83FD37}" {
@@ -490,7 +490,7 @@ FrameWidgetClass {
     SizeY 27.701
     OffsetBottom -222.605
    }
-   Text "Icon Scale"
+   Text "#CSI-Ingame_Settings_Icon_Scale_Selector"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{608F286408E2E57B}" {
@@ -506,7 +506,7 @@ FrameWidgetClass {
     SizeY 27.712
     OffsetBottom -187.713
    }
-   Text "Personal Icon Visible"
+   Text "#CSI-Ingame_Settings_Personal_Icon_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{608F2864D145903D}" {
@@ -522,7 +522,7 @@ FrameWidgetClass {
     SizeY 27.699
     OffsetBottom 27.539
    }
-   Text "Role In Nametags"
+   Text "#CSI-Ingame_Settings_Nametags_Role_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60971295EDCA7BB4}" {
@@ -538,7 +538,7 @@ FrameWidgetClass {
     SizeY 27.7
     OffsetBottom 122.942
    }
-   Text "Personal CT Menu"
+   Text "#CSI-Ingame_Settings_CT_Menu_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{609372796030C538}" {

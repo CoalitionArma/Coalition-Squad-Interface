@@ -55,7 +55,7 @@ FrameWidgetClass {
     SizeY 20.256
     OffsetBottom 440.68
    }
-   Text "Player Selection"
+   Text "#CSI-Player_Selection_Title"
    "Font Size" 32
    "Min Font Size" 18
    "Vertical Alignment" Center
@@ -92,7 +92,7 @@ FrameWidgetClass {
     OffsetBottom 403.01
    }
    Color 0.761 0.386 0.078 1
-   Text "// Select A Player To Edit"
+   Text "#csi-player_selection_subtitle"
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {

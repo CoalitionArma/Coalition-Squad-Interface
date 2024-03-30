@@ -7,12 +7,76 @@ GameProject {
  }
  Configurations {
   GameProjectConfig PC {
+   WidgetManagerSettings WidgetManagerSettings "{AC4BE58770485E02}" {
+    StringTables {
+     StringTableDefinition "{60FC2921AAB86F9F}" {
+      StringTableSource "{7F1658C204FA1341}language/CSI_localization.st"
+      Languages {
+       LanguageDefinition "{60FC2921A8CA316A}" {
+        Code "cs_cz"
+        StringTableRuntime "{A2E008B0B9446C23}language/CSI_localization.cs_cz.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA3120}" {
+        Code "de_de"
+        StringTableRuntime "{779E1283AAE77D03}language/CSI_localization.de_de.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA313C}" {
+        Code "en_us"
+        StringTableRuntime "{296E98C8C0147802}language/CSI_localization.en_us.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA310A}" {
+        Code "es_es"
+        StringTableRuntime "{EC22D5412E16131D}language/CSI_localization.es_es.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30E7}" {
+        Code "fr_fr"
+        StringTableRuntime "{578A2076C895F01F}language/CSI_localization.fr_fr.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30F1}" {
+        Code "it_it"
+        StringTableRuntime "{D796AF4265B773E6}language/CSI_localization.it_it.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30C0}" {
+        Code "ja_jp"
+        StringTableRuntime "{C78D12D05BC6434D}language/CSI_localization.ja_jp.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30DF}" {
+        Code "ko_kr"
+        StringTableRuntime "{67333A7CC8EB4072}language/CSI_localization.ko_kr.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30AD}" {
+        Code "pl_pl"
+        StringTableRuntime "{3B429C867604DC0E}language/CSI_localization.pl_pl.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA30BD}" {
+        Code "pt_br"
+        StringTableRuntime "{EE35064A4DFA16B4}language/CSI_localization.pt_br.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA3097}" {
+        Code "ru_ru"
+        StringTableRuntime "{BB7412E2D08373C2}language/CSI_localization.ru_ru.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA2F81}" {
+        Code "uk_ua"
+        StringTableRuntime "{312C4714BCADCD97}language/CSI_localization.uk_ua.conf"
+       }
+       LanguageDefinition "{60FC2921A8CA2F9E}" {
+        Code "zh_cn"
+        StringTableRuntime "{EB9C2929850D1D8A}language/CSI_localization.zh_cn.conf"
+       }
+      }
+     }
+    }
+   }
   }
   GameProjectConfig XBOX_ONE {
   }
   GameProjectConfig XBOX_SERIES {
   }
   GameProjectConfig PS4 {
+  }
+  GameProjectConfig PS5 : PC {
+   PlatformHardware PS5
   }
   GameProjectConfig HEADLESS {
   }
