@@ -276,9 +276,6 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			playerKeyAndValueToSplit.Split("╪", playerKeyAndValueArray, false);
 			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
 		};
-		
-		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		clientComponent.UpdateLocalGroupArray();
 	}
 
 	//------------------------------------------------------------------------------------------------

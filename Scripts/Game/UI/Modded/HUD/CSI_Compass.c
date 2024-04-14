@@ -236,7 +236,7 @@ class CSI_Compass : SCR_InfoDisplay
 		string value = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PlayerValue");
 		string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
 
-		if (colorTeam == "" || value == "" || icon == "") return;
+		if (colorTeam.IsEmpty() || value.IsEmpty() || icon.IsEmpty()) return;
 
 		int valueInt = value.ToInt();
 

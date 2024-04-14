@@ -123,7 +123,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		string iconOverride = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OverrideIcon");
 
-		if (iconOverride == "") return;
+		if (iconOverride.IsEmpty()) return;
 
 		int playerOverideIcon = 0;
 		switch (iconOverride)

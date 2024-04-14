@@ -59,6 +59,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DisplayIcon");
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
+			
+			if (playerName.IsEmpty() || icon.IsEmpty() || colorTeam.IsEmpty()) return;
 
 			if (rankVisible == "true") {
 				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");

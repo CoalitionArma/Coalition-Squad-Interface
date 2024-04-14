@@ -52,13 +52,14 @@ class CSI_ClientComponent : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-
-		if (!GetGame().InPlayMode() || Replication.IsServer()) return;
 		
 		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 
+		if (!GetGame().InPlayMode() || Replication.IsServer()) return;
+
 		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 325, true);
+		GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 875, true);
 	}
 
 	//------------------------------------------------------------------------------------------------
