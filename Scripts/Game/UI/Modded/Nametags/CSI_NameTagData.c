@@ -13,7 +13,7 @@ modded class SCR_NameTagData
 	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
 	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
 
-	protected CSI_GameModeComponent m_GameModeComponent;
+	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected string m_sNametagsPos;
 
 	//------------------------------------------------------------------------------------------------
@@ -21,10 +21,10 @@ modded class SCR_NameTagData
 	{
 		super.InitDefaults();
 
-		m_GameModeComponent = CSI_GameModeComponent.GetInstance();
-		if (!m_GameModeComponent) return;
+		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		if (!m_AuthorityComponent) return;
 
-		m_sNametagsPos = m_GameModeComponent.ReturnLocalCSISettings()[11];
+		m_sNametagsPos = m_AuthorityComponent.ReturnLocalCSISettings()[11];
 
 		if (m_sNametagsPos == "HEAD") {
 			m_eAttachedTo = ENameTagPosition.HEAD;
@@ -38,11 +38,11 @@ modded class SCR_NameTagData
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
 	{
-		if (!m_GameModeComponent) return;
+		if (!m_AuthorityComponent) return;
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
-			string roleNametagVisible = m_GameModeComponent.ReturnLocalCSISettings()[7];
-			string rankVisible = m_GameModeComponent.ReturnLocalCSISettings()[5];
+			string roleNametagVisible = m_AuthorityComponent.ReturnLocalCSISettings()[7];
+			string rankVisible = m_AuthorityComponent.ReturnLocalCSISettings()[5];
 
 			PlayerManager playerMgr = GetGame().GetPlayerManager();
 			if (playerMgr)
@@ -51,13 +51,13 @@ modded class SCR_NameTagData
 
 				if (rankVisible == "true")
 				{
-					string rank = m_GameModeComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PlayerRank");
+					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PlayerRank");
 					if (rank != "") 
 						m_sName = string.Format("%1 %2", rank, m_sName);
 				};
 				if (roleNametagVisible == "true")
 				{
-					string icon = m_GameModeComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");
+					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");
 					switch (icon) {
 						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
 						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
@@ -118,20 +118,20 @@ modded class SCR_NameTagData
 	//------------------------------------------------------------------------------------------------
 	string GetPlayerColorTeam()
 	{		
-		if (!m_GameModeComponent) return "";
+		if (!m_AuthorityComponent) return "";
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_GameModeComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "";
+		if (!group || !m_AuthorityComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "";
 
-		return m_GameModeComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");;
+		return m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");;
 	}
 
 	void UpdateAttatchedTo()
 	{
-		if (!m_GameModeComponent) return;
+		if (!m_AuthorityComponent) return;
 
-		m_sNametagsPos = m_GameModeComponent.ReturnLocalCSISettings()[11];
+		m_sNametagsPos = m_AuthorityComponent.ReturnLocalCSISettings()[11];
 
 		if (m_sNametagsPos == "HEAD") {
 			m_eAttachedTo = ENameTagPosition.HEAD;

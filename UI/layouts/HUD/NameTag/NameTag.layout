@@ -16,7 +16,7 @@ FrameWidgetClass {
      Slot LayoutSlot "{51C4C0A5BAFB20D2}" {
      }
      {
-      RichTextWidgetClass "{605607D06C552ED4}" {
+      TextWidgetClass "{605607D06C552ED4}" {
        Name "PlayerGroupName"
        Slot FrameWidgetSlot "{605607D06C552E2E}" {
         Anchor 0 0 0 0
