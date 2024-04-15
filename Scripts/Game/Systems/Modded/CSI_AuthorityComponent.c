@@ -246,6 +246,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			string playerValue = ReturnAuthorityPlayerMapValue(groupID, playerID, "PlayerValue");
 			string key5 = string.Format("%1 %2 %3", groupID, playerID, "PlayerValue");
 			tempMap.Set(key5, playerValue);
+			
+			string playerRank = ReturnAuthorityPlayerMapValue(-1, playerID, "PlayerRank");
+			string key6 = string.Format("%1 %2 %3", -1, playerID, "PlayerRank");
+			tempMap.Set(key6, playerRank);
 		};
 
 		m_mAuthorityPlayerMap.Clear();
