@@ -5,15 +5,9 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 {
 	// A hashmap that is modified only on the authority.
 	protected ref map<string, string> m_mUpdateAuthoritySettingsMap = new map<string, string>;
-	
-	// A hashmap that is modified only on the local user.
-	protected ref map<string, string> m_mUpdateClientSettingsMap = new map<string, string>;
-	
-	// A array where we hold all local user settings.
-	protected ref array<string> m_aLocalCSISettingsArray = new array<string>;
 
 	// A array we use to broadcast whenever a change happens to any of the server overrides.
-	[RplProp()]
+	[RplProp(onRplName: "UpdateLocalSettings")]
 	ref array<string> m_aServerOverridesArray = new array<string>;
 
 	// A hashmap that is modified only on the authority.
@@ -51,15 +45,11 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 		if (Replication.IsServer()) 
 		{
-			CheckAuthoritySettings();
+			UpdateAuthoritySettingArray();
 			
 			GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 850, true);
-			GetGame().GetCallqueue().CallLater(CheckAuthoritySettings, 5000, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 480000, true); // Updates every 8min (480000ms)
 		};
-		
-		CheckClientCSISettings();
-		GetGame().GetCallqueue().CallLater(CheckClientCSISettings, 2850, true);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -70,90 +60,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		if (Replication.IsServer()) 
 		{
 			GetGame().GetCallqueue().Remove(UpdateAllGroupStrings);
-			GetGame().GetCallqueue().Remove(CheckAuthoritySettings);
 			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
 		};
-		
-		GetGame().GetCallqueue().Remove(CheckClientCSISettings);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-
-	// Function for getting/setting local settings
-
-	//------------------------------------------------------------------------------------------------
-
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	TStringArray ReturnLocalCSISettings() {
-		return m_aLocalCSISettingsArray;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	void ChangeLocalCSISetting(string setting, string value)
-	{
-		m_mUpdateClientSettingsMap.Set(setting, value);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void CheckClientCSISettings()
-	{
-		if (m_mUpdateClientSettingsMap.Count() > 0) {
-			for (int i = 0; i < m_mUpdateClientSettingsMap.Count(); i++)
-			{
-				string setting = m_mUpdateClientSettingsMap.GetKey(i);
-				string value = m_mUpdateClientSettingsMap.Get(setting);
-
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
-			};
-			m_mUpdateClientSettingsMap.Clear();
-			GetGame().UserSettingsChanged();
-			GetGame().SaveUserSettings();
-		};
-		
-		array<string> settingsToCheck = {
-			// Settings that can be overriden by the server
-			"compassVisible",						  //0
-			"squadRadarVisible",					//1
-			"groupDisplayVisible",				//2
-			"staminaBarVisible",					//3
-			"nametagsVisible",						//4
-			"rankVisible",								//5
-			"nametagsRange",							//6
-			"roleNametagVisible",					//7
-			"personalColorTeamMenu",			//8
-
-			// Settings that are purely local to each client
-			"squadRadarIconSize",					//9
-			"squadRadarSelfIconVisible",	//10
-			"nametagsPosition",						//11
-			"compassTexture",						  //12
-		};
-
-		array<string> tempLocalCSISettingsArray = {};
-
-		foreach (int i, string setting : settingsToCheck)
-		{
-			string settingValue = "";
-			string settingServerOverride = "";
-			if (i < 9 && !ReturnAuthoritySettings().IsEmpty()) {
-				settingServerOverride = ReturnAuthoritySettings()[i];
-			};
-			switch (true)
-			{
-				case(!(settingServerOverride.IsEmpty() || settingServerOverride == "N/A")) : {settingValue = settingServerOverride; break; };
-				default : {
-					GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(setting, settingValue); 
-					if (i < 9 && settingValue.IsEmpty() && ReturnAuthoritySettings()[9] == "true") 
-					{
-						 settingValue = ReturnAuthoritySettings()[i+10]; 
-					}; 
-					break; 
-				};
-			};
-			tempLocalCSISettingsArray.Insert(settingValue);
-		};
-		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -168,30 +76,32 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{
 		return m_aServerOverridesArray;
 	}
+	
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	void UpdateLocalSettings()
+	{
+		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+		if (!clientComponent) return;
+		clientComponent.UpdateLocalCSISettingArray();
+	};
 
 	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
 	void UpdateAuthoritySetting(string setting, string value)
 	{
-		m_mUpdateAuthoritySettingsMap.Set(setting, value);
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
+		
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
+		
+		UpdateAuthoritySettingArray();
 	}
 
+	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
-	protected void CheckAuthoritySettings()
+	void UpdateAuthoritySettingArray()
 	{
-		if (m_mUpdateAuthoritySettingsMap.Count() > 0) {
-			for (int i = 0; i < m_mUpdateAuthoritySettingsMap.Count(); i++)
-			{
-				string setting = m_mUpdateAuthoritySettingsMap.GetKey(i);
-				string value = m_mUpdateAuthoritySettingsMap.Get(setting);
-
-				GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
-			};
-			m_mUpdateAuthoritySettingsMap.Clear();
-			GetGame().UserSettingsChanged();
-			GetGame().SaveUserSettings();
-		};
-
 		m_aServerOverridesArray.Clear();
 		array<string> serverOverridesArray =
 		{
@@ -220,11 +130,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		};
 		foreach (string serverOverride : serverOverridesArray)
 		{
-			string value = "";
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(serverOverride, value);
-			m_aServerOverridesArray.Insert(value);
+			string checkValue = "";
+			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(serverOverride, checkValue);
+			m_aServerOverridesArray.Insert(checkValue);
 		}
-
 		Replication.BumpMe();
 	}
 
@@ -276,6 +185,10 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			playerKeyAndValueToSplit.Split("╪", playerKeyAndValueArray, false);
 			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
 		};
+		
+		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+		if (!clientComponent) return;
+		clientComponent.UpdateLocalGroupArray();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -321,6 +234,18 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			string overrideIcon = ReturnAuthorityPlayerMapValue(groupID, playerID, "OverrideIcon");
 			string key2 = string.Format("%1 %2 %3", groupID, playerID, "OverrideIcon");
 			tempMap.Set(key2, overrideIcon);
+			
+			string displayIcon = ReturnAuthorityPlayerMapValue(groupID, playerID, "DisplayIcon");
+			string key3 = string.Format("%1 %2 %3", groupID, playerID, "DisplayIcon");
+			tempMap.Set(key3, displayIcon);
+
+			string storedSpecialtyIcon = ReturnAuthorityPlayerMapValue(groupID, playerID, "StoredSpecialtyIcon");
+			string key4 = string.Format("%1 %2 %3", groupID, playerID, "StoredSpecialtyIcon");
+			tempMap.Set(key4, storedSpecialtyIcon);
+		
+			string playerValue = ReturnAuthorityPlayerMapValue(groupID, playerID, "PlayerValue");
+			string key5 = string.Format("%1 %2 %3", groupID, playerID, "PlayerValue");
+			tempMap.Set(key5, playerValue);
 		};
 
 		m_mAuthorityPlayerMap.Clear();

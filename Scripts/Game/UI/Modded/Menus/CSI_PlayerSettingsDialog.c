@@ -103,7 +103,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		if (m_sStoredSpecialtyIcon.IsEmpty() || colorTeam.IsEmpty()) return;
 
-		string rankVisible = m_AuthorityComponent.ReturnLocalCSISettings()[5];
+		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 
 		if (rankVisible == "true") {
 			string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(m_iSelectedPlayerID));

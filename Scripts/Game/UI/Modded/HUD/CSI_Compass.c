@@ -27,6 +27,8 @@ class CSI_Compass : SCR_InfoDisplay
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
+		
+		if (Replication.IsServer()) return;
 
 		if (!m_AuthorityComponent) {
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
@@ -38,11 +40,11 @@ class CSI_Compass : SCR_InfoDisplay
 			return;
 		};
 
-		m_sCompassTexture = m_AuthorityComponent.ReturnLocalCSISettings()[12];
-		m_sSquadRadarIconSize = m_AuthorityComponent.ReturnLocalCSISettings()[9];
+		m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[12];
+		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[9];
 
-		string compassVisible = m_AuthorityComponent.ReturnLocalCSISettings()[0];
-		string squadRadarVisible = m_AuthorityComponent.ReturnLocalCSISettings()[1];
+		string compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
+		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 
 		//Refresh base widgets if we can't get them
 		if (!m_wBearing || !m_wCompass) {
@@ -153,7 +155,7 @@ class CSI_Compass : SCR_InfoDisplay
 
 		string squadRadarSelfIconVisible = "";
 		int opacity = 1;
-		squadRadarSelfIconVisible = m_AuthorityComponent.ReturnLocalCSISettings()[10];
+		squadRadarSelfIconVisible = m_ClientComponent.ReturnLocalCSISettings()[10];
 
 		if (squadRadarSelfIconVisible == "false") opacity = 0;
 

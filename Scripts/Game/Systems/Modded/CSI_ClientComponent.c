@@ -22,6 +22,12 @@ class CSI_ClientComponent : ScriptComponent
 	protected string m_sCTYellow = ARGB(255, 230, 230, 0).ToString();
 	protected string m_sCTGreen  = ARGB(255, 0, 190, 85).ToString();
 	protected string m_sCTNone   = ARGB(255, 215, 215, 215).ToString();
+	
+	// A hashmap that is modified only on the local user.
+	protected ref map<string, string> m_mUpdateClientSettingsMap = new map<string, string>;
+	
+	// A array where we hold all local user settings.
+	protected ref array<string> m_aLocalCSISettingsArray = new array<string>;
 
 	// A array where we keep the local clients current group stored and sorted by the value determined for each player.
 	protected ref array<string> m_aLocalGroupArray = new array<string>;
@@ -52,14 +58,14 @@ class CSI_ClientComponent : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		
-		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
-		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 
 		if (!GetGame().InPlayMode() || Replication.IsServer()) return;
 
+		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
+		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
+		
 		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 325, true);
-		GetGame().GetCallqueue().CallLater(UpdateLocalGroupArray, 875, true);
+		UpdateLocalCSISettingArray();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -256,8 +262,8 @@ class CSI_ClientComponent : ScriptComponent
 			{
 				case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : {specialtyIcon = m_sMachineGunner; break; };
 				case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : {specialtyIcon = m_sAntiTank;      break; };
-				case (medicalTypeArray.Contains(SCR_EConsumableType.SALINE))    : {specialtyIcon = m_sMedic;         break; };
 				case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : {specialtyIcon = m_sMarksman;      break; };
+				case (medicalTypeArray.Contains(SCR_EConsumableType.SALINE))    : {specialtyIcon = m_sMedic;         break; };
 				case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : {specialtyIcon = m_sGrenadier;     break; };
 				default                                                         : {specialtyIcon = m_sMan;                  };
 			};
@@ -326,6 +332,88 @@ class CSI_ClientComponent : ScriptComponent
 
 		// Return how valuable the player is
 		return value;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+
+	// Function for getting/setting local settings
+
+	//------------------------------------------------------------------------------------------------
+
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	TStringArray ReturnLocalCSISettings() 
+	{
+		return m_aLocalCSISettingsArray;
+	}
+	
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	void Owner_ChangeLocalCSISetting(string setting, string value)
+	{
+		Rpc(RpcAsk_ChangeLocalCSISetting, setting, value);
+	}
+
+	//- Client Owner -\\
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Owner)]
+	protected void RpcAsk_ChangeLocalCSISetting(string setting, string value)
+	{
+		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
+
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
+		
+		UpdateLocalCSISettingArray();
+	};
+		
+	//- Client -\\
+	//------------------------------------------------------------------------------------------------
+	void UpdateLocalCSISettingArray()
+	{
+		array<string> settingsToCheck = {
+			// Settings that can be overriden by the server
+			"compassVisible",						  //0
+			"squadRadarVisible",					//1
+			"groupDisplayVisible",				//2
+			"staminaBarVisible",					//3
+			"nametagsVisible",						//4
+			"rankVisible",								//5
+			"nametagsRange",							//6
+			"roleNametagVisible",					//7
+			"personalColorTeamMenu",			//8
+
+			// Settings that are purely local to each client
+			"squadRadarIconSize",					//9
+			"squadRadarSelfIconVisible",	//10
+			"nametagsPosition",						//11
+			"compassTexture",						  //12
+		};
+
+		array<string> tempLocalCSISettingsArray = {};
+
+		foreach (int i, string checkSetting : settingsToCheck)
+		{
+			string settingValue = "";
+			string settingServerOverride = "";
+			if (i < 9 && !m_AuthorityComponent.ReturnAuthoritySettings().IsEmpty()) {
+				settingServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[i];
+			};
+			switch (true)
+			{
+				case(!(settingServerOverride.IsEmpty() || settingServerOverride == "N/A")) : {settingValue = settingServerOverride; break; };
+				default : {
+					GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(checkSetting, settingValue); 
+					if (i < 9 && settingValue.IsEmpty() && m_AuthorityComponent.ReturnAuthoritySettings()[9] == "true") 
+					{
+						 settingValue = m_AuthorityComponent.ReturnAuthoritySettings()[i+10]; 
+					}; 
+					break; 
+				};
+			};
+			tempLocalCSISettingsArray.Insert(settingValue);
+		};
+		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -445,7 +533,7 @@ class CSI_ClientComponent : ScriptComponent
 	{
 		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
 		
-		if (m_AuthorityComponent.ReturnLocalCSISettings()[8] == "false" || (SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || (storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds"))
+		if (ReturnLocalCSISettings()[8] == "false" || (SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || (storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds"))
 		{
 			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
 			return;

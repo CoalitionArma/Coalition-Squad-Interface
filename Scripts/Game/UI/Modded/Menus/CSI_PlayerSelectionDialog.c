@@ -97,7 +97,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 	protected void UpdatePlayerList()
 	{
-		string rankVisible = m_AuthorityComponent.ReturnLocalCSISettings()[5];
+		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 

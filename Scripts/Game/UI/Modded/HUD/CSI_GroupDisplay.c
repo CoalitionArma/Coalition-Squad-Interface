@@ -14,6 +14,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
+		if (Replication.IsServer()) return;
+		
 		if (m_iCurrentFrame < 20) {
 			m_iCurrentFrame++;
 			return;
@@ -31,8 +33,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			return;
 		};
 
-		string groupDisplayVisible = m_AuthorityComponent.ReturnLocalCSISettings()[2];
-		string rankVisible = m_AuthorityComponent.ReturnLocalCSISettings()[5];
+		string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
+		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 
 		if (groupDisplayVisible == "false") {
 			ClearGroupDisplay(0, true);

@@ -1,6 +1,6 @@
 class CSI_StaminaBar : SCR_InfoDisplay
 {
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientComponent m_ClientComponent;
 	protected ProgressBarWidget m_wStamBar;
 
 	//------------------------------------------------------------------------------------------------
@@ -12,13 +12,15 @@ class CSI_StaminaBar : SCR_InfoDisplay
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
+		
+		if (Replication.IsServer()) return;
 
-		if (!m_AuthorityComponent) {
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		if (!m_ClientComponent) {
+			m_ClientComponent = CSI_ClientComponent.GetInstance();
 			return;
 		};
 
-		string stamBarVisible = m_AuthorityComponent.ReturnLocalCSISettings()[3];
+		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
 
 		//Refresh base widget
 		if (!m_wStamBar) {
