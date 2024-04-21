@@ -64,7 +64,7 @@ class CSI_ClientComponent : ScriptComponent
 		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 		
-		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 325, true);
+		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 525, true);
 		UpdateLocalCSISettingArray();
 	}
 
@@ -93,7 +93,8 @@ class CSI_ClientComponent : ScriptComponent
 		array<string> outGroupStrArray = {};
 		groupString.Split("║", outGroupStrArray, false);
 
-		foreach (string playerString : outGroupStrArray) {
+		foreach (string playerString : outGroupStrArray) 
+		{
 			tempLocalGroupArray.Insert(playerString);
 		};
 
@@ -117,12 +118,13 @@ class CSI_ClientComponent : ScriptComponent
 
 		if (!localplayer) return;
 		
-		if (m_AuthorityComponent.ReturnAuthoritySettings()[5]) {
+		if (m_AuthorityComponent.ReturnAuthoritySettings()[5]) 
+		{
 			// Update PlayerRank
 			Owner_UpdatePlayerMapValue(-1, localPlayerID, "PlayerRank", SCR_CharacterRankComponent.GetCharacterRankNameShort(localplayer));
 		};
 		
-		if ((!m_AuthorityComponent.ReturnAuthoritySettings()[0] || !m_AuthorityComponent.ReturnAuthoritySettings()[1]) && !m_AuthorityComponent.ReturnAuthoritySettings()[2] && !m_AuthorityComponent.ReturnAuthoritySettings()[7]) return;
+		if (!m_AuthorityComponent.ReturnAuthoritySettings()[1] && !m_AuthorityComponent.ReturnAuthoritySettings()[2] && !m_AuthorityComponent.ReturnAuthoritySettings()[7]) return;
 		
 		// Get base group manager component
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
@@ -182,7 +184,8 @@ class CSI_ClientComponent : ScriptComponent
 
 		string playerOverideIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "OverrideIcon");
 
-		if (playerOverideIcon && specialtyIcon.IsEmpty() && vehicleIcon.IsEmpty()) {
+		if (playerOverideIcon && specialtyIcon.IsEmpty() && vehicleIcon.IsEmpty()) 
+		{
 			switch (playerOverideIcon)
 			{
 				case "Team Lead"      : {specialtyIcon = m_sTeamLeader;    break; };
@@ -199,7 +202,8 @@ class CSI_ClientComponent : ScriptComponent
 		//	Specialty Icons
 		//------------------------------------------------------------------------------------------------
 
-		if (specialtyIcon.IsEmpty()  && vehicleIcon.IsEmpty() && m_iCurrentUpdateCycle == 26) {
+		if (specialtyIcon.IsEmpty()  && vehicleIcon.IsEmpty() && m_iCurrentUpdateCycle == 26) 
+		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
 
@@ -239,7 +243,8 @@ class CSI_ClientComponent : ScriptComponent
 				};
 				// Check if item is a Weapon.
 				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
-				if (weaponComp) {
+				if (weaponComp) 
+				{
 					// Get the weapons type and insert it into the weapon array so we can read it later.
 					weaponTypeArray.Insert(weaponComp.GetWeaponType());
 					
@@ -290,7 +295,8 @@ class CSI_ClientComponent : ScriptComponent
 		
 		// Get players Color Team so we can determine player value.
 		string playerColorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "ColorTeam");
-		if (!playerColorTeam || playerColorTeam.IsEmpty()) {
+		if (!playerColorTeam || playerColorTeam.IsEmpty()) 
+		{
 			Owner_UpdatePlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "ColorTeam", m_sCTNone);
 			playerColorTeam = m_sCTNone;
 		}
@@ -313,7 +319,8 @@ class CSI_ClientComponent : ScriptComponent
 		string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, playerID, "StoredSpecialtyIcon");
 
 		// Sort player by their color so we can group color teams together (a lil bit racist).
-		switch (colorTeam) {
+		switch (colorTeam) 
+		{
 			case m_sCTRed    : {value = -3; break; };
 			case m_sCTBlue   : {value = -5; break; };
 			case m_sCTYellow : {value = -7; break; };
@@ -321,7 +328,8 @@ class CSI_ClientComponent : ScriptComponent
 			case m_sCTNone   : {value = 2;  break; };
 		};
 
-		switch (true) {
+		switch (true) 
+		{
 			// If the players is currently the SL, make him the most valuable player in the list
 			case (icon == m_sSquadLeader)                          : {value = -1; break; };
 
@@ -396,7 +404,8 @@ class CSI_ClientComponent : ScriptComponent
 		{
 			string settingValue = "";
 			string settingServerOverride = "";
-			if (i < 9 && !m_AuthorityComponent.ReturnAuthoritySettings().IsEmpty()) {
+			if (i < 9 && !m_AuthorityComponent.ReturnAuthoritySettings().IsEmpty()) 
+			{
 				settingServerOverride = m_AuthorityComponent.ReturnAuthoritySettings()[i];
 			};
 			switch (true)

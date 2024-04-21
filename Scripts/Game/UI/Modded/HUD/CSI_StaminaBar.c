@@ -15,22 +15,18 @@ class CSI_StaminaBar : SCR_InfoDisplay
 		
 		if (Replication.IsServer()) return;
 
-		if (!m_ClientComponent) {
+		if (!m_ClientComponent || !m_wStamBar) 
+		{
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_wStamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 			return;
 		};
 
 		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
 
-		//Refresh base widget
-		if (!m_wStamBar) {
-			m_wStamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
-			return;
-		};
-
-		if (stamBarVisible == "false")
+		if (stamBarVisible == "false") 
 		{
-			m_wStamBar.SetOpacity(0);
+			if (m_wStamBar.GetOpacity() > 0) m_wStamBar.SetOpacity(0);
 			return;
 		}
 

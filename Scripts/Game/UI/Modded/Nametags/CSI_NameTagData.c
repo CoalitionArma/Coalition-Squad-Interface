@@ -1,4 +1,4 @@
-modded class SCR_NameTagData
+modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body
 
@@ -24,15 +24,16 @@ modded class SCR_NameTagData
 		
 		if (Replication.IsServer()) return;
 
-		m_ClientComponent = CSI_ClientComponent.GetInstance();
-		if (!m_ClientComponent) return;
-		
-		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		if (!m_AuthorityComponent) return;
+		if (!m_AuthorityComponent || !m_ClientComponent) 
+		{
+			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+			m_ClientComponent = CSI_ClientComponent.GetInstance();
+		}
 
 		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
 
-		if (m_sNametagsPos == "HEAD") {
+		if (m_sNametagsPos == "HEAD") 
+		{
 			m_eAttachedTo = ENameTagPosition.HEAD;
 			m_eAttachedToLast = ENameTagPosition.HEAD;
 		} else {
@@ -64,7 +65,8 @@ modded class SCR_NameTagData
 				if (roleNametagVisible == "true")
 				{
 					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");
-					switch (icon) {
+					switch (icon) 
+					{
 						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
 						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
 						case m_sGunner        : { m_sName = string.Format("%1 [GNR]", m_sName); break; };
@@ -130,16 +132,18 @@ modded class SCR_NameTagData
 
 		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "";
 
-		return m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");;
+		return m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");
 	}
 
+	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
 		if (!m_ClientComponent || Replication.IsServer()) return;
 
 		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
 
-		if (m_sNametagsPos == "HEAD") {
+		if (m_sNametagsPos == "HEAD") 
+		{
 			m_eAttachedTo = ENameTagPosition.HEAD;
 			m_eAttachedToLast = ENameTagPosition.HEAD;
 		} else {
@@ -148,11 +152,11 @@ modded class SCR_NameTagData
 		};
 	}
 
-	// Overriding this whole thing to force these fucking tags to the body
 	//------------------------------------------------------------------------------------------------
 	override void SetTagPosition(ENameTagPosition pos, bool gradualChange = false)
 	{
-		if (m_sNametagsPos == "HEAD") {
+		if (m_sNametagsPos == "HEAD") 
+		{
 			m_eAttachedTo = ENameTagPosition.HEAD;
 			m_eAttachedToLast = ENameTagPosition.HEAD;
 		} else {

@@ -47,7 +47,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		{
 			UpdateAuthoritySettingArray();
 			
-			GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 850, true);
+			GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 550, true);
 			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 480000, true); // Updates every 8min (480000ms)
 		};
 	}
@@ -57,7 +57,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{
 		super.OnGameEnd();
 		
-		if (Replication.IsServer()) 
+		if (Replication.IsServer())
 		{
 			GetGame().GetCallqueue().Remove(UpdateAllGroupStrings);
 			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
@@ -221,7 +221,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		array<int> outPlayers = new array<int>;
 
 		GetGame().GetPlayerManager().GetPlayers(outPlayers);
-		foreach (int playerID : outPlayers) {
+		foreach (int playerID : outPlayers) 
+		{
 			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
 			if (!playersGroup) continue;
 
@@ -260,7 +261,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllGroupStrings()
 	{
-		if ((!ReturnAuthoritySettings()[0] || !ReturnAuthoritySettings()[1]) && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) return;
+		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) return;
 		
 		// Get base group manager component
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
@@ -302,7 +303,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 			tempLocalGroupArray.Sort(false);
 
-			foreach (string playerStr : tempLocalGroupArray) {
+			foreach (string playerStr : tempLocalGroupArray) 
+			{
 				if (groupString.IsEmpty()) 
 					groupString = playerStr;
 				else

@@ -12,7 +12,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		
 		if (Replication.IsServer()) return;
 		
-		if (!m_ClientComponent) {
+		if (!m_ClientComponent) 
+		{
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 			return;
 		};
@@ -23,7 +24,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (nametagsRange.IsEmpty()) nametagsRange = "35";
 		if (nametagsVisible == "false") nametagsRange = "1";
 
-		foreach (SCR_NameTagZone nTZone : GetNametagZones()) {
+		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 
+		{
 			nTZone.SetZoneEnd(nametagsRange.ToInt());
 		};
 

@@ -1,8 +1,10 @@
 class CSI_GroupDisplay : SCR_InfoDisplay
 {
-	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected CSI_ClientComponent m_ClientComponent;
-	protected int m_iCurrentFrame = 45;
+	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	
+	protected int m_iCurrentFrame = 35;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -16,40 +18,31 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		
 		if (Replication.IsServer()) return;
 		
-		if (m_iCurrentFrame < 20) {
+		if (m_iCurrentFrame < 35) {
 			m_iCurrentFrame++;
 			return;
 		};
 
 		m_iCurrentFrame = 0;
 
-		if (!m_AuthorityComponent) {
+		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent) {
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-			return;
-		};
-
-		if (!m_ClientComponent) {
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			return;
 		};
-
+		
 		string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
-
-		if (groupDisplayVisible == "false") {
-			ClearGroupDisplay(0, true);
-			return;
-		};
-
+		
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
-		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
-		if (!groupArray || groupArray.Count() <= 1 || !groupsManagerComponent) {
+		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1) {
 			ClearGroupDisplay(0, true);
 			return;
 		};
 
-		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
 		foreach (int i, string playerStringToSplit : groupArray) {
 			array<string> playerSplitArray = {};

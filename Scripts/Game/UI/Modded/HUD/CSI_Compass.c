@@ -2,20 +2,17 @@ class CSI_Compass : SCR_InfoDisplay
 {
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
+	protected SCR_AIGroup m_PlayersGroup;
+	protected CSI_ClientComponent m_ClientComponent;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
-	protected CSI_ClientComponent m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
-	protected SCR_AIGroup m_PlayersGroup;
 
-	protected float m_fYaw;
-	protected float m_fStoredYaw;
-	protected float m_iSearchRadius;
 	protected vector m_vOwnerOrigin;
+	protected float m_fYaw, m_fStoredYaw, m_iSearchRadius;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
 
-	protected string m_sCompassTexture;
-	protected string m_sSquadRadarIconSize;
+	protected string m_sCompassTexture, m_sSquadRadarIconSize;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -30,62 +27,46 @@ class CSI_Compass : SCR_InfoDisplay
 		
 		if (Replication.IsServer()) return;
 
-		if (!m_AuthorityComponent) {
+		if (!m_AuthorityComponent || !m_ClientComponent || !m_ChimeraCharacter || !m_GroupsManagerComponent || !m_wBearing || !m_wCompass) 
+		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-			return;
-		};
-
-		if (!m_ClientComponent) {
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+			
+			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
+			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
 			return;
 		};
-
-		m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[12];
-		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[9];
+		
+		// Get players current group.
+		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
 		string compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
 		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 
-		//Refresh base widgets if we can't get them
-		if (!m_wBearing || !m_wCompass) {
-			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
-			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
-			return;
+		if (compassVisible == "false") 
+		{
+			if (m_wCompass.GetOpacity() > 0) {
+				m_wCompass.SetOpacity(0);
+				m_wBearing.SetOpacity(0);
+			};
+		} else {
+			if (m_wCompass.GetOpacity() < 1) {
+				m_wCompass.SetOpacity(1);
+				m_wBearing.SetOpacity(1);
+			
+				m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[12];
+				m_wCompass.LoadImageTexture(0, m_sCompassTexture);
+			};
 		};
+		
+		SetBearingAndCompass(compassVisible);
 
-		if (compassVisible == "false") {
-			m_wCompass.SetOpacity(0);
-			m_wBearing.SetOpacity(0);
+		if (squadRadarVisible == "false" || !m_PlayersGroup) 
 			ClearSquadRadar(-1);
-			return;
-		};
-
-		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
-
-		if (!m_ChimeraCharacter) return;
-
-		// Sets m_wBearings text and the m_wCompass direction
-		SetBearingAndCompass();
-
-		if (squadRadarVisible == "false") {
-			ClearSquadRadar(-1);
-			return;
-		};
-
-		if (!m_GroupsManagerComponent) {
-			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-			return;
-		};
-
-		// Get players current group.
-		m_PlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-
-		if (!m_PlayersGroup) {
-			ClearSquadRadar(-1);
-			return;
-		};
-
-		SquadRadarSearch();
+		else
+			SquadRadarSearch();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -94,13 +75,8 @@ class CSI_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
-	protected void SetBearingAndCompass()
+	protected void SetBearingAndCompass(string compassVisible)
 	{
-		m_wCompass.SetOpacity(1);
-		m_wBearing.SetOpacity(1);
-
-		m_wCompass.LoadImageTexture(0, m_sCompassTexture);
-
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) return;
 
@@ -118,6 +94,8 @@ class CSI_Compass : SCR_InfoDisplay
 			m_fYaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
 			m_fStoredYaw = m_fYaw;
 		};
+		
+		if (compassVisible == "false") return;
 
 		int yawInt = -m_fYaw;
 		if (yawInt < 0) { yawInt = 360 - Math.AbsFloat(yawInt); };
@@ -139,15 +117,19 @@ class CSI_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
-	protected void SquadRadarSearch() {
+	protected void SquadRadarSearch() 
+	{
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
 
 		m_aAllPlayersWithinRange = {};
 
-		if (!groupArray || groupArray.Count() <= 1) {
+		if (!groupArray || groupArray.Count() <= 1) 
+		{
 			ClearSquadRadar(-1);
 			return;
 		};
+		
+		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[9];
 
 		float widthAndHeight = 12 * (m_sSquadRadarIconSize.ToInt() * 0.01);
 
@@ -278,7 +260,8 @@ class CSI_Compass : SCR_InfoDisplay
 	protected bool IsPlayerInVehicle(SCR_ChimeraCharacter playerCharacter)
 	{
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess) {
+		if (compartmentAccess) 
+		{
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 			if (compartment) return true;
 		};
@@ -288,7 +271,8 @@ class CSI_Compass : SCR_InfoDisplay
 	//------------------------------------------------------------------------------------------------
 	protected void ClearSquadRadar(int positionToStartClearing)
 	{
-		if (positionToStartClearing == -1) {
+		if (positionToStartClearing == -1) 
+		{
 			ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
 			radarlocalPlayer.SetOpacity(0);
 		};
