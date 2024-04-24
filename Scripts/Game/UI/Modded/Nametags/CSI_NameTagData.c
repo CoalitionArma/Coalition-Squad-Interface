@@ -1,3 +1,4 @@
+
 modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body

@@ -34,7 +34,7 @@ class CSI_ClientComponent : ScriptComponent
 	
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	
-	protected int m_iLocalPlayersGroupID = null;
+	protected int m_iLocalPlayersGroupID = 1;
 	
 	protected int m_iCurrentUpdateCycle = 26;
 	
@@ -381,7 +381,7 @@ class CSI_ClientComponent : ScriptComponent
 	{
 		array<string> settingsToCheck = {
 			// Settings that can be overriden by the server
-			"compassVisible",						  //0
+			"compassVisible",						 //0
 			"squadRadarVisible",					//1
 			"groupDisplayVisible",				//2
 			"staminaBarVisible",					//3
@@ -395,7 +395,7 @@ class CSI_ClientComponent : ScriptComponent
 			"squadRadarIconSize",					//9
 			"squadRadarSelfIconVisible",	//10
 			"nametagsPosition",						//11
-			"compassTexture",						  //12
+			"compassTexture",						//12
 		};
 
 		array<string> tempLocalCSISettingsArray = {};
@@ -511,7 +511,7 @@ class CSI_ClientComponent : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 
-	// Functions for Group Display replication
+	// Functions for updating the authority map which houses all player data
 
 	//------------------------------------------------------------------------------------------------
 

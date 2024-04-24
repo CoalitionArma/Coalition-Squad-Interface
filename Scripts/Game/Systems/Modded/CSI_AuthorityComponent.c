@@ -21,7 +21,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	protected ref array<string> m_aPlayerArray = new array<string>;
 
 	// The vanilla group manager.
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent = null;
+	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -263,7 +263,6 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{
 		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) return;
 		
-		// Get base group manager component
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
 		if (!m_GroupsManagerComponent) return;

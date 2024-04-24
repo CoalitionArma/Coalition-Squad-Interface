@@ -17,7 +17,7 @@ FrameWidgetClass {
     OffsetBottom 135
    }
    "Z Order" -100
-   Opacity 0.984
+   Opacity 0
    style debugUI
    Text "000"
    "Font Size" 13
@@ -47,6 +47,7 @@ FrameWidgetClass {
    }
    "Z Order" -100
    IsPixelPerfect 0
+   Opacity 0
    Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Modded/Compasses/compass_shadow360.edds"
    Size 264 264
    "Shadow Offset" 0 0

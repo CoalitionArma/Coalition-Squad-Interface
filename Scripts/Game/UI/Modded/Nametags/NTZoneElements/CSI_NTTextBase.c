@@ -24,16 +24,19 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		tWidget.SetShadow(stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
 		
-		if (tWidget.GetName() == "PlayerGroupName") 
-			tWidget.SetText(data.GetGroupName());
+		if (tWidget.GetName() == "PlayerGroupName") {
+			tWidget.SetText(data.GetGroupName()); 
+		};
+		
+		if (tWidget.GetName() == "PlayerName") {
+			string ct = data.GetPlayerColorTeam();
+			if (ct.IsEmpty())
+				tWidget.SetColor(stateConf.m_vColor);
+			else
+				tWidget.SetColorInt(ct.ToInt());
+		};
 		
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, true); // transitions	
-		
-		string ct = data.GetPlayerColorTeam();
-		if (ct.IsEmpty() || tWidget.GetName() == "PlayerGroupName")
-			tWidget.SetColor(stateConf.m_vColor);
-		else
-			tWidget.SetColorInt(ct.ToInt());
 	}
 }
 
