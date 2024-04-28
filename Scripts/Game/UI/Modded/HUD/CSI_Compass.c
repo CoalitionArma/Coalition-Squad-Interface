@@ -28,13 +28,14 @@ class CSI_Compass : SCR_InfoDisplay
 		if (Replication.IsServer()) return;
 		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
+		
+		if (!m_ChimeraCharacter) return;
 
 		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent || !m_wBearing || !m_wCompass) 
 		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-			
 			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
 			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
 			return;

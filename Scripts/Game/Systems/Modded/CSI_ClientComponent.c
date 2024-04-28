@@ -276,15 +276,16 @@ class CSI_ClientComponent : ScriptComponent
 			m_iCurrentUpdateCycle == 0;
 		};
 		
-		if (specialtyIcon.IsEmpty()  && vehicleIcon.IsEmpty())
-			specialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "StoredSpecialtyIcon");
-		
-		if (specialtyIcon.IsEmpty())
-			specialtyIcon = m_sMan;
+		if (specialtyIcon.IsEmpty()) {
+				specialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "StoredSpecialtyIcon");
+			
+			if (specialtyIcon.IsEmpty())
+				specialtyIcon = m_sMan;
+		};
 
 		if (!vehicleIcon.IsEmpty()) 
 			displayIcon = vehicleIcon;
-		else 
+		else
 			displayIcon = specialtyIcon;
 		
 		// Update the Icon we show on players screens.
@@ -302,7 +303,7 @@ class CSI_ClientComponent : ScriptComponent
 		}
 		
 		// Determine players value by their color team and icon so we can sort players from most to least valuable in the group display (definitely not racist).
-		int playerValue = DetermineLocalPlayerValue(localPlayerID, playerColorTeam);
+		int playerValue = DetermineLocalPlayerValue(localPlayerID, specialtyIcon, playerColorTeam);
 
 		// Update PlayerValue
 		Owner_UpdatePlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "PlayerValue", playerValue.ToString());
@@ -310,13 +311,10 @@ class CSI_ClientComponent : ScriptComponent
 	
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
-	int DetermineLocalPlayerValue(int playerID, string colorTeam)
+	int DetermineLocalPlayerValue(int playerID, string icon, string colorTeam)
 	{
 		// Setup value variable.
 		int value = 0;
-
-		// Get player StoredSpecialtyIcon so we aren't influenced if the player is in a vehicle.
-		string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, playerID, "StoredSpecialtyIcon");
 
 		// Sort player by their color so we can group color teams together (a lil bit racist).
 		switch (colorTeam) 
