@@ -36,13 +36,13 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 		
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
+		
+		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1) {
+		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1 || !playersGroup) {
 			ClearGroupDisplay(0, true);
 			return;
 		};
-
-		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
 		foreach (int i, string playerStringToSplit : groupArray) {
 			array<string> playerSplitArray = {};
