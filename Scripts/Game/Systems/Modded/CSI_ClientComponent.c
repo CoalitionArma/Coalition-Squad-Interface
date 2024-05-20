@@ -160,9 +160,9 @@ class CSI_ClientComponent : ScriptComponent
 				ECompartmentType compartmentType = compartment.GetType();
 				switch (compartmentType)
 				{
-					case ECompartmentType.Cargo  : {vehicleIcon = m_sCargo;  break; };
-					case ECompartmentType.Pilot  : {vehicleIcon = m_sDriver; break; };
-					case ECompartmentType.Turret : {vehicleIcon = m_sGunner; break; };
+					case ECompartmentType.CARGO  : {vehicleIcon = m_sCargo;  break; };
+					case ECompartmentType.PILOT  : {vehicleIcon = m_sDriver; break; };
+					case ECompartmentType.TURRET : {vehicleIcon = m_sGunner; break; };
 				};
 			};
 		};
@@ -222,7 +222,7 @@ class CSI_ClientComponent : ScriptComponent
 				if (consumable)
 				{
 					// Check items type.
-					SCR_EConsumableType medicalType = SCR_ConsumableItemComponent.Cast(consumable).GetConsumableType();
+					SCR_EConsumableType medicalType = consumable.GetConsumableType();
 					if (medicalType == SCR_EConsumableType.SALINE)
 					{
 						medicalTypeArray.Insert(medicalType);
