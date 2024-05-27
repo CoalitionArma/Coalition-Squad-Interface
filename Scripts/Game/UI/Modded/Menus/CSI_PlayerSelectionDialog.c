@@ -43,20 +43,22 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
-		if (!groupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return; };
-
-		m_PlayersGroup = groupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (!groupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
+		
+		int playerID = SCR_PlayerController.GetLocalPlayerId();
+		m_PlayersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 
-		if (!m_PlayersGroup || !m_aGroupArray || m_aGroupArray.Count() <= 0) {
+		if (!m_PlayersGroup || !m_aGroupArray || m_aGroupArray.Count() <= 0) 
+		{
 			OnMenuBack();
 			return;
 		};
 
-		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), SCR_PlayerController.GetLocalPlayerId(), "StoredSpecialtyIcon");
+		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
 
-		if ((m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds") || storedSpecialtyIcon == "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds")
+		if (m_PlayersGroup.IsPlayerLeader(playerID) || storedSpecialtyIcon == "FTL")
 		{
 			UpdatePlayerList();
 		} else {
@@ -64,10 +66,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			return;
 		};
 
-		if (m_PlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()) && storedSpecialtyIcon == "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds")
-		{
+		if (m_PlayersGroup.IsPlayerLeader(playerID) && storedSpecialtyIcon == "SL")
 			ShowGroupSettings();
-		}
 
 		GetGame().GetCallqueue().CallLater(UpdatePlayerList, 425, true);
 	}
@@ -106,12 +106,12 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		foreach (int i, string playerStringToSplit : m_aGroupArray) {
 
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("╣", playerSplitArray, false);
+			playerStringToSplit.Split(":", playerSplitArray, false);
 
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "ColorTeam");
-			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "StoredSpecialtyIcon");
+			string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "CT"); // CT = ColorTeam
+			string iconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
@@ -128,10 +128,10 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			playerName = CheckEllipsis(190, playerName);
 
 			playerDisplay.SetText(playerName);
-			playerDisplay.SetColorInt(colorTeam.ToInt());
+			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 			statusDisplay.SetOpacity(1);
-			statusDisplay.LoadImageTexture(0, icon);
-			statusDisplay.SetColorInt(colorTeam.ToInt());
+			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
+			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		};
 		for (int e = m_aGroupArray.Count(); e <= 24; e++)
 		{

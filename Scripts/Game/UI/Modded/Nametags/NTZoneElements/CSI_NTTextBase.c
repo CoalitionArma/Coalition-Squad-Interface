@@ -29,11 +29,11 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		};
 		
 		if (tWidget.GetName() == "PlayerName") {
-			string ct = data.GetPlayerColorTeam();
-			if (ct.IsEmpty())
+			int ct = data.GetPlayerColorTeam();
+			if (ct == 0)
 				tWidget.SetColor(stateConf.m_vColor);
 			else
-				tWidget.SetColorInt(ct.ToInt());
+				tWidget.SetColorInt(ct);
 		};
 		
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, true); // transitions	

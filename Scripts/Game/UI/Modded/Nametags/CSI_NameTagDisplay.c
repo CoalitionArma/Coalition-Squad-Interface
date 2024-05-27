@@ -10,8 +10,6 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	{
 		super.DisplayUpdate(owner, timeSlice);
 		
-		if (Replication.IsServer()) return;
-		
 		if (!m_ClientComponent) 
 		{
 			m_ClientComponent = CSI_ClientComponent.GetInstance();

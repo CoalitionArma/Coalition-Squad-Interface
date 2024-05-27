@@ -40,7 +40,7 @@ modded class SCR_VehicleTagData
 						ECompartmentType compartmentType = compartment.GetType();
 						switch (compartmentType)
 						{
-							case ECompartmentType.Turret  : {m_MainTag = tagData; break; };
+							case ECompartmentType.Turret  : {m_MainTag = tagData; break;};
 						};
 					};
 				};
