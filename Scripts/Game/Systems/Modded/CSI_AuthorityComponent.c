@@ -169,6 +169,9 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			
 			foreach (string value : playerValuesArray) 
 			{
+				if (value == "PR")
+				 	groupID = -1;
+				
 				string hashValue = ReturnAuthorityPlayerMapValue(groupID, playerID, value);
 				string key = string.Format("%1%2%3", groupID, playerID, value);
 				tempMap.Set(key, hashValue);
