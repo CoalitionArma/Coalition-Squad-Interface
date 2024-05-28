@@ -3,17 +3,6 @@ modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body
 
-	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
-	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
-	protected string m_sGunner        = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
-	protected string m_sSquadLeader   = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
-	protected string m_sTeamLeader    = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
-	protected string m_sMedic         = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
-	protected string m_sMarksman      = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
-	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
-	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
-	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
-
 	protected CSI_ClientComponent m_ClientComponent;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected string m_sNametagsPos;
@@ -22,8 +11,6 @@ modded class SCR_NameTagData : Managed
 	override protected void InitDefaults()
 	{
 		super.InitDefaults();
-		
-		if (Replication.IsServer()) return;
 
 		if (!m_AuthorityComponent || !m_ClientComponent) 
 		{
@@ -46,7 +33,7 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
 	{
-		if (!m_ClientComponent || Replication.IsServer()) return;
+		if (!m_ClientComponent) return;
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
 			string roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
@@ -59,27 +46,18 @@ modded class SCR_NameTagData : Managed
 
 				if (rankVisible == "true")
 				{
-					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PlayerRank");
+					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PR"); // PR = PlayerRank
+					
 					if (rank != "") 
 						m_sName = string.Format("%1 %2", rank, m_sName);
 				};
 				if (roleNametagVisible == "true")
 				{
-					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DisplayIcon");
-					switch (icon) 
-					{
-						case m_sCargo         : { m_sName = string.Format("%1 [PAX]", m_sName); break; };
-						case m_sDriver        : { m_sName = string.Format("%1 [DRV]", m_sName); break; };
-						case m_sGunner        : { m_sName = string.Format("%1 [GNR]", m_sName); break; };
-						case m_sSquadLeader   : { m_sName = string.Format("%1 [SL]",  m_sName); break; };
-						case m_sTeamLeader    : { m_sName = string.Format("%1 [FTL]", m_sName); break; };
-						case m_sMedic         : { m_sName = string.Format("%1 [MED]", m_sName); break; };
-						case m_sMarksman      : { m_sName = string.Format("%1 [MRK]", m_sName); break; };
-						case m_sMachineGunner : { m_sName = string.Format("%1 [MG]",  m_sName); break; };
-						case m_sAntiTank      : { m_sName = string.Format("%1 [AT]",  m_sName); break; };
-						case m_sGrenadier     : { m_sName = string.Format("%1 [GRN]", m_sName); break; };
-					}
-				};
+					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DI"); // DI = DisplayIcon
+					
+					if (icon != "MAN")
+						m_sName = string.Format("%1 [%2]", m_sName, icon);
+				}
 			} else { m_sName = "No player manager!" };
 		}
 		else if (m_eType == ENameTagEntityType.AI)
@@ -125,21 +103,21 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
-	string GetPlayerColorTeam()
+	int GetPlayerColorTeam()
 	{		
-		if (!m_ClientComponent || Replication.IsServer()) return "";
+		if (!m_ClientComponent) return ARGB(255, 215, 215, 215);
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return "";
+		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return ARGB(255, 215, 215, 215);
 
-		return m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "ColorTeam");
+		return m_ClientComponent.SwitchStringToColorTeam(m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "CT")); // CT = ColorTeam
 	}
 
 	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
-		if (!m_ClientComponent || Replication.IsServer()) return;
+		if (!m_ClientComponent) return;
 
 		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
 

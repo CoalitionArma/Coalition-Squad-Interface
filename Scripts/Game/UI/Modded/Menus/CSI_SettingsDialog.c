@@ -107,8 +107,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string compassVisible = "";
 		switch (m_sCompassVisibleSO)
 		{
-			case ("false") : { m_wCompassVisibleWidget.SetChecked(false); m_wCompassVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wCompassVisibleWidget.SetChecked(true); m_wCompassVisibleWidget.SetEnabled(false); m_wCompassVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wCompassVisibleWidget.SetChecked(false); m_wCompassVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wCompassVisibleWidget.SetChecked(true); m_wCompassVisibleWidget.SetEnabled(false); m_wCompassVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
 				// default state
@@ -126,8 +126,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string squadRadarVisible = "";
 		switch (m_sSquadRadarVisibleSO)
 		{
-			case ("false") : { m_wSquadRadarVisibleWidget.SetChecked(false); m_wSquadRadarVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wSquadRadarVisibleWidget.SetChecked(true); m_wSquadRadarVisibleWidget.SetEnabled(false); m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wSquadRadarVisibleWidget.SetChecked(false); m_wSquadRadarVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wSquadRadarVisibleWidget.SetChecked(true); m_wSquadRadarVisibleWidget.SetEnabled(false); m_wSquadRadarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 				// default state
@@ -145,8 +145,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string groupDisplayVisible = "";
 		switch (m_sGroupDisplayVisibleSO)
 		{
-			case ("false") : { m_wGroupDisplayVisibleWidget.SetChecked(false); m_wGroupDisplayVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wGroupDisplayVisibleWidget.SetChecked(true); m_wGroupDisplayVisibleWidget.SetEnabled(false); m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wGroupDisplayVisibleWidget.SetChecked(false); m_wGroupDisplayVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wGroupDisplayVisibleWidget.SetChecked(true); m_wGroupDisplayVisibleWidget.SetEnabled(false); m_wGroupDisplayVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
 				// default state
@@ -164,8 +164,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string staminaBarVisible = "";
 		switch (m_sStaminaBarVisibleSO)
 		{
-			case ("false") : { m_wStaminaBarVisibleWidget.SetChecked(false); m_wStaminaBarVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wStaminaBarVisibleWidget.SetChecked(true); m_wStaminaBarVisibleWidget.SetEnabled(false); m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wStaminaBarVisibleWidget.SetChecked(false); m_wStaminaBarVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wStaminaBarVisibleWidget.SetChecked(true); m_wStaminaBarVisibleWidget.SetEnabled(false); m_wStaminaBarVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				staminaBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
 				// default state
@@ -183,8 +183,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string nametagsVisible = "";
 		switch (m_sNametagsVisibleSO)
 		{
-			case ("false") : { m_wNametagsVisibleWidget.SetChecked(false); m_wNametagsVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wNametagsVisibleWidget.SetChecked(true); m_wNametagsVisibleWidget.SetEnabled(false); m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wNametagsVisibleWidget.SetChecked(false); m_wNametagsVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wNametagsVisibleWidget.SetChecked(true); m_wNametagsVisibleWidget.SetEnabled(false); m_wNametagsVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];
 				// default state
@@ -202,8 +202,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string rankVisible = "";
 		switch (m_sRankVisibleSO)
 		{
-			case ("false") : { m_wRankVisibleWidget.SetChecked(false); m_wRankVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wRankVisibleWidget.SetChecked(true); m_wRankVisibleWidget.SetEnabled(false); m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wRankVisibleWidget.SetChecked(false); m_wRankVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wRankVisibleWidget.SetChecked(true); m_wRankVisibleWidget.SetEnabled(false); m_wRankVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 				// default state
@@ -226,7 +226,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string nametagsRangeStr = "0";
 		switch (true)
 		{
-			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem((m_iNametagsRangeSO / 5) - 1); m_wNametagsRangeWidget.SetEnabled(false); break; };
+			case (m_iNametagsRangeSO > 0) : { m_wNametagsRangeWidget.SetCurrentItem((m_iNametagsRangeSO / 5) - 1); m_wNametagsRangeWidget.SetEnabled(false); break;};
 			default : {
 				nametagsRangeStr = m_ClientComponent.ReturnLocalCSISettings()[6];
 				int nametagsRange = nametagsRangeStr.ToInt();
@@ -245,8 +245,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string roleNametagVisible = "";
 		switch (m_sRoleNametagVisibleSO)
 		{
-			case ("false") : { m_wRoleNametagVisibleWidget.SetChecked(false); m_wRoleNametagVisibleWidget.SetEnabled(false); break; };
-			case ("true") : { m_wRoleNametagVisibleWidget.SetChecked(true); m_wRoleNametagVisibleWidget.SetEnabled(false); m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wRoleNametagVisibleWidget.SetChecked(false); m_wRoleNametagVisibleWidget.SetEnabled(false); break;};
+			case ("true") : { m_wRoleNametagVisibleWidget.SetChecked(true); m_wRoleNametagVisibleWidget.SetEnabled(false); m_wRoleNametagVisibleWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
 				// default state
@@ -264,8 +264,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		string personalColorTeamMenuEnabled = "";
 		switch (m_sPersonalColorTeamMenuSO)
 		{
-			case ("false") : { m_wPersonalColorTeamMenuWidget.SetChecked(false); m_wPersonalColorTeamMenuWidget.SetEnabled(false); break; };
-			case ("true") : { m_wPersonalColorTeamMenuWidget.SetChecked(true); m_wPersonalColorTeamMenuWidget.SetEnabled(false); m_wPersonalColorTeamMenuWidget.SetColorInt(ARGB(255, 95, 95, 95)); break; };
+			case ("false") : { m_wPersonalColorTeamMenuWidget.SetChecked(false); m_wPersonalColorTeamMenuWidget.SetEnabled(false); break;};
+			case ("true") : { m_wPersonalColorTeamMenuWidget.SetChecked(true); m_wPersonalColorTeamMenuWidget.SetEnabled(false); m_wPersonalColorTeamMenuWidget.SetColorInt(ARGB(255, 95, 95, 95)); break;};
 			default : {
 				personalColorTeamMenuEnabled = m_ClientComponent.ReturnLocalCSISettings()[8];
 				// default state

@@ -25,8 +25,6 @@ class CSI_Compass : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (Replication.IsServer()) return;
-		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
 		
 		if (!m_ChimeraCharacter) return;
@@ -218,11 +216,11 @@ class CSI_Compass : SCR_InfoDisplay
 		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
 		int groupID = m_PlayersGroup.GetGroupID();
 
-		string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "ColorTeam");
-		string value = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PlayerValue");
-		string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DisplayIcon");
+		string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "CT"); // CT = ColorTeam
+		string value = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PV"); // PV = PlayerValue
+		string iconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DI"); // DI = DisplayIcon
 
-		if (colorTeam.IsEmpty() || value.IsEmpty() || icon.IsEmpty()) return;
+		if (value.IsEmpty() || iconString.IsEmpty()) return;
 
 		int valueInt = value.ToInt();
 
@@ -230,9 +228,9 @@ class CSI_Compass : SCR_InfoDisplay
 		if (valueInt >= 2) valueInt = -11;
 
 		radarPlayer.SetOpacity(opacity);
-		radarPlayer.LoadImageTexture(0, icon);
+		radarPlayer.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 		radarPlayer.SetZOrder(valueInt);
-		radarPlayer.SetColorInt(colorTeam.ToInt());
+		radarPlayer.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		FrameSlot.SetSize(radarPlayer, widthAndHeight, widthAndHeight);
 
 		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - yaw), 360));

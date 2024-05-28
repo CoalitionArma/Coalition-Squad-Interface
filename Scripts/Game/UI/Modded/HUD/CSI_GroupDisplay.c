@@ -16,8 +16,6 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (Replication.IsServer()) return;
-		
 		if (m_iCurrentFrame < 35) {
 			m_iCurrentFrame++;
 			return;
@@ -46,19 +44,19 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 		foreach (int i, string playerStringToSplit : groupArray) {
 			array<string> playerSplitArray = {};
-			playerStringToSplit.Split("╣", playerSplitArray, false);
+			playerStringToSplit.Split(":", playerSplitArray, false);
 
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeam = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "ColorTeam");
-			string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DisplayIcon");
+			string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "CT"); // CT = ColorTeam
+			string iconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(playersGroup.GetGroupID(), playerID, "DI"); // DI = DisplayIcon
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 			
-			if (playerName.IsEmpty() || icon.IsEmpty() || colorTeam.IsEmpty()) return;
+			if (playerName.IsEmpty() || iconString.IsEmpty()) return;
 
 			if (rankVisible == "true") {
-				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PlayerRank");
+				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
 				if (rank != "") 
 					playerName = string.Format("%1 %2", rank, playerName);
 			};
@@ -71,10 +69,10 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			playerName = CheckEllipsis(106, playerName);
 
 			playerDisplay.SetText(playerName);
-			playerDisplay.SetColorInt(colorTeam.ToInt());
+			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 			statusDisplay.SetOpacity(1);
-			statusDisplay.LoadImageTexture(0, icon);
-			statusDisplay.SetColorInt(colorTeam.ToInt());
+			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
+			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
 	}
