@@ -48,14 +48,14 @@ modded class SCR_NameTagData : Managed
 				{
 					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PR"); // PR = PlayerRank
 					
-					if (rank != "") 
+					if (!rank.IsEmpty()) 
 						m_sName = string.Format("%1 %2", rank, m_sName);
 				};
 				if (roleNametagVisible == "true")
 				{
 					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DI"); // DI = DisplayIcon
 					
-					if (icon != "MAN")
+					if (icon != "MAN" && !icon.IsEmpty())
 						m_sName = string.Format("%1 [%2]", m_sName, icon);
 				}
 			} else { m_sName = "No player manager!" };
@@ -105,6 +105,8 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerColorTeam()
 	{		
+		m_ClientComponent = CSI_ClientComponent.GetInstance();
+		
 		if (!m_ClientComponent) return ARGB(255, 215, 215, 215);
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
