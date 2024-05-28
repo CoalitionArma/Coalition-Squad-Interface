@@ -107,11 +107,11 @@ modded class SCR_NameTagData : Managed
 	{		
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 		
-		if (!m_ClientComponent) return ARGB(255, 215, 215, 215);
+		if (!m_ClientComponent) return 0;
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return ARGB(255, 215, 215, 215);
+		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return 0;
 
 		return m_ClientComponent.SwitchStringToColorTeam(m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "CT")); // CT = ColorTeam
 	}
