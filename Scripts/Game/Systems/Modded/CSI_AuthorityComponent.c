@@ -43,13 +43,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{
 		super.OnPostInit(owner);
 
-		if (Replication.IsServer()) 
-		{
-			UpdateAuthoritySettingArray();
+		//--- Server only
+		if (RplSession.Mode() == RplMode.Client)
+			return;
+		
+		UpdateAuthoritySettingArray();
 			
-			GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 685, true);
-			GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 480000, true); // Updates every 8min (480000ms)
-		};
+		GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 685, true);
+		GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 480000, true); // Updates every 8min (480000ms)
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -57,11 +58,12 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	{
 		super.OnGameEnd();
 		
-		if (Replication.IsServer())
-		{
-			GetGame().GetCallqueue().Remove(UpdateAllGroupStrings);
-			GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
-		};
+		//--- Server only
+		if (RplSession.Mode() == RplMode.Client)
+			return;
+		
+		GetGame().GetCallqueue().Remove(UpdateAllGroupStrings);
+		GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -218,8 +220,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 				// Format a string with what we need for displaying/sorting a player.
 				string playerStr = string.Format("%1:%2", playerValue, localPlayerID);
 
-				if (playerValue != ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "PV"))
-					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PV", playerValue);
+				if (playerValue != ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "PV")) // PV = PlayerValue
+					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PV", playerValue); // PV = PlayerValue
 				
 				tempLocalGroupArray.Insert(playerStr);
 			};
@@ -235,7 +237,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			}
 
 			// Update GroupString.
-			if (groupString != ReturnAuthorityPlayerMapValue(groupID, -1, "GS"))
+			if (groupString != ReturnAuthorityPlayerMapValue(groupID, -1, "GS")) // GS = GroupString
 				UpdateAuthorityPlayerMapValue(groupID, -1, "GS", groupString); // GS = GroupString
 		};
 
@@ -249,7 +251,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		// Setup value variable.
 		int value = 0;
 		
-		string icon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "SSI");
+		string icon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
 		string colorTeam = ReturnLocalPlayerMapValue(groupID, localPlayerID, "CT"); // CT = ColorTeam
 
 		// Sort player by their color so we can group color teams together (a lil bit racist).

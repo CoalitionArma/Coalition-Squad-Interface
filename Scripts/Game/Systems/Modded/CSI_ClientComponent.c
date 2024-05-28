@@ -65,7 +65,8 @@ class CSI_ClientComponent : ScriptComponent
 
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 
-		if (!GetGame().InPlayMode()) return;
+		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
+			return;
 
 		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
