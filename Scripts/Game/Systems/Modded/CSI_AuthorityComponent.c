@@ -1,4 +1,4 @@
-[ComponentEditorProps(category: "GameScripted/Callsign", description: "")]
+[ComponentEditorProps(category: "GameScripted/Authority", description: "")]
 class CSI_AuthorityComponentClass : SCR_BaseGameModeComponentClass {};
 
 class CSI_AuthorityComponent : SCR_BaseGameModeComponent
