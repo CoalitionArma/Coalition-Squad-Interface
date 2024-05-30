@@ -120,8 +120,9 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 
 			if (rankVisible == "true") {
-				string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
-				playerName = string.Format("%1 %2", rank, playerName);
+				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
+				if (rank != "") 
+					playerName = string.Format("%1 %2", rank, playerName);
 			};
 
 			// Check if we need to add ... to the end of players names.

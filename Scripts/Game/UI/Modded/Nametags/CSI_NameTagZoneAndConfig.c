@@ -10,7 +10,6 @@ modded class SCR_NameTagZone
 	}
 }
 
-
 [BaseContainerProps(configRoot: true)]
 modded class SCR_NameTagConfig
 {

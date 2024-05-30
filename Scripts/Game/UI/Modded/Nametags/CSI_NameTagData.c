@@ -1,4 +1,3 @@
-
 modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body
@@ -10,13 +9,14 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		super.InitDefaults();
-
 		if (!m_AuthorityComponent || !m_ClientComponent) 
 		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 		}
+		
+		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
+	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
 
 		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
 
@@ -28,6 +28,20 @@ modded class SCR_NameTagData : Managed
 			m_eAttachedTo = ENameTagPosition.BODY;
 			m_eAttachedToLast = ENameTagPosition.BODY;
 		};
+		
+		m_iZoneID = -1;
+		m_iGroupID = -1;
+		m_iPlayerID = -1;
+		m_fTimeSliceUpdate = 1.0;
+		m_fTimeSliceVON = 0;
+		m_fTimeSlicePosChange = 0;
+		m_fTimeSliceCleanup = 0;
+		m_fTimeSliceFade = 0;
+		m_fTimeSliceVisibility = 0;
+		m_fDistance = 0;
+		m_fOpacityFade = 1;
+		m_sName = string.Empty;
+		m_aNameParams = {};
 	};
 
 	//------------------------------------------------------------------------------------------------

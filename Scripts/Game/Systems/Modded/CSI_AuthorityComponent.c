@@ -149,42 +149,6 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
-	protected void CleanUpAuthorityPlayerMap()
-	{
-		map<string, string> tempMap = new map<string, string>;
-		array<int> outPlayers = new array<int>;
-
-		GetGame().GetPlayerManager().GetPlayers(outPlayers);
-		
-		foreach (int playerID : outPlayers) 
-		{
-			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
-			
-			if (!playersGroup) continue;
-
-			int groupID = playersGroup.GetGroupID();
-			
-			// CT = ColorTeam | OI = OverrideIcon | DI = DisplayIcon | SSI = StoredSpecialtyIcon | PV = PlayerValue | PR = PlayerRank
-			array<string> playerValuesArray = {"CT", "OI", "DI", "SSI", "PV", "PR"};
-			
-			foreach (string value : playerValuesArray) 
-			{
-				if (value == "PR")
-				 	groupID = -1;
-				
-				string hashValue = ReturnAuthorityPlayerMapValue(groupID, playerID, value);
-				string key = string.Format("%1%2%3", groupID, playerID, value);
-				tempMap.Set(key, hashValue);
-			}
-		};
-
-		m_mAuthorityPlayerMap.Clear();
-
-		m_mAuthorityPlayerMap = tempMap;
-	}
-
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllGroupStrings()
 	{	
 		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) return;
@@ -216,15 +180,17 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			// Parse through current group array.
 			foreach (int localPlayerID : groupPlayersIDs)
 			{
+				// Get local player entity.
+				IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
+				
+				if (!localplayer) continue;
+				
 				string playerValue = DetermineLocalPlayerValue(groupID, localPlayerID).ToString(); // Determine players value by their color team and icon so we can sort players from most to least valuable in the group display (definitely not racist).
 				
 				if (playerValue.IsEmpty() || playerValue == "0") continue;
 				
 				// Format a string with what we need for displaying/sorting a player.
 				string playerStr = string.Format("%1:%2", playerValue, localPlayerID);
-
-				if (playerValue != ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "PV")) // PV = PlayerValue
-					UpdateAuthorityPlayerMapValue(groupID, localPlayerID, "PV", playerValue); // PV = PlayerValue
 				
 				tempLocalGroupArray.Insert(playerStr);
 			};
@@ -255,7 +221,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		int value = 0;
 		
 		string icon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
-		string colorTeam = ReturnLocalPlayerMapValue(groupID, localPlayerID, "CT"); // CT = ColorTeam
+		string colorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "CT"); // CT = ColorTeam
 
 		// Sort player by their color so we can group color teams together (a lil bit racist).
 		switch (colorTeam) 
@@ -279,6 +245,42 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 		// Return how valuable the player is
 		return value;
+	}
+	
+	//- Authority -\\
+	//------------------------------------------------------------------------------------------------
+	protected void CleanUpAuthorityPlayerMap()
+	{
+		map<string, string> tempMap = new map<string, string>;
+		array<int> outPlayers = new array<int>;
+
+		GetGame().GetPlayerManager().GetPlayers(outPlayers);
+		
+		foreach (int playerID : outPlayers) 
+		{
+			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
+			
+			if (!playersGroup) continue;
+
+			int groupID = playersGroup.GetGroupID();
+			
+			// CT = ColorTeam | OI = OverrideIcon | DI = DisplayIcon | SSI = StoredSpecialtyIcon | PR = PlayerRank
+			array<string> playerValuesArray = {"CT", "OI", "DI", "SSI", "PR"};
+			
+			foreach (string value : playerValuesArray) 
+			{
+				if (value == "PR")
+				 	groupID = -1;
+				
+				string hashValue = ReturnAuthorityPlayerMapValue(groupID, playerID, value);
+				string key = string.Format("%1%2%3", groupID, playerID, value);
+				tempMap.Set(key, hashValue);
+			}
+		};
+
+		m_mAuthorityPlayerMap.Clear();
+
+		m_mAuthorityPlayerMap = tempMap;
 	}
 	
 	//------------------------------------------------------------------------------------------------

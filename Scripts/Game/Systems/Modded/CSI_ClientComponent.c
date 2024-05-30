@@ -3,19 +3,6 @@ class CSI_ClientComponentClass : ScriptComponentClass {};
 
 class CSI_ClientComponent : ScriptComponent
 {	
-	// All Icons we could possibly want to give the player and/or to use for other functions.
-	protected string m_sCargo         = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";
-	protected string m_sDriver        = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";
-	protected string m_sGunner        = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";
-	protected string m_sSquadLeader   = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";
-	protected string m_sTeamLeader    = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds";
-	protected string m_sMedic         = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";
-	protected string m_sMarksman      = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";
-	protected string m_sMachineGunner = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";
-	protected string m_sAntiTank      = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";
-	protected string m_sGrenadier     = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";
-	protected string m_sMan           = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";
-	
 	// All Color Teams
 	protected int m_iCTNone   = ARGB(255, 215, 215, 215);
 	protected int m_iCTRed    = ARGB(255, 200, 65, 65);
@@ -39,7 +26,7 @@ class CSI_ClientComponent : ScriptComponent
 	protected int m_iLocalPlayersGroupID = 1;
 	
 	// Update Cycle Tracker so we aren't checking the players inventory every 625ms but rather every 10000ms.
-	protected int m_iCurrentUpdateCycle = 16;
+	protected int m_iCurrentUpdateCycle = 20;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -113,18 +100,19 @@ class CSI_ClientComponent : ScriptComponent
 		string icon;
 		switch (inputString) 
 		{
-			case "PAX" : {icon = m_sCargo;         break;};
-			case "DRV" : {icon = m_sDriver;        break;};
-			case "GNR" : {icon = m_sGunner;        break;};
-			case "SL"  : {icon = m_sSquadLeader;   break;};
-			case "FTL" : {icon = m_sTeamLeader;    break;};
-			case "MED" : {icon = m_sMedic;         break;};
-			case "MRK" : {icon = m_sMarksman;      break;};
-			case "MG"  : {icon = m_sMachineGunner; break;};
-			case "AT"  : {icon = m_sAntiTank;      break;};
-			case "GRN" : {icon = m_sGrenadier;     break;};
-			case "MAN" : {icon = m_sMan;           break;};
-			default    : {icon = m_sMan;           break;};
+			// All Icons we could possibly want to give the player and/or to use for other functions.
+			case "PAX" : {icon = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";        break;};
+			case "DRV" : {icon = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";       break;};
+			case "GNR" : {icon = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";       break;};
+			case "SL"  : {icon = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";     break;};
+			case "FTL" : {icon = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds"; break;};
+			case "MED" : {icon = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";      break;};
+			case "MRK" : {icon = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";     break;};
+			case "MG"  : {icon = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";         break;};
+			case "AT"  : {icon = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";         break;};
+			case "GRN" : {icon = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";  break;};
+			case "MAN" : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
+			default    : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
 		};
 		
 		return icon;
@@ -226,14 +214,14 @@ class CSI_ClientComponent : ScriptComponent
 
 		string playerOverideIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "OI"); // OI = OverrideIcon
 
-		if (!playerOverideIcon.IsEmpty() && playerOverideIcon != "N/A" && specialtyIcon.IsEmpty() && vehicleIcon.IsEmpty()) 
+		if (!playerOverideIcon.IsEmpty() && playerOverideIcon != "N/A" && specialtyIcon.IsEmpty()) 
 			specialtyIcon = playerOverideIcon;
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
 		//------------------------------------------------------------------------------------------------
 
-		if (specialtyIcon.IsEmpty() && vehicleIcon.IsEmpty() && m_iCurrentUpdateCycle >= 16) 
+		if (specialtyIcon.IsEmpty() && m_iCurrentUpdateCycle >= 20) 
 		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
@@ -253,7 +241,7 @@ class CSI_ClientComponent : ScriptComponent
 				if (consumable)
 				{
 					// Check items type.
-					SCR_EConsumableType medicalType = SCR_ConsumableItemComponent.Cast(consumable).GetConsumableType();
+					SCR_EConsumableType medicalType = consumable.GetConsumableType();
 					if (medicalType == SCR_EConsumableType.SALINE)
 					{
 						medicalTypeArray.Insert(medicalType);
@@ -495,20 +483,20 @@ class CSI_ClientComponent : ScriptComponent
 	{
 		array<string> settingsToCheck = {
 			// Settings that can be overriden by the server
-			"compassVisible",					 //0
-			"squadRadarVisible",				 //1
-			"groupDisplayVisible",			 //2
-			"staminaBarVisible",				 //3
-			"nametagsVisible",					 //4
-			"rankVisible",							 //5
-			"nametagsRange",						 //6
-			"roleNametagVisible",				 //7
-			"personalColorTeamMenu",		 //8
+			"compassVisible",            //0
+			"squadRadarVisible",         //1
+			"groupDisplayVisible",       //2
+			"staminaBarVisible",         //3
+			"nametagsVisible",           //4
+			"rankVisible",               //5
+			"nametagsRange",             //6
+			"roleNametagVisible",        //7
+			"personalColorTeamMenu",     //8
 
 			// Settings that are purely local to each client
 			"squadRadarIconSize",        //9
 			"squadRadarSelfIconVisible", //10
-			"nametagsPosition",	          //11
+			"nametagsPosition",	        //11
 			"compassTexture",            //12
 		};
 

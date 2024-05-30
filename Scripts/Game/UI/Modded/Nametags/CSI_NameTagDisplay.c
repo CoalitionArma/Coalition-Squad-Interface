@@ -1,7 +1,6 @@
 //------------------------------------------------------------------------------------------------
 //! Nametag UI
 //! Attached to SCR_HUDManagerComponent which is a component of SCR_PlayerController
-
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
 	protected CSI_ClientComponent m_ClientComponent;

@@ -100,8 +100,9 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 
 		if (rankVisible == "true") {
-			string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(m_iSelectedPlayerID));
-			playerName = string.Format("%1 %2", rank, playerName);
+			string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iSelectedPlayerID, "PR"); // PR = PlayerRank
+			if (rank != "") 
+				playerName = string.Format("%1 %2", rank, playerName);
 		};
 
 		m_wIcon.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(m_sStoredSpecialtyIcon));

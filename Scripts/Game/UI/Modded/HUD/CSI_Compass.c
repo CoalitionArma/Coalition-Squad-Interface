@@ -3,6 +3,7 @@ class CSI_Compass : SCR_InfoDisplay
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
 	protected SCR_AIGroup m_PlayersGroup;
+	protected PlayerManager m_PlayerManager;
 	protected CSI_ClientComponent m_ClientComponent;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
@@ -29,13 +30,14 @@ class CSI_Compass : SCR_InfoDisplay
 		
 		if (!m_ChimeraCharacter) return;
 
-		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent || !m_wBearing || !m_wCompass) 
+		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent || !m_wBearing || !m_wCompass || !m_PlayerManager) 
 		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
 			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
+			m_PlayerManager = GetGame().GetPlayerManager();
 			return;
 		};
 		
@@ -162,7 +164,7 @@ class CSI_Compass : SCR_InfoDisplay
 		SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(processEntity);
 		if (!playerCharacter || playerCharacter == m_ChimeraCharacter) return true;
 
-		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
+		int processEntityID = m_PlayerManager.GetPlayerIdFromControlledEntity(playerCharacter);
 		if (!processEntityID || !m_PlayersGroup.IsPlayerInGroup(processEntityID)) return true;
 
 		m_aAllPlayersWithinRange.Insert(playerCharacter);
@@ -179,7 +181,7 @@ class CSI_Compass : SCR_InfoDisplay
 			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
 			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 
-			int offset = 75;
+			int offset = 75.35;
 
 			float widthAndHeight = 12 * (m_sSquadRadarIconSize.ToInt() * 0.01);
 
@@ -187,8 +189,8 @@ class CSI_Compass : SCR_InfoDisplay
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
 			float disT = dis * 2.0;
 
-			if (IsPlayerInVehicle(playerCharacter)) offset = 74;
-			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 6.475;
+			if (IsPlayerInVehicle(playerCharacter)) offset = 74.115;
+			if (IsPlayerInVehicle(m_ChimeraCharacter)) disT = dis * 6.215;
 
 			// Get Direction
 			vector dirV = vector.Direction(playerCharacterOrigin, m_vOwnerOrigin);
@@ -213,27 +215,57 @@ class CSI_Compass : SCR_InfoDisplay
 	//------------------------------------------------------------------------------------------------
 	protected void SetSquadRadarImage(ImageWidget radarPlayer, float widthAndHeight, float opacity, float yaw, SCR_ChimeraCharacter playerCharacter)
 	{
-		int processEntityID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(playerCharacter);
+		int processEntityID = m_PlayerManager.GetPlayerIdFromControlledEntity(playerCharacter);
 		int groupID = m_PlayersGroup.GetGroupID();
 
 		string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "CT"); // CT = ColorTeam
-		string value = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "PV"); // PV = PlayerValue
 		string iconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "DI"); // DI = DisplayIcon
+		string storedSpecialtyIconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, processEntityID, "SSI"); // SSI = StoredSpecialtyIcon
 
-		if (value.IsEmpty() || iconString.IsEmpty()) return;
+		if (iconString.IsEmpty() || storedSpecialtyIconString.IsEmpty()) return;
 
-		int valueInt = value.ToInt();
+		int value = DetermineLocalPlayerValue(groupID, processEntityID, storedSpecialtyIconString, colorTeamString);
 
-		if (valueInt == 1) valueInt = -10;
-		if (valueInt >= 2) valueInt = -11;
+		if (value == 1) value = -10;
+		if (value >= 2) value = -11;
 
 		radarPlayer.SetOpacity(opacity);
 		radarPlayer.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
-		radarPlayer.SetZOrder(valueInt);
+		radarPlayer.SetZOrder(value);
 		radarPlayer.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		FrameSlot.SetSize(radarPlayer, widthAndHeight, widthAndHeight);
 
 		radarPlayer.SetRotation(-Math.Mod((GetPlayersYaw(playerCharacter) - yaw), 360));
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	int DetermineLocalPlayerValue(int groupID, int localPlayerID, string icon, string colorTeam)
+	{
+		// Setup value variable.
+		int value = 0;
+
+		// Sort player by their color so we can group color teams together (a lil bit racist).
+		switch (colorTeam) 
+		{
+			case "R" : {value = -3; break;};
+			case "B" : {value = -5; break;};
+			case "Y" : {value = -7; break;};
+			case "G" : {value = -9; break;};
+			default  : {value = 2;  break;};
+		};
+
+		switch (true) 
+		{
+			// If the players is currently the SL, make him the most valuable player in the list
+			case (icon == "SL")                          : {value = -1; break;};
+
+			// Add/Remove value from a player if they're a Team Lead
+			case (icon == "FTL" && colorTeam == "N/A") : {value--;    break;};
+			case (icon == "FTL" && colorTeam != "N/A") : {value++;    break;};
+		};
+
+		// Return how valuable the player is
+		return value;
 	}
 
 	//------------------------------------------------------------------------------------------------
