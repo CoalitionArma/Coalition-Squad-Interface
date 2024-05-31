@@ -38,6 +38,12 @@ class CSI_GameSettings : ModuleGameSettings
 
 	[Attribute("")]
 	string personalColorTeamMenu;
+	
+	[Attribute("")]
+	string groupNametagVisible;
+
+	[Attribute("")]
+	string nametagLOSEnabled;
 
 	//Server Overrides
 
@@ -67,6 +73,12 @@ class CSI_GameSettings : ModuleGameSettings
 
 	[Attribute("N/A")]
 	string personalColorTeamMenuServerOverride;
+	
+	[Attribute("N/A")]
+	string groupNametagVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string nametagLOSEnabledServerOverride;
 	
 	//Server Defaults
 	
@@ -99,4 +111,10 @@ class CSI_GameSettings : ModuleGameSettings
 
 	[Attribute("true")]
 	string personalColorTeamMenuServerDefault;
+
+	[Attribute("true")]
+	string groupNametagVisibleServerDefault;
+
+	[Attribute("true")]
+	string nametagLOSEnabledServerDefault;
 }

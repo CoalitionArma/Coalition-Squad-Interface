@@ -119,7 +119,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		};
 		
 		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		if (!clientComponent) return;
+		if (!clientComponent) 
+			return;
 		clientComponent.UpdateLocalGroupArray();
 	}
 
@@ -151,11 +152,13 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllGroupStrings()
 	{	
-		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) return;
+		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) 
+			return;
 		
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
-		if (!m_GroupsManagerComponent) return;
+		if (!m_GroupsManagerComponent) 
+			return;
 
 		array<SCR_AIGroup> outAllGroups;
 
@@ -164,13 +167,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 		foreach (SCR_AIGroup playersGroup : outAllGroups)
 		{
-			if (!playersGroup) continue;
+			if (!playersGroup) 
+				continue;
 
 			array<string> groupStringArray = {};
 
 			// Get list of all the players we have to parse through.
 			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
-
+			
 			// Get Group ID
 			int groupID = playersGroup.GetGroupID();
 
@@ -180,14 +184,15 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			// Parse through current group array.
 			foreach (int localPlayerID : groupPlayersIDs)
 			{
-				// Get local player entity.
-				IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
+				string playerDisplayIcon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "DI"); // DI = DisplayIcon
 				
-				if (!localplayer) continue;
+				if (playerDisplayIcon.IsEmpty()) 
+					continue;
 				
 				string playerValue = DetermineLocalPlayerValue(groupID, localPlayerID).ToString(); // Determine players value by their color team and icon so we can sort players from most to least valuable in the group display (definitely not racist).
 				
-				if (playerValue.IsEmpty() || playerValue == "0") continue;
+				if (playerValue.IsEmpty() || playerValue == "0") 
+					continue;
 				
 				// Format a string with what we need for displaying/sorting a player.
 				string playerStr = string.Format("%1:%2", playerValue, localPlayerID);
@@ -260,7 +265,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		{
 			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
 			
-			if (!playersGroup) continue;
+			if (!playersGroup) 
+				continue;
 
 			int groupID = playersGroup.GetGroupID();
 			
@@ -301,7 +307,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 	void UpdateLocalSettings()
 	{
 		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		if (!clientComponent) return;
+		if (!clientComponent) 
+			return;
 		clientComponent.UpdateLocalCSISettingArray();
 	};
 
@@ -334,6 +341,8 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			"nametagsRangeServerOverride",
 			"roleNametagVisibleServerOverride",
 			"personalColorTeamMenuServerOverride",
+			"groupNametagVisibleServerOverride",
+			"nametagLOSEnabledServerOverride",
 			
 			// Server Defaults
 			"serverDefaultsActive",
@@ -345,7 +354,9 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			"rankVisibleServerDefault",
 			"nametagsRangeServerDefault",
 			"roleNametagVisibleServerDefault",
-			"personalColorTeamMenuServerDefault"
+			"personalColorTeamMenuServerDefault",
+			"groupNametagVisibleServerDefault",
+			"nametagLOSEnabledServerDefault"
 		};
 		foreach (string serverOverride : serverOverridesArray)
 		{

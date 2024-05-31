@@ -9,7 +9,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
-		if (data.m_eType == ENameTagEntityType.VEHICLE || IsPlayerInVehicle(SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity())))
+		if (data.m_eType == ENameTagEntityType.VEHICLE || CSI_ClientComponent.GetInstance().ReturnLocalCSISettings()[10] == "false" || IsPlayerInVehicle(SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity())))
 			return true;
 		
 		TraceParam param = new TraceParam;
@@ -34,7 +34,8 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		if (compartmentAccess) 
 		{
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment) return true;
+			if (compartment) 
+				return true;
 		};
 		return false;
 	};

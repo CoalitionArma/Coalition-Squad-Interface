@@ -5,14 +5,14 @@ FrameWidgetClass {
    Name "Status0"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 89.351
-    OffsetLeft 89.351
-    PositionY -123.321
-    OffsetTop -123.321
-    SizeX 16.9
-    OffsetRight -106.251
-    SizeY 17.3
-    OffsetBottom 106.021
+    PositionX 88.7
+    OffsetLeft 88.7
+    PositionY -123.4
+    OffsetTop -123.4
+    SizeX 17.5
+    OffsetRight -106.2
+    SizeY 17.5
+    OffsetBottom 105.9
    }
    IsPixelPerfect 0
    Opacity 0
@@ -50,14 +50,14 @@ FrameWidgetClass {
    Name "Status1"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 89.218
-    OffsetLeft 89.218
-    PositionY -100.278
-    OffsetTop -100.278
-    SizeX 16.899
-    OffsetRight -106.117
-    SizeY 17.299
-    OffsetBottom 82.979
+    PositionX 88.6
+    OffsetLeft 88.6
+    PositionY -100.3
+    OffsetTop -100.3
+    SizeX 17.5
+    OffsetRight -106.1
+    SizeY 17.5
+    OffsetBottom 82.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -95,14 +95,14 @@ FrameWidgetClass {
    Name "Status2"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 89.174
-    OffsetLeft 89.174
-    PositionY -76.97
-    OffsetTop -76.97
-    SizeX 16.9
-    OffsetRight -106.074
-    SizeY 17.3
-    OffsetBottom 59.67
+    PositionX 88.6
+    OffsetLeft 88.6
+    PositionY -77
+    OffsetTop -77
+    SizeX 17.5
+    OffsetRight -106.1
+    SizeY 17.5
+    OffsetBottom 59.5
    }
    IsPixelPerfect 0
    Opacity 0
@@ -140,14 +140,14 @@ FrameWidgetClass {
    Name "Status3"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 89.24
-    OffsetLeft 89.24
-    PositionY -53.46
-    OffsetTop -53.46
-    SizeX 16.9
-    OffsetRight -106.14
-    SizeY 17.299
-    OffsetBottom 36.161
+    PositionX 88.6
+    OffsetLeft 88.6
+    PositionY -53.5
+    OffsetTop -53.5
+    SizeX 17.5
+    OffsetRight -106.1
+    SizeY 17.5
+    OffsetBottom 36
    }
    IsPixelPerfect 0
    Opacity 0
@@ -185,14 +185,14 @@ FrameWidgetClass {
    Name "Status4"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 89.44
-    OffsetLeft 89.44
-    PositionY -30.33
-    OffsetTop -30.33
-    SizeX 16.9
-    OffsetRight -106.34
-    SizeY 17.299
-    OffsetBottom 13.031
+    PositionX 88.8
+    OffsetLeft 88.8
+    PositionY -30.3
+    OffsetTop -30.3
+    SizeX 17.5
+    OffsetRight -106.3
+    SizeY 17.5
+    OffsetBottom 12.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -230,14 +230,14 @@ FrameWidgetClass {
    Name "Status5"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 219.42
-    OffsetLeft 219.42
-    PositionY -123.098
-    OffsetTop -123.098
-    SizeX 16.9
-    OffsetRight -236.32
-    SizeY 17.3
-    OffsetBottom 105.798
+    PositionX 218.8
+    OffsetLeft 218.8
+    PositionY -123.1
+    OffsetTop -123.1
+    SizeX 17.5
+    OffsetRight -236.3
+    SizeY 17.5
+    OffsetBottom 105.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -275,14 +275,14 @@ FrameWidgetClass {
    Name "Status6"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 219.287
-    OffsetLeft 219.287
-    PositionY -100.055
-    OffsetTop -100.055
-    SizeX 16.899
-    OffsetRight -236.186
-    SizeY 17.3
-    OffsetBottom 82.755
+    PositionX 218.7
+    OffsetLeft 218.7
+    PositionY -100.1
+    OffsetTop -100.1
+    SizeX 17.5
+    OffsetRight -236.2
+    SizeY 17.5
+    OffsetBottom 82.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -320,14 +320,14 @@ FrameWidgetClass {
    Name "Status7"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 219.243
-    OffsetLeft 219.243
-    PositionY -76.746
-    OffsetTop -76.746
-    SizeX 16.9
-    OffsetRight -236.143
-    SizeY 17.3
-    OffsetBottom 59.446
+    PositionX 218.6
+    OffsetLeft 218.6
+    PositionY -76.7
+    OffsetTop -76.7
+    SizeX 17.5
+    OffsetRight -236.1
+    SizeY 17.5
+    OffsetBottom 59.2
    }
    IsPixelPerfect 0
    Opacity 0
@@ -365,14 +365,14 @@ FrameWidgetClass {
    Name "Status8"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 219.309
-    OffsetLeft 219.309
-    PositionY -53.236
-    OffsetTop -53.236
-    SizeX 16.9
-    OffsetRight -236.209
-    SizeY 17.299
-    OffsetBottom 35.937
+    PositionX 218.7
+    OffsetLeft 218.7
+    PositionY -53.2
+    OffsetTop -53.2
+    SizeX 17.5
+    OffsetRight -236.2
+    SizeY 17.5
+    OffsetBottom 35.7
    }
    IsPixelPerfect 0
    Opacity 0
@@ -410,14 +410,14 @@ FrameWidgetClass {
    Name "Status9"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 219.509
-    OffsetLeft 219.509
-    PositionY -30.107
-    OffsetTop -30.107
-    SizeX 16.9
-    OffsetRight -236.409
-    SizeY 17.299
-    OffsetBottom 12.807
+    PositionX 218.9
+    OffsetLeft 218.9
+    PositionY -30.1
+    OffsetTop -30.1
+    SizeX 17.5
+    OffsetRight -236.4
+    SizeY 17.5
+    OffsetBottom 12.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -455,14 +455,14 @@ FrameWidgetClass {
    Name "Status10"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 349.577
-    OffsetLeft 349.577
-    PositionY -123.12
-    OffsetTop -123.12
-    SizeX 16.9
-    OffsetRight -366.477
-    SizeY 17.3
-    OffsetBottom 105.82
+    PositionX 349
+    OffsetLeft 349
+    PositionY -123.1
+    OffsetTop -123.1
+    SizeX 17.5
+    OffsetRight -366.5
+    SizeY 17.5
+    OffsetBottom 105.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -500,14 +500,14 @@ FrameWidgetClass {
    Name "Status11"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 349.444
-    OffsetLeft 349.444
-    PositionY -100.077
-    OffsetTop -100.077
-    SizeX 16.899
-    OffsetRight -366.343
-    SizeY 17.3
-    OffsetBottom 82.777
+    PositionX 348.8
+    OffsetLeft 348.8
+    PositionY -100.1
+    OffsetTop -100.1
+    SizeX 17.5
+    OffsetRight -366.3
+    SizeY 17.5
+    OffsetBottom 82.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -545,14 +545,14 @@ FrameWidgetClass {
    Name "Status12"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 349.4
-    OffsetLeft 349.4
-    PositionY -76.769
-    OffsetTop -76.769
-    SizeX 16.9
+    PositionX 348.8
+    OffsetLeft 348.8
+    PositionY -76.8
+    OffsetTop -76.8
+    SizeX 17.5
     OffsetRight -366.3
-    SizeY 17.3
-    OffsetBottom 59.468
+    SizeY 17.5
+    OffsetBottom 59.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -590,14 +590,14 @@ FrameWidgetClass {
    Name "Status13"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 349.466
-    OffsetLeft 349.466
-    PositionY -53.258
-    OffsetTop -53.258
-    SizeX 16.9
-    OffsetRight -366.366
-    SizeY 17.299
-    OffsetBottom 35.959
+    PositionX 348.9
+    OffsetLeft 348.9
+    PositionY -53.3
+    OffsetTop -53.3
+    SizeX 17.5
+    OffsetRight -366.4
+    SizeY 17.5
+    OffsetBottom 35.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -635,14 +635,14 @@ FrameWidgetClass {
    Name "Status14"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 349.666
-    OffsetLeft 349.666
-    PositionY -30.128
-    OffsetTop -30.128
-    SizeX 16.9
-    OffsetRight -366.566
-    SizeY 17.299
-    OffsetBottom 12.829
+    PositionX 349.1
+    OffsetLeft 349.1
+    PositionY -30.1
+    OffsetTop -30.1
+    SizeX 17.5
+    OffsetRight -366.6
+    SizeY 17.5
+    OffsetBottom 12.6
    }
    IsPixelPerfect 0
    Opacity 0
@@ -680,14 +680,14 @@ FrameWidgetClass {
    Name "Status15"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 479.227
-    OffsetLeft 479.227
-    PositionY -123.334
-    OffsetTop -123.334
-    SizeX 16.9
-    OffsetRight -496.127
-    SizeY 17.3
-    OffsetBottom 106.034
+    PositionX 478.6
+    OffsetLeft 478.6
+    PositionY -123.3
+    OffsetTop -123.3
+    SizeX 17.5
+    OffsetRight -496.1
+    SizeY 17.5
+    OffsetBottom 105.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -725,14 +725,14 @@ FrameWidgetClass {
    Name "Status16"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 479.094
-    OffsetLeft 479.094
-    PositionY -100.291
-    OffsetTop -100.291
-    SizeX 16.898
-    OffsetRight -495.992
-    SizeY 17.3
-    OffsetBottom 82.991
+    PositionX 478.5
+    OffsetLeft 478.5
+    PositionY -100.3
+    OffsetTop -100.3
+    SizeX 17.5
+    OffsetRight -496
+    SizeY 17.5
+    OffsetBottom 82.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -770,14 +770,14 @@ FrameWidgetClass {
    Name "Status17"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 479.05
-    OffsetLeft 479.05
-    PositionY -76.982
-    OffsetTop -76.982
-    SizeX 16.9
-    OffsetRight -495.95
-    SizeY 17.3
-    OffsetBottom 59.682
+    PositionX 478.4
+    OffsetLeft 478.4
+    PositionY -77
+    OffsetTop -77
+    SizeX 17.5
+    OffsetRight -495.9
+    SizeY 17.5
+    OffsetBottom 59.5
    }
    IsPixelPerfect 0
    Opacity 0
@@ -815,14 +815,14 @@ FrameWidgetClass {
    Name "Status18"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 479.116
-    OffsetLeft 479.116
-    PositionY -53.472
-    OffsetTop -53.472
-    SizeX 16.9
-    OffsetRight -496.016
-    SizeY 17.299
-    OffsetBottom 36.173
+    PositionX 478.5
+    OffsetLeft 478.5
+    PositionY -53.5
+    OffsetTop -53.5
+    SizeX 17.5
+    OffsetRight -496
+    SizeY 17.5
+    OffsetBottom 36
    }
    IsPixelPerfect 0
    Opacity 0
@@ -860,14 +860,14 @@ FrameWidgetClass {
    Name "Status19"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 479.315
-    OffsetLeft 479.315
-    PositionY -30.343
-    OffsetTop -30.343
-    SizeX 16.901
-    OffsetRight -496.216
-    SizeY 17.299
-    OffsetBottom 13.043
+    PositionX 478.7
+    OffsetLeft 478.7
+    PositionY -30.3
+    OffsetTop -30.3
+    SizeX 17.5
+    OffsetRight -496.2
+    SizeY 17.5
+    OffsetBottom 12.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -905,14 +905,14 @@ FrameWidgetClass {
    Name "Status20"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 609.194
-    OffsetLeft 609.194
-    PositionY -123.654
-    OffsetTop -123.654
-    SizeX 16.9
-    OffsetRight -626.094
-    SizeY 17.3
-    OffsetBottom 106.354
+    PositionX 608.6
+    OffsetLeft 608.6
+    PositionY -123.7
+    OffsetTop -123.7
+    SizeX 17.5
+    OffsetRight -626.1
+    SizeY 17.5
+    OffsetBottom 106.2
    }
    IsPixelPerfect 0
    Opacity 0
@@ -950,14 +950,14 @@ FrameWidgetClass {
    Name "Status21"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 609.061
-    OffsetLeft 609.061
-    PositionY -100.611
-    OffsetTop -100.611
-    SizeX 16.898
-    OffsetRight -625.959
-    SizeY 17.3
-    OffsetBottom 83.311
+    PositionX 608.5
+    OffsetLeft 608.5
+    PositionY -100.6
+    OffsetTop -100.6
+    SizeX 17.5
+    OffsetRight -626
+    SizeY 17.5
+    OffsetBottom 83.1
    }
    IsPixelPerfect 0
    Opacity 0
@@ -995,14 +995,14 @@ FrameWidgetClass {
    Name "Status22"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 609.017
-    OffsetLeft 609.017
-    PositionY -77.302
-    OffsetTop -77.302
-    SizeX 16.9
-    OffsetRight -625.917
-    SizeY 17.3
-    OffsetBottom 60.002
+    PositionX 608.4
+    OffsetLeft 608.4
+    PositionY -77.3
+    OffsetTop -77.3
+    SizeX 17.5
+    OffsetRight -625.9
+    SizeY 17.5
+    OffsetBottom 59.8
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1040,14 +1040,14 @@ FrameWidgetClass {
    Name "Status23"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 609.083
-    OffsetLeft 609.083
-    PositionY -53.792
-    OffsetTop -53.792
-    SizeX 16.9
-    OffsetRight -625.983
-    SizeY 17.299
-    OffsetBottom 36.493
+    PositionX 608.5
+    OffsetLeft 608.5
+    PositionY -53.8
+    OffsetTop -53.8
+    SizeX 17.5
+    OffsetRight -626
+    SizeY 17.5
+    OffsetBottom 36.3
    }
    IsPixelPerfect 0
    Opacity 0
@@ -1085,14 +1085,14 @@ FrameWidgetClass {
    Name "Status24"
    Slot FrameWidgetSlot "{5B0E436436746530}" {
     Anchor 0.5 1 0.5 1
-    PositionX 609.282
-    OffsetLeft 609.282
-    PositionY -30.663
-    OffsetTop -30.663
-    SizeX 16.901
-    OffsetRight -626.183
-    SizeY 17.299
-    OffsetBottom 13.363
+    PositionX 608.7
+    OffsetLeft 608.7
+    PositionY -30.7
+    OffsetTop -30.7
+    SizeX 17.5
+    OffsetRight -626.2
+    SizeY 17.5
+    OffsetBottom 13.2
    }
    IsPixelPerfect 0
    Opacity 0

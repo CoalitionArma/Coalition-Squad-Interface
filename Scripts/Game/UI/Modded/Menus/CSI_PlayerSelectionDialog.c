@@ -43,7 +43,11 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 
-		if (!groupsManagerComponent || !m_AuthorityComponent) {OnMenuBack(); return;};
+		if (!groupsManagerComponent || !m_AuthorityComponent) 
+		{
+			OnMenuBack(); 
+			return;
+		};
 		
 		int playerID = SCR_PlayerController.GetLocalPlayerId();
 		m_PlayersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
@@ -101,10 +105,14 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 		m_aGroupArray = m_ClientComponent.GetLocalGroupArray();
 
-		if (m_aGroupArray.Count() <= 0) {OnMenuBack(); return; };
+		if (m_aGroupArray.Count() <= 0) 
+		{
+			OnMenuBack(); 
+			return; 
+		};
 
-		foreach (int i, string playerStringToSplit : m_aGroupArray) {
-
+		foreach (int i, string playerStringToSplit : m_aGroupArray) 
+		{
 			array<string> playerSplitArray = {};
 			playerStringToSplit.Split(":", playerSplitArray, false);
 
@@ -119,9 +127,12 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
 
-			if (rankVisible == "true") {
+			if (!playerDisplay || !statusDisplay) continue;
+
+			if (rankVisible == "true") 
+			{
 				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
-				if (rank != "") 
+				if (!rank.IsEmpty()) 
 					playerName = string.Format("%1 %2", rank, playerName);
 			};
 
@@ -129,7 +140,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			playerName = CheckEllipsis(190, playerName);
 
 			playerDisplay.SetText(playerName);
-			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
+			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));			
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
@@ -159,7 +170,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 		testWidget.SetText(name);
 		testWidget.GetTextSize(sx, yx);
 
-		if (sx > maxLength) {
+		if (sx > maxLength) 
+		{
 			for (int e = 0; sx > maxLength - 3.5; e++)
 			{
 				int nameLength = name.Length();
@@ -227,7 +239,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 	{
 		CSI_ClientComponent groupBackendComponent = CSI_ClientComponent.GetInstance();
 
-		if (groupBackendComponent) {
+		if (groupBackendComponent) 
+		{
 			int maxMembers = m_wMaxPlayers.GetCurrentItem();
 			groupBackendComponent.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), maxMembers + 1);
 		};
@@ -242,7 +255,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 		ImageWidget statusDisplayList = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", playerInt)));
 		int playerOInt = statusDisplayList.GetOpacity();
-		if (!playerOInt || playerOInt == 0) return;
+		if (!playerOInt || playerOInt == 0) 
+			return;
 
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 

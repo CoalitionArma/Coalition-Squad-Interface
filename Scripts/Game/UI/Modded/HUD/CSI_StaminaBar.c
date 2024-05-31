@@ -32,12 +32,14 @@ class CSI_StaminaBar : SCR_InfoDisplay
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 
 		// Can't run if these dont exist better exit out.
-		if (!character) return;
+		if (!character) 
+			return;
 
 		// Get Charachter Controller of the locally played entity.
 		SCR_CharacterControllerComponent characterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
 
-		if (!characterController) return;
+		if (!characterController) 
+			return;
 
 		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
 		OnStaminaChange(characterController.GetStamina());
