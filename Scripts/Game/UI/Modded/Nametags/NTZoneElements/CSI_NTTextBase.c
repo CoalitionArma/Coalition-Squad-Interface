@@ -1,14 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //! Base nametag element for text
+[BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {			
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
-	{
-		super.SetDefaults(data, index);
-		
-		data.UpdateAttatchedTo();
-		
+	{	
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!tWidget)
 			return;
@@ -22,11 +19,10 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (!m_bScaleElement)
 			tWidget.SetExactFontSize(m_fTextSizeMax);
 		
-		tWidget.SetShadow(stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
+		tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
 		
-		if (tWidget.GetName() == "PlayerGroupName") {
+		if (tWidget.GetName() == "PlayerGroupName")
 			tWidget.SetText(data.GetGroupName()); 
-		};
 		
 		if (tWidget.GetName() == "PlayerName") {
 			int ct = data.GetPlayerColorTeam();
@@ -36,14 +32,13 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				tWidget.SetColorInt(ct);
 		};
 		
-		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, true); // transitions	
+		data.UpdateAttatchedTo();
+		
+		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 }
 
 //------------------------------------------------------------------------------------------------
-//! Nametag element for group text
+//! Group nametag element for text
 [BaseContainerProps(), SCR_NameTagElementTitle()]
-class CSI_NTGroupName : SCR_NTTextBase
-{
-	
-}
+class CSI_NTGroupName : SCR_NTTextBase {}

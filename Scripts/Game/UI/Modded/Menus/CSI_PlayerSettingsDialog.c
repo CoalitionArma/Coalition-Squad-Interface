@@ -34,7 +34,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		// Get Global Player Controller and Group Manager.
 		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		if (!m_AuthorityComponent || !m_ClientComponent) return;
+		if (!m_AuthorityComponent || !m_ClientComponent) 
+			return;
 
 		m_wIconOveride = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconOveride"));
 		m_wPlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName"));
@@ -95,13 +96,16 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		m_sStoredSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
 	
-		if (m_sStoredSpecialtyIcon.IsEmpty()) return;
+		if (m_sStoredSpecialtyIcon.IsEmpty()) 
+			return;
 
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
 
-		if (rankVisible == "true") {
-			string rank = SCR_CharacterRankComponent.GetCharacterRankNameShort(GetGame().GetPlayerManager().GetPlayerControlledEntity(m_iSelectedPlayerID));
-			playerName = string.Format("%1 %2", rank, playerName);
+		if (rankVisible == "true") 
+		{
+			string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iSelectedPlayerID, "PR"); // PR = PlayerRank
+			if (!rank.IsEmpty()) 
+				playerName = string.Format("%1 %2", rank, playerName);
 		};
 
 		m_wIcon.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(m_sStoredSpecialtyIcon));
@@ -113,11 +117,13 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateIconOverride()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
+			return;
 
 		string iconOverride = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI"); // OI = OverrideIcon
 
-		if (iconOverride.IsEmpty()) return;
+		if (iconOverride.IsEmpty()) 
+			return;
 
 		int playerOverideIcon = 0;
 		switch (iconOverride)
@@ -204,12 +210,15 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected") return;
+		if (m_wPlayerName.GetText() == "No Player Selected") 
+			return;
 		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();
 
-		if (!m_iSelectedPlayerID) return;
+		if (!m_iSelectedPlayerID) 
+			return;
 		
-		if (colorTeamButtonName == "None") {
+		if (colorTeamButtonName == "None") 
+		{
 			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "CT", "N/A"); // OI = OverrideIcon
 			return;
 		}
@@ -220,7 +229,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnOverrideIconClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID) || m_sStoredSpecialtyIcon == "FTL") return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID) || m_sStoredSpecialtyIcon == "FTL") 
+			return;
 
 		int iconToOverride = m_wIconOveride.GetCurrentItem();
 		string iconToOverrideStr = "";
@@ -234,9 +244,11 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 			case 6 : {iconToOverrideStr = "MAN";  break;};
 		};
 
-		if (!m_iSelectedPlayerID) return;
+		if (!m_iSelectedPlayerID) 
+			return;
 		
-		if (iconToOverrideStr.IsEmpty()) {
+		if (iconToOverrideStr.IsEmpty()) 
+		{
 			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
 			return;
 		}
@@ -247,7 +259,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnPromoteToSLClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
+			return;
 
 		m_ClientComponent.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
 		GetGame().GetMenuManager().CloseAllMenus();
@@ -256,9 +269,11 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnPromoteToTLClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
+			return;
 
-		if (m_sStoredSpecialtyIcon == "FTL") {
+		if (m_sStoredSpecialtyIcon == "FTL") 
+		{
 			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
 			return;
 		};
@@ -268,7 +283,8 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnKickClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) return;
+		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
+			return;
 
 		m_ClientComponent.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);

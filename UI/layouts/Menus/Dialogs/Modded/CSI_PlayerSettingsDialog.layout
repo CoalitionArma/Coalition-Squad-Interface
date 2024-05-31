@@ -208,14 +208,14 @@ FrameWidgetClass {
    Name "Icon"
    Slot FrameWidgetSlot "{5EC77B609A838859}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -72.82
-    OffsetLeft -72.82
-    PositionY -190
-    OffsetTop -190
-    SizeX 142
-    OffsetRight -69.18
-    SizeY 142
-    OffsetBottom 48
+    PositionX -82.5
+    OffsetLeft -82.5
+    PositionY -185
+    OffsetTop -185
+    SizeX 165
+    OffsetRight -82.5
+    SizeY 165
+    OffsetBottom 20
    }
    Texture "{25A0BFBD75253292}UI/Textures/HUD/Modded/Icons/iconman_ca.edds"
    Size 48 48

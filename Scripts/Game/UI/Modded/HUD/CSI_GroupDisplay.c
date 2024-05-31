@@ -16,14 +16,16 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (m_iCurrentFrame < 35) {
+		if (m_iCurrentFrame < 35) 
+		{
 			m_iCurrentFrame++;
 			return;
 		};
 
 		m_iCurrentFrame = 0;
 
-		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent) {
+		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent) 
+		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
@@ -37,7 +39,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1 || !playersGroup) {
+		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1 || !playersGroup) 
+		{
 			ClearGroupDisplay(0, true);
 			return;
 		};
@@ -53,23 +56,50 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 			
-			if (playerName.IsEmpty() || iconString.IsEmpty()) return;
+			if (playerName.IsEmpty() || iconString.IsEmpty()) 
+				return;
 
-			if (rankVisible == "true") {
+			if (rankVisible == "true") 
+			{
 				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
-				if (rank != "") 
+				if (!rank.IsEmpty()) 
 					playerName = string.Format("%1 %2", rank, playerName);
 			};
 
 			// Get group display widgets.
 			TextWidget playerDisplay = TextWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Player%1", i)));
 			ImageWidget statusDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", i)));
+			
+			if (!playerDisplay || !statusDisplay) 
+				continue;
 
 			// Check if we need to add ... to the end of players names.
 			playerName = CheckEllipsis(106, playerName);
 
 			playerDisplay.SetText(playerName);
 			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
+			
+			if (iconString == "DRV" || iconString == "PAX") 
+			{
+				FrameSlot.SetSize(statusDisplay, 17, 17);	
+				switch (true) {
+					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 88.6);  break;};
+					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 218.8); break;};
+					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 349.0); break;};
+					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 478.6); break;};
+					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 608.6); break;};
+				};
+			} else {
+				FrameSlot.SetSize(statusDisplay, 23.2, 23.2);
+				switch (true) {
+					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 85.8);  break;};
+					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 216);   break;};
+					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 346.2); break;};
+					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 475.8); break;};
+					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 605.8); break;};
+				};
+			};
+			
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
@@ -88,7 +118,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		//Check if there's anything to clear
 		ImageWidget displayCheck = ImageWidget.Cast(m_wRoot.FindAnyWidget("Status0"));
 		int check = displayCheck.GetOpacity();
-		if (check == 1 || forceClear) {
+		if (check == 1 || forceClear) 
+		{
 			for (int e = positionToStartClearing; e <= 24; e++)
 			{
 				// Get group display widgets.
@@ -96,7 +127,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 				ImageWidget statusRemoveDisplay = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Status%1", e)));
 
 				// Skip ahead to next for-loop iteration if either of these are false.
-				if (!playerRemoveDisplay || !statusRemoveDisplay) continue;
+				if (!playerRemoveDisplay || !statusRemoveDisplay) 
+					continue;
 
 				// Clear widgets.
 				playerRemoveDisplay.SetText("");
@@ -120,7 +152,8 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		testWidget.SetText(name);
 		testWidget.GetTextSize(sx, yx);
 
-		if (sx > maxLength) {
+		if (sx > maxLength) 
+		{
 			for (int e = 0; sx > maxLength - 3.5; e++)
 			{
 				int nameLength = name.Length();

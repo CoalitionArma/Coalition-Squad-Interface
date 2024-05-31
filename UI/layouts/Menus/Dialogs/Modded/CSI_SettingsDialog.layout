@@ -5,14 +5,14 @@ FrameWidgetClass {
    Name "Background"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -170.577
-    OffsetLeft -170.577
-    PositionY -296.378
-    OffsetTop -296.378
+    PositionX -170.463
+    OffsetLeft -170.463
+    PositionY -339.309
+    OffsetTop -339.309
     SizeX 274.909
-    OffsetRight -104.332
-    SizeY 635.646
-    OffsetBottom -339.268
+    OffsetRight -104.446
+    SizeY 708.089
+    OffsetBottom -368.78
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
@@ -21,14 +21,14 @@ FrameWidgetClass {
    Name "Footer"
    Slot FrameWidgetSlot "{60937360A8396184}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -164.795
-    OffsetLeft -164.795
-    PositionY 301.717
-    OffsetTop 301.717
+    PositionX -165.39
+    OffsetLeft -165.39
+    PositionY 330.007
+    OffsetTop 330.007
     SizeX 262.991
-    OffsetRight -98.196
+    OffsetRight -97.601
     SizeY 30
-    OffsetBottom -331.717
+    OffsetBottom -360.007
    }
    {
     OverlayWidgetClass "{60937360364E315B}" {
@@ -59,14 +59,14 @@ FrameWidgetClass {
    Name "Confirm"
    Slot FrameWidgetSlot "{60B2AAF59074A6D8}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 2.318
-    OffsetLeft 2.318
-    PositionY 301.665
-    OffsetTop 301.665
+    PositionX 1.723
+    OffsetLeft 1.723
+    PositionY 329.955
+    OffsetTop 329.955
     SizeX 100.002
-    OffsetRight -102.32
+    OffsetRight -101.725
     SizeY 30
-    OffsetBottom -331.665
+    OffsetBottom -359.955
    }
    components {
     SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
@@ -97,14 +97,14 @@ FrameWidgetClass {
    Name "CompassSettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -161.63
-    OffsetLeft -161.63
-    PositionY 240.619
-    OffsetTop 240.619
+    PositionX -162.225
+    OffsetLeft -162.225
+    PositionY 268.909
+    OffsetTop 268.909
     SizeX 257.828
-    OffsetRight -96.198
+    OffsetRight -95.603
     SizeY 5.195
-    OffsetBottom -245.814
+    OffsetBottom -274.104
    }
    Color 0.761 0.386 0.078 1
    Text "------------------------------------------------------------------------------------"
@@ -119,14 +119,14 @@ FrameWidgetClass {
    Name "CompassSettingsText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -161.603
-    OffsetLeft -161.603
-    PositionY 224.942
-    OffsetTop 224.942
+    PositionX -162.198
+    OffsetLeft -162.198
+    PositionY 253.232
+    OffsetTop 253.232
     SizeX 224.343
-    OffsetRight -62.74
+    OffsetRight -62.145
     SizeY 15.592
-    OffsetBottom -240.534
+    OffsetBottom -268.824
    }
    Color 0.761 0.386 0.078 1
    Text "#CSI-Ingame_Settings_Compass_Settings_Subtitle"
@@ -140,14 +140,14 @@ FrameWidgetClass {
    Name "GroupDisplaySettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -162.372
-    OffsetLeft -162.372
-    PositionY 56.825
-    OffsetTop 56.825
+    PositionX -162.967
+    OffsetLeft -162.967
+    PositionY 85.114
+    OffsetTop 85.114
     SizeX 258.538
-    OffsetRight -96.166
+    OffsetRight -95.571
     SizeY 5.533
-    OffsetBottom -62.358
+    OffsetBottom -90.647
    }
    Color 0.761 0.386 0.078 1
    Text "------------------------------------------------------------------------------------"
@@ -162,14 +162,14 @@ FrameWidgetClass {
    Name "GroupDisplaySettingsText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -162.549
-    OffsetLeft -162.549
-    PositionY 41.063
-    OffsetTop 41.063
+    PositionX -163.144
+    OffsetLeft -163.144
+    PositionY 69.352
+    OffsetTop 69.352
     SizeX 225.187
-    OffsetRight -62.638
+    OffsetRight -62.043
     SizeY 15.592
-    OffsetBottom -56.655
+    OffsetBottom -84.944
    }
    Color 0.761 0.386 0.078 1
    Text "#CSI-Ingame_Settings_Group_Display_Settings_Subtitle"
@@ -183,14 +183,14 @@ FrameWidgetClass {
    Name "StaminaBarSettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -163.068
-    OffsetLeft -163.068
-    PositionY -229.635
-    OffsetTop -229.635
+    PositionX -162.954
+    OffsetLeft -162.954
+    PositionY -272.566
+    OffsetTop -272.566
     SizeX 258.538
-    OffsetRight -95.47
+    OffsetRight -95.584
     SizeY 5.533
-    OffsetBottom 224.102
+    OffsetBottom 267.033
    }
    Color 0.761 0.386 0.078 1
    Text "------------------------------------------------------------------------------------"
@@ -205,14 +205,14 @@ FrameWidgetClass {
    Name "StaminaBarSettingsText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -163.245
-    OffsetLeft -163.245
-    PositionY -245.397
-    OffsetTop -245.397
+    PositionX -163.131
+    OffsetLeft -163.131
+    PositionY -288.328
+    OffsetTop -288.328
     SizeX 225.188
-    OffsetRight -61.943
+    OffsetRight -62.057
     SizeY 15.592
-    OffsetBottom 229.805
+    OffsetBottom 272.736
    }
    Color 0.761 0.386 0.078 1
    Text "#CSI-Ingame_Settings_Subtitle"
@@ -226,14 +226,14 @@ FrameWidgetClass {
    Name "NameTagsSettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -162.829
-    OffsetLeft -162.829
-    PositionY -99.661
-    OffsetTop -99.661
+    PositionX -162.715
+    OffsetLeft -162.715
+    PositionY -142.592
+    OffsetTop -142.592
     SizeX 258.537
-    OffsetRight -95.708
+    OffsetRight -95.822
     SizeY 5.533
-    OffsetBottom 94.128
+    OffsetBottom 137.059
    }
    Color 0.761 0.386 0.078 1
    Text "------------------------------------------------------------------------------------"
@@ -248,14 +248,14 @@ FrameWidgetClass {
    Name "NameTagsSettingsText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -163.006
-    OffsetLeft -163.006
-    PositionY -115.423
-    OffsetTop -115.423
+    PositionX -162.892
+    OffsetLeft -162.892
+    PositionY -158.354
+    OffsetTop -158.354
     SizeX 225.187
-    OffsetRight -62.181
+    OffsetRight -62.295
     SizeY 15.592
-    OffsetBottom 99.831
+    OffsetBottom 142.762
    }
    Color 0.761 0.386 0.078 1
    Text "#CSI-Ingame_Settings_Nametag_Settings_Subtitle"
@@ -269,14 +269,14 @@ FrameWidgetClass {
    Name "SquadRadarSettingsText"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -162.066
-    OffsetLeft -162.066
-    PositionY 100.911
-    OffsetTop 100.911
+    PositionX -162.661
+    OffsetLeft -162.661
+    PositionY 129.201
+    OffsetTop 129.201
     SizeX 224.343
-    OffsetRight -62.277
+    OffsetRight -61.682
     SizeY 15.592
-    OffsetBottom -116.503
+    OffsetBottom -144.793
    }
    Color 0.761 0.386 0.078 1
    Text "#CSI-Ingame_Settings_Squad_Radar_Settings_Subtitle"
@@ -290,14 +290,14 @@ FrameWidgetClass {
    Name "SquadRadarSettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -162.093
-    OffsetLeft -162.093
-    PositionY 116.588
-    OffsetTop 116.588
+    PositionX -162.688
+    OffsetLeft -162.688
+    PositionY 144.878
+    OffsetTop 144.878
     SizeX 257.828
-    OffsetRight -95.735
+    OffsetRight -95.14
     SizeY 5.195
-    OffsetBottom -121.783
+    OffsetBottom -150.073
    }
    Color 0.761 0.386 0.078 1
    Text "------------------------------------------------------------------------------------"
@@ -312,14 +312,14 @@ FrameWidgetClass {
    Name "Pretty"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -170.642
-    OffsetLeft -170.642
-    PositionY -296.049
-    OffsetTop -296.049
+    PositionX -170.528
+    OffsetLeft -170.528
+    PositionY -338.98
+    OffsetTop -338.98
     SizeX 40.001
-    OffsetRight 130.641
+    OffsetRight 130.527
     SizeY 40
-    OffsetBottom 256.049
+    OffsetBottom 298.98
    }
    Color 0.761 0.386 0.078 1
    Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
@@ -331,14 +331,14 @@ FrameWidgetClass {
    Name "PrettyText"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -130.727
-    OffsetLeft -130.727
-    PositionY -286.242
-    OffsetTop -286.242
+    PositionX -130.613
+    OffsetLeft -130.613
+    PositionY -329.173
+    OffsetTop -329.173
     SizeX 174.4
-    OffsetRight -43.673
+    OffsetRight -43.787
     SizeY 20.256
-    OffsetBottom 265.986
+    OffsetBottom 308.917
    }
    Text "#CSI-Ingame_Settings_Title"
    "Font Size" 32
@@ -353,14 +353,14 @@ FrameWidgetClass {
    Name "CompassVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.163
-    OffsetLeft -107.163
-    PositionY 249.116
-    OffsetTop 249.116
+    PositionX -107.758
+    OffsetLeft -107.758
+    PositionY 277.406
+    OffsetTop 277.406
     SizeX 205.867
-    OffsetRight -98.704
+    OffsetRight -98.109
     SizeY 27.713
-    OffsetBottom -276.829
+    OffsetBottom -305.119
    }
    Text "#CSI-Ingame_Settings_Compass_Visible_Toggle"
    "Vertical Alignment" Center
@@ -369,14 +369,14 @@ FrameWidgetClass {
    Name "SquadRadarVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.517
-    OffsetLeft -107.517
-    PositionY 125.033
-    OffsetTop 125.033
+    PositionX -108.112
+    OffsetLeft -108.112
+    PositionY 153.323
+    OffsetTop 153.323
     SizeX 205.868
-    OffsetRight -98.351
+    OffsetRight -97.756
     SizeY 27.713
-    OffsetBottom -152.746
+    OffsetBottom -181.036
    }
    Text "#CSI-Ingame_Settings_Squad_Radar_Toggle"
    "Vertical Alignment" Center
@@ -385,14 +385,14 @@ FrameWidgetClass {
    Name "GroupDisplayVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.214
-    OffsetLeft -107.214
-    PositionY 65.699
-    OffsetTop 65.699
+    PositionX -107.809
+    OffsetLeft -107.809
+    PositionY 93.988
+    OffsetTop 93.988
     SizeX 205.749
-    OffsetRight -98.535
+    OffsetRight -97.94
     SizeY 27.713
-    OffsetBottom -93.412
+    OffsetBottom -121.702
    }
    Text "#CSI-Ingame_Settings_Group_Display_Toggle"
    "Vertical Alignment" Center
@@ -401,14 +401,14 @@ FrameWidgetClass {
    Name "StaminaBarVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.477
-    OffsetLeft -107.477
-    PositionY -219.928
-    OffsetTop -219.928
+    PositionX -107.363
+    OffsetLeft -107.363
+    PositionY -262.859
+    OffsetTop -262.859
     SizeX 206.111
-    OffsetRight -98.634
+    OffsetRight -98.748
     SizeY 27.713
-    OffsetBottom 192.215
+    OffsetBottom 235.146
    }
    Text "#CSI-Ingame_Settings_Stamina_Bar_Toggle"
    "Vertical Alignment" Center
@@ -417,14 +417,14 @@ FrameWidgetClass {
    Name "NametagsVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -108.439
-    OffsetLeft -108.439
-    PositionY -90.23
-    OffsetTop -90.23
+    PositionX -108.325
+    OffsetLeft -108.325
+    PositionY -133.161
+    OffsetTop -133.161
     SizeX 206.073
-    OffsetRight -97.634
+    OffsetRight -97.748
     SizeY 27.699
-    OffsetBottom 62.531
+    OffsetBottom 105.462
    }
    Text "#CSI-Ingame_Settings_Nametags_Toggle"
    "Vertical Alignment" Center
@@ -433,14 +433,14 @@ FrameWidgetClass {
    Name "NametagsPosText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -108.409
-    OffsetLeft -108.409
-    PositionY -20.872
-    OffsetTop -20.872
-    SizeX 206.074
-    OffsetRight -97.665
+    PositionX -108.181
+    OffsetLeft -108.181
+    PositionY 7.038
+    OffsetTop 7.038
+    SizeX 206.073
+    OffsetRight -97.892
     SizeY 27.701
-    OffsetBottom -6.829
+    OffsetBottom -34.739
    }
    Text "#CSI-Ingame_Settings_Nametags_Position_Selector"
    "Vertical Alignment" Center
@@ -449,14 +449,14 @@ FrameWidgetClass {
    Name "NametagsRangeText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -108.352
-    OffsetLeft -108.352
-    PositionY 10.979
-    OffsetTop 10.979
-    SizeX 206.073
-    OffsetRight -97.721
+    PositionX -108.124
+    OffsetLeft -108.124
+    PositionY 38.889
+    OffsetTop 38.889
+    SizeX 206.072
+    OffsetRight -97.948
     SizeY 27.699
-    OffsetBottom -38.678
+    OffsetBottom -66.587
    }
    Text "#CSI-Ingame_Settings_Nametags_Range_Selector"
    "Vertical Alignment" Center
@@ -465,14 +465,14 @@ FrameWidgetClass {
    Name "RankVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.558
-    OffsetLeft -107.558
-    PositionY -185.352
-    OffsetTop -185.352
+    PositionX -107.444
+    OffsetLeft -107.444
+    PositionY -228.283
+    OffsetTop -228.283
     SizeX 206.14
-    OffsetRight -98.582
+    OffsetRight -98.696
     SizeY 27.7
-    OffsetBottom 157.652
+    OffsetBottom 200.583
    }
    Text "#CSI-Ingame_Settings_Rank_Visible_Toggle"
    "Vertical Alignment" Center
@@ -481,14 +481,14 @@ FrameWidgetClass {
    Name "IconScaleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.512
-    OffsetLeft -107.512
-    PositionY 194.904
-    OffsetTop 194.904
+    PositionX -108.107
+    OffsetLeft -108.107
+    PositionY 223.194
+    OffsetTop 223.194
     SizeX 206.039
-    OffsetRight -98.527
+    OffsetRight -97.932
     SizeY 27.701
-    OffsetBottom -222.605
+    OffsetBottom -250.895
    }
    Text "#CSI-Ingame_Settings_Icon_Scale_Selector"
    "Vertical Alignment" Center
@@ -497,46 +497,46 @@ FrameWidgetClass {
    Name "squadRadarSelfIconVisibleText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.517
-    OffsetLeft -107.517
-    PositionY 160.001
-    OffsetTop 160.001
+    PositionX -108.112
+    OffsetLeft -108.112
+    PositionY 188.291
+    OffsetTop 188.291
     SizeX 205.868
-    OffsetRight -98.351
+    OffsetRight -97.756
     SizeY 27.712
-    OffsetBottom -187.713
+    OffsetBottom -216.003
    }
    Text "#CSI-Ingame_Settings_Personal_Icon_Toggle"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{608F2864D145903D}" {
-   Name "roleNametagVisibleText"
+   Name "nametagLOSEnabledText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -108.439
-    OffsetLeft -108.439
-    PositionY -55.238
-    OffsetTop -55.238
+    PositionX -108.325
+    OffsetLeft -108.325
+    PositionY -98.169
+    OffsetTop -98.169
     SizeX 206.073
-    OffsetRight -97.634
+    OffsetRight -97.748
     SizeY 27.699
-    OffsetBottom 27.539
+    OffsetBottom 70.471
    }
-   Text "#CSI-Ingame_Settings_Nametags_Role_Toggle"
+   Text "#CSI-Ingame_Settings_Nametags_Use_LOS_Selector"
    "Vertical Alignment" Center
   }
   TextWidgetClass "{60971295EDCA7BB4}" {
    Name "personalColorTeamMenuText"
    Slot FrameWidgetSlot "{60833E08D261E66F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -107.558
-    OffsetLeft -107.558
-    PositionY -150.642
-    OffsetTop -150.642
+    PositionX -107.444
+    OffsetLeft -107.444
+    PositionY -193.573
+    OffsetTop -193.573
     SizeX 206.14
-    OffsetRight -98.582
+    OffsetRight -98.696
     SizeY 27.7
-    OffsetBottom 122.942
+    OffsetBottom 165.873
    }
    Text "#CSI-Ingame_Settings_CT_Menu_Toggle"
    "Vertical Alignment" Center
@@ -545,14 +545,14 @@ FrameWidgetClass {
    Name "SettingsSeperator"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -169.016
-    OffsetLeft -169.016
-    PositionY 286.743
-    OffsetTop 286.743
+    PositionX -169.481
+    OffsetLeft -169.481
+    PositionY 308.938
+    OffsetTop 308.938
     SizeX 270.716
-    OffsetRight -101.7
+    OffsetRight -101.235
     SizeY 5.186
-    OffsetBottom -291.929
+    OffsetBottom -314.124
    }
    Text "------------------------------------------------------------------------------------"
    "Font Size" 14
@@ -566,14 +566,14 @@ FrameWidgetClass {
    Name "SettingsSeperator1"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -169.349
-    OffsetLeft -169.349
-    PositionY -254.093
-    OffsetTop -254.093
+    PositionX -169.235
+    OffsetLeft -169.235
+    PositionY -297.024
+    OffsetTop -297.024
     SizeX 270.491
-    OffsetRight -101.142
+    OffsetRight -101.256
     SizeY 4.214
-    OffsetBottom 249.879
+    OffsetBottom 292.81
    }
    Text "------------------------------------------------------------------------------------"
    "Font Size" 14
@@ -587,14 +587,14 @@ FrameWidgetClass {
    Name "BackgroundServerOverride"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 106.984
-    OffsetLeft 106.984
-    PositionY -273.843
-    OffsetTop -273.843
+    PositionX 107.098
+    OffsetLeft 107.098
+    PositionY -316.774
+    OffsetTop -316.774
     SizeX 100.254
-    OffsetRight -207.238
-    SizeY 564.183
-    OffsetBottom -290.34
+    OffsetRight -207.352
+    SizeY 632.535
+    OffsetBottom -315.761
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -604,14 +604,14 @@ FrameWidgetClass {
    Name "PrettyServerOverride"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 106.816
-    OffsetLeft 106.816
-    PositionY -273.781
-    OffsetTop -273.781
+    PositionX 106.93
+    OffsetLeft 106.93
+    PositionY -316.712
+    OffsetTop -316.712
     SizeX 22.161
-    OffsetRight -128.977
+    OffsetRight -129.091
     SizeY 20.283
-    OffsetBottom 253.498
+    OffsetBottom 296.429
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -624,14 +624,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 128.887
-    OffsetLeft 128.887
-    PositionY -273.773
-    OffsetTop -273.773
+    PositionX 129.001
+    OffsetLeft 129.001
+    PositionY -316.704
+    OffsetTop -316.704
     SizeX 75.606
-    OffsetRight -204.493
+    OffsetRight -204.607
     SizeY 20.257
-    OffsetBottom 253.516
+    OffsetBottom 296.447
    }
    Opacity 0
    Text "Server Override"
@@ -647,14 +647,14 @@ FrameWidgetClass {
    Name "compassVisibleServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.951
-    OffsetLeft 144.951
-    PositionY 246.246
-    OffsetTop 246.246
+    PositionX 144.356
+    OffsetLeft 144.356
+    PositionY 274.536
+    OffsetTop 274.536
     SizeX 35
-    OffsetRight -179.951
+    OffsetRight -179.356
     SizeY 35
-    OffsetBottom -281.246
+    OffsetBottom -309.536
    }
    "Is Enabled" 0
    Opacity 0
@@ -673,14 +673,14 @@ FrameWidgetClass {
    Name "squadRadarVisibleServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.951
-    OffsetLeft 144.951
-    PositionY 123.112
-    OffsetTop 123.112
+    PositionX 144.631
+    OffsetLeft 144.631
+    PositionY 146.777
+    OffsetTop 146.777
     SizeX 35
-    OffsetRight -179.951
+    OffsetRight -179.631
     SizeY 34.999
-    OffsetBottom -158.111
+    OffsetBottom -181.776
    }
    "Is Enabled" 0
    Opacity 0
@@ -699,14 +699,14 @@ FrameWidgetClass {
    Name "groupDisplayVisibleServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.951
-    OffsetLeft 144.951
-    PositionY 61.991
-    OffsetTop 61.991
+    PositionX 144.356
+    OffsetLeft 144.356
+    PositionY 90.28
+    OffsetTop 90.28
     SizeX 35
-    OffsetRight -179.951
+    OffsetRight -179.356
     SizeY 35
-    OffsetBottom -96.991
+    OffsetBottom -125.281
    }
    "Is Enabled" 0
    Opacity 0
@@ -725,14 +725,14 @@ FrameWidgetClass {
    Name "staminaBarVisibleServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.998
-    OffsetLeft 144.998
-    PositionY -224.31
-    OffsetTop -224.31
+    PositionX 145.112
+    OffsetLeft 145.112
+    PositionY -267.241
+    OffsetTop -267.241
     SizeX 35
-    OffsetRight -179.998
+    OffsetRight -180.112
     SizeY 35
-    OffsetBottom 189.31
+    OffsetBottom 232.241
    }
    "Is Enabled" 0
    Opacity 0
@@ -751,14 +751,14 @@ FrameWidgetClass {
    Name "nametagsVisibleServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.951
-    OffsetLeft 144.951
-    PositionY -94.084
-    OffsetTop -94.084
+    PositionX 145.065
+    OffsetLeft 145.065
+    PositionY -137.015
+    OffsetTop -137.015
     SizeX 35
-    OffsetRight -179.951
+    OffsetRight -180.065
     SizeY 35
-    OffsetBottom 59.084
+    OffsetBottom 102.015
    }
    "Is Enabled" 0
    Opacity 0
@@ -777,14 +777,14 @@ FrameWidgetClass {
    Name "showRankServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.998
-    OffsetLeft 144.998
-    PositionY -189.235
-    OffsetTop -189.235
+    PositionX 145.112
+    OffsetLeft 145.112
+    PositionY -232.166
+    OffsetTop -232.166
     SizeX 35
-    OffsetRight -179.998
+    OffsetRight -180.112
     SizeY 35.001
-    OffsetBottom 154.234
+    OffsetBottom 197.165
    }
    "Is Enabled" 0
    Opacity 0
@@ -803,14 +803,14 @@ FrameWidgetClass {
    Name "nametagsRangeServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 145.067
-    OffsetLeft 145.067
-    PositionY 7.658
-    OffsetTop 7.658
+    PositionX 145.295
+    OffsetLeft 145.295
+    PositionY 35.568
+    OffsetTop 35.568
     SizeX 35
-    OffsetRight -180.067
+    OffsetRight -180.295
     SizeY 35.001
-    OffsetBottom -42.659
+    OffsetBottom -70.568
    }
    "Is Enabled" 0
    Opacity 0
@@ -826,17 +826,17 @@ FrameWidgetClass {
    }
   }
   CheckBoxWidgetClass "{608F2864D1459008}" {
-   Name "roleNametagVisibleServerOverride"
+   Name "nametagLOSEnabledServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.951
-    OffsetLeft 144.951
-    PositionY -59.092
-    OffsetTop -59.092
+    PositionX 145.065
+    OffsetLeft 145.065
+    PositionY -102.023
+    OffsetTop -102.023
     SizeX 35
-    OffsetRight -179.951
+    OffsetRight -180.065
     SizeY 35
-    OffsetBottom 24.092
+    OffsetBottom 67.024
    }
    "Is Enabled" 0
    Opacity 0
@@ -855,14 +855,14 @@ FrameWidgetClass {
    Name "personalColorTeamMenuServerOverride"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 144.998
-    OffsetLeft 144.998
-    PositionY -154.525
-    OffsetTop -154.525
+    PositionX 145.112
+    OffsetLeft 145.112
+    PositionY -197.456
+    OffsetTop -197.456
     SizeX 35
-    OffsetRight -179.998
+    OffsetRight -180.112
     SizeY 35.001
-    OffsetBottom 119.524
+    OffsetBottom 162.455
    }
    "Is Enabled" 0
    Opacity 0
@@ -881,14 +881,14 @@ FrameWidgetClass {
    Name "SeperatorServerOverride"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.161
-    OffsetLeft 108.161
-    PositionY -229.472
-    OffsetTop -229.472
+    PositionX 108.275
+    OffsetLeft 108.275
+    PositionY -272.403
+    OffsetTop -272.403
     SizeX 95.635
-    OffsetRight -203.796
+    OffsetRight -203.91
     SizeY 5.312
-    OffsetBottom 224.16
+    OffsetBottom 267.091
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -904,14 +904,14 @@ FrameWidgetClass {
    Name "SeperatorServerOverride1"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.534
-    OffsetLeft 108.534
-    PositionY -99.236
-    OffsetTop -99.236
+    PositionX 108.648
+    OffsetLeft 108.648
+    PositionY -142.167
+    OffsetTop -142.167
     SizeX 95.499
-    OffsetRight -204.033
+    OffsetRight -204.147
     SizeY 5.103
-    OffsetBottom 94.133
+    OffsetBottom 137.064
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -927,14 +927,14 @@ FrameWidgetClass {
    Name "SeperatorServerOverride2"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.842
-    OffsetLeft 108.842
-    PositionY 56.942
-    OffsetTop 56.942
+    PositionX 108.247
+    OffsetLeft 108.247
+    PositionY 85.231
+    OffsetTop 85.231
     SizeX 95.499
-    OffsetRight -204.341
+    OffsetRight -203.746
     SizeY 5.104
-    OffsetBottom -62.046
+    OffsetBottom -90.335
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -950,14 +950,14 @@ FrameWidgetClass {
    Name "SeperatorServerOverride3"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.649
-    OffsetLeft 108.649
-    PositionY 117.708
-    OffsetTop 117.708
+    PositionX 108.054
+    OffsetLeft 108.054
+    PositionY 145.998
+    OffsetTop 145.998
     SizeX 95.499
-    OffsetRight -204.148
+    OffsetRight -203.553
     SizeY 5.103
-    OffsetBottom -122.811
+    OffsetBottom -151.101
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -973,14 +973,14 @@ FrameWidgetClass {
    Name "SeperatorServerOverride4"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 109.721
-    OffsetLeft 109.721
-    PositionY 240.939
-    OffsetTop 240.939
+    PositionX 109.126
+    OffsetLeft 109.126
+    PositionY 269.229
+    OffsetTop 269.229
     SizeX 95.499
-    OffsetRight -205.22
+    OffsetRight -204.625
     SizeY 5.103
-    OffsetBottom -246.042
+    OffsetBottom -274.332
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -996,14 +996,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride1"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.253
-    OffsetLeft 108.253
-    PositionY -240.324
-    OffsetTop -240.324
+    PositionX 108.367
+    OffsetLeft 108.367
+    PositionY -283.255
+    OffsetTop -283.255
     SizeX 95.475
-    OffsetRight -203.728
+    OffsetRight -203.842
     SizeY 10.952
-    OffsetBottom 229.372
+    OffsetBottom 272.303
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1018,14 +1018,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride2"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.646
-    OffsetLeft 108.646
-    PositionY -110.249
-    OffsetTop -110.249
+    PositionX 108.76
+    OffsetLeft 108.76
+    PositionY -153.18
+    OffsetTop -153.18
     SizeX 95.714
-    OffsetRight -204.36
+    OffsetRight -204.474
     SizeY 10.952
-    OffsetBottom 99.297
+    OffsetBottom 142.228
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1040,14 +1040,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride3"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.954
-    OffsetLeft 108.954
-    PositionY 46.027
-    OffsetTop 46.027
+    PositionX 108.359
+    OffsetLeft 108.359
+    PositionY 74.316
+    OffsetTop 74.316
     SizeX 95.714
-    OffsetRight -204.668
+    OffsetRight -204.073
     SizeY 10.952
-    OffsetBottom -56.979
+    OffsetBottom -85.268
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1062,14 +1062,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride4"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 108.576
-    OffsetLeft 108.576
-    PositionY 106.73
-    OffsetTop 106.73
+    PositionX 107.981
+    OffsetLeft 107.981
+    PositionY 135.02
+    OffsetTop 135.02
     SizeX 95.714
-    OffsetRight -204.29
+    OffsetRight -203.695
     SizeY 10.952
-    OffsetBottom -117.682
+    OffsetBottom -145.972
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1084,14 +1084,14 @@ FrameWidgetClass {
    Name "PrettyTextServerOverride5"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 109.648
-    OffsetLeft 109.648
-    PositionY 229.96
-    OffsetTop 229.96
+    PositionX 109.053
+    OffsetLeft 109.053
+    PositionY 258.25
+    OffsetTop 258.25
     SizeX 95.714
-    OffsetRight -205.362
+    OffsetRight -204.767
     SizeY 10.952
-    OffsetBottom -240.912
+    OffsetBottom -269.202
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1106,14 +1106,14 @@ FrameWidgetClass {
    Name "StaminaBarVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.688
-    OffsetLeft -149.688
-    PositionY -224.148
-    OffsetTop -224.148
+    PositionX -149.574
+    OffsetLeft -149.574
+    PositionY -267.079
+    OffsetTop -267.079
     SizeX 35
-    OffsetRight 114.688
+    OffsetRight 114.574
     SizeY 35
-    OffsetBottom 189.148
+    OffsetBottom 232.079
    }
    components {
     ButtonComponent "{60B40B7B96CEFF8C}" {
@@ -1130,14 +1130,14 @@ FrameWidgetClass {
    Name "RankVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.759
-    OffsetLeft -149.759
-    PositionY -188.89
-    OffsetTop -188.89
+    PositionX -149.645
+    OffsetLeft -149.645
+    PositionY -231.821
+    OffsetTop -231.821
     SizeX 35
-    OffsetRight 114.759
+    OffsetRight 114.645
     SizeY 34.999
-    OffsetBottom 153.891
+    OffsetBottom 196.822
    }
    components {
     ButtonComponent "{60B40B7BC5E4F891}" {
@@ -1154,14 +1154,14 @@ FrameWidgetClass {
    Name "PersonalColorTeamMenuCheckbox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.759
-    OffsetLeft -149.759
-    PositionY -154.18
-    OffsetTop -154.18
+    PositionX -149.645
+    OffsetLeft -149.645
+    PositionY -197.111
+    OffsetTop -197.111
     SizeX 35
-    OffsetRight 114.759
+    OffsetRight 114.645
     SizeY 34.999
-    OffsetBottom 119.181
+    OffsetBottom 162.112
    }
    components {
     ButtonComponent "{60B40B7BC1D6DA0F}" {
@@ -1178,14 +1178,14 @@ FrameWidgetClass {
    Name "NametagsVisibleCheckbox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.806
-    OffsetLeft -149.806
-    PositionY -94.041
-    OffsetTop -94.041
+    PositionX -149.692
+    OffsetLeft -149.692
+    PositionY -136.972
+    OffsetTop -136.972
     SizeX 35
-    OffsetRight 114.806
+    OffsetRight 114.692
     SizeY 35
-    OffsetBottom 59.041
+    OffsetBottom 101.972
    }
    components {
     ButtonComponent "{60B40B7BCE471A12}" {
@@ -1199,17 +1199,17 @@ FrameWidgetClass {
    }
   }
   CheckBoxWidgetClass "{608F2864D145939A}" {
-   Name "roleNametagVisibleCheckbox"
+   Name "NametagLOSEnabledCheckbox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.806
-    OffsetLeft -149.806
-    PositionY -59.049
-    OffsetTop -59.049
+    PositionX -149.692
+    OffsetLeft -149.692
+    PositionY -101.98
+    OffsetTop -101.98
     SizeX 35
-    OffsetRight 114.806
+    OffsetRight 114.692
     SizeY 35
-    OffsetBottom 24.049
+    OffsetBottom 66.981
    }
    components {
     ButtonComponent "{60B40B7BCADC8F5F}" {
@@ -1226,14 +1226,14 @@ FrameWidgetClass {
    Name "NametagsPosXComboBox"
    Slot FrameWidgetSlot "{60833E0EC961C16F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -159.69
-    OffsetLeft -159.69
-    PositionY -20.198
-    OffsetTop -20.198
+    PositionX -159.462
+    OffsetLeft -159.462
+    PositionY 7.712
+    OffsetTop 7.712
     SizeX 47.4
-    OffsetRight 112.29
+    OffsetRight 112.062
     SizeY 25.8
-    OffsetBottom -5.602
+    OffsetBottom -33.512
    }
    components {
     ButtonComponent "{60B40B7BFC241FB6}" {
@@ -1254,14 +1254,14 @@ FrameWidgetClass {
    Name "NametagsRangeXComboBox"
    Slot FrameWidgetSlot "{60833E0EC961C16F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -159.69
-    OffsetLeft -159.69
-    PositionY 11.903
-    OffsetTop 11.903
+    PositionX -159.462
+    OffsetLeft -159.462
+    PositionY 39.813
+    OffsetTop 39.813
     SizeX 47.4
-    OffsetRight 112.29
+    OffsetRight 112.062
     SizeY 25.799
-    OffsetBottom -37.702
+    OffsetBottom -65.611
    }
    components {
     ButtonComponent "{60B40B7BE4F55682}" {
@@ -1282,14 +1282,14 @@ FrameWidgetClass {
    Name "GroupDisplayVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.498
-    OffsetLeft -149.498
-    PositionY 62.432
-    OffsetTop 62.432
+    PositionX -150.093
+    OffsetLeft -150.093
+    PositionY 90.721
+    OffsetTop 90.721
     SizeX 35
-    OffsetRight 114.498
+    OffsetRight 115.093
     SizeY 35
-    OffsetBottom -97.432
+    OffsetBottom -125.722
    }
    components {
     ButtonComponent "{60B40B7BE319A332}" {
@@ -1306,14 +1306,14 @@ FrameWidgetClass {
    Name "SquadRadarVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.234
-    OffsetLeft -149.234
-    PositionY 121.768
-    OffsetTop 121.768
+    PositionX -149.829
+    OffsetLeft -149.829
+    PositionY 150.058
+    OffsetTop 150.058
     SizeX 35
-    OffsetRight 114.234
+    OffsetRight 114.829
     SizeY 35
-    OffsetBottom -156.768
+    OffsetBottom -185.058
    }
    components {
     ButtonComponent "{60B40B7BEFAC0145}" {
@@ -1330,14 +1330,14 @@ FrameWidgetClass {
    Name "squadRadarSelfIconVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -149.234
-    OffsetLeft -149.234
-    PositionY 156.736
-    OffsetTop 156.736
+    PositionX -149.829
+    OffsetLeft -149.829
+    PositionY 185.026
+    OffsetTop 185.026
     SizeX 35
-    OffsetRight 114.234
+    OffsetRight 114.829
     SizeY 34.999
-    OffsetBottom -191.735
+    OffsetBottom -220.025
    }
    components {
     ButtonComponent "{60B40B7BEBC36D7E}" {
@@ -1354,14 +1354,14 @@ FrameWidgetClass {
    Name "IconScaleXComboBox"
    Slot FrameWidgetSlot "{60833E0EC961C16F}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -159.704
-    OffsetLeft -159.704
-    PositionY 195.016
-    OffsetTop 195.016
+    PositionX -160.299
+    OffsetLeft -160.299
+    PositionY 223.306
+    OffsetTop 223.306
     SizeX 47.4
-    OffsetRight 112.304
+    OffsetRight 112.899
     SizeY 25.701
-    OffsetBottom -220.717
+    OffsetBottom -249.007
    }
    components {
     ButtonComponent "{60B40B7B10A90D88}" {
@@ -1382,14 +1382,14 @@ FrameWidgetClass {
    Name "CompassVisibleCheckBox"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX -148.88
-    OffsetLeft -148.88
-    PositionY 245.864
-    OffsetTop 245.864
+    PositionX -149.475
+    OffsetLeft -149.475
+    PositionY 274.154
+    OffsetTop 274.154
     SizeX 35
-    OffsetRight 113.88
+    OffsetRight 114.475
     SizeY 35
-    OffsetBottom -280.864
+    OffsetBottom -309.154
    }
    components {
     ButtonComponent "{60B40B7B1C652F7E}" {
@@ -1406,14 +1406,14 @@ FrameWidgetClass {
    Name "BackgroundServerDefaults"
    Slot FrameWidgetSlot "{5EC651633FD7EA82}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 209.619
-    OffsetLeft 209.619
-    PositionY -273.807
-    OffsetTop -273.807
+    PositionX 209.733
+    OffsetLeft 209.733
+    PositionY -316.738
+    OffsetTop -316.738
     SizeX 100.254
-    OffsetRight -309.873
+    OffsetRight -309.987
     SizeY 157.686
-    OffsetBottom 116.121
+    OffsetBottom 159.052
    }
    Opacity 0
    Color 0.007 0.012 0.014 1
@@ -1423,14 +1423,14 @@ FrameWidgetClass {
    Name "PrettyServerDefaults"
    Slot FrameWidgetSlot "{5EC77B6D3C4B6F0C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 209.451
-    OffsetLeft 209.451
-    PositionY -273.555
-    OffsetTop -273.555
+    PositionX 209.565
+    OffsetLeft 209.565
+    PositionY -316.486
+    OffsetTop -316.486
     SizeX 22.161
-    OffsetRight -231.612
+    OffsetRight -231.726
     SizeY 20.283
-    OffsetBottom 253.272
+    OffsetBottom 296.203
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1443,14 +1443,14 @@ FrameWidgetClass {
    Name "PrettyTextServerDefaults0"
    Slot FrameWidgetSlot "{5EC77B6C959191F4}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 231.522
-    OffsetLeft 231.522
-    PositionY -273.547
-    OffsetTop -273.547
+    PositionX 231.636
+    OffsetLeft 231.636
+    PositionY -316.478
+    OffsetTop -316.478
     SizeX 78.377
-    OffsetRight -309.899
+    OffsetRight -310.013
     SizeY 20.257
-    OffsetBottom 253.29
+    OffsetBottom 296.221
    }
    Opacity 0
    Text "Override Defaults"
@@ -1466,14 +1466,14 @@ FrameWidgetClass {
    Name "PrettyTextServerDefaults1"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 211.3
-    OffsetLeft 211.3
-    PositionY -183.988
-    OffsetTop -183.988
+    PositionX 211.414
+    OffsetLeft 211.414
+    PositionY -226.919
+    OffsetTop -226.919
     SizeX 95.475
-    OffsetRight -306.775
+    OffsetRight -306.889
     SizeY 19.679
-    OffsetBottom 164.309
+    OffsetBottom 207.24
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1489,14 +1489,14 @@ FrameWidgetClass {
    Name "SeperatorServerDefaults0"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 211.108
-    OffsetLeft 211.108
-    PositionY -164.311
-    OffsetTop -164.311
+    PositionX 211.222
+    OffsetLeft 211.222
+    PositionY -207.242
+    OffsetTop -207.242
     SizeX 95.635
-    OffsetRight -306.743
+    OffsetRight -306.857
     SizeY 5.312
-    OffsetBottom 158.999
+    OffsetBottom 201.93
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1512,14 +1512,14 @@ FrameWidgetClass {
    Name "ServerDefaults"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 247.624
-    OffsetLeft 247.624
-    PositionY -156.07
-    OffsetTop -156.07
+    PositionX 247.738
+    OffsetLeft 247.738
+    PositionY -199.001
+    OffsetTop -199.001
     SizeX 35
-    OffsetRight -282.624
+    OffsetRight -282.738
     SizeY 35
-    OffsetBottom 121.07
+    OffsetBottom 164.001
    }
    "Is Enabled" 0
    Opacity 0
@@ -1538,14 +1538,14 @@ FrameWidgetClass {
    Name "PrettyTextServerDefaults2"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 210.97
-    OffsetLeft 210.97
-    PositionY -251.423
-    OffsetTop -251.423
+    PositionX 211.084
+    OffsetLeft 211.084
+    PositionY -294.354
+    OffsetTop -294.354
     SizeX 95.475
-    OffsetRight -306.445
+    OffsetRight -306.559
     SizeY 22.046
-    OffsetBottom 229.377
+    OffsetBottom 272.308
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1561,14 +1561,14 @@ FrameWidgetClass {
    Name "SeperatorServerDefaults1"
    Slot FrameWidgetSlot "{5ED010D8455BB8DE}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 211.068
-    OffsetLeft 211.068
-    PositionY -229.396
-    OffsetTop -229.396
+    PositionX 211.182
+    OffsetLeft 211.182
+    PositionY -272.327
+    OffsetTop -272.327
     SizeX 95.635
-    OffsetRight -306.703
+    OffsetRight -306.817
     SizeY 5.313
-    OffsetBottom 224.083
+    OffsetBottom 267.014
    }
    Opacity 0
    Color 0.761 0.386 0.078 1
@@ -1584,14 +1584,146 @@ FrameWidgetClass {
    Name "ServerDefaultsActive"
    Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 247.484
-    OffsetLeft 247.484
-    PositionY -220.711
-    OffsetTop -220.711
+    PositionX 247.598
+    OffsetLeft 247.598
+    PositionY -263.642
+    OffsetTop -263.642
     SizeX 35
-    OffsetRight -282.484
+    OffsetRight -282.598
     SizeY 35
-    OffsetBottom 185.711
+    OffsetBottom 228.642
+   }
+   "Is Enabled" 0
+   Opacity 0
+   components {
+    ButtonComponent "{60B40B7B25526E04}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  CheckBoxWidgetClass "{617D3191F16416DD}" {
+   Name "RoleNametagVisibleCheckbox"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -149.692
+    OffsetLeft -149.692
+    PositionY -31.992
+    OffsetTop -31.992
+    SizeX 35
+    OffsetRight 114.692
+    SizeY 35
+    OffsetBottom -3.008
+   }
+   components {
+    ButtonComponent "{60B40B7BCADC8F5F}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  CheckBoxWidgetClass "{617D3191F1641765}" {
+   Name "GroupNametagVisibleCheckbox"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -149.692
+    OffsetLeft -149.692
+    PositionY -66.983
+    OffsetTop -66.983
+    SizeX 35
+    OffsetRight 114.692
+    SizeY 35
+    OffsetBottom 31.983
+   }
+   components {
+    ButtonComponent "{60B40B7BCE471A12}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  TextWidgetClass "{617D3191F16417FD}" {
+   Name "roleNametagVisibleText"
+   Slot FrameWidgetSlot "{60833E08D261E66F}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -108.325
+    OffsetLeft -108.325
+    PositionY -28.181
+    OffsetTop -28.181
+    SizeX 206.073
+    OffsetRight -97.748
+    SizeY 27.699
+    OffsetBottom 0.482
+   }
+   Text "#CSI-Ingame_Settings_Nametags_Role_Toggle"
+   "Vertical Alignment" Center
+  }
+  TextWidgetClass "{617D3191F16417CA}" {
+   Name "groupNametagVisibleText"
+   Slot FrameWidgetSlot "{60833E08D261E66F}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX -108.325
+    OffsetLeft -108.325
+    PositionY -63.173
+    OffsetTop -63.173
+    SizeX 206.073
+    OffsetRight -97.748
+    SizeY 27.699
+    OffsetBottom 35.473
+   }
+   Text "#CSI-Ingame_Settings_Group_In_Nametags_Selector"
+   "Vertical Alignment" Center
+  }
+  CheckBoxWidgetClass "{617D3191F164149F}" {
+   Name "roleNametagVisibleServerOverride"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 145.065
+    OffsetLeft 145.065
+    PositionY -32.035
+    OffsetTop -32.035
+    SizeX 35
+    OffsetRight -180.065
+    SizeY 35
+    OffsetBottom -2.965
+   }
+   "Is Enabled" 0
+   Opacity 0
+   components {
+    ButtonComponent "{60B40B7B385D5882}" {
+     m_ColorButtonDefault 1 1 1 1
+     m_ColorButtonFocused 0.761 0.392 0.078 1
+     m_ColorButtonPressed 1 0.597 0.205 1
+     m_ColorButtonDisabled 1 1 1 1
+     m_ColorButtonHovered 0.761 0.392 0.078 1
+     m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+    }
+   }
+  }
+  CheckBoxWidgetClass "{617D3191F16414E8}" {
+   Name "groupNametagVisibleServerOverride"
+   Slot FrameWidgetSlot "{60833E2F2B33C08C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 145.065
+    OffsetLeft 145.065
+    PositionY -67.026
+    OffsetTop -67.026
+    SizeX 35
+    OffsetRight -180.065
+    SizeY 35
+    OffsetBottom 32.027
    }
    "Is Enabled" 0
    Opacity 0

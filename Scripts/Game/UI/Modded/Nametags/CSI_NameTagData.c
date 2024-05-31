@@ -1,7 +1,6 @@
-
 modded class SCR_NameTagData : Managed
 {
-	const vector BODY_OFFSET = "0 -0.245 0";			// tag visual position offset for body
+	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
 
 	protected CSI_ClientComponent m_ClientComponent;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
@@ -10,15 +9,16 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		super.InitDefaults();
-
 		if (!m_AuthorityComponent || !m_ClientComponent) 
 		{
 			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
 			m_ClientComponent = CSI_ClientComponent.GetInstance();
 		}
+		
+		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
+	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
 
-		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
+		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[13];
 
 		if (m_sNametagsPos == "HEAD") 
 		{
@@ -28,12 +28,28 @@ modded class SCR_NameTagData : Managed
 			m_eAttachedTo = ENameTagPosition.BODY;
 			m_eAttachedToLast = ENameTagPosition.BODY;
 		};
+		
+		m_iZoneID = -1;
+		m_iGroupID = -1;
+		m_iPlayerID = -1;
+		m_fTimeSliceUpdate = 1.0;
+		m_fTimeSliceVON = 0;
+		m_fTimeSlicePosChange = 0;
+		m_fTimeSliceCleanup = 0;
+		m_fTimeSliceFade = 0;
+		m_fTimeSliceVisibility = 0;
+		m_fDistance = 0;
+		m_fOpacityFade = 1;
+		m_sName = string.Empty;
+		m_aNameParams = {};
 	};
 
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
 	{
-		if (!m_ClientComponent) return;
+		if (!m_ClientComponent) 
+			return;
+		
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
 			string roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
@@ -58,7 +74,9 @@ modded class SCR_NameTagData : Managed
 					if (icon != "MAN" && !icon.IsEmpty())
 						m_sName = string.Format("%1 [%2]", m_sName, icon);
 				}
-			} else { m_sName = "No player manager!" };
+			} else { 
+				m_sName = "No player manager!" 
+			};
 		}
 		else if (m_eType == ENameTagEntityType.AI)
 		{
@@ -66,9 +84,7 @@ modded class SCR_NameTagData : Managed
 			if (scrCharIdentity)
 			{
 				scrCharIdentity.GetFormattedFullName(m_sName, m_aNameParams);
-			}
-			else
-			{
+			} else {
 				CharacterIdentityComponent charIdentity = CharacterIdentityComponent.Cast(m_Entity.FindComponent(CharacterIdentityComponent));
 				if (charIdentity && charIdentity.GetIdentity())
 					m_sName = charIdentity.GetIdentity().GetName();
@@ -87,7 +103,8 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group) return "";
+		if (!group || m_ClientComponent.ReturnLocalCSISettings()[9] == "false") 
+			return "";
 
 		string groupName = group.GetCustomName();
 
@@ -107,11 +124,13 @@ modded class SCR_NameTagData : Managed
 	{		
 		m_ClientComponent = CSI_ClientComponent.GetInstance();
 		
-		if (!m_ClientComponent) return 0;
+		if (!m_ClientComponent) 
+			return 0;
 		
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) return 0;
+		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) 
+			return 0;
 
 		return m_ClientComponent.SwitchStringToColorTeam(m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "CT")); // CT = ColorTeam
 	}
@@ -119,9 +138,10 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
-		if (!m_ClientComponent) return;
+		if (!m_ClientComponent) 
+			return;
 
-		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[11];
+		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[13];
 
 		if (m_sNametagsPos == "HEAD") 
 		{
