@@ -48,18 +48,22 @@ class CSI_Compass : SCR_InfoDisplay
 		string compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
 		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 
-		if (compassVisible == "false" && m_wCompass.GetOpacity() > 0) 
+		if (compassVisible == "false") 
 		{
-			m_wCompass.SetOpacity(0);
-			m_wBearing.SetOpacity(0);
-		} 
-		else if (m_wCompass.GetOpacity() < 1) 
-		{
-			m_wCompass.SetOpacity(1);
-			m_wBearing.SetOpacity(1);
+			if (m_wCompass.GetOpacity() > 0) 
+			{
+				m_wCompass.SetOpacity(0);
+				m_wBearing.SetOpacity(0);
+			};
+		} else {
+			if (m_wCompass.GetOpacity() < 1) 
+			{
+				m_wCompass.SetOpacity(1);
+				m_wBearing.SetOpacity(1);
 			
-			m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[14];
-			m_wCompass.LoadImageTexture(0, m_sCompassTexture);
+				m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[14];
+				m_wCompass.LoadImageTexture(0, m_sCompassTexture);
+			};
 		};
 		
 		SetBearingAndCompass(compassVisible);
