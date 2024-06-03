@@ -92,11 +92,11 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			} else {
 				FrameSlot.SetSize(statusDisplay, 23.2, 23.2);
 				switch (true) {
-					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 85.8);  break;};
-					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 216);   break;};
-					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 346.2); break;};
-					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 475.8); break;};
-					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 605.8); break;};
+					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 85.6125);  break;};
+					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 216.0125);   break;};
+					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 345.6125); break;};
+					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 475.6125); break;};
+					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 605.6125); break;};
 				};
 			};
 			
@@ -106,12 +106,6 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
 	}
-
-	//------------------------------------------------------------------------------------------------
-
-	// Functions for updating the group display
-
-	//------------------------------------------------------------------------------------------------
 
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
@@ -136,12 +130,6 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 			}
 		};
 	}
-
-	//------------------------------------------------------------------------------------------------
-
-	// Additionals
-
-	//------------------------------------------------------------------------------------------------
 
 	string CheckEllipsis(float maxLength, string name)
 	{
