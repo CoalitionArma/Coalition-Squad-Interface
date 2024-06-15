@@ -1,4 +1,4 @@
-[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Player Component for RPC", color: "0 0 255 255")]
+[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Charachter Component For Setting Default Values", color: "0 0 255 255")]
 class CSI_CharacterComponentClass : ScriptComponentClass {};
 
 class CSI_CharacterComponent : ScriptComponent
@@ -7,7 +7,10 @@ class CSI_CharacterComponent : ScriptComponent
 	protected int m_iStartingColorTeam;
 	
 	[Attribute("0", uiwidget: UIWidgets.ComboBox, desc: "Starting icon, especially usefull if you want to set teamleads automatically", category: "Default Player Settings", enums: { ParamEnum("None", "0"), ParamEnum("Team Lead", "1"), ParamEnum("Medic", "2"), ParamEnum("Marksman", "3"), ParamEnum("Machine Gunner", "4"), ParamEnum("Anti-Tank", "5"), ParamEnum("Grenadier", "6"), ParamEnum("Man", "7")})]
-	protected int m_iOverrideIcon;
+	protected int m_iStartingIcon;
+	
+	[Attribute(desc: "Should we set players starting color team/icon on respawn", category: "Default Player Settings")]
+	protected bool m_bOverrideOnRespawn;
 	
 	//------------------------------------------------------------------------------------------------
 
@@ -19,9 +22,9 @@ class CSI_CharacterComponent : ScriptComponent
 	{
 		super.OnPostInit(owner);
 
-		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
+		if (!GetGame().InPlayMode() || GetOwner() != owner || RplSession.Mode() == RplMode.Dedicated) 
 			return;
-		
+
 		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true);
 	}
 	
@@ -34,25 +37,36 @@ class CSI_CharacterComponent : ScriptComponent
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	protected void WaitUntilWeSetDefaults()
-	{
+	{		
+		int playerID = SCR_PlayerController.GetLocalPlayerId();
+		
+		if (playerID == 0)
+			return;
+		
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
 		if (!groupsManagerComponent) 
 			return;
 		
-		int playerID = GetGame().GetPlayerController().GetPlayerId();
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 		
-		if (!playersGroup) 
+		if (!playersGroup)
 			return;
 		
 		int groupID = playersGroup.GetGroupID();
 		
-		if (playerID != 0 && GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID) && groupID != -1) // Check if player has a ID, is in a valid entity, and has a valid group
+		if (groupID == -1)
+			return;
+		
+		if (GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID))
 		{
 			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
 		
 			CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+			CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
+			
+ 			if (!clientComponent || !authorityComponent || (!m_bOverrideOnRespawn && !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty()))
+			 return;
 			
 			switch (m_iStartingColorTeam) 
 			{
@@ -62,7 +76,7 @@ class CSI_CharacterComponent : ScriptComponent
 				case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
 			};
 
-			switch (m_iOverrideIcon) 
+			switch (m_iStartingIcon) 
 			{
 				case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
 				case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
