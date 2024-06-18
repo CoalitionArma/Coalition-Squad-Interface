@@ -21,11 +21,11 @@ class CSI_CharacterComponent : ScriptComponent
 	override protected void OnPostInit(IEntity owner)
 	{
 		super.OnPostInit(owner);
-
-		if (!GetGame().InPlayMode() || GetOwner() != owner || RplSession.Mode() == RplMode.Dedicated) 
+		
+		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated || (m_iStartingColorTeam == 0 && m_iStartingIcon == 0))
 			return;
 
-		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true);
+		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, owner);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -36,12 +36,21 @@ class CSI_CharacterComponent : ScriptComponent
 
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
-	protected void WaitUntilWeSetDefaults()
-	{		
-		int playerID = SCR_PlayerController.GetLocalPlayerId();
-		
-		if (playerID == 0)
+	protected void WaitUntilWeSetDefaults(IEntity owner)
+	{				
+		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
 			return;
+		
+		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(owner));
+		
+		if (playerID == 0 && (!SCR_PlayerController.GetLocalControlledEntity() && !SCR_PlayerController.GetLocalMainEntity())) 
+			return;
+		
+		if (playerID != SCR_PlayerController.GetLocalPlayerId())
+		{
+			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+			return;
+		}
 		
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
@@ -54,38 +63,34 @@ class CSI_CharacterComponent : ScriptComponent
 			return;
 		
 		int groupID = playersGroup.GetGroupID();
+		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
 		
-		if (groupID == -1)
+		if (groupID == -1 || !clientComponent || !authorityComponent)
 			return;
-		
-		if (GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID))
-		{
-			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
-		
-			CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-			CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
-			
- 			if (!clientComponent || !authorityComponent || (!m_bOverrideOnRespawn && !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty()))
-			 return;
-			
-			switch (m_iStartingColorTeam) 
-			{
-				case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "R"); break;}; // CT = ColorTeam
-				case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "B"); break;}; // CT = ColorTeam
-				case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "Y"); break;}; // CT = ColorTeam
-				case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
-			};
 
-			switch (m_iStartingIcon) 
-			{
-				case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
-				case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
-				case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MRK"); break;}; // OI = OverrideIcon
-				case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MG");  break;}; // OI = OverrideIcon
-				case 5 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "AT");  break;}; // OI = OverrideIcon
-				case 6 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "GRN"); break;}; // OI = OverrideIcon
-				case 7 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MAN"); break;}; // OI = OverrideIcon
-			};
+		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+			
+ 		if (!m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty()))
+		 return;
+			
+		switch (m_iStartingColorTeam) 
+		{
+			case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "R"); break;}; // CT = ColorTeam
+			case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "B"); break;}; // CT = ColorTeam
+			case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "Y"); break;}; // CT = ColorTeam
+			case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
+		};
+
+		switch (m_iStartingIcon) 
+		{
+			case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
+			case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
+			case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MRK"); break;}; // OI = OverrideIcon
+			case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MG");  break;}; // OI = OverrideIcon
+			case 5 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "AT");  break;}; // OI = OverrideIcon
+			case 6 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "GRN"); break;}; // OI = OverrideIcon
+			case 7 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MAN"); break;}; // OI = OverrideIcon
 		};
 	}
 }
