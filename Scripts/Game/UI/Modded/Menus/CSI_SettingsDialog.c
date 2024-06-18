@@ -225,6 +225,12 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wNametagsRangeWidget = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagsRangeXComboBox"));
+		
+		for(int i = 21; i <= 199; i++)
+		{
+			m_wNametagsRangeWidget.AddItem((i*5).ToString());
+		}
+		
 		string nametagsRangeSOString = m_AuthorityComponent.ReturnAuthoritySettings()[6];
 		if (!nametagsRangeSOString.IsEmpty()) {
 			m_iNametagsRangeSO = nametagsRangeSOString.ToInt();
