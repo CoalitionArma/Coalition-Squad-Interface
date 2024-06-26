@@ -197,9 +197,9 @@ class CSI_ClientComponent : ScriptComponent
 				ECompartmentType compartmentType = compartment.GetType();
 				switch (compartmentType)
 				{
-					case ECompartmentType.Cargo  : {vehicleIcon = "PAX";  break;};
-					case ECompartmentType.Pilot  : {vehicleIcon = "DRV"; break;};
-					case ECompartmentType.Turret : {vehicleIcon = "GNR"; break;};
+					case ECompartmentType.CARGO  : {vehicleIcon = "PAX";  break;};
+					case ECompartmentType.PILOT  : {vehicleIcon = "DRV"; break;};
+					case ECompartmentType.TURRET : {vehicleIcon = "GNR"; break;};
 				};
 			};
 		};
