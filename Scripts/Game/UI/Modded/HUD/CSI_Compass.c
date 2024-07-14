@@ -158,7 +158,7 @@ class CSI_Compass : SCR_InfoDisplay
 		m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[11];
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-		SetSquadRadarImage(radarlocalPlayer, 0, -76, m_fStoredYaw, opacity, m_ChimeraCharacter);
+		SetSquadRadarImage(radarlocalPlayer, 0, 0, m_fStoredYaw, opacity, m_ChimeraCharacter);
 
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		GetGame().GetWorld().QueryEntitiesBySphere(m_vOwnerOrigin, m_iSearchRadius, ProcessEntity, null, EQueryEntitiesFlags.DYNAMIC | EQueryEntitiesFlags.WITH_OBJECT);
@@ -208,7 +208,7 @@ class CSI_Compass : SCR_InfoDisplay
 			relDir = relDir * Math.DEG2RAD;
 
 			float x = (Math.Sin(relDir) * disT);
-			float y = (Math.Cos(relDir) * disT) - 76;
+			float y = (Math.Cos(relDir) * disT);
 
 			SetSquadRadarImage(radarPlayer, x, y, m_fYaw, Math.Map(dis, 0, m_iSearchRadius, 4, 0), playerCharacter);
 			posToStartClearing = i + 1;
@@ -235,7 +235,9 @@ class CSI_Compass : SCR_InfoDisplay
 			initialWidthAndHeight = 12;
 		
 		if (m_fStoredYaw == yaw && iconString == "GNR")
-			y = -78.5;
+			y = y - 78.5;
+		else
+			y = y - 76;
 		
 		float widthAndHeight = initialWidthAndHeight * (m_sSquadRadarIconSize.ToInt() * 0.01);
 		
