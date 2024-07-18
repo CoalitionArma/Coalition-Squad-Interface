@@ -183,10 +183,10 @@ StringTable {
   }
   CustomStringTableItem "{60FC2921768CE182}" {
    Id "CSI-Name"
-   Target_en_us "Coaltion Squad Interface"
-   Target_fr_fr "Coaltion Squad Interface"
-   Target_de_de "Coaltion Squad Interface"
-   Modified 1635699111
+   Target_en_us "Coalition Squad Interface"
+   Target_fr_fr "Coalition Squad Interface"
+   Target_de_de "Coalition Squad Interface"
+   Modified 1642372171
    Author "pi123"
    LastChanged "Njpatman"
   }
