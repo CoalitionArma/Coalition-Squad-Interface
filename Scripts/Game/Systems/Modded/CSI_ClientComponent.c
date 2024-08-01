@@ -112,6 +112,8 @@ class CSI_ClientComponent : ScriptComponent
 			case "MG"  : {icon = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";         break;};
 			case "AT"  : {icon = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";         break;};
 			case "GRN" : {icon = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";  break;};
+			case "EXP" : {icon = "{FBB43C7D00261184}UI\Textures\HUD\Modded\Icons\Iconmanexplosive_ca.edds";  break;};
+			case "ENG" : {icon = "{BE8B9118CEF234A2}UI\Textures\HUD\Modded\Icons\iconmanengineer_ca.edds";   break;};
 			case "MAN" : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
 			default    : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
 		};
@@ -236,34 +238,40 @@ class CSI_ClientComponent : ScriptComponent
 
 			// Setup new arrays and variables
 			array<EWeaponType> weaponTypeArray = {};
-			array<SCR_EConsumableType> medicalTypeArray = {};
+			array<IEntity> medicalTypeArray = {};
+			array<IEntity> explosiveTypeArray = {};
+			array<IEntity> engineerTypeArray = {};
 
 			// Parse through players entire inventory.
 			foreach (IEntity item : allPlayerItems)
 			{
-				SCR_ConsumableItemComponent consumable = SCR_ConsumableItemComponent.Cast(item.FindComponent(SCR_ConsumableItemComponent));
-				if (consumable)
+				// Check if item is explosives related
+				SCR_DetonatorGadgetComponent detonator = SCR_DetonatorGadgetComponent.Cast(item.FindComponent(SCR_DetonatorGadgetComponent));
+				SCR_ExplosiveChargeComponent explosives = SCR_ExplosiveChargeComponent.Cast(item.FindComponent(SCR_ExplosiveChargeComponent));
+				SCR_MineWeaponComponent mine = SCR_MineWeaponComponent.Cast(item.FindComponent(SCR_MineWeaponComponent));
+				if(detonator || explosives || mine)
 				{
-					// Check items type.
-					SCR_EConsumableType medicalType = consumable.GetConsumableType();
-					if (medicalType == SCR_EConsumableType.SALINE)
-					{
-						medicalTypeArray.Insert(medicalType);
-						
-						// Get Saline Storage Component
-						SCR_SalineStorageComponent salineStorageMan = SCR_SalineStorageComponent.Cast(localplayer.FindComponent(SCR_SalineStorageComponent));
-
-						// Get all Saline bags attatched to this person, just so we dont accidentally assign cassualties the medic role.
-						array<IEntity> items = {};
-						salineStorageMan.GetAll(items);
-						foreach (IEntity salineBag : items)
-						{
-							if (salineBag == item)
-								medicalTypeArray.Clear(); // Insert the valid item into the medical array so we can read it later.
-						}
-					};
+					explosiveTypeArray.Insert(item);
+					continue;
 				};
-				// Check if item is a Weapon.
+				
+				// Check if item is enginner related
+				SCR_RepairSupportStationComponent engTool = SCR_RepairSupportStationComponent.Cast(item.FindComponent(SCR_RepairSupportStationComponent));
+				if(engTool)
+				{
+					engineerTypeArray.Insert(item);
+					continue;
+				};
+				
+				// Check if item is medical related
+				SCR_HealSupportStationComponent medTool = SCR_HealSupportStationComponent.Cast(item.FindComponent(SCR_HealSupportStationComponent));
+				if(medTool)
+				{
+					medicalTypeArray.Insert(item);
+					continue;
+				};
+				
+				// Check if item is a weapon.
 				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
 				if (weaponComp) 
 				{
@@ -282,6 +290,7 @@ class CSI_ClientComponent : ScriptComponent
 							case EMuzzleType.MT_UGLMuzzle : {weaponTypeArray.Insert(EWeaponType.WT_GRENADELAUNCHER); break;};
 						};
 					};
+					continue;
 				};
 			};
 			// Take all the data we just collected and assign players a Icon based on if it exists in the weapon/medical arrays.
@@ -290,7 +299,9 @@ class CSI_ClientComponent : ScriptComponent
 				case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : {specialtyIcon = "MG";  break;};
 				case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : {specialtyIcon = "AT";  break;};
 				case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : {specialtyIcon = "MRK"; break;};
-				case (medicalTypeArray.Contains(SCR_EConsumableType.SALINE))    : {specialtyIcon = "MED"; break;};
+				case (medicalTypeArray.Count() != 0)                            : {specialtyIcon = "MED"; break;};
+				case (explosiveTypeArray.Count() != 0)                          : {specialtyIcon = "EXP"; break;};
+				case (engineerTypeArray.Count() != 0)                           : {specialtyIcon = "ENG"; break;};
 				case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : {specialtyIcon = "GRN"; break;};
 				default                                                         : {specialtyIcon = "MAN";       };
 			};
@@ -506,7 +517,8 @@ class CSI_ClientComponent : ScriptComponent
 			"squadRadarIconSize",        //11
 			"squadRadarSelfIconVisible", //12
 			"nametagsPosition",          //13
-			"compassTexture",            //14
+			"autoHideUI",                //14
+			"compassTexture",            //15
 		};
 
 		array<string> tempLocalCSISettingsArray = {};

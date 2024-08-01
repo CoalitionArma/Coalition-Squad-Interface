@@ -31,6 +31,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 	,m_wRankVisibleWidget
 	,m_wRoleNametagVisibleWidget
 	,m_wSquadRadarSelfIconVisibleWidget
+	,m_wAutoHideHudWidget
 	,m_wPersonalColorTeamMenuWidget
 	,m_wGroupNametagVisibleWidget
 	,m_wNametagLOSEnabledWidget
@@ -98,6 +99,16 @@ class CSI_SettingsDialog : ChimeraMenuBase
 			m_wNametagsPosWidget.SetCurrentItem(1);
 		} else {
 			m_wNametagsPosWidget.SetCurrentItem(0);
+		};
+		
+		m_wAutoHideHudWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("AutoHideHUDCheckbox"));
+		string autoHideHud = "";
+		autoHideHud = m_ClientComponent.ReturnLocalCSISettings()[14];
+		if (autoHideHud == "false")
+		{
+			m_wAutoHideHudWidget.SetChecked(false);
+		} else {
+			m_wAutoHideHudWidget.SetChecked(true);
 		};
 
 		m_wSquadRadarSelfIconVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("squadRadarSelfIconVisibleCheckBox"));
@@ -468,6 +479,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		m_ClientComponent.Owner_ChangeLocalCSISetting("personalColorTeamMenu",     m_wPersonalColorTeamMenuWidget.IsChecked().ToString());
 		m_ClientComponent.Owner_ChangeLocalCSISetting("groupNametagVisible",       m_wGroupNametagVisibleWidget.IsChecked().ToString());
 		m_ClientComponent.Owner_ChangeLocalCSISetting("nametagLOSEnabled",         m_wNametagLOSEnabledWidget.IsChecked().ToString());
+		m_ClientComponent.Owner_ChangeLocalCSISetting("autoHideUI",                m_wAutoHideHudWidget.IsChecked().ToString());
 
 		if (m_wNametagsPosWidget.GetCurrentItem() == 0) {
 			m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsPosition", "BODY");

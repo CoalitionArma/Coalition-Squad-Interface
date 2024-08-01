@@ -9,6 +9,7 @@ class CSI_Compass : SCR_InfoDisplay
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
+	protected bool hudToggled = false;
 	protected vector m_vOwnerOrigin;
 	protected float m_fYaw, m_fStoredYaw, m_iSearchRadius;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
@@ -20,6 +21,13 @@ class CSI_Compass : SCR_InfoDisplay
 	// Override/static functions
 
 	//------------------------------------------------------------------------------------------------
+	
+	protected override event void OnStartDraw(IEntity owner)
+	{
+		super.OnStartDraw(owner);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
+	}
 
 	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
@@ -47,8 +55,9 @@ class CSI_Compass : SCR_InfoDisplay
 
 		string compassVisible = m_ClientComponent.ReturnLocalCSISettings()[0];
 		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
+		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
 
-		if (compassVisible == "false") 
+		if (compassVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
 		{
 			if (m_wCompass.GetOpacity() > 0) 
 			{
@@ -61,14 +70,14 @@ class CSI_Compass : SCR_InfoDisplay
 				m_wCompass.SetOpacity(1);
 				m_wBearing.SetOpacity(1);
 			
-				m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[14];
+				m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[15];
 				m_wCompass.LoadImageTexture(0, m_sCompassTexture);
 			};
 		};
 		
-		SetBearingAndCompass(compassVisible);
+		SetBearingAndCompass(compassVisible, hudAutoHidden);
 
-		if (squadRadarVisible == "false" || !m_PlayersGroup) 
+		if ((squadRadarVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) || !m_PlayersGroup) 
 			ClearSquadRadar(-1);
 		else
 			SquadRadarSearch();
@@ -79,8 +88,13 @@ class CSI_Compass : SCR_InfoDisplay
 	// Compass Functions
 
 	//------------------------------------------------------------------------------------------------
+	
+	protected void ToggleIsVisible()
+	{
+		hudToggled = !hudToggled;
+	}
 
-	protected void SetBearingAndCompass(string compassVisible)
+	protected void SetBearingAndCompass(string compassVisible, string hudAutoHidden)
 	{
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
 		if (!playerControllerComponent) 
@@ -103,7 +117,7 @@ class CSI_Compass : SCR_InfoDisplay
 			m_fStoredYaw = m_fYaw;
 		};
 		
-		if (compassVisible == "false") 
+		if (compassVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
 			return;
 
 		int yawInt = -m_fYaw;

@@ -44,6 +44,9 @@ class CSI_GameSettings : ModuleGameSettings
 
 	[Attribute("")]
 	string nametagLOSEnabled;
+	
+	[Attribute("false")]
+	string autoHideUI;
 
 	//Server Overrides
 

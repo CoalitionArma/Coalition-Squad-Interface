@@ -3,12 +3,16 @@ class CSI_AuthorityComponentClass : SCR_BaseGameModeComponentClass {};
 
 class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 {
+	//- Setting Variables
+	
 	// A hashmap that is modified only on the authority.
 	protected ref map<string, string> m_mUpdateAuthoritySettingsMap = new map<string, string>;
 
 	// A array we use to broadcast whenever a change happens to any of the server overrides.
 	[RplProp(onRplName: "UpdateLocalSettings")]
 	ref array<string> m_aServerOverridesArray = new array<string>;
+	
+	//- Player Maps Variables
 
 	// A hashmap that is modified only on the authority.
 	protected ref map<string, string> m_mAuthorityPlayerMap = new map<string, string>;
@@ -241,7 +245,7 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		switch (true) 
 		{
 			// If the players is currently the SL, make him the most valuable player in the list
-			case (icon == "SL")                          : {value = -1; break;};
+			case (icon == "SL")                        : {value = -1; break;};
 
 			// Add/Remove value from a player if they're a Team Lead
 			case (icon == "FTL" && colorTeam == "N/A") : {value--;    break;};
@@ -267,14 +271,14 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 			
 			if (!playersGroup) 
 				continue;
-
-			int groupID = playersGroup.GetGroupID();
 			
 			// CT = ColorTeam | OI = OverrideIcon | DI = DisplayIcon | SSI = StoredSpecialtyIcon | PR = PlayerRank
 			array<string> playerValuesArray = {"CT", "OI", "DI", "SSI", "PR"};
 			
 			foreach (string value : playerValuesArray) 
 			{
+				int groupID = playersGroup.GetGroupID();
+				
 				if (value == "PR")
 				 	groupID = -1;
 				

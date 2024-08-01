@@ -4,7 +4,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	protected CSI_AuthorityComponent m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	
-	protected int m_iCurrentFrame = 35;
+	protected bool hudToggled = false;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -12,17 +12,17 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
+	protected override event void OnStartDraw(IEntity owner)
+	{
+		super.OnStartDraw(owner);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
-		
-		if (m_iCurrentFrame < 35) 
-		{
-			m_iCurrentFrame++;
-			return;
-		};
-
-		m_iCurrentFrame = 0;
 
 		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent) 
 		{
@@ -34,12 +34,13 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		
 		string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
 		string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
+		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
 		
 		array<string> groupArray = m_ClientComponent.GetLocalGroupArray();
 		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1 || !playersGroup) 
+		if ((groupDisplayVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) || !groupArray || groupArray.Count() <= 1 || !playersGroup) 
 		{
 			ClearGroupDisplay(0, true);
 			return;
@@ -106,7 +107,19 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		};
 		ClearGroupDisplay(groupArray.Count(), true);
 	}
+	
+	//------------------------------------------------------------------------------------------------
 
+	// group display functions
+
+	//------------------------------------------------------------------------------------------------
+	
+	protected void ToggleIsVisible()
+	{
+		hudToggled = !hudToggled;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	protected void ClearGroupDisplay(int positionToStartClearing, bool forceClear)
 	{
 		//Check if there's anything to clear

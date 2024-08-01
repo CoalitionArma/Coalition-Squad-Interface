@@ -1,14 +1,8 @@
-[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Charachter Component For Setting Default Values", color: "0 0 255 255")]
+[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Group Component For Setting Default Values", color: "0 0 255 255")]
 class CSI_CharacterComponentClass : ScriptComponentClass {};
 
 class CSI_CharacterComponent : ScriptComponent
-{
-	[Attribute("0", uiwidget: UIWidgets.ComboBox, desc: "Starting color team", category: "Default Player Settings", enums: { ParamEnum("None", "0"), ParamEnum("Red", "1"), ParamEnum("Blue", "2"), ParamEnum("Yellow", "3"), ParamEnum("Green", "4")})]
-	protected int m_iStartingColorTeam;
-	
-	[Attribute("0", uiwidget: UIWidgets.ComboBox, desc: "Starting icon, especially usefull if you want to set teamleads automatically", category: "Default Player Settings", enums: { ParamEnum("None", "0"), ParamEnum("Team Lead", "1"), ParamEnum("Medic", "2"), ParamEnum("Marksman", "3"), ParamEnum("Machine Gunner", "4"), ParamEnum("Anti-Tank", "5"), ParamEnum("Grenadier", "6"), ParamEnum("Man", "7")})]
-	protected int m_iStartingIcon;
-	
+{	
 	[Attribute(desc: "Should we set players starting color team/icon on respawn", category: "Default Player Settings")]
 	protected bool m_bOverrideOnRespawn;
 	
@@ -22,7 +16,7 @@ class CSI_CharacterComponent : ScriptComponent
 	{
 		super.OnPostInit(owner);
 		
-		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated || (m_iStartingColorTeam == 0 && m_iStartingIcon == 0))
+		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated)
 			return;
 
 		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, owner);
@@ -70,27 +64,60 @@ class CSI_CharacterComponent : ScriptComponent
 			return;
 
 		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
-			
- 		if (!m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty()))
-		 return;
-			
-		switch (m_iStartingColorTeam) 
+		
+		int index = -1;
+		string overrideIcon;
+		string colorTeam;
+		
+		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
+		array<array<RplId>> groupsIDsArray = new array<array<RplId>>;
+		groupsIDsArray = groupManager.ReturnAllGroupIDsArray();
+		
+		foreach(int i, array<RplId> groupIDs : groupsIDsArray)
 		{
-			case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "R"); break;}; // CT = ColorTeam
-			case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "B"); break;}; // CT = ColorTeam
-			case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "Y"); break;}; // CT = ColorTeam
-			case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
-		};
-
-		switch (m_iStartingIcon) 
-		{
-			case 1 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
-			case 2 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
-			case 3 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MRK"); break;}; // OI = OverrideIcon
-			case 4 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MG");  break;}; // OI = OverrideIcon
-			case 5 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "AT");  break;}; // OI = OverrideIcon
-			case 6 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "GRN"); break;}; // OI = OverrideIcon
-			case 7 : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MAN"); break;}; // OI = OverrideIcon
+			if (groupIDs)
+				index = groupIDs.Find(Replication.FindId(SCR_PlayerController.GetLocalMainEntity()));
+			
+			if (index == -1 || !m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty()))
+				continue;
+			
+			array<string> colorTeamArray = groupManager.ReturnAllGroupPrefabColorsArray()[i];
+			array<string> overrideIconArray = groupManager.ReturnAllGroupPrefabOverridesArray()[i];
+			
+			if((colorTeamArray.Count() - 1) >= index)
+				colorTeam = colorTeamArray.Get(index);
+			
+			if((overrideIconArray.Count() - 1) >= index)
+				overrideIcon = overrideIconArray.Get(index);
+			
+			if (!colorTeam.IsEmpty())
+			{
+				switch (colorTeam)
+				{
+					case "Red"    : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "R"); break;}; // CT = ColorTeam
+					case "Blue"   : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "B"); break;}; // CT = ColorTeam
+					case "Yellow" : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "Y"); break;}; // CT = ColorTeam
+					case "Green"  : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
+				};
+			};
+			
+			if (!overrideIcon.IsEmpty())
+			{
+				switch (overrideIcon)
+				{
+					case "Team Lead"      : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
+					case "Medic"          : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
+					case "Marksman"       : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MRK"); break;}; // OI = OverrideIcon
+					case "Machine Gunner" : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MG");  break;}; // OI = OverrideIcon
+					case "Anti-Tank"      : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "AT");  break;}; // OI = OverrideIcon
+					case "Grenadier"      : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "GRN"); break;}; // OI = OverrideIcon
+					case "Demolitionist"  : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "EXP"); break;}; // OI = OverrideIcon
+					case "Engineer"       : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "ENG"); break;}; // OI = OverrideIcon
+					case "Man"            : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "MAN"); break;}; // OI = OverrideIcon
+				};
+			};
+			
+			return;
 		};
 	}
 }

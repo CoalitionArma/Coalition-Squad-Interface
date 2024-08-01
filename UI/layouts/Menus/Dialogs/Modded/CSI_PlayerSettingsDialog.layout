@@ -274,7 +274,7 @@ FrameWidgetClass {
    FontProperties FontProperties "{5EC77B557AF5C054}" {
    }
    items {
-    "Auto" "Medic" "Marksman" "Machine Gunner" "Anti-Tank" "Grenadier" "Man"
+    "Auto" "Medic" "Marksman" "Machine Gunner" "Anti-Tank" "Grenadier" "Demolitionist" "Engineer" "Man"
    }
   }
   ImageWidgetClass "{5EC77AD0E60C948B}" {

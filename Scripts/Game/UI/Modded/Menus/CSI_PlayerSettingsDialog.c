@@ -133,7 +133,9 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 			case "MG"  : {playerOverideIcon = 3; break;};
 			case "AT"  : {playerOverideIcon = 4; break;};
 			case "GRN" : {playerOverideIcon = 5; break;};
-			case "MAN" : {playerOverideIcon = 6; break;};
+			case "EXP" : {playerOverideIcon = 6; break;};
+			case "ENG" : {playerOverideIcon = 7; break;};
+			case "MAN" : {playerOverideIcon = 8; break;};
 		};
 
 		m_wIconOveride.SetCurrentItem(playerOverideIcon);
@@ -241,7 +243,9 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 			case 3 : {iconToOverrideStr = "MG";   break;};
 			case 4 : {iconToOverrideStr = "AT";   break;};
 			case 5 : {iconToOverrideStr = "GRN";  break;};
-			case 6 : {iconToOverrideStr = "MAN";  break;};
+			case 6 : {iconToOverrideStr = "EXP";  break;};
+			case 7 : {iconToOverrideStr = "ENG";  break;};
+			case 8 : {iconToOverrideStr = "MAN";  break;};
 		};
 
 		if (!m_iSelectedPlayerID) 

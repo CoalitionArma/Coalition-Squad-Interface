@@ -2,6 +2,7 @@ class CSI_StaminaBar : SCR_InfoDisplay
 {
 	protected CSI_ClientComponent m_ClientComponent;
 	protected ProgressBarWidget m_wStamBar;
+	protected bool hudToggled = false;
 
 	//------------------------------------------------------------------------------------------------
 
@@ -9,6 +10,14 @@ class CSI_StaminaBar : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 
+	protected override event void OnStartDraw(IEntity owner)
+	{
+		super.OnStartDraw(owner);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
+		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateValues(IEntity owner, float timeSlice)
 	{
 		super.UpdateValues(owner, timeSlice);
@@ -21,8 +30,9 @@ class CSI_StaminaBar : SCR_InfoDisplay
 		};
 
 		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
+		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
 
-		if (stamBarVisible == "false") 
+		if (stamBarVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
 		{
 			if (m_wStamBar.GetOpacity() > 0) m_wStamBar.SetOpacity(0);
 			return;
@@ -50,7 +60,13 @@ class CSI_StaminaBar : SCR_InfoDisplay
 	// Stamina Bar Functions
 
 	//------------------------------------------------------------------------------------------------
+	
+	protected void ToggleIsVisible()
+	{
+		hudToggled = !hudToggled;
+	}
 
+	//------------------------------------------------------------------------------------------------
 	void RevealBar(float currentOpacity)
 	{
 		float setOpacity = currentOpacity + 0.005;
