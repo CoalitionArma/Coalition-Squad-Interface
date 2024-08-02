@@ -78,11 +78,16 @@ class CSI_CharacterComponent : ScriptComponent
 			if (groupIDs)
 				index = groupIDs.Find(Replication.FindId(SCR_PlayerController.GetLocalMainEntity()));
 			
+			Print(index);
+			
 			if (index == -1 || !m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty()))
 				continue;
 			
 			array<string> colorTeamArray = groupManager.ReturnAllGroupPrefabColorsArray()[i];
 			array<string> overrideIconArray = groupManager.ReturnAllGroupPrefabOverridesArray()[i];
+			
+			Print(colorTeamArray);
+			Print(overrideIconArray);
 			
 			if((colorTeamArray.Count() - 1) >= index)
 				colorTeam = colorTeamArray.Get(index);

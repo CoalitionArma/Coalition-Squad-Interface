@@ -33,21 +33,14 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdateGroupsArray(array<RplId> value)
+	void UpdateAllGroupArrays(array<RplId> IDs, array<string> CTs, array<string> OIs)
 	{
-		m_aGroupsIDsArray.Insert(value);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void UpdateGroupsPrefabColorsArray(array<string> value)
-	{
-		m_aGroupsPrefabColorsArray.Insert(value);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void UpdateGroupsPrefabOverridesArray(array<string> value)
-	{
-		m_aGroupsPrefabOverridesArray.Insert(value);
+		if(!Replication.IsServer()) 
+			return;
+		
+		m_aGroupsIDsArray.Insert(IDs);
+		m_aGroupsPrefabColorsArray.Insert(CTs);
+		m_aGroupsPrefabOverridesArray.Insert(OIs);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -56,11 +49,13 @@ modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
 		return m_aGroupsIDsArray;
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	array<array<string>> ReturnAllGroupPrefabColorsArray()
 	{
 		return m_aGroupsPrefabColorsArray;
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	array<array<string>> ReturnAllGroupPrefabOverridesArray()
 	{
 		return m_aGroupsPrefabOverridesArray;
@@ -86,9 +81,7 @@ modded class SCR_AIGroup : ChimeraAIGroup
 			{
 				Event_OnInit.Invoke(this);
 				SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-				groupManager.UpdateGroupsArray(m_aSpawnedPrefabIDs);
-				groupManager.UpdateGroupsPrefabColorsArray(m_aUnitPrefabColorTeams);
-				groupManager.UpdateGroupsPrefabOverridesArray(m_aUnitPrefabOverrideIcons);
+				groupManager.UpdateAllGroupArrays(m_aSpawnedPrefabIDs, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
 				Replication.BumpMe();
 			};
 			
@@ -164,7 +157,6 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		// Move in to vehicle 
 		SCR_EditableEntityComponent editableEntity = SCR_EditableEntityComponent.Cast(member.FindComponent(SCR_EditableEntityComponent));
 		
-		
 		if (editMode)
 			m_aSceneGroupUnitInstances.Insert(member);
 		
@@ -183,9 +175,7 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		{
 			Event_OnInit.Invoke(this);
 			SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-			groupManager.UpdateGroupsArray(m_aSpawnedPrefabIDs);
-			groupManager.UpdateGroupsPrefabColorsArray(m_aUnitPrefabColorTeams);
-			groupManager.UpdateGroupsPrefabOverridesArray(m_aUnitPrefabOverrideIcons);
+			groupManager.UpdateAllGroupArrays(m_aSpawnedPrefabIDs, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
 			Replication.BumpMe();
 		};
 		return true;
