@@ -343,7 +343,7 @@ class CSI_ClientComponent : ScriptComponent
 	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
+	void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{
 		if (m_AuthorityComponent)
 			m_AuthorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, write, value);

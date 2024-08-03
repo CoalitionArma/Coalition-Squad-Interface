@@ -221,7 +221,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		
 		if (colorTeamButtonName == "None") 
 		{
-			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "CT", "N/A"); // OI = OverrideIcon
+			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "CT", "N/A"); // CT = ColorTeam
 			return;
 		}
 

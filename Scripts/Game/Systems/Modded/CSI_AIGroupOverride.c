@@ -1,67 +1,3 @@
-modded class SCR_GroupsManagerComponent : SCR_BaseGameModeComponent
-{	
-	[RplProp()]
-	protected ref array<array<RplId>> m_aGroupsIDsArray = new array<array<RplId>>;
-	
-	[RplProp()]
-	protected ref array<array<string>> m_aGroupsPrefabColorsArray = new array<array<string>>;
-	
-	[RplProp()]
-	protected ref array<array<string>> m_aGroupsPrefabOverridesArray = new array<array<string>>;
-
-	//------------------------------------------------------------------------------------------------
-	override void OnPostInit(IEntity owner)
-	{
-		super.OnPostInit(owner);
-		
-		if(Replication.IsServer()) 
-		{
-			GetGame().GetCallqueue().CallLater(ReplicateGroupArrays, 850);
-			GetGame().GetCallqueue().CallLater(ReplicateGroupArrays, 1850);
-			GetGame().GetCallqueue().CallLater(ReplicateGroupArrays, 2850);
-			GetGame().GetCallqueue().CallLater(ReplicateGroupArrays, 8850);
-		};
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	protected void ReplicateGroupArrays()
-	{
-		m_aGroupsIDsArray.Insert(new array<RplId>);
-		m_aGroupsPrefabColorsArray.Insert(new array<string>);
-		m_aGroupsPrefabOverridesArray.Insert(new array<string>);
-		Replication.BumpMe();
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void UpdateAllGroupArrays(array<RplId> IDs, array<string> CTs, array<string> OIs)
-	{
-		if(!Replication.IsServer()) 
-			return;
-		
-		m_aGroupsIDsArray.Insert(IDs);
-		m_aGroupsPrefabColorsArray.Insert(CTs);
-		m_aGroupsPrefabOverridesArray.Insert(OIs);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	array<array<RplId>> ReturnAllGroupIDsArray()
-	{
-		return m_aGroupsIDsArray;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	array<array<string>> ReturnAllGroupPrefabColorsArray()
-	{
-		return m_aGroupsPrefabColorsArray;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	array<array<string>> ReturnAllGroupPrefabOverridesArray()
-	{
-		return m_aGroupsPrefabOverridesArray;
-	}
-}
-
 modded class SCR_AIGroup : ChimeraAIGroup
 {
 	[Attribute(defvalue: "", UIWidgets.EditBox, desc: "Default slot color team, accepted values are: \n\n None \n Red \n Blue \n Yellow \n Green \n\nArray index should line up with the index of prefab in 'Unit Prefab Slots'", category: "Group Members")]
@@ -70,9 +6,6 @@ modded class SCR_AIGroup : ChimeraAIGroup
 	[Attribute(defvalue: "", UIWidgets.EditBox, desc: "Default slot override icon, accepted values are: \n\n None \n Team Lead \n Medic \n Marksman \n Machine Gunner \n Anti-Tank \n Grenadier \n Demolitionist \n Engineer \n Man \n\nArray index should line up with the index of prefab in 'Unit Prefab Slots'", category: "Group Members")]
 	ref array<string> m_aUnitPrefabOverrideIcons;
 	
-	[RplProp()]
-	ref array<RplId> m_aSpawnedPrefabIDs = {};
-	
 	protected override bool SpawnGroupMember(bool snapToTerrain, int index, ResourceName res, bool editMode, bool isLast)
 	{	
 		if (!GetGame().GetAIWorld().CanLimitedAIBeAdded())
@@ -80,9 +13,6 @@ modded class SCR_AIGroup : ChimeraAIGroup
 			if (isLast) 
 			{
 				Event_OnInit.Invoke(this);
-				SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-				groupManager.UpdateAllGroupArrays(m_aSpawnedPrefabIDs, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
-				Replication.BumpMe();
 			};
 			
 			//Event_OnLastGroupMemberSpawned.Invoke(this);
@@ -149,7 +79,9 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		spawnParams.Transform[3] = pos;
 		
 		IEntity member = GetGame().SpawnEntityPrefab(res, true, world, spawnParams);
-		m_aSpawnedPrefabIDs.InsertAt(Replication.FindId(member), index);
+		
+		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
+			CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent)).SetDefaults(index, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
 		
 		if (!member)
 			return true;
@@ -174,9 +106,6 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		if (isLast) 
 		{
 			Event_OnInit.Invoke(this);
-			SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-			groupManager.UpdateAllGroupArrays(m_aSpawnedPrefabIDs, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
-			Replication.BumpMe();
 		};
 		return true;
 	}
