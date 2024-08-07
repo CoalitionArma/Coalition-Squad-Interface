@@ -14,7 +14,10 @@ class CSI_CharacterComponent : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	protected void WaitUntilWeSetDefaults(int index, IEntity entity, array<string> colorTeamArray, array<string> overrideIconArray)
-	{				
+	{		
+		if (!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
+			return;
+				
 		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(entity));
 		
 		if (playerID == 0)
