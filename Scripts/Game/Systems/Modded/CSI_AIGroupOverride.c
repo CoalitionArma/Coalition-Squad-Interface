@@ -1,10 +1,10 @@
 modded class SCR_AIGroup : ChimeraAIGroup
 {
 	[Attribute(defvalue: "", UIWidgets.EditBox, desc: "Default slot color team, accepted values are: \n\n None \n Red \n Blue \n Yellow \n Green \n\nArray index should line up with the index of prefab in 'Unit Prefab Slots'", category: "Group Members")]
-	ref array<string> m_aUnitPrefabColorTeams;
+	private ref array<string> m_aUnitPrefabColorTeams;
 	
 	[Attribute(defvalue: "", UIWidgets.EditBox, desc: "Default slot override icon, accepted values are: \n\n None \n Team Lead \n Medic \n Marksman \n Machine Gunner \n Anti-Tank \n Grenadier \n Demolitionist \n Engineer \n Man \n\nArray index should line up with the index of prefab in 'Unit Prefab Slots'", category: "Group Members")]
-	ref array<string> m_aUnitPrefabOverrideIcons;
+	private ref array<string> m_aUnitPrefabOverrideIcons;
 	
 	protected override bool SpawnGroupMember(bool snapToTerrain, int index, ResourceName res, bool editMode, bool isLast)
 	{	
@@ -112,17 +112,11 @@ modded class SCR_AIGroup : ChimeraAIGroup
 
 	//------------------------------------------------------------------------------------------------
 	protected void WaitUntilWeSetDefaults(int index, IEntity entity)
-	{		
-		if (!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
-			return;
-				
+	{			
 		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(entity));
 		
-		if (playerID == 0 || !entity)
-		{
-			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+		if (playerID == 0)
 			return;
-		};
 			
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
