@@ -80,8 +80,8 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		
 		IEntity member = GetGame().SpawnEntityPrefab(res, true, world, spawnParams);
 		
-		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
-			CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent)).SetDefaults(index, member, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
+		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning() && Replication.IsServer())
+			GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, index, member);
 		
 		if (!member)
 			return true;
@@ -108,5 +108,74 @@ modded class SCR_AIGroup : ChimeraAIGroup
 			Event_OnInit.Invoke(this);
 		};
 		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void WaitUntilWeSetDefaults(int index, IEntity entity)
+	{		
+		if (!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
+			return;
+				
+		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(entity));
+		
+		if (playerID == 0 || !entity)
+		{
+			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+			return;
+		};
+			
+		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		
+		if (!groupsManagerComponent)
+			return;
+		
+		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
+		
+		if (!playersGroup)
+			return;
+		
+		int groupID = playersGroup.GetGroupID();
+		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
+		
+		if (groupID == -1 || !authorityComponent)
+			return;
+		
+		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+
+		string colorTeam;
+		string overrideIcon;
+			
+		if((m_aUnitPrefabColorTeams.Count() - 1) >= index)
+			colorTeam = m_aUnitPrefabColorTeams.Get(index);
+			
+		if((m_aUnitPrefabOverrideIcons.Count() - 1) >= index)
+			overrideIcon = m_aUnitPrefabOverrideIcons.Get(index);
+			
+		if (!colorTeam.IsEmpty())
+		{
+			switch (colorTeam)
+			{
+				case "Red"    : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "CT", "R"); break;}; // CT = ColorTeam
+				case "Blue"   : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "CT", "B"); break;}; // CT = ColorTeam
+				case "Yellow" : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "CT", "Y"); break;}; // CT = ColorTeam
+				case "Green"  : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "CT", "G"); break;}; // CT = ColorTeam
+			};
+		};
+			
+		if (!overrideIcon.IsEmpty())
+		{
+			switch (overrideIcon)
+			{
+				case "Team Lead"      : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "FTL"); break;}; // OI = OverrideIcon
+				case "Medic"          : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "MED"); break;}; // OI = OverrideIcon
+				case "Marksman"       : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "MRK"); break;}; // OI = OverrideIcon
+				case "Machine Gunner" : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "MG");  break;}; // OI = OverrideIcon
+				case "Anti-Tank"      : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "AT");  break;}; // OI = OverrideIcon
+				case "Grenadier"      : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "GRN"); break;}; // OI = OverrideIcon
+				case "Demolitionist"  : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "EXP"); break;}; // OI = OverrideIcon
+				case "Engineer"       : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "ENG"); break;}; // OI = OverrideIcon
+				case "Man"            : {authorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, "OI", "MAN"); break;}; // OI = OverrideIcon
+			};
+		};
 	}
 };
