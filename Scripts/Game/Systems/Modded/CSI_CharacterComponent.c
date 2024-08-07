@@ -3,35 +3,22 @@ class CSI_CharacterComponentClass : ScriptComponentClass {};
 
 class CSI_CharacterComponent : ScriptComponent
 {		
-	IEntity m_eOwner;
-	
-	override protected void OnPostInit(IEntity owner)
-	{
-		super.OnPostInit(owner);
-		m_eOwner = owner
-	}
-	
 	//------------------------------------------------------------------------------------------------
-	void SetDefaults(int index, array<string> colorTeamArray, array<string> overrideIconArray)
+	void SetDefaults(int index, IEntity entity, array<string> colorTeamArray, array<string> overrideIconArray)
 	{
-		if (!Replication.IsServer() || SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
+		if (!Replication.IsServer())
 			return;
 
-		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, index, colorTeamArray, overrideIconArray);
+		GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, index, entity, colorTeamArray, overrideIconArray);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected void WaitUntilWeSetDefaults(int index, array<string> colorTeamArray, array<string> overrideIconArray)
+	protected void WaitUntilWeSetDefaults(int index, IEntity entity, array<string> colorTeamArray, array<string> overrideIconArray)
 	{				
-		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning() || !m_eOwner)
-			return;
-		
-		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(m_eOwner));
+		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(entity));
 		
 		if (playerID == 0)
 			return;
-		
-		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
 		
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
@@ -45,10 +32,11 @@ class CSI_CharacterComponent : ScriptComponent
 		
 		int groupID = playersGroup.GetGroupID();
 		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
 		
-		if (groupID == -1 || !clientComponent || !authorityComponent)
+		if (groupID == -1 || !clientComponent)
 			return;
+		
+		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
 
 		string colorTeam;
 		string overrideIcon;

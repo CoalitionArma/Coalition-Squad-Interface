@@ -81,7 +81,7 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		IEntity member = GetGame().SpawnEntityPrefab(res, true, world, spawnParams);
 		
 		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
-			CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent)).SetDefaults(index, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
+			CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent)).SetDefaults(index, member, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
 		
 		if (!member)
 			return true;
