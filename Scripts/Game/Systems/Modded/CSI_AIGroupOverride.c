@@ -80,7 +80,7 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		
 		IEntity member = GetGame().SpawnEntityPrefab(res, true, world, spawnParams);
 		
-		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning() && Replication.IsServer())
+		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning() && Replication.IsServer() && (!m_aUnitPrefabColorTeams.IsEmpty() || !m_aUnitPrefabOverrideIcons.IsEmpty()))
 			GetGame().GetCallqueue().CallLater(WaitUntilWeSetDefaults, 1000, true, index, member);
 		
 		if (!member)
@@ -113,6 +113,9 @@ modded class SCR_AIGroup : ChimeraAIGroup
 	//------------------------------------------------------------------------------------------------
 	protected void WaitUntilWeSetDefaults(int index, IEntity entity)
 	{			
+		if(!entity)
+			GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
+		
 		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(entity));
 		
 		if (playerID == 0)
