@@ -1,0 +1,7 @@
+SCR_ChimeraCharacter {
+ ID "520EC961A090B1EE"
+ components {
+  CSI_CharacterComponent "{62844C16E9ED2054}" {
+  }
+ }
+}
