@@ -4,7 +4,7 @@ class CSI_ClientComponentClass : ScriptComponentClass {};
 class CSI_ClientComponent : ScriptComponent
 {	
 	// All Color Teams
-	protected int m_iCTNone   = ARGB(255, 215, 215, 215);
+	protected int m_iCTNone   = ARGB(255, 165, 165, 165);
 	protected int m_iCTRed    = ARGB(255, 200, 65, 65);
 	protected int m_iCTBlue   = ARGB(255, 0, 92, 255);
 	protected int m_iCTYellow = ARGB(255, 230, 230, 0);
@@ -536,7 +536,7 @@ class CSI_ClientComponent : ScriptComponent
 				case(!(settingServerOverride.IsEmpty() || settingServerOverride == "N/A")) : {settingValue = settingServerOverride; break;};
 				default : {
 					GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(checkSetting, settingValue); 
-					if (i < 11 && settingValue.IsEmpty() && m_AuthorityComponent.ReturnAuthoritySettings()[11] == "true") 
+					if (i < 11 && settingValue.IsEmpty() && (!m_AuthorityComponent.ReturnAuthoritySettings().IsEmpty() && m_AuthorityComponent.ReturnAuthoritySettings()[11] == "true")) 
 					{
 						 settingValue = m_AuthorityComponent.ReturnAuthoritySettings()[i+12]; 
 					}; 

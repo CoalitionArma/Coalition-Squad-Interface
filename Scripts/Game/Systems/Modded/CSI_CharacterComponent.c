@@ -42,7 +42,7 @@ class CSI_CharacterComponent : ScriptComponent
 		
 		int playerID = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(SCR_ChimeraCharacter.Cast(owner));
 		
-		if (playerID == 0 && (!SCR_PlayerController.GetLocalControlledEntity() && !SCR_PlayerController.GetLocalMainEntity())) 
+		if (playerID <= 0 && (!SCR_PlayerController.GetLocalControlledEntity() && !SCR_PlayerController.GetLocalMainEntity())) 
 			return;
 		
 		if (playerID != SCR_PlayerController.GetLocalPlayerId())
@@ -70,7 +70,7 @@ class CSI_CharacterComponent : ScriptComponent
 		
 		GetGame().GetCallqueue().Remove(WaitUntilWeSetDefaults);
 		
-		if (!m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty()))
+		if ((m_aUnitPrefabColorTeams.IsEmpty() && m_aUnitPrefabOverrideIcons.IsEmpty()) || (!m_bOverrideOnRespawn && (!authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "CT").IsEmpty() || !authorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, "OI").IsEmpty())))
 			return;
 
 		string colorTeam;

@@ -65,10 +65,10 @@ class CSI_Compass : SCR_InfoDisplay
 				m_wBearing.SetOpacity(0);
 			};
 		} else {
-			if (m_wCompass.GetOpacity() < 1) 
+			if (m_wCompass.GetOpacity() < 0.715) 
 			{
-				m_wCompass.SetOpacity(1);
-				m_wBearing.SetOpacity(1);
+				m_wCompass.SetOpacity(0.715);
+				m_wBearing.SetOpacity(0.715);
 			
 				m_sCompassTexture = m_ClientComponent.ReturnLocalCSISettings()[15];
 				m_wCompass.LoadImageTexture(0, m_sCompassTexture);
@@ -224,7 +224,7 @@ class CSI_Compass : SCR_InfoDisplay
 			float x = (Math.Sin(relDir) * disT);
 			float y = (Math.Cos(relDir) * disT);
 
-			SetSquadRadarImage(radarPlayer, x, y, m_fYaw, Math.Map(dis, 0, m_iSearchRadius, 4, 0), playerCharacter);
+			SetSquadRadarImage(radarPlayer, x, y, m_fYaw, Math.Map(dis, (0.865*m_iSearchRadius), m_iSearchRadius, 0.685, 0), playerCharacter);
 			posToStartClearing = i + 1;
 		};
 		ClearSquadRadar(posToStartClearing);
