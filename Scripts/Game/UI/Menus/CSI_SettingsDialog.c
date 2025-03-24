@@ -487,6 +487,9 @@ class CSI_SettingsDialog : ChimeraMenuBase
 			m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsPosition", "HEAD");
 		};
 
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
+
 		if (SCR_Global.IsAdmin()) ApplyAdminSettings();
 	}
 

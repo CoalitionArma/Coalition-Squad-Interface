@@ -488,9 +488,6 @@ class CSI_ClientComponent : ScriptComponent
 	protected void RpcAsk_ChangeLocalCSISetting(string setting, string value)
 	{
 		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
-
-		GetGame().UserSettingsChanged();
-		GetGame().SaveUserSettings();
 		
 		UpdateLocalCSISettingArray();
 	};

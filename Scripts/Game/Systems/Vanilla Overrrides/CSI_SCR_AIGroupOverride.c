@@ -6,8 +6,8 @@ modded class SCR_AIGroup : ChimeraAIGroup
 	[Attribute(defvalue: "", UIWidgets.EditBox, desc: "Default slot override icon, accepted values are: \n\n None \n Team Lead \n Medic \n Marksman \n Machine Gunner \n Anti-Tank \n Grenadier \n Demolitionist \n Engineer \n Man \n\nArray index should line up with the index of prefab in 'Unit Prefab Slots'", category: "Group Members")]
 	private ref array<string> m_aUnitPrefabOverrideIcons;
 	
-	protected override bool SpawnGroupMember(bool snapToTerrain, int index, ResourceName res, bool editMode, bool isLast)
-	{	
+	override protected bool SpawnGroupMember(bool snapToTerrain, int index, ResourceName res, bool editMode, bool isLast)
+	{
 		if (!GetGame().GetAIWorld().CanLimitedAIBeAdded())
 		{
 			if (isLast)
@@ -80,10 +80,6 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		if (!member)
 			return true;
 		
-
-		if(!SCR_BaseGameMode.Cast(GetGame().GetGameMode()).IsRunning())
-			CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent)).SetDefaults(index, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
-		
 		// Move in to vehicle 
 		SCR_EditableEntityComponent editableEntity = SCR_EditableEntityComponent.Cast(member.FindComponent(SCR_EditableEntityComponent));
 		
@@ -94,6 +90,12 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		// Even same null-check is above, in some situations, member can get deleted and it would result in VME
 		if (!member)
 			return true;
+		
+		CSI_CharacterComponent characterComp = CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent));
+		
+		if(characterComp)
+			characterComp.SetDefaults(index, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);
+			
 		
 		AddAIEntityToGroup(member);
 		
