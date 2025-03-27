@@ -334,7 +334,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -414,7 +414,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -475,7 +475,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -574,7 +574,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -654,7 +654,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -734,7 +734,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -814,7 +814,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -875,7 +875,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -974,7 +974,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1054,7 +1054,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1134,7 +1134,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1214,7 +1214,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1275,7 +1275,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1374,7 +1374,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1454,7 +1454,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1534,7 +1534,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1614,7 +1614,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1675,7 +1675,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1774,7 +1774,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1854,7 +1854,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -1934,7 +1934,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -2014,7 +2014,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -2075,7 +2075,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -2174,7 +2174,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -2253,7 +2253,7 @@ FrameWidgetClass {
    "Min Font Size" 16
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
@@ -2336,7 +2336,7 @@ FrameWidgetClass {
    "Min Font Size" 11
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{54A29B2BD9DE5841}UI/Fonts/NotoSans/NotoSansCJK-Light-jp.fnt"
+    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
     ForceFont 1
     Bold 1
     ShadowSize 31
