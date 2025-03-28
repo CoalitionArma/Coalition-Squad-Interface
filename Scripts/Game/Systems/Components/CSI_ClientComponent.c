@@ -52,8 +52,8 @@ class CSI_ClientComponent : ScriptComponent
 		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
 			return;
 
-		GetGame().GetInputManager().AddActionListener("CSISettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
-		GetGame().GetInputManager().AddActionListener("PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
+		GetGame().GetInputManager().AddActionListener("CSI_PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
+		GetGame().GetInputManager().AddActionListener("CSI_SettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		
 		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 625, true);
 		UpdateLocalCSISettingArray();
