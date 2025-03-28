@@ -7,12 +7,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -170.463
     OffsetLeft -170.463
-    PositionY -339.309
-    OffsetTop -339.309
+    PositionY -340.139
+    OffsetTop -340.139
     SizeX 274.909
     OffsetRight -104.446
     SizeY 739.002
-    OffsetBottom -399.693
+    OffsetBottom -398.863
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
@@ -25,8 +25,8 @@ FrameWidgetClass {
     OffsetLeft -165.927
     PositionY 361.515
     OffsetTop 361.515
-    SizeX 262.99
-    OffsetRight -97.063
+    SizeX 253.063
+    OffsetRight -87.136
     SizeY 30
     OffsetBottom -391.515
    }
@@ -59,14 +59,14 @@ FrameWidgetClass {
    Name "Confirm"
    Slot FrameWidgetSlot "{60B2AAF59074A6D8}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 2.01
-    OffsetLeft 2.01
-    PositionY 361.29
-    OffsetTop 361.29
+    PositionX -1.512
+    OffsetLeft -1.512
+    PositionY 361.61
+    OffsetTop 361.61
     SizeX 100.002
-    OffsetRight -102.012
+    OffsetRight -98.49
     SizeY 30
-    OffsetBottom -391.29
+    OffsetBottom -391.61
    }
    components {
     SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
@@ -133,6 +133,7 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -176,6 +177,7 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -219,6 +221,7 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -262,6 +265,7 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -283,6 +287,7 @@ FrameWidgetClass {
    "Font Size" 14
    "Min Font Size" 14
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -335,8 +340,8 @@ FrameWidgetClass {
     OffsetLeft -130.613
     PositionY -329.173
     OffsetTop -329.173
-    SizeX 174.4
-    OffsetRight -43.787
+    SizeX 167.675
+    OffsetRight -37.062
     SizeY 20.256
     OffsetBottom 308.917
    }
@@ -345,7 +350,7 @@ FrameWidgetClass {
    "Min Font Size" 18
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
-    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -363,7 +368,13 @@ FrameWidgetClass {
     OffsetBottom -338.87
    }
    Text "#CSI-Ingame_Settings_Compass_Visible_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FBAF3E0FF}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E080F5D3795}" {
    Name "SquadRadarVisibleText"
@@ -379,7 +390,13 @@ FrameWidgetClass {
     OffsetBottom -214.787
    }
    Text "#CSI-Ingame_Settings_Squad_Radar_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FA739A88F}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E080A63F42F}" {
    Name "GroupDisplayVisibleText"
@@ -395,7 +412,13 @@ FrameWidgetClass {
     OffsetBottom -155.453
    }
    Text "#CSI-Ingame_Settings_Group_Display_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB8353D61}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E08346E61B6}" {
    Name "StaminaBarVisibleText"
@@ -411,7 +434,13 @@ FrameWidgetClass {
     OffsetBottom 235.146
    }
    Text "#CSI-Ingame_Settings_Stamina_Bar_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242F82D7778E}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E0836767C08}" {
    Name "NametagsVisibleText"
@@ -427,7 +456,13 @@ FrameWidgetClass {
     OffsetBottom 71.711
    }
    Text "#CSI-Ingame_Settings_Nametags_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB00CC1E5}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{608E21CB3599021B}" {
    Name "NametagsPosText"
@@ -443,7 +478,13 @@ FrameWidgetClass {
     OffsetBottom -68.49
    }
    Text "#CSI-Ingame_Settings_Nametags_Position_Selector"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FBE1EC50D}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{608E21CB3739F2E2}" {
    Name "NametagsRangeText"
@@ -459,7 +500,13 @@ FrameWidgetClass {
     OffsetBottom -100.338
    }
    Text "#CSI-Ingame_Settings_Nametags_Range_Selector"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FBF3E2D9F}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E0832BE9956}" {
    Name "RankVisibleText"
@@ -475,7 +522,13 @@ FrameWidgetClass {
     OffsetBottom 200.583
    }
    Text "#CSI-Ingame_Settings_Rank_Visible_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242F8B6DF7CF}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60833E087A83FD37}" {
    Name "IconScaleText"
@@ -491,7 +544,13 @@ FrameWidgetClass {
     OffsetBottom -284.646
    }
    Text "#CSI-Ingame_Settings_Icon_Scale_Selector"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FA45E1666}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{608F286408E2E57B}" {
    Name "squadRadarSelfIconVisibleText"
@@ -507,7 +566,13 @@ FrameWidgetClass {
     OffsetBottom -249.754
    }
    Text "#CSI-Ingame_Settings_Personal_Icon_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FA5CCADFE}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{608F2864D145903D}" {
    Name "nametagLOSEnabledText"
@@ -515,15 +580,21 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -109.784
     OffsetLeft -109.784
-    PositionY -64.418
-    OffsetTop -64.418
+    PositionY -64.912
+    OffsetTop -64.912
     SizeX 206.072
     OffsetRight -96.288
-    SizeY 27.698
+    SizeY 28.192
     OffsetBottom 36.72
    }
    Text "#CSI-Ingame_Settings_Nametags_Use_LOS_Selector"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB12ED271}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{60971295EDCA7BB4}" {
    Name "personalColorTeamMenuText"
@@ -539,7 +610,13 @@ FrameWidgetClass {
     OffsetBottom 165.873
    }
    Text "#CSI-Ingame_Settings_CT_Menu_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB562F05B}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{609372796030C538}" {
    Name "SettingsSeperator"
@@ -635,11 +712,11 @@ FrameWidgetClass {
    }
    Opacity 0
    Text "Server Override"
-   "Font Size" 12
-   "Min Font Size" 12
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
-    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1011,6 +1088,7 @@ FrameWidgetClass {
    "Font Size" 10
    "Min Font Size" 10
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1033,6 +1111,7 @@ FrameWidgetClass {
    "Font Size" 10
    "Min Font Size" 10
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1055,6 +1134,7 @@ FrameWidgetClass {
    "Font Size" 9
    "Min Font Size" 9
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1077,6 +1157,7 @@ FrameWidgetClass {
    "Font Size" 9
    "Min Font Size" 9
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1099,6 +1180,7 @@ FrameWidgetClass {
    "Font Size" 10
    "Min Font Size" 10
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1454,11 +1536,11 @@ FrameWidgetClass {
    }
    Opacity 0
    Text "Override Defaults"
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
-    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1478,10 +1560,11 @@ FrameWidgetClass {
    Opacity 0
    Color 0.761 0.386 0.078 1
    Text "// Set Selected Settings as Default"
-   "Font Size" 10
-   "Min Font Size" 10
+   "Font Size" 9
+   "Min Font Size" 9
    Wrap 1
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1550,10 +1633,11 @@ FrameWidgetClass {
    Opacity 0
    Color 0.761 0.386 0.078 1
    Text "// Turn On/Off Default Settings Override"
-   "Font Size" 10
-   "Min Font Size" 10
+   "Font Size" 9
+   "Min Font Size" 9
    Wrap 1
    FontProperties FontProperties "{605B121A62611D32}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -1668,7 +1752,13 @@ FrameWidgetClass {
     OffsetBottom -33.269
    }
    Text "#CSI-Ingame_Settings_Nametags_Role_Toggle"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FBCDB36BC}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   TextWidgetClass "{617D3191F16417CA}" {
    Name "groupNametagVisibleText"
@@ -1684,7 +1774,13 @@ FrameWidgetClass {
     OffsetBottom 1.722
    }
    Text "#CSI-Ingame_Settings_Group_In_Nametags_Selector"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB37460E2}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
   CheckBoxWidgetClass "{617D3191F164149F}" {
    Name "roleNametagVisibleServerOverride"
@@ -1776,7 +1872,13 @@ FrameWidgetClass {
     OffsetBottom 131.375
    }
    Text "Auto Hide HUD"
+   "Font Size" 21
+   "Min Font Size" 21
    "Vertical Alignment" Center
+   FontProperties FontProperties "{64F8242FB6963DE3}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+    ShadowOffset 0.5 0.5
+   }
   }
  }
 }

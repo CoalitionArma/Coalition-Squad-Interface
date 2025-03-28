@@ -10,12 +10,12 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX -163.897
     OffsetLeft -163.897
-    PositionY -230.053
-    OffsetTop -230.053
+    PositionY -230.465
+    OffsetTop -230.465
     SizeX 328.433
     OffsetRight -164.536
     SizeY 454.227
-    OffsetBottom -224.174
+    OffsetBottom -223.762
    }
    Color 0.007 0.012 0.014 1
    "Shadow Offset" 0.5 0.5
@@ -38,6 +38,7 @@ FrameWidgetClass {
    "Font Size" 12
    "Min Font Size" 12
    FontProperties FontProperties "{60587BCB22D7A1C8}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -59,6 +60,7 @@ FrameWidgetClass {
    "Font Size" 12
    "Min Font Size" 12
    FontProperties FontProperties "{60587BCB2098979A}" {
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -98,7 +100,7 @@ FrameWidgetClass {
    Text "#CSI-Player_Settings_Title"
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
-    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }
@@ -240,9 +242,8 @@ FrameWidgetClass {
    "Horizontal Alignment" Center
    "Vertical Alignment" Center
    FontProperties FontProperties "{60587BCBC751C206}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowOffset 0.5 0.5
    }
   }
@@ -705,11 +706,11 @@ FrameWidgetClass {
    }
    Opacity 0
    Text "Advanced Settings"
-   "Font Size" 14
+   "Font Size" 12
    "Min Font Size" 8
    "Vertical Alignment" Center
    FontProperties FontProperties "{5EC77B6CA687BBE6}" {
-    Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ShadowOffset 0.5 0.5
    }
   }

@@ -35,13 +35,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -80,13 +79,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -125,13 +123,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -170,13 +167,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -215,13 +211,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -260,13 +255,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -305,13 +299,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -350,13 +343,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -395,13 +387,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -440,13 +431,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -485,13 +475,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -530,13 +519,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -575,13 +563,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -620,13 +607,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -665,13 +651,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -710,13 +695,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -755,13 +739,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -800,13 +783,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -845,13 +827,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -890,13 +871,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -935,13 +915,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -980,13 +959,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -1025,13 +1003,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -1070,13 +1047,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
@@ -1115,13 +1091,12 @@ FrameWidgetClass {
    }
    IsPixelPerfect 0
    Text ""
-   "Font Size" 11
-   "Min Font Size" 11
+   "Font Size" 10
+   "Min Font Size" 10
    "Vertical Alignment" Center
    FontProperties FontProperties "{5B0E4BD4BBEC25CB}" {
-    Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+    Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
     ForceFont 1
-    Bold 1
     ShadowSize 31
     ShadowOffset 0.5 0.5
    }
