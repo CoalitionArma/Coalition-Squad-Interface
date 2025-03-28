@@ -466,25 +466,25 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		if (!m_ClientComponent) 
 			return;
 		
-		m_ClientComponent.Owner_ChangeLocalCSISetting("compassVisible",            m_wCompassVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("squadRadarVisible",         m_wSquadRadarVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("groupDisplayVisible",       m_wGroupDisplayVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("staminaBarVisible",         m_wStaminaBarVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsVisible",           m_wNametagsVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("rankVisible",               m_wRankVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("squadRadarIconSize",        ((m_wIconSizeWidget.GetCurrentItem() * 5) + 50).ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsRange",             ((m_wNametagsRangeWidget.GetCurrentItem() + 1) * 5).ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("roleNametagVisible",        m_wRoleNametagVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("squadRadarSelfIconVisible", m_wSquadRadarSelfIconVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("personalColorTeamMenu",     m_wPersonalColorTeamMenuWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("groupNametagVisible",       m_wGroupNametagVisibleWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("nametagLOSEnabled",         m_wNametagLOSEnabledWidget.IsChecked().ToString());
-		m_ClientComponent.Owner_ChangeLocalCSISetting("autoHideUI",                m_wAutoHideHudWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("compassVisible",            m_wCompassVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarVisible",         m_wSquadRadarVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("groupDisplayVisible",       m_wGroupDisplayVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("staminaBarVisible",         m_wStaminaBarVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("nametagsVisible",           m_wNametagsVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("rankVisible",               m_wRankVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarIconSize",        ((m_wIconSizeWidget.GetCurrentItem() * 5) + 50).ToString());
+		m_ClientComponent.ChangeLocalCSISetting("nametagsRange",             ((m_wNametagsRangeWidget.GetCurrentItem() + 1) * 5).ToString());
+		m_ClientComponent.ChangeLocalCSISetting("roleNametagVisible",        m_wRoleNametagVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("squadRadarSelfIconVisible", m_wSquadRadarSelfIconVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("personalColorTeamMenu",     m_wPersonalColorTeamMenuWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("groupNametagVisible",       m_wGroupNametagVisibleWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("nametagLOSEnabled",         m_wNametagLOSEnabledWidget.IsChecked().ToString());
+		m_ClientComponent.ChangeLocalCSISetting("autoHideUI",                m_wAutoHideHudWidget.IsChecked().ToString());
 
 		if (m_wNametagsPosWidget.GetCurrentItem() == 0) {
-			m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsPosition", "BODY");
+			m_ClientComponent.ChangeLocalCSISetting("nametagsPosition", "BODY");
 		} else {
-			m_ClientComponent.Owner_ChangeLocalCSISetting("nametagsPosition", "HEAD");
+			m_ClientComponent.ChangeLocalCSISetting("nametagsPosition", "HEAD");
 		};
 
 		GetGame().UserSettingsChanged();

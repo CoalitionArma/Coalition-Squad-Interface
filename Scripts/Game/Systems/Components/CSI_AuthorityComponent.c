@@ -26,6 +26,9 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 	// The vanilla group manager.
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	
+	// Need to ensure we dont save too many times since that'll break stuff
+	protected bool m_bEngineSaving
 
 	//------------------------------------------------------------------------------------------------
 
@@ -323,9 +326,22 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
 		
 		GetGame().UserSettingsChanged();
-		GetGame().SaveUserSettings();
+		
+		if(!m_bEngineSaving)
+		{
+			m_bEngineSaving = true;
+			GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 1, false);
+		}
 		
 		UpdateAuthoritySettingArray();
+	}
+	
+	//- Authority -\\
+	//------------------------------------------------------------------------------------------------
+	void SaveAuthoritySettingsDelay()
+	{
+		m_bEngineSaving = false;
+		GetGame().SaveUserSettings();
 	}
 
 	//- Authority -\\

@@ -477,20 +477,12 @@ class CSI_ClientComponent : ScriptComponent
 	
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
-	void Owner_ChangeLocalCSISetting(string setting, string value)
-	{
-		Rpc(RpcAsk_ChangeLocalCSISetting, setting, value);
-	}
-
-	//- Client Owner -\\
-	//------------------------------------------------------------------------------------------------
-	[RplRpc(RplChannel.Reliable, RplRcver.Owner)]
-	protected void RpcAsk_ChangeLocalCSISetting(string setting, string value)
+	void ChangeLocalCSISetting(string setting, string value)
 	{
 		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
 		
 		UpdateLocalCSISettingArray();
-	};
+	}
 		
 	//- Client -\\
 	//------------------------------------------------------------------------------------------------
