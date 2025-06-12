@@ -1,52 +1,32 @@
-FrameWidgetClass {
+OverlayWidgetClass {
  {
   HorizontalLayoutWidgetClass "{00000000490622C6}" {
    Prefab "{00000000490622C6}"
-   Slot FrameWidgetSlot "{51C4C0A5BAFB2375}" {
-    OffsetLeft 0
-    OffsetTop 0
-    SizeX 0
-    OffsetRight 0
-    SizeY 0
-    OffsetBottom 0
-   }
    {
     FrameWidgetClass "{00000000BD5E5CB4}" {
      Prefab "{00000000BD5E5CB4}"
-     Slot LayoutSlot "{51C4C0A5BAFB20D2}" {
-     }
      {
-      TextWidgetClass "{605607D06C552ED4}" {
+      TextWidgetClass "{000000003DEE4CFF}" {
+       Prefab "{000000003DEE4CFF}"
+       Name "PlayerName"
+      }
+      TextWidgetClass "{6598E862901EB857}" {
        Name "PlayerGroupName"
-       Slot FrameWidgetSlot "{605607D06C552E2E}" {
-        Anchor 0 0 0 0
-        OffsetLeft 0
-        PositionY 15
-        OffsetTop 15
-        SizeX 0
-        OffsetRight 0
-        SizeY 0
-        OffsetBottom -15
-        SizeToContent 1
+       Slot FrameWidgetSlot "{6598E862901EB846}" {
        }
        "Inherit Color" 1
-       Text ""
-       "Font Size" 10
-       "Min Font Size" 10
+       Text "Group Name"
+       "Font Size" 16
+       "Min Font Size" 16
        "Horizontal Alignment" Center
        "Vertical Alignment" Center
-       FontProperties FontProperties "{605607D0464FA2F2}" {
-        Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+       FontProperties FontProperties "{6598E8628DE433C6}" {
+        Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
         DisabledColor 0.198 0.198 0.198 1
         OutlineColor 0.305 0.305 0.305 1
         ShadowSize 10
+        ShadowOffset 0 0
        }
-      }
-      TextWidgetClass "{000000003DEE4CFF}" {
-       Prefab "{000000003DEE4CFF}"
-       Text "Player Name"
-       "Font Size" 10
-       "Min Font Size" 10
       }
      }
     }

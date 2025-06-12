@@ -9,6 +9,8 @@ MetaFileClass {
   }
   LayoutResourceClass PS4 : PC {
   }
+  LayoutResourceClass PS5 : PC {
+  }
   LayoutResourceClass HEADLESS : PC {
   }
  }
