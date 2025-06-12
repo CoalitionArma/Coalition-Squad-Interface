@@ -9,19 +9,30 @@ OverlayWidgetClass {
       TextWidgetClass "{000000003DEE4CFF}" {
        Prefab "{000000003DEE4CFF}"
        Name "PlayerName"
+       Slot FrameWidgetSlot "{51DC7B064D3F5743}" {
+       }
       }
       TextWidgetClass "{6598E862901EB857}" {
        Name "PlayerGroupName"
        Slot FrameWidgetSlot "{6598E862901EB846}" {
+        PositionX 0
+        OffsetLeft 0
+        PositionY 15
+        OffsetTop 15
+        SizeX 0
+        OffsetRight 0
+        SizeY 0
+        OffsetBottom -15
+        SizeToContent 1
        }
        "Inherit Color" 1
        Text "Group Name"
-       "Font Size" 16
-       "Min Font Size" 16
+       "Font Size" 10
+       "Min Font Size" 10
        "Horizontal Alignment" Center
        "Vertical Alignment" Center
        FontProperties FontProperties "{6598E8628DE433C6}" {
-        Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+        Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
         DisabledColor 0.198 0.198 0.198 1
         OutlineColor 0.305 0.305 0.305 1
         ShadowSize 10
