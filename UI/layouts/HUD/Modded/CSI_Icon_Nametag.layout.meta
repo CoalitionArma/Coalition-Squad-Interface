@@ -1,0 +1,17 @@
+MetaFileClass {
+ Name "{8040C3DFF7CFA3ED}UI/layouts/HUD/Modded/CSI_Icon_Nametag.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass PS5 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}
