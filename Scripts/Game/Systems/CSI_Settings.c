@@ -47,7 +47,77 @@ class CSI_GameSettings : ModuleGameSettings
 	
 	[Attribute("false")]
 	string autoHideUI;
+
+	//Server Overrides
+
+	[Attribute("N/A")]
+	string compassVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string squadRadarVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string groupDisplayVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string staminaBarVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string nametagsVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string rankVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string nametagsRangeServerOverride;
+
+	[Attribute("N/A")]
+	string roleNametagVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string personalColorTeamMenuServerOverride;
+	
+	[Attribute("N/A")]
+	string groupNametagVisibleServerOverride;
+
+	[Attribute("N/A")]
+	string nametagLOSEnabledServerOverride;
+	
+	//Server Defaults
 	
 	[Attribute("false")]
-	CSI_ERoleThemes roleTheme;
+	string serverDefaultsActive;
+
+	[Attribute("true")]
+	string compassVisibleServerDefault;
+
+	[Attribute("true")]
+	string squadRadarVisibleServerDefault;
+
+	[Attribute("true")]
+	string groupDisplayVisibleServerDefault;
+
+	[Attribute("true")]
+	string staminaBarVisibleServerDefault;
+
+	[Attribute("true")]
+	string nametagsVisibleServerDefault;
+
+	[Attribute("false")]
+	string rankVisibleServerDefault;
+
+	[Attribute("35")]
+	string nametagsRangeServerDefault;
+
+	[Attribute("false")]
+	string roleNametagVisibleServerDefault;
+
+	[Attribute("true")]
+	string personalColorTeamMenuServerDefault;
+
+	[Attribute("true")]
+	string groupNametagVisibleServerDefault;
+
+	[Attribute("true")]
+	string nametagLOSEnabledServerDefault;
 }

@@ -93,7 +93,7 @@ modded class SCR_NameTagRulesetBase : Managed
 		int currentZone = -1;
 		for (int i = 0; i < m_ZoneCfg.m_iZoneCount; i++) 	// get lowest nametag zone and use it to display the tag, for perf improvement, only nearest zone is searched for when deciding where to draw
 		{
-			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndSq + ((int)(isZoomed) * m_ZoneCfg.m_aZones[i].m_iZoneEndSq); // increase max distance if player is using a scope or binoculars
+			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 + ((int)(isZoomed) * m_ZoneCfg.m_aZones[i].m_iZoneEndPow2); // increase max distance if player is using a scope or binoculars
 			if ( data.m_fDistance <=  distMaxZone)
 			{
 				currentZone = i;
