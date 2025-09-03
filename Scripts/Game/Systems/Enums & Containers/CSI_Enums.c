@@ -36,7 +36,7 @@ enum CSI_ERoleThemes
 
 enum CSI_EIcon
 {
-	// ----------- MAN -----------
+	// ----------- BASE ICONS -----------
 	
 	MAN,
 	OFFICER,
@@ -51,22 +51,7 @@ enum CSI_EIcon
 	MG,
 	MEDIC,
 	
-	// ----------- ICON -----------
-	
-	MAN_ICON,
-	OFFICER_ICON,
-	SL_ICON,
-	TL_ICON,
-	RTO_ICON,
-	ENG_ICON,
-	AT_ICON,
-	DEMO_ICON,
-	SNIPER_ICON,
-	GREN_ICON,
-	MG_ICON,
-	MEDIC_ICON,
-	
-	// ----------- VEHICLE -----------
+	// ----------- VEHICLE ICONS -----------
 	
 	DRIVER,
 	PASSANGER,

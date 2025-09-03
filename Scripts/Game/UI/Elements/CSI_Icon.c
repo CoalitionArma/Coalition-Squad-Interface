@@ -13,12 +13,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		CSI_EIcon.SL,
 		CSI_EIcon.TL,
 		CSI_EIcon.RTO,
-		// ----------- ICON -----------
-		CSI_EIcon.MAN_ICON,
-		CSI_EIcon.OFFICER_ICON,
-		CSI_EIcon.SL_ICON,
-		CSI_EIcon.TL_ICON,
-		CSI_EIcon.RTO_ICON,
 		// ----------- VEHICLE -----------
 		CSI_EIcon.DRIVER,
 		CSI_EIcon.PASSANGER,
@@ -27,6 +21,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		CSI_EIcon.HELIPILOT,
 		CSI_EIcon.HELICREW,
 	};
+	
+	protected bool m_bIconRotationEnabled;
+	protected int m_iPlayerId;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -37,8 +34,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
 	}
 	
+	
 	//------------------------------------------------------------------------------------------------
-	void OnIconUpdate()
+	void IconUpdate(int playerId, )
 	{
 		
 		
