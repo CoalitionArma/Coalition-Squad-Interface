@@ -1128,5 +1128,18 @@ FrameWidgetClass {
     ShadowOffset 0.5 0.5
    }
   }
+  OverlayWidgetClass "{66490C0EF63E99CF}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/CSI_Player.layout" {
+   Name "rootFrame0"
+   Slot FrameWidgetSlot "{66490C0EF63E962B}" {
+    PositionX 1028.33
+    OffsetLeft 1028.33
+    PositionY 930.7
+    OffsetTop 930.7
+    SizeX 188.664
+    OffsetRight -1216.99
+    SizeY 80.479
+    OffsetBottom -1011.18
+   }
+  }
  }
 }

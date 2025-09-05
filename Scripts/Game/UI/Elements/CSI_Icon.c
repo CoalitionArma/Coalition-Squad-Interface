@@ -3,9 +3,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	
-	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Modded/Icons/CSI_ICONS.edds";
+	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
 	
-	protected ref array<CSI_EIcon> m_aNonThemedIcons =
+	protected ref array<CSI_EIcon> m_aNonThemedManIcons =
 	{
 		// ----------- MAN -----------
 		CSI_EIcon.MAN,
@@ -13,6 +13,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		CSI_EIcon.SL,
 		CSI_EIcon.TL,
 		CSI_EIcon.RTO,
+	};
+	
+	protected ref array<CSI_EIcon> m_aNonThemedVehicleIcons =
+	{
 		// ----------- VEHICLE -----------
 		CSI_EIcon.DRIVER,
 		CSI_EIcon.PASSANGER,
@@ -22,8 +26,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		CSI_EIcon.HELICREW,
 	};
 	
-	protected bool m_bIconRotationEnabled;
 	protected int m_iPlayerId;
+	
+	[Attribute("true", UIWidgets.CheckBox)]
+	protected bool m_bIconRotationEnabled;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -36,7 +42,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	
 	//------------------------------------------------------------------------------------------------
-	void IconUpdate(int playerId, )
+	void IconUpdate(int playerId, int yaw)
 	{
 		
 		
@@ -47,14 +53,16 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
+		// do settings check here
+		CSI_ERoleThemes theme;
+		
+		//do icon check here
+		
 		string iconString;
 		
-		if (m_aNonThemedIcons.Contains(icon))
+		if (m_aNonThemedManIcons.Contains(icon) || m_aNonThemedVehicleIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
-		else {
-			// do settings check here
-			CSI_ERoleThemes theme;
-			
+		else {			
 			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_ERoleThemes, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		};
 		
