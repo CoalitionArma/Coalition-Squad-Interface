@@ -3,7 +3,7 @@ SizeLayoutWidgetClass {
  Slot LayoutSlot "{66490C04A7496E5A}" {
  }
  components {
-  CSI_Icon "{661747D2780310A9}" {
+  CSI_Icon "{66A6B5A2EA7E48E5}" {
   }
  }
  {
@@ -16,35 +16,35 @@ SizeLayoutWidgetClass {
    {
     ImageWidgetClass "{660612B98AFC2634}" {
      Name "Arrow"
-     Slot OverlayWidgetSlot {
+     Slot OverlayWidgetSlot "{66A6A72AC9C4C8B2}" {
       HorizontalAlign 3
       VerticalAlign 3
      }
-     Texture "{7EC2171E18286F04}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
      Size 64 64
      Filter 0
     }
-    ImageWidgetClass "{66230406157E78D1}" {
+    ImageWidgetClass "{66A6B5A377FC8834}" {
      Name "Outline"
-     Slot OverlayWidgetSlot {
+     Slot OverlayWidgetSlot "{66A6A72AC9C4C131}" {
       HorizontalAlign 3
       VerticalAlign 3
      }
-     Texture "{7EC2171E18286F04}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-     Image "ICON_OUTLINE"
-     Size 64 64
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON OUTLINE"
+     Size 63 63
      Filter 0
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
-     Slot OverlayWidgetSlot {
+     Slot OverlayWidgetSlot "{66A6A72AC9C4C131}" {
       HorizontalAlign 3
       VerticalAlign 3
      }
-     Texture "{7EC2171E18286F04}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-     Image "DRIVER"
-     Size 64 64
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON FILL"
+     Size 63 63
      Filter 0
     }
    }

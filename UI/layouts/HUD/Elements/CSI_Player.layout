@@ -1,21 +1,33 @@
-OverlayWidgetClass {
+FrameWidgetClass {
  Name "rootFrame"
  Slot LayoutSlot "{66490C04F7A9CB71}" {
  }
  {
   ButtonWidgetClass "{66490C018E363AD3}" {
    Name "Button"
-   Slot OverlayWidgetSlot "{66490C045E9F7180}" {
-    HorizontalAlign 3
-    VerticalAlign 3
+   Slot FrameWidgetSlot "{66A6B5A1D9AF9838}" {
+    PositionX 0
+    OffsetLeft 0
+    PositionY 0
+    OffsetTop 0
+    SizeX 201.835
+    OffsetRight -201.835
+    SizeY 56.095
+    OffsetBottom -56.095
    }
    Color 1 1 1 0
   }
   HorizontalLayoutWidgetClass "{66490C04EEBB161D}" {
    Name "HorizontalLayout"
-   Slot OverlayWidgetSlot "{66490C04EEBB1653}" {
-    HorizontalAlign 3
-    VerticalAlign 3
+   Slot FrameWidgetSlot "{66A6B5A1D9AF9812}" {
+    PositionX 16
+    OffsetLeft 16
+    PositionY 16
+    OffsetTop 16
+    SizeX 177.65
+    OffsetRight -193.65
+    SizeY 30
+    OffsetBottom -46
    }
    {
     SizeLayoutWidgetClass "{66490C075ED122F7}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
@@ -30,7 +42,6 @@ OverlayWidgetClass {
      {
       OverlayWidgetClass "{66490C04B0577466}" {
        Prefab "{66490C04B0577466}"
-       Name "Overlay"
        Slot AlignableSlot "{66490C04BF90FFA3}" {
         HorizontalAlign 3
         VerticalAlign 3
@@ -38,23 +49,13 @@ OverlayWidgetClass {
        {
         ImageWidgetClass "{660612B98AFC2634}" {
          Prefab "{660612B98AFC2634}"
-         Name "Arrow"
          Slot OverlayWidgetSlot "{66490C0EB0DF9137}" {
-          HorizontalAlign 3
-          VerticalAlign 3
-         }
-        }
-        ImageWidgetClass "{66230406157E78D1}" {
-         Prefab "{66230406157E78D1}"
-         Name "Outline"
-         Slot OverlayWidgetSlot "{66490C0EB0DF9166}" {
           HorizontalAlign 3
           VerticalAlign 3
          }
         }
         ImageWidgetClass "{6623052134C9CBC2}" {
          Prefab "{6623052134C9CBC2}"
-         Name "Icon"
          Slot OverlayWidgetSlot "{66490C045E9F18E9}" {
          }
         }
