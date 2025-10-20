@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{8040C3DFF7CFA3ED}UI/layouts/HUD/Modded/CSI_Icon_Nametag.layout"
+ Name "{24C145EEC397BAE7}UI/layouts/HUD/CSI_HUD.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -12,6 +12,8 @@ MetaFileClass {
   LayoutResourceClass PS5 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
+  }
+  LayoutResourceClass Xbox : PC {
   }
  }
 }

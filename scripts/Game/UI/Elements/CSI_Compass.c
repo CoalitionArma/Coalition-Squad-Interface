@@ -1,4 +1,4 @@
-class CSI_Compass : SCR_InfoDisplay
+class CSI_Compass : SCR_ScriptedWidgetComponent
 {
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
@@ -22,6 +22,7 @@ class CSI_Compass : SCR_InfoDisplay
 
 	//------------------------------------------------------------------------------------------------
 	
+	/*
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
@@ -344,4 +345,5 @@ class CSI_Compass : SCR_InfoDisplay
 		
 		return value;
 	}
+	*/
 }

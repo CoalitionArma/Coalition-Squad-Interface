@@ -1,51 +1,73 @@
-SizeLayoutWidgetClass {
- Name "rootFrame"
- Slot LayoutSlot "{66490C04A7496E5A}" {
+ScaleWidgetClass {
+ Name "Icon"
+ Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+  PositionX 0
+  OffsetLeft 0
+  PositionY 0
+  OffsetTop 0
+  SizeX 64
+  OffsetRight -64
+  SizeY 64
+  OffsetBottom -64
  }
  components {
-  CSI_Icon "{66A6B5A2EA7E48E5}" {
+  CSI_Icon "{66A831E2EDF40BCC}" {
+   m_bIconRotationEnabled 0
   }
  }
  {
-  OverlayWidgetClass "{66490C04B0577466}" {
-   Name "Overlay"
-   Slot AlignableSlot "{66490C04BF90FFA3}" {
+  FrameWidgetClass "{66A831E5CEE1BDCF}" {
+   Name "Frame"
+   Slot AlignableSlot "{66A831E5F4AFA64A}" {
     HorizontalAlign 3
     VerticalAlign 3
    }
    {
     ImageWidgetClass "{660612B98AFC2634}" {
      Name "Arrow"
-     Slot OverlayWidgetSlot "{66A6A72AC9C4C8B2}" {
-      HorizontalAlign 3
-      VerticalAlign 3
+     Slot FrameWidgetSlot "{66A831E806B0B8CE}" {
+      Anchor 0 0 1 1
+      PositionX 30.912
+      PositionY 30.08
+      SizeX -61.824
+      OffsetRight 0
+      SizeY -60.16
+      OffsetBottom 0
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
      Size 64 64
      Filter 0
     }
-    ImageWidgetClass "{66A6B5A377FC8834}" {
-     Name "Outline"
-     Slot OverlayWidgetSlot "{66A6A72AC9C4C131}" {
-      HorizontalAlign 3
-      VerticalAlign 3
-     }
-     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-     Image "ICON OUTLINE"
-     Size 63 63
-     Filter 0
-    }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
-     Slot OverlayWidgetSlot "{66A6A72AC9C4C131}" {
-      HorizontalAlign 3
-      VerticalAlign 3
+     Slot FrameWidgetSlot "{66A831E806B0B922}" {
+      Anchor 0 0 1 1
+      PositionX 30.912
+      PositionY 30.08
+      SizeX -61.824
+      OffsetRight 0
+      SizeY -60.16
+      OffsetBottom 0
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON FILL"
      Size 63 63
-     Filter 0
+    }
+    ImageWidgetClass "{66A6B5A377FC8834}" {
+     Name "Outline"
+     Slot FrameWidgetSlot "{66A831E806B0B939}" {
+      Anchor 0 0 1 1
+      PositionX 30.912
+      PositionY 30.08
+      SizeX -61.824
+      OffsetRight 0
+      SizeY -60.16
+      OffsetBottom 0
+     }
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON OUTLINE"
+     Size 63 63
     }
    }
   }

@@ -1,84 +1,69 @@
-FrameWidgetClass {
- Name "rootFrame"
- Slot LayoutSlot "{66490C04F7A9CB71}" {
+ScaleWidgetClass {
+ Name "Player"
+ Slot FrameWidgetSlot "{66A831E5607A8E01}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 127.5
+  OffsetRight -127.5
+  SizeY 20
+  OffsetBottom -20
+ }
+ components {
+  CSI_Player "{66A8318F2121D74D}" {
+  }
  }
  {
-  ButtonWidgetClass "{66490C018E363AD3}" {
-   Name "Button"
-   Slot FrameWidgetSlot "{66A6B5A1D9AF9838}" {
-    PositionX 0
-    OffsetLeft 0
-    PositionY 0
-    OffsetTop 0
-    SizeX 201.835
-    OffsetRight -201.835
-    SizeY 56.095
-    OffsetBottom -56.095
-   }
-   Color 1 1 1 0
-  }
-  HorizontalLayoutWidgetClass "{66490C04EEBB161D}" {
-   Name "HorizontalLayout"
-   Slot FrameWidgetSlot "{66A6B5A1D9AF9812}" {
-    PositionX 16
-    OffsetLeft 16
-    PositionY 16
-    OffsetTop 16
-    SizeX 177.65
-    OffsetRight -193.65
-    SizeY 30
-    OffsetBottom -46
+  FrameWidgetClass "{66A831E5EDE01DB1}" {
+   Name "Frame"
+   Slot AlignableSlot "{66A831E511CFBA86}" {
+    HorizontalAlign 3
+    VerticalAlign 3
    }
    {
-    SizeLayoutWidgetClass "{66490C075ED122F7}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
-     Name "PlayerIcon"
-     Slot LayoutSlot "{66490C04A7496E5A}" {
-     }
-     components {
-      CSI_Icon "{661747D2780310A9}" {
-       m_bIconRotationEnabled 0
-      }
+    HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+     Name "HorizontalLayout"
+     Slot FrameWidgetSlot "{66A831E2AD69F2CE}" {
+      Anchor 0 0 1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX -27
+      OffsetRight 5
+      SizeY 10
+      OffsetBottom 0
      }
      {
-      OverlayWidgetClass "{66490C04B0577466}" {
-       Prefab "{66490C04B0577466}"
-       Slot AlignableSlot "{66490C04BF90FFA3}" {
-        HorizontalAlign 3
+      ScaleWidgetClass "{66A831E50814C1AB}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
+       Name "Icon0"
+       Slot LayoutSlot "{66A831E2E95A965B}" {
         VerticalAlign 3
-       }
-       {
-        ImageWidgetClass "{660612B98AFC2634}" {
-         Prefab "{660612B98AFC2634}"
-         Slot OverlayWidgetSlot "{66490C0EB0DF9137}" {
-          HorizontalAlign 3
-          VerticalAlign 3
-         }
-        }
-        ImageWidgetClass "{6623052134C9CBC2}" {
-         Prefab "{6623052134C9CBC2}"
-         Slot OverlayWidgetSlot "{66490C045E9F18E9}" {
-         }
-        }
+        SizeMode Fill
+        FillWeight 0.2
        }
       }
-     }
-    }
-    RichTextWidgetClass "{66490C0182D57E7E}" {
-     Name "PlayerName"
-     Slot LayoutSlot "{66490C045E9F147C}" {
-     }
-     "Left rule" Stop
-     "Right rule" Stop
-     "Up rule" Stop
-     "Down rule" Stop
-     Text "Njpatman"
-     "Min Font Size" 8
-     "Vertical Alignment" Center
-     FontProperties FontProperties "{66490C06959EDBA0}" {
-      Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
-      ForceFont 1
-      ShadowSize 2
-      ShadowOffset 0.5 0.5
+      RichTextWidgetClass "{66490C0182D57E7E}" {
+       Name "PlayerName"
+       Slot LayoutSlot "{66A831E2E95A96BD}" {
+        HorizontalAlign 0
+        Padding -2 0 0 0
+        SizeMode Fill
+       }
+       "Left rule" Stop
+       "Right rule" Stop
+       "Up rule" Stop
+       "Down rule" Stop
+       Text "PLAYER NAME PLAYER NAME PLAYER NAME"
+       "Font Size" 10
+       "Min Font Size" 10
+       "Vertical Alignment" Center
+       FontProperties FontProperties "{66490C06959EDBA0}" {
+        Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+        ForceFont 1
+        ShadowSize 31
+        ShadowOffset 0.5 0.5
+       }
+      }
      }
     }
    }

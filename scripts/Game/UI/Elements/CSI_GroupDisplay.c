@@ -1,4 +1,4 @@
-class CSI_GroupDisplay : SCR_InfoDisplay
+class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 {
 	protected CSI_ClientComponent m_ClientComponent;
 	protected CSI_AuthorityComponent m_AuthorityComponent;
@@ -11,7 +11,7 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 	// override/static functions
 
 	//------------------------------------------------------------------------------------------------
-
+/*
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
@@ -168,4 +168,5 @@ class CSI_GroupDisplay : SCR_InfoDisplay
 		};
 		return name;
 	};
+*/
 }

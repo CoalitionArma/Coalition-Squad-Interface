@@ -1,0 +1,100 @@
+ScaleWidgetClass {
+ Name "Compass"
+ Slot FrameWidgetSlot "{66A8318AD64681BA}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 132
+  OffsetRight -132
+  SizeY 150
+  OffsetBottom -150
+ }
+ {
+  FrameWidgetClass "{66A8318AA3F0B87B}" {
+   Name "Frame"
+   Slot AlignableSlot "{66A8318AAA650E77}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   {
+    VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
+     Name "VerticalLayout"
+     Slot FrameWidgetSlot "{66A8318AE0DC5BB4}" {
+      Anchor 0 0 1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX -31.944
+      OffsetRight 0
+      SizeY -9.6
+      OffsetBottom 0
+     }
+     {
+      TextWidgetClass "{5EBD2BF287B38B83}" {
+       Name "Bearing"
+       Slot LayoutSlot {
+        SizeMode Auto
+       }
+       "Z Order" -100
+       style debugUI
+       Text "000"
+       "Font Size" 13
+       "Min Font Size" 13
+       "Horizontal Alignment" Center
+       "Vertical Alignment" Center
+       FontProperties FontProperties "{5B0C606254D4404C}" {
+        Font "{0E041C5B1F27DCEA}ui/fonts/robotomono_msdf_28.fnt"
+        ForceFont 1
+        OutlineSize 2
+        ShadowSize 32
+        ShadowOffset 1.25 1.25
+       }
+      }
+      FrameWidgetClass "{66A8318A0B2CF4B5}" {
+       Name "CompassFrame"
+       Slot LayoutSlot "{66A8318A0B2CF4E4}" {
+        SizeMode Fill
+       }
+       {
+        ScaleWidgetClass "{66A83189F3E605FE}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
+         Name "LocalIcon"
+         Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+          Anchor 0.5 0.5 0.5 0.5
+          PositionX -8
+          OffsetLeft -8
+          PositionY -8
+          OffsetTop -8
+          SizeX 16
+          OffsetRight -8
+          SizeY 16
+          OffsetBottom -8
+         }
+        }
+        ImageWidgetClass "{607B1E27AE03E516}" {
+         Name "Compass"
+         Slot FrameWidgetSlot "{66A8318A352718A0}" {
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0
+          OffsetTop 0
+          SizeX -32
+          OffsetRight 0
+          SizeY -107
+          OffsetBottom 0
+         }
+         "Z Order" -100
+         IsPixelPerfect 0
+         Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/compass_shadow360.edds"
+         Size 264 264
+         "Shadow Offset" 0 0
+         "Shadow Size Increase" 0 0
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

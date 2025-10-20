@@ -1,0 +1,33 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_GroupDisplay.layout" {
+   Name "GroupDisplay"
+   Slot FrameWidgetSlot "{66A83196E3AE5829}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 72
+    OffsetLeft 72
+    PositionY -118
+    OffsetTop -118
+    SizeX 637.5
+    OffsetRight -709.5
+    SizeY 100
+    OffsetBottom 18
+   }
+  }
+  ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/layouts/HUD/Elements/CSI_Compass.layout" {
+   Name "Compass"
+   Slot FrameWidgetSlot "{66A8318AD64681BA}" {
+    Anchor 0.5 1 0.5 1
+    PositionX -66
+    OffsetLeft -66
+    PositionY -150
+    OffsetTop -150
+    SizeX 131.995
+    OffsetRight -66
+    SizeY 150.001
+    OffsetBottom 0
+   }
+  }
+ }
+}
