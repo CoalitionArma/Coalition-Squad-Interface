@@ -28,6 +28,38 @@ FrameWidgetClass {
     SizeY 150.001
     OffsetBottom 0
    }
+   {
+    FrameWidgetClass "{66A8318AA3F0B87B}" {
+     Prefab "{66A8318AA3F0B87B}"
+     {
+      VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
+       Prefab "{66A8318AE0DC5B30}"
+       {
+        FrameWidgetClass "{66A8318A0B2CF4B5}" {
+         Prefab "{66A8318A0B2CF4B5}"
+         {
+          ScaleWidgetClass "{66A83189F3E605FE}" {
+           Prefab "{66A83189F3E605FE}"
+           Name "LocalIcon"
+           Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+            Anchor 0.5 0.5 0.5 0.5
+            PositionX -8
+            OffsetLeft -8
+            PositionY -8
+            OffsetTop -8
+            SizeX 16
+            OffsetRight -8
+            SizeY 16
+            OffsetBottom -8
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
   }
  }
 }
