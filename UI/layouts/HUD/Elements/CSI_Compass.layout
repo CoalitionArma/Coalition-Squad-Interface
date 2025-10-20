@@ -32,7 +32,7 @@ ScaleWidgetClass {
      {
       TextWidgetClass "{5EBD2BF287B38B83}" {
        Name "Bearing"
-       Slot LayoutSlot {
+       Slot LayoutSlot "{66A8E6E1A20809DB}" {
         SizeMode Auto
        }
        "Z Order" -100

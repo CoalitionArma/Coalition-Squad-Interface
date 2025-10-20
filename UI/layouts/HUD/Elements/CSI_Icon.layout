@@ -5,10 +5,10 @@ ScaleWidgetClass {
   OffsetLeft 0
   PositionY 0
   OffsetTop 0
-  SizeX 64
-  OffsetRight -64
-  SizeY 64
-  OffsetBottom -64
+  SizeX 63
+  OffsetRight -63
+  SizeY 63
+  OffsetBottom -63
  }
  components {
   CSI_Icon "{66A831E2EDF40BCC}" {
@@ -36,8 +36,7 @@ ScaleWidgetClass {
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
-     Size 64 64
-     Filter 0
+     Size 63 63
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
