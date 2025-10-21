@@ -143,30 +143,5 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 			}
 		};
 	}
-
-	string CheckEllipsis(float maxLength, string name)
-	{
-		float sx = 0;
-		float yx = 0;
-		
-		TextWidget testWidget = TextWidget.Cast(m_wRoot.FindAnyWidget("TestPlayerName"));
-		testWidget.SetText(name);
-		testWidget.GetTextSize(sx, yx);
-
-		if (sx > maxLength) 
-		{
-			for (int e = 0; sx > maxLength - 3.5; e++)
-			{
-				int nameLength = name.Length();
-				nameLength = nameLength - 1;
-				name = name.Substring(0, nameLength);
-
-				testWidget.SetText(name);
-				testWidget.GetTextSize(sx, yx);
-			};
-			name = string.Format("%1...", name);
-		};
-		return name;
-	};
 */
 }

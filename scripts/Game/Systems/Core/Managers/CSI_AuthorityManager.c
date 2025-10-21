@@ -1,7 +1,7 @@
 [ComponentEditorProps(category: "GameScripted/Authority", description: "")]
-class CSI_AuthorityComponentClass : SCR_BaseGameModeComponentClass {};
+class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
 
-class CSI_AuthorityComponent : SCR_BaseGameModeComponent
+class CSI_AuthorityManager : SCR_BaseGameModeComponent
 {
 	//- Setting Variables
 	
@@ -224,39 +224,6 @@ class CSI_AuthorityComponent : SCR_BaseGameModeComponent
 
 		//Once we've updated all values, propagate them to all clients with UpdatePlayerArray.
 		UpdatePlayerArray();
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	int DetermineLocalPlayerValue(int groupID, int localPlayerID)
-	{
-		// Setup value variable.
-		int value = 0;
-		
-		string icon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
-		string colorTeam = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "CT"); // CT = ColorTeam
-
-		// Sort player by their color so we can group color teams together (a lil bit racist).
-		switch (colorTeam) 
-		{
-			case "R" : {value = -3; break;};
-			case "B" : {value = -5; break;};
-			case "Y" : {value = -7; break;};
-			case "G" : {value = -9; break;};
-			default  : {value = 2;  break;};
-		};
-
-		switch (true) 
-		{
-			// If the players is currently the SL, make him the most valuable player in the list
-			case (icon == "SL")                        : {value = -1; break;};
-
-			// Add/Remove value from a player if they're a Team Lead
-			case (icon == "FTL" && colorTeam == "N/A") : {value--;    break;};
-			case (icon == "FTL" && colorTeam != "N/A") : {value++;    break;};
-		};
-
-		// Return how valuable the player is
-		return value;
 	}
 	
 	//- Authority -\\

@@ -1,7 +1,7 @@
 [ComponentEditorProps(category: "GameScripted/Client", description: "CSI Player Component for RPC", color: "0 0 255 255")]
-class CSI_ClientComponentClass : ScriptComponentClass {};
+class CSI_ClientManagerClass : ScriptComponentClass {};
 
-class CSI_ClientComponent : ScriptComponent
+class CSI_ClientManager : ScriptComponent
 {	
 	// All Color Teams
 	protected int m_iCTNone   = ARGB(255, 165, 165, 165);
@@ -92,50 +92,6 @@ class CSI_ClientComponent : ScriptComponent
 		};
 
 		m_aLocalGroupArray = tempLocalGroupArray;
-	}
-	
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	string SwitchStringToIcon(string inputString)
-	{
-		string icon;
-		switch (inputString) 
-		{
-			// All Icons we could possibly want to give the player and/or to use for other functions.
-			case "PAX" : {icon = "{05CAA2D974A461ED}UI\Textures\HUD\Modded\Icons\imagecargo_ca.edds";        break;};
-			case "DRV" : {icon = "{9F51D41FDEB5D414}UI\Textures\HUD\Modded\Icons\imagedriver_ca.edds";       break;};
-			case "GNR" : {icon = "{6049973DED62368F}UI\Textures\HUD\Modded\Icons\imagegunner_ca.edds";       break;};
-			case "SL"  : {icon = "{039CA0681094CD28}UI\Textures\HUD\Modded\Icons\Iconmanleader_ca.edds";     break;};
-			case "FTL" : {icon = "{D1A273A0110C4D5C}UI\Textures\HUD\Modded\Icons\Iconmanteamleader_ca.edds"; break;};
-			case "MED" : {icon = "{C74F2DD12FEBFEB9}UI\Textures\HUD\Modded\Icons\Iconmanmedic_ca.edds";      break;};
-			case "MRK" : {icon = "{6CD9D05A934CDA32}UI\Textures\HUD\Modded\Icons\Iconmansniper_ca.edds";     break;};
-			case "MG"  : {icon = "{C0938BB194E60432}UI\Textures\HUD\Modded\Icons\Iconmanmg_ca.edds";         break;};
-			case "AT"  : {icon = "{D0E196FA6DA69F07}UI\Textures\HUD\Modded\Icons\Iconmanat_ca.edds";         break;};
-			case "GRN" : {icon = "{FBC8C841728649FC}UI\Textures\HUD\Modded\Icons\Iconmangrenadier_ca.edds";  break;};
-			case "EXP" : {icon = "{FBB43C7D00261184}UI\Textures\HUD\Modded\Icons\Iconmanexplosive_ca.edds";  break;};
-			case "ENG" : {icon = "{BE8B9118CEF234A2}UI\Textures\HUD\Modded\Icons\iconmanengineer_ca.edds";   break;};
-			case "MAN" : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
-			default    : {icon = "{25A0BFBD75253292}UI\Textures\HUD\Modded\Icons\Iconman_ca.edds";           break;};
-		};
-		
-		return icon;
-	}
-	
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	int SwitchStringToColorTeam(string inputString)
-	{
-		int colorTeam;
-		switch (inputString) 
-		{
-			case "R" : {colorTeam = m_iCTRed;    break;};
-			case "B" : {colorTeam = m_iCTBlue;   break;};
-			case "Y" : {colorTeam = m_iCTYellow; break;};
-			case "G" : {colorTeam = m_iCTGreen;  break;};
-			default  : {colorTeam = m_iCTNone;   break;};
-		};
-		
-		return colorTeam;
 	}
 	
 	//------------------------------------------------------------------------------------------------

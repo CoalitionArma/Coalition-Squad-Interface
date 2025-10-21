@@ -265,38 +265,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		radarPlayer.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		radarPlayer.SetZOrder(DeterminePlayerValue(storedSpecialtyIconString, colorTeamString));
 	}
-	
-	//------------------------------------------------------------------------------------------------
-	protected float GetPlayersYaw(SCR_ChimeraCharacter playerCharacter)
-	{
-		AimingComponent playerControllerComponent = playerCharacter.GetHeadAimingComponent();
-		if (!playerControllerComponent) 
-			return 0;
-
-		float yaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
-
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess)
-		{
-			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment)
-				yaw = -playerCharacter.GetYawPitchRoll()[0];
-		}
-		return yaw;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected bool IsPlayerInVehicle(SCR_ChimeraCharacter playerCharacter)
-	{
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess) 
-		{
-			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment) 
-				return true;
-		};
-		return false;
-	};
 
 	//------------------------------------------------------------------------------------------------
 	protected void ClearSquadRadar(int positionToStartClearing)
@@ -316,34 +284,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			
 			removeRadarPlayerWidget.SetOpacity(0);
 		};
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	int DeterminePlayerValue(string icon, string colorTeam)
-	{
-		int value = 0;
-		
-		switch (colorTeam) {
-			case "R" : {value = -3; break;};
-			case "B" : {value = -5; break;};
-			case "Y" : {value = -7; break;};
-			case "G" : {value = -9; break;};
-			default  : {value = 2;  break;};
-		};
-		
-		switch (true) {
-			case (icon == "SL")                        : {value = -1; break;};
-			case (icon == "FTL" && colorTeam == "N/A") : {value--;    break;};
-			case (icon == "FTL" && colorTeam != "N/A") : {value++;    break;};
-		};
-
-		if (value == 1) 
-			value = -10;
-		
-		if (value >= 2) 
-			value = -11;
-		
-		return value;
 	}
 	*/
 }
