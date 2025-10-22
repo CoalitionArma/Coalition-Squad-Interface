@@ -33,6 +33,11 @@ class CSI_UIHelper
 		return value;
 	}
 	
+	static void AddToNextAvalibleGridSpace(GridLayoutWidget grid, Widget widget)
+	{
+	
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)
 	{
