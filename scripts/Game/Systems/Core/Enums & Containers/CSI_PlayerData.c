@@ -3,15 +3,17 @@ class CSI_PlayerData
 	protected int m_iPlayerID;
 
 	protected CSI_EColorTeam m_iColorTeam;
+	
 	protected CSI_EIcon m_iOverrideIcon;
 	protected CSI_EIcon m_iDisplayIcon;
-	protected CSI_EIcon m_iSpecialtyIcon;
+	
+	protected bool m_bIsSquadLeader;
+	protected bool m_bIsTeamLeader;
+
 	protected string m_sRank; //For the love of god make this a enum
 	
 	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
-
-	protected int m_iGroupID;
 	
 	//------------------------------------------------------------------------------------------------
 	// SCRIPT INVOKERS
@@ -93,12 +95,6 @@ class CSI_PlayerData
 	CSI_EColorTeam GetColorTeam()
 	{
 		return m_iColorTeam;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	CSI_EIcon GetOverrideIcon()
-	{
-		return m_iOverrideIcon;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -202,7 +198,7 @@ class CSI_PlayerData
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareStringSnapshots(rhs)
+			&& lhs.CompareStringSnapshots(rhs); 
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -213,6 +209,6 @@ class CSI_PlayerData
 			&& snapshot.CompareInt(instance.m_iOverrideIcon)
 			&& snapshot.CompareInt(instance.m_iDisplayIcon)
 			&& snapshot.CompareInt(instance.m_iSpecialtyIcon)
-			&& snapshot.CompareString(instance.m_sPlayerRank)
+			&& snapshot.CompareString(instance.m_sPlayerRank);
 	}
 }

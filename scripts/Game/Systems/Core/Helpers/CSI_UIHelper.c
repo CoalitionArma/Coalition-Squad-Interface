@@ -17,11 +17,6 @@ class CSI_UIHelper
 		CSI_EIcon.HELIPILOT,
 		CSI_EIcon.HELICREW,
 	};
-
-	static void AddToNextAvalibleGridSpace(GridLayoutWidget grid, Widget widget)
-	{
-	
-	}
 	
 	//------------------------------------------------------------------------------------------------
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)

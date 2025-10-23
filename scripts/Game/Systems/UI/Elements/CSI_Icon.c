@@ -9,6 +9,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	[Attribute("true", UIWidgets.CheckBox)]
 	protected bool m_bIconRotationEnabled;
+	
+	[Attribute("false", UIWidgets.CheckBox)]
+	protected bool m_bIsSimpleIcon;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
