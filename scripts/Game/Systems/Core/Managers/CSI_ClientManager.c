@@ -20,7 +20,7 @@ class CSI_ClientManager : ScriptComponent
 	protected ref array<string> m_aLocalGroupArray = new array<string>;
 	
 	// Authority component that handles replication of hashmaps.
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_AuthorityManager m_AuthorityComponent;
 	
 	// Players local group ID
 	protected int m_iLocalPlayersGroupID = 1;
@@ -34,10 +34,10 @@ class CSI_ClientManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 
-	static CSI_ClientComponent GetInstance()
+	static CSI_ClientManager GetInstance()
 	{
 		if (GetGame().GetPlayerController())
-			return CSI_ClientComponent.Cast(GetGame().GetPlayerController().FindComponent(CSI_ClientComponent));
+			return CSI_ClientManager.Cast(GetGame().GetPlayerController().FindComponent(CSI_ClientManager));
 		else
 			return null;
 	}
@@ -47,7 +47,7 @@ class CSI_ClientManager : ScriptComponent
 	{
 		super.OnPostInit(owner);
 
-		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
 
 		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
 			return;

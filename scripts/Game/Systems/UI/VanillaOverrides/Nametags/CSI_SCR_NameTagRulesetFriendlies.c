@@ -32,7 +32,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
 		if (data.m_eType == ENameTagEntityType.VEHICLE 
-		|| CSI_ClientComponent.GetInstance().ReturnLocalCSISettings()[10] == "false" 
+		|| CSI_ClientManager.GetInstance().ReturnLocalCSISettings()[10] == "false" 
 		|| CSI_ChararcterHelper.GetCharacterVehicleCompartment(SCR_PlayerController.GetLocalMainEntity()))
 			return true;
 		

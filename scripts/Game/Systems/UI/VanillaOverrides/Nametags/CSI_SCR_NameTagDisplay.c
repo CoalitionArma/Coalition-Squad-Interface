@@ -3,14 +3,14 @@
 //! Attached to SCR_HUDManagerComponent which is a component of SCR_PlayerController
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_ClientManager m_ClientComponent;
 
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
 		super.DisplayUpdate(owner, timeSlice);
 		
 		if (!m_ClientComponent) 
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_ClientComponent = CSI_ClientManager.GetInstance();
 
 		string nametagsRange = m_ClientComponent.ReturnLocalCSISettings()[6];
 		string nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];

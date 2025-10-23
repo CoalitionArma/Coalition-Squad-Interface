@@ -2,8 +2,8 @@ modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
 
-	protected CSI_ClientComponent m_ClientComponent;
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientManager m_ClientComponent;
+	protected CSI_AuthorityManager m_AuthorityComponent;
 	protected string m_sNametagsPos;
 
 	//------------------------------------------------------------------------------------------------
@@ -11,8 +11,8 @@ modded class SCR_NameTagData : Managed
 	{
 		if (!m_AuthorityComponent || !m_ClientComponent) 
 		{
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
+			m_ClientComponent = CSI_ClientManager.GetInstance();
 		}
 		
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
@@ -122,7 +122,7 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerColorTeam()
 	{		
-		m_ClientComponent = CSI_ClientComponent.GetInstance();
+		m_ClientComponent = CSI_ClientManager.GetInstance();
 		
 		if (!m_ClientComponent) 
 			return 0;

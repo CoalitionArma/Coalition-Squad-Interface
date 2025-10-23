@@ -91,7 +91,7 @@ modded class SCR_AIGroup : ChimeraAIGroup
 		if (!member)
 			return true;
 		
-		CSI_CharacterComponent characterComp = CSI_CharacterComponent.Cast(member.FindComponent(CSI_CharacterComponent));
+		CSI_CharacterManager characterComp = CSI_CharacterManager.Cast(member.FindComponent(CSI_CharacterManager));
 		
 		if(characterComp)
 			characterComp.SetDefaults(index, m_aUnitPrefabColorTeams, m_aUnitPrefabOverrideIcons);

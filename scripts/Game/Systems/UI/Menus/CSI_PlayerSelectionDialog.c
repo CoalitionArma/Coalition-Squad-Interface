@@ -17,8 +17,8 @@ modded class GroupSettingsDialogUI : DialogUI
 class CSI_PlayerSelectionDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
-	protected CSI_AuthorityComponent m_AuthorityComponent;
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_AuthorityManager m_AuthorityComponent;
+	protected CSI_ClientManager m_ClientComponent;
 
 	protected Widget m_wRoot;
 	protected XComboBoxWidget m_wMaxPlayers;
@@ -40,8 +40,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 		// Get Global Player Controller and Group Manager.
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-		m_ClientComponent = CSI_ClientComponent.GetInstance();
+		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
+		m_ClientComponent = CSI_ClientManager.GetInstance();
 
 		if (!groupsManagerComponent || !m_AuthorityComponent) 
 		{
@@ -237,7 +237,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 	protected void OnConfirmMaxPlayersClicked()
 	{
-		CSI_ClientComponent groupBackendComponent = CSI_ClientComponent.GetInstance();
+		CSI_ClientManager groupBackendComponent = CSI_ClientManager.GetInstance();
 
 		if (groupBackendComponent) 
 		{

@@ -4,9 +4,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wCompass;
 	protected SCR_AIGroup m_PlayersGroup;
 	protected PlayerManager m_PlayerManager;
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_ClientManager m_ClientComponent;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_AuthorityManager m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	protected bool hudToggled = false;
@@ -22,17 +22,18 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	
-	protected override event void OnStartDraw(IEntity owner)
+	/*
+	protected override event void OnShow(Widget w)
 	{
-		super.OnStartDraw(owner);
+		super.OnShow(w);
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	override protected void UpdateValues(IEntity owner, float timeSlice)
+	override protected void OnUpdate(Widget w)
 	{
-		super.UpdateValues(owner, timeSlice);
+		super.OnUpdate(w);
 		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
 		
@@ -41,8 +42,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent || !m_wBearing || !m_wCompass || !m_PlayerManager) 
 		{
-			m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
+			m_ClientComponent = CSI_ClientManager.GetInstance();
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 			m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
 			m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
@@ -82,6 +83,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		else
 			SquadRadarSearch();
 	}
+	*/
 
 	//------------------------------------------------------------------------------------------------
 

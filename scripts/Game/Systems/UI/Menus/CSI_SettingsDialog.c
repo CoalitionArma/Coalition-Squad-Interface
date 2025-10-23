@@ -7,8 +7,8 @@ modded enum ChimeraMenuPreset {
 class CSI_SettingsDialog : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
-	protected CSI_ClientComponent m_ClientComponent;
-	protected CSI_AuthorityComponent m_AuthorityComponent;
+	protected CSI_ClientManager m_ClientComponent;
+	protected CSI_AuthorityManager m_AuthorityComponent;
 
 	protected int m_iNametagsRangeSO;
 	
@@ -69,11 +69,11 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
 		cancel.m_OnClicked.Insert(OnMenuBack);
 
-		m_ClientComponent = CSI_ClientComponent.GetInstance();
+		m_ClientComponent = CSI_ClientManager.GetInstance();
 		if (!m_ClientComponent) 
 			return;
 
-		m_AuthorityComponent = CSI_AuthorityComponent.GetInstance();
+		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
 		if (!m_AuthorityComponent) 
 			return;
 

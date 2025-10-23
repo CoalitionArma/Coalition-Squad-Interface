@@ -36,11 +36,11 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 
 	//------------------------------------------------------------------------------------------------
 
-	static CSI_AuthorityComponent GetInstance()
+	static CSI_AuthorityManager GetInstance()
 	{
 		BaseGameMode gameMode = GetGame().GetGameMode();
 		if (gameMode)
-			return CSI_AuthorityComponent.Cast(gameMode.FindComponent(CSI_AuthorityComponent));
+			return CSI_AuthorityManager.Cast(gameMode.FindComponent(CSI_AuthorityManager));
 		else
 			return null;
 	}
@@ -125,7 +125,7 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
 		};
 		
-		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+		CSI_ClientManager clientComponent = CSI_ClientManager.GetInstance();
 		if (!clientComponent) 
 			return;
 		clientComponent.UpdateLocalGroupArray();
@@ -280,7 +280,7 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdateLocalSettings()
 	{
-		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
+		CSI_ClientManager clientComponent = CSI_ClientManager.GetInstance();
 		if (!clientComponent) 
 			return;
 		clientComponent.UpdateLocalCSISettingArray();

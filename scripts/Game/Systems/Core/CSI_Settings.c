@@ -49,5 +49,5 @@ class CSI_GameSettings : ModuleGameSettings
 	string autoHideUI;
 	
 	[Attribute("false")]
-	CSI_ERoleThemes roleTheme;
+	CSI_EIconThemes roleTheme;
 }

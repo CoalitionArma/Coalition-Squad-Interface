@@ -1,6 +1,6 @@
 class CSI_StaminaBar : SCR_InfoDisplay
 {
-	protected CSI_ClientComponent m_ClientComponent;
+	protected CSI_ClientManager m_ClientComponent;
 	protected ProgressBarWidget m_wStamBar;
 	protected bool hudToggled = false;
 
@@ -24,7 +24,7 @@ class CSI_StaminaBar : SCR_InfoDisplay
 
 		if (!m_ClientComponent || !m_wStamBar) 
 		{
-			m_ClientComponent = CSI_ClientComponent.GetInstance();
+			m_ClientComponent = CSI_ClientManager.GetInstance();
 			m_wStamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
 			return;
 		};

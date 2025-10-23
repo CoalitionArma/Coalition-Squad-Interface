@@ -8,7 +8,7 @@ modded class SCR_PlayerController
 		if (RplSession.Mode() == RplMode.Dedicated)
 			return;
 			
-		CSI_CharacterComponent characterComp = CSI_CharacterComponent.Cast(to.FindComponent(CSI_CharacterComponent));
+		CSI_CharacterManager characterComp = CSI_CharacterManager.Cast(to.FindComponent(CSI_CharacterManager));
 		
 		if(characterComp)
 		{	
@@ -17,7 +17,7 @@ modded class SCR_PlayerController
 		};
 	}
 	
-	void SetPlayerMapValues(CSI_CharacterComponent characterComp, SCR_GroupsManagerComponent groupsManagerComp)
+	void SetPlayerMapValues(CSI_CharacterManager characterComp, SCR_GroupsManagerComponent groupsManagerComp)
 	{
 		if (!characterComp || !groupsManagerComp)
 			return;
@@ -35,8 +35,8 @@ modded class SCR_PlayerController
 		bool overrideOnSpawn = characterComp.GetOverrideOnSpawn();
 		TStringArray colorTeamArray = characterComp.GetColorTeamArray();
 		TStringArray overrideIconArray = characterComp.GetOverrideIcons();
-		CSI_ClientComponent clientComponent = CSI_ClientComponent.GetInstance();
-		CSI_AuthorityComponent authorityComponent = CSI_AuthorityComponent.GetInstance();
+		CSI_ClientManager clientComponent = CSI_ClientManager.GetInstance();
+		CSI_AuthorityManager authorityComponent = CSI_AuthorityManager.GetInstance();
 		
 		if (groupID == -1 || !clientComponent || !authorityComponent || (colorTeamArray && colorTeamArray.IsEmpty()) && (overrideIconArray && overrideIconArray.IsEmpty()))
 			return;

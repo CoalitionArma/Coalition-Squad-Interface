@@ -6,11 +6,10 @@ class CSI_PlayerData
 	
 	protected CSI_EIcon m_iOverrideIcon;
 	protected CSI_EIcon m_iDisplayIcon;
-	
-	protected bool m_bIsSquadLeader;
-	protected bool m_bIsTeamLeader;
 
-	protected string m_sRank; //For the love of god make this a enum
+	protected SCR_ECharacterRank m_iRank;
+	
+	protected bool m_bIsTeamLeader;
 	
 	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
@@ -65,20 +64,16 @@ class CSI_PlayerData
 	{
 		m_iDisplayIcon = displayIcon;
 	}
-
-	//------------------------------------------------------------------------------------------------
-	void SetSpecialtyIcon(CSI_EIcon specialtyIcon)
-	{
-		if (CSI_DataHelper.IsSpecialtyIcon(specialtyIcon))
-			m_iSpecialtyIcon = specialtyIcon;
-		else
-			m_iSpecialtyIcon = CSI_EIcon.MAN;
-	}
 	
 	//------------------------------------------------------------------------------------------------
 	void SetRank(string rank)
 	{
-		m_sRank = rank;
+		m_iRank = rank;
+	}
+	
+	void SetIsTeamLeader(bool isTL)
+	{
+		m_bIsTeamLeader = isTL;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -102,17 +97,17 @@ class CSI_PlayerData
 	{
 		return m_iDisplayIcon;
 	}
-
+	
 	//------------------------------------------------------------------------------------------------
-	CSI_EIcon GetSpecialtyIcon()
+	SCR_ECharacterRank GetRank()
 	{
-		return m_iSpecialtyIcon;
+		return m_iRank;
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	string GetRank()
+	bool GetIsTeamLeader()
 	{
-		return m_sRank;
+		return m_bIsTeamLeader;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -126,8 +121,8 @@ class CSI_PlayerData
 		writer.WriteInt(m_iColorTeam);
 		writer.WriteInt(m_iOverrideIcon);
 		writer.WriteInt(m_iDisplayIcon);
-		writer.WriteInt(m_iSpecialtyIcon);
-		writer.WriteString(m_sPlayerRank);
+		writer.WriteInt(m_iRank);
+		writer.WriteBool(m_bIsTeamLeader);
 		return true;
 	}
 	
@@ -138,32 +133,32 @@ class CSI_PlayerData
 		reader.ReadInt(m_iColorTeam);
 		reader.ReadInt(m_iOverrideIcon);
 		reader.ReadInt(m_iDisplayIcon);
-		reader.ReadInt(m_iSpecialtyIcon);
-		reader.ReadString(m_sPlayerRank);
+		reader.ReadInt(m_iRank);
+		reader.ReadBool(m_bIsTeamLeader);
 		return true;
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	static bool Extract(CRF_SlotDataContainer instance, ScriptCtx ctx, SSnapSerializerBase snapshot)
+	static bool Extract(CSI_PlayerData instance, ScriptCtx ctx, SSnapSerializerBase snapshot)
 	{
 		snapshot.SerializeInt(instance.m_iPlayerID);
 		snapshot.SerializeInt(instance.m_iColorTeam);
 		snapshot.SerializeInt(instance.m_iOverrideIcon);
 		snapshot.SerializeInt(instance.m_iDisplayIcon);
-		snapshot.SerializeInt(instance.m_iSpecialtyIcon);
-		snapshot.SerializeString(instance.m_sPlayerRank);
+		snapshot.SerializeInt(instance.m_iRank);
+		snapshot.SerializeBool(instance.m_bIsTeamLeader);
 		return true;
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	static bool Inject(SSnapSerializerBase snapshot, ScriptCtx ctx, CRF_SlotDataContainer instance)
+	static bool Inject(SSnapSerializerBase snapshot, ScriptCtx ctx, CSI_PlayerData instance)
 	{
 		snapshot.SerializeInt(instance.m_iPlayerID);
 		snapshot.SerializeInt(instance.m_iColorTeam);
 		snapshot.SerializeInt(instance.m_iOverrideIcon);
 		snapshot.SerializeInt(instance.m_iDisplayIcon);
-		snapshot.SerializeInt(instance.m_iSpecialtyIcon);
-		snapshot.SerializeString(instance.m_sPlayerRank);
+		snapshot.SerializeInt(instance.m_iRank);
+		snapshot.SerializeBool(instance.m_bIsTeamLeader);
 		return true;
 	}
 	
@@ -175,7 +170,7 @@ class CSI_PlayerData
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeInt(packet);
-		snapshot.EncodeString(packet);
+		snapshot.EncodeBool(packet);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -186,7 +181,7 @@ class CSI_PlayerData
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
-		snapshot.DecodeString(packet);
+		snapshot.DecodeBool(packet);
 		return true;
 	}
 	
@@ -198,17 +193,18 @@ class CSI_PlayerData
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareStringSnapshots(rhs); 
+			&& lhs.CompareSnapshots(rhs, 4)
+			&& lhs.CompareSnapshots(rhs, 4);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	static bool PropCompare(CRF_SlotDataContainer instance, SSnapSerializerBase snapshot, ScriptCtx ctx)
+	static bool PropCompare(CSI_PlayerData instance, SSnapSerializerBase snapshot, ScriptCtx ctx)
 	{
 		return snapshot.CompareInt(instance.m_iPlayerID)
 			&& snapshot.CompareInt(instance.m_iColorTeam)
 			&& snapshot.CompareInt(instance.m_iOverrideIcon)
 			&& snapshot.CompareInt(instance.m_iDisplayIcon)
-			&& snapshot.CompareInt(instance.m_iSpecialtyIcon)
-			&& snapshot.CompareString(instance.m_sPlayerRank);
+			&& snapshot.CompareInt(instance.m_iRank)
+			&& snapshot.CompareInt(instance.m_bIsTeamLeader);
 	}
 }
