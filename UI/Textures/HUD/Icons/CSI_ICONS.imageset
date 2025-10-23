@@ -669,8 +669,8 @@ ImageSetClass {
      Size 63 63
      Flags 0
     }
-    ImageSetDefClass MEDEVIAL {
-     Name "MEDEVIAL"
+    ImageSetDefClass MEDEVIAL SNIPER{
+     Name "MEDEVIAL SNIPER"
      Pos 197 457
      Size 63 63
      Flags 0

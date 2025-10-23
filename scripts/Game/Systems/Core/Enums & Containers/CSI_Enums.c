@@ -1,9 +1,10 @@
 //------------------------------------------------------------------------------------
-// Enumeration for additional gearscript items
+// Enumeration for Color Teams
 //------------------------------------------------------------------------------------
 
-enum CSI_EColorTeams
+enum CSI_EColorTeam
 {
+	NONE,
 	BLUE,
 	RED,
 	GREEN,
@@ -11,7 +12,7 @@ enum CSI_EColorTeams
 }
 
 //------------------------------------------------------------------------------------
-// Enumeration for additional gearscript items
+// Enumeration for Arrows
 //------------------------------------------------------------------------------------
 
 enum CSI_EArrow
@@ -23,7 +24,11 @@ enum CSI_EArrow
 	SIMPLE,
 }
 
-enum CSI_ERoleThemes
+//------------------------------------------------------------------------------------
+// Enumeration for each players Icon
+//------------------------------------------------------------------------------------
+
+enum CSI_EIconThemes
 {
 	CLASSIC,
 	REFORGER_ADV,
@@ -37,7 +42,6 @@ enum CSI_ERoleThemes
 enum CSI_EIcon
 {
 	// ----------- BASE ICONS -----------
-	
 	MAN,
 	OFFICER,
 	SL,
@@ -50,9 +54,7 @@ enum CSI_EIcon
 	GREN,
 	MG,
 	MEDIC,
-	
 	// ----------- VEHICLE ICONS -----------
-	
 	DRIVER,
 	PASSANGER,
 	COMMANDER,

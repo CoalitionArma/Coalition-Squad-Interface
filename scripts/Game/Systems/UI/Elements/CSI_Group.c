@@ -11,7 +11,7 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 	// override/static functions
 
 	//------------------------------------------------------------------------------------------------
-/*
+
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
@@ -80,27 +80,6 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 			playerDisplay.SetText(playerName);
 			playerDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 			
-			if (iconString == "DRV" || iconString == "PAX") 
-			{
-				FrameSlot.SetSize(statusDisplay, 17, 17);	
-				switch (true) {
-					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 88.6);  break;};
-					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 218.8); break;};
-					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 349.0); break;};
-					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 478.6); break;};
-					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 608.6); break;};
-				};
-			} else {
-				FrameSlot.SetSize(statusDisplay, 23.2, 23.2);
-				switch (true) {
-					case (i >= 0 && i <= 4)   : {FrameSlot.SetPosX(statusDisplay, 85.6125);  break;};
-					case (i >= 5 && i <= 9)   : {FrameSlot.SetPosX(statusDisplay, 216.0125); break;};
-					case (i >= 10 && i <= 14) : {FrameSlot.SetPosX(statusDisplay, 346.0125); break;};
-					case (i >= 15 && i <= 19) : {FrameSlot.SetPosX(statusDisplay, 475.6125); break;};
-					case (i >= 20 && i <= 24) : {FrameSlot.SetPosX(statusDisplay, 605.6125); break;};
-				};
-			};
-			
 			statusDisplay.SetOpacity(1);
 			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
@@ -143,5 +122,4 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 			}
 		};
 	}
-*/
 }

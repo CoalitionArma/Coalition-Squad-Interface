@@ -1,38 +1,23 @@
 class CSI_UIHelper
 {	
-	//------------------------------------------------------------------------------------------------
-	static int DeterminePlayerValue(int groupID, int playerID)
+	static ref array<CSI_EIcon> m_aNonThemedIcons =
 	{
-		// Setup value variable.
-		int value = 0;
-		
-		string icon = ReturnAuthorityPlayerMapValue(groupID, playerID, "SSI"); // SSI = StoredSpecialtyIcon
-		string colorTeam = ReturnAuthorityPlayerMapValue(groupID, playerID, "CT"); // CT = ColorTeam
+		// ----------- MAN -----------
+		CSI_EIcon.MAN,
+		CSI_EIcon.OFFICER,
+		CSI_EIcon.SL,
+		CSI_EIcon.TL,
+		CSI_EIcon.RTO,
 
-		// Sort player by their color so we can group color teams together (a lil bit racist).
-		switch (colorTeam) 
-		{
-			case "R" : {value = -3; break;};
-			case "B" : {value = -5; break;};
-			case "Y" : {value = -7; break;};
-			case "G" : {value = -9; break;};
-			default  : {value = 2;  break;};
-		};
+		// ----------- VEHICLE -----------
+		CSI_EIcon.DRIVER,
+		CSI_EIcon.PASSANGER,
+		CSI_EIcon.COMMANDER,
+		CSI_EIcon.GUNNER,
+		CSI_EIcon.HELIPILOT,
+		CSI_EIcon.HELICREW,
+	};
 
-		switch (true) 
-		{
-			// If the players is currently the SL, make him the most valuable player in the list
-			case (icon == "SL")                        : {value = -1; break;};
-
-			// Add/Remove value from a player if they're a Team Lead
-			case (icon == "FTL" && colorTeam == "N/A") : {value--;    break;};
-			case (icon == "FTL" && colorTeam != "N/A") : {value++;    break;};
-		};
-
-		// Return how valuable the player is
-		return value;
-	}
-	
 	static void AddToNextAvalibleGridSpace(GridLayoutWidget grid, Widget widget)
 	{
 	

@@ -22,7 +22,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	
-	/*
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
@@ -285,5 +284,4 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			removeRadarPlayerWidget.SetOpacity(0);
 		};
 	}
-	*/
 }
