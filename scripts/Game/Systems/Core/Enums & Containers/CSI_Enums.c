@@ -62,3 +62,17 @@ enum CSI_EIcon
 	HELIPILOT,
 	HELICREW,
 }
+
+enum CSI_EOverrideIcon
+{
+	AUTO = 2,
+	TL,
+	RTO,
+	ENG,
+	AT,
+	DEMO,
+	SNIPER,
+	GREN,
+	MG,
+	MEDIC,
+}

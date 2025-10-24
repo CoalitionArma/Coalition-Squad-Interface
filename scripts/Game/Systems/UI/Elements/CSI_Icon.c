@@ -2,6 +2,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 {
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
+	protected ImageWidget m_wOutline;
 	
 	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
 	
@@ -20,8 +21,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
+		m_wOutline = ImageWidget.Cast(w.FindAnyWidget("Outline"));
 	}
-	
 	
 	//------------------------------------------------------------------------------------------------
 	void IconUpdate(int playerId, int yaw)

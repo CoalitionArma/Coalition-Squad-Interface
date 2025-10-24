@@ -19,6 +19,13 @@ class CSI_UIHelper
 	};
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	* Check the inputed text widget and add a "..." to the end of their name if the name is longer than the text widget
+	* @param testWidget widget to use to test a players name.
+	* @param maxLength max length the name can bet.
+	* @param name players name.
+	* @return players name with a ellipsis at the end.
+	*/
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)
 	{
 		float sx = 0;

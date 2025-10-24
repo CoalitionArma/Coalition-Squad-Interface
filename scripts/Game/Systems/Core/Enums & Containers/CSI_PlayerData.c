@@ -4,7 +4,7 @@ class CSI_PlayerData
 
 	protected CSI_EColorTeam m_iColorTeam;
 	
-	protected CSI_EIcon m_iOverrideIcon;
+	protected CSI_EOverrideIcon m_iOverrideIcon;
 	protected CSI_EIcon m_iDisplayIcon;
 
 	protected SCR_ECharacterRank m_iRank;
@@ -38,6 +38,13 @@ class CSI_PlayerData
 	// SETTERS
 	//------------------------------------------------------------------------------------------------
 	
+	void ResetPlayerData()
+	{
+		m_iColorTeam = CSI_EColorTeam.NONE;
+		m_iOverrideIcon = CSI_EOverrideIcon.AUTO;
+		m_bIsTeamLeader = false;
+	}
+
 	//------------------------------------------------------------------------------------------------
 	void SetPlayerId(int playerId)
 	{
@@ -51,12 +58,9 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void SetOverrideIcon(CSI_EIcon overrideIcon)
+	void SetOverrideIcon(CSI_EOverrideIcon overrideIcon)
 	{
-		if (CSI_DataHelper.IsSpecialtyIcon(overrideIcon))
-			m_iOverrideIcon = overrideIcon;
-		else
-			m_iOverrideIcon = CSI_EIcon.MAN;
+		m_iOverrideIcon = overrideIcon;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -95,7 +99,10 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	CSI_EIcon GetDisplayIcon()
 	{
-		return m_iDisplayIcon;
+		if (m_iOverrideIcon != CSI_EOverrideIcon.AUTO)
+			return m_iOverrideIcon;
+		else
+			return m_iDisplayIcon;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -205,6 +212,6 @@ class CSI_PlayerData
 			&& snapshot.CompareInt(instance.m_iOverrideIcon)
 			&& snapshot.CompareInt(instance.m_iDisplayIcon)
 			&& snapshot.CompareInt(instance.m_iRank)
-			&& snapshot.CompareInt(instance.m_bIsTeamLeader);
+			&& snapshot.CompareBool(instance.m_bIsTeamLeader);
 	}
 }
