@@ -19,6 +19,23 @@ class CSI_UIHelper
 	};
 	
 	//------------------------------------------------------------------------------------------------
+	static Color ConvertColorTeamToColor(CSI_EColorTeam colorInt)
+	{	
+		Color colorFromInt;
+		
+		switch(colorInt)
+		{
+			case CSI_EColorTeam.NONE : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTNone); break;
+			case CSI_EColorTeam.BLUE : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTBlue); break;
+			case CSI_EColorTeam.RED : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTRed); break;
+			case CSI_EColorTeam.GREEN : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTGreen); break;
+			case CSI_EColorTeam.YELLOW : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTYellow); break;
+		}
+		
+		return colorFromInt; 
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	/**
 	* Check the inputed text widget and add a "..." to the end of their name if the name is longer than the text widget
 	* @param testWidget widget to use to test a players name.
@@ -49,4 +66,24 @@ class CSI_UIHelper
 		};
 		return name;
 	};
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Gets player ID from player name
+	 * @param name The player name to search for
+	 * @return The matching player ID or 0 if not found
+	 */
+	static int GetPlayerIdFromName(string name)
+	{
+		array<int> playerIds = {};
+		GetGame().GetPlayerManager().GetPlayers(playerIds);
+		
+		foreach (int pid : playerIds)
+		{
+			if (GetGame().GetPlayerManager().GetPlayerName(pid) == name)
+				return pid;
+		}
+
+		return 0;
+	}
 }

@@ -2,26 +2,10 @@ class CSI_StaminaBar : SCR_InfoDisplay
 {
 	protected CSI_ClientManager m_ClientComponent;
 	protected ProgressBarWidget m_wStamBar;
-	protected bool hudToggled = false;
 
 	//------------------------------------------------------------------------------------------------
-
-	// Override/static functions
-
-	//------------------------------------------------------------------------------------------------
-
-	protected override event void OnStartDraw(IEntity owner)
+	void Update()
 	{
-		super.OnStartDraw(owner);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override protected void UpdateValues(IEntity owner, float timeSlice)
-	{
-		super.UpdateValues(owner, timeSlice);
-
 		if (!m_ClientComponent || !m_wStamBar) 
 		{
 			m_ClientComponent = CSI_ClientManager.GetInstance();
@@ -32,7 +16,7 @@ class CSI_StaminaBar : SCR_InfoDisplay
 		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
 		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
 
-		if (stamBarVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
+		if (stamBarVisible == "false") 
 		{
 			if (m_wStamBar.GetOpacity() > 0) m_wStamBar.SetOpacity(0);
 			return;
@@ -53,17 +37,6 @@ class CSI_StaminaBar : SCR_InfoDisplay
 
 		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
 		OnStaminaChange(characterController.GetStamina());
-	}
-
-	//------------------------------------------------------------------------------------------------
-
-	// Stamina Bar Functions
-
-	//------------------------------------------------------------------------------------------------
-	
-	protected void ToggleIsVisible()
-	{
-		hudToggled = !hudToggled;
 	}
 
 	//------------------------------------------------------------------------------------------------

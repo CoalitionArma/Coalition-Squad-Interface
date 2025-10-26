@@ -3,28 +3,10 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 	protected CSI_ClientManager m_ClientComponent;
 	protected CSI_AuthorityManager m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
-	
-	protected bool hudToggled = false;
 
 	//------------------------------------------------------------------------------------------------
-
-	// override/static functions
-
-	//------------------------------------------------------------------------------------------------
-
-	/*
-	protected override event void OnShow(Widget w)
+	void Update()
 	{
-		super.OnShow(w);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override protected void OnUpdate(Widget w)
-	{
-		super.OnUpdate(w);
-
 		if (!m_AuthorityComponent || !m_ClientComponent || !m_GroupsManagerComponent) 
 		{
 			m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
@@ -41,7 +23,7 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if ((groupDisplayVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) || !groupArray || groupArray.Count() <= 1 || !playersGroup) 
+		if (groupDisplayVisible == "false" || !groupArray || groupArray.Count() <= 1 || !playersGroup) 
 		{
 			ClearGroupDisplay(0, true);
 			return;
@@ -85,19 +67,8 @@ class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
 			statusDisplay.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 			statusDisplay.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		};
+		
 		ClearGroupDisplay(groupArray.Count(), true);
-	}
-	*/
-	
-	//------------------------------------------------------------------------------------------------
-
-	// group display functions
-
-	//------------------------------------------------------------------------------------------------
-	
-	protected void ToggleIsVisible()
-	{
-		hudToggled = !hudToggled;
 	}
 
 	//------------------------------------------------------------------------------------------------

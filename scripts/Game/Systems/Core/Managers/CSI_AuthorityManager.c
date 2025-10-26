@@ -2,47 +2,42 @@
 class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
 
 class CSI_AuthorityManager : SCR_BaseGameModeComponent
-{
-	//- Setting Variables
-	
-	// A hashmap that is modified only on the authority.
-	protected ref map<string, string> m_mUpdateAuthoritySettingsMap = new map<string, string>;
-
+{	
 	// A array we use to broadcast whenever a change happens to any of the server overrides.
 	[RplProp(onRplName: "UpdateLocalSettings")]
 	ref array<string> m_aServerOverridesArray = new array<string>;
 	
-	//- Player Maps Variables
-
-	// A hashmap that is modified only on the authority.
-	protected ref map<string, string> m_mAuthorityPlayerMap = new map<string, string>;
-
-	// A hashmap that is modified only on each client by a .BumpMe from the authority.
-	protected ref map<string, string> m_mLocalPlayerMap = new map<string, string>;
-
-	// A array we use primarily for replication of m_mAuthorityPlayerMap to m_mLocalPlayerMap.
-	[RplProp(onRplName: "UpdateLocalPlayerMap")]
-	protected ref array<string> m_aPlayerArray = new array<string>;
+	protected ref map<int, CSI_PlayerData> m_mPlayerDataMap = new map<int, CSI_PlayerData>;
+	
+	// Replication arrays (maps cannot be directly replicated)
+	[RplProp()]
+	protected ref array<int> m_aPlayerIDs = {}; 
+	
+	[RplProp()]
+	protected ref array<ref CSI_PlayerData> m_aPlayerData = {}; 
+	
+	// Replication property for slotting updates
+	[RplProp(onRplName: "PlayerDataUpdate")]
+	protected int m_PlayerDataUpdate;
 
 	// The vanilla group manager.
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+
+	//------------------------------------------------------------------------------------------------
+	protected static CSI_AuthorityManager m_sInstance;
+	void CSI_AuthorityManager(IEntityComponentSource src, IEntity ent, IEntity parent)
+	{
+		m_sInstance = this;
+	}
 	
-	// Need to ensure we dont save too many times since that'll break stuff
-	protected bool m_bEngineSaving
-
 	//------------------------------------------------------------------------------------------------
-
-	// override/static functions
-
+	// INITIALIZATION
 	//------------------------------------------------------------------------------------------------
-
+	
+	//------------------------------------------------------------------------------------------------
 	static CSI_AuthorityManager GetInstance()
 	{
-		BaseGameMode gameMode = GetGame().GetGameMode();
-		if (gameMode)
-			return CSI_AuthorityManager.Cast(gameMode.FindComponent(CSI_AuthorityManager));
-		else
-			return null;
+		return m_sInstance;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -55,212 +50,62 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 			return;
 		
 		UpdateAuthoritySettingArray();
-			
-		GetGame().GetCallqueue().CallLater(UpdateAllGroupStrings, 685, true);
-		GetGame().GetCallqueue().CallLater(CleanUpAuthorityPlayerMap, 480000, true); // Updates every 8min (480000ms)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	// DATA AND REPLICATION HANDLING
+	//------------------------------------------------------------------------------------------------
+
+	//------------------------------------------------------------------------------------------------
+	CSI_PlayerData GetPlayerData(int playerID)
+	{
+		return m_mPlayerDataMap.Get(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	override protected void OnGameEnd()
+	void RequestDataUpdate()
 	{
-		super.OnGameEnd();
-		
-		//--- Server only
 		if (RplSession.Mode() == RplMode.Client)
 			return;
 		
-		GetGame().GetCallqueue().Remove(UpdateAllGroupStrings);
-		GetGame().GetCallqueue().Remove(CleanUpAuthorityPlayerMap);
-	}
+		m_aPlayerIDs.Clear();
+		m_aPlayerData.Clear();
 
-	//------------------------------------------------------------------------------------------------
-
-	// Functions to replicate and store values to each clients m_mLocalPlayerMap
-
-	//------------------------------------------------------------------------------------------------
-
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	string ReturnLocalPlayerMapValue(int groupID, int playerID, string key)
-	{
-		// Get the players key
-		key = string.Format("%1%2%3", groupID, playerID, key);
-		return m_mLocalPlayerMap.Get(key);
-	}
-
-
-	//- Authority & Client -\\
-	//------------------------------------------------------------------------------------------------
-	protected void UpdatePlayerArray()
-	{
-		// Create a temp array so we arent broadcasting for each change to m_aPlayerArray.
-		protected ref array<string> tempPlayerArray = new array<string>;
-
-		// Fill tempPlayerArray with all keys and values in m_mAuthorityPlayerMap.
-		for (int i = 0; i < m_mAuthorityPlayerMap.Count(); i++)
+		// Fill arrays with all map data
+		foreach (int playerID, ref CSI_PlayerData playerData : m_mPlayerDataMap)
 		{
-			string key = m_mAuthorityPlayerMap.GetKey(i);
-			string value = m_mAuthorityPlayerMap.Get(key);
-			
-			tempPlayerArray.Insert(string.Format("%1~%2", key, value));
-		};
+			m_aPlayerIDs.Insert(playerID);
+			m_aPlayerData.Insert(playerData);
+		}
 
-		// Replicate m_aPlayerArray to all clients.
-		m_aPlayerArray = tempPlayerArray;
+		// Update replication properties
+		m_PlayerDataUpdate++;
 		Replication.BumpMe();
 		
-		//Adds support for listen servers
-		UpdateLocalPlayerMap();
+		#ifdef WORKBENCH
+			PlayerDataUpdate();
+		#endif
 	}
 
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
-	protected void UpdateLocalPlayerMap()
+	protected void PlayerDataUpdate()
 	{
-		// Fill m_mLocalPlayerMap with all keys and values from m_mAuthorityPlayerMap.
-		foreach (string playerKeyAndValueToSplit : m_aPlayerArray)
-		{
-			array<string> playerKeyAndValueArray = {};
-			playerKeyAndValueToSplit.Split("~", playerKeyAndValueArray, false);
-			m_mLocalPlayerMap.Set(playerKeyAndValueArray[0], playerKeyAndValueArray[1]);
-		};
-		
-		CSI_ClientManager clientComponent = CSI_ClientManager.GetInstance();
-		if (!clientComponent) 
-			return;
-		clientComponent.UpdateLocalGroupArray();
-	}
-
-	//------------------------------------------------------------------------------------------------
-
-	// Functions to update m_mAuthorityPlayerMap.
-
-	//------------------------------------------------------------------------------------------------
-	
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	string ReturnAuthorityPlayerMapValue(int groupID, int playerID, string key)
-	{
-		// Get the players key
-		key = string.Format("%1%2%3", groupID, playerID, key);
-		return m_mAuthorityPlayerMap.Get(key);
-	}
-
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	void UpdateAuthorityPlayerMapValue(int groupID, int playerID, string write, string value)
-	{
-		// The key we are gonna use that keeps everything local to the group and player, so we don't get any cross-contamination between groups or players.
-		string key = string.Format("%1%2%3", groupID, playerID, write);
-		m_mAuthorityPlayerMap.Set(key, value);
-	}
-
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	protected void UpdateAllGroupStrings()
-	{	
-		if (!ReturnAuthoritySettings()[1] && !ReturnAuthoritySettings()[2] && !ReturnAuthoritySettings()[7]) 
+		if (RplSession.Mode() == RplMode.Dedicated)
 			return;
 		
-		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		if (!m_GroupsManagerComponent) 
-			return;
-
-		array<SCR_AIGroup> outAllGroups;
-
-		// Get all groups
-		m_GroupsManagerComponent.GetAllPlayableGroups(outAllGroups);
-
-		foreach (SCR_AIGroup playersGroup : outAllGroups)
+		// Update local map from replicated arrays
+		for (int i = 0; i < m_aPlayerIDs.Count(); i++)
 		{
-			if (!playersGroup) 
-				continue;
-
-			array<string> groupStringArray = {};
-
-			// Get list of all the players we have to parse through.
-			array<int> groupPlayersIDs = playersGroup.GetPlayerIDs();
+			int playerID = m_aPlayerIDs.Get(i);
 			
-			// Get Group ID
-			int groupID = playersGroup.GetGroupID();
-
-			array<string> tempLocalGroupArray = {};
-			string groupString = "";
-
-			// Parse through current group array.
-			foreach (int localPlayerID : groupPlayersIDs)
-			{
-				string playerDisplayIcon = ReturnAuthorityPlayerMapValue(groupID, localPlayerID, "DI"); // DI = DisplayIcon
-				
-				if (playerDisplayIcon.IsEmpty()) 
-					continue;
-				
-				string playerValue = DetermineLocalPlayerValue(groupID, localPlayerID).ToString(); // Determine players value by their color team and icon so we can sort players from most to least valuable in the group display (definitely not racist).
-				
-				if (playerValue.IsEmpty() || playerValue == "0") 
-					continue;
-				
-				// Format a string with what we need for displaying/sorting a player.
-				string playerStr = string.Format("%1:%2", playerValue, localPlayerID);
-				
-				tempLocalGroupArray.Insert(playerStr);
-			};
-
-			tempLocalGroupArray.Sort(false);
-
-			foreach (string playerStr : tempLocalGroupArray) 
-			{
-				if (groupString.IsEmpty()) 
-					groupString = playerStr;
-				else
-					groupString = string.Format("%1|%2", groupString, playerStr);
-			}
-
-			// Update GroupString.
-			if (groupString != ReturnAuthorityPlayerMapValue(groupID, -1, "GS")) // GS = GroupString
-				UpdateAuthorityPlayerMapValue(groupID, -1, "GS", groupString); // GS = GroupString
-		};
-
-		//Once we've updated all values, propagate them to all clients with UpdatePlayerArray.
-		UpdatePlayerArray();
-	}
-	
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	protected void CleanUpAuthorityPlayerMap()
-	{
-		map<string, string> tempMap = new map<string, string>;
-		array<int> outPlayers = new array<int>;
-
-		GetGame().GetPlayerManager().GetPlayers(outPlayers);
-		
-		foreach (int playerID : outPlayers) 
-		{
-			SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(playerID);
+			CSI_PlayerData newPlayerData = m_aPlayerData.Get(i);
+			CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
 			
-			if (!playersGroup) 
-				continue;
-			
-			// CT = ColorTeam | OI = OverrideIcon | DI = DisplayIcon | SSI = StoredSpecialtyIcon | PR = PlayerRank
-			array<string> playerValuesArray = {"CT", "OI", "DI", "SSI", "PR"};
-			
-			foreach (string value : playerValuesArray) 
-			{
-				int groupID = playersGroup.GetGroupID();
-				
-				if (value == "PR")
-				 	groupID = -1;
-				
-				string hashValue = ReturnAuthorityPlayerMapValue(groupID, playerID, value);
-				string key = string.Format("%1%2%3", groupID, playerID, value);
-				tempMap.Set(key, hashValue);
-			}
-		};
-
-		m_mAuthorityPlayerMap.Clear();
-
-		m_mAuthorityPlayerMap = tempMap;
+			if(!oldPlayerData)
+				m_mPlayerDataMap.Set(playerID, newPlayerData);
+			else
+				oldPlayerData.DataUpdate(playerID, newPlayerData);
+		}
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -294,11 +139,7 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 		
 		GetGame().UserSettingsChanged();
 		
-		if(!m_bEngineSaving)
-		{
-			m_bEngineSaving = true;
-			GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 1, false);
-		}
+		GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 1, false);
 		
 		UpdateAuthoritySettingArray();
 	}
@@ -307,7 +148,6 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	//------------------------------------------------------------------------------------------------
 	void SaveAuthoritySettingsDelay()
 	{
-		m_bEngineSaving = false;
 		GetGame().SaveUserSettings();
 	}
 

@@ -65,9 +65,8 @@ enum CSI_EIcon
 
 enum CSI_EOverrideIcon
 {
-	AUTO = 2,
-	TL,
-	RTO,
+	AUTO = 0,
+	RTO = 4,
 	ENG,
 	AT,
 	DEMO,

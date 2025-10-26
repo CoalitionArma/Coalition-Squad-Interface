@@ -9,7 +9,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected CSI_AuthorityManager m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
-	protected bool hudToggled = false;
 	protected vector m_vOwnerOrigin;
 	protected float m_fYaw, m_fStoredYaw, m_iSearchRadius;
 	protected ref array<SCR_ChimeraCharacter> m_aAllPlayersWithinRange;
@@ -17,24 +16,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected string m_sCompassTexture, m_sSquadRadarIconSize;
 
 	//------------------------------------------------------------------------------------------------
-
-	// Override/static functions
-
-	//------------------------------------------------------------------------------------------------
-	
-	/*
-	protected override event void OnShow(Widget w)
-	{
-		super.OnShow(w);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override protected void OnUpdate(Widget w)
-	{
-		super.OnUpdate(w);
-		
+	void Update()
+	{		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());
 		
 		if (!m_ChimeraCharacter) 
@@ -58,7 +41,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		string squadRadarVisible = m_ClientComponent.ReturnLocalCSISettings()[1];
 		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
 
-		if (compassVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
+		if (compassVisible == "false") 
 		{
 			if (m_wCompass.GetOpacity() > 0) 
 			{
@@ -78,24 +61,13 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		
 		SetBearingAndCompass(compassVisible, hudAutoHidden);
 
-		if ((squadRadarVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) || !m_PlayersGroup) 
+		if (squadRadarVisible == "false" || !m_PlayersGroup) 
 			ClearSquadRadar(-1);
 		else
 			SquadRadarSearch();
 	}
-	*/
 
 	//------------------------------------------------------------------------------------------------
-
-	// Compass Functions
-
-	//------------------------------------------------------------------------------------------------
-	
-	protected void ToggleIsVisible()
-	{
-		hudToggled = !hudToggled;
-	}
-
 	protected void SetBearingAndCompass(string compassVisible, string hudAutoHidden)
 	{
 		AimingComponent playerControllerComponent = m_ChimeraCharacter.GetHeadAimingComponent();
@@ -119,7 +91,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			m_fStoredYaw = m_fYaw;
 		};
 		
-		if (compassVisible == "false" || (hudAutoHidden == "true" && !hudToggled)) 
+		if (compassVisible == "false") 
 			return;
 
 		int yawInt = -m_fYaw;
@@ -144,11 +116,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-
-	// Squad Radar Functions
-
-	//------------------------------------------------------------------------------------------------
-
 	protected void SquadRadarSearch() 
 	{
 		m_aAllPlayersWithinRange = {};
@@ -265,25 +232,5 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		radarPlayer.LoadImageTexture(0, m_ClientComponent.SwitchStringToIcon(iconString));
 		radarPlayer.SetColorInt(m_ClientComponent.SwitchStringToColorTeam(colorTeamString));
 		radarPlayer.SetZOrder(DeterminePlayerValue(storedSpecialtyIconString, colorTeamString));
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void ClearSquadRadar(int positionToStartClearing)
-	{
-		if (positionToStartClearing == -1) 
-		{
-			ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
-			radarlocalPlayer.SetOpacity(0);
-		};
-
-		for (int e = positionToStartClearing; e <= 24; e++)
-		{
-			ImageWidget removeRadarPlayerWidget = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", e)));
-			
-			if (!removeRadarPlayerWidget) 
-				continue;
-			
-			removeRadarPlayerWidget.SetOpacity(0);
-		};
 	}
 }

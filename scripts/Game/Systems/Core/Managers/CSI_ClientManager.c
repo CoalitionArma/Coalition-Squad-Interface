@@ -4,11 +4,11 @@ class CSI_ClientManagerClass : ScriptComponentClass {};
 class CSI_ClientManager : ScriptComponent
 {	
 	// All Color Teams
-	protected int m_iCTNone   = ARGB(255, 165, 165, 165);
-	protected int m_iCTRed    = ARGB(255, 200, 65, 65);
-	protected int m_iCTBlue   = ARGB(255, 0, 92, 255);
-	protected int m_iCTYellow = ARGB(255, 230, 230, 0);
-	protected int m_iCTGreen  = ARGB(255, 0, 190, 85);
+	static int m_iCTNone   = ARGB(255, 165, 165, 165);
+	static int m_iCTRed    = ARGB(255, 200, 65, 65);
+	static int m_iCTBlue   = ARGB(255, 0, 92, 255);
+	static int m_iCTYellow = ARGB(255, 230, 230, 0);
+	static int m_iCTGreen  = ARGB(255, 0, 190, 85);
 	
 	// A hashmap that is modified only on the local user.
 	protected ref map<string, string> m_mUpdateClientSettingsMap = new map<string, string>;
@@ -57,41 +57,6 @@ class CSI_ClientManager : ScriptComponent
 		
 		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 625, true);
 		UpdateLocalCSISettingArray();
-	}
-
-	//------------------------------------------------------------------------------------------------
-
-	// Functions to sort and store the current group array we want to show on players screens.
-
-	//------------------------------------------------------------------------------------------------
-
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	TStringArray GetLocalGroupArray()
-	{
-		return m_aLocalGroupArray;
-	}
-
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	void UpdateLocalGroupArray()
-	{
-		array<string> tempLocalGroupArray = {};
-		
-		string groupString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, -1, "GS"); // GS = GroupString
-
-		if (groupString.IsEmpty()) 
-			return;
-
-		array<string> outGroupStrArray = {};
-		groupString.Split("|", outGroupStrArray, false);
-
-		foreach (string playerString : outGroupStrArray) 
-		{
-			tempLocalGroupArray.Insert(playerString);
-		};
-
-		m_aLocalGroupArray = tempLocalGroupArray;
 	}
 	
 	//------------------------------------------------------------------------------------------------
