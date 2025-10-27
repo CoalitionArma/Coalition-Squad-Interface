@@ -126,14 +126,6 @@ class CSI_ClientManager : ScriptComponent
 				};
 			};
 		};
-		
-		//------------------------------------------------------------------------------------------------
-		// Set SL Icon
-		//------------------------------------------------------------------------------------------------
-
-		// Check if current player is the current squad leader.
-		if (playersGroup.IsPlayerLeader(localPlayerID))
-			specialtyIcon = "SL"; // Set Squad Leader Icon
 
 		//------------------------------------------------------------------------------------------------
 		// Override regular Icons If Needed

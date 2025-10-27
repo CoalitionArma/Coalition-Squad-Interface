@@ -16,6 +16,20 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected string m_sCompassTexture, m_sSquadRadarIconSize;
 
 	//------------------------------------------------------------------------------------------------
+	override void HandlerAttached(Widget w)
+	{
+		super.HandlerAttached(w);
+
+		m_AuthorityComponent.GetInstance();
+		m_ClientComponent.GetInstance();
+		m_GroupsManagerComponent.GetInstance();
+		
+		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
+		m_wBearing = TextWidget.Cast(w.FindAnyWidget("Bearing"));
+		m_PlayerManager = GetGame().GetPlayerManager();
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	void Update()
 	{		
 		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerController().GetControlledEntity());

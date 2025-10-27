@@ -32,9 +32,16 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		{
 			m_iPlayerId = playerId;
 			
-			if(m_PlayerData)
+			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 			
+			if (playerId == 0)
+			{
+				m_wRoot.SetVisible(false);
+				return;
+			};
+			
+			m_wRoot.SetVisible(true);
 			m_PlayerData = m_AuthorityManager.GetPlayerData(playerId);
 			m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
 			

@@ -1,27 +1,18 @@
-class CSI_StaminaBar : SCR_InfoDisplay
+class CSI_StaminaBar : SCR_ScriptedWidgetComponent
 {
-	protected CSI_ClientManager m_ClientComponent;
 	protected ProgressBarWidget m_wStamBar;
 
 	//------------------------------------------------------------------------------------------------
+	override void HandlerAttached(Widget w)
+	{
+		super.HandlerAttached(w);
+		
+		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	void Update()
 	{
-		if (!m_ClientComponent || !m_wStamBar) 
-		{
-			m_ClientComponent = CSI_ClientManager.GetInstance();
-			m_wStamBar = ProgressBarWidget.Cast(m_wRoot.FindWidget("StamBar"));
-			return;
-		};
-
-		string stamBarVisible = m_ClientComponent.ReturnLocalCSISettings()[3];
-		string hudAutoHidden = m_ClientComponent.ReturnLocalCSISettings()[14];
-
-		if (stamBarVisible == "false") 
-		{
-			if (m_wStamBar.GetOpacity() > 0) m_wStamBar.SetOpacity(0);
-			return;
-		}
-
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
 

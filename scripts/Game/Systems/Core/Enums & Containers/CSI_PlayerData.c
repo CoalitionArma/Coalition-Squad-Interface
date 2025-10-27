@@ -38,20 +38,25 @@ class CSI_PlayerData
 		// Sort player by their color so we can group color teams together (a lil bit racist).
 		switch (m_iColorTeam) 
 		{
-			case CSI_EColorTeam.RED    : {value = -3; break;};
-			case CSI_EColorTeam.BLUE   : {value = -5; break;};
-			case CSI_EColorTeam.YELLOW : {value = -7; break;};
-			case CSI_EColorTeam.GREEN  : {value = -9; break;};
+			case CSI_EColorTeam.RED    : value = -3; break;
+			case CSI_EColorTeam.BLUE   : value = -5; break;
+			case CSI_EColorTeam.YELLOW : value = -7; break;
+			case CSI_EColorTeam.GREEN  : value = -9; break;
 			default : {value = 2;  break;};
 		};
 
 		switch (true) 
 		{
-			// Add/Remove value from a player if they're a Team Lead
-			case (m_bIsTeamLeader && m_iColorTeam == CSI_EColorTeam.NONE) : {value--;    break;};
-			case (m_bIsTeamLeader && m_iColorTeam != CSI_EColorTeam.NONE) : {value++;    break;};
+			case (m_bIsTeamLeader && m_iColorTeam == CSI_EColorTeam.NONE) : value--; break;
+			case (m_bIsTeamLeader && m_iColorTeam != CSI_EColorTeam.NONE) : value++; break;
 		};
 		
+		if (SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(playerID).IsPlayerLeader(playerID))
+		{
+			value = -1;
+			m_iDisplayIcon = CSI_EIcon.SL;
+		};
+				
 		m_iPlayerValue = value;
 		
 		if (m_OnDataUpdate)
