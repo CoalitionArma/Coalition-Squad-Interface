@@ -103,8 +103,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		
 		ImageWidget radarlocalPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget("LocalPlayer"));
 		
-		
-		
 		m_vOwnerOrigin = m_ChimeraCharacter.GetOrigin();
 		
 		UpdateSquadRadarPositions();
@@ -120,13 +118,12 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(m_PlayerManager.GetPlayerControlledEntity(playerId));
 			
 			if (!playerCharacter)
-				continue
+				continue;
 			
 			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 
 			// Get Distance
 			float dis = vector.Distance(m_vOwnerOrigin, playerCharacterOrigin);
-			float disT = dis * 2.0;
 			
 			int searchRadius = 24;
 			
@@ -138,6 +135,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			
 			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
 
+			float disT = dis * 2.0;
+			
 			if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_ChimeraCharacter)) 
 				disT = dis * 6.215;
 
