@@ -29,14 +29,38 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerData(int playerID, CSI_EIcon icon, CSI_EOverrideIcon overrideIcon, CSI_EColorTeam colorTeam, bool isTL, SCR_ECharacterRank rank)
+	void UpdatePlayerData(int playerID, CSI_EIcon icon, SCR_ECharacterRank rank)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		playerData.SetDisplayIcon(icon);
+		playerData.SetRank(rank);
+		
+		RequestDataUpdate();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		playerData.SetColorTeam(colorTeam);
-		playerData.SetIsTeamLeader(isTL);
-		playerData.SetDisplayIcon(icon);
+		
+		RequestDataUpdate();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
 		playerData.SetOverrideIcon(overrideIcon);
-		playerData.SetRank(rank);
+		
+		RequestDataUpdate();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerTeamLeader(int playerID, bool isTL)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		playerData.SetIsTeamLeader(isTL);
 		
 		RequestDataUpdate();
 	}

@@ -8,16 +8,20 @@ ScaleWidgetClass {
   SizeY 150
   OffsetBottom -150
  }
+ components {
+  CSI_Compass "{66B8C3E494A6A162}" {
+  }
+ }
  {
   FrameWidgetClass "{66A8318AA3F0B87B}" {
-   Name "Frame"
+   Name "CompassFrame"
    Slot AlignableSlot "{66A8318AAA650E77}" {
     HorizontalAlign 3
     VerticalAlign 3
    }
    {
     VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
-     Name "VerticalLayout"
+     Name "CompassVerticalLayout"
      Slot FrameWidgetSlot "{66A8318AE0DC5BB4}" {
       Anchor 0 0 1 1
       PositionX 0
@@ -33,9 +37,9 @@ ScaleWidgetClass {
       TextWidgetClass "{5EBD2BF287B38B83}" {
        Name "Bearing"
        Slot LayoutSlot "{66A8E6E1A20809DB}" {
-        SizeMode Auto
+        SizeMode Fill
+        FillWeight 0.12
        }
-       "Z Order" -100
        style debugUI
        Text "000"
        "Font Size" 13
@@ -56,19 +60,19 @@ ScaleWidgetClass {
         SizeMode Fill
        }
        {
-        ScaleWidgetClass "{66A83189F3E605FE}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
-         Name "LocalIcon"
-         Slot FrameWidgetSlot "{66A831E473F06EE3}" {
-          Anchor 0.5 0.5 0.5 0.5
-          PositionX -8
-          OffsetLeft -8
-          PositionY -8
-          OffsetTop -8
-          SizeX 16
-          OffsetRight -8
-          SizeY 16
-          OffsetBottom -8
+        ScaleWidgetClass "{66B8C3E49230831B}" : "{D45CA5F9BA346BF7}UI/layouts/HUD/Elements/CSI_Radar.layout" {
+         Name "Radar"
+         Slot FrameWidgetSlot "{66B8C3DFC9AE8CC6}" {
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0.964
+          SizeX 0
+          OffsetRight 0
+          SizeY -1.929
+          OffsetBottom 0
          }
+         "Z Order" 1
         }
         ImageWidgetClass "{607B1E27AE03E516}" {
          Name "Compass"

@@ -52,9 +52,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			if (dis > searchRadius) 
 				continue;
 			
-			ImageWidget radarPlayer = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", i)));
+			ImageWidget radarIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarIcon%1", i)));
 
-            CSI_Icon icon = CSI_Icon.Cast(radarPlayer.FindHandler(CSI_Icon));
+            CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
             icon.IconUpdate(playerId);
 
 			float disT = dis * 2.0;
@@ -77,23 +77,25 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			float widthAndHeight = 16 * (m_sSquadRadarIconSize.ToInt() * 0.01);
 			y = y - 76;
 			
-			FrameSlot.SetPos(radarPlayer, (x - widthAndHeight/2), y);
-			FrameSlot.SetSize(radarPlayer, widthAndHeight, widthAndHeight);
+			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), y);
+			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
 
-			radarPlayer.SetOpacity(Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0));
-			radarPlayer.SetRotation(-Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360));
+			radarIcon.SetOpacity(Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0));
+			radarIcon.SetRotation(-Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360));
 
             positionToStartClearing++;
 		};
 
 		for (int e = positionToStartClearing; e <= 24; e++)
 		{
-			ImageWidget removeRadarPlayerWidget = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarPlayer%1", e)));
+			ImageWidget RemoveRadarWidget = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("RadarIcon%1", e)));
 			
-			if (!removeRadarPlayerWidget) 
+			if (!RemoveRadarWidget) 
 				continue;
 			
-			removeRadarPlayerWidget.SetVisible(false);
+            CSI_Icon RemoveRadarIcon = CSI_Icon.Cast(RemoveRadarWidget.FindHandler(CSI_Icon));
+            RemoveRadarIcon.IconUpdate(0);
+			RemoveRadarWidget.SetVisible(false);
 		};
 	}
 }

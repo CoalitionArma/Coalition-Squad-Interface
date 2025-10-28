@@ -12,12 +12,11 @@ ScaleWidgetClass {
  }
  components {
   CSI_Icon "{66A831E2EDF40BCC}" {
-   m_bIconRotationEnabled 0
   }
  }
  {
   FrameWidgetClass "{66A831E5CEE1BDCF}" {
-   Name "Frame"
+   Name "IconFrame"
    Slot AlignableSlot "{66A831E5F4AFA64A}" {
     HorizontalAlign 3
     VerticalAlign 3

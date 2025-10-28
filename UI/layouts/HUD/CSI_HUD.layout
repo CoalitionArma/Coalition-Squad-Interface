@@ -1,8 +1,22 @@
 FrameWidgetClass {
  Name "rootFrame"
  {
-  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_GroupDisplay.layout" {
-   Name "GroupDisplay"
+  ScaleWidgetClass "{66B8C3E3798DA427}" : "{AD61A34EB388CF6D}UI/layouts/HUD/Elements/CSI_Stamina.layout" {
+   Name "Stamina"
+   Slot FrameWidgetSlot "{66B8C3DE186DE6AB}" {
+    Anchor 0 1 0 1
+    PositionX 0
+    OffsetLeft 0
+    PositionY -6
+    OffsetTop -6
+    SizeX 250
+    OffsetRight -250
+    SizeY 6
+    OffsetBottom 0
+   }
+  }
+  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_Group.layout" {
+   Name "Group"
    Slot FrameWidgetSlot "{66A83196E3AE5829}" {
     Anchor 0.5 1 0.5 1
     PositionX 72
@@ -27,38 +41,6 @@ FrameWidgetClass {
     OffsetRight -66
     SizeY 150.001
     OffsetBottom 0
-   }
-   {
-    FrameWidgetClass "{66A8318AA3F0B87B}" {
-     Prefab "{66A8318AA3F0B87B}"
-     {
-      VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
-       Prefab "{66A8318AE0DC5B30}"
-       {
-        FrameWidgetClass "{66A8318A0B2CF4B5}" {
-         Prefab "{66A8318A0B2CF4B5}"
-         {
-          ScaleWidgetClass "{66A83189F3E605FE}" {
-           Prefab "{66A83189F3E605FE}"
-           Name "LocalIcon"
-           Slot FrameWidgetSlot "{66A831E473F06EE3}" {
-            Anchor 0.5 0.5 0.5 0.5
-            PositionX -8
-            OffsetLeft -8
-            PositionY -8
-            OffsetTop -8
-            SizeX 16
-            OffsetRight -8
-            SizeY 16
-            OffsetBottom -8
-           }
-          }
-         }
-        }
-       }
-      }
-     }
-    }
    }
   }
  }

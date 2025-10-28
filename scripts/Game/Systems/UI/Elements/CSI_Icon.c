@@ -26,7 +26,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void IconUpdate(int playerId, int yaw = 0)
+	void IconUpdate(int playerId)
 	{
 		if (m_iPlayerId != playerId)
 		{
@@ -47,10 +47,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			
 			DataUpdate();
 		}
-		
-		m_wArrow.SetRotation(yaw);
-		m_wIcon.SetRotation(yaw);
-		m_wOutline.SetRotation(yaw);
 	}
 	
 	//------------------------------------------------------------------------------------------------

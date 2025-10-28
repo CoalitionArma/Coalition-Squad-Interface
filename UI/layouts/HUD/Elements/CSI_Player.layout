@@ -14,14 +14,14 @@ ScaleWidgetClass {
  }
  {
   FrameWidgetClass "{66A831E5EDE01DB1}" {
-   Name "Frame"
+   Name "PlayerFrame"
    Slot AlignableSlot "{66A831E511CFBA86}" {
     HorizontalAlign 3
     VerticalAlign 3
    }
    {
     HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
-     Name "HorizontalLayout"
+     Name "PlayerHorizontalLayout"
      Slot FrameWidgetSlot "{66A831E2AD69F2CE}" {
       Anchor 0 0 1 1
       PositionX 0
@@ -35,7 +35,7 @@ ScaleWidgetClass {
      }
      {
       ScaleWidgetClass "{66A831E50814C1AB}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
-       Name "Icon0"
+       Name "Icon"
        Slot LayoutSlot "{66A831E2E95A965B}" {
         VerticalAlign 3
         SizeMode Fill

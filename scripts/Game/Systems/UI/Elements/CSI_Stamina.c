@@ -1,4 +1,4 @@
-class CSI_StaminaBar : SCR_ScriptedWidgetComponent
+class CSI_Stamina : SCR_ScriptedWidgetComponent
 {
 	protected ProgressBarWidget m_wStamBar;
 

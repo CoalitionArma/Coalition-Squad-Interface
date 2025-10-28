@@ -1,4 +1,4 @@
-class CSI_GroupDisplay : SCR_ScriptedWidgetComponent
+class CSI_Group : SCR_ScriptedWidgetComponent
 {
 	protected CSI_ClientManager m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
