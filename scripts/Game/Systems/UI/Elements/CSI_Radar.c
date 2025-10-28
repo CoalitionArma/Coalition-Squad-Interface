@@ -60,7 +60,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 					continue;
 				
 				float x = 0;
-				float y = 0 - 8;
+				float y = 0;
 				float rotation;
 				
 	            CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
@@ -77,12 +77,12 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 					relDir = relDir * Math.DEG2RAD;
 		
 					x = (Math.Sin(relDir) * disT);
-					y = (Math.Cos(relDir) * disT) - 8;
+					y = (Math.Cos(relDir) * disT);
 				};
 	
 				float widthAndHeight = 16; // * (m_sSquadRadarIconSize.ToInt() * 0.01);
 				
-				FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), y);
+				FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 				FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
 	
 				radarIcon.SetOpacity(Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0));

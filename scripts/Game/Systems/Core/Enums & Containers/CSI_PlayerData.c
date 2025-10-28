@@ -1,12 +1,9 @@
 class CSI_PlayerData
 {
 	protected CSI_EColorTeam m_iColorTeam;
-	
 	protected CSI_EOverrideIcon m_iOverrideIcon;
 	protected CSI_EIcon m_iDisplayIcon;
-
 	protected SCR_ECharacterRank m_iRank;
-	
 	protected bool m_bIsTeamLeader;
 	
 	// Invoker for data updates
@@ -233,7 +230,6 @@ class CSI_PlayerData
 	static bool SnapCompare(SSnapSerializerBase lhs, SSnapSerializerBase rhs, ScriptCtx ctx)
 	{
 		return lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
