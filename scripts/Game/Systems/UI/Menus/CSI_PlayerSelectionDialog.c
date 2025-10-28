@@ -30,6 +30,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 	//------------------------------------------------------------------------------------------------
 
+	/*
 	override void OnMenuShow()
 	{
 		super.OnMenuShow();
@@ -265,4 +266,5 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 		colorTeamMenu.SetPlayerStr(m_aGroupArray[playerInt]);
 	}
+	*/
 }

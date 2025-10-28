@@ -3,25 +3,16 @@ class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
 
 class CSI_AuthorityManager : SCR_BaseGameModeComponent
 {	
-	// A array we use to broadcast whenever a change happens to any of the server overrides.
-	[RplProp(onRplName: "UpdateLocalSettings")]
-	ref array<string> m_aServerOverridesArray = new array<string>;
-	
 	protected ref map<int, CSI_PlayerData> m_mPlayerDataMap = new map<int, CSI_PlayerData>;
 	
-	// Replication arrays (maps cannot be directly replicated)
 	[RplProp()]
 	protected ref array<int> m_aPlayerIDs = {}; 
 	
 	[RplProp()]
 	protected ref array<ref CSI_PlayerData> m_aPlayerData = {}; 
 	
-	// Replication property for slotting updates
 	[RplProp(onRplName: "PlayerDataUpdate")]
 	protected int m_PlayerDataUpdate;
-
-	// The vanilla group manager.
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	//------------------------------------------------------------------------------------------------
 	protected static CSI_AuthorityManager m_sInstance;
@@ -113,86 +104,4 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	// Functions to change/get Server Override Settings
 
 	//------------------------------------------------------------------------------------------------
-
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	TStringArray ReturnAuthoritySettings()
-	{
-		return m_aServerOverridesArray;
-	}
-	
-	//- Client -\\
-	//------------------------------------------------------------------------------------------------
-	void UpdateLocalSettings()
-	{
-		CSI_ClientManager clientComponent = CSI_ClientManager.GetInstance();
-		if (!clientComponent) 
-			return;
-		clientComponent.UpdateLocalCSISettingArray();
-	};
-
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	void UpdateAuthoritySetting(string setting, string value)
-	{
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
-		
-		GetGame().UserSettingsChanged();
-		
-		GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 1, false);
-		
-		UpdateAuthoritySettingArray();
-	}
-	
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	void SaveAuthoritySettingsDelay()
-	{
-		GetGame().SaveUserSettings();
-	}
-
-	//- Authority -\\
-	//------------------------------------------------------------------------------------------------
-	void UpdateAuthoritySettingArray()
-	{
-		m_aServerOverridesArray.Clear();
-		array<string> serverOverridesArray =
-		{
-			// Server Overrides
-			"compassVisibleServerOverride",
-			"squadRadarVisibleServerOverride",
-			"groupDisplayVisibleServerOverride",
-			"staminaBarVisibleServerOverride",
-			"nametagsVisibleServerOverride",
-			"rankVisibleServerOverride",
-			"nametagsRangeServerOverride",
-			"roleNametagVisibleServerOverride",
-			"personalColorTeamMenuServerOverride",
-			"groupNametagVisibleServerOverride",
-			"nametagLOSEnabledServerOverride",
-			
-			// Server Defaults
-			"serverDefaultsActive",
-			"compassVisibleServerDefault",
-			"squadRadarVisibleServerDefault",
-			"groupDisplayVisibleServerDefault",
-			"staminaBarVisibleServerDefault",
-			"nametagsVisibleServerDefault",
-			"rankVisibleServerDefault",
-			"nametagsRangeServerDefault",
-			"roleNametagVisibleServerDefault",
-			"personalColorTeamMenuServerDefault",
-			"groupNametagVisibleServerDefault",
-			"nametagLOSEnabledServerDefault"
-		};
-		foreach (string serverOverride : serverOverridesArray)
-		{
-			string checkValue = "";
-			GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(serverOverride, checkValue);
-			m_aServerOverridesArray.Insert(checkValue);
-		}
-		Replication.BumpMe();
-		
-		UpdateLocalSettings();
-	}
 }

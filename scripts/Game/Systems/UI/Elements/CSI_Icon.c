@@ -72,8 +72,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		// do settings check here
 		CSI_EIconThemes theme;
 		
-		//do icon check here
-		
 		string iconString;
 		
 		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))

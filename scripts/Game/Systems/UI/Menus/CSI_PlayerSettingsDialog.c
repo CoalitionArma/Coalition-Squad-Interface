@@ -20,6 +20,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 	//------------------------------------------------------------------------------------------------
 
+	/*
 	override void OnMenuOpen()
 	{
 		super.OnMenuOpen();
@@ -293,4 +294,5 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		m_ClientComponent.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);
 	};
+	*/
 }

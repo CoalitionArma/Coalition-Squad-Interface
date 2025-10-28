@@ -2,23 +2,7 @@
 class CSI_ClientManagerClass : ScriptComponentClass {};
 
 class CSI_ClientManager : ScriptComponent
-{	
-	// All Color Teams
-	static int m_iCTNone   = ARGB(255, 165, 165, 165);
-	static int m_iCTRed    = ARGB(255, 200, 65, 65);
-	static int m_iCTBlue   = ARGB(255, 0, 92, 255);
-	static int m_iCTYellow = ARGB(255, 230, 230, 0);
-	static int m_iCTGreen  = ARGB(255, 0, 190, 85);
-	
-	// A hashmap that is modified only on the local user.
-	protected ref map<string, string> m_mUpdateClientSettingsMap = new map<string, string>;
-	
-	// A array where we hold all local user settings.
-	protected ref array<string> m_aLocalCSISettingsArray = new array<string>;
-
-	// A array where we keep the local clients current group stored and sorted by the value determined for each player.
-	protected ref array<string> m_aLocalGroupArray = new array<string>;
-	
+{		
 	// Authority component that handles replication of hashmaps.
 	protected CSI_AuthorityManager m_AuthorityComponent;
 	
@@ -29,9 +13,7 @@ class CSI_ClientManager : ScriptComponent
 	protected int m_iCurrentUpdateCycle = 20;
 	
 	//------------------------------------------------------------------------------------------------
-
 	// override/static functions
-
 	//------------------------------------------------------------------------------------------------
 
 	static CSI_ClientManager GetInstance()
@@ -60,12 +42,9 @@ class CSI_ClientManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-
 	// Functions for updating the local players icon.
-
 	//------------------------------------------------------------------------------------------------
 	
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllLocalPlayerValues()
 	{
@@ -108,22 +87,17 @@ class CSI_ClientManager : ScriptComponent
 		// Vehicle Icons, they supercede any other Icon
 		//------------------------------------------------------------------------------------------------
 
-		// Check if player is in a vehicle.
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(localplayer.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess.IsInCompartment())
+		// Check players current compartment.
+		BaseCompartmentSlot compartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(localplayer);
+		if (compartment)
 		{
-			// Check players current compartment.
-			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment)
+			// Check players current compartment type, then assign his Icon.
+			ECompartmentType compartmentType = compartment.GetType();
+			switch (compartmentType)
 			{
-				// Check players current compartment type, then assign his Icon.
-				ECompartmentType compartmentType = compartment.GetType();
-				switch (compartmentType)
-				{
-					case ECompartmentType.CARGO  : {vehicleIcon = "PAX";  break;};
-					case ECompartmentType.PILOT  : {vehicleIcon = "DRV"; break;};
-					case ECompartmentType.TURRET : {vehicleIcon = "GNR"; break;};
-				};
+				case ECompartmentType.CARGO  : {vehicleIcon = "PAX";  break;};
+				case ECompartmentType.PILOT  : {vehicleIcon = "DRV"; break;};
+				case ECompartmentType.TURRET : {vehicleIcon = "GNR"; break;};
 			};
 		};
 
@@ -238,12 +212,10 @@ class CSI_ClientManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-
 	// Functions for updating the authority map which houses all player data
-
 	//------------------------------------------------------------------------------------------------
 
-	//- Client -\\
+	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
 	{
 		string storedValue = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, write);
@@ -253,7 +225,6 @@ class CSI_ClientManager : ScriptComponent
 		Rpc(RpcAsk_UpdatePlayerMapValue, groupID, playerID, write, value);
 	}
 
-	//- Authority -\\
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
@@ -263,12 +234,9 @@ class CSI_ClientManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-
 	// Functions for Group/Player Settings replication
-
 	//------------------------------------------------------------------------------------------------
 
-	//- Promote Player To SL -\\
 	//------------------------------------------------------------------------------------------------
 	void Owner_PromotePlayerToSL(int playerID)
 	{
@@ -284,7 +252,6 @@ class CSI_ClientManager : ScriptComponent
 		playersGroup.SetGroupLeader(playerID);
 	}
 
-	//- Set Max Group Members -\\
 	//------------------------------------------------------------------------------------------------
 	void Owner_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
@@ -304,7 +271,6 @@ class CSI_ClientManager : ScriptComponent
 		playersGroup.SetMaxMembers(maxMembers);
 	}
 
-	//- Remove Player From Group -\\
 	//------------------------------------------------------------------------------------------------
 	void Owner_RemovePlayerFromGroup(int playerID)
 	{
@@ -327,11 +293,10 @@ class CSI_ClientManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-
 	// Functions for Menus
-
 	//------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------
 	protected void TogglePlayerSelectionMenu()
 	{
 		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, SCR_PlayerController.GetLocalPlayerId(), "SSI"); // SSI = StoredSpecialtyIcon
@@ -355,19 +320,15 @@ class CSI_ClientManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-
 	// Functions to change Server Override Settings
-
 	//------------------------------------------------------------------------------------------------
 
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	void Owner_ChangeAuthoritySetting(string setting, string value)
 	{
 		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value);
 	}
 
-	//- Server -\\
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, string value)
@@ -381,14 +342,12 @@ class CSI_ClientManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	TStringArray ReturnLocalCSISettings() 
 	{
 		return m_aLocalCSISettingsArray;
 	}
 	
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	void ChangeLocalCSISetting(string setting, string value)
 	{
@@ -397,7 +356,6 @@ class CSI_ClientManager : ScriptComponent
 		UpdateLocalCSISettingArray();
 	}
 		
-	//- Client -\\
 	//------------------------------------------------------------------------------------------------
 	void UpdateLocalCSISettingArray()
 	{

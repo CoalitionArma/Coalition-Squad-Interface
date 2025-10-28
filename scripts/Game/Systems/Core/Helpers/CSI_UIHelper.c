@@ -17,25 +17,42 @@ class CSI_UIHelper
 		CSI_EIcon.HELIPILOT,
 		CSI_EIcon.HELICREW,
 	};
+
+	// All Color Teams
+	static int m_iCTNone   = ARGB(255, 165, 165, 165);
+	static int m_iCTRed    = ARGB(255, 200, 65, 65);
+	static int m_iCTBlue   = ARGB(255, 0, 92, 255);
+	static int m_iCTYellow = ARGB(255, 230, 230, 0);
+	static int m_iCTGreen  = ARGB(255, 0, 190, 85);
 	
 	//------------------------------------------------------------------------------------------------
-	static Color ConvertColorTeamToColor(CSI_EColorTeam colorInt)
+	/**
+	* Convert the color team enum to a color
+	* @param colorEnum: The color enum to convert into a color
+	* @return color team color
+	*/
+	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum)
 	{	
 		Color colorFromInt;
 		
-		switch(colorInt)
+		switch(colorEnum)
 		{
-			case CSI_EColorTeam.NONE : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTNone); break;
-			case CSI_EColorTeam.BLUE : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTBlue); break;
-			case CSI_EColorTeam.RED : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTRed); break;
-			case CSI_EColorTeam.GREEN : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTGreen); break;
-			case CSI_EColorTeam.YELLOW : colorFromInt = Color.FromInt(CSI_ClientManager.m_iCTYellow); break;
+			case CSI_EColorTeam.NONE : colorFromInt = Color.FromInt(m_iCTNone); break;
+			case CSI_EColorTeam.BLUE : colorFromInt = Color.FromInt(m_iCTBlue); break;
+			case CSI_EColorTeam.RED : colorFromInt = Color.FromInt(m_iCTRed); break;
+			case CSI_EColorTeam.GREEN : colorFromInt = Color.FromInt(m_iCTGreen); break;
+			case CSI_EColorTeam.YELLOW : colorFromInt = Color.FromInt(m_iCTYellow); break;
 		}
 		
 		return colorFromInt; 
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	* Get players name, with a check if we need to add a players rank
+	* @param playerId: The inputed player ID to pull the name of and rank of
+	* @return players name
+	*/
 	static string GetPlayersName(int playerId)
 	{
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerId);
@@ -60,8 +77,9 @@ class CSI_UIHelper
 	
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Gets a sorted list of player IDs from the local players group
-	 * @return The full list of player IDs sorted by their value to the group (how we group color teams, set TLs to the top of their color teams, etc)
+	 * Gets a sorted list of player IDs sorted by their value to the group (how we group color teams, set TLs to the top of their color teams, etc)
+	 * playersGroup: players group to pull the sorted group array of players
+	 * @return The full list of player IDs
 	 */
 	static array<int> GetSortedGroupArray(SCR_AIGroup playersGroup)
 	{
@@ -95,9 +113,9 @@ class CSI_UIHelper
 	//------------------------------------------------------------------------------------------------
 	/**
 	* Check the inputed text widget and add a "..." to the end of their name if the name is longer than the text widget
-	* @param testWidget widget to use to test a players name.
-	* @param maxLength max length the name can bet.
-	* @param name players name.
+	* @param testWidget: widget to use to test a players name.
+	* @param maxLength: max length the name can bet.
+	* @param name: players name.
 	* @return players name with a ellipsis at the end.
 	*/
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)

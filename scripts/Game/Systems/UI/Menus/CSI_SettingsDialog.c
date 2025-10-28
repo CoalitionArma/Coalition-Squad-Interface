@@ -59,6 +59,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 
 	//------------------------------------------------------------------------------------------------
 
+	/*
 	override void OnMenuOpen()
 	{
 		super.OnMenuOpen();
@@ -633,4 +634,5 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		GetGame().GetInputManager().RemoveActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
 		GetGame().GetMenuManager().CloseAllMenus();
 	}	
+	*/
 }

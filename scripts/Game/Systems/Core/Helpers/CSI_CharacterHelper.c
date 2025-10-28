@@ -20,7 +20,34 @@ class CSI_ChararcterHelper
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 			if (compartment)
 				yaw = -playerCharacter.GetYawPitchRoll()[0];
-		}
+		};
+		return yaw;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	/**
+	* Get characters yaw axis value
+	* @param playerCharacter The inputed players character entity
+	* @return The yaw of the character entity
+	*/
+	static float GetLocalAimingYaw(SCR_ChimeraCharacter playerCharacter)
+	{
+		// Freelook Direction
+        float yaw;
+
+		AimingComponent playerControllerComponent = playerCharacter.GetHeadAimingComponent();
+		if (!playerControllerComponent) 
+			return yaw;
+
+		if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(playerCharacter) || playerControllerComponent.GetAimingDirection().ToYaw() > 0)
+		{
+			vector transform[4];
+			GetGame().GetWorld().GetCurrentCamera(transform);
+
+			yaw = -Math3D.MatrixToAngles(transform)[0];
+		} else
+			yaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
+
 		return yaw;
 	}
 
