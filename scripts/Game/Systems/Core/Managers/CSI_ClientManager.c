@@ -173,7 +173,7 @@ class CSI_ClientManager : ScriptComponent
 		CSI_PlayerData playerData = m_AuthorityComponent.GetPlayerData(playerId);
 		
 		// Check if any data has updated
-		if(icon == playerData.GetDisplayIcon() && rank == playerData.GetRank())
+		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank()))
 			return;
 		
 		m_AuthorityComponent.UpdatePlayerData(playerId, icon, rank);

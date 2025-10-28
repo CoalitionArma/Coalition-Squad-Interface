@@ -19,14 +19,14 @@ FrameWidgetClass {
    Name "Group"
    Slot FrameWidgetSlot "{66A83196E3AE5829}" {
     Anchor 0.5 1 0.5 1
-    PositionX 72
-    OffsetLeft 72
-    PositionY -118
-    OffsetTop -118
+    PositionX 70
+    OffsetLeft 70
+    PositionY -125
+    OffsetTop -125
     SizeX 637.5
-    OffsetRight -709.5
+    OffsetRight -707.5
     SizeY 100
-    OffsetBottom 18
+    OffsetBottom 25
    }
    {
     GridLayoutWidgetClass "{66A83199895D5C0A}" {
@@ -142,12 +142,12 @@ FrameWidgetClass {
     Anchor 0.5 1 0.5 1
     PositionX -66
     OffsetLeft -66
-    PositionY -150
-    OffsetTop -150
+    PositionY -160
+    OffsetTop -160
     SizeX 131.995
     OffsetRight -66
     SizeY 150.001
-    OffsetBottom 0
+    OffsetBottom 10
    }
   }
  }

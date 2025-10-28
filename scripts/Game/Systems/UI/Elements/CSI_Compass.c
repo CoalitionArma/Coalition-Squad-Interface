@@ -3,6 +3,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
 	protected Widget m_wRadar;
+	
+	protected CSI_Radar m_Radar;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -12,6 +14,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
 		m_wBearing = TextWidget.Cast(w.FindAnyWidget("Bearing"));
 		m_wRadar = w.FindAnyWidget("Radar");
+		
+		m_Radar = CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar));
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -19,7 +23,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	{		
 		// Future compass visibility check goes here
 		
-		CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar)).Update();
+		m_Radar.Update();
 		
         float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
 		int yawInt = -yaw;

@@ -8,7 +8,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	protected CSI_AuthorityManager m_AuthorityManager;
 	protected CSI_PlayerData m_PlayerData;
-	protected int m_iPlayerId;
+	protected int m_iPlayerId = -1;
 	
 	[Attribute("false", UIWidgets.CheckBox)]
 	protected bool m_bIsSimpleIcon;
@@ -43,6 +43,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			
 			m_wRoot.SetVisible(true);
 			m_PlayerData = m_AuthorityManager.GetPlayerData(playerId);
+			
+			if (!m_PlayerData)
+				return;
+			
 			m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
 			
 			DataUpdate();
@@ -85,6 +89,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		else	
 			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconThemes, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
+		
+		m_wOutline.SetVisible(false);
 		
 		m_wIcon.LoadImageFromSet(0, CSI_ICONS_RESOURCE, iconString);
 	}

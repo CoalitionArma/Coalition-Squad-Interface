@@ -53,7 +53,7 @@ ScaleWidgetClass {
        "Right rule" Stop
        "Up rule" Stop
        "Down rule" Stop
-       Text "PLAYER NAME PLAYER NAME PLAYER NAME"
+       Text "PLAYER NAME"
        "Font Size" 10
        "Min Font Size" 10
        "Vertical Alignment" Center

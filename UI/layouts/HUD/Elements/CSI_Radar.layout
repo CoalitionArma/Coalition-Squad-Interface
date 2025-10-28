@@ -33,7 +33,6 @@ ScaleWidgetClass {
       SizeY 16
       OffsetBottom -8
      }
-     "Is Visible" 0
     }
     ScaleWidgetClass "{66B8C3E1134DF216}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/CSI_Icon.layout" {
      Name "RadarIcon1"

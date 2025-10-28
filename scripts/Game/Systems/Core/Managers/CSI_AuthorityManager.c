@@ -32,6 +32,13 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	void UpdatePlayerData(int playerID, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
+		
+		if (!playerData)
+		{
+			playerData = new CSI_PlayerData;
+			m_mPlayerDataMap.Set(playerID, playerData);
+		}
+		
 		playerData.SetDisplayIcon(icon);
 		playerData.SetRank(rank);
 		

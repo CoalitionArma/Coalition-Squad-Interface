@@ -43,8 +43,6 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerWidget(int widgetNumber, int playerId)
 	{
-		
-		
 		Widget player = m_wRoot.FindAnyWidget(string.Format("Player%1", widgetNumber));
 
 		if (player) 

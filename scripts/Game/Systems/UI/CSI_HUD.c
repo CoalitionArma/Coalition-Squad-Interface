@@ -6,6 +6,10 @@ class CSI_HUD : SCR_InfoDisplay
 	protected Widget m_wCompass;
 	protected Widget m_wGroup;
 	
+	protected CSI_Stamina m_Stamina;
+	protected CSI_Compass m_Compass;
+	protected CSI_Group m_Group;
+	
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
@@ -15,6 +19,10 @@ class CSI_HUD : SCR_InfoDisplay
 		m_wStamina = m_wRoot.FindAnyWidget("Stamina");
 		m_wCompass = m_wRoot.FindAnyWidget("Compass");
 		m_wGroup = m_wRoot.FindAnyWidget("Group");
+		
+		m_Stamina = CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina));
+		m_Compass = CSI_Compass.Cast(m_wCompass.FindHandler(CSI_Compass));
+		m_Group = CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group));
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -29,9 +37,9 @@ class CSI_HUD : SCR_InfoDisplay
 		} else
 			m_wRoot.SetVisible(true);
 		
-		CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina)).Update();
-		CSI_Compass.Cast(m_wCompass.FindHandler(CSI_Compass)).Update();
-		CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group)).Update();
+		m_Stamina.Update();
+		m_Compass.Update();
+		m_Group.Update();
 	};
 	
 	//------------------------------------------------------------------------------------------------

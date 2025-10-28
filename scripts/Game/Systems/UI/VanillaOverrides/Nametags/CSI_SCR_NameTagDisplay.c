@@ -12,8 +12,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_ClientComponent) 
 			m_ClientComponent = CSI_ClientManager.GetInstance();
 
-		string nametagsRange = m_ClientComponent.ReturnLocalCSISettings()[6];
-		string nametagsVisible = m_ClientComponent.ReturnLocalCSISettings()[4];
+		string nametagsRange = ""; //m_ClientComponent.ReturnLocalCSISettings()[6];
+		string nametagsVisible = ""; //m_ClientComponent.ReturnLocalCSISettings()[4];
 
 		if (nametagsRange.IsEmpty()) 
 			nametagsRange = "35";

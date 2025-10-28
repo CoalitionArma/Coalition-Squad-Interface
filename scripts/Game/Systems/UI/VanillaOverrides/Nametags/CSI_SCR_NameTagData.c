@@ -18,7 +18,7 @@ modded class SCR_NameTagData : Managed
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
 
-		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[13];
+		m_sNametagsPos = "HEAD"; //m_ClientComponent.ReturnLocalCSISettings()[13];
 
 		if (m_sNametagsPos == "HEAD") 
 		{
@@ -78,7 +78,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || m_ClientComponent.ReturnLocalCSISettings()[9] == "false") 
+		if (!group) //|| m_ClientComponent.ReturnLocalCSISettings()[9] == "false") 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -100,7 +100,7 @@ modded class SCR_NameTagData : Managed
 		if (!m_ClientComponent) 
 			return;
 
-		m_sNametagsPos = m_ClientComponent.ReturnLocalCSISettings()[13];
+		m_sNametagsPos = "HEAD"; //m_ClientComponent.ReturnLocalCSISettings()[13];
 
 		if (m_sNametagsPos == "HEAD") 
 		{
