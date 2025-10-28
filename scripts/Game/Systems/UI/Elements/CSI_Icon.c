@@ -18,7 +18,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_AuthorityManager.GetInstance();
+		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -50,8 +50,19 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	void SetRotation(float yaw)
+	{
+		m_wArrow.SetRotation(yaw);
+		m_wIcon.SetRotation(yaw);
+		m_wOutline.SetRotation(yaw);
+	};
+	
+	//------------------------------------------------------------------------------------------------
 	protected void DataUpdate()
 	{	
+		if (!m_PlayerData)
+			return;
+		
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
 		SetArrowWidget();
 		

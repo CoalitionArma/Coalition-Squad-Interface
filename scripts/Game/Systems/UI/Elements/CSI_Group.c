@@ -4,20 +4,22 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	//------------------------------------------------------------------------------------------------
+	override void HandlerAttached(Widget w)
+	{
+		super.HandlerAttached(w);
+
+		m_ClientComponent = CSI_ClientManager.GetInstance();
+		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	void Update()
 	{
-		if (!m_ClientComponent || !m_GroupsManagerComponent) 
-		{
-			m_ClientComponent = CSI_ClientManager.GetInstance();
-			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-			return;
-		};
-		
-		string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
+		//string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
 		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (groupDisplayVisible == "false" || !playersGroup) 
+		if (!playersGroup) 
 		{
 			ClearGroupDisplay(0);
 			return;
@@ -41,6 +43,8 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerWidget(int widgetNumber, int playerId)
 	{
+		
+		
 		Widget player = m_wRoot.FindAnyWidget(string.Format("Player%1", widgetNumber));
 
 		if (player) 

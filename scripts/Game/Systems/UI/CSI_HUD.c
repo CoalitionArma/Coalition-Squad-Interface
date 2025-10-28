@@ -23,8 +23,10 @@ class CSI_HUD : SCR_InfoDisplay
 		super.UpdateValues(owner, timeSlice);
 		
 		if (!m_bIsVisible)
+		{
 			m_wRoot.SetVisible(false);
-		else
+			return;		
+		} else
 			m_wRoot.SetVisible(true);
 		
 		CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina)).Update();

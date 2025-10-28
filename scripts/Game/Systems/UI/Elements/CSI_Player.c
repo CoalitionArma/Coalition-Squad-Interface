@@ -12,7 +12,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_AuthorityManager.GetInstance();
+		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
 		
 		m_wPlayerName = RichTextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = w.FindAnyWidget("Icon");

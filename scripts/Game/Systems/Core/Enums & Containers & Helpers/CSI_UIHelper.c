@@ -89,7 +89,12 @@ class CSI_UIHelper
 		// Parse through current group array.
 		foreach (int playerID : playersGroup.GetPlayerIDs())
 		{
-			int playerValue = CSI_AuthorityManager.GetInstance().GetPlayerData(playerID).GetPlayerValue();
+			CSI_PlayerData playerData = CSI_AuthorityManager.GetInstance().GetPlayerData(playerID);
+			
+			if (!playerData)
+				continue;
+			
+			int playerValue = playerData.GetPlayerValue();
 			
 			// Format a string with what we need for displaying/sorting a player.
 			string playerStr = string.Format("%1;%2", playerValue, playerID);

@@ -14,7 +14,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	void Update()
 	{
 		// Get local enity the player is controlling at the moment.
-		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalControlledEntity());
+		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
 
 		// Can't run if these dont exist better exit out.
 		if (!character) 
