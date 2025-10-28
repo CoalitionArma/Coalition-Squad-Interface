@@ -26,11 +26,11 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerName") 
 		{	
-			int ct = data.GetPlayerColorTeam();
-			if (ct == 0) 
+			Color ct = CSI_UIHelper.ConvertColorTeamToColor(CSI_AuthorityManager.GetInstance().GetPlayerData(data.m_iPlayerID).GetColorTeam());
+			if (ct.IsZero()) 
 				tWidget.SetColor(stateConf.m_vColor);
 			else 
-				tWidget.SetColorInt(ct);
+				tWidget.SetColor(ct);
 		};
 		
 		data.UpdateAttatchedTo();

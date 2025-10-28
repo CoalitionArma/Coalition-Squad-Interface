@@ -19,6 +19,7 @@ modded class SCR_PlayerController
 	
 	void SetPlayerMapValues(CSI_CharacterManager characterComp, SCR_GroupsManagerComponent groupsManagerComp)
 	{
+		/*
 		if (!characterComp || !groupsManagerComp)
 			return;
 		
@@ -75,5 +76,6 @@ modded class SCR_PlayerController
 				case "None"           : {clientComponent.Owner_UpdatePlayerMapValue(groupID, playerID, "OI", "");    break;}; // OI = OverrideIcon
 			};
 		};
+		*/
 	}
 }

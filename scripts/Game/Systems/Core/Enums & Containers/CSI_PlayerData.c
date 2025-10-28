@@ -20,13 +20,24 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	
 	//------------------------------------------------------------------------------------------------
-	void DataUpdate(int playerID, CSI_PlayerData newData)
+	void DataUpdate(int playerID, CSI_PlayerData newData = null)
 	{	
-		// Check if any data has updated
-		if(m_iColorTeam == newData.GetColorTeam() && m_iOverrideIcon == newData.GetOverrideIcon() && m_iDisplayIcon == newData.GetDisplayIcon() && m_iRank == newData.GetRank() && m_bIsTeamLeader == newData.GetIsTeamLeader())	
-			return;
+		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(playerID);
 		
 		// Update all data
+		if (m_iStoredGroupID != group.GetGroupID())
+		{
+			m_iStoredGroupID = group.GetGroupID();
+			SetColorTeam(CSI_EColorTeam.NONE);
+			SetOverrideIcon(CSI_EOverrideIcon.AUTO);
+			SetIsTeamLeader(false);
+			return;
+		};
+		
+		// Check if any data has updated
+		if(!newData || (m_iColorTeam == newData.GetColorTeam() && m_iOverrideIcon == newData.GetOverrideIcon() && m_iDisplayIcon == newData.GetDisplayIcon() && m_iRank == newData.GetRank() && m_bIsTeamLeader == newData.GetIsTeamLeader()))	
+			return;
+	
 		SetColorTeam(newData.GetColorTeam());
 		SetOverrideIcon(newData.GetOverrideIcon());
 		SetDisplayIcon(newData.GetDisplayIcon());
@@ -104,14 +115,6 @@ class CSI_PlayerData
 	void SetIsTeamLeader(bool isTL)
 	{
 		m_bIsTeamLeader = isTL;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void ResetPlayerData()
-	{
-		m_iColorTeam = CSI_EColorTeam.NONE;
-		m_iOverrideIcon = CSI_EOverrideIcon.AUTO;
-		m_bIsTeamLeader = false;
 	}
 	
 	//------------------------------------------------------------------------------------------------

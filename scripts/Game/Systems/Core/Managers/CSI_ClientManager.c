@@ -3,14 +3,12 @@ class CSI_ClientManagerClass : ScriptComponentClass {};
 
 class CSI_ClientManager : ScriptComponent
 {		
-	// Authority component that handles replication of hashmaps.
 	protected CSI_AuthorityManager m_AuthorityComponent;
-	
-	// Players local group ID
-	protected int m_iLocalPlayersGroupID = 1;
-	
-	// Update Cycle Tracker so we aren't checking the players inventory every 625ms but rather every 10000ms.
 	protected int m_iCurrentUpdateCycle = 20;
+	
+	protected CSI_EOverrideIcon m_iStoredOverrideIcon;
+	protected CSI_EColorTeam m_iStoredColorTeam;
+	protected bool m_bStoredIsTeamLead;
 	
 	//------------------------------------------------------------------------------------------------
 	// override/static functions
@@ -37,30 +35,19 @@ class CSI_ClientManager : ScriptComponent
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 		GetGame().GetInputManager().AddActionListener("CSI_SettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		
-		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 625, true);
+		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 500, true);
 		UpdateLocalCSISettingArray();
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	// Functions for updating the local players icon.
-	//------------------------------------------------------------------------------------------------
-	
-	//------------------------------------------------------------------------------------------------
 	protected void UpdateAllLocalPlayerValues()
 	{
-		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
+		int playerID = SCR_PlayerController.GetLocalPlayerId();
 		
 		// Get local player entity.
-		IEntity localplayer = GetGame().GetPlayerManager().GetPlayerControlledEntity(localPlayerID);
+		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
 		if (!localplayer) 
-			return;
-		
-		if (m_AuthorityComponent.ReturnAuthoritySettings()[5]) 
-			// Update PlayerRank
-			Owner_UpdatePlayerMapValue(-1, localPlayerID, "PR", SCR_CharacterRankComponent.GetCharacterRankNameShort(localplayer)); // PR = PlayerRank
-		
-		if (!m_AuthorityComponent.ReturnAuthoritySettings()[1] && !m_AuthorityComponent.ReturnAuthoritySettings()[2] && !m_AuthorityComponent.ReturnAuthoritySettings()[7]) 
 			return;
 		
 		// Get base group manager component
@@ -70,22 +57,16 @@ class CSI_ClientManager : ScriptComponent
 			return;
 		
 		// Get players current group.
-		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(localPlayerID);
+		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		if (!playersGroup) 
 			return;
 		
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
-		
-		m_iLocalPlayersGroupID = playersGroup.GetGroupID();
-
-		string vehicleIcon = "";
-		string specialtyIcon = "";
-		string displayIcon = "";
+		CSI_EIcon displayIcon;
 
 		//------------------------------------------------------------------------------------------------
 		// Vehicle Icons, they supercede any other Icon
-		//------------------------------------------------------------------------------------------------
 
 		// Check players current compartment.
 		BaseCompartmentSlot compartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(localplayer);
@@ -95,26 +76,16 @@ class CSI_ClientManager : ScriptComponent
 			ECompartmentType compartmentType = compartment.GetType();
 			switch (compartmentType)
 			{
-				case ECompartmentType.CARGO  : {vehicleIcon = "PAX";  break;};
-				case ECompartmentType.PILOT  : {vehicleIcon = "DRV"; break;};
-				case ECompartmentType.TURRET : {vehicleIcon = "GNR"; break;};
+				case ECompartmentType.CARGO  : displayIcon = CSI_EIcon.PASSANGER;  break;
+				case ECompartmentType.PILOT  : displayIcon = CSI_EIcon.DRIVER; break;
+				case ECompartmentType.TURRET : displayIcon = CSI_EIcon.GUNNER; break;
 			};
 		};
 
 		//------------------------------------------------------------------------------------------------
-		// Override regular Icons If Needed
-		//------------------------------------------------------------------------------------------------
-
-		string playerOverideIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "OI"); // OI = OverrideIcon
-
-		if (!playerOverideIcon.IsEmpty() && playerOverideIcon != "N/A" && specialtyIcon.IsEmpty()) 
-			specialtyIcon = playerOverideIcon;
-
-		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-		//------------------------------------------------------------------------------------------------
 
-		if (specialtyIcon.IsEmpty() && m_iCurrentUpdateCycle >= 20) 
+		if (displayIcon != CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 20) 
 		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
@@ -183,54 +154,46 @@ class CSI_ClientManager : ScriptComponent
 			// Take all the data we just collected and assign players a Icon based on if it exists in the weapon/medical arrays.
 			switch (true)
 			{
-				case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : {specialtyIcon = "MG";  break;};
-				case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : {specialtyIcon = "AT";  break;};
-				case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : {specialtyIcon = "MRK"; break;};
-				case (medicalTypeArray.Count() != 0)                            : {specialtyIcon = "MED"; break;};
-				case (explosiveTypeArray.Count() != 0)                          : {specialtyIcon = "EXP"; break;};
-				case (engineerTypeArray.Count() != 0)                           : {specialtyIcon = "ENG"; break;};
-				case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : {specialtyIcon = "GRN"; break;};
-				default                                                         : {specialtyIcon = "MAN";       };
+				case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : displayIcon = CSI_EIcon.MG;  break;
+				case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : displayIcon = CSI_EIcon.AT;  break;
+				case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : displayIcon = CSI_EIcon.SNIPER; break;
+				case (medicalTypeArray.Count() != 0)                            : displayIcon = CSI_EIcon.MEDIC; break;
+				case (explosiveTypeArray.Count() != 0)                          : displayIcon = CSI_EIcon.DEMO; break;
+				case (engineerTypeArray.Count() != 0)                           : displayIcon = CSI_EIcon.ENG; break;
+				case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : displayIcon = CSI_EIcon.GREN; break;
+				default                                                         : displayIcon = CSI_EIcon.MAN;
 			};
 			
 			m_iCurrentUpdateCycle = 0;
-		} else {
-			if (specialtyIcon.IsEmpty())
-				specialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
 		}
-
-		if (!vehicleIcon.IsEmpty()) 
-			displayIcon = vehicleIcon;
-		else
-			displayIcon = specialtyIcon;
 		
-		// Update the Icon we show on players screens.
-		Owner_UpdatePlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "DI", displayIcon); // DI = DisplayIcon
-
-		// Update StoredSpecialtyIcon.
-		Owner_UpdatePlayerMapValue(m_iLocalPlayersGroupID, localPlayerID, "SSI", specialtyIcon); // SSI = StoredSpecialtyIcon
+		Rpc(RpcAsk_UpdatePlayerData, playerID, displayIcon, m_iStoredOverrideIcon, m_iStoredColorTeam, m_bStoredIsTeamLead, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	// Functions for updating the authority map which houses all player data
-	//------------------------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
+	void UpdatePlayerOverrideIcon(CSI_EOverrideIcon overrideIcon)
 	{
-		string storedValue = m_AuthorityComponent.ReturnLocalPlayerMapValue(groupID, playerID, write);
-		if (storedValue == value || value.IsEmpty())
-			return;
-		
-		Rpc(RpcAsk_UpdatePlayerMapValue, groupID, playerID, write, value);
+		m_iStoredOverrideIcon = overrideIcon;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerColorTeam(CSI_EColorTeam colorTeam)
+	{
+		m_iStoredColorTeam = colorTeam;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerTeamleader(bool isTL)
+	{
+		m_bStoredIsTeamLead = isTL;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerMapValue(int groupID, int playerID, string write, string value)
+	void RpcAsk_UpdatePlayerData(int playerID, CSI_EIcon icon, CSI_EOverrideIcon overrideIcon, CSI_EColorTeam colorTeam, bool isTL, SCR_ECharacterRank rank)
 	{
 		if (m_AuthorityComponent)
-			m_AuthorityComponent.UpdateAuthorityPlayerMapValue(groupID, playerID, write, value);
+			m_AuthorityComponent.UpdatePlayerData(playerID, icon, overrideIcon, colorTeam, isTL, rank);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -299,6 +262,7 @@ class CSI_ClientManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	protected void TogglePlayerSelectionMenu()
 	{
+		/*
 		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, SCR_PlayerController.GetLocalPlayerId(), "SSI"); // SSI = StoredSpecialtyIcon
 		
 		if (ReturnLocalCSISettings()[8] == "false" || storedSpecialtyIcon == "SL" || storedSpecialtyIcon == "FTL")
@@ -311,6 +275,7 @@ class CSI_ClientManager : ScriptComponent
 			CSI_PlayerSettingsDialog.Cast(menu).SetPlayerStr(string.Format("PlayerID:%1", SCR_PlayerController.GetLocalPlayerId()));
 			return;
 		};
+		*/
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -333,7 +298,7 @@ class CSI_ClientManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, string value)
 	{
-		m_AuthorityComponent.UpdateAuthoritySetting(setting, value);
+		//m_AuthorityComponent.UpdateAuthoritySetting(setting, value);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -342,6 +307,8 @@ class CSI_ClientManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 
+	ref TStringArray m_aLocalCSISettingsArray = {};
+	
 	//------------------------------------------------------------------------------------------------
 	TStringArray ReturnLocalCSISettings() 
 	{
@@ -359,6 +326,7 @@ class CSI_ClientManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdateLocalCSISettingArray()
 	{
+		/*
 		array<string> settingsToCheck = {
 			// Settings that can be overriden by the server
 			"compassVisible",            //0
@@ -406,5 +374,7 @@ class CSI_ClientManager : ScriptComponent
 			tempLocalCSISettingsArray.Insert(settingValue);
 		};
 		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;
+	
+		*/
 	}
 }

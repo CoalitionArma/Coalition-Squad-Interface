@@ -3,6 +3,7 @@ class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
 
 class CSI_AuthorityManager : SCR_BaseGameModeComponent
 {	
+	protected bool m_bDataUpdateInProgress;
 	protected ref map<int, CSI_PlayerData> m_mPlayerDataMap = new map<int, CSI_PlayerData>;
 	
 	[RplProp()]
@@ -22,30 +23,23 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	// INITIALIZATION
-	//------------------------------------------------------------------------------------------------
-	
-	//------------------------------------------------------------------------------------------------
 	static CSI_AuthorityManager GetInstance()
 	{
 		return m_sInstance;
 	}
-
-	//------------------------------------------------------------------------------------------------
-	override protected void OnPostInit(IEntity owner)
-	{
-		super.OnPostInit(owner);
-
-		//--- Server only
-		if (RplSession.Mode() == RplMode.Client)
-			return;
-		
-		UpdateAuthoritySettingArray();
-	}
 	
 	//------------------------------------------------------------------------------------------------
-	// DATA AND REPLICATION HANDLING
-	//------------------------------------------------------------------------------------------------
+	void UpdatePlayerData(int playerID, CSI_EIcon icon, CSI_EOverrideIcon overrideIcon, CSI_EColorTeam colorTeam, bool isTL, SCR_ECharacterRank rank)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		playerData.SetColorTeam(colorTeam);
+		playerData.SetIsTeamLeader(isTL);
+		playerData.SetDisplayIcon(icon);
+		playerData.SetOverrideIcon(overrideIcon);
+		playerData.SetRank(rank);
+		
+		RequestDataUpdate();
+	}
 
 	//------------------------------------------------------------------------------------------------
 	CSI_PlayerData GetPlayerData(int playerID)
@@ -54,10 +48,19 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void RequestDataUpdate()
+	protected void RequestDataUpdate()
 	{
-		if (RplSession.Mode() == RplMode.Client)
-			return;
+		if (!m_bDataUpdateInProgress)
+		{
+			GetGame().GetCallqueue().CallLater(DataUpdate, 250, false);
+			m_bDataUpdateInProgress = true;
+		};
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void DataUpdate()
+	{
+		m_bDataUpdateInProgress = false;
 		
 		m_aPlayerIDs.Clear();
 		m_aPlayerData.Clear();
@@ -77,13 +80,10 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 			PlayerDataUpdate();
 		#endif
 	}
-
+	
 	//------------------------------------------------------------------------------------------------
 	protected void PlayerDataUpdate()
 	{
-		if (RplSession.Mode() == RplMode.Dedicated)
-			return;
-		
 		// Update local map from replicated arrays
 		for (int i = 0; i < m_aPlayerIDs.Count(); i++)
 		{
@@ -98,10 +98,4 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 				oldPlayerData.DataUpdate(playerID, newPlayerData);
 		}
 	}
-	
-	//------------------------------------------------------------------------------------------------
-
-	// Functions to change/get Server Override Settings
-
-	//------------------------------------------------------------------------------------------------
 }

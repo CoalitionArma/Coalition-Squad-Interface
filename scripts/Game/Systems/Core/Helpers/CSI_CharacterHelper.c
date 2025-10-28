@@ -30,8 +30,10 @@ class CSI_ChararcterHelper
 	* @param playerCharacter The inputed players character entity
 	* @return The yaw of the character entity
 	*/
-	static float GetLocalAimingYaw(SCR_ChimeraCharacter playerCharacter)
+	static float GetLocalAimingYaw()
 	{
+		SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
+		
 		// Freelook Direction
         float yaw;
 

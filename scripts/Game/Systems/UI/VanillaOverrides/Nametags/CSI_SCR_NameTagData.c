@@ -51,33 +51,8 @@ modded class SCR_NameTagData : Managed
 			return;
 		
 		if (m_eType == ENameTagEntityType.PLAYER)
-		{
-			string roleNametagVisible = m_ClientComponent.ReturnLocalCSISettings()[7];
-			string rankVisible = m_ClientComponent.ReturnLocalCSISettings()[5];
-
-			PlayerManager playerMgr = GetGame().GetPlayerManager();
-			if (playerMgr)
-			{
-				m_sName = playerMgr.GetPlayerName(m_iPlayerID);
-
-				if (rankVisible == "true")
-				{
-					string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iPlayerID, "PR"); // PR = PlayerRank
-					
-					if (!rank.IsEmpty()) 
-						m_sName = string.Format("%1 %2", rank, m_sName);
-				};
-				if (roleNametagVisible == "true")
-				{
-					string icon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iPlayerID, "DI"); // DI = DisplayIcon
-					
-					if (icon != "MAN" && !icon.IsEmpty())
-						m_sName = string.Format("%1 [%2]", m_sName, icon);
-				}
-			} else { 
-				m_sName = "No player manager!" 
-			};
-		}
+			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
+			
 		else if (m_eType == ENameTagEntityType.AI)
 		{
 			SCR_CharacterIdentityComponent scrCharIdentity = SCR_CharacterIdentityComponent.Cast(m_Entity.FindComponent(SCR_CharacterIdentityComponent));
@@ -117,22 +92,6 @@ modded class SCR_NameTagData : Managed
 		};
 
 		return groupName;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	int GetPlayerColorTeam()
-	{		
-		m_ClientComponent = CSI_ClientManager.GetInstance();
-		
-		if (!m_ClientComponent) 
-			return 0;
-		
-		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
-
-		if (!group || !m_ClientComponent || (!(m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER) || (m_ePriorityEntityState & ENameTagEntityState.VON))) 
-			return 0;
-
-		return m_ClientComponent.SwitchStringToColorTeam(m_AuthorityComponent.ReturnLocalPlayerMapValue(group.GetGroupID(), m_iPlayerID, "CT")); // CT = ColorTeam
 	}
 
 	//------------------------------------------------------------------------------------------------

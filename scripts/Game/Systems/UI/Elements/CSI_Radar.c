@@ -1,6 +1,5 @@
-class CSI_Compass : SCR_ScriptedWidgetComponent
+class CSI_Radar : SCR_ScriptedWidgetComponent
 {
-	protected PlayerManager m_PlayerManager;
 	protected CSI_ClientManager m_ClientComponent;
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
@@ -12,7 +11,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		m_ClientComponent.GetInstance();
 		m_GroupsManagerComponent.GetInstance();
-		m_PlayerManager = GetGame().GetPlayerManager();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -27,7 +25,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
         float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
 
 		//squadRadarSelfIconVisible = m_ClientComponent.ReturnLocalCSISettings()[12];
-		//m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[11];
+		string m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[11];
 		
 		vector localPlayerCharacterOrigin = m_ChimeraCharacter.GetOrigin();
 		
@@ -36,7 +34,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		foreach (int i, int playerId : playersGroup.GetPlayerIDs())
 		{
-			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(m_PlayerManager.GetPlayerControlledEntity(playerId));
+			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
 			
 			if (!playerCharacter)
 				continue;
@@ -95,7 +93,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			if (!removeRadarPlayerWidget) 
 				continue;
 			
-			removeRadarPlayerWidget.SetVisibility(false);
+			removeRadarPlayerWidget.SetVisible(false);
 		};
 	}
 }
