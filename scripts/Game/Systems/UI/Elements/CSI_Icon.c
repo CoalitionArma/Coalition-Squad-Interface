@@ -78,14 +78,14 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
 		// do settings check here
-		CSI_EIconThemes theme;
+		CSI_EIconTheme theme;
 		
 		string iconString;
 		
 		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		else	
-			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconThemes, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
+			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		
 		m_wOutline.SetVisible(false);
 		
@@ -96,9 +96,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrow arrow;
+		CSI_EArrowTheme arrow;
 		
-		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrow, arrow));
+		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		
 		m_wArrow.LoadImageFromSet(0, CSI_ICONS_RESOURCE, arrowString);
 	}

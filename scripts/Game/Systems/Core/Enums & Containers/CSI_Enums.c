@@ -15,7 +15,7 @@ enum CSI_EColorTeam
 // Enumeration for Arrows
 //------------------------------------------------------------------------------------
 
-enum CSI_EArrow
+enum CSI_EArrowTheme
 {
 	CLASSIC,
 	STUBBY,
@@ -28,7 +28,13 @@ enum CSI_EArrow
 // Enumeration for each players Icon
 //------------------------------------------------------------------------------------
 
-enum CSI_EIconThemes
+enum CSI_EIconType
+{
+	REGULAR,
+	OUTLINE
+}
+
+enum CSI_EIconTheme
 {
 	CLASSIC,
 	REFORGER_ADV,
@@ -74,4 +80,15 @@ enum CSI_EOverrideIcon
 	GREN,
 	MG,
 	MEDIC,
+}
+
+//------------------------------------------------------------------------------------
+// Enumeration for compass themes
+//------------------------------------------------------------------------------------
+
+enum CSI_ECompassTheme
+{
+	REGULAR,
+	SCI_FI,
+	WW2,
 }

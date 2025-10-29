@@ -1,0 +1,6 @@
+class CSI_SettingsHelper
+{
+
+
+
+}

@@ -30,7 +30,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		array<int> groupArray = {};
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (!playersGroup)
+		if (playersGroup)
 			groupArray = playersGroup.GetPlayerIDs();
 
 		foreach (int i, int playerId : groupArray)
@@ -70,10 +70,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	
 				x = (Math.Sin(relDir) * disT);
 				y = (Math.Cos(relDir) * disT);
-
-				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
-				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360);
 			};
+
+			opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
+			rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360);
 
 			UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
 		};

@@ -31,7 +31,7 @@ class CSI_ClientManager : ScriptComponent
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 		GetGame().GetInputManager().AddActionListener("CSI_SettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		
-		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 250, true);
+		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 225, true);
 		UpdateLocalCSISettingArray();
 	}
 	
@@ -325,7 +325,6 @@ class CSI_ClientManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdateLocalCSISettingArray()
 	{
-		/*
 		array<string> settingsToCheck = {
 			// Settings that can be overriden by the server
 			"compassVisible",            //0
@@ -372,8 +371,6 @@ class CSI_ClientManager : ScriptComponent
 			};
 			tempLocalCSISettingsArray.Insert(settingValue);
 		};
-		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;
-	
-		*/
+		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;	
 	}
 }

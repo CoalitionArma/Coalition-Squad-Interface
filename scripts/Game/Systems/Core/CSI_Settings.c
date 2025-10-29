@@ -1,53 +1,53 @@
 class CSI_GameSettings : ModuleGameSettings
 {
 	[Attribute("")]
-	string compassVisible;
-
-	[Attribute("{D19C93F5109F3E1D}UI\Textures\HUD\Modded\Compasses\compass_shadow360.edds")]
-	string compassTexture;
+	bool compassVisible;
 
 	[Attribute("")]
-	string squadRadarVisible;
+	bool squadRadarVisible;
 
 	[Attribute("")]
-	string groupDisplayVisible;
+	bool groupDisplayVisible;
 
 	[Attribute("")]
-	string staminaBarVisible;
+	bool staminaBarVisible;
 
 	[Attribute("")]
-	string nametagsVisible;
+	bool nametagsVisible;
 
 	[Attribute("")]
-	string rankVisible;
-
-	[Attribute("100")]
-	string squadRadarIconSize;
-
-	[Attribute("BODY")]
-	string nametagsPosition;
+	bool rankVisible;
 
 	[Attribute("")]
-	string nametagsRange;
-
-	[Attribute("true")]
-	string squadRadarSelfIconVisible;
-
-	[Attribute("")]
-	string roleNametagVisible;
-
-	[Attribute("")]
-	string personalColorTeamMenu;
+	bool roleInNametagVisible;
 	
 	[Attribute("")]
-	string groupNametagVisible;
+	bool groupNametagVisible;
 
 	[Attribute("")]
-	string nametagLOSEnabled;
+	bool nametagLOSVisible;
 	
-	[Attribute("false")]
-	string autoHideUI;
+	[Attribute("")]
+	bool autoHideUI;
 	
-	[Attribute("false")]
-	CSI_EIconThemes roleTheme;
+	[Attribute()]
+	CSI_EIconTheme iconTheme;
+
+	[Attribute()]
+	CSI_EIconType iconType;
+
+	[Attribute()]
+	CSI_EArrowTheme arrowTheme;
+
+	[Attribute()]
+	CSI_ECompassTheme compassTheme;
+
+	[Attribute()]
+	ENameTagPosition nametagsPosition;
+
+	[Attribute()]
+	int nametagsRange;
+
+	[Attribute()]
+	int squadRadarIconSize;
 }
