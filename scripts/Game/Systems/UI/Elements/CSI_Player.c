@@ -5,7 +5,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	protected RichTextWidget m_wPlayerName;
 	protected Widget m_wIcon;
 
-	protected int m_iPlayerId = -1;
+	protected int m_iPlayerId;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)

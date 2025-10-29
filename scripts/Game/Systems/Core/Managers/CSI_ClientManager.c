@@ -31,7 +31,7 @@ class CSI_ClientManager : ScriptComponent
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
 		GetGame().GetInputManager().AddActionListener("CSI_SettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		
-		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 500, true);
+		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 250, true);
 		UpdateLocalCSISettingArray();
 	}
 	
@@ -79,9 +79,15 @@ class CSI_ClientManager : ScriptComponent
 		};
 
 		//------------------------------------------------------------------------------------------------
+		//	SL Icon
+
+		if (playersGroup.IsPlayerLeader(playerId))
+			displayIcon = CSI_EIcon.SL;
+
+		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
 
-		if (displayIcon != CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 20) 
+		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 20) 
 		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
@@ -275,35 +281,6 @@ class CSI_ClientManager : ScriptComponent
 		if (!newGroup)
 			return;
 		playerGroupController.RequestJoinGroup(newGroup.GetGroupID());
-	}
-
-	//------------------------------------------------------------------------------------------------
-	// Functions for Menus
-	//------------------------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------------------------
-	protected void TogglePlayerSelectionMenu()
-	{
-		/*
-		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iLocalPlayersGroupID, SCR_PlayerController.GetLocalPlayerId(), "SSI"); // SSI = StoredSpecialtyIcon
-		
-		if (ReturnLocalCSISettings()[8] == "false" || storedSpecialtyIcon == "SL" || storedSpecialtyIcon == "FTL")
-		{
-			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
-			return;
-		} else {
-			MenuBase menu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsDialog, 0, true);
-			
-			CSI_PlayerSettingsDialog.Cast(menu).SetPlayerStr(string.Format("PlayerID:%1", SCR_PlayerController.GetLocalPlayerId()));
-			return;
-		};
-		*/
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void ToggleCSISettingsMenu()
-	{
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_SettingsDialog);
 	}
 	
 	//------------------------------------------------------------------------------------------------

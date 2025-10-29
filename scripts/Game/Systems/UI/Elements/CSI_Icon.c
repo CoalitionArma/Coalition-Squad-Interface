@@ -8,10 +8,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	protected CSI_AuthorityManager m_AuthorityManager;
 	protected CSI_PlayerData m_PlayerData;
-	protected int m_iPlayerId = -1;
-	
-	[Attribute("false", UIWidgets.CheckBox)]
-	protected bool m_bIsSimpleIcon;
+	protected int m_iPlayerId;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)

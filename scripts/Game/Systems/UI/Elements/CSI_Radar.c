@@ -4,6 +4,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected SCR_ChimeraCharacter m_ChimeraCharacter;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
+	protected static int ICON_WIDTH_AND_HEIGHT = 16;
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
@@ -23,84 +25,79 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		// Freelook Direction
         float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
-
-		//squadRadarSelfIconVisible = m_ClientComponent.ReturnLocalCSISettings()[12];
-		//string m_sSquadRadarIconSize = m_ClientComponent.ReturnLocalCSISettings()[11];
-		
 		vector localPlayerCharacterOrigin = m_ChimeraCharacter.GetOrigin();
 		
+		array<int> groupArray = {};
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		int positionToStartClearing;
 
-		if(playersGroup)
-		{
-			foreach (int i, int playerId : playersGroup.GetPlayerIDs())
-			{
-				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
-				Widget radarIcon = m_wRoot.FindAnyWidget(string.Format("RadarIcon%1", i));
-	
-				if (!radarIcon || !playerCharacter)
-					continue;
-				
-				vector playerCharacterOrigin = playerCharacter.GetOrigin();
-	
-				// Get Distance
-				float dis = vector.Distance(localPlayerCharacterOrigin, playerCharacterOrigin);
-				
-				float disT = dis * 2.0;
-				int searchRadius = 24;
-				
-				if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_ChimeraCharacter))
-				{
-					searchRadius = 8;
-					disT = dis * 6.215;
-				};
-				
-				if (dis > searchRadius) 
-					continue;
-				
-				float x = 0;
-				float y = 0;
-				float rotation;
-				
-	            CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
-	            icon.IconUpdate(playerId);
-	
-				if (playerId != SCR_PlayerController.GetLocalPlayerId())
-				{
-					// Get Direction
-					float dir = vector.Direction(playerCharacterOrigin, localPlayerCharacterOrigin).ToYaw();
-		
-					// Get Relative Direction
-					float relDir = Math.Mod(((dir - yaw) + 360), 360);
-					relDir = Math.Mod(relDir - (dir * 2), 360);
-					relDir = relDir * Math.DEG2RAD;
-		
-					x = (Math.Sin(relDir) * disT);
-					y = (Math.Cos(relDir) * disT);
-				};
-	
-				float widthAndHeight = 16; // * (m_sSquadRadarIconSize.ToInt() * 0.01);
-				
-				FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
-				FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
-	
-				radarIcon.SetOpacity(Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0));
-				icon.SetRotation(-Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360));
-	
-	            positionToStartClearing++;
-			};
-		};
+		if (!playersGroup)
+			groupArray = playersGroup.GetPlayerIDs();
 
-		for (int e = positionToStartClearing; e <= 24; e++)
+		foreach (int i, int playerId : groupArray)
 		{
-			Widget RemoveRadarWidget = m_wRoot.FindAnyWidget(string.Format("RadarIcon%1", e));
-			
-			if (!RemoveRadarWidget) 
+			float x, y, opacity, rotation, disT, dis, searchRadius;
+			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
+
+			if (!playerCharacter)
 				continue;
 			
-            CSI_Icon RemoveRadarIcon = CSI_Icon.Cast(RemoveRadarWidget.FindHandler(CSI_Icon));
-            RemoveRadarIcon.IconUpdate(0);
+			vector playerCharacterOrigin = playerCharacter.GetOrigin();
+
+			// Get Distance
+			dis = vector.Distance(localPlayerCharacterOrigin, playerCharacterOrigin);
+			
+			if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_ChimeraCharacter))
+			{
+				searchRadius = 8;
+				disT = dis * 6.215;
+			} else {
+				searchRadius = 24;
+				disT = dis * 2.0;
+			};
+			
+			if (dis > searchRadius) 
+				continue;
+
+			if (playerId != SCR_PlayerController.GetLocalPlayerId())
+			{
+				// Get Direction
+				float dir = vector.Direction(playerCharacterOrigin, localPlayerCharacterOrigin).ToYaw();
+	
+				// Get Relative Direction
+				float relDir = Math.Mod(((dir - yaw) + 360), 360);
+				relDir = Math.Mod(relDir - (dir * 2), 360);
+				relDir = relDir * Math.DEG2RAD;
+	
+				x = (Math.Sin(relDir) * disT);
+				y = (Math.Cos(relDir) * disT);
+
+				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
+				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360);
+			};
+
+			UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
+		};
+
+		for (int e = groupArray.Count(), e <= 24; e++)
+			UpdatePlayerRadarWidget(e, -1, 0, 0, 0, 0);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerId, float opacity, float x, float y, float rotation)
+	{
+		Widget radarIcon = m_wRoot.FindAnyWidget(string.Format("RadarIcon%1", widgetNumber));
+
+		if (radarIcon) 
+		{
+			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
+
+			icon.IconUpdate(playerId);
+
+			FrameSlot.SetPos(radarIcon, (x - ICON_WIDTH_AND_HEIGHT/2), (y - ICON_WIDTH_AND_HEIGHT/2));
+			FrameSlot.SetSize(radarIcon, ICON_WIDTH_AND_HEIGHT, ICON_WIDTH_AND_HEIGHT);
+
+			radarIcon.SetOpacity(opacity);
+			icon.SetRotation(rotation);
 		};
 	}
 }

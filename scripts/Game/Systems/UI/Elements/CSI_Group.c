@@ -37,7 +37,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	protected void ClearGroupDisplay(int positionToStartClearing)
 	{
 		for (int e = positionToStartClearing; e <= 24; e++)
-			UpdatePlayerWidget(e, 0);
+			UpdatePlayerWidget(e, -1);
 	}
 	
 	//------------------------------------------------------------------------------------------------
