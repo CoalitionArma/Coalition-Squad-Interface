@@ -4,24 +4,15 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 class CSI_RplToAuthorityManager : ScriptComponent
 {	
     protected CSI_AuthorityManager m_AuthorityManager;
-	protected static CSI_RplToAuthorityManager m_sInstance;
-	
-	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the RplToAuthorityManager
-	static CSI_RplToAuthorityManager GetInstance()
-	{
-		return m_sInstance;
-	}
+	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
 	{	
 		super.OnPostInit(owner);
 		
-		if(!Replication.IsServer())
-			return;
-		
 		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -31,24 +22,48 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
-		Rpc(RpcAsk_UpdatePlayerColorTeam, playerId, icon, rank);
+		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		
+		// Check if any data has updated
+		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank()))
+			return;
+		
+		Rpc(RpcAsk_UpdatePlayerData, playerId, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerColorTeam(int playerId, CSI_EColorTeam colorTeam)
 	{
+		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		
+		// Check if any data has updated
+		if(playerData && colorTeam == playerData.GetColorTeam())
+			return;
+		
 		Rpc(RpcAsk_UpdatePlayerColorTeam, playerId, colorTeam);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerOverrideIcon(int playerId, CSI_EOverrideIcon overrideIcon)
 	{
+		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		
+		// Check if any data has updated
+		if(playerData && overrideIcon == playerData.GetOverrideIcon())
+			return;
+		
 		Rpc(RpcAsk_UpdatePlayerOverrideIcon, playerId, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerTeamLeader(int playerId, bool isTL)
 	{
+		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		
+		// Check if any data has updated
+		if(playerData && isTL == playerData.GetIsTeamLeader())
+			return;
+		
 		Rpc(RpcAsk_UpdatePlayerTeamLeader, playerId, isTL);
 	}
 
@@ -71,7 +86,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_ChangeAuthoritySetting(string setting, string value)
+	void Owner_ChangeAuthoritySetting(string setting, int value)
 	{
 		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value);
 	}
@@ -83,13 +98,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
-	{
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
-		
-		// Check if any data has updated
-		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank()))
-			return;
-		
+	{	
 		m_AuthorityManager.UpdatePlayerData(playerId, icon, rank);
 	}
 	
@@ -153,9 +162,17 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_ChangeAuthoritySetting(string setting, string value)
+	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value)
 	{
-		//m_AuthorityManager.UpdateAuthoritySetting(setting, value);
+		m_SettingsManager.UpdateLocalSetting(setting, value);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	// Returns the instance of the RplToAuthorityManager
+	protected static CSI_RplToAuthorityManager m_sInstance;
+	static CSI_RplToAuthorityManager GetInstance()
+	{
+		return m_sInstance;
 	}
 
     //------------------------------------------------------------------------------------------------

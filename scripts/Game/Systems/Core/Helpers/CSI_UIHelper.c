@@ -58,7 +58,7 @@ class CSI_UIHelper
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerId);
 		CSI_PlayerData playerData = CSI_AuthorityManager.GetInstance().GetPlayerData(playerId);
 		
-		if (!playerData)
+		if (!playerData || !CSI_SettingsManager.GetInstance().GetCSISettingBool(CSI_SettingsManager.RANK_VISIBLE))
 			return name;
 		
 		SCR_ECharacterRank rankEnum = playerData.GetRank();

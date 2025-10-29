@@ -1,5 +1,6 @@
 class CSI_HUD : SCR_InfoDisplay
 {
+	protected CSI_SettingsManager m_SettingsManager;
 	protected bool m_bIsVisible = true;
 	
 	protected Widget m_wStamina;
@@ -13,6 +14,8 @@ class CSI_HUD : SCR_InfoDisplay
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
 		
@@ -23,6 +26,9 @@ class CSI_HUD : SCR_InfoDisplay
 		m_Stamina = CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina));
 		m_Compass = CSI_Compass.Cast(m_wCompass.FindHandler(CSI_Compass));
 		m_Group = CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group));
+		
+		if (!m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD))
+			m_bIsVisible = false;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -30,10 +36,10 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (!m_bIsVisible)
+		if (!m_bIsVisible && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD))
 		{
 			m_wRoot.SetVisible(false);
-			return;		
+			return;
 		} else
 			m_wRoot.SetVisible(true);
 		

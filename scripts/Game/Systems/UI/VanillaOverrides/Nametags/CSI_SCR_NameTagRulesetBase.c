@@ -1,6 +1,8 @@
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetBase : Managed
 {
+	protected CSI_SettingsManager m_SettingsManager;
+	
 	//------------------------------------------------------------------------------------------------
 	//! Determine whether the tag passes basic conditions for visibility
 	//! \param data is the subject nametag
@@ -8,6 +10,9 @@ modded class SCR_NameTagRulesetBase : Managed
 	//! \return Returns true if tag passed conditions for visibility
 	override protected bool TestVisibility(SCR_NameTagData data, float timeSlice)
 	{
+		if (!m_SettingsManager)
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		// current players tag, update tag specific vars and return
 		if (data == m_CurrentPlayerTag)
 		{
@@ -27,7 +32,10 @@ modded class SCR_NameTagRulesetBase : Managed
 		
 		//int notScopedMaxRangeSqrd = m_ZoneCfg.m_fFarthestZoneRangePow2 - 2500; // don't show tags farther than 50m (50^2) unless scoping
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
-		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * m_ZoneCfg.m_fFarthestZoneRangePow2); // increase max distance if player is using a scope or binoculars
+		
+		// increase max distance if player is using a scope or binoculars
+		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * (m_ZoneCfg.m_fFarthestZoneRangePow2 * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
+		
 		if (data.m_fDistance >= distMax) // distance of visible tag is updated per frame for scaling, which is why this check has its own scope
 		{
 			if (data.m_fDistance >= distMax + 100)		// cleanup tags which are more than distance + 10m (10^2) away from base zone query 
@@ -83,7 +91,10 @@ modded class SCR_NameTagRulesetBase : Managed
 	//! \param data is the subject nametag
 	//! \param timeSlice is the OnFrame timeslice
 	override protected void UpdateVisibleTag(SCR_NameTagData data, float timeSlice)
-	{				
+	{	
+		if (!m_SettingsManager)
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+					
 		if (data.m_eEntityStateFlags & ENameTagEntityState.HIDDEN)	// fade in tag			
 			data.DeactivateEntityState(ENameTagEntityState.HIDDEN);
 
@@ -93,7 +104,10 @@ modded class SCR_NameTagRulesetBase : Managed
 		int currentZone = -1;
 		for (int i = 0; i < m_ZoneCfg.m_iZoneCount; i++) 	// get lowest nametag zone and use it to display the tag, for perf improvement, only nearest zone is searched for when deciding where to draw
 		{
-			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 + ((int)(isZoomed) * m_ZoneCfg.m_aZones[i].m_iZoneEndPow2); // increase max distance if player is using a scope or binoculars
+			
+			// increase max zone distance if player is using a scope or binoculars
+			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 + ((int)(isZoomed) * (m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
+			
 			if ( data.m_fDistance <=  distMaxZone)
 			{
 				currentZone = i;

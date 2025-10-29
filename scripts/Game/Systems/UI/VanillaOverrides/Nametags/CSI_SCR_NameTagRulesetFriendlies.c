@@ -3,6 +3,8 @@
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 {
+	protected CSI_SettingsManager m_SettingsManager;
+	
 	//------------------------------------------------------------------------------------------------
 	override protected bool TestVisibilityFiltered(SCR_NameTagData data, float timeSlice)
 	{
@@ -12,8 +14,13 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		if (data.m_Flags & ENameTagFlags.OBSTRUCTED) 	// obstructed, this is checked here in order for the LOS checks to have run for the smaller subset of tag data 
 			return false;
 		
+		if (!m_SettingsManager)
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
-		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * m_ZoneCfg.m_fFarthestZoneRangePow2); // increase max distance if player is using a scope or binoculars
+		
+		// increase max distance if player is using a scope or binoculars
+		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * (m_ZoneCfg.m_fFarthestZoneRangePow2 * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
 		
 		float distLerp = Math.InverseLerp(distMax, 0, data.m_fDistance); // reduce the angle required to show with distance -> the further is the entity, angle required to focus it gets smaller
 		distLerp *= m_iMaxAngle/2;  // adjust for more standard ish FOV of 90 (45 radius) TODO: this should be taken from real FOV
@@ -31,8 +38,11 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
+		if (!m_SettingsManager)
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		if (data.m_eType == ENameTagEntityType.VEHICLE 
-		|| CSI_ClientManager.GetInstance().ReturnLocalCSISettings()[10] == "false" 
+		|| m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.NAMETAG_LOS_VISIBLE)
 		|| CSI_ChararcterHelper.GetCharacterVehicleCompartment(SCR_PlayerController.GetLocalMainEntity()))
 			return true;
 		

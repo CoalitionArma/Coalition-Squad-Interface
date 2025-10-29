@@ -3,93 +3,154 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 
 class CSI_SettingsManager : ScriptComponent
 {	
-    protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected static CSI_SettingsManager m_sInstance;
+	static string COMPASS_VISIBLE = "m_iCompassVisible";
+	static string BEARING_VISIBLE = "m_iBearingVisible";
+	static string RADAR_VISIBLE = "m_iRadarVisible";
+	static string GROUP_VISIBLE = "m_iGroupVisible";
+	static string STAMINA_VISIBLE = "m_iStaminaVisible";
+	static string NAMETAG_VISIBLE = "m_iNametagVisible";
+	static string RANK_VISIBLE = "m_iRankVisible";
+	static string ROLE_IN_NAMETAG_VISIBLE = "m_iRoleInNametagVisible";
+	static string GROUP_IN_NAMETAG_VISIBLE = "m_iGroupInNametagVisible";
+	static string NAMETAG_LOS_VISIBLE = "m_iNametagLOSVisible";
+	static string AUTO_HIDE_HUD = "m_iAutoHideHUD";
+	static string ICON_THEME = "m_iIconTheme";
+	static string ICON_TYPE = "m_iIconType";
+	static string ARROW_THEME = "m_iArrowTheme";
+	static string COMPASS_THEME = "m_iCompassTheme";
+	static string NAMETAG_POSITION = "m_iNametagPosition";
+	static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
+	static string NAMETAG_RANGE = "m_iNametagRange";
+	static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
+	static string RADAR_ICON_SIZE = "m_iRadarIconSize";
 	
-    ref TStringArray m_aLocalCSISettingsArray = {};
-
-	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the SettingsManager
-	static CSI_SettingsManager GetInstance()
-	{
-		return m_sInstance;
-	}
+	static int INDEX_WHERE_BOOL_SETTINGS_STOP = 10;
+	
+	protected UserSettings m_UserSettigs;
+    protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
+	protected CSI_AuthorityManager m_AuthorityManager;
+	
+    protected ref TStringArray m_aCSISettingsArray = {};
+	
+	[RplProp()]
+	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
 	{	
 		super.OnPostInit(owner);
 		
-		if(!Replication.IsServer())
-			return;
-		
+		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		
+		m_aCSISettingsArray = {
+			COMPASS_VISIBLE,
+			BEARING_VISIBLE,
+			RADAR_VISIBLE,
+			GROUP_VISIBLE,
+			STAMINA_VISIBLE,
+			NAMETAG_VISIBLE,
+			RANK_VISIBLE,
+			ROLE_IN_NAMETAG_VISIBLE, //
+			GROUP_IN_NAMETAG_VISIBLE,
+			NAMETAG_LOS_VISIBLE,
+			AUTO_HIDE_HUD,
+			ICON_THEME,
+			ICON_TYPE,
+			ARROW_THEME,
+			COMPASS_THEME,
+			NAMETAG_POSITION,
+			NAMETAG_POSITION_OFFSET,
+			NAMETAG_RANGE,
+			NAMETAG_MAGNIFICATION_MULTIPLICATION,
+			RADAR_ICON_SIZE
+		}
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	TStringArray ReturnLocalCSISettings() 
+	bool GetCSISettingBool(string setting) 
 	{
-		return m_aLocalCSISettingsArray;
-	}
+		int index = m_aCSISettingsArray.Find(setting);
+		if (index != -1 && index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+			return GetCSISettingInt(setting);
+		
+		return false;
+	};	
 	
 	//------------------------------------------------------------------------------------------------
-	void ChangeLocalCSISetting(string setting, string value)
+	int GetCSISettingInt(string setting) 
 	{
-		GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Set(setting, value);
+		int settingValue;
+		int index = m_aCSISettingsArray.Find(setting);
 		
-		UpdateLocalCSISettingArray();
-	}
-		
-	//------------------------------------------------------------------------------------------------
-	void UpdateLocalCSISettingArray()
-	{
-		array<string> settingsToCheck = {
-			// Settings that can be overriden by the server
-			"compassVisible",            //0
-			"squadRadarVisible",         //1
-			"groupDisplayVisible",       //2
-			"staminaBarVisible",         //3
-			"nametagsVisible",           //4
-			"rankVisible",               //5
-			"nametagsRange",             //6
-			"roleNametagVisible",        //7
-			"personalColorTeamMenu",     //8
-			"groupNametagVisible",       //9
-			"nametagLOSEnabled",         //10
-
-			// Settings that are purely local to each client
-			"squadRadarIconSize",        //11
-			"squadRadarSelfIconVisible", //12
-			"nametagsPosition",          //13
-			"autoHideUI",                //14
-			"compassTexture",            //15
-		};
-
-		array<string> tempLocalCSISettingsArray = {};
-
-		foreach (int i, string checkSetting : settingsToCheck)
+		if (index != -1)
 		{
-			string settingValue = "";
-			string settingServerOverride = "";
-			if (i < 11 && !m_AuthorityManager.ReturnAuthoritySettings().IsEmpty()) 
+			int serverSetting = m_aCSISettingsAuthorityValues.Get(index);
+	
+			if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
 			{
-				settingServerOverride = m_AuthorityManager.ReturnAuthoritySettings()[i];
-			};
-			switch (true)
+				if (serverSetting == -1)
+					settingValue = 0;
+				else if (serverSetting == -2)
+					settingValue = 1;
+				
+			} else if (serverSetting < 0)
+				settingValue = Math.AbsInt(serverSetting);
+		} else
+			m_UserSettigs.Get(setting, settingValue); 
+		
+		return settingValue;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdateLocalSetting(string setting, int value)
+	{
+		if (RplSession.Mode() != RplMode.Client) 
+		{
+			int index = m_aCSISettingsArray.Find(setting);
+			if (index != -1)
 			{
-				case(!(settingServerOverride.IsEmpty() || settingServerOverride == "N/A")) : {settingValue = settingServerOverride; break;};
-				default : {
-					GetGame().GetGameUserSettings().GetModule("CSI_GameSettings").Get(checkSetting, settingValue); 
-					if (i < 11 && settingValue.IsEmpty() && (!m_AuthorityManager.ReturnAuthoritySettings().IsEmpty() && m_AuthorityManager.ReturnAuthoritySettings()[11] == "true")) 
-					{
-						 settingValue = m_AuthorityManager.ReturnAuthoritySettings()[i+12]; 
-					}; 
-					break; 
-				};
+				if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+				{
+					if (value == 0)
+						value = -1;
+					else
+						value = -2;
+				} else
+					value = -value;
+				
+				m_UserSettigs.Set(setting, value);
+				UpdateAuthorityValueArray();
+				return;
 			};
-			tempLocalCSISettingsArray.Insert(settingValue);
 		};
-		m_aLocalCSISettingsArray = tempLocalCSISettingsArray;	
+		
+		m_UserSettigs.Set(setting, value);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdateAuthorityValueArray()
+	{
+		m_aCSISettingsAuthorityValues.Clear();
+		
+		foreach (string setting : m_aCSISettingsArray)
+		{
+			int settingValue;
+			m_UserSettigs.Get(setting, settingValue); 
+			
+			m_aCSISettingsAuthorityValues.Insert(settingValue);
+		}
+		
+		Replication.BumpMe();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	// Returns the instance of the SettingsManager
+	protected static CSI_SettingsManager m_sInstance;
+	static CSI_SettingsManager GetInstance()
+	{
+		return m_sInstance;
 	}
 
     //------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ class CSI_PlayerData
 			return;
 		};
 
-		m_iPlayerValue = GetPlayerValue();
+		m_iPlayerValue = UpdatePlayerValue();
 		
 		// Check if any data has updated
 		if(!newData || (m_iColorTeam == newData.GetColorTeam() && m_iOverrideIcon == newData.GetOverrideIcon() && m_iDisplayIcon == newData.GetDisplayIcon() && m_iRank == newData.GetRank() && m_bIsTeamLeader == newData.GetIsTeamLeader()))	
@@ -47,7 +47,7 @@ class CSI_PlayerData
 			m_OnDataUpdate.Invoke();
 	}
 
-	protected int GetPlayerValue()
+	protected int UpdatePlayerValue()
 	{
 		int value = 0;
 

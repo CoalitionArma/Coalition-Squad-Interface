@@ -1,7 +1,7 @@
 class CSI_Radar : SCR_ScriptedWidgetComponent
 {
-	protected CSI_ClientManager m_ClientComponent;
-	protected SCR_ChimeraCharacter m_ChimeraCharacter;
+	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_PlayerControllerManager m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
@@ -11,26 +11,27 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_ClientComponent = CSI_ClientManager.GetInstance();
+		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Update()
 	{		
-		m_ChimeraCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
+		SCR_ChimeraCharacter localPlayerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
 		
-		if (!m_ChimeraCharacter) 
+		if (!localPlayerCharacter) 
 			return;
 
 		// Freelook Direction
         float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
-		vector localPlayerCharacterOrigin = m_ChimeraCharacter.GetOrigin();
+		vector localPlayerCharacterOrigin = localPlayerCharacter.GetOrigin();
 		
 		array<int> groupArray = {};
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-
-		if (playersGroup)
+		
+		if (playersGroup && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.RADAR_VISIBLE))
 			groupArray = playersGroup.GetPlayerIDs();
 
 		foreach (int i, int playerId : groupArray)
@@ -46,7 +47,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			// Get Distance
 			dis = vector.Distance(localPlayerCharacterOrigin, playerCharacterOrigin);
 			
-			if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_ChimeraCharacter))
+			if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(localPlayerCharacter))
 			{
 				searchRadius = 8;
 				disT = dis * 6.215;
@@ -78,7 +79,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
 		};
 
-		for (int e = groupArray.Count(), e <= 24; e++)
+		for (int e = groupArray.Count(); e <= 24; e++)
 			UpdatePlayerRadarWidget(e, -1, 0, 0, 0, 0);
 	}
 
@@ -92,9 +93,11 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
 
 			icon.IconUpdate(playerId);
+			
+			float widthAndHeight = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);
 
-			FrameSlot.SetPos(radarIcon, (x - ICON_WIDTH_AND_HEIGHT/2), (y - ICON_WIDTH_AND_HEIGHT/2));
-			FrameSlot.SetSize(radarIcon, ICON_WIDTH_AND_HEIGHT, ICON_WIDTH_AND_HEIGHT);
+			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
+			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
 
 			radarIcon.SetOpacity(opacity);
 			icon.SetRotation(rotation);

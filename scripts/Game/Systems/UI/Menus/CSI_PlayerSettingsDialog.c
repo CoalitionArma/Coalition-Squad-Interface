@@ -1,7 +1,7 @@
 class CSI_PlayerSettingsDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
-	protected CSI_ClientManager m_ClientComponent;
+	protected CSI_PlayerControllerManager m_ClientComponent;
 	protected CSI_AuthorityManager m_AuthorityComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
@@ -31,7 +31,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
 		cancel.m_OnClicked.Insert(OnMenuBack);
 
-		m_ClientComponent = CSI_ClientManager.GetInstance();
+		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
 
 		// Get Global Player Controller and Group Manager.
 		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();

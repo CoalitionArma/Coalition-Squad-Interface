@@ -1,5 +1,10 @@
 class CSI_Compass : SCR_ScriptedWidgetComponent
 {
+	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
+	protected string m_sStoredCompass;
+	
+	protected CSI_SettingsManager m_SettingsManager;
+	
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
 	protected Widget m_wRadar;
@@ -11,6 +16,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
 		m_wBearing = TextWidget.Cast(w.FindAnyWidget("Bearing"));
 		m_wRadar = w.FindAnyWidget("Radar");
@@ -21,24 +28,45 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	void Update()
 	{		
-		// Future compass visibility check goes here
-		
 		m_Radar.Update();
 		
-        float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
-		int yawInt = -yaw;
-		
-		if (yawInt < 0)
-			yawInt = 360 - Math.AbsFloat(yawInt);
-
-		m_wCompass.SetRotation(yaw);
-
+		int yawInt;
 		string bearingAdd = "";
-		if (yawInt >= 0 & yawInt < 10)
-			bearingAdd = "00";
 		
-		if (yawInt >= 10 & yawInt < 100)
-			bearingAdd = "0";
+		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.COMPASS_VISIBLE))
+		{
+			CSI_ECompassTheme compassTheme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.COMPASS_THEME);
+			string compassImage;
+			switch (compassTheme)
+			{
+				case CSI_ECompassTheme.REGULAR : compassImage = STANDARD_COMPASS_RESOURCE; break;
+			};
+			
+			if (m_sStoredCompass != compassImage)
+			{
+				m_wCompass.LoadImageTexture(0, compassImage);
+				m_sStoredCompass = compassImage;
+			};
+			
+	        float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
+			yawInt = -yaw;
+			
+			m_wCompass.SetVisible(true);
+			m_wCompass.SetRotation(yaw);
+		} else 
+			m_wCompass.SetVisible(false);
+
+		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.BEARING_VISIBLE))
+		{
+			if (yawInt < 0)
+				yawInt = 360 - Math.AbsInt(yawInt);
+			
+			if (yawInt >= 0 & yawInt < 10)
+				bearingAdd = "00";
+			
+			if (yawInt >= 10 & yawInt < 100)
+				bearingAdd = "0";
+		}
 
 		m_wBearing.SetText(bearingAdd + (yawInt.ToString()));
 	}

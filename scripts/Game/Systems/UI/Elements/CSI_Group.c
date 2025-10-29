@@ -1,6 +1,7 @@
 class CSI_Group : SCR_ScriptedWidgetComponent
 {
-	protected CSI_ClientManager m_ClientComponent;
+	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_PlayerControllerManager m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	//------------------------------------------------------------------------------------------------
@@ -8,18 +9,17 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_ClientComponent = CSI_ClientManager.GetInstance();
+		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Update()
 	{
-		//string groupDisplayVisible = m_ClientComponent.ReturnLocalCSISettings()[2];
-		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 
-		if (!playersGroup) 
+		if (!playersGroup || !m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.GROUP_VISIBLE)) 
 		{
 			ClearGroupDisplay(0);
 			return;

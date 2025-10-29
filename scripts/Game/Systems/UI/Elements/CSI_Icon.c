@@ -1,14 +1,15 @@
 class CSI_Icon : SCR_ScriptedWidgetComponent
-{
-	protected ImageWidget m_wArrow;
-	protected ImageWidget m_wIcon;
-	protected ImageWidget m_wOutline;
-	
+{	
 	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
 	
 	protected CSI_AuthorityManager m_AuthorityManager;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
 	protected int m_iPlayerId;
+	
+	protected ImageWidget m_wArrow;
+	protected ImageWidget m_wIcon;
+	protected ImageWidget m_wOutline;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -16,6 +17,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -78,7 +80,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
 		// do settings check here
-		CSI_EIconTheme theme;
+		CSI_EIconTheme theme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
 		
 		string iconString;
 		
@@ -87,7 +89,12 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		else	
 			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		
-		m_wOutline.SetVisible(false);
+		if (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR)
+			m_wOutline.SetVisible(false);
+		else {
+			m_wOutline.SetVisible(true);
+			iconString = iconString + "_ICON";
+		};
 		
 		m_wIcon.LoadImageFromSet(0, CSI_ICONS_RESOURCE, iconString);
 	}
@@ -96,7 +103,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrowTheme arrow;
+		CSI_EArrowTheme arrow = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ARROW_THEME);
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		

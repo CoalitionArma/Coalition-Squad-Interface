@@ -2,32 +2,18 @@ modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
 
-	protected CSI_ClientManager m_ClientComponent;
-	protected CSI_AuthorityManager m_AuthorityComponent;
-	protected string m_sNametagsPos;
+	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		if (!m_AuthorityComponent || !m_ClientComponent) 
-		{
-			m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
-			m_ClientComponent = CSI_ClientManager.GetInstance();
-		}
+		if (!m_SettingsManager) 
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
 
-		m_sNametagsPos = "HEAD"; //m_ClientComponent.ReturnLocalCSISettings()[13];
-
-		if (m_sNametagsPos == "HEAD") 
-		{
-			m_eAttachedTo = ENameTagPosition.HEAD;
-			m_eAttachedToLast = ENameTagPosition.HEAD;
-		} else {
-			m_eAttachedTo = ENameTagPosition.BODY;
-			m_eAttachedToLast = ENameTagPosition.BODY;
-		};
+		UpdateAttatchedTo();
 		
 		m_iZoneID = -1;
 		m_iGroupID = -1;
@@ -47,9 +33,6 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
 	{
-		if (!m_ClientComponent) 
-			return;
-		
 		if (m_eType == ENameTagEntityType.PLAYER)
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
 			
@@ -71,6 +54,38 @@ modded class SCR_NameTagData : Managed
 		name = m_sName;
 		nameParams.Copy(m_aNameParams);
 	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Update tag position
+	override void UpdateTagPos()
+	{
+		vector matPos[4];
+		Animation anim = m_Entity.GetAnimation();
+		anim.GetBoneMatrix(m_iSpineBone, matPos);
+		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
+		anim.GetBoneMatrix(m_iHeadBone, matPos);
+		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
+		
+		vector nametagOffsetVector = "0 0 0";
+		int nametagOffset = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_POSITION_OFFSET);
+		
+		nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
+		
+		if (m_eAttachedTo == ENameTagPosition.HEAD)
+		{
+			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
+		}
+		else if (m_eAttachedTo == ENameTagPosition.BODY)
+		{
+			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
+		}
+
+		if (m_eType != ENameTagEntityType.PLAYER && GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(m_Entity) > 0)
+		{
+			m_Flags |= ENameTagFlags.ENT_TYPE_UPDATE;
+			m_Flags |= ENameTagFlags.NAME_UPDATE;
+		}
+	}
 
 	//------------------------------------------------------------------------------------------------
 	string GetGroupName()
@@ -78,7 +93,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group) //|| m_ClientComponent.ReturnLocalCSISettings()[9] == "false") 
+		if (!group || !m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.GROUP_IN_NAMETAG_VISIBLE)) 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -93,38 +108,16 @@ modded class SCR_NameTagData : Managed
 
 		return groupName;
 	}
-
+	
 	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
-		if (!m_ClientComponent) 
+		if (!m_SettingsManager) 
 			return;
 
-		m_sNametagsPos = "HEAD"; //m_ClientComponent.ReturnLocalCSISettings()[13];
+		ENameTagPosition nametagPos = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_POSITION);
 
-		if (m_sNametagsPos == "HEAD") 
-		{
-			m_eAttachedTo = ENameTagPosition.HEAD;
-			m_eAttachedToLast = ENameTagPosition.HEAD;
-		} else {
-			m_eAttachedTo = ENameTagPosition.BODY;
-			m_eAttachedToLast = ENameTagPosition.BODY;
-		};
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override void SetTagPosition(ENameTagPosition pos, bool gradualChange = false)
-	{
-		if (m_sNametagsPos == "HEAD") 
-		{
-			m_eAttachedTo = ENameTagPosition.HEAD;
-			m_eAttachedToLast = ENameTagPosition.HEAD;
-		} else {
-			m_eAttachedTo = ENameTagPosition.BODY;
-			m_eAttachedToLast = ENameTagPosition.BODY;
-		};
-
-		m_fTimeSlicePosChange = 0;
-		m_vTagWorldPosLast = m_vTagWorldPos;
+		m_eAttachedTo = nametagPos;
+		m_eAttachedToLast = nametagPos;
 	}
 }

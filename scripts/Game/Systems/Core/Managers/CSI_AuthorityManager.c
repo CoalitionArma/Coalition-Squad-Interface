@@ -4,7 +4,7 @@ class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
 class CSI_AuthorityManager : SCR_BaseGameModeComponent
 {	
 	protected bool m_bDataUpdateInProgress;
-	protected static CSI_AuthorityManager m_sInstance;
+
 	protected ref map<int, CSI_PlayerData> m_mPlayerDataMap = new map<int, CSI_PlayerData>;
 	
 	[RplProp()]
@@ -15,13 +15,6 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	
 	[RplProp(onRplName: "PlayerDataUpdate")]
 	protected int m_PlayerDataUpdate;
-	
-	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the AuthorityManager
-	static CSI_AuthorityManager GetInstance()
-	{
-		return m_sInstance;
-	}
 	
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerData(int playerID, CSI_EIcon icon, SCR_ECharacterRank rank)
@@ -123,6 +116,14 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 			else
 				oldPlayerData.DataUpdate(playerID, newPlayerData);
 		}
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	// Returns the instance of the AuthorityManager
+	protected static CSI_AuthorityManager m_sInstance;
+	static CSI_AuthorityManager GetInstance()
+	{
+		return m_sInstance;
 	}
 
 	//------------------------------------------------------------------------------------------------

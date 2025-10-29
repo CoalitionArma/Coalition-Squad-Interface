@@ -17,7 +17,7 @@ enum CSI_EColorTeam
 
 enum CSI_EArrowTheme
 {
-	CLASSIC,
+	CLASSIC = 1,
 	STUBBY,
 	POINTIER,
 	ROUNDIER,
@@ -30,13 +30,13 @@ enum CSI_EArrowTheme
 
 enum CSI_EIconType
 {
-	REGULAR,
+	REGULAR = 1,
 	OUTLINE
 }
 
 enum CSI_EIconTheme
 {
-	CLASSIC,
+	CLASSIC = 1,
 	REFORGER_ADV,
 	REFORGER_REG,
 	NATO,
@@ -88,7 +88,7 @@ enum CSI_EOverrideIcon
 
 enum CSI_ECompassTheme
 {
-	REGULAR,
+	REGULAR = 1,
 	SCI_FI,
 	WW2,
 }

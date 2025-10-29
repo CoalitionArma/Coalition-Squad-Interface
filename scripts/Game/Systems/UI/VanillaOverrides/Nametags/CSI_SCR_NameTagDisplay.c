@@ -3,26 +3,22 @@
 //! Attached to SCR_HUDManagerComponent which is a component of SCR_PlayerController
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
-	protected CSI_ClientManager m_ClientComponent;
+	protected CSI_SettingsManager m_SettingsManager;
 
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
 		super.DisplayUpdate(owner, timeSlice);
 		
-		if (!m_ClientComponent) 
-			m_ClientComponent = CSI_ClientManager.GetInstance();
+		if (!m_SettingsManager) 
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		string nametagsRange = ""; //m_ClientComponent.ReturnLocalCSISettings()[6];
-		string nametagsVisible = ""; //m_ClientComponent.ReturnLocalCSISettings()[4];
+		int nametagsRange = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_RANGE);
 
-		if (nametagsRange.IsEmpty()) 
-			nametagsRange = "35";
-		
-		if (nametagsVisible == "false") 
-			nametagsRange = "1";
+		if (!m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.NAMETAG_VISIBLE)) 
+			nametagsRange = 1;
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 
-			nTZone.SetZoneEnd(nametagsRange.ToInt());
+			nTZone.SetZoneEnd(nametagsRange);
 
 		s_NametagCfg.ResetFarthestZone();
 	}

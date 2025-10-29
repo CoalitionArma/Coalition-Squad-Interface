@@ -1,5 +1,7 @@
 class CSI_Stamina : SCR_ScriptedWidgetComponent
 {
+	protected CSI_SettingsManager m_SettingsManager;
+	
 	protected ProgressBarWidget m_wStamBar;
 
 	//------------------------------------------------------------------------------------------------
@@ -7,12 +9,20 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Update()
 	{
+		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.STAMINA_VISIBLE))
+		{
+			HideBar(0);
+			return;
+		}
+		
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
 

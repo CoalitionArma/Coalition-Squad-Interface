@@ -4,15 +4,8 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 class CSI_PlayerControllerManager : ScriptComponent
 {		
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected static CSI_PlayerControllerManager m_sInstance;
+
 	protected int m_iCurrentUpdateCycle = 20;
-	
-	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the PlayerControllerManager
-	static CSI_PlayerControllerManager GetInstance()
-	{
-		return m_sInstance;
-	}
 
 	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
@@ -23,9 +16,6 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
 			return;
-
-		GetGame().GetInputManager().AddActionListener("CSI_PlayerSelectionMenu", EActionTrigger.DOWN, TogglePlayerSelectionMenu);
-		GetGame().GetInputManager().AddActionListener("CSI_SettingsMenu", EActionTrigger.DOWN, ToggleCSISettingsMenu);
 		
 		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 225, true);
 	}
@@ -58,8 +48,6 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		// Vehicle Icons, they supercede any other Icon
-
-		// Check players current compartment.
 		BaseCompartmentSlot compartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(localplayer);
 		if (compartment)
 		{
@@ -75,13 +63,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	SL Icon
-
 		if (playersGroup.IsPlayerLeader(playerId))
 			displayIcon = CSI_EIcon.SL;
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-
 		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 20) 
 		{
 			// Get players inventory component
@@ -165,6 +151,14 @@ class CSI_PlayerControllerManager : ScriptComponent
 		}
 		
 		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerId, displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	// Returns the instance of the PlayerControllerManager
+	protected static CSI_PlayerControllerManager m_sInstance;
+	static CSI_PlayerControllerManager GetInstance()
+	{
+		return m_sInstance;
 	}
 
 	//------------------------------------------------------------------------------------------------
