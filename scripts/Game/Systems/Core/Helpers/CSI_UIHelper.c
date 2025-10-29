@@ -146,24 +146,4 @@ class CSI_UIHelper
 		};
 		return name;
 	};
-	
-	//------------------------------------------------------------------------------------------------
-	/**
-	 * Gets player ID from player name
-	 * @param name The player name to search for
-	 * @return The matching player ID or 0 if not found
-	 */
-	static int GetPlayerIdFromName(string name)
-	{
-		array<int> playerIds = {};
-		GetGame().GetPlayerManager().GetPlayers(playerIds);
-		
-		foreach (int pid : playerIds)
-		{
-			if (GetGame().GetPlayerManager().GetPlayerName(pid) == name)
-				return pid;
-		}
-
-		return 0;
-	}
 }

@@ -1,8 +1,9 @@
 class CSI_PlayerSettingsDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
-	protected CSI_PlayerControllerManager m_ClientComponent;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_AuthorityManager m_AuthorityComponent;
+	protected CSI_RplToAuthorityManagerClass m_RplToAuthorityManagerClass;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
 	protected Widget m_wRoot;
@@ -15,12 +16,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	protected string m_sStoredSpecialtyIcon;
 
 	//------------------------------------------------------------------------------------------------
-
-	// Override/static functions
-
-	//------------------------------------------------------------------------------------------------
-
-	/*
 	override void OnMenuOpen()
 	{
 		super.OnMenuOpen();
@@ -31,11 +26,11 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
 		cancel.m_OnClicked.Insert(OnMenuBack);
 
-		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
-
-		// Get Global Player Controller and Group Manager.
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
-		if (!m_AuthorityComponent || !m_ClientComponent) 
+		m_RplToAuthorityManagerClass = CSI_RplToAuthorityManagerClass.GetInstance();
+		
+		if (!m_AuthorityComponent || !m_SettingsManager || !m_RplToAuthorityManagerClass) 
 			return;
 
 		m_wIconOveride = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconOveride"));
@@ -65,11 +60,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-
-	// Functions moddified by the Player Selection menu
-
-	//------------------------------------------------------------------------------------------------
-
 	void SetPlayerStr(string playerStringToSplit)
 	{
 		array<string> playerSplitArray = {};
@@ -85,11 +75,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-
-	// Functions to update visual icons/text (player icon, player name, etc.)
-
-	//------------------------------------------------------------------------------------------------
-
 	protected void UpdatePlayerIcon()
 	{
 		string playerName = GetGame().GetPlayerManager().GetPlayerName(m_iSelectedPlayerID);
@@ -143,11 +128,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	};
 
 	//------------------------------------------------------------------------------------------------
-
-	// Additional menu functions
-
-	//------------------------------------------------------------------------------------------------
-
 	protected void OnMenuBack()
 	{
 		GetGame().GetCallqueue().Remove(UpdatePlayerIcon);
@@ -206,11 +186,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	};
 
 	//------------------------------------------------------------------------------------------------
-
-	// Button functions
-
-	//------------------------------------------------------------------------------------------------
-
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
 		if (m_wPlayerName.GetText() == "No Player Selected") 
@@ -235,30 +210,12 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID) || m_sStoredSpecialtyIcon == "FTL") 
 			return;
 
-		int iconToOverride = m_wIconOveride.GetCurrentItem();
-		string iconToOverrideStr = "";
-		switch (iconToOverride)
-		{
-			case 1 : {iconToOverrideStr = "MED";  break;};
-			case 2 : {iconToOverrideStr = "MRK";  break;};
-			case 3 : {iconToOverrideStr = "MG";   break;};
-			case 4 : {iconToOverrideStr = "AT";   break;};
-			case 5 : {iconToOverrideStr = "GRN";  break;};
-			case 6 : {iconToOverrideStr = "EXP";  break;};
-			case 7 : {iconToOverrideStr = "ENG";  break;};
-			case 8 : {iconToOverrideStr = "MAN";  break;};
-		};
+		CSI_EOverrideIcon iconToOverride = m_wIconOveride.GetCurrentItem();
 
 		if (!m_iSelectedPlayerID) 
 			return;
 		
-		if (iconToOverrideStr.IsEmpty()) 
-		{
-			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
-			return;
-		}
-		
-		m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", iconToOverrideStr); // OI = OverrideIcon
+		m_RplToAuthorityManagerClass.Owner_UpdatePlayerOverrideIcon(m_iSelectedPlayerID, iconToOverride); // OI = OverrideIcon
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -267,7 +224,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
 			return;
 
-		m_ClientComponent.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
+		m_SettingsManager.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
 		GetGame().GetMenuManager().CloseAllMenus();
 	};
 
@@ -279,10 +236,10 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		if (m_sStoredSpecialtyIcon == "FTL") 
 		{
-			m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
+			m_SettingsManager.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
 			return;
 		};
-		m_ClientComponent.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "FTL"); // OI = OverrideIcon
+		m_SettingsManager.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "FTL"); // OI = OverrideIcon
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -291,8 +248,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
 			return;
 
-		m_ClientComponent.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
+		m_SettingsManager.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);
 	};
-	*/
 }
