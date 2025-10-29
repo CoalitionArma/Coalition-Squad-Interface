@@ -66,8 +66,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			
 			if (yawInt >= 10 & yawInt < 100)
 				bearingAdd = "0";
-		}
-
-		m_wBearing.SetText(bearingAdd + (yawInt.ToString()));
+			
+			m_wBearing.SetText(bearingAdd + (yawInt.ToString()));
+		} else
+			m_wBearing.SetText("");
 	}
 }

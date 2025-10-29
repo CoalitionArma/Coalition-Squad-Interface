@@ -1,9 +1,9 @@
 class CSI_PlayerData
 {
-	protected CSI_EColorTeam m_iColorTeam;
-	protected CSI_EOverrideIcon m_iOverrideIcon;
-	protected CSI_EIcon m_iDisplayIcon;
-	protected SCR_ECharacterRank m_iRank;
+	protected CSI_EColorTeam m_iColorTeam = CSI_EColorTeam.NONE;
+	protected CSI_EOverrideIcon m_iOverrideIcon = CSI_EOverrideIcon.AUTO;
+	protected CSI_EIcon m_iDisplayIcon = CSI_EIcon.MAN;
+	protected SCR_ECharacterRank m_iRank = SCR_ECharacterRank.PRIVATE;
 	protected bool m_bIsTeamLeader;
 	
 	// Invoker for data updates

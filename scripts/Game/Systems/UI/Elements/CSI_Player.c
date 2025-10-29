@@ -46,7 +46,9 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, GetGame().GetPlayerManager().GetPlayerName(playerId)));
 			
 			m_PlayerData = m_AuthorityManager.GetPlayerData(playerId);
-			m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
+			
+			if (m_PlayerData)
+				m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
 			
 			DataUpdate();
 		}
@@ -55,6 +57,9 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void DataUpdate()
 	{	
+		if (!m_PlayerData)
+			return;
+		
 		Color colorTeam = CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam());
 		
 		m_wPlayerName.SetColor(colorTeam); 

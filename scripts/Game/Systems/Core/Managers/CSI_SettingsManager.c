@@ -65,7 +65,10 @@ class CSI_SettingsManager : ScriptComponent
 			NAMETAG_RANGE,
 			NAMETAG_MAGNIFICATION_MULTIPLICATION,
 			RADAR_ICON_SIZE
-		}
+		};
+		
+		if (RplSession.Mode() != RplMode.Client) 
+			UpdateAuthorityValueArray();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -99,6 +102,9 @@ class CSI_SettingsManager : ScriptComponent
 				settingValue = Math.AbsInt(serverSetting);
 		} else
 			m_UserSettigs.Get(setting, settingValue); 
+		
+		Print(setting);
+		Print(settingValue);
 		
 		return settingValue;
 	}
