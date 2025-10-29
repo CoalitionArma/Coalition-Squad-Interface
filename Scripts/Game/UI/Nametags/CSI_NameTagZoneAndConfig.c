@@ -6,7 +6,7 @@ modded class SCR_NameTagZone
 	void SetZoneEnd(int range)
 	{
 		m_iZoneEnd = range;
-		m_iZoneEndPow2 = range * range;
+		m_iZoneEndSq = range * range;
 	}
 }
 
