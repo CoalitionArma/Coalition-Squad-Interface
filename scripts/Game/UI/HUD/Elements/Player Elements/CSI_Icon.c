@@ -18,7 +18,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
+		
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -77,7 +79,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			return;
 		
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
-		SetArrowWidget();
 		
 		Color colorTeam = CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam());
 		
@@ -98,9 +99,14 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			iconString = iconString + "_ICON";
 		};
 		
-		Print(iconString);
+		if (CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+			m_wArrow.SetVisible(false);
+		else 
+			m_wArrow.SetVisible(true);
 		
 		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
+		
+		SetArrowWidget();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -110,8 +116,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		CSI_EArrowTheme arrow = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ARROW_THEME);
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
-		
-		Print(arrowString);
 		
 		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, arrowString);
 	}
