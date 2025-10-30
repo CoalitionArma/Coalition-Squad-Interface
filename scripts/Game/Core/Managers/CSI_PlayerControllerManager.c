@@ -70,7 +70,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	TL Icon
-		if (m_AuthorityManager.GetPlayerData(playerId).GetIsTeamLeader())
+		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		if (playerData && playerData.GetIsTeamLeader())
 			displayIcon = CSI_EIcon.TL;
 
 		//------------------------------------------------------------------------------------------------
