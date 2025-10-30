@@ -1,7 +1,5 @@
 class CSI_Icon : SCR_ScriptedWidgetComponent
 {	
-	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
-	
 	protected CSI_AuthorityManager m_AuthorityManager;
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
@@ -34,7 +32,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 			
-			if (playerId == 0)
+			if (playerId <= 0)
 			{
 				m_wRoot.SetVisible(false);
 				return;
@@ -56,6 +54,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	void SetRotation(float yaw)
 	{
 		m_wArrow.SetRotation(yaw);
+
+		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
+			yaw = 0;
+
 		m_wIcon.SetRotation(yaw);
 		m_wOutline.SetRotation(yaw);
 	};
@@ -79,15 +81,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
-		// do settings check here
-		CSI_EIconTheme theme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
-		
-		string iconString;
-		
-		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))
-			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
-		else	
-			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
+		string iconString = CSI_UIHelper.GetIconString(icon);
 		
 		if (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR)
 			m_wOutline.SetVisible(false);
@@ -96,7 +90,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			iconString = iconString + "_ICON";
 		};
 		
-		m_wIcon.LoadImageFromSet(0, CSI_ICONS_RESOURCE, iconString);
+		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -107,6 +101,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		
-		m_wArrow.LoadImageFromSet(0, CSI_ICONS_RESOURCE, arrowString);
+		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, arrowString);
 	}
 }

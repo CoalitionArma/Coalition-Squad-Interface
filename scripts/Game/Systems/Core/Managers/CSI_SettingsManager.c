@@ -3,28 +3,32 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 
 class CSI_SettingsManager : ScriptComponent
 {	
-	static string COMPASS_VISIBLE = "m_iCompassVisible";
-	static string BEARING_VISIBLE = "m_iBearingVisible";
-	static string RADAR_VISIBLE = "m_iRadarVisible";
-	static string GROUP_VISIBLE = "m_iGroupVisible";
-	static string STAMINA_VISIBLE = "m_iStaminaVisible";
-	static string NAMETAG_VISIBLE = "m_iNametagVisible";
-	static string RANK_VISIBLE = "m_iRankVisible";
-	static string ROLE_IN_NAMETAG_VISIBLE = "m_iRoleInNametagVisible";
-	static string GROUP_IN_NAMETAG_VISIBLE = "m_iGroupInNametagVisible";
-	static string NAMETAG_LOS_VISIBLE = "m_iNametagLOSVisible";
-	static string AUTO_HIDE_HUD = "m_iAutoHideHUD";
-	static string ICON_THEME = "m_iIconTheme";
-	static string ICON_TYPE = "m_iIconType";
-	static string ARROW_THEME = "m_iArrowTheme";
-	static string COMPASS_THEME = "m_iCompassTheme";
-	static string NAMETAG_POSITION = "m_iNametagPosition";
-	static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
-	static string NAMETAG_RANGE = "m_iNametagRange";
-	static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
-	static string RADAR_ICON_SIZE = "m_iRadarIconSize";
+	const static string COMPASS_VISIBLE = "m_iCompassVisible";
+	const static string BEARING_VISIBLE = "m_iBearingVisible";
+	const static string RADAR_VISIBLE = "m_iRadarVisible";
+	const static string ONLY_RADAR_ICON_ARROWS_ROTATE = "m_iOnlyRadarIconArrowsRotate";
+	const static string GROUP_VISIBLE = "m_iGroupVisible";
+	const static string STAMINA_VISIBLE = "m_iStaminaVisible";
+	const static string NAMETAG_VISIBLE = "m_iNametagVisible";
+	const static string RANK_VISIBLE = "m_iRankVisible";
+	const static string ROLE_IN_NAMETAG_VISIBLE = "m_iRoleInNametagVisible";
+	const static string GROUP_IN_NAMETAG_VISIBLE = "m_iGroupInNametagVisible";
+	const static string NAMETAG_LOS_VISIBLE = "m_iNametagLOSVisible";
+	const static string AUTO_HIDE_HUD = "m_iAutoHideHUD";
+	const static string ICON_THEME = "m_iIconTheme";
+	const static string ICON_TYPE = "m_iIconType";
+	const static string ARROW_THEME = "m_iArrowTheme";
+	const static string COMPASS_THEME = "m_iCompassTheme";
+	const static string NAMETAG_POSITION = "m_iNametagPosition";
+	const static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
+	const static string NAMETAG_RANGE = "m_iNametagRange";
+	const static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
+	const static string RADAR_ICON_SIZE = "m_iRadarIconSize";
 	
-	static int INDEX_WHERE_BOOL_SETTINGS_STOP = 10;
+	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
+	const static int SERVER_OVERRIDE_DISABLED_VALUE = 0;
+	const static int SERVER_OVERRIDE_FALSE = -1;
+	const static int SERVER_OVERRIDE_TRUE = -2;
 	
 	protected UserSettings m_UserSettigs;
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
@@ -48,11 +52,12 @@ class CSI_SettingsManager : ScriptComponent
 			COMPASS_VISIBLE,
 			BEARING_VISIBLE,
 			RADAR_VISIBLE,
+			ONLY_RADAR_ICON_ARROWS_ROTATE,
 			GROUP_VISIBLE,
 			STAMINA_VISIBLE,
 			NAMETAG_VISIBLE,
 			RANK_VISIBLE,
-			ROLE_IN_NAMETAG_VISIBLE, //
+			ROLE_IN_NAMETAG_VISIBLE,
 			GROUP_IN_NAMETAG_VISIBLE,
 			NAMETAG_LOS_VISIBLE,
 			AUTO_HIDE_HUD,
@@ -84,27 +89,22 @@ class CSI_SettingsManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	int GetCSISettingInt(string setting) 
 	{
-		int settingValue;
 		int index = m_aCSISettingsArray.Find(setting);
+		bool IsBool = index <= INDEX_WHERE_BOOL_SETTINGS_STOP;
 		
-		if (index != -1)
+		if (index == -1)
+			return;
+
+		int settingValue;
+		int serverSetting = m_aCSISettingsAuthorityValues.Get(index);
+
+		switch (true)
 		{
-			int serverSetting = m_aCSISettingsAuthorityValues.Get(index);
-	
-			if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
-			{
-				if (serverSetting == -1)
-					settingValue = 0;
-				else if (serverSetting == -2)
-					settingValue = 1;
-				
-			} else if (serverSetting < 0)
-				settingValue = Math.AbsInt(serverSetting);
-		} else
-			m_UserSettigs.Get(setting, settingValue); 
-		
-		Print(setting);
-		Print(settingValue);
+			case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
+			case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
+			case (serverSetting < 0) : settingValue = Math.AbsInt(serverSetting); break;
+			default : m_UserSettigs.Get(setting, settingValue);
+		}
 		
 		return settingValue;
 	}
@@ -117,15 +117,17 @@ class CSI_SettingsManager : ScriptComponent
 			int index = m_aCSISettingsArray.Find(setting);
 			if (index != -1)
 			{
-				if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+				if (value != SERVER_OVERRIDE_DISABLED_VALUE)
 				{
-					if (value == 0)
-						value = -1;
-					else
-						value = -2;
-				} else
-					value = -value;
-				
+					if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+					{
+						if (value == false)
+							value = SERVER_OVERRIDE_FALSE;
+						else
+							value = SERVER_OVERRIDE_TRUE;
+					} else
+						value = -value;
+				};
 				m_UserSettigs.Set(setting, value);
 				UpdateAuthorityValueArray();
 				return;

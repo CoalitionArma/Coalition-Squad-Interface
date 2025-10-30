@@ -1,5 +1,8 @@
 class CSI_UIHelper
 {	
+	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
+	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
+
 	static ref array<CSI_EIcon> m_aNonThemedIcons =
 	{
 		// ----------- MAN -----------
@@ -45,6 +48,29 @@ class CSI_UIHelper
 		}
 		
 		return colorFromInt; 
+	}
+
+	//------------------------------------------------------------------------------------------------
+	/**
+	* Get icon string so we can set the icon through LoadImageFromSet
+	* @param icon: Icon to find the string of
+	* @param isSimpleIcon: should we return the simple (non-circular) Icon
+	* @return icon string
+	*/
+	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false)
+	{
+		string iconString;
+		CSI_EIconTheme theme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
+		
+		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))
+			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
+		else	
+			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
+
+		if (isSimpleIcon)
+			iconString = iconString + "_ICON";
+
+		return iconString;
 	}
 	
 	//------------------------------------------------------------------------------------------------

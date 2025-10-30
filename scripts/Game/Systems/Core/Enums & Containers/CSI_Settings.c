@@ -11,6 +11,9 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "true", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Radar Inside The Compass")]
 	int m_iRadarVisible;
 
+	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox, desc: "Only Have The Arrows Of The Icons Rotate To Indicate The Direction A Player Is Facing On The Radar")]
+	int m_iOnlyRadarIconArrowsRotate;
+
 	[Attribute(defvalue: "true", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Group Display To The Right Of The Compass")]
 	int m_iGroupVisible;
 
@@ -32,7 +35,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "true", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Nametags Utilizing Line Of Sight To Determine Visiblity")]
 	int m_iNametagLOSVisible;
 	
-	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable The CSI HUD Auto Hiding Until A Key Is Pressed")]
+	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable The CSI HUD Automatically Hiding Itself Until A Key Is Pressed")]
 	int m_iAutoHideHUD;
 	
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconTheme), desc: "Theme Of All Specialty Icons")]
@@ -53,12 +56,12 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "8", uiwidget: UIWidgets.Slider, params: "0 10 1", desc: "Z Offset Of Nametags From The Nametag Position")]
 	int m_iNametagPositionOffset;
 
-	[Attribute(defvalue: "32", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
+	[Attribute(defvalue: "35", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
 	int m_iNametagRange;
 	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "When Looking Through A Magnified Sight/Binos, Multiply The Nametag Range By This Number")]
 	int m_iNametagMagnificationMultiplication;
 
-	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "40 500 5", desc: "Icon Size On The Radar")]
+	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Icon Size On The Radar")]
 	int m_iRadarIconSize;
 }

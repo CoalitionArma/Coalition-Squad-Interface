@@ -34,50 +34,54 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		if (playersGroup && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.RADAR_VISIBLE))
 			groupArray = playersGroup.GetPlayerIDs();
 
-		foreach (int i, int playerId : groupArray)
+		if (groupArray.Count() > 1)
 		{
-			float x, y, opacity, rotation, disT, dis, searchRadius;
-			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
-
-			if (!playerCharacter)
-				continue;
-			
-			vector playerCharacterOrigin = playerCharacter.GetOrigin();
-
-			// Get Distance
-			dis = vector.Distance(localPlayerCharacterOrigin, playerCharacterOrigin);
-			
-			if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(localPlayerCharacter))
+			foreach (int i, int playerId : groupArray)
 			{
-				searchRadius = 8;
-				disT = dis * 6.215;
-			} else {
-				searchRadius = 24;
-				disT = dis * 2.0;
+				float x, y, opacity, rotation, disT, dis, searchRadius;
+				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
+
+				if (!playerCharacter)
+					continue;
+				
+				vector playerCharacterOrigin = playerCharacter.GetOrigin();
+
+				// Get Distance
+				dis = vector.Distance(localPlayerCharacterOrigin, playerCharacterOrigin);
+				
+				if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(localPlayerCharacter))
+				{
+					searchRadius = 8;
+					disT = dis * 6.215;
+				} else {
+					searchRadius = 24;
+					disT = dis * 2.0;
+				};
+				
+				if (dis > searchRadius) 
+					continue;
+
+				if (playerId != SCR_PlayerController.GetLocalPlayerId())
+				{
+					// Get Direction
+					float dir = vector.Direction(playerCharacterOrigin, localPlayerCharacterOrigin).ToYaw();
+		
+					// Get Relative Direction
+					float relDir = Math.Mod(((dir - yaw) + 360), 360);
+					relDir = Math.Mod(relDir - (dir * 2), 360);
+					relDir = relDir * Math.DEG2RAD;
+		
+					x = (Math.Sin(relDir) * disT);
+					y = (Math.Cos(relDir) * disT);
+				};
+
+				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
+				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360);
+
+				UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
 			};
-			
-			if (dis > searchRadius) 
-				continue;
-
-			if (playerId != SCR_PlayerController.GetLocalPlayerId())
-			{
-				// Get Direction
-				float dir = vector.Direction(playerCharacterOrigin, localPlayerCharacterOrigin).ToYaw();
-	
-				// Get Relative Direction
-				float relDir = Math.Mod(((dir - yaw) + 360), 360);
-				relDir = Math.Mod(relDir - (dir * 2), 360);
-				relDir = relDir * Math.DEG2RAD;
-	
-				x = (Math.Sin(relDir) * disT);
-				y = (Math.Cos(relDir) * disT);
-			};
-
-			opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
-			rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - yaw), 360);
-
-			UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
-		};
+		} else 
+			groupArray.Clear();
 
 		for (int e = groupArray.Count(); e <= 24; e++)
 			UpdatePlayerRadarWidget(e, -1, 0, 0, 0, 0);

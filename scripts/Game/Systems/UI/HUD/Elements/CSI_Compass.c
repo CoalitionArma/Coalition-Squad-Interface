@@ -1,6 +1,5 @@
 class CSI_Compass : SCR_ScriptedWidgetComponent
 {
-	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
 	protected string m_sStoredCompass;
 	
 	protected CSI_SettingsManager m_SettingsManager;
@@ -39,7 +38,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			string compassImage;
 			switch (compassTheme)
 			{
-				case CSI_ECompassTheme.REGULAR : compassImage = STANDARD_COMPASS_RESOURCE; break;
+				case CSI_ECompassTheme.REGULAR : compassImage = CSI_UIHelper.STANDARD_COMPASS_RESOURCE; break;
 			};
 			
 			if (m_sStoredCompass != compassImage)

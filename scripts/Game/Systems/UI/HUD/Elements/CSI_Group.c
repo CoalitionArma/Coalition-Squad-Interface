@@ -27,8 +27,11 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		
 		array<int> groupArray = CSI_UIHelper.GetSortedGroupArray(playersGroup);
 
-		foreach (int i, int playerId : groupArray) 
-			UpdatePlayerWidget(i, playerId);
+		if (groupArray.Count() > 1)
+			foreach (int i, int playerId : groupArray) 
+				UpdatePlayerWidget(i, playerId);
+		else
+			groupArray.Clear();
 		
 		ClearGroupDisplay(groupArray.Count());
 	}

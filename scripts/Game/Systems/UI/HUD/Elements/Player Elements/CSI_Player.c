@@ -35,7 +35,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 			
-			if (playerId == 0)
+			if (playerId <= 0)
 			{
 				m_wRoot.SetVisible(false);
 				m_wPlayerName.SetText("");
