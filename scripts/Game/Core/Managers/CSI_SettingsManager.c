@@ -33,12 +33,13 @@ class CSI_SettingsManager : ScriptComponent
 	protected ref ScriptInvoker m_OnSettingsUpdate;
 	protected UserSettings m_UserSettigs;
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected CSI_AuthorityManager m_AuthorityManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
     protected ref TStringArray m_aCSISettingsArray = {};
 	
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
+	protected ref TIntArray m_aCSISettingsLocalValues = {};
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
@@ -47,7 +48,7 @@ class CSI_SettingsManager : ScriptComponent
 		
 		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		
 		m_aCSISettingsArray = {
 			COMPASS_VISIBLE,
@@ -91,23 +92,11 @@ class CSI_SettingsManager : ScriptComponent
 	int GetCSISettingInt(string setting) 
 	{
 		int index = m_aCSISettingsArray.Find(setting);
-		bool IsBool = index <= INDEX_WHERE_BOOL_SETTINGS_STOP;
 		
 		if (index == -1)
 			return 0;
 
-		int settingValue;
-		int serverSetting = m_aCSISettingsAuthorityValues.Get(index);
-
-		switch (true)
-		{
-			case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
-			case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
-			case (serverSetting < 0) : settingValue = Math.AbsInt(serverSetting); break;
-			default : m_UserSettigs.Get(setting, settingValue);
-		}
-		
-		return settingValue;
+		return m_aCSISettingsLocalValues.Get(index);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -152,11 +141,32 @@ class CSI_SettingsManager : ScriptComponent
 		}
 		
 		Replication.BumpMe();
+		
+		#ifdef WORKBENCH
+			SettingsUpdate();
+		#endif
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void SettingsUpdate()
 	{
+		foreach (int i, string setting : m_aCSISettingsArray)
+		{
+			int settingValue;
+			bool IsBool = i <= INDEX_WHERE_BOOL_SETTINGS_STOP;
+			int serverSetting = m_aCSISettingsAuthorityValues.Get(i);
+	
+			switch (true)
+			{
+				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
+				case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
+				case (serverSetting < 0) : settingValue = Math.AbsInt(serverSetting); break;
+				default : m_UserSettigs.Get(setting, settingValue);
+			}
+			
+			m_aCSISettingsLocalValues.Insert(settingValue);
+		}
+		
 		if (m_OnSettingsUpdate)
 			m_OnSettingsUpdate.Invoke();
 	}

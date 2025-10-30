@@ -8,7 +8,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 {
 	protected Widget m_wRoot;
 	protected CSI_PlayerControllerManager m_ClientComponent;
-	protected CSI_AuthorityManager m_AuthorityComponent;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 
 	protected int m_iNametagsRangeSO;
 	
@@ -74,8 +74,8 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		if (!m_ClientComponent) 
 			return;
 
-		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
-		if (!m_AuthorityComponent) 
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		if (!m_PlayerDataManager) 
 			return;
 
 		GetGame().GetInputManager().AddActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
@@ -123,7 +123,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wCompassVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("CompassVisibleCheckBox"));
-		m_sCompassVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[0];
+		m_sCompassVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[0];
 		string compassVisible = "";
 		switch (m_sCompassVisibleSO)
 		{
@@ -142,7 +142,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wSquadRadarVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("SquadRadarVisibleCheckBox"));
-		m_sSquadRadarVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[1];
+		m_sSquadRadarVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[1];
 		string squadRadarVisible = "";
 		switch (m_sSquadRadarVisibleSO)
 		{
@@ -161,7 +161,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wGroupDisplayVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("GroupDisplayVisibleCheckBox"));
-		m_sGroupDisplayVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[2];
+		m_sGroupDisplayVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[2];
 		string groupDisplayVisible = "";
 		switch (m_sGroupDisplayVisibleSO)
 		{
@@ -180,7 +180,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wStaminaBarVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("StaminaBarVisibleCheckBox"));
-		m_sStaminaBarVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[3];
+		m_sStaminaBarVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[3];
 		string staminaBarVisible = "";
 		switch (m_sStaminaBarVisibleSO)
 		{
@@ -199,7 +199,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wNametagsVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagsVisibleCheckbox"));
-		m_sNametagsVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[4];
+		m_sNametagsVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[4];
 		string nametagsVisible = "";
 		switch (m_sNametagsVisibleSO)
 		{
@@ -218,7 +218,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wRankVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("RankVisibleCheckBox"));
-		m_sRankVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[5];
+		m_sRankVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[5];
 		string rankVisible = "";
 		switch (m_sRankVisibleSO)
 		{
@@ -243,7 +243,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 			m_wNametagsRangeWidget.AddItem((i*5).ToString());
 		}
 		
-		string nametagsRangeSOString = m_AuthorityComponent.ReturnAuthoritySettings()[6];
+		string nametagsRangeSOString = m_PlayerDataManager.ReturnAuthoritySettings()[6];
 		if (!nametagsRangeSOString.IsEmpty()) {
 			m_iNametagsRangeSO = nametagsRangeSOString.ToInt();
 		} else {
@@ -271,7 +271,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wRoleNametagVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("RoleNametagVisibleCheckbox"));
-		m_sRoleNametagVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[7];
+		m_sRoleNametagVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[7];
 		string roleNametagVisible = "";
 		switch (m_sRoleNametagVisibleSO)
 		{
@@ -290,7 +290,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 
 		m_wPersonalColorTeamMenuWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("PersonalColorTeamMenuCheckbox"));
-		m_sPersonalColorTeamMenuSO = m_AuthorityComponent.ReturnAuthoritySettings()[8];
+		m_sPersonalColorTeamMenuSO = m_PlayerDataManager.ReturnAuthoritySettings()[8];
 		string personalColorTeamMenuEnabled = "";
 		switch (m_sPersonalColorTeamMenuSO)
 		{
@@ -309,7 +309,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 		
 		m_wGroupNametagVisibleWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("GroupNametagVisibleCheckbox"));
-		m_sGroupNametagVisibleSO = m_AuthorityComponent.ReturnAuthoritySettings()[9];
+		m_sGroupNametagVisibleSO = m_PlayerDataManager.ReturnAuthoritySettings()[9];
 		string GroupNametagVisibleEnabled = "";
 		switch (m_sGroupNametagVisibleSO)
 		{
@@ -328,7 +328,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		};
 		
 		m_wNametagLOSEnabledWidget = CheckBoxWidget.Cast(m_wRoot.FindAnyWidget("NametagLOSEnabledCheckbox"));
-		m_sNametagLOSEnabledSO = m_AuthorityComponent.ReturnAuthoritySettings()[10];
+		m_sNametagLOSEnabledSO = m_PlayerDataManager.ReturnAuthoritySettings()[10];
 		string NametagLOSEnabledEnabled = "";
 		switch (m_sNametagLOSEnabledSO)
 		{
@@ -447,7 +447,7 @@ class CSI_SettingsDialog : ChimeraMenuBase
 		backgroundServerDefaults.SetOpacity(1);
 		prettyServerDefaults.SetOpacity(1);
 		
-		if (m_AuthorityComponent.ReturnAuthoritySettings()[11] == "true") m_wServerDefaultsActive.SetChecked(true);
+		if (m_PlayerDataManager.ReturnAuthoritySettings()[11] == "true") m_wServerDefaultsActive.SetChecked(true);
 
 		if (m_sCompassVisibleSO == "true" || m_sCompassVisibleSO == "false") m_wCompassVisibleWidgetSO.SetChecked(true);
 		if (m_sSquadRadarVisibleSO == "true" || m_sSquadRadarVisibleSO == "false") m_wSquadRadarVisibleWidgetSO.SetChecked(true);

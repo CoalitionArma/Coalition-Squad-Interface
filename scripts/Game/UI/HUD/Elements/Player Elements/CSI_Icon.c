@@ -1,6 +1,6 @@
 class CSI_Icon : SCR_ScriptedWidgetComponent
 {	
-	protected CSI_AuthorityManager m_AuthorityManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
 	protected int m_iPlayerId;
@@ -8,13 +8,15 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	protected ImageWidget m_wOutline;
+	
+	protected float m_fStoredYaw;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
 
-		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
 		
@@ -40,7 +42,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			};
 			
 			m_wRoot.SetVisible(true);
-			m_PlayerData = m_AuthorityManager.GetPlayerData(playerId);
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerId);
 			
 			if (!m_PlayerData)
 				return;
@@ -54,6 +56,11 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	void SetRotation(float yaw)
 	{
+		if (m_fStoredYaw == yaw)
+			return;
+		else
+			m_fStoredYaw = yaw;
+		
 		m_wArrow.SetRotation(yaw);
 
 		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
@@ -84,12 +91,14 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		string iconString = CSI_UIHelper.GetIconString(icon);
 		
-		if (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR)
+		if (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			m_wOutline.SetVisible(false);
 		else {
 			m_wOutline.SetVisible(true);
 			iconString = iconString + "_ICON";
 		};
+		
+		Print(iconString);
 		
 		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 	}

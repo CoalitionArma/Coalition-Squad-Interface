@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 
 class CSI_RplToAuthorityManager : ScriptComponent
 {	
-    protected CSI_AuthorityManager m_AuthorityManager;
+    protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	{	
 		super.OnPostInit(owner);
 		
-		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
 
@@ -22,7 +22,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		
 		// Check if any data has updated
 		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank()))
@@ -34,7 +34,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerColorTeam(int playerId, CSI_EColorTeam colorTeam)
 	{
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		
 		// Check if any data has updated
 		if(playerData && colorTeam == playerData.GetColorTeam())
@@ -46,7 +46,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerOverrideIcon(int playerId, CSI_EOverrideIcon overrideIcon)
 	{
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		
 		// Check if any data has updated
 		if(playerData && overrideIcon == playerData.GetOverrideIcon())
@@ -58,7 +58,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerTeamLeader(int playerId, bool isTL)
 	{
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		
 		// Check if any data has updated
 		if(playerData && isTL == playerData.GetIsTeamLeader())
@@ -99,28 +99,28 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{	
-		m_AuthorityManager.UpdatePlayerData(playerId, icon, rank);
+		m_PlayerDataManager.UpdatePlayerData(playerId, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerColorTeam(int playerId, CSI_EColorTeam colorTeam)
 	{
-		m_AuthorityManager.UpdatePlayerColorTeam(playerId, colorTeam);
+		m_PlayerDataManager.UpdatePlayerColorTeam(playerId, colorTeam);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerId, CSI_EOverrideIcon overrideIcon)
 	{
-		m_AuthorityManager.UpdatePlayerOverrideIcon(playerId, overrideIcon);
+		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerId, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerTeamLeader(int playerId, bool isTL)
 	{
-		m_AuthorityManager.UpdatePlayerTeamLeader(playerId, isTL);
+		m_PlayerDataManager.UpdatePlayerTeamLeader(playerId, isTL);
 	}
 
 	//------------------------------------------------------------------------------------------------

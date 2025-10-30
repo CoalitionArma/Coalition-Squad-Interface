@@ -3,6 +3,8 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerControllerManager m_ClientComponent;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	
+	protected ref array<int> m_iStoredGroupPlayerIDs;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -18,22 +20,28 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	void Update()
 	{
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-
+		
 		if (!playersGroup || !m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.GROUP_VISIBLE)) 
 		{
 			ClearGroupDisplay(0);
 			return;
 		};
 		
-		array<int> groupArray = CSI_UIHelper.GetSortedGroupArray(playersGroup);
+		array<int> groupArray = CSI_UIHelper.GetSortedGroupArray(playersGroup.GetPlayerIDs());
+		int groupCount = groupArray.Count();
+		
+		if(m_iStoredGroupPlayerIDs == groupArray)
+			return;
+		
+		m_iStoredGroupPlayerIDs = groupArray;
 
-		if (groupArray.Count() > 1)
+		if (groupCount > 0)
 			foreach (int i, int playerId : groupArray) 
 				UpdatePlayerWidget(i, playerId);
 		else
 			groupArray.Clear();
 		
-		ClearGroupDisplay(groupArray.Count());
+		ClearGroupDisplay(groupCount);
 	}
 
 	//------------------------------------------------------------------------------------------------

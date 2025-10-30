@@ -1,7 +1,7 @@
 [ComponentEditorProps(category: "GameScripted/Authority", description: "")]
-class CSI_AuthorityManagerClass : SCR_BaseGameModeComponentClass {};
+class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
 
-class CSI_AuthorityManager : SCR_BaseGameModeComponent
+class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 {	
 	protected bool m_bDataUpdateInProgress;
 
@@ -22,42 +22,45 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
 		if (!playerData)
-		{
-			playerData = new CSI_PlayerData;
-			m_mPlayerDataMap.Set(playerID, playerData);
-		}
+			playerData = CreatePlayerData(playerID);
 		
 		playerData.SetDisplayIcon(icon);
 		playerData.SetRank(rank);
 		
-		RequestDataUpdate();
+		DataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		playerData.SetColorTeam(colorTeam);
 		
-		RequestDataUpdate();
+		if (playerData)
+			playerData.SetColorTeam(colorTeam);
+		
+		DataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		playerData.SetOverrideIcon(overrideIcon);
 		
-		RequestDataUpdate();
+		if (playerData)
+			playerData.SetOverrideIcon(overrideIcon);
+		
+		DataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		playerData.SetIsTeamLeader(isTL);
 		
-		RequestDataUpdate();
+		if (playerData)
+			playerData.SetIsTeamLeader(isTL);
+		
+		DataUpdate();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -65,22 +68,18 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	{
 		return m_mPlayerDataMap.Get(playerID);
 	}
-
+	
 	//------------------------------------------------------------------------------------------------
-	protected void RequestDataUpdate()
+	CSI_PlayerData CreatePlayerData(int playerID)
 	{
-		if (!m_bDataUpdateInProgress)
-		{
-			GetGame().GetCallqueue().CallLater(DataUpdate, 250, false);
-			m_bDataUpdateInProgress = true;
-		};
+		CSI_PlayerData playerData = new CSI_PlayerData;
+		m_mPlayerDataMap.Set(playerID, playerData);
+		return playerData;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void DataUpdate()
 	{
-		m_bDataUpdateInProgress = false;
-		
 		m_aPlayerIDs.Clear();
 		m_aPlayerData.Clear();
 
@@ -111,6 +110,9 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 			CSI_PlayerData newPlayerData = m_aPlayerData.Get(i);
 			CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
 			
+			Print(newPlayerData);
+			Print(oldPlayerData);
+			
 			if(!oldPlayerData)
 				m_mPlayerDataMap.Set(playerID, newPlayerData);
 			else
@@ -119,15 +121,15 @@ class CSI_AuthorityManager : SCR_BaseGameModeComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the AuthorityManager
-	protected static CSI_AuthorityManager m_sInstance;
-	static CSI_AuthorityManager GetInstance()
+	// Returns the instance of the PlayerDataManager
+	protected static CSI_PlayerDataManager m_sInstance;
+	static CSI_PlayerDataManager GetInstance()
 	{
 		return m_sInstance;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void CSI_AuthorityManager(IEntityComponentSource src, IEntity ent, IEntity parent)
+	void CSI_PlayerDataManager(IEntityComponentSource src, IEntity ent, IEntity parent)
 	{
 		m_sInstance = this;
 	}

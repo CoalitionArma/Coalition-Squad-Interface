@@ -2,7 +2,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
 	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_AuthorityManager m_AuthorityComponent;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManagerClass m_RplToAuthorityManagerClass;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 
@@ -28,10 +28,10 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		cancel.m_OnClicked.Insert(OnMenuBack);
 
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManagerClass = CSI_RplToAuthorityManagerClass.GetInstance();
 		
-		if (!m_AuthorityComponent || !m_SettingsManager || !m_RplToAuthorityManagerClass) 
+		if (!m_PlayerDataManager || !m_SettingsManager || !m_RplToAuthorityManagerClass) 
 			return;
 
 		m_wIconOveride = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconOveride"));
@@ -79,9 +79,9 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	protected void UpdatePlayerIcon()
 	{
 		string playerName = GetGame().GetPlayerManager().GetPlayerName(m_iSelectedPlayerID);
-		string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "CT"); // CT = ColorTeam
+		string colorTeamString = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "CT"); // CT = ColorTeam
 
-		m_sStoredSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
+		m_sStoredSpecialtyIcon = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "SSI"); // SSI = StoredSpecialtyIcon
 	
 		if (m_sStoredSpecialtyIcon.IsEmpty()) 
 			return;
@@ -90,7 +90,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		if (rankVisible == "true") 
 		{
-			string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, m_iSelectedPlayerID, "PR"); // PR = PlayerRank
+			string rank = m_PlayerDataManager.ReturnLocalPlayerMapValue(-1, m_iSelectedPlayerID, "PR"); // PR = PlayerRank
 			if (!rank.IsEmpty()) 
 				playerName = string.Format("%1 %2", rank, playerName);
 		};
@@ -107,7 +107,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
 			return;
 
-		string iconOverride = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI"); // OI = OverrideIcon
+		string iconOverride = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI"); // OI = OverrideIcon
 
 		if (iconOverride.IsEmpty()) 
 			return;

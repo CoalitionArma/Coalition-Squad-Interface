@@ -1,6 +1,7 @@
 class CSI_Compass : SCR_ScriptedWidgetComponent
 {
 	protected string m_sStoredCompass;
+	protected float m_fStoredYaw;
 	
 	protected CSI_SettingsManager m_SettingsManager;
 	
@@ -51,7 +52,12 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			yawInt = -yaw;
 			
 			m_wCompass.SetVisible(true);
-			m_wCompass.SetRotation(yaw);
+			
+			if (m_fStoredYaw != yaw)
+			{
+				m_wCompass.SetRotation(yaw);
+				m_fStoredYaw = yaw;
+			};
 		} else 
 			m_wCompass.SetVisible(false);
 

@@ -1,7 +1,7 @@
 class CSI_Player : SCR_ScriptedWidgetComponent
 {
 	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_AuthorityManager m_AuthorityManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_PlayerData m_PlayerData;
 	
 	protected RichTextWidget m_wPlayerName;
@@ -14,7 +14,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
 		m_wPlayerName = RichTextWidget.Cast(w.FindAnyWidget("PlayerName"));
@@ -45,7 +45,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			m_wRoot.SetVisible(true);
 			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, GetGame().GetPlayerManager().GetPlayerName(playerId)));
 			
-			m_PlayerData = m_AuthorityManager.GetPlayerData(playerId);
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerId);
 			
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);

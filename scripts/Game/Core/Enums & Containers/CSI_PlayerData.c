@@ -31,7 +31,7 @@ class CSI_PlayerData
 			return;
 		};
 
-		m_iPlayerValue = UpdatePlayerValue();
+		m_iPlayerValue = UpdatePlayerValue(playerID);
 		
 		// Check if any data has updated
 		if(!newData || (m_iColorTeam == newData.GetColorTeam() && m_iOverrideIcon == newData.GetOverrideIcon() && m_iDisplayIcon == newData.GetDisplayIcon() && m_iRank == newData.GetRank() && m_bIsTeamLeader == newData.GetIsTeamLeader()))	
@@ -43,11 +43,13 @@ class CSI_PlayerData
 		SetRank(newData.GetRank());
 		SetIsTeamLeader(newData.GetIsTeamLeader());
 		
+		Print(newData.GetDisplayIcon());
+		
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();
 	}
 
-	protected int UpdatePlayerValue()
+	protected int UpdatePlayerValue(int playerID)
 	{
 		int value = 0;
 
@@ -60,10 +62,12 @@ class CSI_PlayerData
 			case CSI_EColorTeam.GREEN  : value = -9; break;
 			default : {value = 2;  break;};
 		};
+		
+		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerValue);
 
 		switch (true) 
 		{
-			case (SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerValue).IsPlayerLeader(m_iPlayerValue)) : value = -1; break;
+			case (group && group.IsPlayerLeader(playerID)) : value = -1; break;
 			case (m_bIsTeamLeader && m_iColorTeam == CSI_EColorTeam.NONE) : value--; break;
 			case (m_bIsTeamLeader && m_iColorTeam != CSI_EColorTeam.NONE) : value++; break;
 		};

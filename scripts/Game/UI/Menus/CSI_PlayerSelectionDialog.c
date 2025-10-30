@@ -17,7 +17,7 @@ modded class GroupSettingsDialogUI : DialogUI
 class CSI_PlayerSelectionDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;
-	protected CSI_AuthorityManager m_AuthorityComponent;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_PlayerControllerManager m_ClientComponent;
 
 	protected Widget m_wRoot;
@@ -41,10 +41,10 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 		// Get Global Player Controller and Group Manager.
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		m_AuthorityComponent = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
 
-		if (!groupsManagerComponent || !m_AuthorityComponent) 
+		if (!groupsManagerComponent || !m_PlayerDataManager) 
 		{
 			OnMenuBack(); 
 			return;
@@ -61,7 +61,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 			return;
 		};
 
-		string storedSpecialtyIcon = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
+		string storedSpecialtyIcon = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
 
 		if (m_PlayersGroup.IsPlayerLeader(playerID) || storedSpecialtyIcon == "FTL")
 		{
@@ -119,8 +119,8 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 			// Get all values we need to display this player.
 			int playerID = playerSplitArray[1].ToInt();
-			string colorTeamString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "CT"); // CT = ColorTeam
-			string iconString = m_AuthorityComponent.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
+			string colorTeamString = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "CT"); // CT = ColorTeam
+			string iconString = m_PlayerDataManager.ReturnLocalPlayerMapValue(m_PlayersGroup.GetGroupID(), playerID, "SSI"); // SSI = StoredSpecialtyIcon
 
 			string playerName = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
@@ -132,7 +132,7 @@ class CSI_PlayerSelectionDialog : ChimeraMenuBase
 
 			if (rankVisible == "true") 
 			{
-				string rank = m_AuthorityComponent.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
+				string rank = m_PlayerDataManager.ReturnLocalPlayerMapValue(-1, playerID, "PR"); // PR = PlayerRank
 				if (!rank.IsEmpty()) 
 					playerName = string.Format("%1 %2", rank, playerName);
 			};

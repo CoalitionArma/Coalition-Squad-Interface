@@ -3,16 +3,17 @@ class CSI_UIHelper
 	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
 	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
 
-	static ref array<CSI_EIcon> m_aNonThemedIcons =
+	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
 	{
-		// ----------- MAN -----------
 		CSI_EIcon.MAN,
 		CSI_EIcon.OFFICER,
 		CSI_EIcon.SL,
 		CSI_EIcon.TL,
 		CSI_EIcon.RTO,
-
-		// ----------- VEHICLE -----------
+	};
+	
+	static ref array<CSI_EIcon> m_aVehicleIcons =
+	{
 		CSI_EIcon.DRIVER,
 		CSI_EIcon.PASSANGER,
 		CSI_EIcon.COMMANDER,
@@ -62,14 +63,14 @@ class CSI_UIHelper
 		string iconString;
 		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
 		
-		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))
+		if (m_aNonThemedRegularIcons.Contains(icon) || m_aVehicleIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
 		else	
 			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
 
 		if (isSimpleIcon)
 			iconString = iconString + "_ICON";
-
+		
 		return iconString;
 	}
 	
@@ -82,7 +83,7 @@ class CSI_UIHelper
 	static string GetPlayersName(int playerId)
 	{
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerId);
-		CSI_PlayerData playerData = CSI_AuthorityManager.GetInstance().GetPlayerData(playerId);
+		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerId);
 		
 		if (!playerData || !CSI_SettingsManager.GetInstance().GetCSISettingBool(CSI_SettingsManager.RANK_VISIBLE))
 			return name;
@@ -104,18 +105,18 @@ class CSI_UIHelper
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Gets a sorted list of player IDs sorted by their value to the group (how we group color teams, set TLs to the top of their color teams, etc)
-	 * playersGroup: players group to pull the sorted group array of players
+	 * playerIds: players ID's to sort
 	 * @return The full list of player IDs
 	 */
-	static array<int> GetSortedGroupArray(SCR_AIGroup playersGroup)
+	static array<int> GetSortedGroupArray(array<int> playerIds)
 	{
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
 
 		// Parse through current group array.
-		foreach (int playerID : playersGroup.GetPlayerIDs())
+		foreach (int playerID : playerIds)
 		{
-			CSI_PlayerData playerData = CSI_AuthorityManager.GetInstance().GetPlayerData(playerID);
+			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 			
 			if (!playerData)
 				continue;

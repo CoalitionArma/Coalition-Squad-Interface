@@ -34,7 +34,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		if (playersGroup && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.RADAR_VISIBLE))
 			groupArray = playersGroup.GetPlayerIDs();
 
-		if (groupArray.Count() > 1)
+		if (groupArray.Count() > 0)
 		{
 			foreach (int i, int playerId : groupArray)
 			{
@@ -94,6 +94,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		if (radarIcon) 
 		{
+			float iconOpacity = radarIcon.GetOpacity();
+			if (iconOpacity == 0 && iconOpacity == opacity)
+				return;
+			
 			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
 
 			icon.IconUpdate(playerId);

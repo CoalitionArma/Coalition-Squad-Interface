@@ -4,7 +4,7 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 class CSI_PlayerControllerManager : ScriptComponent
 {		
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected CSI_AuthorityManager m_AuthorityManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 
 	protected int m_iCurrentUpdateCycle = 20;
 
@@ -14,7 +14,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
 		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
 			return;
@@ -65,13 +65,13 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	SL Icon
-		if (playersGroup.IsPlayerLeader(playerId))
+		if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerId))
 			displayIcon = CSI_EIcon.SL;
 
 		//------------------------------------------------------------------------------------------------
 		//	TL Icon
-		CSI_PlayerData playerData = m_AuthorityManager.GetPlayerData(playerId);
-		if (playerData && playerData.GetIsTeamLeader())
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
 			displayIcon = CSI_EIcon.TL;
 
 		//------------------------------------------------------------------------------------------------
