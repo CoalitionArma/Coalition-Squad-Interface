@@ -28,22 +28,19 @@ class CSI_PlayerData
 			SetColorTeam(CSI_EColorTeam.NONE);
 			SetOverrideIcon(CSI_EOverrideIcon.AUTO);
 			SetIsTeamLeader(false);
-			return;
+			newData = null;
 		};
-
+		
+		if(newData)	
+		{
+			SetColorTeam(newData.GetColorTeam());
+			SetOverrideIcon(newData.GetOverrideIcon());
+			SetDisplayIcon(newData.GetDisplayIcon());
+			SetRank(newData.GetRank());
+			SetIsTeamLeader(newData.GetIsTeamLeader());
+		};
+		
 		m_iPlayerValue = UpdatePlayerValue(playerID);
-		
-		// Check if any data has updated
-		if(!newData || (m_iColorTeam == newData.GetColorTeam() && m_iOverrideIcon == newData.GetOverrideIcon() && m_iDisplayIcon == newData.GetDisplayIcon() && m_iRank == newData.GetRank() && m_bIsTeamLeader == newData.GetIsTeamLeader()))	
-			return;
-	
-		SetColorTeam(newData.GetColorTeam());
-		SetOverrideIcon(newData.GetOverrideIcon());
-		SetDisplayIcon(newData.GetDisplayIcon());
-		SetRank(newData.GetRank());
-		SetIsTeamLeader(newData.GetIsTeamLeader());
-		
-		Print(newData.GetDisplayIcon());
 		
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();

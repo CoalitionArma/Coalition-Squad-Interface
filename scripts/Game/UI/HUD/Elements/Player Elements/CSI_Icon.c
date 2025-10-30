@@ -111,6 +111,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		
+		Print(arrowString);
+		
 		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, arrowString);
 	}
 }

@@ -28,13 +28,14 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
         float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
 		vector localPlayerCharacterOrigin = localPlayerCharacter.GetOrigin();
 		
-		array<int> groupArray = {};
+		array<int> groupArray;
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
 		if (playersGroup && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.RADAR_VISIBLE))
-			groupArray = playersGroup.GetPlayerIDs();
+			groupArray = CSI_UIHelper.GetSortedGroupArray(playersGroup.GetPlayerIDs());
+		int groupCount = groupArray.Count();
 
-		if (groupArray.Count() > 0)
+		if (groupCount > 0)
 		{
 			foreach (int i, int playerId : groupArray)
 			{
@@ -81,9 +82,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				UpdatePlayerRadarWidget(i, playerId, opacity, x, y, rotation);
 			};
 		} else 
-			groupArray.Clear();
+			groupCount = 0;
 
-		for (int e = groupArray.Count(); e <= 24; e++)
+		for (int e = groupCount; e <= 24; e++)
 			UpdatePlayerRadarWidget(e, -1, 0, 0, 0, 0);
 	}
 
@@ -99,7 +100,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				return;
 			
 			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
-
+			
 			icon.IconUpdate(playerId);
 			
 			float widthAndHeight = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);

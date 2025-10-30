@@ -4,38 +4,38 @@ ImageSetClass {
   ImageSetTextureClass "{66BCC3916ABA7707}" {
    screenSize FHD
    size 914 2214
-   path "{2799448E5170798D}UI/Textures/HUD/Icons/CSI_ICONS.edds"
+   path "{F51F7488C807DD8F}UI/Textures/HUD/Icons/CSI_ICONS.edds"
   }
  }
  Groups {
   ImageSetGroupClass VEHICLE {
    Images {
-    ImageSetDefClass "VEHICLE DRIVER_ICON" {
+    ImageSetDefClass DRIVER_ICON {
      Pos 134 1174
      Size 126 126
      Flags 0 0
     }
-    ImageSetDefClass "VEHICLE PASSANGER_ICON" {
+    ImageSetDefClass PASSANGER_ICON {
      Pos 264 1174
      Size 126 126
      Flags 0 0
     }
-    ImageSetDefClass "VEHICLE COMMANDER_ICON" {
+    ImageSetDefClass COMMANDER_ICON {
      Pos 394 1174
      Size 126 126
      Flags 0 0
     }
-    ImageSetDefClass "VEHICLE GUNNER_ICON" {
+    ImageSetDefClass GUNNER_ICON {
      Pos 524 1174
      Size 126 126
      Flags 0 0
     }
-    ImageSetDefClass "VEHICLE HELIPILOT_ICON" {
+    ImageSetDefClass HELIPILOT_ICON {
      Pos 784 1174
      Size 126 126
      Flags 0 0
     }
-    ImageSetDefClass "VEHICLE HELICREW_ICON" {
+    ImageSetDefClass HELICREW_ICON {
      Pos 654 1174
      Size 126 126
      Flags 0 0
@@ -646,12 +646,12 @@ ImageSetClass {
   ImageSetGroupClass ICON {
    Images {
     ImageSetDefClass "ICON FILL" {
-     Pos 784 4
+     Pos 654 4
      Size 126 126
      Flags 0 0
     }
     ImageSetDefClass "ICON OUTLINE" {
-     Pos 654 4
+     Pos 784 4
      Size 126 126
      Flags 0 0
     }

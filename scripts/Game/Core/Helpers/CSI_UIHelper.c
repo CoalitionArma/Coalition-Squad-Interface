@@ -1,7 +1,7 @@
 class CSI_UIHelper
 {	
 	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
-	const static string CSI_ICONS_RESOURCE = "{C3E05464509FCE85}UI/Textures/HUD/Icons/CSI_ICONS.edds";
+	const static string CSI_ICONS_RESOURCE = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
 
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
 	{

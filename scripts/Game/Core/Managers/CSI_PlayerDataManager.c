@@ -110,9 +110,6 @@ class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 			CSI_PlayerData newPlayerData = m_aPlayerData.Get(i);
 			CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
 			
-			Print(newPlayerData);
-			Print(oldPlayerData);
-			
 			if(!oldPlayerData)
 				m_mPlayerDataMap.Set(playerID, newPlayerData);
 			else

@@ -5,10 +5,10 @@ ScaleWidgetClass {
   OffsetLeft 0
   PositionY 0
   OffsetTop 0
-  SizeX 63
-  OffsetRight -63
-  SizeY 63
-  OffsetBottom -63
+  SizeX 126
+  OffsetRight -126
+  SizeY 126
+  OffsetBottom -126
  }
  components {
   CSI_Icon "{66A831E2EDF40BCC}" {
@@ -35,7 +35,7 @@ ScaleWidgetClass {
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
-     Size 63 63
+     Size 126 126
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
@@ -49,8 +49,8 @@ ScaleWidgetClass {
       OffsetBottom 0
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-     Image "ICON FILL"
-     Size 63 63
+     Image "MAN"
+     Size 126 126
     }
     ImageWidgetClass "{66A6B5A377FC8834}" {
      Name "Outline"
@@ -65,7 +65,7 @@ ScaleWidgetClass {
      }
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
-     Size 63 63
+     Size 126 126
     }
    }
   }
