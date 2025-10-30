@@ -207,7 +207,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------
 	protected void OnOverrideIconClicked()
 	{
-		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID) || m_sStoredSpecialtyIcon == "FTL") 
+		if (m_wPlayerName.GetText() == "No Player Selected") 
 			return;
 
 		CSI_EOverrideIcon iconToOverride = m_wIconOveride.GetCurrentItem();
@@ -215,7 +215,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (!m_iSelectedPlayerID) 
 			return;
 		
-		m_RplToAuthorityManagerClass.Owner_UpdatePlayerOverrideIcon(m_iSelectedPlayerID, iconToOverride); // OI = OverrideIcon
+		m_RplToAuthorityManagerClass.Owner_UpdatePlayerOverrideIcon(m_iSelectedPlayerID, iconToOverride);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		if (m_wPlayerName.GetText() == "No Player Selected" || m_PlayersGroup.IsPlayerLeader(m_iSelectedPlayerID)) 
 			return;
 
-		m_SettingsManager.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
+		m_RplToAuthorityManagerClass.Owner_PromotePlayerToSL(m_iSelectedPlayerID);
 		GetGame().GetMenuManager().CloseAllMenus();
 	};
 
@@ -236,10 +236,10 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 
 		if (m_sStoredSpecialtyIcon == "FTL") 
 		{
-			m_SettingsManager.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
+			m_RplToAuthorityManagerClass.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "N/A"); // OI = OverrideIcon
 			return;
 		};
-		m_SettingsManager.Owner_UpdatePlayerMapValue(m_iGroupID, m_iSelectedPlayerID, "OI", "FTL"); // OI = OverrideIcon
+		m_RplToAuthorityManagerClass.Owner_UpdatePlayerTeamLeader(m_iSelectedPlayerID);
 	};
 
 	//------------------------------------------------------------------------------------------------
