@@ -4,6 +4,7 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 class CSI_PlayerControllerManager : ScriptComponent
 {		
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
+	protected CSI_AuthorityManager m_AuthorityManager;
 
 	protected int m_iCurrentUpdateCycle = 20;
 
@@ -13,6 +14,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
 
 		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
 			return;
@@ -44,7 +46,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 			return;
 		
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
-		CSI_EIcon displayIcon;
+		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
 		//------------------------------------------------------------------------------------------------
 		// Vehicle Icons, they supercede any other Icon
@@ -65,6 +67,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 		//	SL Icon
 		if (playersGroup.IsPlayerLeader(playerId))
 			displayIcon = CSI_EIcon.SL;
+
+		//------------------------------------------------------------------------------------------------
+		//	TL Icon
+		if (m_AuthorityManager.GetPlayerData(playerId).GetIsTeamLeader())
+			displayIcon = CSI_EIcon.TL;
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons

@@ -16,6 +16,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 		m_AuthorityManager = CSI_AuthorityManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));

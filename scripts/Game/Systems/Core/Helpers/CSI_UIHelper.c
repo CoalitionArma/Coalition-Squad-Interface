@@ -60,7 +60,7 @@ class CSI_UIHelper
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false)
 	{
 		string iconString;
-		CSI_EIconTheme theme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
+		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
 		
 		if (CSI_UIHelper.m_aNonThemedIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));

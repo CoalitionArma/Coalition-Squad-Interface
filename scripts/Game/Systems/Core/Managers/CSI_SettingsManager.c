@@ -30,13 +30,14 @@ class CSI_SettingsManager : ScriptComponent
 	const static int SERVER_OVERRIDE_FALSE = -1;
 	const static int SERVER_OVERRIDE_TRUE = -2;
 	
+	protected ref ScriptInvoker m_OnSettingsUpdate;
 	protected UserSettings m_UserSettigs;
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_AuthorityManager m_AuthorityManager;
 	
     protected ref TStringArray m_aCSISettingsArray = {};
 	
-	[RplProp()]
+	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
 
 	//------------------------------------------------------------------------------------------------
@@ -138,7 +139,7 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdateAuthorityValueArray()
+	protected void UpdateAuthorityValueArray()
 	{
 		m_aCSISettingsAuthorityValues.Clear();
 		
@@ -151,6 +152,22 @@ class CSI_SettingsManager : ScriptComponent
 		}
 		
 		Replication.BumpMe();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void SettingsUpdate()
+	{
+		if (m_OnSettingsUpdate)
+			m_OnSettingsUpdate.Invoke();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	ScriptInvoker GetOnSettingsUpdate()
+	{
+		if (!m_OnSettingsUpdate)
+			m_OnSettingsUpdate = new ScriptInvoker();
+
+		return m_OnSettingsUpdate;
 	}
 	
 	//------------------------------------------------------------------------------------------------
