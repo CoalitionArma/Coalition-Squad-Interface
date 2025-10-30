@@ -15,6 +15,7 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 	protected int m_iGroupID;
 	protected string m_sStoredSpecialtyIcon;
 
+	/*
 	//------------------------------------------------------------------------------------------------
 	override void OnMenuOpen()
 	{
@@ -251,4 +252,5 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		m_SettingsManager.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);
 	};
+	*/
 }

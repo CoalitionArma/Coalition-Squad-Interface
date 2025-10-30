@@ -94,7 +94,7 @@ class CSI_SettingsManager : ScriptComponent
 		bool IsBool = index <= INDEX_WHERE_BOOL_SETTINGS_STOP;
 		
 		if (index == -1)
-			return;
+			return 0;
 
 		int settingValue;
 		int serverSetting = m_aCSISettingsAuthorityValues.Get(index);

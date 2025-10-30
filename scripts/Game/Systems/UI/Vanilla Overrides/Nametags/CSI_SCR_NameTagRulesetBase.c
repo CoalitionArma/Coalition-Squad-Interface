@@ -106,7 +106,7 @@ modded class SCR_NameTagRulesetBase : Managed
 		{
 			
 			// increase max zone distance if player is using a scope or binoculars
-			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 + ((int)(isZoomed) * (m_ZoneCfg.m_aZones[i].m_iZoneEndPow2 * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
+			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndSq + ((int)(isZoomed) * (m_ZoneCfg.m_aZones[i].m_iZoneEndSq * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
 			
 			if ( data.m_fDistance <=  distMaxZone)
 			{
