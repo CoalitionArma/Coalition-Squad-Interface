@@ -1,42 +1,40 @@
 class CSI_GameSettings : ModuleGameSettings
 {
-	// Using Int's because I can flip them to negative to indicate if the server has overriden a setting (without having to make a whole seprate list of "server override" settings)
-	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Compass")]
-	int m_iCompassVisible;
+	bool m_iCompassVisible;
 	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Bearing Above The Compass")]
-	int m_iBearingVisible;
+	bool m_iBearingVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Radar Inside The Compass")]
-	int m_iRadarVisible;
+	bool m_iRadarVisible;
 
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Only Have The Arrows Of The Icons Rotate To Indicate The Direction A Player Is Facing On The Radar")]
-	int m_iOnlyRadarIconArrowsRotate;
+	bool m_iOnlyRadarIconArrowsRotate;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Group Display To The Right Of The Compass")]
-	int m_iGroupVisible;
+	bool m_iGroupVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of The Stamina Bar")]
-	int m_iStaminaVisible;
+	bool m_iStaminaVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Nametags")]
-	int m_iNametagVisible;
+	bool m_iNametagVisible;
 
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Ranks In Players Names")]
-	int m_iRankVisible;
+	bool m_iRankVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Roles In Players Nametags")]
-	int m_iRoleInNametagVisible;
+	bool m_iRoleInNametagVisible;
 	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Groups In Players Nametags")]
-	int m_iGroupInNametagVisible;
+	bool m_iGroupInNametagVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Nametags Utilizing Line Of Sight To Determine Visiblity")]
-	int m_iNametagLOSVisible;
+	bool m_iNametagLOSVisible;
 	
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable The CSI HUD Automatically Hiding Itself Until A Key Is Pressed")]
-	int m_iAutoHideHUD;
+	bool m_iAutoHideHUD;
 	
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconTheme), desc: "Theme Of All Specialty Icons")]
 	int m_iIconTheme;

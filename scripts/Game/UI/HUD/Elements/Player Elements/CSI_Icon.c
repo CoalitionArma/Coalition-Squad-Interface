@@ -8,8 +8,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	protected ImageWidget m_wOutline;
-	
-	protected float m_fStoredYaw;
+	protected FrameWidget m_wIconFrame;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -25,6 +24,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
 		m_wOutline = ImageWidget.Cast(w.FindAnyWidget("Outline"));
+		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -58,11 +58,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	void SetRotation(float yaw)
 	{
-		if (m_fStoredYaw == yaw)
-			return;
-		else
-			m_fStoredYaw = yaw;
-		
 		m_wArrow.SetRotation(yaw);
 
 		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
@@ -80,11 +75,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
 		
-		Color colorTeam = CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam());
-		
-		m_wArrow.SetColor(colorTeam); 
-		m_wIcon.SetColor(colorTeam);
-		m_wOutline.SetColor(colorTeam);
+		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam())); 
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -100,9 +91,11 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		};
 		
 		if (CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+		{
 			m_wArrow.SetVisible(false);
-		else 
+		} else {
 			m_wArrow.SetVisible(true);
+		};
 		
 		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 		

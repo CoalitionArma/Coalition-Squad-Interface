@@ -73,6 +73,17 @@ ScaleWidgetClass {
           OffsetBottom 0
          }
          "Z Order" 1
+         {
+          FrameWidgetClass "{66B8C3E1E51A1B0A}" {
+           Prefab "{66B8C3E1E51A1B0A}"
+           {
+            ScaleWidgetClass "{66B8C3E1E2901792}" {
+             Prefab "{66B8C3E1E2901792}"
+             "Is Visible" 0
+            }
+           }
+          }
+         }
         }
         ImageWidgetClass "{607B1E27AE03E516}" {
          Name "Compass"
@@ -89,7 +100,7 @@ ScaleWidgetClass {
          }
          "Z Order" -100
          IsPixelPerfect 0
-         Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/compass_shadow360.edds"
+         Texture "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds"
          Size 264 264
          "Shadow Offset" 0 0
          "Shadow Size Increase" 0 0

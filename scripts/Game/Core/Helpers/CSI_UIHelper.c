@@ -103,43 +103,22 @@ class CSI_UIHelper
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Gets a sorted list of player IDs sorted by their value to the group (how we group color teams, set TLs to the top of their color teams, etc)
-	 * playerIds: players ID's to sort
-	 * @return The full list of player IDs
-	 */
-	static array<int> GetSortedGroupArray(array<int> playerIds)
+	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
-		array<int> playersGroupArray = {};
-		array<string> tempLocalGroupArray = {};
-
-		// Parse through current group array.
-		foreach (int playerID : playerIds)
-		{
-			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
-			
-			if (!playerData)
-				continue;
-			
-			int playerValue = playerData.GetPlayerValue();
-			
-			// Format a string with what we need for displaying/sorting a player.
-			string playerStr = string.Format("%1;%2", playerValue, playerID);
-			
-			tempLocalGroupArray.Insert(playerStr);
-		};
-
-		tempLocalGroupArray.Sort(false);
-
-		foreach (string playerStr : tempLocalGroupArray) 
-		{
-			array<string> outPlayerStrArray = {};
-			playerStr.Split(";", outPlayerStrArray, false);
-			
-			playersGroupArray.Insert(outPlayerStrArray[1].ToInt());
-		}
+		array<Widget> icons = {};
 		
-		return playersGroupArray;
+		if (!root || widgetString.IsEmpty() || count <= 0)
+			return icons;
+		
+		for (int e = 0; e <= count; e++)
+		{
+			Widget icon = root.FindAnyWidget(widgetString + e.ToString());
+			
+			if (icon)
+				icons.Insert(icon);
+		};
+		
+		return icons;
 	};
 	
 	//------------------------------------------------------------------------------------------------
@@ -148,7 +127,7 @@ class CSI_UIHelper
 	* @param testWidget: widget to use to test a players name.
 	* @param maxLength: max length the name can bet.
 	* @param name: players name.
-	* @return players name with a ellipsis at the end.
+	* @return players name with ellipsis at the end.
 	*/
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)
 	{

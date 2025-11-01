@@ -4,12 +4,10 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected float m_fStoredYaw;
 	
 	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_HUDManager m_HUDManager;
 	
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
-	protected Widget m_wRadar;
-	
-	protected CSI_Radar m_Radar;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -17,21 +15,16 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 		
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		m_HUDManager = CSI_HUDManager.GetInstance();
 		
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
 		m_wBearing = TextWidget.Cast(w.FindAnyWidget("Bearing"));
-		m_wRadar = w.FindAnyWidget("Radar");
-		
-		m_Radar = CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar));
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Update()
 	{		
-		m_Radar.Update();
-		
 		int yawInt;
-		string bearingAdd = "";
 		
 		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.COMPASS_VISIBLE))
 		{
@@ -48,7 +41,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 				m_sStoredCompass = compassImage;
 			};
 			
-	        float yaw = CSI_ChararcterHelper.GetLocalAimingYaw();
+	        float yaw = m_HUDManager.GetLocalYaw();
 			yawInt = -yaw;
 			
 			m_wCompass.SetVisible(true);
@@ -63,6 +56,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.BEARING_VISIBLE))
 		{
+			string bearingAdd = "";
+			
 			if (yawInt < 0)
 				yawInt = 360 - Math.AbsInt(yawInt);
 			

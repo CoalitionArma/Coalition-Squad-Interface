@@ -1,7 +1,6 @@
-[ComponentEditorProps(category: "GameScripted/Authority", description: "")]
-class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
+class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 
-class CSI_PlayerDataManager : SCR_BaseGameModeComponent
+class CSI_PlayerDataManager : ScriptComponent
 {	
 	protected bool m_bDataUpdateInProgress;
 

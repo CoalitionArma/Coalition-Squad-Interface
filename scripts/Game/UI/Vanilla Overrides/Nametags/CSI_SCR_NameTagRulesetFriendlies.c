@@ -4,6 +4,7 @@
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 {
 	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_HUDManager m_HUDManager;
 	
 	//------------------------------------------------------------------------------------------------
 	override protected bool TestVisibilityFiltered(SCR_NameTagData data, float timeSlice)
@@ -38,26 +39,36 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
-		if (!m_SettingsManager)
+		if (!m_SettingsManager || !m_HUDManager)
+		{
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
-		
-		if (data.m_eType == ENameTagEntityType.VEHICLE 
-		|| m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.NAMETAG_LOS_VISIBLE)
-		|| CSI_ChararcterHelper.GetCharacterVehicleCompartment(SCR_PlayerController.GetLocalMainEntity()))
-			return true;
+			m_HUDManager = CSI_HUDManager.GetInstance();
+		};
 		
 		TraceParam param = new TraceParam;
-		param.Start = m_CurrentPlayerTag.m_vEntHeadPos;
+		param.Start = m_CameraPosition;
 		param.End = data.m_vEntHeadPos + HEAD_LOS_OFFSET;
-		param.LayerMask = EPhysicsLayerDefs.Projectile;
-		param.Flags = TraceFlags.WORLD | TraceFlags.ENTS; 
-		array<IEntity> excludes = { m_CurrentPlayerTag.m_Entity, data.m_Entity };
-		param.ExcludeArray = excludes;
-			
+		param.Flags = TraceFlags.ANY_CONTACT | TraceFlags.WORLD | TraceFlags.ENTS; 
+		IEntity targetEntity = data.m_Entity;
+		
+		if (data.GetVehicleCompartment())
+			targetEntity = data.GetVehicleCompartment().GetVehicle();
+		
+		array<IEntity> ExcludeArray = {};
+		ExcludeArray.Insert(targetEntity);
+		ExcludeArray.Insert(m_CurrentPlayerTag.m_Entity);
+		param.ExcludeArray = ExcludeArray;
+		
+		param.LayerMask = TRACE_LAYER_CAMERA;
 		float percent = GetGame().GetWorld().TraceMove(param, null);
-		if (percent == 1)	// If trace travels the entire path, return true
+		if (percent == 1)
 			return true;
-				
+		
+		param.LayerMask = EPhysicsLayerDefs.Projectile;
+		percent = GetGame().GetWorld().TraceMove(param, null);
+		if (percent == 1)
+			return true;
+		
 		return false;
 	}
 };

@@ -1,4 +1,3 @@
-[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Player Component for RPC", color: "0 0 255 255")]
 class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 
 class CSI_RplToAuthorityManager : ScriptComponent

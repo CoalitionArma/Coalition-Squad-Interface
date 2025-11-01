@@ -3,6 +3,8 @@ SCR_PlayerController {
  components {
   CSI_PlayerControllerManager "{66BA79683C60E83C}" {
    components {
+    CSI_HUDManager "{66C2411726C1DDCA}" {
+    }
     CSI_RplToAuthorityManager "{66BA79683F29EA95}" {
     }
    }

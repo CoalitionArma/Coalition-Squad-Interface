@@ -23,14 +23,13 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	
 	//------------------------------------------------------------------------------------------------
 	void PlayerUpdate(int playerId)
-	{
-		CSI_Icon icon = CSI_Icon.Cast(m_wIcon.FindHandler(CSI_Icon));
-		
-		icon.IconUpdate(playerId);
-		
+	{	
 		if (m_iPlayerId != playerId)
 		{
 			m_iPlayerId = playerId;
+			CSI_Icon icon = CSI_Icon.Cast(m_wIcon.FindHandler(CSI_Icon));
+		
+			icon.IconUpdate(playerId);
 			
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);

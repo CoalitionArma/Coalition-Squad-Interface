@@ -19,121 +19,14 @@ FrameWidgetClass {
    Name "Group"
    Slot FrameWidgetSlot "{66A83196E3AE5829}" {
     Anchor 0.5 1 0.5 1
-    PositionX 70
-    OffsetLeft 70
-    PositionY -125
-    OffsetTop -125
-    SizeX 637.5
-    OffsetRight -707.5
+    PositionX 69.03
+    OffsetLeft 69.03
+    PositionY -125.573
+    OffsetTop -125.573
+    SizeX 637.501
+    OffsetRight -706.53
     SizeY 100
-    OffsetBottom 25
-   }
-   {
-    GridLayoutWidgetClass "{66A83199895D5C0A}" {
-     Prefab "{66A83199895D5C0A}"
-     {
-      ScaleWidgetClass "{66B8C3DF4832D4CF}" {
-       Prefab "{66B8C3DF4832D4CF}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF495703FC}" {
-       Prefab "{66B8C3DF495703FC}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF4A3D4978}" {
-       Prefab "{66B8C3DF4A3D4978}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF4B057223}" {
-       Prefab "{66B8C3DF4B057223}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7468AFA7}" {
-       Prefab "{66B8C3DF7468AFA7}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF75676B21}" {
-       Prefab "{66B8C3DF75676B21}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF75FC97AB}" {
-       Prefab "{66B8C3DF75FC97AB}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF76A9FDC4}" {
-       Prefab "{66B8C3DF76A9FDC4}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF77833DEC}" {
-       Prefab "{66B8C3DF77833DEC}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF700D4224}" {
-       Prefab "{66B8C3DF700D4224}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF70958879}" {
-       Prefab "{66B8C3DF70958879}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7140F449}" {
-       Prefab "{66B8C3DF7140F449}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF71C59AC6}" {
-       Prefab "{66B8C3DF71C59AC6}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF72EAC970}" {
-       Prefab "{66B8C3DF72EAC970}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF736A728F}" {
-       Prefab "{66B8C3DF736A728F}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF73EE8299}" {
-       Prefab "{66B8C3DF73EE8299}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7C682942}" {
-       Prefab "{66B8C3DF7C682942}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7CEC92F8}" {
-       Prefab "{66B8C3DF7CEC92F8}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7D6A0D3C}" {
-       Prefab "{66B8C3DF7D6A0D3C}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7DF8684C}" {
-       Prefab "{66B8C3DF7DF8684C}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7E8237EE}" {
-       Prefab "{66B8C3DF7E8237EE}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7F0F200F}" {
-       Prefab "{66B8C3DF7F0F200F}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF7FAB149E}" {
-       Prefab "{66B8C3DF7FAB149E}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF784F93CC}" {
-       Prefab "{66B8C3DF784F93CC}"
-       "Is Visible" 1
-      }
-      ScaleWidgetClass "{66B8C3DF78E0C9B3}" {
-       Prefab "{66B8C3DF78E0C9B3}"
-       "Is Visible" 1
-      }
-     }
-    }
+    OffsetBottom 25.573
    }
   }
   ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/layouts/HUD/Elements/CSI_Compass.layout" {
@@ -148,6 +41,37 @@ FrameWidgetClass {
     OffsetRight -66
     SizeY 150.001
     OffsetBottom 10
+   }
+   {
+    FrameWidgetClass "{66A8318AA3F0B87B}" {
+     Prefab "{66A8318AA3F0B87B}"
+     {
+      VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
+       Prefab "{66A8318AE0DC5B30}"
+       {
+        FrameWidgetClass "{66A8318A0B2CF4B5}" {
+         Prefab "{66A8318A0B2CF4B5}"
+         {
+          ScaleWidgetClass "{66B8C3E49230831B}" {
+           Prefab "{66B8C3E49230831B}"
+           {
+            FrameWidgetClass "{66B8C3E1E51A1B0A}" {
+             Prefab "{66B8C3E1E51A1B0A}"
+             {
+              ScaleWidgetClass "{66B8C3E1E2901792}" {
+               Prefab "{66B8C3E1E2901792}"
+               "Is Visible" 0
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
    }
   }
  }

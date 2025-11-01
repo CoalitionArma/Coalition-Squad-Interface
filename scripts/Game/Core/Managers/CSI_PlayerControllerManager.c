@@ -1,12 +1,14 @@
-[ComponentEditorProps(category: "GameScripted/Client", description: "CSI Player Component for RPC", color: "0 0 255 255")]
 class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 
 class CSI_PlayerControllerManager : ScriptComponent
 {		
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
+	protected CSI_HUDManager m_HUDManager;
 
+	protected int m_iUpdate;
 	protected int m_iCurrentUpdateCycle = 20;
+	protected CSI_EIcon m_iLocalyStoredSpecialtyIcon;
 
 	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
@@ -15,11 +17,27 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		m_HUDManager = CSI_HUDManager.GetInstance();
 
-		if (!GetGame().InPlayMode() || RplSession.Mode() == RplMode.Dedicated) 
+		if (RplSession.Mode() == RplMode.Dedicated) 
 			return;
 		
-		GetGame().GetCallqueue().CallLater(UpdateAllLocalPlayerValues, 225, true);
+		SetEventMask(owner, EntityEvent.FIXEDFRAME);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void EOnFixedFrame(IEntity owner, float timeSlice)
+	{
+		m_iUpdate++;
+		m_HUDManager.UpdateLocalAimingYaw();
+		
+		if (!(m_iUpdate >= 20))
+			return;
+		else
+			m_iUpdate = 0;
+		
+		UpdateAllLocalPlayerValues();
+		m_HUDManager.UpdateLocalHUDValues();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -76,7 +94,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 20) 
+		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 16) 
 		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
@@ -156,8 +174,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 			};
 			
 			m_iCurrentUpdateCycle = 0;
+			m_iLocalyStoredSpecialtyIcon = displayIcon;
 		}
 		
+		if (displayIcon == CSI_EIcon.MAN)
+			displayIcon = m_iLocalyStoredSpecialtyIcon;
+	
 		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerId, displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	

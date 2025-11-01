@@ -5,10 +5,10 @@ ScaleWidgetClass {
   OffsetLeft 0
   PositionY 0
   OffsetTop 0
-  SizeX 64
-  OffsetRight -64
-  SizeY 64
-  OffsetBottom -64
+  SizeX 63
+  OffsetRight -63
+  SizeY 63
+  OffsetBottom -63
  }
  components {
   CSI_Icon "{66A831E2EDF40BCC}" {
@@ -21,7 +21,6 @@ ScaleWidgetClass {
     HorizontalAlign 3
     VerticalAlign 3
    }
-   Opacity 0.65
    {
     ImageWidgetClass "{660612B98AFC2634}" {
      Name "Arrow"
@@ -34,12 +33,10 @@ ScaleWidgetClass {
       SizeY -60.16
       OffsetBottom 0
      }
-     "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
-     Size 126 126
+     Size 63 63
      "Shadow Offset" 0.5 0.5
-     "Shadow Color" 0.1683 0.1683 0.1683 1
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
@@ -52,12 +49,10 @@ ScaleWidgetClass {
       SizeY -60.16
       OffsetBottom 0
      }
-     "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
-     Size 126 126
+     Size 63 63
      "Shadow Offset" 0.5 0.5
-     "Shadow Color" 0.1683 0.1683 0.1683 1
     }
     ImageWidgetClass "{66A6B5A377FC8834}" {
      Name "Outline"
@@ -70,12 +65,11 @@ ScaleWidgetClass {
       SizeY -60.16
       OffsetBottom 0
      }
-     "Inherit Color" 1
+     "Is Visible" 0
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
-     Size 126 126
+     Size 63 63
      "Shadow Offset" 0.5 0.5
-     "Shadow Color" 0.1683 0.1683 0.1683 1
     }
    }
   }

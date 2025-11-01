@@ -1,8 +1,8 @@
+/*
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetBase : Managed
 {
 	protected CSI_SettingsManager m_SettingsManager;
-	
 	//------------------------------------------------------------------------------------------------
 	//! Determine whether the tag passes basic conditions for visibility
 	//! \param data is the subject nametag
@@ -160,3 +160,4 @@ modded class SCR_NameTagRulesetBase : Managed
 			data.SetTagPosition(ENameTagPosition.HEAD, false);
 	}
 }
+*/

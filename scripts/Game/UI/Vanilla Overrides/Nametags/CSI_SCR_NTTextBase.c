@@ -26,11 +26,23 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerName") 
 		{	
-			Color ct = CSI_UIHelper.ConvertColorTeamToColor(CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID).GetColorTeam());
-			if (ct.IsZero()) 
+			bool ctSet = false;
+			if (data.m_iPlayerID > 0)
+			{
+				Color ct;
+				CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
+				if (playerData)
+					CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+				
+				if (!ct.IsZero()) 
+				{
+					ctSet = true;
+					tWidget.SetColor(ct);
+				}
+			}
+			
+			if (!ctSet)
 				tWidget.SetColor(stateConf.m_vColor);
-			else 
-				tWidget.SetColor(ct);
 		};
 		
 		data.UpdateAttatchedTo();
@@ -44,6 +56,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName : SCR_NTTextBase 
 {	
+	/*
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
@@ -61,6 +74,7 @@ modded class SCR_NTName : SCR_NTTextBase
 			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
 		}
 	}
+	*/
 }
 
 //------------------------------------------------------------------------------------------------
