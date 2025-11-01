@@ -79,17 +79,19 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	protected void DataUpdate()
 	{
-		m_aPlayerIDs.Clear();
-		m_aPlayerData.Clear();
+		array<int> tempPlayerIDs = {};
+		array<ref CSI_PlayerData> tempPlayerData = {};
 
 		// Fill arrays with all map data
 		foreach (int playerID, ref CSI_PlayerData playerData : m_mPlayerDataMap)
 		{
-			m_aPlayerIDs.Insert(playerID);
-			m_aPlayerData.Insert(playerData);
+			tempPlayerIDs.Insert(playerID);
+			tempPlayerData.Insert(playerData);
 		}
 
 		// Update replication properties
+		m_aPlayerIDs = tempPlayerIDs;
+		m_aPlayerData = tempPlayerData;
 		m_PlayerDataUpdate++;
 		Replication.BumpMe();
 		

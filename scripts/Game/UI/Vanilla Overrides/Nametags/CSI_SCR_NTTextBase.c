@@ -32,9 +32,9 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				Color ct;
 				CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
 				if (playerData)
-					CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+					ct = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
 				
-				if (!ct.IsZero()) 
+				if (ct && !ct.IsZero()) 
 				{
 					ctSet = true;
 					tWidget.SetColor(ct);

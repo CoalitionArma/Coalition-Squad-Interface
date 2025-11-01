@@ -28,6 +28,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	override protected void EOnFixedFrame(IEntity owner, float timeSlice)
 	{
+		super.EOnFixedFrame(owner, timeSlice);
+		
 		m_iUpdate++;
 		m_HUDManager.UpdateLocalAimingYaw();
 		
