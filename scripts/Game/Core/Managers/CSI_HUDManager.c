@@ -6,6 +6,7 @@ class CSI_HUDManager : ScriptComponent
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;
 	protected ref array<int> m_aLocalGroupPlayerIds;
 	protected bool m_bIsLocalPlayerInVehicle;
+	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
 	protected float m_iLocalYaw;
 	
@@ -25,10 +26,22 @@ class CSI_HUDManager : ScriptComponent
 		if (!m_LocalPlayerCharacter) 
 			return;
 		
-		if (CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter))
-			m_bIsLocalPlayerInVehicle = true;
-		else
+		BaseCompartmentSlot vehicleCompartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
+		
+		if (vehicleCompartment)
+		{ 
+			IEntity vehicle = vehicleCompartment.GetVehicle();
+			if (vehicle)
+			{
+				m_bIsLocalPlayerInVehicle = true;
+				
+				if (SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)))
+					m_bIsLocalPlayerInMortar = true;
+			};
+		} else {
 			m_bIsLocalPlayerInVehicle = false;
+			m_bIsLocalPlayerInMortar = false;
+		};
 		
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		
@@ -114,6 +127,12 @@ class CSI_HUDManager : ScriptComponent
 	bool GetIsLocalPlayerInVehicle()
 	{
 		return m_bIsLocalPlayerInVehicle;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	bool GetIsLocalPlayerInMortar()
+	{
+		return m_bIsLocalPlayerInMortar;
 	}
 	
 	//------------------------------------------------------------------------------------------------

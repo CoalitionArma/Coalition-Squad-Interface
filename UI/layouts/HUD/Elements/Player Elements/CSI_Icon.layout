@@ -33,38 +33,76 @@ ScaleWidgetClass {
       SizeY -60.16
       OffsetBottom 0
      }
+     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
      Size 63 63
-     "Shadow Offset" 0.5 0.5
+     "Shadow Offset" 0.2 0.2
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
      Slot FrameWidgetSlot "{66A831E806B0B922}" {
-      Anchor 0 0 1 1
-      PositionX 30.912
-      PositionY 30.08
-      SizeX -61.824
+      Anchor 0.265 0.265 0.735 0.735
+      PositionX 0.63
+      PositionY 0.63
+      SizeX -1.26
       OffsetRight 0
-      SizeY -60.16
+      SizeY -1.26
       OffsetBottom 0
      }
+     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
-     Size 63 63
-     "Shadow Offset" 0.5 0.5
+     Size 31 31
+     "Shadow Offset" 0.2 0.2
     }
     ImageWidgetClass "{66A6B5A377FC8834}" {
      Name "Outline"
      Slot FrameWidgetSlot "{66A831E806B0B939}" {
-      Anchor 0 0 1 1
-      PositionX 30.912
-      PositionY 30.08
-      SizeX -61.824
+      Anchor 0.265 0.265 0.735 0.735
+      PositionX 0.599
+      PositionY 0.63
+      SizeX -1.229
       OffsetRight 0
-      SizeY -60.16
+      SizeY -1.222
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON OUTLINE"
+     Size 31 31
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{66C340735F1D38DC}" {
+     Name "Icon_Large"
+     Slot FrameWidgetSlot "{66A831E806B0B922}" {
+      Anchor 0.125 0.125 0.875 0.875
+      PositionX -2.898
+      PositionY -2.898
+      SizeX 5.796
+      OffsetRight 0
+      SizeY 5.796
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "MAN"
+     Size 63 63
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{66C3407344436D8A}" {
+     Name "Outline_Large"
+     Slot FrameWidgetSlot "{66A831E806B0B939}" {
+      Anchor 0.125 0.125 0.875 0.875
+      PositionX -2.928
+      PositionY -2.883
+      SizeX 5.859
+      OffsetRight 0
+      SizeY 5.778
       OffsetBottom 0
      }
      "Is Visible" 0
@@ -72,7 +110,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
      Size 63 63
-     "Shadow Offset" 0.5 0.5
+     "Shadow Offset" 0.2 0.2
     }
    }
   }

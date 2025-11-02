@@ -3,15 +3,53 @@ OverlayWidgetClass {
   HorizontalLayoutWidgetClass "{00000000490622C6}" {
    Prefab "{00000000490622C6}"
    {
+    FrameWidgetClass "{614EF40E0273E962}" {
+     Prefab "{614EF40E0273E962}"
+     Slot LayoutSlot "{615481F1E61A3068}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     {
+      ImageWidgetClass "{66C340959E1A02B0}" {
+       Name "RoleIconLeft"
+       Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
+        Anchor 0 0.5 0 0.5
+        PositionX 0
+        OffsetLeft 0
+        PositionY -11.5
+        OffsetTop -11.5
+        SizeX 22
+        OffsetRight -22
+        SizeY 22
+        OffsetBottom -10.5
+       }
+       Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+       Image "CLASSIC GREN_ICON"
+       Size 22 22
+      }
+      ImageWidgetClass "{614EF40E0273E961}" {
+       Prefab "{614EF40E0273E961}"
+       "Is Visible" 0
+      }
+      ImageWidgetClass "{614EF40E0273E96F}" {
+       Prefab "{614EF40E0273E96F}"
+       Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight -100
+        OffsetBottom -30
+       }
+       "Is Visible" 0
+      }
+     }
+    }
     FrameWidgetClass "{00000000BD5E5CB4}" {
      Prefab "{00000000BD5E5CB4}"
+     Slot LayoutSlot "{51C4C0A5BAFB20D2}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
      {
-      TextWidgetClass "{000000003DEE4CFF}" {
-       Prefab "{000000003DEE4CFF}"
-       Name "PlayerName"
-       Slot FrameWidgetSlot "{51DC7B064D3F5743}" {
-       }
-      }
       TextWidgetClass "{6598E862901EB857}" {
        Name "PlayerGroupName"
        Slot FrameWidgetSlot "{6598E862901EB846}" {
@@ -38,6 +76,60 @@ OverlayWidgetClass {
         ShadowSize 10
         ShadowOffset 0 0
        }
+      }
+      ImageWidgetClass "{66C3409C7D41C13A}" {
+       Name "RoleIconCenter"
+       Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
+        Anchor 0.5 0 0.5 0
+        PositionX -11
+        OffsetLeft -11
+        PositionY -22
+        OffsetTop -22
+        SizeX 22
+        OffsetRight -11
+        SizeY 22
+        OffsetBottom 0
+       }
+       "Is Visible" 0
+       Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+       Image "CLASSIC GREN_ICON"
+       Size 22 22
+      }
+      TextWidgetClass "{000000003DEE4CFF}" {
+       Prefab "{000000003DEE4CFF}"
+       Slot FrameWidgetSlot "{51DC7B064D3F5743}" {
+       }
+      }
+     }
+    }
+    FrameWidgetClass "{55E0813E4A103125}" {
+     Prefab "{55E0813E4A103125}"
+     Slot LayoutSlot "{5D9CD06AC931D183}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     {
+      ImageWidgetClass "{55E87CF66AE32785}" {
+       Prefab "{55E87CF66AE32785}"
+       Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
+        SizeToContent 0
+       }
+      }
+      ImageWidgetClass "{00000000559BABFA}" {
+       Prefab "{00000000559BABFA}"
+       Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
+        OffsetLeft 0
+        OffsetTop 0
+        SizeX 22
+        OffsetRight -22
+        SizeY 22
+        OffsetBottom -22
+        SizeToContent 0
+       }
+       "Is Visible" 0
+       Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+       Image "MAN_ICON"
+       Size 22 22
       }
      }
     }

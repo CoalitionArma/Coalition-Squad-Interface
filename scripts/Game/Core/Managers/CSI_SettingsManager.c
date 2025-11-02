@@ -19,6 +19,7 @@ class CSI_SettingsManager : ScriptComponent
 	const static string ARROW_THEME = "m_iArrowTheme";
 	const static string COMPASS_THEME = "m_iCompassTheme";
 	const static string NAMETAG_POSITION = "m_iNametagPosition";
+	const static string NAMETAG_ROLE_ICON_POSITION = "m_iNametagRoleIconPosition";
 	const static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
 	const static string NAMETAG_RANGE = "m_iNametagRange";
 	const static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
@@ -38,6 +39,7 @@ class CSI_SettingsManager : ScriptComponent
 	
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
+	
 	protected ref TIntArray m_aCSISettingsLocalValues = {};
 
 	//------------------------------------------------------------------------------------------------
@@ -67,6 +69,7 @@ class CSI_SettingsManager : ScriptComponent
 			ARROW_THEME,
 			COMPASS_THEME,
 			NAMETAG_POSITION,
+			NAMETAG_ROLE_ICON_POSITION,
 			NAMETAG_POSITION_OFFSET,
 			NAMETAG_RANGE,
 			NAMETAG_MAGNIFICATION_MULTIPLICATION,

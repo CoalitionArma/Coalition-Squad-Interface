@@ -7,7 +7,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 	protected CSI_HUDManager m_HUDManager;
 
 	protected int m_iUpdate;
-	protected int m_iCurrentUpdateCycle = 20;
+	protected int m_iCurrentUpdateCycle = 12;
 	protected CSI_EIcon m_iLocalyStoredSpecialtyIcon;
 
 	//------------------------------------------------------------------------------------------------
@@ -19,21 +19,19 @@ class CSI_PlayerControllerManager : ScriptComponent
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_HUDManager = CSI_HUDManager.GetInstance();
 
-		if (RplSession.Mode() == RplMode.Dedicated) 
-			return;
-		
-		SetEventMask(owner, EntityEvent.FIXEDFRAME);
+		if (RplSession.Mode() != RplMode.Dedicated) 
+			SetEventMask(owner, EntityEvent.FRAME);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	override protected void EOnFixedFrame(IEntity owner, float timeSlice)
+	override protected void EOnFrame(IEntity owner, float timeSlice)
 	{
-		super.EOnFixedFrame(owner, timeSlice);
+		super.EOnFrame(owner, timeSlice);
 		
 		m_iUpdate++;
 		m_HUDManager.UpdateLocalAimingYaw();
 		
-		if (!(m_iUpdate >= 20))
+		if (!(m_iUpdate >= 25))
 			return;
 		else
 			m_iUpdate = 0;
@@ -73,13 +71,28 @@ class CSI_PlayerControllerManager : ScriptComponent
 		BaseCompartmentSlot compartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(localplayer);
 		if (compartment)
 		{
+			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));
+			
 			// Check players current compartment type, then assign his Icon.
 			ECompartmentType compartmentType = compartment.GetType();
+			
 			switch (compartmentType)
 			{
-				case ECompartmentType.CARGO  : displayIcon = CSI_EIcon.PASSANGER;  break;
-				case ECompartmentType.PILOT  : displayIcon = CSI_EIcon.DRIVER; break;
+				case ECompartmentType.CARGO  : displayIcon = CSI_EIcon.PASSANGER; break;
 				case ECompartmentType.TURRET : displayIcon = CSI_EIcon.GUNNER; break;
+				
+				case ECompartmentType.PILOT  : {
+					if (heloSim)
+					{
+						UIInfo uiInfo = compartment.GetUIInfo();
+						if (uiInfo.GetName() == "#AR-VehiclePosition_Copilot")
+							displayIcon = CSI_EIcon.HELICREW;
+						else
+							displayIcon = CSI_EIcon.HELIPILOT;
+					} else
+						displayIcon = CSI_EIcon.DRIVER; 
+					break;
+				};
 			};
 		};
 
@@ -96,84 +109,93 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 16) 
+		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 12) 
 		{
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-
-			// Get all of players inventory items
+			
 			array<IEntity> allPlayerItems = {};
-			characterInventory.GetAllRootItems(allPlayerItems);
-
-			// Setup new arrays and variables
-			array<EWeaponType> weaponTypeArray = {};
-			array<IEntity> medicalTypeArray = {};
-			array<IEntity> explosiveTypeArray = {};
-			array<IEntity> engineerTypeArray = {};
-
-			// Parse through players entire inventory.
+			characterInventory.GetItems(allPlayerItems);
+			// Parse through all items.
 			foreach (IEntity item : allPlayerItems)
-			{
-				// Check if item is explosives related
-				SCR_DetonatorGadgetComponent detonator = SCR_DetonatorGadgetComponent.Cast(item.FindComponent(SCR_DetonatorGadgetComponent));
-				SCR_ExplosiveChargeComponent explosives = SCR_ExplosiveChargeComponent.Cast(item.FindComponent(SCR_ExplosiveChargeComponent));
-				SCR_MineWeaponComponent mine = SCR_MineWeaponComponent.Cast(item.FindComponent(SCR_MineWeaponComponent));
-				if(detonator || explosives || mine)
+			{	
+				// Check if item is RTO related
+				SCR_RadioComponent radioComp = SCR_RadioComponent.Cast(item.FindComponent(SCR_RadioComponent));
+				SCR_RestrictedDeployableSpawnPointComponent spawnPoint = SCR_RestrictedDeployableSpawnPointComponent.Cast(item.FindComponent(SCR_RestrictedDeployableSpawnPointComponent));
+				if(spawnPoint || (radioComp && radioComp.GetRadioCategory() == ERadioCategory.MANPACK))
 				{
-					explosiveTypeArray.Insert(item);
-					continue;
-				};
-				
-				// Check if item is enginner related
-				SCR_RepairSupportStationComponent engTool = SCR_RepairSupportStationComponent.Cast(item.FindComponent(SCR_RepairSupportStationComponent));
-				if(engTool)
-				{
-					engineerTypeArray.Insert(item);
-					continue;
+					displayIcon = CSI_EIcon.RTO;
+					break;
 				};
 				
 				// Check if item is medical related
 				SCR_HealSupportStationComponent medTool = SCR_HealSupportStationComponent.Cast(item.FindComponent(SCR_HealSupportStationComponent));
 				if(medTool)
 				{
-					medicalTypeArray.Insert(item);
-					continue;
+					displayIcon = CSI_EIcon.MEDIC;
+					break;
 				};
 				
+				// Check if item is enginner related
+				SCR_RepairSupportStationComponent engTool = SCR_RepairSupportStationComponent.Cast(item.FindComponent(SCR_RepairSupportStationComponent));
+				if(engTool)
+				{
+					displayIcon = CSI_EIcon.ENG;
+					break;
+				};
+					
 				// Check if item is a weapon.
 				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
 				if (weaponComp) 
 				{
-					// Get the weapons type and insert it into the weapon array so we can read it later.
-					weaponTypeArray.Insert(weaponComp.GetWeaponType());
+					//--- Get weapon type
+					EWeaponType weaponType = weaponComp.GetWeaponType();
+					if (weaponType == EWeaponType.WT_NONE)
+						continue;
 					
-					array<BaseMuzzleComponent> muzzles = {};
-					
-					// Get muzzle types (so we can detect something like a underslung grenade launcher)
-					for (int m = 0, mCount = weaponComp.GetMuzzlesList(muzzles); m < mCount; m++)
+					switch (weaponType)
 					{
-						// Convert muzzle types to weapon types and insert it into the weapon array so we can read it later. (ToDo: Not hardcoded?)
+						case EWeaponType.WT_MACHINEGUN : 
+							displayIcon = CSI_EIcon.MG; 
+							break;
+						case EWeaponType.WT_SNIPERRIFLE : 
+							displayIcon = CSI_EIcon.SNIPER; 
+							break;
+						case EWeaponType.WT_ROCKETLAUNCHER : 
+							displayIcon = CSI_EIcon.AT;
+							break;
+					};
+
+					array<BaseMuzzleComponent> muzzles = {};						
+					//-- Get muzzle types (e.g., underslung grenade launcher)
+					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++)
+					{
+						//--- Convert muzzle types to weapon types (ToDo: Not hardcoded?)
+						EWeaponType muzzleWeaponType = -1;
 						switch (muzzles[m].GetMuzzleType())
 						{
-							case EMuzzleType.MT_RPGMuzzle : {weaponTypeArray.Insert(EWeaponType.WT_ROCKETLAUNCHER); break;};
-							case EMuzzleType.MT_UGLMuzzle : {weaponTypeArray.Insert(EWeaponType.WT_GRENADELAUNCHER); break;};
-						};
-					};
-					continue;
+							case EMuzzleType.MT_UGLMuzzle: 
+								displayIcon = CSI_EIcon.GREN;
+								break;
+						}
+					}
+					
+					if (displayIcon != CSI_EIcon.MAN)
+						break;
+					else
+						continue;
 				};
-			};
-			// Take all the data we just collected and assign players a Icon based on if it exists in the weapon/medical arrays.
-			switch (true)
-			{
-				case (weaponTypeArray.Contains(EWeaponType.WT_MACHINEGUN))      : displayIcon = CSI_EIcon.MG;  break;
-				case (weaponTypeArray.Contains(EWeaponType.WT_ROCKETLAUNCHER))  : displayIcon = CSI_EIcon.AT;  break;
-				case (weaponTypeArray.Contains(EWeaponType.WT_SNIPERRIFLE))     : displayIcon = CSI_EIcon.SNIPER; break;
-				case (medicalTypeArray.Count() != 0)                            : displayIcon = CSI_EIcon.MEDIC; break;
-				case (explosiveTypeArray.Count() != 0)                          : displayIcon = CSI_EIcon.DEMO; break;
-				case (engineerTypeArray.Count() != 0)                           : displayIcon = CSI_EIcon.ENG; break;
-				case (weaponTypeArray.Contains(EWeaponType.WT_GRENADELAUNCHER)) : displayIcon = CSI_EIcon.GREN; break;
-				default                                                         : displayIcon = CSI_EIcon.MAN;
-			};
+				
+				// Check if item is explosives related
+				SCR_DetonatorGadgetComponent detonator = SCR_DetonatorGadgetComponent.Cast(item.FindComponent(SCR_DetonatorGadgetComponent));
+				SCR_ExplosiveChargeComponent explosives = SCR_ExplosiveChargeComponent.Cast(item.FindComponent(SCR_ExplosiveChargeComponent));
+				SCR_MineWeaponComponent mine = SCR_MineWeaponComponent.Cast(item.FindComponent(SCR_MineWeaponComponent));
+				if(detonator || explosives || mine)
+				{
+					displayIcon = CSI_EIcon.DEMO;
+					break;
+				};
+			}
 			
 			m_iCurrentUpdateCycle = 0;
 			m_iLocalyStoredSpecialtyIcon = displayIcon;
@@ -182,7 +204,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocalyStoredSpecialtyIcon;
 	
-		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerId, displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
+		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerId, playersGroup.IsPlayerLeader(playerId), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	
 	//------------------------------------------------------------------------------------------------

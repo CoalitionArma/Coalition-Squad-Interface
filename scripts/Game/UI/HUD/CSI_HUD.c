@@ -1,6 +1,7 @@
 class CSI_HUD : SCR_InfoDisplay
 {
 	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_HUDManager m_CSIHUDManager;
 	protected bool m_bIsVisible = true;
 	
 	protected Widget m_wStamina;
@@ -17,6 +18,7 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.OnStartDraw(owner);
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		m_CSIHUDManager = CSI_HUDManager.GetInstance();
 		
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
 		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
@@ -40,7 +42,7 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if (!m_bIsVisible && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD))
+		if ((!m_bIsVisible && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD)) || m_CSIHUDManager.GetIsLocalPlayerInMortar())
 		{
 			m_wRoot.SetVisible(false);
 			return;

@@ -16,7 +16,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	protected int m_PlayerDataUpdate;
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerData(int playerID, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
@@ -25,6 +25,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		
 		playerData.SetDisplayIcon(icon);
 		playerData.SetRank(rank);
+		playerData.SetIsSquadLeader(isSL);
 		
 		DataUpdate();
 	}

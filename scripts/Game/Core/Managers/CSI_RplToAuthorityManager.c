@@ -19,15 +19,15 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void Owner_UpdatePlayerData(int playerId, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		
 		// Check if any data has updated
-		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank()))
+		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank() && isSL == playerData.GetIsSquadLeader()))
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerData, playerId, icon, rank);
+		Rpc(RpcAsk_UpdatePlayerData, playerId, isSL, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -96,9 +96,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerData(int playerId, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void RpcAsk_UpdatePlayerData(int playerId, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{	
-		m_PlayerDataManager.UpdatePlayerData(playerId, icon, rank);
+		m_PlayerDataManager.UpdatePlayerData(playerId, isSL, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------

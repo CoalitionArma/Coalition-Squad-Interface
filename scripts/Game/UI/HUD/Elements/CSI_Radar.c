@@ -8,7 +8,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref array<Widget> m_aRadarIcons;
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
-	protected static int ICON_WIDTH_AND_HEIGHT_IN_VEHICLE = 28;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -37,7 +36,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		{
 			foreach (int i, int playerId : m_HUDManager.GetLocalGroupPlayerIds())
 			{
-				float x, y, opacity, rotation, disT, dis, searchRadius, widthAndHeight;
+				float x, y, opacity, rotation, disT, dis, searchRadius;
 				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
 
 				if (!playerCharacter)
@@ -50,11 +49,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				
 				if (m_HUDManager.GetIsLocalPlayerInVehicle())
 				{
-					widthAndHeight = ICON_WIDTH_AND_HEIGHT_IN_VEHICLE;
 					searchRadius = 8;
 					disT = dis * 6.215;
 				} else {
-					widthAndHeight = ICON_WIDTH_AND_HEIGHT;
 					searchRadius = 24;
 					disT = dis * 2.0;
 				};
@@ -79,7 +76,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
 				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
-				UpdatePlayerRadarWidget(i, playerId, widthAndHeight, opacity, x, y, rotation);
+				UpdatePlayerRadarWidget(i, playerId, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
 			};
 		} else
 			groupCount = 0;

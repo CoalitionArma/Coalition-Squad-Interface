@@ -33,7 +33,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		m_aStoredGroupPlayerIDs = groupArray;
 		
 		if (!m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.GROUP_VISIBLE)) 
-			groupCount = 0;
+			groupCount = 1;
 
 		if (groupCount > 1)
 			foreach (int i, int playerId : groupArray) 

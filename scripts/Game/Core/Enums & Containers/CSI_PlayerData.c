@@ -5,6 +5,7 @@ class CSI_PlayerData
 	protected CSI_EIcon m_iDisplayIcon = CSI_EIcon.MAN;
 	protected SCR_ECharacterRank m_iRank = SCR_ECharacterRank.PRIVATE;
 	protected bool m_bIsTeamLeader;
+	protected bool m_bIsSquadLeader;
 	
 	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
@@ -38,6 +39,7 @@ class CSI_PlayerData
 			SetDisplayIcon(newData.GetDisplayIcon());
 			SetRank(newData.GetRank());
 			SetIsTeamLeader(newData.GetIsTeamLeader());
+			SetIsSquadLeader(newData.GetIsSquadLeader());
 		};
 		
 		m_iPlayerValue = UpdatePlayerValue(playerID);
@@ -59,12 +61,10 @@ class CSI_PlayerData
 			case CSI_EColorTeam.GREEN  : value = -9; break;
 			default : {value = 2;  break;};
 		};
-		
-		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerValue);
 
 		switch (true) 
 		{
-			case (group && group.IsPlayerLeader(playerID)) : value = -1; break;
+			case (m_bIsSquadLeader) : value = -1; break;
 			case (m_bIsTeamLeader && m_iColorTeam == CSI_EColorTeam.NONE) : value--; break;
 			case (m_bIsTeamLeader && m_iColorTeam != CSI_EColorTeam.NONE) : value++; break;
 		};
@@ -116,6 +116,12 @@ class CSI_PlayerData
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	void SetIsSquadLeader(bool isSL)
+	{
+		m_bIsSquadLeader = isSL;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	// GETTERS
 	//------------------------------------------------------------------------------------------------
 	
@@ -159,6 +165,12 @@ class CSI_PlayerData
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	bool GetIsSquadLeader()
+	{
+		return m_bIsSquadLeader;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	// REPLICATION STUFF
 	//------------------------------------------------------------------------------------------------
 	
@@ -170,6 +182,7 @@ class CSI_PlayerData
 		writer.Write(m_iDisplayIcon, 6);
 		writer.Write(m_iRank, 6);
 		writer.Write(m_bIsTeamLeader, 1);
+		writer.Write(m_bIsSquadLeader, 1);
 		return true;
 	}
 	
@@ -181,6 +194,7 @@ class CSI_PlayerData
 		reader.Read(m_iDisplayIcon, 6);
 		reader.Read(m_iRank, 6);
 		reader.Read(m_bIsTeamLeader, 1);
+		reader.Read(m_bIsSquadLeader, 1);
 		return true;
 	}
 	
@@ -192,6 +206,7 @@ class CSI_PlayerData
 		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
 		snapshot.SerializeBytes(instance.m_iRank, 4);
 		snapshot.SerializeBytes(instance.m_bIsTeamLeader, 4);
+		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
 		return true;
 	}
 	
@@ -203,6 +218,7 @@ class CSI_PlayerData
 		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
 		snapshot.SerializeBytes(instance.m_iRank, 4);
 		snapshot.SerializeBytes(instance.m_bIsTeamLeader, 4);
+		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
 		return true;
 	}
 	
@@ -214,6 +230,7 @@ class CSI_PlayerData
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeBool(packet);
+		snapshot.EncodeBool(packet);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -224,6 +241,7 @@ class CSI_PlayerData
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeBool(packet);
+		snapshot.DecodeBool(packet);
 		return true;
 	}
 	
@@ -231,6 +249,7 @@ class CSI_PlayerData
 	static bool SnapCompare(SSnapSerializerBase lhs, SSnapSerializerBase rhs, ScriptCtx ctx)
 	{
 		return lhs.CompareSnapshots(rhs, 4)
+			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
@@ -244,6 +263,7 @@ class CSI_PlayerData
 			&& snapshot.Compare(instance.m_iOverrideIcon, 4)
 			&& snapshot.Compare(instance.m_iDisplayIcon, 4)
 			&& snapshot.Compare(instance.m_iRank, 4)
-			&& snapshot.Compare(instance.m_bIsTeamLeader, 4);
+			&& snapshot.Compare(instance.m_bIsTeamLeader, 4)
+			&& snapshot.Compare(instance.m_bIsSquadLeader, 4);
 	}
 }
