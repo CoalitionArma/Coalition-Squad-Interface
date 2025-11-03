@@ -106,6 +106,15 @@ class CSI_PlayerControllerManager : ScriptComponent
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
 		if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
 			displayIcon = CSI_EIcon.TL;
+		
+		//------------------------------------------------------------------------------------------------
+		//	Override Icon
+		if (playerData)
+		{
+			CSI_EOverrideIcon overrideIcon = playerData.GetOverrideIcon();
+			if (displayIcon == CSI_EIcon.MAN && overrideIcon != CSI_EOverrideIcon.AUTO)
+				displayIcon = overrideIcon;
+		};
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons

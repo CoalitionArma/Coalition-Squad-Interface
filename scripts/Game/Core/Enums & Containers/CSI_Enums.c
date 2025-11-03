@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------------
 enum CSI_EArrowTheme
 {
-	CLASSIC = 1,
+	CLASSIC,
 	STUBBY,
 	POINTIER,
 	ROUNDIER,
@@ -15,7 +15,7 @@ enum CSI_EArrowTheme
 //------------------------------------------------------------------------------------
 enum CSI_ENametagIconPosition
 {
-	LEFT = 1,
+	LEFT,
 	CENTER,
 	RIGHT,
 }
@@ -23,7 +23,7 @@ enum CSI_ENametagIconPosition
 //------------------------------------------------------------------------------------
 enum CSI_ECompassTheme
 {
-	REGULAR = 1,
+	REGULAR,
 	SCI_FI,
 	WW2,
 }
@@ -31,14 +31,14 @@ enum CSI_ECompassTheme
 //------------------------------------------------------------------------------------
 enum CSI_EIconType
 {
-	REGULAR = 1,
+	REGULAR,
 	OUTLINE
 }
 
 //------------------------------------------------------------------------------------
 enum CSI_EIconTheme
 {
-	CLASSIC = 1,
+	CLASSIC,
 	REFORGER_ADV,
 	REFORGER_REG,
 	NATO,

@@ -64,7 +64,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		m_wArrow.SetRotation(yaw);
 
-		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
+		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
 			yaw = 0;
 
 		m_wIcon.SetRotation(yaw);
@@ -88,7 +88,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
-		if (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+		if (m_SettingsManager.GetSettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
 		
 		ImageWidget iconToUse;
@@ -132,7 +132,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrowTheme arrow = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.ARROW_THEME);
+		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_SettingsManager.ARROW_THEME);
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		

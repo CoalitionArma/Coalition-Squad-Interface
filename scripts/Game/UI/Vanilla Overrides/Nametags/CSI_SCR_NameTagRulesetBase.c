@@ -34,7 +34,7 @@ modded class SCR_NameTagRulesetBase : Managed
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
 		
 		// increase max distance if player is using a scope or binoculars
-		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * (m_ZoneCfg.m_fFarthestZoneRangePow2 * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
+		int distMax = m_ZoneCfg.m_fFarthestZoneRangePow2 + ((int)(isZoomed) * (m_ZoneCfg.m_fFarthestZoneRangePow2 * (m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
 		
 		if (data.m_fDistance >= distMax) // distance of visible tag is updated per frame for scaling, which is why this check has its own scope
 		{
@@ -106,7 +106,7 @@ modded class SCR_NameTagRulesetBase : Managed
 		{
 			
 			// increase max zone distance if player is using a scope or binoculars
-			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndSq + ((int)(isZoomed) * (m_ZoneCfg.m_aZones[i].m_iZoneEndSq * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
+			int distMaxZone = m_ZoneCfg.m_aZones[i].m_iZoneEndSq + ((int)(isZoomed) * (m_ZoneCfg.m_aZones[i].m_iZoneEndSq * (m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_MAGNIFICATION_MULTIPLICATION) - 1)));
 			
 			if ( data.m_fDistance <=  distMaxZone)
 			{

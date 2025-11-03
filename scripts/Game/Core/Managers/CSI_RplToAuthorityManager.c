@@ -163,7 +163,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value)
 	{
-		m_SettingsManager.UpdateLocalSetting(setting, value);
+		m_SettingsManager.UpdateServerSetting(setting, value);
 	}
 	
 	//------------------------------------------------------------------------------------------------

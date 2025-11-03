@@ -61,7 +61,7 @@ class CSI_UIHelper
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false)
 	{
 		string iconString;
-		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetCSISettingInt(CSI_SettingsManager.ICON_THEME);
+		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_SettingsManager.ICON_THEME);
 		
 		if (m_aNonThemedRegularIcons.Contains(icon) || m_aVehicleIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
@@ -85,7 +85,7 @@ class CSI_UIHelper
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerId);
 		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerId);
 		
-		if (!playerData || !CSI_SettingsManager.GetInstance().GetCSISettingBool(CSI_SettingsManager.RANK_VISIBLE))
+		if (!playerData || !CSI_SettingsManager.GetInstance().GetSettingBool(CSI_SettingsManager.RANK_VISIBLE))
 			return name;
 		
 		SCR_ECharacterRank rankEnum = playerData.GetRank();

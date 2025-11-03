@@ -28,6 +28,10 @@ FrameWidgetClass {
     SizeY 100
     OffsetBottom 25.573
    }
+   components {
+    CSI_Group "{66B8C3E6E183C164}" {
+    }
+   }
   }
   ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/layouts/HUD/Elements/CSI_Compass.layout" {
    Name "Compass"

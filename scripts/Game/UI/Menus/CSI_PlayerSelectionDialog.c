@@ -10,7 +10,7 @@ modded class GroupSettingsDialogUI : DialogUI
 	protected void CTButtonClicked()
 	{
 		GetGame().GetMenuManager().CloseMenu(this);
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
+		//GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
 	}
 }
 

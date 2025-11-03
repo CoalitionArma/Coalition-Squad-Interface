@@ -12,7 +12,7 @@ modded class SCR_NTIconBase
 		if (!stateConf)
 			return;
 		
-		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetCSISettingInt(CSI_SettingsManager.NAMETAG_ROLE_ICON_POSITION);
+		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_SettingsManager.NAMETAG_ROLE_ICON_POSITION);
 		Widget parent = iWidget.GetParent().GetParent();
 		
 		ImageWidget leftWidget = ImageWidget.Cast(parent.FindAnyWidget("RoleIconLeft"));
@@ -60,7 +60,7 @@ modded class SCR_NTIconPlatform
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
-		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetCSISettingInt(CSI_SettingsManager.NAMETAG_ROLE_ICON_POSITION);
+		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_SettingsManager.NAMETAG_ROLE_ICON_POSITION);
 		if (nametagPos == CSI_ENametagIconPosition.LEFT)
 		{
 			ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );

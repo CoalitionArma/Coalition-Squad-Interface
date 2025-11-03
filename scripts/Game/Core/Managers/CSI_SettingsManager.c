@@ -2,18 +2,18 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 
 class CSI_SettingsManager : ScriptComponent
 {	
-	const static string COMPASS_VISIBLE = "m_iCompassVisible";
-	const static string BEARING_VISIBLE = "m_iBearingVisible";
-	const static string RADAR_VISIBLE = "m_iRadarVisible";
-	const static string ONLY_RADAR_ICON_ARROWS_ROTATE = "m_iOnlyRadarIconArrowsRotate";
-	const static string GROUP_VISIBLE = "m_iGroupVisible";
-	const static string STAMINA_VISIBLE = "m_iStaminaVisible";
-	const static string NAMETAG_VISIBLE = "m_iNametagVisible";
-	const static string RANK_VISIBLE = "m_iRankVisible";
-	const static string ROLE_IN_NAMETAG_VISIBLE = "m_iRoleInNametagVisible";
-	const static string GROUP_IN_NAMETAG_VISIBLE = "m_iGroupInNametagVisible";
-	const static string NAMETAG_LOS_VISIBLE = "m_iNametagLOSVisible";
-	const static string AUTO_HIDE_HUD = "m_iAutoHideHUD";
+	const static string COMPASS_VISIBLE = "m_bCompassVisible";
+	const static string BEARING_VISIBLE = "m_bBearingVisible";
+	const static string RADAR_VISIBLE = "m_bRadarVisible";
+	const static string ONLY_RADAR_ICON_ARROWS_ROTATE = "m_bOnlyRadarIconArrowsRotate";
+	const static string GROUP_VISIBLE = "m_bGroupVisible";
+	const static string STAMINA_VISIBLE = "m_bStaminaVisible";
+	const static string NAMETAG_VISIBLE = "m_bNametagVisible";
+	const static string RANK_VISIBLE = "m_bRankVisible";
+	const static string ROLE_IN_NAMETAG_VISIBLE = "m_bRoleInNametagVisible";
+	const static string GROUP_IN_NAMETAG_VISIBLE = "m_bGroupInNametagVisible";
+	const static string NAMETAG_LOS_VISIBLE = "m_bNametagLOSVisible";
+	const static string AUTO_HIDE_HUD = "m_bAutoHideHUD";
 	const static string ICON_THEME = "m_iIconTheme";
 	const static string ICON_TYPE = "m_iIconType";
 	const static string ARROW_THEME = "m_iArrowTheme";
@@ -26,7 +26,7 @@ class CSI_SettingsManager : ScriptComponent
 	const static string RADAR_ICON_SIZE = "m_iRadarIconSize";
 	
 	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
-	const static int SERVER_OVERRIDE_DISABLED_VALUE = 0;
+	const static int SERVER_OVERRIDE_OFFSET = 1;
 	const static int SERVER_OVERRIDE_FALSE = -1;
 	const static int SERVER_OVERRIDE_TRUE = -2;
 	
@@ -35,23 +35,7 @@ class CSI_SettingsManager : ScriptComponent
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
-    protected ref TStringArray m_aCSISettingsArray = {};
-	
-	[RplProp(onRplName: "SettingsUpdate")]
-	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
-	
-	protected ref map<string, int> m_mCSISettingsLocalValues = new map<string, int>;
-
-	//------------------------------------------------------------------------------------------------
-	override void OnPostInit(IEntity owner)
-	{	
-		super.OnPostInit(owner);
-		
-		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
-		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		
-		m_aCSISettingsArray = {
+    static ref TStringArray m_aSettingsArray = {
 			COMPASS_VISIBLE,
 			BEARING_VISIBLE,
 			RADAR_VISIBLE,
@@ -75,66 +59,93 @@ class CSI_SettingsManager : ScriptComponent
 			NAMETAG_MAGNIFICATION_MULTIPLICATION,
 			RADAR_ICON_SIZE
 		};
+	
+	[RplProp(onRplName: "SettingsUpdate")]
+	protected ref TIntArray m_aSettingsAuthorityValues = {};
+	
+	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;
+
+	//------------------------------------------------------------------------------------------------
+	override void OnPostInit(IEntity owner)
+	{	
+		super.OnPostInit(owner);
+		
+		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
+		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		
 		if (RplSession.Mode() != RplMode.Client) 
 			UpdateAuthorityValueArray();
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	bool GetCSISettingBool(string setting) 
+	bool GetSettingBool(string setting) 
 	{
-		int index = m_aCSISettingsArray.Find(setting);
+		int index = m_aSettingsArray.Find(setting);
 		if (index != -1 && index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
-			return GetCSISettingInt(setting);
+			return GetSettingInt(setting);
 		
 		return false;
 	};	
 	
 	//------------------------------------------------------------------------------------------------
-	int GetCSISettingInt(string setting) 
+	int GetSettingInt(string setting) 
 	{
-		return m_mCSISettingsLocalValues.Get(setting);
+		return m_mSettingsLocalValues.Get(setting);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdateLocalSetting(string setting, int value)
+	static TStringArray GetSettingsArray() 
 	{
-		if (RplSession.Mode() != RplMode.Client) 
+		return m_aSettingsArray;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	TIntArray GetServerSettingsArray() 
+	{
+		return m_aSettingsAuthorityValues;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void RequestSettingsUpdate()
+	{
+		SettingsUpdate();
+	};
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdateServerSetting(string setting, int value)
+	{
+		int index = m_aSettingsArray.Find(setting);
+		if (index != -1)
 		{
-			int index = m_aCSISettingsArray.Find(setting);
-			if (index != -1)
+			if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
 			{
-				if (value != SERVER_OVERRIDE_DISABLED_VALUE)
-				{
-					if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
-					{
-						if (value == false)
-							value = SERVER_OVERRIDE_FALSE;
-						else
-							value = SERVER_OVERRIDE_TRUE;
-					} else
-						value = -value;
-				};
-				m_UserSettigs.Set(setting, value);
-				UpdateAuthorityValueArray();
-				return;
-			};
+				if (value == false)
+					value = SERVER_OVERRIDE_FALSE;
+				else
+					value = SERVER_OVERRIDE_TRUE;
+			} else {
+				value = value + SERVER_OVERRIDE_OFFSET;
+				value = -value;
+			}
+			
+			m_UserSettigs.Set(setting, value);
+			UpdateAuthorityValueArray();
+			return;
 		};
-		
-		m_UserSettigs.Set(setting, value);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	protected void UpdateAuthorityValueArray()
 	{
-		m_aCSISettingsAuthorityValues.Clear();
+		m_aSettingsAuthorityValues.Clear();
 		
-		foreach (string setting : m_aCSISettingsArray)
+		foreach (string setting : m_aSettingsArray)
 		{
 			int settingValue;
 			m_UserSettigs.Get(setting, settingValue); 
 			
-			m_aCSISettingsAuthorityValues.Insert(settingValue);
+			m_aSettingsAuthorityValues.Insert(settingValue);
 		}
 		
 		Replication.BumpMe();
@@ -147,21 +158,21 @@ class CSI_SettingsManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	protected void SettingsUpdate()
 	{
-		foreach (int i, string setting : m_aCSISettingsArray)
+		foreach (int i, string setting : m_aSettingsArray)
 		{
 			int settingValue;
 			bool IsBool = i <= INDEX_WHERE_BOOL_SETTINGS_STOP;
-			int serverSetting = m_aCSISettingsAuthorityValues.Get(i);
+			int serverSetting = m_aSettingsAuthorityValues.Get(i);
 	
 			switch (true)
 			{
 				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
 				case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
-				case (serverSetting < 0) : settingValue = Math.AbsInt(serverSetting); break;
+				case (serverSetting < 0) : settingValue = Math.AbsInt((serverSetting + SERVER_OVERRIDE_OFFSET)); break;
 				default : m_UserSettigs.Get(setting, settingValue);
 			}
 			
-			m_mCSISettingsLocalValues.Set(setting, settingValue);
+			m_mSettingsLocalValues.Set(setting, settingValue);
 		}
 		
 		if (m_OnSettingsUpdate)

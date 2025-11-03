@@ -59,6 +59,8 @@ modded class SCR_NameTagData : Managed
 	//! Update tag position
 	override void UpdateTagPos()
 	{
+		UpdateAttatchedTo();
+		
 		vector matPos[4];
 		Animation anim = m_Entity.GetAnimation();
 		anim.GetBoneMatrix(m_iSpineBone, matPos);
@@ -67,16 +69,16 @@ modded class SCR_NameTagData : Managed
 		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
 		
 		vector nametagOffsetVector = "0 0 0";
-		int nametagOffset = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_POSITION_OFFSET);
-		
-		nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
+		int nametagOffset = m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_POSITION_OFFSET);
 		
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
+			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
 			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
 		}
 		else if (m_eAttachedTo == ENameTagPosition.BODY)
 		{
+			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
 			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
 		}
 
@@ -93,7 +95,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.GROUP_IN_NAMETAG_VISIBLE)) 
+		if (!group || !m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_IN_NAMETAG_VISIBLE)) 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -115,7 +117,7 @@ modded class SCR_NameTagData : Managed
 		if (!m_SettingsManager) 
 			return;
 
-		ENameTagPosition nametagPos = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_POSITION);
+		ENameTagPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_POSITION);
 
 		m_eAttachedTo = nametagPos;
 		m_eAttachedToLast = nametagPos;

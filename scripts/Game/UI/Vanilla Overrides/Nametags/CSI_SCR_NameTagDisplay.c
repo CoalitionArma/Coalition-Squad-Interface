@@ -12,9 +12,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager) 
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		int nametagsRange = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.NAMETAG_RANGE);
+		int nametagsRange = m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_RANGE);
 
-		if (!m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.NAMETAG_VISIBLE)) 
+		if (!m_SettingsManager.GetSettingBool(CSI_SettingsManager.NAMETAG_VISIBLE)) 
 			nametagsRange = 1;
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 

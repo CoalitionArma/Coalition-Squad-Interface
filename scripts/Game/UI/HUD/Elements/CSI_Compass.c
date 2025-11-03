@@ -25,10 +25,12 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	void Update()
 	{		
 		int yawInt;
+        float yaw = m_HUDManager.GetLocalYaw();
+		yawInt = -yaw;
 		
-		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.COMPASS_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.COMPASS_VISIBLE))
 		{
-			CSI_ECompassTheme compassTheme = m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.COMPASS_THEME);
+			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_SettingsManager.COMPASS_THEME);
 			string compassImage;
 			switch (compassTheme)
 			{
@@ -41,9 +43,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 				m_sStoredCompass = compassImage;
 			};
 			
-	        float yaw = m_HUDManager.GetLocalYaw();
-			yawInt = -yaw;
-			
 			m_wCompass.SetVisible(true);
 			
 			if (m_fStoredYaw != yaw)
@@ -54,7 +53,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		} else 
 			m_wCompass.SetVisible(false);
 
-		if (m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.BEARING_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.BEARING_VISIBLE))
 		{
 			string bearingAdd = "";
 			

@@ -8,6 +8,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref array<Widget> m_aRadarIcons;
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
+	
+	[Attribute("1")]
+	int m_iGroupSizeToHide;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -32,7 +35,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
         float localYaw = m_HUDManager.GetLocalYaw();
 		vector localOrigin = localCharacter.GetOrigin();
 
-		if (groupCount > 1 && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.RADAR_VISIBLE))
+		if (groupCount > m_iGroupSizeToHide && m_SettingsManager.GetSettingBool(CSI_SettingsManager.RADAR_VISIBLE))
 		{
 			foreach (int i, int playerId : m_HUDManager.GetLocalGroupPlayerIds())
 			{
@@ -104,7 +107,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerId);
 			
-			widthAndHeight = widthAndHeight * (m_SettingsManager.GetCSISettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

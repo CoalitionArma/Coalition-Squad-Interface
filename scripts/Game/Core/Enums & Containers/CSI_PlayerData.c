@@ -146,10 +146,7 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	CSI_EIcon GetDisplayIcon()
 	{
-		if (m_iOverrideIcon != CSI_EOverrideIcon.AUTO)
-			return m_iOverrideIcon;
-		else
-			return m_iDisplayIcon;
+		return m_iDisplayIcon;
 	}
 	
 	//------------------------------------------------------------------------------------------------

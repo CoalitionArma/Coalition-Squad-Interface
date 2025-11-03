@@ -33,7 +33,7 @@ class CSI_HUD : SCR_InfoDisplay
 		m_Radar = CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar));
 		m_Group = CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group));
 		
-		if (!m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD))
+		if (!m_SettingsManager.GetSettingBool(CSI_SettingsManager.AUTO_HIDE_HUD))
 			m_bIsVisible = false;
 	}
 
@@ -42,7 +42,7 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if ((!m_bIsVisible && m_SettingsManager.GetCSISettingBool(CSI_SettingsManager.AUTO_HIDE_HUD)) || m_CSIHUDManager.GetIsLocalPlayerInMortar())
+		if ((!m_bIsVisible && m_SettingsManager.GetSettingBool(CSI_SettingsManager.AUTO_HIDE_HUD)) || m_CSIHUDManager.GetIsLocalPlayerInMortar())
 		{
 			m_wRoot.SetVisible(false);
 			return;
