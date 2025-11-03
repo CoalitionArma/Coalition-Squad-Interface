@@ -53,7 +53,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Is Rank Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -70,7 +70,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Auto Hide HUD"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -87,7 +87,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Stamina Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -104,7 +104,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Group Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -133,54 +133,54 @@ HorizontalLayoutWidgetClass {
         }
        }
       }
-      ButtonWidgetClass "{66C340D24E548E50}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+      ButtonWidgetClass "{66C55DE444232586}" : "{4B5AE6E64037FFB4}UI/layouts/WidgetLibrary/ComboBox/WLib_ComboBox.layout" {
        Name "IconTheme"
-       Slot LayoutSlot "{54890CCD61050681}" {
+       Slot LayoutSlot "{58A4F540041D9FC5}" {
         Padding 4 4 4 4
        }
        components {
-        SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+        SCR_ComboBoxComponent "{546B1D464BC32853}" {
+         m_sLabel "Icons Theme"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "CLASSIC" "REFORGER ADVANCED" "REFORGER REGULAR" "NATO" "SCI FI" "WW2" "MEDIVAL"
          }
-         m_bUseLightArrows 1
-         m_bCycleMode 1
+        }
+        SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {
         }
        }
       }
-      ButtonWidgetClass "{66C340D2494AD1F9}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+      ButtonWidgetClass "{66C55DE4116FC062}" : "{4B5AE6E64037FFB4}UI/layouts/WidgetLibrary/ComboBox/WLib_ComboBox.layout" {
        Name "IconType"
-       Slot LayoutSlot "{54890CCD61050681}" {
+       Slot LayoutSlot "{58A4F540041D9FC5}" {
         Padding 4 4 4 4
        }
        components {
-        SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+        SCR_ComboBoxComponent "{546B1D464BC32853}" {
+         m_sLabel "Icons Theme Type"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "REGULAR" "OUTLINE"
          }
-         m_bUseLightArrows 1
-         m_bCycleMode 1
+        }
+        SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {
         }
        }
       }
-      ButtonWidgetClass "{66C340D24A1BAE30}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+      ButtonWidgetClass "{66C55DE58A9A35D7}" : "{4B5AE6E64037FFB4}UI/layouts/WidgetLibrary/ComboBox/WLib_ComboBox.layout" {
        Name "ArrowTheme"
-       Slot LayoutSlot "{54890CCD61050681}" {
+       Slot LayoutSlot "{58A4F540041D9FC5}" {
         Padding 4 4 4 4
        }
        components {
-        SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+        SCR_ComboBoxComponent "{546B1D464BC32853}" {
+         m_sLabel "Icons Arrow Theme"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "CLASSIC" "STUBBY" "POINTIER" "ROUNDIER" "SIMPLE"
          }
-         m_bUseLightArrows 1
-         m_bCycleMode 1
+        }
+        SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {
         }
        }
       }
@@ -210,7 +210,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Nametag Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -227,7 +227,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Group In Nametag"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -244,7 +244,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Nametag Line Of Sight Enabled"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -261,10 +261,10 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Nametag Body Position"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "BODY" "HEAD"
          }
          m_bUseLightArrows 1
          m_bCycleMode 1
@@ -278,9 +278,12 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SliderComponent "{548294960C7399D9}" {
-         m_sLabel "#AR-Settings_MouseSensitivity"
+         m_sLabel "Nametag Body Position Z Offset"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-         m_sFormatText "#AR-ValueUnit_Short_Times"
+         m_fValue 0.3
+         m_fMinValue -0.5
+         m_fMaxValue 0.5
+         m_sFormatText "%1"
          m_bRoundValue 1
          m_iDecimalPrecision 2
         }
@@ -293,9 +296,13 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SliderComponent "{548294960C7399D9}" {
-         m_sLabel "#AR-Settings_MouseSensitivity"
+         m_sLabel "Nametag Range"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-         m_sFormatText "#AR-ValueUnit_Short_Times"
+         m_fValue 35
+         m_fMinValue 5
+         m_fMaxValue 2500
+         m_fStep 5
+         m_sFormatText "%1"
          m_bRoundValue 1
          m_iDecimalPrecision 2
         }
@@ -308,9 +315,12 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SliderComponent "{548294960C7399D9}" {
-         m_sLabel "#AR-Settings_MouseSensitivity"
+         m_sLabel "Nametag Range Magnification Multiplication"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-         m_sFormatText "#AR-ValueUnit_Short_Times"
+         m_fValue 1
+         m_fMinValue 1
+         m_fMaxValue 10
+         m_fStep 1
          m_bRoundValue 1
          m_iDecimalPrecision 2
         }
@@ -323,7 +333,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Role Icon In Nametag"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -340,10 +350,10 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Role Nametag Icon Position"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "LEFT" "CENTER" "RIGHT"
          }
          m_bUseLightArrows 1
          m_bCycleMode 1
@@ -369,20 +379,20 @@ HorizontalLayoutWidgetClass {
         }
        }
       }
-      ButtonWidgetClass "{66C340D0DF57BD7B}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+      ButtonWidgetClass "{66C55DE5C0E9C564}" : "{4B5AE6E64037FFB4}UI/layouts/WidgetLibrary/ComboBox/WLib_ComboBox.layout" {
        Name "CompassTheme"
-       Slot LayoutSlot "{54890CCD61050681}" {
+       Slot LayoutSlot "{58A4F540041D9FC5}" {
         Padding 4 4 4 4
        }
        components {
-        SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+        SCR_ComboBoxComponent "{546B1D464BC32853}" {
+         m_sLabel "Compass Theme"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
-          "#AR-UI_No" "#AR-UI_Yes"
+          "CLASSIC" "SCI FI" "WW2"
          }
-         m_bUseLightArrows 1
-         m_bCycleMode 1
+        }
+        SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {
         }
        }
       }
@@ -393,7 +403,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Compass Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -410,7 +420,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Bearing Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -427,7 +437,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Radar Visible"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -444,9 +454,12 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SliderComponent "{548294960C7399D9}" {
-         m_sLabel "#AR-Settings_MouseSensitivity"
+         m_sLabel "Radar Icon Size"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-         m_sFormatText "#AR-ValueUnit_Short_Times"
+         m_fValue 100
+         m_fMinValue 10
+         m_fMaxValue 300
+         m_fStep 10
          m_bRoundValue 1
          m_iDecimalPrecision 2
         }
@@ -459,7 +472,7 @@ HorizontalLayoutWidgetClass {
        }
        components {
         SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-         m_sLabel "#AR-Settings_RadioSubtitles"
+         m_sLabel "Radar Icons Arrows Seprate From Main Icon"
          m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
          m_aElementNames {
           "#AR-UI_No" "#AR-UI_Yes"
@@ -477,6 +490,14 @@ HorizontalLayoutWidgetClass {
    Name "Description"
    Slot LayoutSlot "{54890CCD7A457969}" {
     SizeMode Fill
+   }
+   {
+    FrameWidgetClass "{66C55DAD14E2360B}" {
+     Name "Frame"
+     Slot LayoutSlot "{66C55DAD14E2365D}" {
+      SizeMode Fill
+     }
+    }
    }
   }
  }

@@ -40,7 +40,7 @@ class CSI_SettingsManager : ScriptComponent
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aCSISettingsAuthorityValues = {};
 	
-	protected ref TIntArray m_aCSISettingsLocalValues = {};
+	protected ref map<string, int> m_mCSISettingsLocalValues = new map<string, int>;
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
@@ -93,12 +93,7 @@ class CSI_SettingsManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	int GetCSISettingInt(string setting) 
 	{
-		int index = m_aCSISettingsArray.Find(setting);
-		
-		if (index == -1)
-			return 0;
-
-		return m_aCSISettingsLocalValues.Get(index);
+		return m_mCSISettingsLocalValues.Get(setting);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -166,7 +161,7 @@ class CSI_SettingsManager : ScriptComponent
 				default : m_UserSettigs.Get(setting, settingValue);
 			}
 			
-			m_aCSISettingsLocalValues.Insert(settingValue);
+			m_mCSISettingsLocalValues.Set(setting, settingValue);
 		}
 		
 		if (m_OnSettingsUpdate)

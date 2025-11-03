@@ -42,7 +42,7 @@ ScaleWidgetClass {
        }
        style debugUI
        Text "000"
-       "Font Size" 13
+       "Font Size" 96
        "Min Font Size" 13
        "Horizontal Alignment" Center
        "Vertical Alignment" Center
