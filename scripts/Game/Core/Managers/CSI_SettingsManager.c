@@ -10,7 +10,7 @@ class CSI_SettingsManager : ScriptComponent
 	const static string STAMINA_VISIBLE = "m_bStaminaVisible";
 	const static string NAMETAG_VISIBLE = "m_bNametagVisible";
 	const static string RANK_VISIBLE = "m_bRankVisible";
-	const static string ROLE_IN_NAMETAG_VISIBLE = "m_bRoleInNametagVisible";
+	const static string ROLE_IN_NAMETAG_VISIBLE = "m_bRoleIconInNametagVisible";
 	const static string GROUP_IN_NAMETAG_VISIBLE = "m_bGroupInNametagVisible";
 	const static string NAMETAG_LOS_VISIBLE = "m_bNametagLOSVisible";
 	const static string AUTO_HIDE_HUD = "m_bAutoHideHUD";
@@ -36,6 +36,7 @@ class CSI_SettingsManager : ScriptComponent
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
     static ref TStringArray m_aSettingsArray = {
+			//BOOLEAN SETTINGS
 			COMPASS_VISIBLE,
 			BEARING_VISIBLE,
 			RADAR_VISIBLE,
@@ -48,6 +49,8 @@ class CSI_SettingsManager : ScriptComponent
 			GROUP_IN_NAMETAG_VISIBLE,
 			NAMETAG_LOS_VISIBLE,
 			AUTO_HIDE_HUD,
+		
+			//INTIGER SETTINGS
 			ICON_THEME,
 			ICON_TYPE,
 			ARROW_THEME,
@@ -113,23 +116,30 @@ class CSI_SettingsManager : ScriptComponent
 	};
 	
 	//------------------------------------------------------------------------------------------------
-	void UpdateServerSetting(string setting, int value)
+	void UpdateServerSetting(string setting, int value, bool serverOverrideEnabled)
 	{
+		if (RplSession.Mode() != RplMode.Dedicated) 
+			return;
+		
 		int index = m_aSettingsArray.Find(setting);
 		if (index != -1)
 		{
-			if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
-			{
-				if (value == false)
-					value = SERVER_OVERRIDE_FALSE;
-				else
-					value = SERVER_OVERRIDE_TRUE;
-			} else {
-				value = value + SERVER_OVERRIDE_OFFSET;
-				value = -value;
-			}
+			if(serverOverrideEnabled)
+			{		
+				if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+				{
+					if (value == 0)
+						value = SERVER_OVERRIDE_FALSE;
+					else
+						value = SERVER_OVERRIDE_TRUE;
+				} else {
+					value = value + SERVER_OVERRIDE_OFFSET;
+					value = -value;
+				}
+			};
 			
 			m_UserSettigs.Set(setting, value);
+			GetGame().UserSettingsChanged();
 			UpdateAuthorityValueArray();
 			return;
 		};

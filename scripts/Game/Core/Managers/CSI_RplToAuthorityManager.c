@@ -85,9 +85,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_ChangeAuthoritySetting(string setting, int value)
+	void Owner_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value);
+		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value, serverOverrideEnabled);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -161,9 +161,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value)
+	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		m_SettingsManager.UpdateServerSetting(setting, value);
+		m_SettingsManager.UpdateServerSetting(setting, value, serverOverrideEnabled);
 	}
 	
 	//------------------------------------------------------------------------------------------------

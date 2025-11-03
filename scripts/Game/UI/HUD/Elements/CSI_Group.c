@@ -7,9 +7,6 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	
 	protected ref array<int> m_aStoredGroupPlayerIDs;
 	protected ref array<Widget> m_aPlayerWidgets;
-	
-	[Attribute("1")]
-	int m_iGroupSizeToHide;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -35,7 +32,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		int groupCount = m_HUDManager.GetLocalGroupCount();
 		m_aStoredGroupPlayerIDs = groupArray;
 
-		if (groupCount > m_iGroupSizeToHide && m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_VISIBLE))
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_VISIBLE))
 			foreach (int i, int playerId : groupArray) 
 				UpdatePlayerWidget(i, playerId);
 		else
