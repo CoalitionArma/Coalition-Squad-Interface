@@ -232,7 +232,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Nametag Visible"
+           m_sLabel "Nametags Visible"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "#AR-UI_No" "#AR-UI_Yes"
@@ -249,7 +249,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Group In Nametag"
+           m_sLabel "Group In Nametags"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "#AR-UI_No" "#AR-UI_Yes"
@@ -266,7 +266,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Nametag Line Of Sight Enabled"
+           m_sLabel "Nametags Line Of Sight Enabled"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "#AR-UI_No" "#AR-UI_Yes"
@@ -283,7 +283,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Nametag Body Position"
+           m_sLabel "Nametags Body Position"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "HEAD" "BODY"
@@ -300,7 +300,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SliderComponent "{548294960C7399D9}" {
-           m_sLabel "Nametag Body Position Z Offset"
+           m_sLabel "Nametags Body Position Z Offset"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_fValue 3
            m_fMaxValue 5
@@ -318,7 +318,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SliderComponent "{548294960C7399D9}" {
-           m_sLabel "Nametag Range"
+           m_sLabel "Nametags Range"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_fValue 35
            m_fMinValue 5
@@ -337,7 +337,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SliderComponent "{548294960C7399D9}" {
-           m_sLabel "Nametag Range Magnification Multiplication"
+           m_sLabel "Nametags Range Magnification Multiplication"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_fValue 100
            m_fMinValue 10
@@ -355,7 +355,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Role Icon In Nametag"
+           m_sLabel "Role Icon In Nametags"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "#AR-UI_No" "#AR-UI_Yes"
@@ -372,7 +372,7 @@ HorizontalLayoutWidgetClass {
          }
          components {
           SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-           m_sLabel "Role Nametag Icon Position"
+           m_sLabel "Nametags Role Icon Position"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
             "LEFT" "CENTER" "RIGHT"
