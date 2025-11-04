@@ -14,10 +14,14 @@ class CSI_PlayerData
 	protected int m_iStoredGroupID = -1;
 	
 	//------------------------------------------------------------------------------------------------
-	// SCRIPT INVOKERS
-	//------------------------------------------------------------------------------------------------
-	
-	//------------------------------------------------------------------------------------------------
+	/**
+	 * Replaces or sets the internal CSI_PlayerData record for the player identified by playerID.
+	 * If newData is non-null, the player's data is updated with the provided instance.
+	 * If newData is null, the player's data will be cleared/removed/reset.
+	 *
+	 * @param playerID: ID of the player whose data should be updated.
+	 * @param newData: Pointer/reference to the new CSI_PlayerData to apply.
+	 */
 	void DataUpdate(int playerID, CSI_PlayerData newData = null)
 	{	
 		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(playerID);
@@ -48,6 +52,12 @@ class CSI_PlayerData
 			m_OnDataUpdate.Invoke();
 	}
 
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the value associated with a player identified by their ID
+	 * @param playerID: The unique identifier of the player
+	 * @return Updated value for the specified player
+	 */
 	protected int UpdatePlayerValue(int playerID)
 	{
 		int value = 0;

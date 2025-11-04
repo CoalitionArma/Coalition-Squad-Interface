@@ -22,19 +22,23 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void PlayerUpdate(int playerId)
+	/**
+	 * Updates the player widget state for a specific player
+	 * @param playerID  Player ID to update
+	 */
+	void PlayerUpdate(int playerID)
 	{	
-		if (m_iPlayerId != playerId)
+		if (m_iPlayerId != playerID)
 		{
-			m_iPlayerId = playerId;
+			m_iPlayerId = playerID;
 			CSI_Icon icon = CSI_Icon.Cast(m_wIcon.FindHandler(CSI_Icon));
 		
-			icon.IconUpdate(playerId);
+			icon.IconUpdate(playerID);
 			
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 			
-			if (playerId <= 0)
+			if (playerID <= 0)
 			{
 				m_wRoot.SetVisible(false);
 				m_wPlayerName.SetText("");
@@ -42,9 +46,9 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			};
 			
 			m_wRoot.SetVisible(true);
-			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, GetGame().GetPlayerManager().GetPlayerName(playerId)));
+			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, GetGame().GetPlayerManager().GetPlayerName(playerID)));
 			
-			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerId);
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerID);
 			
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
@@ -54,6 +58,9 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates player related data within the HUD element.
+	 */
 	protected void DataUpdate()
 	{	
 		if (!m_PlayerData)

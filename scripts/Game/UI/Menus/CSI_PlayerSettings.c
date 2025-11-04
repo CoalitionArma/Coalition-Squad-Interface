@@ -4,6 +4,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManagerClass m_RplToAuthorityManagerClass;
 	
+	/*
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
@@ -179,4 +180,5 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		m_SettingsManager.Owner_RemovePlayerFromGroup(m_iSelectedPlayerID);
 		GetGame().GetCallqueue().CallLater(OnMenuBack, 265);
 	};
+	*/
 }

@@ -22,6 +22,9 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the group interface element on each frame
+	 */
 	void Update()
 	{
 		array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
@@ -33,8 +36,8 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		m_aStoredGroupPlayerIDs = groupArray;
 
 		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_VISIBLE))
-			foreach (int i, int playerId : groupArray) 
-				UpdatePlayerWidget(i, playerId);
+			foreach (int i, int playerID : groupArray) 
+				UpdatePlayerWidget(i, playerID);
 		else
 			groupCount = 0;
 		
@@ -43,11 +46,16 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void UpdatePlayerWidget(int widgetNumber, int playerId)
+	/**
+	 * Updates the interface widget for a specific player in the group dsiplay
+	 * @param widgetNumber Widget index to update
+	 * @param playerID ID of the player to display
+	 */
+	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
 	{
 		Widget player = m_aPlayerWidgets[widgetNumber];
 
 		if (player) 
-			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerId);
+			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerID);
 	}
 }

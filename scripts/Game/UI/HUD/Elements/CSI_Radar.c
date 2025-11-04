@@ -22,6 +22,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the radar display each frame.
+	 */
 	void Update()
 	{			
 		SCR_ChimeraCharacter localCharacter = m_HUDManager.GetLocalPlayerCharacter();
@@ -34,10 +37,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_SettingsManager.RADAR_VISIBLE))
 		{
-			foreach (int i, int playerId : m_HUDManager.GetLocalGroupPlayerIds())
+			foreach (int i, int playerID : m_HUDManager.GetLocalGroupPlayerIds())
 			{
 				float x, y, opacity, rotation, disT, dis, searchRadius;
-				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId));
+				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
 
 				if (!playerCharacter)
 					continue;
@@ -59,7 +62,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				if (dis > searchRadius) 
 					continue;
 
-				if (playerId != SCR_PlayerController.GetLocalPlayerId())
+				if (playerID != SCR_PlayerController.GetLocalPlayerId())
 				{
 					// Get Direction
 					float dir = vector.Direction(playerCharacterOrigin, localOrigin).ToYaw();
@@ -76,7 +79,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
 				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
-				UpdatePlayerRadarWidget(i, playerId, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
+				UpdatePlayerRadarWidget(i, playerID, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
 			};
 		} else
 			groupCount = 0;
@@ -90,7 +93,17 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerId, float widthAndHeight, float opacity, float x, float y, float rotation)
+	/**
+	 * Updates radar widget properties for a specific player on the HUD.
+	 * @param widgetNumber The index of the radar widget to update
+	 * @param playerID ID of the player
+	 * @param widthAndHeight Width and height dimensions for the widget
+	 * @param opacity Transparency value for the widget
+	 * @param x X coordinate position
+	 * @param y Y coordinate position
+	 * @param rotation Rotation angle in degrees
+	 */
+	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerID, float widthAndHeight, float opacity, float x, float y, float rotation)
 	{
 		Widget radarIcon = m_aRadarIcons[widgetNumber];
 
@@ -102,7 +115,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
 			
-			icon.IconUpdate(playerId);
+			icon.IconUpdate(playerID);
 			
 			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);
 

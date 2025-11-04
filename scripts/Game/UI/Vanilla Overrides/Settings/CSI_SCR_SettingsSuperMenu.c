@@ -7,6 +7,6 @@ modded class SCR_SettingsSuperMenu {
         if (!m_SuperMenuComponent || !m_SuperMenuComponent.GetTabView())
             return;
 
-        m_SuperMenuComponent.GetTabView().AddTab("{2AA1FFAC7A556059}UI/layouts/Menus/SettingsMenu/CSI_Settings.layout", "Coalition Squad Interface", true, identifier: "CSI_GameSettings");
+        m_SuperMenuComponent.GetTabView().AddTab("{2AA1FFAC7A556059}UI/layouts/Menus/SettingsSubMenus/CSI_SettingsSubMenu.layout", "Coalition Squad Interface", true, identifier: "CSI_GameSettings");
     };
 };

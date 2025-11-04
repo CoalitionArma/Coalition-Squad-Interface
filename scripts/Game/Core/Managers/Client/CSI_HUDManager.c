@@ -19,6 +19,9 @@ class CSI_HUDManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the heads-up display values for the local client
+	 */
 	void UpdateLocalHUDValues()
 	{
 		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
@@ -54,6 +57,9 @@ class CSI_HUDManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the local player's aiming yaw angle.
+	 */
 	void UpdateLocalAimingYaw()
 	{
 		if (!m_LocalPlayerCharacter)
@@ -77,13 +83,18 @@ class CSI_HUDManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected array<int> GetSortedGroupArray(array<int> playerIds)
+	/**
+	 * Returns a sorted array of player IDs based on their group assignments
+	 * @param playerIDs: Array of player IDs to sort
+	 * @return Sorted array of player IDs
+	 */
+	protected array<int> GetSortedGroupArray(array<int> playerIDs)
 	{
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
 
 		// Parse through current group array.
-		foreach (int playerID : playerIds)
+		foreach (int playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 			

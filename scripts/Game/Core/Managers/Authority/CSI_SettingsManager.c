@@ -82,7 +82,12 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	bool GetSettingBool(string setting) 
+	/*!
+	 * Retrieves an boolean value for the specified setting name.
+	 * @param setting: The name of the setting to retrieve
+	 * @return True or false based on setting value
+	 */
+	bool GetSettingBool(string setting)
 	{
 		int index = m_aSettingsArray.Find(setting);
 		if (index != -1 && index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
@@ -92,6 +97,11 @@ class CSI_SettingsManager : ScriptComponent
 	};	
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Retrieves an integer value for the specified setting name.
+	 * @param setting: The name of the setting to retrieve
+	 * @return The integer value of the setting
+	 */
 	int GetSettingInt(string setting) 
 	{
 		return m_mSettingsLocalValues.Get(setting);
@@ -116,6 +126,12 @@ class CSI_SettingsManager : ScriptComponent
 	};
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the specified server setting to the provided integer value and optionally enforces a server-side override.
+	 * @param setting: Setting key to update
+	 * @param value: New integer value for the setting
+	 * @param serverOverrideEnabled: If true, enforce server-side override
+	 */
 	void UpdateServerSetting(string setting, int value, bool serverOverrideEnabled)
 	{
 		if (RplSession.Mode() != RplMode.Dedicated) 
@@ -146,6 +162,9 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the array of authority values used for settings.
+	 */
 	protected void UpdateAuthorityValueArray()
 	{
 		m_aSettingsAuthorityValues.Clear();
@@ -166,6 +185,9 @@ class CSI_SettingsManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates CSI game settings all players pull from based on current server and/or client configuration
+	 */
 	protected void SettingsUpdate()
 	{
 		foreach (int i, string setting : m_aSettingsArray)

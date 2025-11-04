@@ -15,73 +15,95 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	// CLIENT-SIDE METHODS - These send RPCs from client to server
+	// CLIENT-SIDE METHODS - These send RPCs from client to authority (server)
 	//------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerData(int playerId, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
+	/*!
+	 * Updates player data on authority (host) with provided icon, squad leader status and rank
+	 * @param playerID: ID of player to update
+	 * @param isSL: whether player is squad leader
+	 * @param icon: player's icon type
+	 * @param rank: rank of player
+	*/
+	void Owner_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
 		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank() && isSL == playerData.GetIsSquadLeader()))
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerData, playerId, isSL, icon, rank);
+		Rpc(RpcAsk_UpdatePlayerData, playerID, isSL, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerColorTeam(int playerId, CSI_EColorTeam colorTeam)
+	/**
+	 * Update the specified player's team color on the authority.
+	 * @param playerID: Identifier of the player to update
+	 * @param colorTeam: New color team to assign (CSI_EColorTeam)
+	 */
+	void Owner_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
 		if(playerData && colorTeam == playerData.GetColorTeam())
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerColorTeam, playerId, colorTeam);
+		Rpc(RpcAsk_UpdatePlayerColorTeam, playerID, colorTeam);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerOverrideIcon(int playerId, CSI_EOverrideIcon overrideIcon)
+	/**
+	 * Updates a player's icon override state on the authority.
+	 * @param playerID: The ID of the player to update
+	 * @param overrideIcon: The new override icon to apply
+	 */
+	void Owner_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
 		if(playerData && overrideIcon == playerData.GetOverrideIcon())
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerOverrideIcon, playerId, overrideIcon);
+		Rpc(RpcAsk_UpdatePlayerOverrideIcon, playerID, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void Owner_UpdatePlayerTeamLeader(int playerId, bool isTL)
+	/**
+	 * Updates team leader status on the authority.
+	 * @param playerID: ID of player to update
+	 * @param isTL: Whether player should be team leader
+	 */
+	void Owner_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
 		if(playerData && isTL == playerData.GetIsTeamLeader())
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerTeamLeader, playerId, isTL);
+		Rpc(RpcAsk_UpdatePlayerTeamLeader, playerID, isTL);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_PromotePlayerToSL(int playerId)
+	void Owner_PromotePlayerToSL(int playerID)
 	{
-		Rpc(RpcAsk_PromotePlayerToSL, playerId);
+		Rpc(RpcAsk_PromotePlayerToSL, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_SetMaxGroupMembers(int playerId, int maxMembers)
+	void Owner_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
-		Rpc(RpcAsk_SetMaxGroupMembers, playerId, maxMembers);
+		Rpc(RpcAsk_SetMaxGroupMembers, playerID, maxMembers);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void Owner_RemovePlayerFromGroup(int playerId)
+	void Owner_RemovePlayerFromGroup(int playerID)
 	{
-		Rpc(RpcAsk_RemovePlayerFromGroup, playerId);
+		Rpc(RpcAsk_RemovePlayerFromGroup, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -96,49 +118,49 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerData(int playerId, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void RpcAsk_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{	
-		m_PlayerDataManager.UpdatePlayerData(playerId, isSL, icon, rank);
+		m_PlayerDataManager.UpdatePlayerData(playerID, isSL, icon, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerColorTeam(int playerId, CSI_EColorTeam colorTeam)
+	protected void RpcAsk_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
-		m_PlayerDataManager.UpdatePlayerColorTeam(playerId, colorTeam);
+		m_PlayerDataManager.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerId, CSI_EOverrideIcon overrideIcon)
+	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
-		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerId, overrideIcon);
+		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerTeamLeader(int playerId, bool isTL)
+	protected void RpcAsk_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
-		m_PlayerDataManager.UpdatePlayerTeamLeader(playerId, isTL);
+		m_PlayerDataManager.UpdatePlayerTeamLeader(playerID, isTL);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_PromotePlayerToSL(int playerId)
+	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerId);
-		playersGroup.SetGroupLeader(playerId);
+		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
+		playersGroup.SetGroupLeader(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_SetMaxGroupMembers(int playerId, int maxMembers)
+	protected void RpcAsk_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerId);
+		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 
-		if (!playersGroup.IsPlayerLeader(playerId))
+		if (!playersGroup.IsPlayerLeader(playerID))
 			return;
 		
 		if (maxMembers < playersGroup.GetPlayerCount()) 
@@ -149,11 +171,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_RemovePlayerFromGroup(int playerId)
+	protected void RpcAsk_RemovePlayerFromGroup(int playerID)
 	{
 		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_PlayerControllerGroupComponent playerGroupController = SCR_PlayerControllerGroupComponent.GetPlayerControllerComponent(playerId);
-		SCR_AIGroup group = groupsManager.GetPlayerGroup(playerId);
+		SCR_PlayerControllerGroupComponent playerGroupController = SCR_PlayerControllerGroupComponent.GetPlayerControllerComponent(playerID);
+		SCR_AIGroup group = groupsManager.GetPlayerGroup(playerID);
 
 		SCR_AIGroup newGroup = groupsManager.CreateNewPlayableGroup(group.GetFaction());
 

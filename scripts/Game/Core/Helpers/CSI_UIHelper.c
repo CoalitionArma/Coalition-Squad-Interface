@@ -33,7 +33,7 @@ class CSI_UIHelper
 	/**
 	* Convert the color team enum to a color
 	* @param colorEnum: The color enum to convert into a color
-	* @return color team color
+	* @return Color team color
 	*/
 	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum)
 	{	
@@ -55,8 +55,8 @@ class CSI_UIHelper
 	/**
 	* Get icon string so we can set the icon through LoadImageFromSet
 	* @param icon: Icon to find the string of
-	* @param isSimpleIcon: should we return the simple (non-circular) Icon
-	* @return icon string
+	* @param isSimpleIcon: Should we return the simple (non-circular) Icon
+	* @return Icon string
 	*/
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false)
 	{
@@ -77,19 +77,19 @@ class CSI_UIHelper
 	//------------------------------------------------------------------------------------------------
 	/**
 	* Get players name, with a check if we need to add a players rank
-	* @param playerId: The inputed player ID to pull the name of and rank of
-	* @return players name
+	* @param playerID: The inputed player ID to pull the name of and rank of
+	* @return Players name
 	*/
-	static string GetPlayersName(int playerId)
+	static string GetPlayersName(int playerID)
 	{
-		string name = GetGame().GetPlayerManager().GetPlayerName(playerId);
-		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerId);
+		string name = GetGame().GetPlayerManager().GetPlayerName(playerID);
+		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 		
 		if (!playerData || !CSI_SettingsManager.GetInstance().GetSettingBool(CSI_SettingsManager.RANK_VISIBLE))
 			return name;
 		
 		SCR_ECharacterRank rankEnum = playerData.GetRank();
-		SCR_Faction faction = SCR_Faction.Cast(SCR_FactionManager.SGetPlayerFaction(playerId));
+		SCR_Faction faction = SCR_Faction.Cast(SCR_FactionManager.SGetPlayerFaction(playerID));
 		
 		if (!faction)
 			return name;
@@ -103,6 +103,13 @@ class CSI_UIHelper
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Search the widget hierarchy beginning at 'root' and collect icon widgets that match a given identifier.
+	 * @param root: Root widget to start the search from.
+	 * @param widgetString: Substring/pattern used to identify matching icon widgets (matched against widget names/identifiers).
+	 * @param count: Maximum number of matches to collect; if non-positive, function will collect all matches.
+	 * @return: An array of Widget handles for the matching icon widgets (empty if none found or if root is null).
+	 */
 	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
 		array<Widget> icons = {};
@@ -125,9 +132,9 @@ class CSI_UIHelper
 	/**
 	* Check the inputed text widget and add a "..." to the end of their name if the name is longer than the text widget
 	* @param testWidget: widget to use to test a players name.
-	* @param maxLength: max length the name can bet.
-	* @param name: players name.
-	* @return players name with ellipsis at the end.
+	* @param maxLength: Max length the name can bet.
+	* @param name: Players name.
+	* @return Players name with ellipsis at the end.
 	*/
 	static string CheckEllipsis(TextWidget testWidget, float maxLength, string name)
 	{

@@ -41,9 +41,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates all local player values to their current state within the CSI system.
+	 */
 	protected void UpdateAllLocalPlayerValues()
 	{
-		int playerId = SCR_PlayerController.GetLocalPlayerId();
+		int playerID = SCR_PlayerController.GetLocalPlayerId();
 		
 		// Get local player entity.
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
@@ -58,7 +61,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 			return;
 		
 		// Get players current group.
-		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerId);
+		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		if (!playersGroup) 
 			return;
@@ -103,12 +106,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 		//------------------------------------------------------------------------------------------------
 		//	SL Icon
-		if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerId))
+		if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerID))
 			displayIcon = CSI_EIcon.SL;
 
 		//------------------------------------------------------------------------------------------------
 		//	TL Icon
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerId);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
 			displayIcon = CSI_EIcon.TL;
 		
@@ -218,7 +221,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocalyStoredSpecialtyIcon;
 	
-		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerId, playersGroup.IsPlayerLeader(playerId), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
+		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerID, playersGroup.IsPlayerLeader(playerID), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	
 	//------------------------------------------------------------------------------------------------

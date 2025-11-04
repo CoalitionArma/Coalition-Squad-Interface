@@ -32,23 +32,27 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	void IconUpdate(int playerId)
+	/**
+	 * Updates the icon state for a specific player
+	 * @param playerID The ID of the player to update the icon for
+	 */
+	void IconUpdate(int playerID)
 	{
-		if (m_iPlayerId != playerId)
+		if (m_iPlayerId != playerID)
 		{
-			m_iPlayerId = playerId;
+			m_iPlayerId = playerID;
 			
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 			
-			if (playerId <= 0)
+			if (playerID <= 0)
 			{
 				m_wRoot.SetVisible(false);
 				return;
 			};
 			
 			m_wRoot.SetVisible(true);
-			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerId);
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerID);
 			
 			if (!m_PlayerData)
 				return;
@@ -60,6 +64,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the rotation angle of the icon.
+	 * @param yaw The rotation angle in degrees
+	 */
 	void SetRotation(float yaw)
 	{
 		m_wArrow.SetRotation(yaw);
@@ -74,6 +82,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	};
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the visual data representation of the player's icon.
+	 */
 	protected void DataUpdate()
 	{	
 		if (!m_PlayerData)
@@ -85,6 +96,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the icon type for the widget.
+	 * @param icon The enum icon type to be set
+	 */
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
@@ -129,6 +144,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets up the arrow imagewidget within the icon.
+	 */
 	protected void SetArrowWidget()
 	{
 		// do settings check here

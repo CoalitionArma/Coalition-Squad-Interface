@@ -22,6 +22,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the compass HUD element state and position each frame
+	 */
 	void Update()
 	{		
 		int yawInt;

@@ -17,6 +17,9 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Update the stamina UI element each frame.
+	 */
 	void Update()
 	{
 		if (!m_SettingsManager.GetSettingBool(CSI_SettingsManager.STAMINA_VISIBLE))
@@ -57,6 +60,10 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the color and opacity of the samina bar widget.
+	 * @param stamina stamina value to set the bar to
+	 */
 	void OnStaminaChange(float stamina)
 	{
 		m_wStamBar.SetCurrent(stamina); 
