@@ -125,7 +125,7 @@ class CSI_PlayerDataManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Updates internal player data storage for the authority system
+	 * Updates player data arrays that then update the information on all clients.
 	 */
 	protected void DataUpdate()
 	{
@@ -152,7 +152,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Updates and synchronizes the manager's authoritative player data with the current runtime state.
+	 * Updates and synchronizes the manager's authoritative player data with the current local data.
 	 */
 	protected void PlayerDataUpdate()
 	{
