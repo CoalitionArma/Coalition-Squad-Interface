@@ -36,11 +36,27 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		
 		Rpc(RpcAsk_UpdatePlayerData, playerID, isSL, icon, rank);
 	}
+
+	//------------------------------------------------------------------------------------------------
+	/*!
+	 * Updates player data to clear any group-specific values
+	 * @param playerID: ID of player to clear
+	*/
+	void Owner_ClearGroupSpecificData(int playerID)
+	{
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		
+		// Check if player has any data
+		if(!playerData)
+			return;
+		
+		Rpc(RpcAsk_ClearGroupSpecificData, playerID);
+	}
 	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Update the specified player's team color on the authority.
-	 * @param playerID: Identifier of the player to update
+	 * @param playerID: ID of player to update
 	 * @param colorTeam: New color team to assign (CSI_EColorTeam)
 	 */
 	void Owner_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
@@ -57,7 +73,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates a player's icon override state on the authority.
-	 * @param playerID: The ID of the player to update
+	 * @param playerID: ID of player to update
 	 * @param overrideIcon: The new override icon to apply
 	 */
 	void Owner_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
@@ -121,6 +137,13 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	void RpcAsk_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{	
 		m_PlayerDataManager.UpdatePlayerData(playerID, isSL, icon, rank);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	void RpcAsk_ClearGroupSpecificData(int playerID)
+	{	
+		m_PlayerDataManager.ClearGroupSpecificData(playerID);
 	}
 	
 	//------------------------------------------------------------------------------------------------

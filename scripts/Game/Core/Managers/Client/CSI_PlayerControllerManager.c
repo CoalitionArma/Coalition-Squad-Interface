@@ -8,7 +8,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 	protected int m_iUpdate;
 	protected int m_iCurrentUpdateCycle = 12;
-	protected CSI_EIcon m_iLocalyStoredSpecialtyIcon;
+	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
+	protected int m_iLocallyStoredGroupID = -1;
 
 	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
@@ -63,8 +64,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 		// Get players current group.
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
-		if (!playersGroup) 
+		if (!playersGroup || m_iLocallyStoredGroupID != group.GetGroupID()) 
+			m_iLocallyStoredGroupID = group.GetGroupID();
+			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
 			return;
+		};
 		
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
@@ -215,11 +219,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 			}
 			
 			m_iCurrentUpdateCycle = 0;
-			m_iLocalyStoredSpecialtyIcon = displayIcon;
+			m_iLocallyStoredSpecialtyIcon = displayIcon;
 		}
 		
 		if (displayIcon == CSI_EIcon.MAN)
-			displayIcon = m_iLocalyStoredSpecialtyIcon;
+			displayIcon = m_iLocallyStoredSpecialtyIcon;
 	
 		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerID, playersGroup.IsPlayerLeader(playerID), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}

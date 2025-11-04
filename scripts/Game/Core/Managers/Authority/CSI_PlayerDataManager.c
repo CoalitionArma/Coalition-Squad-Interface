@@ -39,6 +39,28 @@ class CSI_PlayerDataManager : ScriptComponent
 		
 		DataUpdate();
 	}
+
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates player data to clear any group-specific values
+	 * @param playerID: ID of player to clear
+	 */
+	void ClearGroupSpecificData(int playerID)
+	{
+		if (playerID <= 0)
+			return;
+
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+
+		if (playerData)
+		{
+			playerData.SetColorTeam(CSI_EColorTeam.NONE);
+			playerData.SetOverrideIcon(CSI_EOverrideIcon.AUTO);
+			playerData.SetIsTeamLeader(false);
+		}
+
+		DataUpdate();
+	}
 	
 	//------------------------------------------------------------------------------------------------
 	/**
