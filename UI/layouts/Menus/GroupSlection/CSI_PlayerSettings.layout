@@ -1,0 +1,556 @@
+ScaleWidgetClass {
+ Name "PlayersSettings"
+ Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
+  Anchor 0.5 0.5 0.5 0.5
+  PositionX -142.5
+  OffsetLeft -142.5
+  PositionY -162.5
+  OffsetTop -162.5
+  SizeX 285
+  OffsetRight -142.5
+  SizeY 325
+  OffsetBottom -162.5
+ }
+ components {
+  CSI_PlayerSettings "{66C774471FBAC4C3}" {
+  }
+ }
+ {
+  FrameWidgetClass "{66C77442F6F8A5E9}" {
+   Name "SettingsFrame"
+   Slot AlignableSlot "{66C77442D83EADFC}" {
+   }
+   Color 1 1 1 0
+   {
+    HorizontalLayoutWidgetClass "{66C774414EE8E30E}" {
+     Name "SettingsLayout"
+     Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -142.5
+      OffsetLeft -142.5
+      PositionY -142.5
+      OffsetTop -142.5
+      SizeX 285
+      OffsetRight -142.5
+      SizeY 285
+      OffsetBottom -142.5
+     }
+     {
+      OverlayWidgetClass "{66C76B3671544CC3}" {
+       Name "SettingsOverlay"
+       Slot LayoutSlot "{66C77442F6F8A260}" {
+        HorizontalAlign 1
+        SizeMode Fill
+        FillWeight 0.35
+       }
+       {
+        ImageWidgetClass "{5EC651633FD7EAA1}" {
+         Name "Background"
+         Slot OverlayWidgetSlot "{66C774419BEC5B14}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+         }
+         Color 0.007 0.012 0.014 1
+         "Shadow Offset" 0.5 0.5
+        }
+        VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
+         Name "VerticalLayout"
+         Slot OverlayWidgetSlot "{66C774419BEC5B75}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+         }
+         {
+          ImageWidgetClass "{5EC77B609A838867}" {
+           Name "Icon"
+           Slot LayoutSlot "{66C774419BEC5B4C}" {
+            VerticalAlign 1
+            Padding 40 5 40 0
+            FillWeight 5.8
+           }
+           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+           Image "TL_ICON"
+           Size 64 128
+           "Shadow Offset" 0.5 0.5
+           "Shadow Size Increase" 1 1
+          }
+          TextWidgetClass "{5EC77AE9FA911A1F}" {
+           Name "PlayerName"
+           Slot LayoutSlot "{66C774419BEC5BAA}" {
+            Padding 5 0 5 0
+           }
+           Text "#CSI-Player_Settings_No_Player_Selected"
+           "Font Size" 16
+           "Min Font Size" 12
+           "Horizontal Alignment" Center
+           "Vertical Alignment" Center
+           FontProperties FontProperties "{60587BCBC751C206}" {
+            Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+            ForceFont 1
+            ShadowOffset 0.5 0.5
+           }
+          }
+          TextWidgetClass "{5ED010D861AD1015}" {
+           Name "Override Icon Text"
+           Slot LayoutSlot "{66C774419BEC5BE4}" {
+           }
+           Color 0.761 0.386 0.078 1
+           Text " "
+           "Font Size" 8
+           "Min Font Size" 8
+           FontProperties FontProperties "{60587BCB2098979A}" {
+            Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+            ShadowOffset 0.5 0.5
+           }
+          }
+          HorizontalLayoutWidgetClass "{66C76B376C9C6C53}" {
+           Name "IconOverrideHorizontalLayout"
+           Slot LayoutSlot "{66C774419BEC5BDC}" {
+            Padding 5 0 5 0
+            SizeMode Fill
+            FillWeight 0.2
+           }
+           {
+            XComboBoxWidgetClass "{5EC77B6095B7A4A8}" {
+             Name "IconOveride"
+             Slot LayoutSlot "{66C774419BEC5BCB}" {
+              SizeMode Fill
+             }
+             components {
+              SCR_ComboBoxComponent "{6093726C5F548801}" {
+              }
+              ButtonComponent "{60B40B7B41F8F1C5}" {
+               m_ColorButtonDefault 1 1 1 0.608
+               m_ColorButtonFocused 1 1 1 1
+               m_ColorButtonPressed 1 1 1 1
+               m_ColorButtonDisabled 1 1 1 0.608
+               m_ColorButtonHovered 1 1 1 1
+               m_ColorButtonHoveredFocused 1 1 1 1
+              }
+             }
+             FontProperties FontProperties "{5EC77B557AF5C054}" {
+             }
+             "Font Size" 18
+             items {
+              "Auto" "Medic" "Marksman" "Machine Gunner" "Anti-Tank" "Grenadier" "Demolitionist" "Engineer" "Man"
+             }
+            }
+            OverlayWidgetClass "{66C76B36999083EB}" {
+             Name "ConfirmOverrideOverlay"
+             Slot LayoutSlot "{66C76B3699908031}" {
+              SizeMode Fill
+              FillWeight 0.2
+             }
+             {
+              ImageWidgetClass "{5EC77AD0E60C948B}" {
+               Name "ConfirmOverrideImage"
+               Slot OverlayWidgetSlot "{66C774419BEC585B}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+               }
+               Color 1 1 1 0.263
+               Texture "{2770916767B4AB81}UI/Imagesets/buttons/pc_buttons.imageset"
+               Image "Enter"
+               Size 42 42
+              }
+              ButtonWidgetClass "{5EC77AD01504BED9}" {
+               Name "ConfirmOverrideButton"
+               Slot OverlayWidgetSlot "{66C774419BEC58A2}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+               }
+               Color 1 1 1 0.098
+               components {
+                SCR_ModularButtonComponent "{6093726F48F28B6C}" {
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+          TextWidgetClass "{5ED010D84219987D}" {
+           Name "Color Team Text"
+           Slot LayoutSlot "{66C774419BEC5899}" {
+           }
+           Color 0.761 0.386 0.078 1
+           Text " "
+           "Font Size" 8
+           "Min Font Size" 8
+           FontProperties FontProperties "{60587BCB22D7A1C8}" {
+            Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+            ShadowOffset 0.5 0.5
+           }
+          }
+          HorizontalLayoutWidgetClass "{66C76B37CB9EA833}" {
+           Name "CTHorizontalLayout"
+           Slot LayoutSlot "{66C774419BEC58F5}" {
+            Padding 5 0 5 5
+            SizeMode Fill
+           }
+           {
+            OverlayWidgetClass "{66C76B37B91FA633}" {
+             Name "NoneOverlay"
+             Slot LayoutSlot "{66C774419BEC58FC}" {
+              SizeMode Fill
+              FillWeight 0.75
+             }
+             {
+              WindowWidgetClass "{5EC77B62D6F82516}" {
+               Name "NoneWindow"
+               Slot OverlayWidgetSlot "{66C774419BEC58EB}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+               }
+              }
+              ImageWidgetClass "{5EC77B6C5671FF7D}" {
+               Name "NoneImage"
+               Slot OverlayWidgetSlot "{66C774419BEC58D1}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+               }
+               Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+               Image "disable"
+               Size 64 64
+               "Shadow Offset" 0.5 0.5
+              }
+              ButtonWidgetClass "{5EC77B782C0E76A0}" {
+               Name "None"
+               Slot OverlayWidgetSlot "{66C774419BEC58C4}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+               }
+               Color 0.159 0.159 0.159 0.119
+               components {
+                SCR_ModularButtonComponent "{6093726F6CB0CD80}" {
+                }
+               }
+              }
+             }
+            }
+            GridLayoutWidgetClass "{66C76B35FF8CBD5F}" {
+             Name "CTGridLayout"
+             Slot LayoutSlot "{66C774419BEC593D}" {
+              SizeMode Fill
+             }
+             RowFill {
+              0.5 0.5
+             }
+             ColumnFill {
+              0.5 0.5
+             }
+             {
+              OverlayWidgetClass "{66C76B3516FAB680}" {
+               Name "RedOverlay"
+               Slot GridWidgetSlot "{66C76B3516FAB6D9}" {
+               }
+               {
+                WindowWidgetClass "{5EC77B62A515EEB7}" {
+                 Name "RedWindow"
+                 Slot OverlayWidgetSlot "{66C774419BEC5912}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                }
+                ButtonWidgetClass "{5EC77B78C18FDC3E}" {
+                 Name "Red"
+                 Slot OverlayWidgetSlot "{66C774419BEC5918}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                 Color 0.791 0 0 0.256
+                 components {
+                  SCR_ModularButtonComponent "{6093726F7CD4B297}" {
+                  }
+                 }
+                }
+               }
+              }
+              OverlayWidgetClass "{66C76B351023D875}" {
+               Name "BlueOverlay"
+               Slot GridWidgetSlot "{66C76B351023D858}" {
+                Column 1
+               }
+               {
+                WindowWidgetClass "{5EC77B62D2E03CB9}" {
+                 Name "BlueWindow"
+                 Slot OverlayWidgetSlot "{66C774419BEC5978}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                }
+                ButtonWidgetClass "{5EC77B78E8A01D0A}" {
+                 Name "Blue"
+                 Slot OverlayWidgetSlot "{66C774419BEC5961}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                 Color 0 0.107 1 0.256
+                 components {
+                  SCR_ModularButtonComponent "{6093726F7FB66145}" {
+                  }
+                 }
+                }
+               }
+              }
+              OverlayWidgetClass "{66C76B35111BB24F}" {
+               Name "YellowOverlay"
+               Slot GridWidgetSlot "{66C76B35111BB2AB}" {
+                Row 1
+               }
+               {
+                WindowWidgetClass "{5EC77B62AC637243}" {
+                 Name "YellowWindow"
+                 Slot OverlayWidgetSlot "{66C774419BEC5959}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                }
+                ButtonWidgetClass "{5EC77B78016F0527}" {
+                 Name "Yellow"
+                 Slot OverlayWidgetSlot "{66C774419BEC5942}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                 Color 0.791 0.791 0 0.256
+                 components {
+                  SCR_ModularButtonComponent "{6093726F7BC3D9C6}" {
+                  }
+                 }
+                }
+               }
+              }
+              OverlayWidgetClass "{66C76B3511FB3AD2}" {
+               Name "GreenOverlay"
+               Slot GridWidgetSlot "{66C76B3511FB3B32}" {
+                Row 1
+                Column 1
+               }
+               {
+                WindowWidgetClass "{5EC77B62AA76B302}" {
+                 Name "GreenWindow"
+                 Slot OverlayWidgetSlot "{66C774419BEC59BC}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                }
+                ButtonWidgetClass "{5EC77B780C772A19}" {
+                 Name "Green"
+                 Slot OverlayWidgetSlot "{66C774419BEC59A5}" {
+                  HorizontalAlign 3
+                  VerticalAlign 3
+                 }
+                 Color 0 0.791 0 0.256
+                 components {
+                  SCR_ModularButtonComponent "{6093726F67AB9945}" {
+                  }
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+      OverlayWidgetClass "{66C77441724892C6}" {
+       Name "AdvancedSettingsOverlay"
+       Slot LayoutSlot "{66C774417248932E}" {
+        HorizontalAlign 2
+        Padding 2.5 0 0 110
+        SizeMode Fill
+        FillWeight 0.35
+       }
+       "Is Visible" 0
+       {
+        ImageWidgetClass "{605035926F91EF39}" {
+         Name "AdvancedBackground"
+         Slot OverlayWidgetSlot "{66C77442F6F8BE09}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+          Padding 2.5 0 0 0
+         }
+         Color 0.007 0.012 0.014 1
+         "Shadow Offset" 0.5 0.5
+        }
+        VerticalLayoutWidgetClass "{66C7744179487624}" {
+         Name "AdvancedVerticalLayout"
+         Slot OverlayWidgetSlot "{66C7744179487609}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+          Padding 2.5 0 0 0
+         }
+         {
+          OverlayWidgetClass "{66C7744083D5D331}" {
+           Name "PrettyOverlay"
+           Slot LayoutSlot "{66C77442F6F8BE6C}" {
+            Padding 2.5 0 2.5 0
+           }
+           {
+            HorizontalLayoutWidgetClass "{66C774400E5F7722}" {
+             Name "HorizontalLayout"
+             Slot OverlayWidgetSlot "{66C774400E5F7700}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             {
+              ImageWidgetClass "{60503593856FF961}" {
+               Name "Pretty"
+               Slot LayoutSlot "{66C77442F6F8BE40}" {
+               }
+               Color 0.761 0.386 0.078 1
+               Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+               Image "settings"
+               Size 16 16
+               "Shadow Offset" 0.5 0.5
+              }
+              TextWidgetClass "{60503593856FF8D2}" {
+               Name "PrettyText"
+               Slot LayoutSlot "{66C77442F6F8BEBC}" {
+                SizeMode Fill
+               }
+               Text "Advanced Settings"
+               "Font Size" 8
+               "Min Font Size" 8
+               "Vertical Alignment" Center
+               FontProperties FontProperties "{5EC77B6CA687BBE6}" {
+                Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+                ShadowOffset 0.5 0.5
+               }
+              }
+             }
+            }
+           }
+          }
+          OverlayWidgetClass "{66C774408334CAF0}" {
+           Name "PromoteToSLOverlay"
+           Slot LayoutSlot "{66C77442F6F8BE9D}" {
+            Padding 2.5 0 2.5 0
+           }
+           {
+            ImageWidgetClass "{6050358F4FF96275}" {
+             Name "PromoteToSLIcon"
+             Slot OverlayWidgetSlot "{66C77442F6F8BE82}" {
+             }
+             Texture "{5C682305CA5C9594}UI/Textures/Menus/Buttons/PromoteToSLButton.edds"
+             Size 145 50
+             "Shadow Offset" 0.5 0.5
+            }
+            ButtonWidgetClass "{604F4D6FF9C3B934}" {
+             Name "PromoteToSL"
+             Slot OverlayWidgetSlot "{66C77442F6F8BEFA}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             "Is Enabled" 0
+             IsPixelPerfect 0
+             Opacity 0
+             Clipping False
+             Color 0.165 0.672 0.202 0.063
+             components {
+              SCR_ModularButtonComponent "{6093726F6FBD3379}" {
+              }
+             }
+            }
+           }
+          }
+          TextWidgetClass "{604F4D6D24F350ED}" {
+           Name "PromoteToTLText"
+           Slot LayoutSlot "{66C77442F6F8BEC5}" {
+           }
+           Color 0.761 0.386 0.078 1
+           Text " "
+           "Font Size" 2
+           "Min Font Size" 2
+           "Vertical Alignment" Center
+           FontProperties FontProperties "{60587BC89FCF66A9}" {
+            ShadowOffset 0.5 0.5
+           }
+          }
+          OverlayWidgetClass "{66C774408216A44B}" {
+           Name "PromoteToTLOverlay"
+           Slot LayoutSlot "{66C77442F6F8BF3F}" {
+            Padding 2.5 0 2.5 0
+           }
+           {
+            ImageWidgetClass "{6050358FED8298C4}" {
+             Name "PromoteToTLIcon"
+             Slot OverlayWidgetSlot "{66C77442F6F8BF23}" {
+             }
+             Texture "{E2B4282BA87BDD67}UI/Textures/Menus/Buttons/PromoteToTLButton.edds"
+             Size 145 50
+             "Shadow Offset" 0.5 0.5
+            }
+            ButtonWidgetClass "{604F4D6F182A3D59}" {
+             Name "PromoteToTL"
+             Slot OverlayWidgetSlot "{66C77442F6F8BF1F}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             "Is Enabled" 0
+             IsPixelPerfect 0
+             Opacity 0
+             Clipping False
+             Color 0.068 0.231 0.371 0.063
+             components {
+              SCR_ModularButtonComponent "{6093726F6AA3820F}" {
+              }
+             }
+            }
+           }
+          }
+          TextWidgetClass "{604F4D6C620AD487}" {
+           Name "KickText"
+           Slot LayoutSlot "{66C77442F6F8BF08}" {
+           }
+           Color 0.761 0.386 0.078 1
+           Text " "
+           "Font Size" 2
+           "Min Font Size" 2
+           "Vertical Alignment" Center
+           FontProperties FontProperties "{60587BC887F2FD1C}" {
+            ShadowOffset 0.5 0.5
+           }
+          }
+          OverlayWidgetClass "{66C77440818BDC1F}" {
+           Name "KickOverlay"
+           Slot LayoutSlot "{66C77442F6F8BF64}" {
+            Padding 2.5 0 2.5 0
+           }
+           {
+            ImageWidgetClass "{605035931933B04A}" {
+             Name "KickIcon"
+             Slot OverlayWidgetSlot "{66C77442F6F8BF69}" {
+             }
+             Texture "{C6E80921A68B03AF}UI/Textures/Menus/Buttons/Kick.edds"
+             Size 145 50
+             "Shadow Offset" 0.5 0.5
+            }
+            ButtonWidgetClass "{605035931933B04B}" {
+             Name "Kick"
+             Slot OverlayWidgetSlot "{66C77442F6F8BF4F}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             "Is Enabled" 0
+             Opacity 0
+             Color 0.68 0.005 0.006 0.063
+             components {
+              SCR_ModularButtonComponent "{6093726E95C17FCB}" {
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

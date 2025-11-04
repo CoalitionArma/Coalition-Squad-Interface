@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{91BBF46EC5B04402}UI/layouts/Menus/GroupSlection/PlayerTile.layout"
+ Name "{DABC068D0A568195}UI/layouts/Menus/GroupSlection/GroupMenuPlayerlist.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -12,6 +12,8 @@ MetaFileClass {
   LayoutResourceClass PS5 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
+  }
+  LayoutResourceClass Xbox : PC {
   }
  }
 }

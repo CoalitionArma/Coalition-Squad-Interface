@@ -1,19 +1,3 @@
-modded class GroupSettingsDialogUI : DialogUI
-{
-	override void OnMenuOpen()
-	{
-		super.OnMenuOpen();
-		SCR_InputButtonComponent colorTeams = SCR_InputButtonComponent.Cast(GetRootWidget().FindAnyWidget("ColorTeams").FindHandler(SCR_InputButtonComponent));
-		colorTeams.m_OnActivated.Insert(CTButtonClicked);
-	}
-
-	protected void CTButtonClicked()
-	{
-		GetGame().GetMenuManager().CloseMenu(this);
-		//GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSelectionDialog);
-	}
-}
-
 class CSI_PlayerSelectionDialog : ChimeraMenuBase
 {
 	protected SCR_AIGroup m_PlayersGroup;

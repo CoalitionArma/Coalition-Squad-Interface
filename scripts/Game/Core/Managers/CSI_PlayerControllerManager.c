@@ -95,6 +95,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 				};
 			};
 		};
+		
+		//------------------------------------------------------------------------------------------------
+		//	OFFICER Icon
+		if (displayIcon == CSI_EIcon.MAN && SCR_FactionCommanderPlayerComponent.IsLocalPlayerCommander())
+			displayIcon = CSI_EIcon.OFFICER;
 
 		//------------------------------------------------------------------------------------------------
 		//	SL Icon

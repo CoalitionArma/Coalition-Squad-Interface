@@ -1,63 +1,41 @@
-class CSI_PlayerSettingsDialog : ChimeraMenuBase
+class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
-	protected SCR_AIGroup m_PlayersGroup;
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManagerClass m_RplToAuthorityManagerClass;
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
-
-	protected Widget m_wRoot;
-	protected XComboBoxWidget m_wIconOveride;
-	protected ImageWidget m_wIcon;
-	protected TextWidget m_wPlayerName;
-
-	protected int m_iSelectedPlayerID;
-	protected int m_iGroupID;
-	protected string m_sStoredSpecialtyIcon;
-
+	
 	/*
 	//------------------------------------------------------------------------------------------------
-	override void OnMenuOpen()
+	override void HandlerAttached(Widget w)
 	{
-		super.OnMenuOpen();
-
-		m_wRoot = GetRootWidget();
-
-		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
-		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
-		cancel.m_OnClicked.Insert(OnMenuBack);
+		super.HandlerAttached(w);
 
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManagerClass = CSI_RplToAuthorityManagerClass.GetInstance();
 		
-		if (!m_PlayerDataManager || !m_SettingsManager || !m_RplToAuthorityManagerClass) 
-			return;
+		m_wIconOveride = XComboBoxWidget.Cast(w.FindAnyWidget("IconOveride"));
+		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
+		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
+		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent red = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Red").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent blue = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Blue").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent yellow = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Yellow").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent green = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Green").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent none = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("None").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent promoteToSLComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("PromoteToSL").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent promoteToTLComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("PromoteToTL").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent kickComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Kick").FindHandler(SCR_ModularButtonComponent));
 
-		m_wIconOveride = XComboBoxWidget.Cast(m_wRoot.FindAnyWidget("IconOveride"));
-		m_wPlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName"));
-		m_wIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("Icon"));
-
-		GetGame().GetCallqueue().CallLater(UpdatePlayerIcon, 215, true);
-		GetGame().GetCallqueue().CallLater(UpdateIconOverride, 145);
-
-		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent red = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Red").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent blue = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Blue").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent yellow = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Yellow").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent green = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Green").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent none = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("None").FindHandler(SCR_ModularButtonComponent));
-
+		promoteToSLComp.m_OnClicked.Insert(OnPromoteToSLClicked);
+		promoteToTLComp.m_OnClicked.Insert(OnPromoteToTLClicked);
+		kickComp.m_OnClicked.Insert(OnKickClicked);
 		confirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
 		red.m_OnClicked.Insert(OnColorTeamClicked);
 		blue.m_OnClicked.Insert(OnColorTeamClicked);
 		yellow.m_OnClicked.Insert(OnColorTeamClicked);
 		green.m_OnClicked.Insert(OnColorTeamClicked);
 		none.m_OnClicked.Insert(OnColorTeamClicked);
-
-		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		SCR_AIGroup openingPlayersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		if (openingPlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId())) ShowAdvSettings();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -135,56 +113,6 @@ class CSI_PlayerSettingsDialog : ChimeraMenuBase
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		GetGame().GetMenuManager().CloseMenu(this);
 	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void ShowAdvSettings()
-	{
-		for (int b = 0; b <= 12; b++)
-		{
-			ImageWidget Background = ImageWidget.Cast(m_wRoot.FindAnyWidget(string.Format("Background%1", b)));
-			Background.SetOpacity(1);
-		};
-
-		TextWidget promoteToSLText = TextWidget.Cast(m_wRoot.FindAnyWidget("PromoteToSLText"));
-		TextWidget promoteToTLText = TextWidget.Cast(m_wRoot.FindAnyWidget("PromoteToTLText"));
-		TextWidget kickText = TextWidget.Cast(m_wRoot.FindAnyWidget("KickText"));
-
-		promoteToSLText.SetOpacity(1);
-		promoteToTLText.SetOpacity(1);
-		kickText.SetOpacity(1);
-
-		TextWidget prettyText0 = TextWidget.Cast(m_wRoot.FindAnyWidget("PrettyText0"));
-		ImageWidget pretty0 = ImageWidget.Cast(m_wRoot.FindAnyWidget("Pretty0"));
-
-		prettyText0.SetOpacity(1);
-		pretty0.SetOpacity(1);
-
-		ImageWidget promoteToSLIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PromoteToSLIcon"));
-		ImageWidget promoteToTLIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PromoteToTLIcon"));
-		ImageWidget kickIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("KickIcon"));
-
-		promoteToSLIcon.SetOpacity(1);
-		promoteToTLIcon.SetOpacity(1);
-		kickIcon.SetOpacity(1);
-
-		ButtonWidget promoteToSL = ButtonWidget.Cast(m_wRoot.FindAnyWidget("PromoteToSL"));
-		ButtonWidget promoteToTL = ButtonWidget.Cast(m_wRoot.FindAnyWidget("PromoteToTL"));
-		ButtonWidget kick = ButtonWidget.Cast(m_wRoot.FindAnyWidget("Kick"));
-		promoteToSL.SetEnabled(true);
-		promoteToTL.SetEnabled(true);
-		kick.SetEnabled(true);
-		promoteToSL.SetOpacity(1);
-		promoteToTL.SetOpacity(1);
-		kick.SetOpacity(1);
-
-		SCR_ModularButtonComponent promoteToSLComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToSL").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent promoteToTLComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("PromoteToTL").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent kickComp = SCR_ModularButtonComponent.Cast(m_wRoot.FindAnyWidget("Kick").FindHandler(SCR_ModularButtonComponent));
-
-		promoteToSLComp.m_OnClicked.Insert(OnPromoteToSLClicked);
-		promoteToTLComp.m_OnClicked.Insert(OnPromoteToTLClicked);
-		kickComp.m_OnClicked.Insert(OnKickClicked);
-	};
 
 	//------------------------------------------------------------------------------------------------
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)

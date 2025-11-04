@@ -138,6 +138,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
 		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerId);
 
+		if (!playersGroup.IsPlayerLeader(playerId))
+			return;
+		
 		if (maxMembers < playersGroup.GetPlayerCount()) 
 			maxMembers = playersGroup.GetPlayerCount();
 

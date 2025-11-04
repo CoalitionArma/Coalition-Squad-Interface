@@ -1,0 +1,28 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ScaleWidgetClass "{66C815647021A121}" : "{CDAE569CD2A70854}UI/layouts/Menus/GroupSlection/CSI_PlayerSettings.layout" {
+   Name "PlayersSettings"
+   Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
+    Anchor 0 0 1 1
+    PositionX 0
+    OffsetLeft 0
+    PositionY 0
+    OffsetTop 0
+    SizeX 0
+    OffsetRight 0
+    SizeY 0
+    OffsetBottom 0
+   }
+   {
+    FrameWidgetClass "{66C77442F6F8A5E9}" {
+     Prefab "{66C77442F6F8A5E9}"
+     Slot AlignableSlot "{66C77442D83EADFC}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+    }
+   }
+  }
+ }
+}
