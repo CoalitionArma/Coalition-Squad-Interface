@@ -86,6 +86,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (compartment)
 		{
 			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));
+			VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleFixedWingSimulation));
 			
 			// Check players current compartment type, then assign his Icon.
 			ECompartmentType compartmentType = compartment.GetType();
