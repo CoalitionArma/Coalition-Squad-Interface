@@ -31,13 +31,13 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
         float yaw = m_HUDManager.GetLocalYaw();
 		yawInt = -yaw;
 		
-		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.COMPASS_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE))
 		{
-			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_SettingsManager.COMPASS_THEME);
+			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
 			string compassImage;
 			switch (compassTheme)
 			{
-				case CSI_ECompassTheme.REGULAR : compassImage = CSI_UIHelper.STANDARD_COMPASS_RESOURCE; break;
+				default : compassImage = CSI_UIHelper.STANDARD_COMPASS_RESOURCE; break;
 			};
 			
 			if (m_sStoredCompass != compassImage)
@@ -56,7 +56,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		} else 
 			m_wCompass.SetVisible(false);
 
-		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.BEARING_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
 		{
 			string bearingAdd = "";
 			

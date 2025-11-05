@@ -1,6 +1,5 @@
 class CSI_Player : SCR_ScriptedWidgetComponent
 {
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_PlayerData m_PlayerData;
 	
@@ -15,7 +14,6 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
 		m_wPlayerName = RichTextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = w.FindAnyWidget("Icon");

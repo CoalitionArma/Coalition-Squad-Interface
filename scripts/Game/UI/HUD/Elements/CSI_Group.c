@@ -1,8 +1,6 @@
 class CSI_Group : SCR_ScriptedWidgetComponent
 {
 	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_PlayerControllerManager m_ClientComponent;
-	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_HUDManager m_HUDManager;
 	
 	protected ref array<int> m_aStoredGroupPlayerIDs;
@@ -13,8 +11,6 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_ClientComponent = CSI_PlayerControllerManager.GetInstance();
-		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDManager = CSI_HUDManager.GetInstance();
 		
@@ -35,7 +31,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		int groupCount = m_HUDManager.GetLocalGroupCount();
 		m_aStoredGroupPlayerIDs = groupArray;
 
-		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_VISIBLE))
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
 			foreach (int i, int playerID : groupArray) 
 				UpdatePlayerWidget(i, playerID);
 		else

@@ -14,7 +14,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
-		if (!m_SettingsManager.GetSettingBool(CSI_SettingsManager.NAMETAG_LOS_VISIBLE))
+		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
 			return true;
 		
 		TraceParam param = new TraceParam;

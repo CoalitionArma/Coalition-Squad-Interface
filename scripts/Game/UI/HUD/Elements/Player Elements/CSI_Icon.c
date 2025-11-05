@@ -103,7 +103,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
-		if (m_SettingsManager.GetSettingInt(CSI_SettingsManager.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+		if (m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
 		
 		ImageWidget iconToUse;
@@ -150,7 +150,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_SettingsManager.ARROW_THEME);
+		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		

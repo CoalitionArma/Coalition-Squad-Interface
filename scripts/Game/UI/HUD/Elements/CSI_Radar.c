@@ -35,7 +35,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
         float localYaw = m_HUDManager.GetLocalYaw();
 		vector localOrigin = localCharacter.GetOrigin();
 
-		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_SettingsManager.RADAR_VISIBLE))
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
 		{
 			foreach (int i, int playerID : m_HUDManager.GetLocalGroupPlayerIds())
 			{
@@ -117,7 +117,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerID);
 			
-			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_SettingsManager.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

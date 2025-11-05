@@ -2,66 +2,14 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 
 class CSI_SettingsManager : ScriptComponent
 {	
-	const static string COMPASS_VISIBLE = "m_bCompassVisible";
-	const static string BEARING_VISIBLE = "m_bBearingVisible";
-	const static string RADAR_VISIBLE = "m_bRadarVisible";
-	const static string ONLY_RADAR_ICON_ARROWS_ROTATE = "m_bOnlyRadarIconArrowsRotate";
-	const static string GROUP_VISIBLE = "m_bGroupVisible";
-	const static string STAMINA_VISIBLE = "m_bStaminaVisible";
-	const static string NAMETAG_VISIBLE = "m_bNametagVisible";
-	const static string RANK_VISIBLE = "m_bRankVisible";
-	const static string ROLE_IN_NAMETAG_VISIBLE = "m_bRoleIconInNametagVisible";
-	const static string GROUP_IN_NAMETAG_VISIBLE = "m_bGroupInNametagVisible";
-	const static string NAMETAG_LOS_VISIBLE = "m_bNametagLOSVisible";
-	const static string AUTO_HIDE_HUD = "m_bAutoHideHUD";
-	const static string ICON_THEME = "m_iIconTheme";
-	const static string ICON_TYPE = "m_iIconType";
-	const static string ARROW_THEME = "m_iArrowTheme";
-	const static string COMPASS_THEME = "m_iCompassTheme";
-	const static string NAMETAG_POSITION = "m_iNametagPosition";
-	const static string NAMETAG_ROLE_ICON_POSITION = "m_iNametagRoleIconPosition";
-	const static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
-	const static string NAMETAG_RANGE = "m_iNametagRange";
-	const static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
-	const static string RADAR_ICON_SIZE = "m_iRadarIconSize";
-	
-	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
 	const static int SERVER_OVERRIDE_OFFSET = 1;
 	const static int SERVER_OVERRIDE_FALSE = -1;
 	const static int SERVER_OVERRIDE_TRUE = -2;
-	
+
 	protected ref ScriptInvoker m_OnSettingsUpdate;
 	protected UserSettings m_UserSettigs;
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	
-    static ref TStringArray m_aSettingsArray = {
-			//BOOLEAN SETTINGS
-			COMPASS_VISIBLE,
-			BEARING_VISIBLE,
-			RADAR_VISIBLE,
-			ONLY_RADAR_ICON_ARROWS_ROTATE,
-			GROUP_VISIBLE,
-			STAMINA_VISIBLE,
-			NAMETAG_VISIBLE,
-			RANK_VISIBLE,
-			ROLE_IN_NAMETAG_VISIBLE,
-			GROUP_IN_NAMETAG_VISIBLE,
-			NAMETAG_LOS_VISIBLE,
-			AUTO_HIDE_HUD,
-		
-			//INTIGER SETTINGS
-			ICON_THEME,
-			ICON_TYPE,
-			ARROW_THEME,
-			COMPASS_THEME,
-			NAMETAG_POSITION,
-			NAMETAG_ROLE_ICON_POSITION,
-			NAMETAG_POSITION_OFFSET,
-			NAMETAG_RANGE,
-			NAMETAG_MAGNIFICATION_MULTIPLICATION,
-			RADAR_ICON_SIZE
-		};
 	
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aSettingsAuthorityValues = {};
@@ -89,7 +37,7 @@ class CSI_SettingsManager : ScriptComponent
 	 */
 	bool GetSettingBool(string setting)
 	{
-		int index = m_aSettingsArray.Find(setting);
+		int index = CSI_GameSettings.m_aSettingsArray.Find(setting);
 		if (index != -1 && index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
 			return GetSettingInt(setting);
 		
@@ -110,7 +58,7 @@ class CSI_SettingsManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	static TStringArray GetSettingsArray() 
 	{
-		return m_aSettingsArray;
+		return CSI_GameSettings.m_aSettingsArray;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -137,7 +85,7 @@ class CSI_SettingsManager : ScriptComponent
 		if (RplSession.Mode() != RplMode.Dedicated) 
 			return;
 		
-		int index = m_aSettingsArray.Find(setting);
+		int index = CSI_GameSettings.m_aSettingsArray.Find(setting);
 		if (index != -1)
 		{
 			if(serverOverrideEnabled)
@@ -169,7 +117,7 @@ class CSI_SettingsManager : ScriptComponent
 	{
 		m_aSettingsAuthorityValues.Clear();
 		
-		foreach (string setting : m_aSettingsArray)
+		foreach (string setting : CSI_GameSettings.m_aSettingsArray)
 		{
 			int settingValue;
 			m_UserSettigs.Get(setting, settingValue); 
@@ -190,7 +138,7 @@ class CSI_SettingsManager : ScriptComponent
 	 */
 	protected void SettingsUpdate()
 	{
-		foreach (int i, string setting : m_aSettingsArray)
+		foreach (int i, string setting : CSI_GameSettings.m_aSettingsArray)
 		{
 			int settingValue;
 			bool IsBool = i <= INDEX_WHERE_BOOL_SETTINGS_STOP;

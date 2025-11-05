@@ -69,7 +69,7 @@ modded class SCR_NameTagData : Managed
 		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
 		
 		vector nametagOffsetVector = "0 0 0";
-		int nametagOffset = m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_POSITION_OFFSET);
+		int nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
 		
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
@@ -95,7 +95,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager.GetSettingBool(CSI_SettingsManager.GROUP_IN_NAMETAG_VISIBLE)) 
+		if (!group || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -117,7 +117,7 @@ modded class SCR_NameTagData : Managed
 		if (!m_SettingsManager) 
 			return;
 
-		ENameTagPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_SettingsManager.NAMETAG_POSITION);
+		ENameTagPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
 
 		m_eAttachedTo = nametagPos;
 		m_eAttachedToLast = nametagPos;

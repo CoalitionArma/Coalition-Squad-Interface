@@ -1,6 +1,5 @@
 class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 
@@ -15,7 +14,6 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		

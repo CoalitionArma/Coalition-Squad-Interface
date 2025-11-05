@@ -22,7 +22,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	 */
 	void Update()
 	{
-		if (!m_SettingsManager.GetSettingBool(CSI_SettingsManager.STAMINA_VISIBLE))
+		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
 		{
 			HideBar(0);
 			return;

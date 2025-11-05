@@ -2,10 +2,20 @@
 //! Base nametag element for text
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
-{			
+{		
+	protected CSI_HUDManager m_HUDManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
+
+
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{	
+		if (!m_HUDManager || !m_PlayerDataManager)
+		{
+			m_HUDManager = CSI_HUDManager.GetInstance();
+			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		};
+
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!tWidget)
 			return;
@@ -30,8 +40,9 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			if (data.m_iPlayerID > 0)
 			{
 				Color ct;
-				CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
-				if (playerData)
+				CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(data.m_iPlayerID);
+				array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
+				if (playerData && groupArray.Contains(m_iPlayerID))
 					ct = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
 				
 				if (ct && !ct.IsZero()) 
@@ -46,7 +57,6 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		};
 		
 		data.UpdateAttatchedTo();
-		
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 }
