@@ -22,7 +22,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
 
-		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("ConfirmIOButton").FindHandler(SCR_ModularButtonComponent));
+		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("ConfirmOverrideButton").FindHandler(SCR_ModularButtonComponent));
 		SCR_ModularButtonComponent red = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Red").FindHandler(SCR_ModularButtonComponent));
 		SCR_ModularButtonComponent blue = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Blue").FindHandler(SCR_ModularButtonComponent));
 		SCR_ModularButtonComponent yellow = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Yellow").FindHandler(SCR_ModularButtonComponent));
@@ -98,13 +98,13 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		if (iconToOverride > 0)
 			iconToOverride = iconToOverride + 3;
 		
-		m_RplToAuthorityManagerClass.Owner_UpdatePlayerOverrideIcon(m_iSelectedPlayerID, iconToOverride);
+		m_RplToAuthorityManager.Owner_UpdatePlayerOverrideIcon(m_iPlayerID, iconToOverride);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void OnPromoteToSLClicked()
 	{
-		if (playerID <= 0)
+		if (m_iPlayerID <= 0)
 			return;
 
 		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
@@ -117,7 +117,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		if (m_iPlayerID <= 0)
 			return;
 
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 		m_RplToAuthorityManager.Owner_UpdatePlayerTeamLeader(m_iPlayerID, !playerData.GetIsTeamLeader());
 	};
 

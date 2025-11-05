@@ -1,4 +1,4 @@
-class CSI_SelfPlayerSettings : ChimeraMenuBase
+class CSI_PlayerSettingsMenu : ChimeraMenuBase
 {
     protected Widget m_wRoot;
 
@@ -10,7 +10,7 @@ class CSI_SelfPlayerSettings : ChimeraMenuBase
 		m_wRoot = GetRootWidget();
 
         Widget settingsWidget = m_wRoot.FindAnyWidget("PlayerSettings");
-        CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(m_wStamina.FindHandler(CSI_PlayerSettings));
+        CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(settingsWidget.FindHandler(CSI_PlayerSettings));
 
         if (playerSettings)
             playerSettings.UpdatePlayerSettingsInformation(SCR_PlayerController.GetLocalPlayerId());
@@ -24,7 +24,6 @@ class CSI_SelfPlayerSettings : ChimeraMenuBase
 	protected void OnMenuBack()
 	{
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
-		GetGame().GetInputManager().RemoveActionListener("MenuSelectHold", EActionTrigger.DOWN, ApplySettings);
 		GetGame().GetMenuManager().CloseAllMenus();
-	}	
+	}
 }

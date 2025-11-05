@@ -63,9 +63,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 		
 		// Get players current group.
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
+		int playersGroupID = playersGroup.GetGroupID();
 
-		if (!playersGroup || m_iLocallyStoredGroupID != group.GetGroupID()) 
-			m_iLocallyStoredGroupID = group.GetGroupID();
+		if (!playersGroup || m_iLocallyStoredGroupID != playersGroupID) 
+		{
+			m_iLocallyStoredGroupID = playersGroupID;
 			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
 			return;
 		};
