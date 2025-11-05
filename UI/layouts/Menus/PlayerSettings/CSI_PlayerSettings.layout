@@ -6,10 +6,10 @@ ScaleWidgetClass {
   OffsetLeft -142.5
   PositionY -162.5
   OffsetTop -162.5
-  SizeX 285
-  OffsetRight -142.5
-  SizeY 325
-  OffsetBottom -162.5
+  SizeX 110
+  OffsetRight 32.5
+  SizeY 600
+  OffsetBottom -437.5
  }
  components {
   CSI_PlayerSettings "{66C774471FBAC4C3}" {
@@ -22,26 +22,26 @@ ScaleWidgetClass {
    }
    Color 1 1 1 0
    {
-    HorizontalLayoutWidgetClass "{66C774414EE8E30E}" {
+    VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
      Name "SettingsLayout"
      Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
       Anchor 0.5 0.5 0.5 0.5
-      PositionX -142.5
-      OffsetLeft -142.5
-      PositionY -142.5
-      OffsetTop -142.5
-      SizeX 285
-      OffsetRight -142.5
-      SizeY 285
-      OffsetBottom -142.5
+      PositionX -55
+      OffsetLeft -55
+      PositionY -300
+      OffsetTop -300
+      SizeX 110
+      OffsetRight -55
+      SizeY 600
+      OffsetBottom -300
      }
      {
       OverlayWidgetClass "{66C76B3671544CC3}" {
        Name "SettingsOverlay"
        Slot LayoutSlot "{66C77442F6F8A260}" {
         HorizontalAlign 1
+        VerticalAlign 0
         SizeMode Fill
-        FillWeight 0.35
        }
        {
         ImageWidgetClass "{5EC651633FD7EAA1}" {
@@ -63,13 +63,14 @@ ScaleWidgetClass {
           ImageWidgetClass "{5EC77B609A838867}" {
            Name "Icon"
            Slot LayoutSlot "{66C774419BEC5B4C}" {
+            HorizontalAlign 1
             VerticalAlign 1
             Padding 40 5 40 0
             FillWeight 5.8
            }
            Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
            Image "TL_ICON"
-           Size 64 128
+           Size 64 64
            "Shadow Offset" 0.5 0.5
            "Shadow Size Increase" 1 1
           }
@@ -79,8 +80,8 @@ ScaleWidgetClass {
             Padding 5 0 5 0
            }
            Text "#CSI-Player_Settings_No_Player_Selected"
-           "Font Size" 16
-           "Min Font Size" 12
+           "Font Size" 12
+           "Min Font Size" 8
            "Horizontal Alignment" Center
            "Vertical Alignment" Center
            FontProperties FontProperties "{60587BCBC751C206}" {
@@ -131,14 +132,14 @@ ScaleWidgetClass {
              }
              "Font Size" 18
              items {
-              "Auto" "Medic" "Marksman" "Machine Gunner" "Anti-Tank" "Grenadier" "Demolitionist" "Engineer" "Man"
+              "AUTO" "RTO" "ENG" "AT" "DEMO" "SNIPER" "GREN" "MG" "MEDIC"
              }
             }
             OverlayWidgetClass "{66C76B36999083EB}" {
              Name "ConfirmOverrideOverlay"
              Slot LayoutSlot "{66C76B3699908031}" {
               SizeMode Fill
-              FillWeight 0.2
+              FillWeight 0.35
              }
              {
               ImageWidgetClass "{5EC77AD0E60C948B}" {
@@ -181,8 +182,8 @@ ScaleWidgetClass {
             ShadowOffset 0.5 0.5
            }
           }
-          HorizontalLayoutWidgetClass "{66C76B37CB9EA833}" {
-           Name "CTHorizontalLayout"
+          VerticalLayoutWidgetClass "{66C76B37CB9EA833}" {
+           Name "CTVerticalLayout"
            Slot LayoutSlot "{66C774419BEC58F5}" {
             Padding 5 0 5 5
             SizeMode Fill
@@ -207,6 +208,7 @@ ScaleWidgetClass {
                Slot OverlayWidgetSlot "{66C774419BEC58D1}" {
                 HorizontalAlign 3
                 VerticalAlign 3
+                Padding 10 0 10 0
                }
                Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
                Image "disable"
@@ -358,19 +360,17 @@ ScaleWidgetClass {
       OverlayWidgetClass "{66C77441724892C6}" {
        Name "AdvancedSettingsOverlay"
        Slot LayoutSlot "{66C774417248932E}" {
-        HorizontalAlign 2
-        Padding 2.5 0 0 110
+        HorizontalAlign 1
+        VerticalAlign 0
+        Padding 0 5 0 0
         SizeMode Fill
-        FillWeight 0.35
        }
-       "Is Visible" 0
        {
         ImageWidgetClass "{605035926F91EF39}" {
          Name "AdvancedBackground"
          Slot OverlayWidgetSlot "{66C77442F6F8BE09}" {
           HorizontalAlign 3
           VerticalAlign 3
-          Padding 2.5 0 0 0
          }
          Color 0.007 0.012 0.014 1
          "Shadow Offset" 0.5 0.5
@@ -380,7 +380,6 @@ ScaleWidgetClass {
          Slot OverlayWidgetSlot "{66C7744179487609}" {
           HorizontalAlign 3
           VerticalAlign 3
-          Padding 2.5 0 0 0
          }
          {
           OverlayWidgetClass "{66C7744083D5D331}" {

@@ -22,8 +22,18 @@ FrameWidgetClass {
       VerticalAlign 3
      }
      {
-      HorizontalLayoutWidgetClass "{66C774414EE8E30E}" {
+      VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
        Prefab "{66C774414EE8E30E}"
+       Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
+        PositionX -72.5
+        OffsetLeft -72.5
+        PositionY -174
+        OffsetTop -174
+        SizeX 145
+        OffsetRight -72.5
+        SizeY 350
+        OffsetBottom -176
+       }
        {
         OverlayWidgetClass "{66C76B3671544CC3}" {
          Prefab "{66C76B3671544CC3}"
@@ -33,44 +43,68 @@ FrameWidgetClass {
            Slot OverlayWidgetSlot "{66C774419BEC5B14}" {
            }
           }
+          VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
+           Prefab "{66C76B3609B8B145}"
+           {
+            OverlayWidgetClass "{66CABAE08B9A0EE6}" {
+             Name "CancelOverlay"
+             Slot LayoutSlot "{66CABAE08B9A0EC3}" {
+             }
+             "Z Order" 1
+             {
+              ButtonWidgetClass "{66CA2A7A9923EA78}" : "{0114A06AD44D49BD}UI/layouts/WidgetLibrary/Buttons/DialogButtonCancel.layout" {
+               Name "Cancel"
+               Slot OverlayWidgetSlot "{66CABAE38FFCD8C1}" {
+                HorizontalAlign 0
+               }
+               "Z Order" 2
+               components {
+                SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
+                 m_sLabel "Exit"
+                }
+               }
+              }
+             }
+            }
+            ImageWidgetClass "{5EC77B609A838867}" {
+             Prefab "{5EC77B609A838867}"
+             Slot LayoutSlot "{66C774419BEC5B4C}" {
+              HorizontalAlign 1
+             }
+            }
+            TextWidgetClass "{5ED010D861AD1015}" {
+             Prefab "{5ED010D861AD1015}"
+             "Font Size" 12
+             "Min Font Size" 12
+            }
+            TextWidgetClass "{5ED010D84219987D}" {
+             Prefab "{5ED010D84219987D}"
+             "Font Size" 12
+             "Min Font Size" 12
+            }
+            VerticalLayoutWidgetClass "{66C76B37CB9EA833}" {
+             Prefab "{66C76B37CB9EA833}"
+             {
+              OverlayWidgetClass "{66C76B37B91FA633}" {
+               Prefab "{66C76B37B91FA633}"
+               {
+                ImageWidgetClass "{5EC77B6C5671FF7D}" {
+                 Prefab "{5EC77B6C5671FF7D}"
+                 Slot OverlayWidgetSlot "{66C774419BEC58D1}" {
+                  Padding 25 0 25 0
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
          }
         }
-       }
-      }
-      ImageWidgetClass "{66CA2A7BC757F326}" {
-       Name "FooterBackground"
-       Slot FrameWidgetSlot "{66CA2A7BC757F30A}" {
-        Anchor 0.5 0.5 0.5 0.5
-        PositionX -115.729
-        OffsetLeft -115.729
-        PositionY 141.546
-        OffsetTop 141.546
-        SizeX 231.458
-        OffsetRight -115.729
-        SizeY 30.24
-        OffsetBottom -171.786
-       }
-       "Z Order" 1
-       Color 0.007 0.012 0.014 1
-       "Shadow Offset" 0.2 0.2
-      }
-      ButtonWidgetClass "{66CA2A7A9923EA78}" : "{0114A06AD44D49BD}UI/layouts/WidgetLibrary/Buttons/DialogButtonCancel.layout" {
-       Name "Cancel"
-       Slot FrameWidgetSlot "{66CA2A7A9923EAB7}" {
-        Anchor 0.5 0.5 0.5 0.5
-        PositionX -114.981
-        OffsetLeft -114.981
-        PositionY 141.266
-        OffsetTop 141.266
-        SizeX 74.811
-        OffsetRight 40.17
-        SizeY 29.081
-        OffsetBottom -170.347
-       }
-       "Z Order" 2
-       components {
-        SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
-         m_sLabel "Exit"
+        OverlayWidgetClass "{66C77441724892C6}" {
+         Prefab "{66C77441724892C6}"
+         "Is Visible" 0
         }
        }
       }

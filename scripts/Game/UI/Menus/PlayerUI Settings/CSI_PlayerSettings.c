@@ -8,6 +8,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	protected TextWidget m_wPlayerName;
 	protected ImageWidget m_wIcon;
 	protected int m_iPlayerID = -1;
+	protected ScriptInvoker m_PlayerUpdate;
 	
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -42,17 +43,36 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		green.m_OnClicked.Insert(OnColorTeamClicked);
 		none.m_OnClicked.Insert(OnColorTeamClicked);
 	}
-
-	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerSettingsInformation(int playerID)
+	
+	void UpdatePlayerSettingsPlayerID(int playerID)
 	{
 		m_iPlayerID = playerID;
 
 		if (playerID <= 0)
 			return;
+		else
+			UpdatePlayerSettingsInformation();
+	}
 
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+	//------------------------------------------------------------------------------------------------
+	protected void UpdatePlayerSettingsInformation()
+	{
+		if (m_iPlayerID <= 0)
+			return;
+		
+		if (m_PlayerUpdate)
+		{
+			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);
+			m_PlayerUpdate = null;
+		};
+		
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+		
+		m_PlayerUpdate = playerData.GetOnDataUpdate();
 
+		if (m_PlayerUpdate)
+			m_PlayerUpdate.Insert(UpdatePlayerSettingsInformation);
+		
 		CSI_EOverrideIcon iconOverride = playerData.GetOverrideIcon();
 		CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
@@ -61,9 +81,9 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(displayIcon));
+		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(displayIcon, true));
 
-		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(playerID));
+		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -129,4 +149,15 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);
 	};
+	
+	override void HandlerDeattached(Widget w)
+	{
+		super.HandlerDeattached(w);
+		
+		if (m_PlayerUpdate)
+		{
+			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);
+			m_PlayerUpdate = null;
+		};
+	}
 }

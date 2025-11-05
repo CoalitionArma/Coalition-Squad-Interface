@@ -6,22 +6,24 @@ VerticalLayoutWidgetClass {
     VerticalLayoutWidgetClass "{66C7744E22BC79E3}" {
      Name "SettingsVerticalLayout"
      Slot LayoutSlot "{66C7744E22BC79C1}" {
-      SizeMode Fill
       FillWeight 0.26
      }
      "Z Order" 1
      "Fill Origin" Center
      {
       ScaleWidgetClass "{66C81377EF3C623A}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
-       Name "PlayersSettings0"
+       Name "PlayersSettings"
        Slot LayoutSlot "{66C81377EF3C6201}" {
-        SizeMode Fill
        }
        {
         FrameWidgetClass "{66C77442F6F8A5E9}" {
          Prefab "{66C77442F6F8A5E9}"
+         Slot AlignableSlot "{66C77442D83EADFC}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+         }
          {
-          HorizontalLayoutWidgetClass "{66C774414EE8E30E}" {
+          VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
            Prefab "{66C774414EE8E30E}"
            {
             OverlayWidgetClass "{66C76B3671544CC3}" {
@@ -34,7 +36,6 @@ VerticalLayoutWidgetClass {
              Prefab "{66C77441724892C6}"
              Slot LayoutSlot "{66C774417248932E}" {
              }
-             "Is Visible" 0
             }
            }
           }
