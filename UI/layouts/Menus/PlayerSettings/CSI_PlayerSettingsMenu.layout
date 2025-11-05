@@ -1,7 +1,7 @@
 FrameWidgetClass {
  Name "rootFrame"
  {
-  ScaleWidgetClass "{66C815647021A121}" : "{CDAE569CD2A70854}UI/layouts/Menus/GroupSlection/CSI_PlayerSettings.layout" {
+  ScaleWidgetClass "{66C815647021A121}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
    Name "PlayersSettings"
    Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
     Anchor 0 0 1 1
@@ -20,6 +20,60 @@ FrameWidgetClass {
      Slot AlignableSlot "{66C77442D83EADFC}" {
       HorizontalAlign 3
       VerticalAlign 3
+     }
+     {
+      HorizontalLayoutWidgetClass "{66C774414EE8E30E}" {
+       Prefab "{66C774414EE8E30E}"
+       {
+        OverlayWidgetClass "{66C76B3671544CC3}" {
+         Prefab "{66C76B3671544CC3}"
+         {
+          ImageWidgetClass "{5EC651633FD7EAA1}" {
+           Prefab "{5EC651633FD7EAA1}"
+           Slot OverlayWidgetSlot "{66C774419BEC5B14}" {
+           }
+          }
+         }
+        }
+       }
+      }
+      ImageWidgetClass "{66CA2A7BC757F326}" {
+       Name "FooterBackground"
+       Slot FrameWidgetSlot "{66CA2A7BC757F30A}" {
+        Anchor 0.5 0.5 0.5 0.5
+        PositionX -115.729
+        OffsetLeft -115.729
+        PositionY 141.546
+        OffsetTop 141.546
+        SizeX 231.458
+        OffsetRight -115.729
+        SizeY 30.24
+        OffsetBottom -171.786
+       }
+       "Z Order" 1
+       Color 0.007 0.012 0.014 1
+       "Shadow Offset" 0.2 0.2
+      }
+      ButtonWidgetClass "{66CA2A7A9923EA78}" : "{0114A06AD44D49BD}UI/layouts/WidgetLibrary/Buttons/DialogButtonCancel.layout" {
+       Name "Cancel"
+       Slot FrameWidgetSlot "{66CA2A7A9923EAB7}" {
+        Anchor 0.5 0.5 0.5 0.5
+        PositionX -114.981
+        OffsetLeft -114.981
+        PositionY 141.266
+        OffsetTop 141.266
+        SizeX 74.811
+        OffsetRight 40.17
+        SizeY 29.081
+        OffsetBottom -170.347
+       }
+       "Z Order" 2
+       components {
+        SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
+         m_sLabel "Exit"
+        }
+       }
+      }
      }
     }
    }
