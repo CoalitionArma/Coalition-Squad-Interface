@@ -1,17 +1,17 @@
 FrameWidgetClass {
  Name "rootFrame"
  {
-  ScaleWidgetClass "{66C815647021A121}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
+  ScaleWidgetClass "{66CABAEDF86B94F5}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
    Name "PlayersSettings"
    Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
     Anchor 0 0 1 1
-    PositionX 0
+    PositionX 817.5
     OffsetLeft 0
-    PositionY 0
+    PositionY 377.5
     OffsetTop 0
-    SizeX 0
+    SizeX -1810
     OffsetRight 0
-    SizeY 0
+    SizeY -480
     OffsetBottom 0
    }
    {
@@ -25,30 +25,25 @@ FrameWidgetClass {
       VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
        Prefab "{66C774414EE8E30E}"
        Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
-        PositionX -72.5
-        OffsetLeft -72.5
-        PositionY -174
-        OffsetTop -174
-        SizeX 145
-        OffsetRight -72.5
+        PositionX -55
+        OffsetLeft -55
+        PositionY -175
+        OffsetTop -175
+        SizeX 110
+        OffsetRight -55
         SizeY 350
-        OffsetBottom -176
+        OffsetBottom -175
        }
        {
         OverlayWidgetClass "{66C76B3671544CC3}" {
          Prefab "{66C76B3671544CC3}"
          {
-          ImageWidgetClass "{5EC651633FD7EAA1}" {
-           Prefab "{5EC651633FD7EAA1}"
-           Slot OverlayWidgetSlot "{66C774419BEC5B14}" {
-           }
-          }
           VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
            Prefab "{66C76B3609B8B145}"
            {
             OverlayWidgetClass "{66CABAE08B9A0EE6}" {
              Name "CancelOverlay"
-             Slot LayoutSlot "{66CABAE08B9A0EC3}" {
+             Slot LayoutSlot {
              }
              "Z Order" 1
              {
@@ -61,38 +56,6 @@ FrameWidgetClass {
                components {
                 SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
                  m_sLabel "Exit"
-                }
-               }
-              }
-             }
-            }
-            ImageWidgetClass "{5EC77B609A838867}" {
-             Prefab "{5EC77B609A838867}"
-             Slot LayoutSlot "{66C774419BEC5B4C}" {
-              HorizontalAlign 1
-             }
-            }
-            TextWidgetClass "{5ED010D861AD1015}" {
-             Prefab "{5ED010D861AD1015}"
-             "Font Size" 12
-             "Min Font Size" 12
-            }
-            TextWidgetClass "{5ED010D84219987D}" {
-             Prefab "{5ED010D84219987D}"
-             "Font Size" 12
-             "Min Font Size" 12
-            }
-            VerticalLayoutWidgetClass "{66C76B37CB9EA833}" {
-             Prefab "{66C76B37CB9EA833}"
-             {
-              OverlayWidgetClass "{66C76B37B91FA633}" {
-               Prefab "{66C76B37B91FA633}"
-               {
-                ImageWidgetClass "{5EC77B6C5671FF7D}" {
-                 Prefab "{5EC77B6C5671FF7D}"
-                 Slot OverlayWidgetSlot "{66C774419BEC58D1}" {
-                  Padding 25 0 25 0
-                 }
                 }
                }
               }

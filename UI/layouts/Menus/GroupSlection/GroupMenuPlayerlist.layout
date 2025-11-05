@@ -14,6 +14,7 @@ VerticalLayoutWidgetClass {
       ScaleWidgetClass "{66C81377EF3C623A}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
        Name "PlayersSettings"
        Slot LayoutSlot "{66C81377EF3C6201}" {
+        SizeMode Fill
        }
        {
         FrameWidgetClass "{66C77442F6F8A5E9}" {
@@ -25,16 +26,129 @@ VerticalLayoutWidgetClass {
          {
           VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
            Prefab "{66C774414EE8E30E}"
+           Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
+            Anchor 0 0.5 0 0.5
+            PositionX 0
+            OffsetLeft 0
+            PositionY -300
+            OffsetTop -300
+            SizeX 110
+            OffsetRight -110
+            SizeY 600
+            OffsetBottom -300
+           }
            {
             OverlayWidgetClass "{66C76B3671544CC3}" {
              Prefab "{66C76B3671544CC3}"
              Slot LayoutSlot "{66C77442F6F8A260}" {
               HorizontalAlign 1
              }
+             {
+              ImageWidgetClass "{5EC651633FD7EAA1}" {
+               Prefab "{5EC651633FD7EAA1}"
+               Opacity 0.1
+              }
+              VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
+               Prefab "{66C76B3609B8B145}"
+               {
+                VerticalLayoutWidgetClass "{66C76B37CB9EA833}" {
+                 Prefab "{66C76B37CB9EA833}"
+                 {
+                  OverlayWidgetClass "{66C76B37B91FA633}" {
+                   Prefab "{66C76B37B91FA633}"
+                   {
+                    WindowWidgetClass "{5EC77B62D6F82516}" {
+                     Prefab "{5EC77B62D6F82516}"
+                     Color 0.305 0.305 0.305 1
+                    }
+                    ButtonWidgetClass "{5EC77B782C0E76A0}" {
+                     Prefab "{5EC77B782C0E76A0}"
+                     Slot OverlayWidgetSlot "{66C774419BEC58C4}" {
+                      Padding 2 1 2 2
+                     }
+                    }
+                   }
+                  }
+                  GridLayoutWidgetClass "{66C76B35FF8CBD5F}" {
+                   Prefab "{66C76B35FF8CBD5F}"
+                   {
+                    OverlayWidgetClass "{66C76B3516FAB680}" {
+                     Prefab "{66C76B3516FAB680}"
+                     {
+                      WindowWidgetClass "{5EC77B62A515EEB7}" {
+                       Prefab "{5EC77B62A515EEB7}"
+                       Color 0.305 0.305 0.305 1
+                      }
+                      ButtonWidgetClass "{5EC77B78C18FDC3E}" {
+                       Prefab "{5EC77B78C18FDC3E}"
+                       Slot OverlayWidgetSlot "{66C774419BEC5918}" {
+                        Padding 2 1 2 2
+                       }
+                      }
+                     }
+                    }
+                    OverlayWidgetClass "{66C76B351023D875}" {
+                     Prefab "{66C76B351023D875}"
+                     {
+                      WindowWidgetClass "{5EC77B62D2E03CB9}" {
+                       Prefab "{5EC77B62D2E03CB9}"
+                       Color 0.305 0.305 0.305 1
+                      }
+                      ButtonWidgetClass "{5EC77B78E8A01D0A}" {
+                       Prefab "{5EC77B78E8A01D0A}"
+                       Slot OverlayWidgetSlot "{66C774419BEC5961}" {
+                        Padding 2 1 2 2
+                       }
+                      }
+                     }
+                    }
+                    OverlayWidgetClass "{66C76B35111BB24F}" {
+                     Prefab "{66C76B35111BB24F}"
+                     {
+                      WindowWidgetClass "{5EC77B62AC637243}" {
+                       Prefab "{5EC77B62AC637243}"
+                       Color 0.305 0.305 0.305 1
+                      }
+                      ButtonWidgetClass "{5EC77B78016F0527}" {
+                       Prefab "{5EC77B78016F0527}"
+                       Slot OverlayWidgetSlot "{66C774419BEC5942}" {
+                        Padding 2 1 2 2
+                       }
+                      }
+                     }
+                    }
+                    OverlayWidgetClass "{66C76B3511FB3AD2}" {
+                     Prefab "{66C76B3511FB3AD2}"
+                     {
+                      WindowWidgetClass "{5EC77B62AA76B302}" {
+                       Prefab "{5EC77B62AA76B302}"
+                       Color 0.305 0.305 0.305 1
+                      }
+                      ButtonWidgetClass "{5EC77B780C772A19}" {
+                       Prefab "{5EC77B780C772A19}"
+                       Slot OverlayWidgetSlot "{66C774419BEC59A5}" {
+                        Padding 2 1 2 2
+                       }
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             }
             }
             OverlayWidgetClass "{66C77441724892C6}" {
              Prefab "{66C77441724892C6}"
              Slot LayoutSlot "{66C774417248932E}" {
+             }
+             {
+              ImageWidgetClass "{605035926F91EF39}" {
+               Prefab "{605035926F91EF39}"
+               Opacity 0.1
+              }
              }
             }
            }

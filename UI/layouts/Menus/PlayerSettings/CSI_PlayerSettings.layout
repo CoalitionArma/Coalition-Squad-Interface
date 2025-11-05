@@ -39,8 +39,8 @@ ScaleWidgetClass {
       OverlayWidgetClass "{66C76B3671544CC3}" {
        Name "SettingsOverlay"
        Slot LayoutSlot "{66C77442F6F8A260}" {
-        HorizontalAlign 1
         VerticalAlign 0
+        Padding 5 5 5 0
         SizeMode Fill
        }
        {
@@ -360,9 +360,8 @@ ScaleWidgetClass {
       OverlayWidgetClass "{66C77441724892C6}" {
        Name "AdvancedSettingsOverlay"
        Slot LayoutSlot "{66C774417248932E}" {
-        HorizontalAlign 1
         VerticalAlign 0
-        Padding 0 5 0 0
+        Padding 5 10 5 0
         SizeMode Fill
        }
        {

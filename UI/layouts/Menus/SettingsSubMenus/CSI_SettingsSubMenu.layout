@@ -1069,6 +1069,7 @@ HorizontalLayoutWidgetClass {
               HorizontalAlign 3
               VerticalAlign 3
              }
+             "Is Enabled" 0
              components {
               ButtonComponent "{66C6723C5F4627CE}" {
                m_ColorButtonDefault 1 1 1 0.7
