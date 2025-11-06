@@ -30,7 +30,14 @@ modded class SCR_PlayerTileButtonComponent
 		{
 			CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(m_PlayerSettings.FindHandler(CSI_PlayerSettings));
             playerSettings.UpdatePlayerSettingsPlayerID(GetTilePlayerID());
+			
 			m_PlayerSettings.SetVisible(true);
+			Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");
+			advSettings.SetVisible(true);
+		} else {
+			m_PlayerSettings.SetVisible(false);
+			Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");
+			advSettings.SetVisible(false);
 		}
 		
 		return super.OnClick(w, x, y, button);

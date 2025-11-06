@@ -51,7 +51,7 @@ modded class SCR_NTIconBase
 		if (!colorTeam || !colorTeam.IsZero()) 
 				colorTeam = stateConf.m_vColor;
 		
-		if (!iconString.IsEmpty())
+		if (!iconString.IsEmpty() && (iconString != "MAN_ICON"))
 		{
 			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 			iWidget.SetColor(colorTeam);

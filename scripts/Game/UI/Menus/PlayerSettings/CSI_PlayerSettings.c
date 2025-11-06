@@ -13,7 +13,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
-
+		
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		
