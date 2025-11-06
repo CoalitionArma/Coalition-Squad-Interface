@@ -90,7 +90,7 @@ ImageSetClass {
      Flags 0 0
     }
     ImageSetDefClass MAN_ICON {
-     Pos 343 18
+     Pos 408 18
      Size 31 31
      Flags 0 0
     }
