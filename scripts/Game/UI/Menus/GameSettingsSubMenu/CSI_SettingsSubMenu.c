@@ -20,7 +20,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			if (SCR_Global.IsAdmin())
 			{
 				Widget serverOverridesLayoutWidget = m_wRoot.FindAnyWidget("ServerOverrides");
-				foreach (int i, string settingStr : CSI_SettingsManager.GetSettingsArray())
+				foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
 				{
 					Widget contentWidget = m_wRoot.FindAnyWidget(settingStr);
 					Widget serverOverrideLayout = serverOverridesLayoutWidget.FindAnyWidget(settingStr);
@@ -62,7 +62,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		};
 		
 		Widget serverOverridesLayoutWidget = m_wRoot.FindAnyWidget("ServerOverrides");
-		foreach (int i, string settingStr : CSI_SettingsManager.GetSettingsArray())
+		foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
 		{
 			bool setVanillaSettingBind = false;
 			

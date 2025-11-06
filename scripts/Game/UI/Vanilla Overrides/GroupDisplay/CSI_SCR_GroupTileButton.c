@@ -1,5 +1,16 @@
 modded class SCR_GroupTileButton
 {	
+    protected CSI_PlayerData m_StoredPlayerData;
+
+    void UpdateScriptInvoker(CSI_PlayerData playerData)
+    {
+        if (m_StoredPlayerData)
+            m_StoredPlayerData.GetOnDataUpdate().Remove(RefreshPlayers);
+
+        playerData.GetOnDataUpdate().Insert(RefreshPlayers);
+        m_StoredPlayerData = playerData;
+    }
+
 	//------------------------------------------------------------------------------------------------
 	//TODO: setup should be taken care of by the player tile component
 	override void SetupPlayerTile(Widget playerTile, int playerID)
@@ -47,7 +58,12 @@ modded class SCR_GroupTileButton
 
 		SetupOptionsCombo(playerTile);
 
-		playerName.SetText(SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID));
+        string playerText = CSI_UIHelper.GetPlayersName(playerID);
+
+        if (playerText.IsEmpty())
+            playerText = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);
+
+		playerName.SetText(playerText);
 		
 		SCR_PlayerController playerCtrl = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 		if (playerCtrl)
@@ -79,45 +95,15 @@ modded class SCR_GroupTileButton
 				muteIcon.SetColor(m_PlayerNameSelfColor);
 				muteIcon.LoadImageFromSet(0, UIConstants.ICONS_IMAGE_SET, "sound-off");
 			}
-		} 
-		
+		}
 
 		//look for loadout and set the appropriate icon
 		if (loadoutIcon)
 		{
-			SCR_LoadoutManager loadoutManager = GetGame().GetLoadoutManager();
-			if (loadoutManager)
-				playerLoadout = loadoutManager.GetPlayerLoadout(playerID);			
-			
-			if (playerLoadout)
-			{
-				res = Resource.Load(playerLoadout.GetLoadoutResource());
-				source = SCR_BaseContainerTools.FindComponentSource(res, "SCR_EditableCharacterComponent");
-				if (source)
-				{
-					container = source.GetObject("m_UIInfo");
-					info = SCR_EditableEntityUIInfo.Cast(BaseContainerTools.CreateInstanceFromContainer(container));
-					info.SetIconTo(loadoutIcon);
-				}
-			}
+			CSI_EIcon icon = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID).GetDisplayIcon();
+            string iconString = CSI_UIHelper.GetIconString(icon, true);
 
-			//set leader icon if given player is a leader
-			if (group.IsPlayerLeader(playerID))
-			{
-				m_LeaderInfo.SetIconTo(loadoutIcon);
-				loadoutIcon.SetColor(m_PlayerNameSelfColor);
-			}
-
-			//set badge color
-			Widget badge = playerTile.FindAnyWidget("PlayerBadge");
-			if (badge)
-			{
-				Color badgeColor = m_GroupFaction.GetFactionColor();
-				if (group.IsPlayerLeader(playerID))
-					badgeColor = (m_PlayerNameSelfColor);
-
-				SetBadgeColor(badge, badgeColor);
-			}
+            loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 		}
 
 		m_PlayerTileComponent.GetOnTileFocus().Insert(OnPlayerTileFocus);

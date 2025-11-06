@@ -37,7 +37,7 @@ class CSI_SettingsManager : ScriptComponent
 	 */
 	bool GetSettingBool(string setting)
 	{
-		int index = CSI_GameSettings.m_aSettingsArray.Find(setting);
+		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
 		if (index != -1 && index <= CSI_GameSettings.INDEX_WHERE_BOOL_SETTINGS_STOP)
 			return GetSettingInt(setting);
 		
@@ -53,12 +53,6 @@ class CSI_SettingsManager : ScriptComponent
 	int GetSettingInt(string setting) 
 	{
 		return m_mSettingsLocalValues.Get(setting);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	static TStringArray GetSettingsArray() 
-	{
-		return CSI_GameSettings.m_aSettingsArray;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -85,7 +79,7 @@ class CSI_SettingsManager : ScriptComponent
 		if (RplSession.Mode() != RplMode.Dedicated) 
 			return;
 		
-		int index = CSI_GameSettings.m_aSettingsArray.Find(setting);
+		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
 		if (index != -1)
 		{
 			if(serverOverrideEnabled)
@@ -117,7 +111,7 @@ class CSI_SettingsManager : ScriptComponent
 	{
 		m_aSettingsAuthorityValues.Clear();
 		
-		foreach (string setting : CSI_GameSettings.m_aSettingsArray)
+		foreach (string setting : CSI_GameSettings.GetSettingsArray())
 		{
 			int settingValue;
 			m_UserSettigs.Get(setting, settingValue); 
@@ -138,7 +132,7 @@ class CSI_SettingsManager : ScriptComponent
 	 */
 	protected void SettingsUpdate()
 	{
-		foreach (int i, string setting : CSI_GameSettings.m_aSettingsArray)
+		foreach (int i, string setting : CSI_GameSettings.GetSettingsArray())
 		{
 			int settingValue;
 			bool IsBool = i <= CSI_GameSettings.INDEX_WHERE_BOOL_SETTINGS_STOP;

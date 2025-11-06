@@ -392,74 +392,74 @@ ImageSetClass {
     }
    }
   }
-  ImageSetGroupClass "SCI-FI" {
+  ImageSetGroupClass "SCI_FI" {
    Images {
-    ImageSetDefClass "SCI-FI ENG" {
+    ImageSetDefClass "SCI_FI ENG" {
      Pos 18 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI AT" {
+    ImageSetDefClass "SCI_FI AT" {
      Pos 83 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI DEMO" {
+    ImageSetDefClass "SCI_FI DEMO" {
      Pos 148 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI SNIPER" {
+    ImageSetDefClass "SCI_FI SNIPER" {
      Pos 213 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI GREN" {
+    ImageSetDefClass "SCI_FI GREN" {
      Pos 278 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI MG" {
+    ImageSetDefClass "SCI_FI MG" {
      Pos 343 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI MEDIC" {
+    ImageSetDefClass "SCI_FI MEDIC" {
      Pos 408 343
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI ENG_ICON" {
+    ImageSetDefClass "SCI_FI ENG_ICON" {
      Pos 18 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI AT_ICON" {
+    ImageSetDefClass "SCI_FI AT_ICON" {
      Pos 83 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI DEMO_ICON" {
+    ImageSetDefClass "SCI_FI DEMO_ICON" {
      Pos 148 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI SNIPER_ICON" {
+    ImageSetDefClass "SCI_FI SNIPER_ICON" {
      Pos 213 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI GREN_ICON" {
+    ImageSetDefClass "SCI_FI GREN_ICON" {
      Pos 278 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI MG_ICON" {
+    ImageSetDefClass "SCI_FI MG_ICON" {
      Pos 343 928
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "SCI-FI MEDIC_ICON" {
+    ImageSetDefClass "SCI_FI MEDIC_ICON" {
      Pos 408 928
      Size 31 31
      Flags 0 0
@@ -540,74 +540,74 @@ ImageSetClass {
     }
    }
   }
-  ImageSetGroupClass MEDEVIAL {
+  ImageSetGroupClass MEDIEVAL {
    Images {
-    ImageSetDefClass "MEDEVIAL ENG" {
+    ImageSetDefClass "MEDIEVAL ENG" {
      Pos 18 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL AT" {
+    ImageSetDefClass "MEDIEVAL AT" {
      Pos 83 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL DEMO" {
+    ImageSetDefClass "MEDIEVAL DEMO" {
      Pos 148 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL SNIPER" {
+    ImageSetDefClass "MEDIEVAL SNIPER" {
      Pos 213 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL GREN" {
+    ImageSetDefClass "MEDIEVAL GREN" {
      Pos 278 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL MG" {
+    ImageSetDefClass "MEDIEVAL MG" {
      Pos 343 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL MEDIC" {
+    ImageSetDefClass "MEDIEVAL MEDIC" {
      Pos 408 473
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL ENG_ICON" {
+    ImageSetDefClass "MEDIEVAL ENG_ICON" {
      Pos 18 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL AT_ICON" {
+    ImageSetDefClass "MEDIEVAL AT_ICON" {
      Pos 83 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL DEMO_ICON" {
+    ImageSetDefClass "MEDIEVAL DEMO_ICON" {
      Pos 148 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL SNIPER_ICON" {
+    ImageSetDefClass "MEDIEVAL SNIPER_ICON" {
      Pos 213 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL GREN_ICON" {
+    ImageSetDefClass "MEDIEVAL GREN_ICON" {
      Pos 278 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL MG_ICON" {
+    ImageSetDefClass "MEDIEVAL MG_ICON" {
      Pos 343 1058
      Size 31 31
      Flags 0 0
     }
-    ImageSetDefClass "MEDEVIAL MEDIC_ICON" {
+    ImageSetDefClass "MEDIEVAL MEDIC_ICON" {
      Pos 408 1058
      Size 31 31
      Flags 0 0

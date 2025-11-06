@@ -165,7 +165,7 @@ HorizontalLayoutWidgetClass {
            m_sLabel "Icons Theme"
            m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
            m_aElementNames {
-            "CLASSIC" "REFORGER ADVANCED" "REFORGER REGULAR" "NATO" "SCI FI" "WW2" "MEDIVAL"
+            "CLASSIC" "REFORGER ADVANCED" "REFORGER REGULAR" "NATO" "SCI FI" "WW2" "MEDIEVAL"
            }
           }
           SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {

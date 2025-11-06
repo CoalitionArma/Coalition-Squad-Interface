@@ -23,7 +23,7 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
 	const static string RADAR_ICON_SIZE = "m_iRadarIconSize";
 	
-	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
+	//------------------------------------------------------------------------------------------------
     static ref TStringArray m_aSettingsArray = 
 	{
 		//BOOLEAN SETTINGS
@@ -53,6 +53,15 @@ class CSI_GameSettings : ModuleGameSettings
 		RADAR_ICON_SIZE
 	};
 
+	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
+
+	//------------------------------------------------------------------------------------------------
+	static TStringArray GetSettingsArray() 
+	{
+		return m_aSettingsArray;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	// General
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Ranks In Players Names")]
 	int m_bRankVisible;
