@@ -30,12 +30,6 @@ modded class SCR_NTIconBase
 		
 		switch (nametagPos)
 		{
-			case CSI_ENametagIconPosition.LEFT : {
-				data.SetVisibility(centerWidget, false, 0, false);
-				data.SetVisibility(rightWidget, false, 0, false);
-				widgetToEdit = leftWidget; 
-				break;
-			}
 			case CSI_ENametagIconPosition.CENTER : {
 				data.SetVisibility(rightWidget, false, 0, false);
 				data.SetVisibility(leftWidget, false, 0, false);
@@ -47,6 +41,11 @@ modded class SCR_NTIconBase
 				data.SetVisibility(leftWidget, false, 0, false);
 				widgetToEdit = rightWidget; 
 				break;
+			}
+			default : {
+				data.SetVisibility(centerWidget, false, 0, false);
+				data.SetVisibility(rightWidget, false, 0, false);
+				widgetToEdit = leftWidget; 
 			}
 		}
 		

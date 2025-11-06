@@ -81,7 +81,7 @@ ScaleWidgetClass {
            }
            Text "#CSI-Player_Settings_No_Player_Selected"
            "Font Size" 12
-           "Min Font Size" 8
+           "Min Font Size" 1
            "Horizontal Alignment" Center
            "Vertical Alignment" Center
            FontProperties FontProperties "{60587BCBC751C206}" {

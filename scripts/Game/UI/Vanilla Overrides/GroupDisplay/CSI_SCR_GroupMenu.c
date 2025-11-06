@@ -21,10 +21,10 @@ modded class SCR_GroupMenu
 	}
 	
 	protected void CheckClose()
-	{
-		if (!m_PlayerSettings || !m_PlayerSettings.IsVisible())
-			Close();
-		else
+	{	
+		if (m_PlayerSettings && m_PlayerSettings.IsVisible())
 			m_PlayerSettings.SetVisible(false);
+		else
+			Close();
 	}
 }

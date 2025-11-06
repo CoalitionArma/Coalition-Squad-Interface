@@ -38,7 +38,10 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
 		
 		if (tWidget.GetName() == "PlayerGroupName")
+		{
+			//tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 			tWidget.SetText(data.GetGroupName()); 
+		}
 		
 		if (tWidget.GetName() == "PlayerName") 
 		{	
