@@ -116,6 +116,7 @@ ScaleWidgetClass {
              Slot LayoutSlot "{66C774419BEC5BCB}" {
               SizeMode Fill
              }
+             Color 0.305 0.305 0.305 1
              components {
               SCR_ComboBoxComponent "{6093726C5F548801}" {
               }
@@ -202,6 +203,7 @@ ScaleWidgetClass {
                 HorizontalAlign 3
                 VerticalAlign 3
                }
+               Color 0.305 0.305 0.305 1
               }
               ImageWidgetClass "{5EC77B6C5671FF7D}" {
                Name "NoneImage"
@@ -252,6 +254,7 @@ ScaleWidgetClass {
                   HorizontalAlign 3
                   VerticalAlign 3
                  }
+                 Color 0.305 0.305 0.305 1
                 }
                 ButtonWidgetClass "{5EC77B78C18FDC3E}" {
                  Name "Red"
@@ -279,6 +282,7 @@ ScaleWidgetClass {
                   HorizontalAlign 3
                   VerticalAlign 3
                  }
+                 Color 0.305 0.305 0.305 1
                 }
                 ButtonWidgetClass "{5EC77B78E8A01D0A}" {
                  Name "Blue"
@@ -306,6 +310,7 @@ ScaleWidgetClass {
                   HorizontalAlign 3
                   VerticalAlign 3
                  }
+                 Color 0.305 0.305 0.305 1
                 }
                 ButtonWidgetClass "{5EC77B78016F0527}" {
                  Name "Yellow"
@@ -334,6 +339,7 @@ ScaleWidgetClass {
                   HorizontalAlign 3
                   VerticalAlign 3
                  }
+                 Color 0.305 0.305 0.305 1
                 }
                 ButtonWidgetClass "{5EC77B780C772A19}" {
                  Name "Green"

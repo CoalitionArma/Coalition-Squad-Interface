@@ -41,11 +41,11 @@ class CSI_UIHelper
 		
 		switch(colorEnum)
 		{
-			case CSI_EColorTeam.NONE : colorFromInt = Color.FromInt(m_iCTNone); break;
 			case CSI_EColorTeam.BLUE : colorFromInt = Color.FromInt(m_iCTBlue); break;
 			case CSI_EColorTeam.RED : colorFromInt = Color.FromInt(m_iCTRed); break;
 			case CSI_EColorTeam.GREEN : colorFromInt = Color.FromInt(m_iCTGreen); break;
 			case CSI_EColorTeam.YELLOW : colorFromInt = Color.FromInt(m_iCTYellow); break;
+			default : colorFromInt = Color.FromInt(m_iCTNone);
 		}
 		
 		return colorFromInt; 

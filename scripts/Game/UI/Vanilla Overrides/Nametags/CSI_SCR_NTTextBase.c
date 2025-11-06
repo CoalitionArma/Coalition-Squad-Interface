@@ -6,7 +6,9 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	protected CSI_HUDManager m_HUDManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
-
+	protected SCR_NameTagData m_StoredNameTagData;
+	protected int m_iStoredIndex;
+	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{	
@@ -23,6 +25,10 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		SCR_NTStateText stateConf = SCR_NTStateText.Cast( GetEntityStateConfig(data) );
 		if (!stateConf)
 			return;
+		
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(DataRefresh);
+		m_StoredNameTagData = data;
+		m_iStoredIndex = index;
 		
 		tWidget.SetFont(m_FontResource);
 		
@@ -43,7 +49,10 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(data.m_iPlayerID);
 				array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
 				if (playerData && groupArray.Contains(data.m_iPlayerID))
+				{
 					ct = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+					playerData.GetOnDataUpdate().Insert(DataRefresh);
+				};
 				
 				if (ct && !ct.IsZero()) 
 				{
@@ -59,32 +68,16 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		data.UpdateAttatchedTo();
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
-}
-
-//------------------------------------------------------------------------------------------------
-//! Group nametag element for text
-[BaseContainerProps(), SCR_NameTagElementTitle()]
-modded class SCR_NTName : SCR_NTTextBase 
-{	
-	/*
-	//------------------------------------------------------------------------------------------------
-	override void UpdateElement(SCR_NameTagData data, int index)
-	{
-		super.UpdateElement(data, index);
-		string name;
-		array<string> nameParams = {};
-			
-		GetText(data, name, nameParams);
+	
+	protected void DataRefresh()
+	{		
+		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(m_StoredNameTagData.m_iPlayerID);
 		
-		if (name == string.Empty)
-			SetText(data, "GETNAME_ERROR", nameParams, index);
-		else
-		{
-			SetText(data, name, nameParams, index);
-			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
-		}
-	}
-	*/
+		playerData.GetOnDataUpdate().Remove(DataRefresh);
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Remove(DataRefresh);
+		
+		SetDefaults(m_StoredNameTagData, m_iStoredIndex);
+	}	
 }
 
 //------------------------------------------------------------------------------------------------

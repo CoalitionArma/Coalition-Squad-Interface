@@ -3,8 +3,9 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 class CSI_PlayerDataManager : ScriptComponent
 {	
 	protected bool m_bDataUpdateInProgress;
-
-	protected ref map<int, CSI_PlayerData> m_mPlayerDataMap = new map<int, CSI_PlayerData>;
+	protected int m_iUpdate;
+	
+	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
 	
 	[RplProp()]
 	protected ref array<int> m_aPlayerIDs = {}; 
@@ -14,6 +15,34 @@ class CSI_PlayerDataManager : ScriptComponent
 	
 	[RplProp(onRplName: "PlayerDataUpdate")]
 	protected int m_PlayerDataUpdate;
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void OnPostInit(IEntity owner)
+	{
+		super.OnPostInit(owner);
+
+		if (RplSession.Mode() != RplMode.Client) 
+			SetEventMask(owner, EntityEvent.FRAME);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void EOnFrame(IEntity owner, float timeSlice)
+	{
+		super.EOnFrame(owner, timeSlice);
+		
+		m_iUpdate++;
+		
+		if (!(m_iUpdate >= 20))
+			return;
+		else
+			m_iUpdate = 0;
+		
+		if (m_bDataUpdateInProgress)
+		{
+			m_bDataUpdateInProgress = false;
+			DataUpdate();
+		}
+	}
 	
 	//------------------------------------------------------------------------------------------------
 	/**
@@ -37,7 +66,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		playerData.SetRank(rank);
 		playerData.SetIsSquadLeader(isSL);
 		
-		DataUpdate();
+		RequestDataUpdate();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -59,7 +88,7 @@ class CSI_PlayerDataManager : ScriptComponent
 			playerData.SetIsTeamLeader(false);
 		}
 
-		DataUpdate();
+		RequestDataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -78,7 +107,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetColorTeam(colorTeam);
 		
-		DataUpdate();
+		RequestDataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -99,7 +128,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetOverrideIcon(overrideIcon);
 		
-		DataUpdate();
+		RequestDataUpdate();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -118,7 +147,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetIsTeamLeader(isTL);
 		
-		DataUpdate();
+		RequestDataUpdate();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -145,6 +174,12 @@ class CSI_PlayerDataManager : ScriptComponent
 		return playerData;
 	}
 
+	//------------------------------------------------------------------------------------------------
+	protected void RequestDataUpdate()
+	{
+		m_bDataUpdateInProgress = true;
+	};
+	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates player data arrays that then update the information on all clients.

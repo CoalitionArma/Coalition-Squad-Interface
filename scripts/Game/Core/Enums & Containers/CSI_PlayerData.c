@@ -69,15 +69,6 @@ class CSI_PlayerData
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	ScriptInvoker GetOnDataUpdate()
-	{
-		if (!m_OnDataUpdate)
-			m_OnDataUpdate = new ScriptInvoker();
-
-		return m_OnDataUpdate;
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	// SETTERS
 	//------------------------------------------------------------------------------------------------
 	
@@ -161,6 +152,15 @@ class CSI_PlayerData
 	bool GetIsSquadLeader()
 	{
 		return m_bIsSquadLeader;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	ScriptInvoker GetOnDataUpdate()
+	{
+		if (!m_OnDataUpdate)
+			m_OnDataUpdate = new ScriptInvoker();
+
+		return m_OnDataUpdate;
 	}
 	
 	//------------------------------------------------------------------------------------------------
