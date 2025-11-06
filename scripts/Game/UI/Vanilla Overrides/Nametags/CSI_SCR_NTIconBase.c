@@ -20,8 +20,16 @@ modded class SCR_NTIconBase
 		
 		switch (nametagPos)
 		{
-			case CSI_ENametagIconPosition.LEFT : iWidget = leftWidget; break;
-			case CSI_ENametagIconPosition.CENTER : iWidget = centerWidget; break;
+			case CSI_ENametagIconPosition.LEFT : {
+				data.SetVisibility(iWidget, false, 0, false);
+				iWidget = leftWidget; 
+				break;
+			}
+			case CSI_ENametagIconPosition.CENTER : {
+				data.SetVisibility(iWidget, false, 0, false);
+				iWidget = centerWidget; 
+				break;
+			}
 		}
 		
 		if (!iWidget)
