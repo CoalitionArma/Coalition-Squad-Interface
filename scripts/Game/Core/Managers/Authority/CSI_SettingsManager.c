@@ -38,7 +38,7 @@ class CSI_SettingsManager : ScriptComponent
 	bool GetSettingBool(string setting)
 	{
 		int index = CSI_GameSettings.m_aSettingsArray.Find(setting);
-		if (index != -1 && index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+		if (index != -1 && index <= CSI_GameSettings.INDEX_WHERE_BOOL_SETTINGS_STOP)
 			return GetSettingInt(setting);
 		
 		return false;
@@ -90,7 +90,7 @@ class CSI_SettingsManager : ScriptComponent
 		{
 			if(serverOverrideEnabled)
 			{		
-				if (index <= INDEX_WHERE_BOOL_SETTINGS_STOP)
+				if (index <= CSI_GameSettings.INDEX_WHERE_BOOL_SETTINGS_STOP)
 				{
 					if (value == 0)
 						value = SERVER_OVERRIDE_FALSE;
@@ -141,7 +141,7 @@ class CSI_SettingsManager : ScriptComponent
 		foreach (int i, string setting : CSI_GameSettings.m_aSettingsArray)
 		{
 			int settingValue;
-			bool IsBool = i <= INDEX_WHERE_BOOL_SETTINGS_STOP;
+			bool IsBool = i <= CSI_GameSettings.INDEX_WHERE_BOOL_SETTINGS_STOP;
 			int serverSetting = m_aSettingsAuthorityValues.Get(i);
 	
 			switch (true)

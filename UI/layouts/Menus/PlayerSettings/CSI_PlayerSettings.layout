@@ -361,7 +361,7 @@ ScaleWidgetClass {
        Name "AdvancedSettingsOverlay"
        Slot LayoutSlot "{66C774417248932E}" {
         VerticalAlign 0
-        Padding 5 10 5 0
+        Padding 5 8.5 5 0
         SizeMode Fill
        }
        {
@@ -431,6 +431,7 @@ ScaleWidgetClass {
             ImageWidgetClass "{6050358F4FF96275}" {
              Name "PromoteToSLIcon"
              Slot OverlayWidgetSlot "{66C77442F6F8BE82}" {
+              Padding 0 0 0 -6.5
              }
              Texture "{5C682305CA5C9594}UI/Textures/Menus/Buttons/PromoteToSLButton.edds"
              Size 145 50
@@ -442,6 +443,7 @@ ScaleWidgetClass {
               HorizontalAlign 3
               VerticalAlign 3
              }
+             "Z Order" 1
              "Is Enabled" 0
              IsPixelPerfect 0
              Opacity 0
@@ -476,6 +478,7 @@ ScaleWidgetClass {
             ImageWidgetClass "{6050358FED8298C4}" {
              Name "PromoteToTLIcon"
              Slot OverlayWidgetSlot "{66C77442F6F8BF23}" {
+              Padding 0 0 0 -6.5
              }
              Texture "{E2B4282BA87BDD67}UI/Textures/Menus/Buttons/PromoteToTLButton.edds"
              Size 145 50
@@ -487,6 +490,7 @@ ScaleWidgetClass {
               HorizontalAlign 3
               VerticalAlign 3
              }
+             "Z Order" 1
              "Is Enabled" 0
              IsPixelPerfect 0
              Opacity 0
@@ -515,12 +519,13 @@ ScaleWidgetClass {
           OverlayWidgetClass "{66C77440818BDC1F}" {
            Name "KickOverlay"
            Slot LayoutSlot "{66C77442F6F8BF64}" {
-            Padding 2.5 0 2.5 0
+            Padding 2.5 0 2.5 3
            }
            {
             ImageWidgetClass "{605035931933B04A}" {
              Name "KickIcon"
              Slot OverlayWidgetSlot "{66C77442F6F8BF69}" {
+              Padding 0 0 0 -6.5
              }
              Texture "{C6E80921A68B03AF}UI/Textures/Menus/Buttons/Kick.edds"
              Size 145 50
@@ -532,6 +537,7 @@ ScaleWidgetClass {
               HorizontalAlign 3
               VerticalAlign 3
              }
+             "Z Order" 1
              "Is Enabled" 0
              Opacity 0
              Color 0.68 0.005 0.006 0.063

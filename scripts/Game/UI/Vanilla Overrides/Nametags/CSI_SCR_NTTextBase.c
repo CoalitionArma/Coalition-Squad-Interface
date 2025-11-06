@@ -42,7 +42,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				Color ct;
 				CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(data.m_iPlayerID);
 				array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
-				if (playerData && groupArray.Contains(m_iPlayerID))
+				if (playerData && groupArray.Contains(data.m_iPlayerID))
 					ct = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
 				
 				if (ct && !ct.IsZero()) 

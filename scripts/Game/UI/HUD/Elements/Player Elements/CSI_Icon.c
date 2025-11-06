@@ -72,7 +72,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		m_wArrow.SetRotation(yaw);
 
-		if (m_SettingsManager.GetSettingBool(CSI_SettingsManager.ONLY_RADAR_ICON_ARROWS_ROTATE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.ONLY_RADAR_ICON_ARROWS_ROTATE))
 			yaw = 0;
 
 		m_wIcon.SetRotation(yaw);

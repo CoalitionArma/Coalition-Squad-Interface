@@ -3,6 +3,7 @@ class CSI_HUDManagerClass : ScriptComponentClass {};
 class CSI_HUDManager : ScriptComponent
 {	
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;
 	protected ref array<int> m_aLocalGroupPlayerIds;
 	protected bool m_bIsLocalPlayerInVehicle;
@@ -16,6 +17,7 @@ class CSI_HUDManager : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -88,7 +90,7 @@ class CSI_HUDManager : ScriptComponent
 	 * @param playerIDs: Array of player IDs to sort
 	 * @return Sorted array of player IDs
 	 */
-	protected array<int> GetSortedGroupArray(array<int> playerIDs)
+	array<int> GetSortedGroupArray(array<int> playerIDs)
 	{
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
@@ -96,7 +98,7 @@ class CSI_HUDManager : ScriptComponent
 		// Parse through current group array.
 		foreach (int playerID : playerIDs)
 		{
-			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
+			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 			
 			if (!playerData)
 				continue;

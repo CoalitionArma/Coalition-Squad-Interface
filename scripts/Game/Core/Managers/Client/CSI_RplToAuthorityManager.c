@@ -204,6 +204,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 		if (!newGroup)
 			return;
+		
 		playerGroupController.RequestJoinGroup(newGroup.GetGroupID());
 	}
 
