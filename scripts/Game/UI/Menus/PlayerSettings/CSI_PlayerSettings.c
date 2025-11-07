@@ -81,6 +81,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(displayIcon, true));
 
+		m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
 	};
 
@@ -122,7 +123,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void OnPromoteToSLClicked()
 	{
-		if (m_iPlayerID <= 0 && !SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerID).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID >= 0 && !SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerID).IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
@@ -142,7 +143,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void OnKickClicked()
 	{
-		if (m_iPlayerID <= 0 && !SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerID).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID >= 0 && !SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(m_iPlayerID).IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);

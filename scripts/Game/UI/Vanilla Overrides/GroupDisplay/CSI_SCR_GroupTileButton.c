@@ -2,6 +2,35 @@ modded class SCR_GroupTileButton
 {	
     protected CSI_PlayerData m_StoredPlayerData;
 
+	//------------------------------------------------------------------------------------------------
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		super.OnClick(w, x, y, button);
+
+		Widget playerSettings = GetRootFrame(m_wRoot).FindAnyWidget("PlayersSettings");
+		
+		if (playerSettings)
+			playerSettings.SetVisible(false);
+		
+		return true;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	Widget GetRootFrame(Widget w)
+	{
+		Widget currentWidget = w;
+		
+		for (int e; e <= 50; e++)
+		{
+			if (currentWidget.GetName() == "rootFrame")
+				break;
+			currentWidget = currentWidget.GetParent();
+		}
+		
+		return currentWidget;
+	}
+
+	//------------------------------------------------------------------------------------------------
     void UpdateScriptInvoker(CSI_PlayerData playerData)
     {
         if (m_StoredPlayerData)
@@ -22,6 +51,9 @@ modded class SCR_GroupTileButton
 		SCR_AIGroup group = m_GroupManager.FindGroup(m_iGroupID);
 		if (!group)
 			return;
+		
+		bool isLocalPlayerInGroup = group.GetPlayerIDs().Contains(SCR_PlayerController.GetLocalPlayerId());
+		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 
 		SCR_GadgetManagerComponent gadgetManager;
 		TextWidget playerName, playerFrequency;
@@ -48,12 +80,14 @@ modded class SCR_GroupTileButton
 		loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget("LoadoutIcon"));
 		ImageWidget m_wIconSymbol = ImageWidget.Cast(playerTile.FindAnyWidget("TaskIconSymbol")); 
 		ImageWidget platformIcon = ImageWidget.Cast(playerTile.FindAnyWidget("PlatformIcon"));
+		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));
 
 		playerButton = ButtonWidget.Cast(playerTile.FindAnyWidget("PlayerButton"));
 		if (!playerButton)
 			return;
 
 		m_PlayerTileComponent = SCR_PlayerTileButtonComponent.Cast(playerButton.FindHandler(SCR_PlayerTileButtonComponent));
+		m_PlayerTileComponent.SetGroupTileButton(this);
 		m_PlayerTileComponent.SetTilePlayerID(playerID);
 
 		SetupOptionsCombo(playerTile);
@@ -80,9 +114,6 @@ modded class SCR_GroupTileButton
 				background.SetOpacity(0.85);
 			}
 		}
-
-		if (playerID == GetGame().GetPlayerController().GetPlayerId())
-			playerName.SetColor(m_PlayerNameSelfColor);
 		
 		//set the state of mute
 		PlayerController pc = GetGame().GetPlayerController();
@@ -94,17 +125,25 @@ modded class SCR_GroupTileButton
 			{
 				muteIcon.SetColor(m_PlayerNameSelfColor);
 				muteIcon.LoadImageFromSet(0, UIConstants.ICONS_IMAGE_SET, "sound-off");
-			}
-		}
-
-		//look for loadout and set the appropriate icon
-		if (loadoutIcon)
+			};
+		};
+		
+		if (loadoutIcon && playerName && lineBackground && isLocalPlayerInGroup)
 		{
-			CSI_EIcon icon = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID).GetDisplayIcon();
+			CSI_EIcon icon = playerData.GetDisplayIcon();
             string iconString = CSI_UIHelper.GetIconString(icon, true);
 
             loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
-		}
+			
+			CSI_EColorTeam colorTeam = playerData.GetColorTeam();
+			playerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+			loadoutIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+		
+			if (colorTeam != CSI_EColorTeam.NONE)
+			{
+				lineBackground.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam, 8));
+			};
+		};
 
 		m_PlayerTileComponent.GetOnTileFocus().Insert(OnPlayerTileFocus);
 		m_PlayerTileComponent.GetOnTileFocusLost().Insert(OnPlayerTileFocusLost);

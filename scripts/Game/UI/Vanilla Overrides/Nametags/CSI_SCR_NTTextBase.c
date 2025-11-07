@@ -39,9 +39,9 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerGroupName")
 		{
-			//tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 			tWidget.SetText(data.GetGroupName()); 
-		}
+		};
 		
 		if (tWidget.GetName() == "PlayerName") 
 		{	
@@ -61,8 +61,8 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				{
 					ctSet = true;
 					tWidget.SetColor(ct);
-				}
-			}
+				};
+			};
 			
 			if (!ctSet)
 				tWidget.SetColor(stateConf.m_vColor);

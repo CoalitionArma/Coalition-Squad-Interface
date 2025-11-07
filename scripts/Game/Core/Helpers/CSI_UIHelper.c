@@ -21,31 +21,25 @@ class CSI_UIHelper
 		CSI_EIcon.HELIPILOT,
 		CSI_EIcon.HELICREW,
 	};
-
-	// All Color Teams
-	static int m_iCTNone   = ARGB(255, 165, 165, 165);
-	static int m_iCTRed    = ARGB(255, 200, 65, 65);
-	static int m_iCTBlue   = ARGB(255, 0, 92, 255);
-	static int m_iCTYellow = ARGB(255, 230, 230, 0);
-	static int m_iCTGreen  = ARGB(255, 0, 190, 85);
 	
 	//------------------------------------------------------------------------------------------------
 	/**
 	* Convert the color team enum to a color
 	* @param colorEnum: The color enum to convert into a color
+	* @param opacity: The opacity of the color (0-255)
 	* @return Color team color
 	*/
-	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum)
+	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum, int opacity = 255)
 	{	
 		Color colorFromInt;
 		
 		switch(colorEnum)
 		{
-			case CSI_EColorTeam.BLUE : colorFromInt = Color.FromInt(m_iCTBlue); break;
-			case CSI_EColorTeam.RED : colorFromInt = Color.FromInt(m_iCTRed); break;
-			case CSI_EColorTeam.GREEN : colorFromInt = Color.FromInt(m_iCTGreen); break;
-			case CSI_EColorTeam.YELLOW : colorFromInt = Color.FromInt(m_iCTYellow); break;
-			default : colorFromInt = Color.FromInt(m_iCTNone);
+			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break; // BLUE
+			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break; // RED
+			case CSI_EColorTeam.GREEN : 	colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break; // GREEN
+			case CSI_EColorTeam.YELLOW : 	colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
+			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 165, 165, 165)); // NONE
 		}
 		
 		return colorFromInt; 

@@ -24,13 +24,13 @@ OverlayWidgetClass {
        Name "RoleIconLeft"
        Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
         Anchor 0 0.5 0 0.5
+        PositionX 0
         OffsetLeft 0
-        PositionY -11
-        OffsetTop -11
+        OffsetTop 0
         SizeX 22
         OffsetRight -22
         SizeY 22
-        OffsetBottom -11
+        OffsetBottom -22
        }
        "Is Visible" 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
@@ -62,21 +62,20 @@ OverlayWidgetClass {
      Prefab "{00000000BD5E5CB4}"
      Slot LayoutSlot "{51C4C0A5BAFB20D2}" {
       HorizontalAlign 3
-      VerticalAlign 3
      }
      {
       TextWidgetClass "{6598E862901EB857}" {
        Name "PlayerGroupName"
        Slot FrameWidgetSlot "{6598E862901EB846}" {
-        Anchor 0 0.5 0 0.5
+        Anchor 0 0 0 0
         PositionX 0
         OffsetLeft 0
-        PositionY 9
-        OffsetTop 9
+        PositionY 35.294
+        OffsetTop 35.3
         SizeX 0
         OffsetRight 0
         SizeY 0
-        OffsetBottom -9
+        OffsetBottom -35.3
         SizeToContent 1
        }
        Color 0.7529 0.7529 0.7529 1
@@ -97,15 +96,15 @@ OverlayWidgetClass {
       ImageWidgetClass "{66C3409C7D41C13A}" {
        Name "RoleIconCenter"
        Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
-        Anchor 0 0.5 0 0.5
-        PositionX 63.5
-        OffsetLeft 63.5
-        PositionY -26.5
-        OffsetTop -26.5
+        Anchor 0.5 1 0.5 1
+        PositionX -11
+        OffsetLeft -11
+        PositionY -49
+        OffsetTop -49
         SizeX 22
-        OffsetRight -85.5
+        OffsetRight -11
         SizeY 22
-        OffsetBottom 4.5
+        OffsetBottom 27
        }
        "Is Visible" 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
@@ -115,15 +114,13 @@ OverlayWidgetClass {
       TextWidgetClass "{000000003DEE4CFF}" {
        Prefab "{000000003DEE4CFF}"
        Slot FrameWidgetSlot "{51DC7B064D3F5743}" {
-        Anchor 0 0.5 0 0.5
-        PositionX 0
         OffsetLeft 0
-        PositionY -10
-        OffsetTop -10
+        PositionY 18
+        OffsetTop 18
         SizeX 0
         OffsetRight 0
         SizeY 0
-        OffsetBottom 10
+        OffsetBottom -18
        }
       }
      }
@@ -145,14 +142,12 @@ OverlayWidgetClass {
        Prefab "{00000000559BABFA}"
        Slot FrameWidgetSlot "{55E0813E4A6948D6}" {
         Anchor 0 0.5 0 0.5
-        PositionX 0
         OffsetLeft 0
-        PositionY -11
-        OffsetTop -11
+        OffsetTop 0
         SizeX 22
         OffsetRight -22
         SizeY 22
-        OffsetBottom -11
+        OffsetBottom -22
         SizeToContent 0
        }
        "Is Visible" 0

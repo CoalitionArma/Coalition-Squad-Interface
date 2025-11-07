@@ -256,7 +256,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 	
 	protected void OpenLocalPlayerSettingsMenu()
 	{
-		GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsMenu, 0, true);
+		
+		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
+			GetGame().OpenGroupMenu();
+		else
+			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsMenu, 0, true);
 	}
 	
 	//------------------------------------------------------------------------------------------------

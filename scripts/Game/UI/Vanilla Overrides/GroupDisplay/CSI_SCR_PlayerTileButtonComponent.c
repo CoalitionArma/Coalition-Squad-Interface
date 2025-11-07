@@ -1,43 +1,15 @@
 modded class SCR_PlayerTileButtonComponent
 {
 	Widget m_PlayerSettings;
-	
+	SCR_GroupTileButton m_TileButton;
+
 	//------------------------------------------------------------------------------------------------
-	override void HandlerAttached(Widget w)
+	void SetGroupTileButton(SCR_GroupTileButton tileButton)
 	{
-		m_PlayerSettings = GetRootFrame(w).FindAnyWidget("PlayersSettings");
-	}
-	
-	protected Widget GetRootFrame(Widget w)
-	{
-		Widget currentWidget = w;
+		m_TileButton = tileButton;
 		
-		for (int e; e <= 25; e++)
-		{
-			if (currentWidget.GetName() == "rootFrame")
-				break;
-			currentWidget = currentWidget.GetParent();
-		}
-		
-		return currentWidget;
-	}
-
-	protected SCR_GroupTileButton GetGroupTileButton(Widget w)
-	{
-		Widget currentWidget = w;
-		SCR_GroupTileButton tileButton;
-
-		for (int e; e <= 25; e++)
-		{
-            tileButton = SCR_GroupTileButton.Cast(currentWidget.FindHandler(SCR_GroupTileButton));
-
-			if (tileButton)
-				break;
-        
-			currentWidget = currentWidget.GetParent();
-		}
-		
-		return tileButton;
+		if (m_TileButton)
+			m_PlayerSettings = m_TileButton.GetRootFrame(m_wRoot).FindAnyWidget("PlayersSettings");
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -51,7 +23,9 @@ modded class SCR_PlayerTileButtonComponent
             playerSettings.UpdatePlayerSettingsPlayerID(GetTilePlayerID());
 
             CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(GetTilePlayerID());
-            GetGroupTileButton(w).UpdateScriptInvoker(playerData);
+            
+			if (m_TileButton)
+				m_TileButton.UpdateScriptInvoker(playerData);
 			
 			m_PlayerSettings.SetVisible(true);
 			advSettings.SetVisible(true);

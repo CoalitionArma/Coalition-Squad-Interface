@@ -448,12 +448,10 @@ ScaleWidgetClass {
              Slot OverlayWidgetSlot "{66C77442F6F8BEFA}" {
               HorizontalAlign 3
               VerticalAlign 3
+              Padding 2 3 2 4
              }
              "Z Order" 1
-             "Is Enabled" 0
-             IsPixelPerfect 0
-             Opacity 0
-             Clipping False
+             Opacity 0.5
              Color 0.165 0.672 0.202 0.063
              components {
               SCR_ModularButtonComponent "{6093726F6FBD3379}" {
@@ -495,12 +493,10 @@ ScaleWidgetClass {
              Slot OverlayWidgetSlot "{66C77442F6F8BF1F}" {
               HorizontalAlign 3
               VerticalAlign 3
+              Padding 2 3 2 4
              }
              "Z Order" 1
-             "Is Enabled" 0
-             IsPixelPerfect 0
-             Opacity 0
-             Clipping False
+             Opacity 0.5
              Color 0.068 0.231 0.371 0.063
              components {
               SCR_ModularButtonComponent "{6093726F6AA3820F}" {
@@ -542,10 +538,10 @@ ScaleWidgetClass {
              Slot OverlayWidgetSlot "{66C77442F6F8BF4F}" {
               HorizontalAlign 3
               VerticalAlign 3
+              Padding 2 3 2 4
              }
              "Z Order" 1
-             "Is Enabled" 0
-             Opacity 0
+             Opacity 0.5
              Color 0.68 0.005 0.006 0.063
              components {
               SCR_ModularButtonComponent "{6093726E95C17FCB}" {
