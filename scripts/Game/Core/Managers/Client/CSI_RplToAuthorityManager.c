@@ -136,6 +136,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
 	{	
+		if (playerID <= 0)
+			return;
+		
 		m_PlayerDataManager.UpdatePlayerData(playerID, isSL, icon, rank);
 	}
 
@@ -143,6 +146,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_ClearGroupSpecificData(int playerID)
 	{	
+		if (playerID <= 0)
+			return;
+		
 		m_PlayerDataManager.ClearGroupSpecificData(playerID);
 	}
 	
@@ -150,6 +156,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
+		if (playerID <= 0)
+			return;
+		
 		m_PlayerDataManager.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
@@ -157,6 +166,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
+		if (playerID <= 0)
+			return;
+		
 		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
 	}
 	
@@ -164,6 +176,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
+		if (playerID <= 0)
+			return;
+		
 		m_PlayerDataManager.UpdatePlayerTeamLeader(playerID, isTL);
 	}
 
@@ -171,6 +186,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
+		if (playerID <= 0)
+			return;
+		
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
 		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 		playersGroup.SetGroupLeader(playerID);
@@ -180,6 +198,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
+		if (playerID <= 0 || maxMembers <= 0)
+			return;
+		
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
 		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 
@@ -196,6 +217,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_RemovePlayerFromGroup(int playerID)
 	{
+		if (playerID <= 0)
+			return;
+		
 		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
 		SCR_PlayerControllerGroupComponent playerGroupController = SCR_PlayerControllerGroupComponent.GetPlayerControllerComponent(playerID);
 		SCR_AIGroup group = groupsManager.GetPlayerGroup(playerID);
@@ -212,6 +236,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
+		if (!CSI_GameSettings.GetSettingsArray().Contains(setting))
+			return;
+		
 		m_SettingsManager.UpdateServerSetting(setting, value, serverOverrideEnabled);
 	}
 	
