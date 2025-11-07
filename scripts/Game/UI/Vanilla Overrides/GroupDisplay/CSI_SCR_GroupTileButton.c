@@ -128,20 +128,23 @@ modded class SCR_GroupTileButton
 			};
 		};
 		
-		if (loadoutIcon && playerName && lineBackground && isLocalPlayerInGroup)
+		if (loadoutIcon && playerName && lineBackground)
 		{
 			CSI_EIcon icon = playerData.GetDisplayIcon();
             string iconString = CSI_UIHelper.GetIconString(icon, true);
 
             loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
 			
-			CSI_EColorTeam colorTeam = playerData.GetColorTeam();
-			playerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-			loadoutIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-		
-			if (colorTeam != CSI_EColorTeam.NONE)
+			if (isLocalPlayerInGroup)
 			{
-				lineBackground.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam, 8));
+				CSI_EColorTeam colorTeam = playerData.GetColorTeam();
+				playerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+				loadoutIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+			
+				if (colorTeam != CSI_EColorTeam.NONE)
+				{
+					lineBackground.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam, 8));
+				};
 			};
 		};
 
