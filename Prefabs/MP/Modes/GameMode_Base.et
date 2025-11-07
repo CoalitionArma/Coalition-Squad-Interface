@@ -1,7 +1,9 @@
 SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
-  CSI_AuthorityComponent "{611A41938F23800E}" {
+  CSI_PlayerDataManager "{66BCC39A74975F3C}" {
+  }
+  CSI_SettingsManager "{66BCC39A774363E3}" {
   }
  }
 }

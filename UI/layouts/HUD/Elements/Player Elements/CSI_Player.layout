@@ -1,0 +1,72 @@
+ScaleWidgetClass {
+ Name "Player"
+ Slot FrameWidgetSlot "{66A831E5607A8E01}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 127.5
+  OffsetRight -127.5
+  SizeY 25
+  OffsetBottom -25
+ }
+ components {
+  CSI_Player "{66A8318F2121D74D}" {
+  }
+ }
+ {
+  FrameWidgetClass "{66A831E5EDE01DB1}" {
+   Name "PlayerFrame"
+   Slot AlignableSlot "{66A831E511CFBA86}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   {
+    HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+     Name "PlayerHorizontalLayout"
+     Slot FrameWidgetSlot "{66A831E2AD69F2CE}" {
+      Anchor 0 0 1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX -27
+      OffsetRight 5
+      SizeY 10
+      OffsetBottom 0
+     }
+     {
+      ScaleWidgetClass "{66A831E50814C1AB}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+       Name "Icon"
+       Slot LayoutSlot "{66A831E2E95A965B}" {
+        VerticalAlign 3
+        SizeMode Fill
+        FillWeight 0.2
+       }
+      }
+      RichTextWidgetClass "{66490C0182D57E7E}" {
+       Name "PlayerName"
+       Slot LayoutSlot "{66A831E2E95A96BD}" {
+        HorizontalAlign 0
+        Padding -2 0 0 0
+        SizeMode Fill
+       }
+       "Left rule" Stop
+       "Right rule" Stop
+       "Up rule" Stop
+       "Down rule" Stop
+       Text "PLAYER NAME"
+       "Font Size" 10
+       "Min Font Size" 10
+       "Vertical Alignment" Center
+       FontProperties FontProperties "{66490C06959EDBA0}" {
+        Font "{D3E75BCBECEB273E}UI/Fonts/NotoSans/NotoSans-Enhanced-Regular-JP-KOR-SC-LAT.fnt"
+        ForceFont 1
+        ShadowSize 31
+        ShadowOffset 0.5 0.5
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

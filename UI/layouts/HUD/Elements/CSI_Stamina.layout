@@ -1,0 +1,29 @@
+ScaleWidgetClass {
+ Name "Stamina"
+ Slot FrameWidgetSlot "{66B8C3DE186DE6AB}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 250
+  OffsetRight -250
+  SizeY 6
+  OffsetBottom -6
+ }
+ components {
+  CSI_Stamina "{66B8C3DE4A5F673F}" {
+  }
+ }
+ {
+  ProgressBarWidgetClass "{5EBD2BF29F9A8646}" {
+   Name "StamBar"
+   Slot AlignableSlot "{66B8C3DE01FAD72E}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   Opacity 0
+   Color 0.042 0.042 0.042 0.078
+   Maximum 1
+   Current 0
+   "Draw Background" 0
+  }
+ }
+}
