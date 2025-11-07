@@ -128,7 +128,7 @@ modded class SCR_GroupTileButton
 			};
 		};
 		
-		if (loadoutIcon && playerName && lineBackground)
+		if (playerData && loadoutIcon && playerName && lineBackground)
 		{
 			CSI_EIcon icon = playerData.GetDisplayIcon();
             string iconString = CSI_UIHelper.GetIconString(icon, true);

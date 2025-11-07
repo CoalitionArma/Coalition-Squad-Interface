@@ -160,7 +160,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 				// Check if item is RTO related
 				SCR_RadioComponent radioComp = SCR_RadioComponent.Cast(item.FindComponent(SCR_RadioComponent));
 				SCR_RestrictedDeployableSpawnPointComponent spawnPoint = SCR_RestrictedDeployableSpawnPointComponent.Cast(item.FindComponent(SCR_RestrictedDeployableSpawnPointComponent));
-				if(spawnPoint || (radioComp && radioComp.GetRadioCategory() == ERadioCategory.MANPACK))
+				if(spawnPoint || (radioComp && radioComp.GetType() == EGadgetType.RADIO_BACKPACK))
 				{
 					validDisplayIcons.Insert(CSI_EIcon.RTO);
 					break;
