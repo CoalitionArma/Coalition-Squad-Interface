@@ -161,7 +161,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	 [RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
 	protected void RpcDo_PlayerDataUpdate(CSI_PlayerData playerData)
 	{
-		CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerData.GetPlayerID());
+		int playerID = playerData.GetPlayerID();
+		CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
 
 		if(!oldPlayerData)
 			m_mPlayerDataMap.Set(playerID, playerData);

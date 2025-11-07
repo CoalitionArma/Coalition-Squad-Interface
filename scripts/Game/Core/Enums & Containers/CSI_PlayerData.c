@@ -263,7 +263,7 @@ class CSI_PlayerData
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4);
+			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4);
 	}
 	
