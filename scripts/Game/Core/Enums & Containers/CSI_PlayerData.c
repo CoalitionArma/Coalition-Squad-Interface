@@ -1,5 +1,6 @@
 class CSI_PlayerData
 {
+	protected int m_iPlayerID;
 	protected CSI_EColorTeam m_iColorTeam = CSI_EColorTeam.NONE;
 	protected CSI_EOverrideIcon m_iOverrideIcon = CSI_EOverrideIcon.AUTO;
 	protected CSI_EIcon m_iDisplayIcon = CSI_EIcon.MAN;
@@ -73,6 +74,12 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	
 	//------------------------------------------------------------------------------------------------
+	void SetPlayerID(int playerID)
+	{
+		m_iPlayerID = playerID;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	void SetColorTeam(CSI_EColorTeam colorTeam)
 	{
 		m_iColorTeam = colorTeam;
@@ -112,6 +119,12 @@ class CSI_PlayerData
 	// GETTERS
 	//------------------------------------------------------------------------------------------------
 	
+	//------------------------------------------------------------------------------------------------
+	int GetPlayerID()
+	{
+		return m_iPlayerID;
+	}
+
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerValue()
 	{
@@ -170,30 +183,31 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	void Save(ScriptBitWriter writer)
 	{
+		writer.WriteInt(m_iPlayerID);
 		writer.WriteInt(m_iColorTeam);
 		writer.WriteInt(m_iOverrideIcon);
 		writer.WriteInt(m_iDisplayIcon);
 		writer.WriteInt(m_iRank);
 		writer.WriteBool(m_bIsTeamLeader);
 		writer.WriteBool(m_bIsSquadLeader);
-		return true;
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void Load(ScriptBitReader reader)
 	{
+		reader.ReadInt(m_iPlayerID);
 		reader.ReadInt(m_iColorTeam);
 		reader.ReadInt(m_iOverrideIcon);
 		reader.ReadInt(m_iDisplayIcon);
 		reader.ReadInt(m_iRank);
 		reader.ReadBool(m_bIsTeamLeader);
 		reader.ReadBool(m_bIsSquadLeader);
-		return true;
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	static bool Extract(CSI_PlayerData instance, ScriptCtx ctx, SSnapSerializerBase snapshot)
 	{
+		snapshot.SerializeBytes(instance.m_iPlayerID, 4);
 		snapshot.SerializeBytes(instance.m_iColorTeam, 4);
 		snapshot.SerializeBytes(instance.m_iOverrideIcon, 4);
 		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
@@ -206,6 +220,7 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	static bool Inject(SSnapSerializerBase snapshot, ScriptCtx ctx, CSI_PlayerData instance)
 	{
+		snapshot.SerializeBytes(instance.m_iPlayerID, 4);
 		snapshot.SerializeBytes(instance.m_iColorTeam, 4);
 		snapshot.SerializeBytes(instance.m_iOverrideIcon, 4);
 		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
@@ -222,6 +237,7 @@ class CSI_PlayerData
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeInt(packet);
 		snapshot.EncodeInt(packet);
+		snapshot.EncodeInt(packet);
 		snapshot.EncodeBool(packet);
 		snapshot.EncodeBool(packet);
 	}
@@ -229,6 +245,7 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	static bool Decode(ScriptBitSerializer packet, ScriptCtx ctx, SSnapSerializerBase snapshot)
 	{
+		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
 		snapshot.DecodeInt(packet);
@@ -247,12 +264,14 @@ class CSI_PlayerData
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4);
+			&& lhs.CompareSnapshots(rhs, 4);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	static bool PropCompare(CSI_PlayerData instance, SSnapSerializerBase snapshot, ScriptCtx ctx)
 	{
-		return snapshot.Compare(instance.m_iColorTeam, 4)
+		return snapshot.Compare(instance.m_iPlayerID, 4)
+		    && snapshot.Compare(instance.m_iColorTeam, 4)
 			&& snapshot.Compare(instance.m_iOverrideIcon, 4)
 			&& snapshot.Compare(instance.m_iDisplayIcon, 4)
 			&& snapshot.Compare(instance.m_iRank, 4)

@@ -2,46 +2,16 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 
 class CSI_PlayerDataManager : ScriptComponent
 {	
+	// Primary Data Map
 	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
-	
-	[RplProp()]
-	protected ref array<int> m_aPlayerIDs = {}; 
-	
-	[RplProp()]
-	protected ref array<ref CSI_PlayerData> m_aPlayerData = {}; 
-	
-	[RplProp(onRplName: "PlayerDataUpdate")]
-	protected int m_PlayerDataUpdate;
-	
-	static float UPDATE_INTERVAL = 0.325;
-	protected float m_fTimeSinceLastUpdate;
-	protected bool m_bDataUpdateInProgress;
-	
-	//------------------------------------------------------------------------------------------------
-	override protected void OnPostInit(IEntity owner)
-	{
-		super.OnPostInit(owner);
 
-		if (RplSession.Mode() != RplMode.Client) 
-			SetEventMask(owner, EntityEvent.FRAME);
-	}
-	
-	override protected void EOnFrame(IEntity owner, float timeSlice)
-	{
-		super.EOnFrame(owner, timeSlice);
-		
-		if (!m_bDataUpdateInProgress)
-			return;
-			
-		m_fTimeSinceLastUpdate += timeSlice;
-		
-		if (m_fTimeSinceLastUpdate >= UPDATE_INTERVAL)
-		{
-			m_fTimeSinceLastUpdate = 0;
-			m_bDataUpdateInProgress = false;
-			DataUpdate();
-		}
-	}
+	// Replication Maps
+	protected ref map<int, int> m_PlayersColorTeams 		= new map<int, int>();
+	protected ref map<int, int> m_PlayersOverrideIcon 		= new map<int, int>();
+	protected ref map<int, int> m_PlayersDisplayIcon 		= new map<int, int>();
+	protected ref map<int, int> m_PlayersRank 				= new map<int, int>();
+	protected ref map<int, bool> m_PlayersIsTeamLeader 		= new map<int, bool>();
+	protected ref map<int, bool> m_PlayersIsSquadLeader 	= new map<int, bool>();
 	
 	//------------------------------------------------------------------------------------------------
 	/**
@@ -65,7 +35,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		playerData.SetRank(rank);
 		playerData.SetIsSquadLeader(isSL);
 		
-		RequestDataUpdate();
+		DataUpdate(playerData);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -87,7 +57,7 @@ class CSI_PlayerDataManager : ScriptComponent
 			playerData.SetIsTeamLeader(false);
 		}
 
-		RequestDataUpdate();
+		DataUpdate(playerData);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -106,7 +76,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetColorTeam(colorTeam);
 		
-		RequestDataUpdate();
+		DataUpdate(playerData);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -127,7 +97,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetOverrideIcon(overrideIcon);
 		
-		RequestDataUpdate();
+		DataUpdate(playerData);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -146,7 +116,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if (playerData)
 			playerData.SetIsTeamLeader(isTL);
 		
-		RequestDataUpdate();
+		DataUpdate(playerData);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -166,70 +136,58 @@ class CSI_PlayerDataManager : ScriptComponent
 	 * @param playerID: The ID of player to create data for
 	 * @return CSI_PlayerData instance
 	 */
-	CSI_PlayerData CreatePlayerData(int playerID)
+	protected CSI_PlayerData CreatePlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = new CSI_PlayerData;
+		playerData.SetPlayerID(playerID);
 		m_mPlayerDataMap.Set(playerID, playerData);
 		return playerData;
 	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void RequestDataUpdate()
-	{
-		m_bDataUpdateInProgress = true;
-	};
 	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates player data arrays that then update the information on all clients.
 	 */
-	protected void DataUpdate()
+	protected void DataUpdate(CSI_PlayerData playerData)
 	{
-		array<int> tempPlayerIDs = {};
-		array<ref CSI_PlayerData> tempPlayerData = {};
-
-		// Fill arrays with all map data
-		foreach (int playerID, ref CSI_PlayerData playerData : m_mPlayerDataMap)
-		{
-			tempPlayerIDs.Insert(playerID);
-			tempPlayerData.Insert(playerData);
-		}
-
-		// Update replication properties
-		m_aPlayerIDs = tempPlayerIDs;
-		m_aPlayerData = tempPlayerData;
-		m_PlayerDataUpdate++;
-		Replication.BumpMe();
-		
-		#ifdef WORKBENCH
-			PlayerDataUpdate();
-		#endif
+		RpcDo_PlayerDataUpdate(playerData);
+		Rpc(RpcDo_PlayerDataUpdate, playerData);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates and synchronizes the manager's authoritative player data with the current local data.
 	 */
-	protected void PlayerDataUpdate()
+	 [RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
+	protected void RpcDo_PlayerDataUpdate(CSI_PlayerData playerData)
 	{
-		// Update local map from replicated arrays
-		for (int i = 0; i < m_aPlayerIDs.Count(); i++)
-		{
-			int playerID = m_aPlayerIDs.Get(i);
-			
-			CSI_PlayerData newPlayerData = m_aPlayerData.Get(i);
-			CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
-			
-			if(!oldPlayerData)
-				m_mPlayerDataMap.Set(playerID, newPlayerData);
-			else
-				oldPlayerData.DataUpdate(playerID, newPlayerData);
-		}
+		CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerData.GetPlayerID());
+
+		if(!oldPlayerData)
+			m_mPlayerDataMap.Set(playerID, playerData);
+		else
+			oldPlayerData.DataUpdate(playerID, playerData);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	// Remove player data from list global list replicated
+	void UnRegisterPlayerData(int playerID)
+	{
+		RpcDo_UnRegisterPlayerData(playerID);
+		Rpc(RpcDo_UnRegisterPlayerData, playerID);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
+	protected void RpcDo_UnRegisterPlayerData(int playerID)
+	{
+		if (!m_mPlayerDataMap.Contains(playerID))
+			return;
+
+		m_mPlayerDataMap.Remove(playerID);
 	}
 	
-	// --------------------------------------------------------------------------------------------
-	// ------------------------------------ Replication -------------------------------------------
-	// --------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------
 	override protected bool RplSave(ScriptBitWriter writer)
 	{
 		// Save maps
@@ -241,25 +199,18 @@ class CSI_PlayerDataManager : ScriptComponent
 		CSI_ReplicationHelper.WriteMapIntBool(writer, m_PlayersIsTeamLeader);
 		CSI_ReplicationHelper.WriteMapIntBool(writer, m_PlayersIsSquadLeader);
 
-		// Save containers
+		// Save playerData
 		int playablesCount = m_mPlayerDataMap.Count();
 		writer.WriteInt(playablesCount);
-		foreach (RplId id, CSI_PlayerData container : m_mPlayerDataMap)
+		foreach (int PlayerID, CSI_PlayerData playerData : m_mPlayerDataMap)
 		{
-			container.Save(writer);
+			playerData.Save(writer);
 		}
 
 		return true;
 	}
-	
-	ref map<int, int> m_PlayersColorTeams 		= new map<int, int>();
-	ref map<int, int> m_PlayersOverrideIcon 	= new map<int, int>();
-	ref map<int, int> m_PlayersDisplayIcon 		= new map<int, int>();
-	ref map<int, int> m_PlayersRank 			= new map<int, int>();
-	ref map<int, bool> m_PlayersIsTeamLeader 	= new map<int, bool>();
-	ref map<int, bool> m_PlayersIsSquadLeader 	= new map<int, bool>();
 
-	// --------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------
 	override protected bool RplLoad(ScriptBitReader reader)
 	{
 		// Load maps
@@ -271,17 +222,15 @@ class CSI_PlayerDataManager : ScriptComponent
 		CSI_ReplicationHelper.ReadMapIntBool(reader, m_PlayersIsTeamLeader);
 		CSI_ReplicationHelper.ReadMapIntBool(reader, m_PlayersIsSquadLeader);
 
-		// Load containers
+		// Load playerData
 		int playablesCount;
 		reader.ReadInt(playablesCount);
 		for (int i = 0; i < playablesCount; i++)
 		{
-			CSI_PlayerData container = new CSI_PlayerData();
-			container.Load(reader);
-			RPC_RegisterPlayable(container);
+			CSI_PlayerData playerData = new CSI_PlayerData();
+			playerData.Load(reader);
+			RpcDo_PlayerDataUpdate(playerData);
 		}
-
-		m_bRplLoaded = true;
 
 		return true;
 	}
