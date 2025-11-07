@@ -2,9 +2,6 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 
 class CSI_PlayerDataManager : ScriptComponent
 {	
-	protected bool m_bDataUpdateInProgress;
-	protected int m_iUpdate;
-	
 	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
 	
 	[RplProp()]
@@ -16,6 +13,10 @@ class CSI_PlayerDataManager : ScriptComponent
 	[RplProp(onRplName: "PlayerDataUpdate")]
 	protected int m_PlayerDataUpdate;
 	
+	static float UPDATE_INTERVAL = 0.325;
+	protected float m_fTimeSinceLastUpdate;
+	protected bool m_bDataUpdateInProgress;
+	
 	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
 	{
@@ -25,20 +26,20 @@ class CSI_PlayerDataManager : ScriptComponent
 			SetEventMask(owner, EntityEvent.FRAME);
 	}
 	
-	//------------------------------------------------------------------------------------------------
 	override protected void EOnFrame(IEntity owner, float timeSlice)
 	{
 		super.EOnFrame(owner, timeSlice);
 		
-		m_iUpdate++;
-		
-		if (!(m_iUpdate >= 20))
+		if (!m_bDataUpdateInProgress)
 			return;
-		else
-			m_iUpdate = 0;
+			
+		m_fTimeSinceLastUpdate += timeSlice;
 		
-		if (m_bDataUpdateInProgress)
+		Print(m_fTimeSinceLastUpdate);
+		
+		if (m_fTimeSinceLastUpdate >= UPDATE_INTERVAL)
 		{
+			m_fTimeSinceLastUpdate = 0;
 			m_bDataUpdateInProgress = false;
 			DataUpdate();
 		}
