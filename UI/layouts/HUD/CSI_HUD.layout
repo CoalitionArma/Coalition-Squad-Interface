@@ -1,0 +1,82 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ScaleWidgetClass "{66B8C3E3798DA427}" : "{AD61A34EB388CF6D}UI/layouts/HUD/Elements/CSI_Stamina.layout" {
+   Name "Stamina"
+   Slot FrameWidgetSlot "{66B8C3DE186DE6AB}" {
+    Anchor 0 1 0 1
+    PositionX 0
+    OffsetLeft 0
+    PositionY -6
+    OffsetTop -6
+    SizeX 250
+    OffsetRight -250
+    SizeY 6
+    OffsetBottom 0
+   }
+  }
+  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_Group.layout" {
+   Name "Group"
+   Slot FrameWidgetSlot "{66A83196E3AE5829}" {
+    Anchor 0.5 1 0.5 1
+    PositionX 69.03
+    OffsetLeft 69.03
+    PositionY -125.573
+    OffsetTop -125.573
+    SizeX 637.501
+    OffsetRight -706.53
+    SizeY 100
+    OffsetBottom 25.573
+   }
+   components {
+    CSI_Group "{66B8C3E6E183C164}" {
+    }
+   }
+  }
+  ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/layouts/HUD/Elements/CSI_Compass.layout" {
+   Name "Compass"
+   Slot FrameWidgetSlot "{66A8318AD64681BA}" {
+    Anchor 0.5 1 0.5 1
+    PositionX -66
+    OffsetLeft -66
+    PositionY -160
+    OffsetTop -160
+    SizeX 131.995
+    OffsetRight -66
+    SizeY 150.001
+    OffsetBottom 10
+   }
+   {
+    FrameWidgetClass "{66A8318AA3F0B87B}" {
+     Prefab "{66A8318AA3F0B87B}"
+     {
+      VerticalLayoutWidgetClass "{66A8318AE0DC5B30}" {
+       Prefab "{66A8318AE0DC5B30}"
+       {
+        FrameWidgetClass "{66A8318A0B2CF4B5}" {
+         Prefab "{66A8318A0B2CF4B5}"
+         {
+          ScaleWidgetClass "{66B8C3E49230831B}" {
+           Prefab "{66B8C3E49230831B}"
+           {
+            FrameWidgetClass "{66B8C3E1E51A1B0A}" {
+             Prefab "{66B8C3E1E51A1B0A}"
+             {
+              ScaleWidgetClass "{66B8C3E1E2901792}" {
+               Prefab "{66B8C3E1E2901792}"
+               "Is Visible" 0
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

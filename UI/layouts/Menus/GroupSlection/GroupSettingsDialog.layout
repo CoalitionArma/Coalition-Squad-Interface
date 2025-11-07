@@ -1,0 +1,80 @@
+FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialog.layout" {
+ {
+  SizeLayoutWidgetClass "{5CC296FE0BE2ED39}" {
+   Prefab "{5CC296FE0BE2ED39}"
+   {
+    OverlayWidgetClass "{5CC296FBD8B6CA52}" {
+     Prefab "{5CC296FBD8B6CA52}"
+     {
+      VerticalLayoutWidgetClass "{5CC296FBD8B6CA68}" {
+       Prefab "{5CC296FBD8B6CA68}"
+       {
+        OverlayWidgetClass "{5CC296FBD8B6CA6D}" {
+         Prefab "{5CC296FBD8B6CA6D}"
+         {
+          SizeLayoutWidgetClass "{5CC296F8389B4B68}" {
+           Prefab "{5CC296F8389B4B68}"
+           {
+            VerticalLayoutWidgetClass "{5CC296F8389B4B6E}" {
+             Prefab "{5CC296F8389B4B6E}"
+             {
+              OverlayWidgetClass "{5CC296F8389B4B62}" {
+               Prefab "{5CC296F8389B4B62}"
+               {
+                SizeLayoutWidgetClass "{5CC2F7A8C73B07D4}" {
+                 Prefab "{5CC2F7A8C73B07D4}"
+                 {
+                  VerticalLayoutWidgetClass "{5CC4C4C74EB344E3}" {
+                   Prefab "{5CC4C4C74EB344E3}"
+                   {
+                    ButtonWidgetClass "{66C81573843410A7}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
+                     Name "GroupSizeSlider"
+                     Slot LayoutSlot "{66C81573843410F6}" {
+                      HorizontalAlign 3
+                      Padding 0 4 0 4
+                     }
+                     "Z Order" 1
+                     components {
+                      SCR_SliderComponent "{548294960C7399D9}" {
+                       m_sLabel "Group Size"
+                       m_fValue 6
+                       m_fMinValue 1
+                       m_fMaxValue 99
+                       m_fStep 1
+                       m_sFormatText "%1"
+                      }
+                     }
+                     {
+                      SizeLayoutWidgetClass "{55387AC2CCC7E284}" {
+                       Prefab "{55387AC2CCC7E284}"
+                       {
+                        OverlayWidgetClass "{55367D8E531FD623}" {
+                         Prefab "{55367D8E531FD623}"
+                         Slot AlignableSlot "{55367D8E531FD640}" {
+                          Padding 0 0 0 0
+                         }
+                        }
+                       }
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

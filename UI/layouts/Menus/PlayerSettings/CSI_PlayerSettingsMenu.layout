@@ -1,0 +1,84 @@
+FrameWidgetClass {
+ Name "rootFrame"
+ {
+  ScaleWidgetClass "{66CABAEDF86B94F5}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
+   Name "PlayersSettings"
+   Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
+    Anchor 0 0 1 1
+    PositionX 817.5
+    OffsetLeft 0
+    PositionY 377.5
+    OffsetTop 0
+    SizeX -1810
+    OffsetRight 0
+    SizeY -480
+    OffsetBottom 0
+   }
+   {
+    FrameWidgetClass "{66C77442F6F8A5E9}" {
+     Prefab "{66C77442F6F8A5E9}"
+     Slot AlignableSlot "{66C77442D83EADFC}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     {
+      VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
+       Prefab "{66C774414EE8E30E}"
+       Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
+        PositionX -90
+        OffsetLeft -90
+        PositionY -225
+        OffsetTop -225
+        SizeX 180
+        OffsetRight -90
+        SizeY 450
+        OffsetBottom -225
+       }
+       {
+        OverlayWidgetClass "{66C76B3671544CC3}" {
+         Prefab "{66C76B3671544CC3}"
+         {
+          VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
+           Prefab "{66C76B3609B8B145}"
+           {
+            OverlayWidgetClass "{66CABAE08B9A0EE6}" {
+             Name "CancelOverlay"
+             Slot LayoutSlot "{66CC2DCCD5369A04}" {
+             }
+             "Z Order" 1
+             {
+              ButtonWidgetClass "{66CA2A7A9923EA78}" : "{0114A06AD44D49BD}UI/layouts/WidgetLibrary/Buttons/DialogButtonCancel.layout" {
+               Name "Cancel"
+               Slot OverlayWidgetSlot "{66CABAE38FFCD8C1}" {
+                HorizontalAlign 0
+               }
+               "Z Order" 2
+               components {
+                SCR_InputButtonComponent "{5D346C3DD81D95CD}" {
+                 m_sLabel "Exit"
+                }
+               }
+              }
+             }
+            }
+            TextWidgetClass "{5EC77AE9FA911A1F}" {
+             Prefab "{5EC77AE9FA911A1F}"
+             "Font Size" 18
+             "Min Font Size" 1
+            }
+           }
+          }
+         }
+        }
+        OverlayWidgetClass "{66C77441724892C6}" {
+         Prefab "{66C77441724892C6}"
+         "Is Visible" 0
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

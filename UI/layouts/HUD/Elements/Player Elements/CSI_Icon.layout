@@ -1,0 +1,118 @@
+ScaleWidgetClass {
+ Name "Icon"
+ Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+  PositionX 0
+  OffsetLeft 0
+  PositionY 0
+  OffsetTop 0
+  SizeX 63
+  OffsetRight -63
+  SizeY 63
+  OffsetBottom -63
+ }
+ components {
+  CSI_Icon "{66A831E2EDF40BCC}" {
+  }
+ }
+ {
+  FrameWidgetClass "{66A831E5CEE1BDCF}" {
+   Name "IconFrame"
+   Slot AlignableSlot "{66A831E5F4AFA64A}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   {
+    ImageWidgetClass "{660612B98AFC2634}" {
+     Name "Arrow"
+     Slot FrameWidgetSlot "{66A831E806B0B8CE}" {
+      Anchor 0 0 1 1
+      PositionX 30.912
+      PositionY 30.08
+      SizeX -61.824
+      OffsetRight 0
+      SizeY -60.16
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ARROW CLASSIC"
+     Size 63 63
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{6623052134C9CBC2}" {
+     Name "Icon"
+     Slot FrameWidgetSlot "{66A831E806B0B922}" {
+      Anchor 0.265 0.265 0.735 0.735
+      PositionX 0.63
+      PositionY 0.63
+      SizeX -1.26
+      OffsetRight 0
+      SizeY -1.26
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "MAN"
+     Size 31 31
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{66A6B5A377FC8834}" {
+     Name "Outline"
+     Slot FrameWidgetSlot "{66A831E806B0B939}" {
+      Anchor 0.265 0.265 0.735 0.735
+      PositionX 0.599
+      PositionY 0.63
+      SizeX -1.229
+      OffsetRight 0
+      SizeY -1.222
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON OUTLINE"
+     Size 31 31
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{66C340735F1D38DC}" {
+     Name "Icon_Large"
+     Slot FrameWidgetSlot "{66A831E806B0B922}" {
+      Anchor 0.125 0.125 0.875 0.875
+      PositionX -2.898
+      PositionY -2.898
+      SizeX 5.796
+      OffsetRight 0
+      SizeY 5.796
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "MAN"
+     Size 63 63
+     "Shadow Offset" 0.2 0.2
+    }
+    ImageWidgetClass "{66C3407344436D8A}" {
+     Name "Outline_Large"
+     Slot FrameWidgetSlot "{66A831E806B0B939}" {
+      Anchor 0.125 0.125 0.875 0.875
+      PositionX -2.928
+      PositionY -2.883
+      SizeX 5.859
+      OffsetRight 0
+      SizeY 5.778
+      OffsetBottom 0
+     }
+     "Is Visible" 0
+     "Inherit Color" 1
+     Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+     Image "ICON OUTLINE"
+     Size 63 63
+     "Shadow Offset" 0.2 0.2
+    }
+   }
+  }
+ }
+}

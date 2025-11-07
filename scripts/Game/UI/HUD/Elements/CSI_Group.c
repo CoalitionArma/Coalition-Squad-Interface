@@ -1,0 +1,57 @@
+class CSI_Group : SCR_ScriptedWidgetComponent
+{
+	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_HUDManager m_HUDManager;
+	
+	protected ref array<int> m_aStoredGroupPlayerIDs;
+	protected ref array<Widget> m_aPlayerWidgets;
+
+	//------------------------------------------------------------------------------------------------
+	override void HandlerAttached(Widget w)
+	{
+		super.HandlerAttached(w);
+
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		m_HUDManager = CSI_HUDManager.GetInstance();
+		
+		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the group interface element on each frame
+	 */
+	void Update()
+	{
+		array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
+
+		if(m_aStoredGroupPlayerIDs == groupArray)
+			return;
+		
+		int groupCount = m_HUDManager.GetLocalGroupCount();
+		m_aStoredGroupPlayerIDs = groupArray;
+
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
+			foreach (int i, int playerID : groupArray) 
+				UpdatePlayerWidget(i, playerID);
+		else
+			groupCount = 0;
+		
+		for (int e = groupCount; e <= 24; e++)
+			UpdatePlayerWidget(e, -1);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Updates the interface widget for a specific player in the group dsiplay
+	 * @param widgetNumber Widget index to update
+	 * @param playerID ID of the player to display
+	 */
+	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
+	{
+		Widget player = m_aPlayerWidgets[widgetNumber];
+
+		if (player) 
+			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerID);
+	}
+}

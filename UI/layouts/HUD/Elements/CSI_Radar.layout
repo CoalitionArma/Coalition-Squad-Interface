@@ -1,0 +1,400 @@
+ScaleWidgetClass {
+ Name "Radar"
+ Slot FrameWidgetSlot "{66B8C3DFC9AE8CC6}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 132
+  OffsetRight -132
+  SizeY 132
+  OffsetBottom -132
+ }
+ components {
+  CSI_Radar "{66B8C3DF17432374}" {
+  }
+ }
+ {
+  FrameWidgetClass "{66B8C3E1E51A1B0A}" {
+   Name "RadarFrame"
+   Slot AlignableSlot "{66B8C3E1E51A1B40}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   {
+    ScaleWidgetClass "{66B8C3E1E2901792}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon0"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+    }
+    ScaleWidgetClass "{66B8C3E1134DF216}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon1"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E11D7EF076}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon2"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E119B23432}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon3"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E119B3C02E}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon4"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E119B4F02B}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon5"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10444FCA6}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon6"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1044604DA}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon7"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10447A1BC}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon8"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E104597A4F}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon9"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1045A1098}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon10"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1045C2099}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon11"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E100368526}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon12"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1004901C5}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon13"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1004B40B0}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon14"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1004D6D1C}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon15"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1004FD60A}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon16"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10040ADD6}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon17"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E100425F51}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon18"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E100431B73}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon19"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10044E480}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon20"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10046570A}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon21"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E1004797FC}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon22"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10059306E}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon23"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+    ScaleWidgetClass "{66B8C3E10CCD00A5}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "RadarIcon24"
+     Slot FrameWidgetSlot "{66A831E473F06EE3}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX -8
+      OffsetLeft -8
+      PositionY -8
+      OffsetTop -8
+      SizeX 16
+      OffsetRight -8
+      SizeY 16
+      OffsetBottom -8
+     }
+     "Is Visible" 0
+    }
+   }
+  }
+ }
+}
