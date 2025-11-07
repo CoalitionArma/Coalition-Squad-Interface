@@ -227,6 +227,65 @@ class CSI_PlayerDataManager : ScriptComponent
 		}
 	}
 	
+	// --------------------------------------------------------------------------------------------
+	// ------------------------------------ Replication -------------------------------------------
+	// --------------------------------------------------------------------------------------------
+	override protected bool RplSave(ScriptBitWriter writer)
+	{
+		// Save maps
+		CSI_ReplicationHelper.WriteMapIntInt(writer, m_PlayersColorTeams);
+		CSI_ReplicationHelper.WriteMapIntInt(writer, m_PlayersOverrideIcon);
+		CSI_ReplicationHelper.WriteMapIntInt(writer, m_PlayersDisplayIcon);
+		CSI_ReplicationHelper.WriteMapIntInt(writer, m_PlayersRank);
+		
+		CSI_ReplicationHelper.WriteMapIntBool(writer, m_PlayersIsTeamLeader);
+		CSI_ReplicationHelper.WriteMapIntBool(writer, m_PlayersIsSquadLeader);
+
+		// Save containers
+		int playablesCount = m_mPlayerDataMap.Count();
+		writer.WriteInt(playablesCount);
+		foreach (RplId id, CSI_PlayerData container : m_mPlayerDataMap)
+		{
+			container.Save(writer);
+		}
+
+		return true;
+	}
+	
+	ref map<int, int> m_PlayersColorTeams 		= new map<int, int>();
+	ref map<int, int> m_PlayersOverrideIcon 	= new map<int, int>();
+	ref map<int, int> m_PlayersDisplayIcon 		= new map<int, int>();
+	ref map<int, int> m_PlayersRank 			= new map<int, int>();
+	ref map<int, bool> m_PlayersIsTeamLeader 	= new map<int, bool>();
+	ref map<int, bool> m_PlayersIsSquadLeader 	= new map<int, bool>();
+
+	// --------------------------------------------------------------------------------------------
+	override protected bool RplLoad(ScriptBitReader reader)
+	{
+		// Load maps
+		CSI_ReplicationHelper.ReadMapIntInt(reader, m_PlayersColorTeams);
+		CSI_ReplicationHelper.ReadMapIntInt(reader, m_PlayersOverrideIcon);
+		CSI_ReplicationHelper.ReadMapIntInt(reader, m_PlayersDisplayIcon);
+		CSI_ReplicationHelper.ReadMapIntInt(reader, m_PlayersRank);
+		
+		CSI_ReplicationHelper.ReadMapIntBool(reader, m_PlayersIsTeamLeader);
+		CSI_ReplicationHelper.ReadMapIntBool(reader, m_PlayersIsSquadLeader);
+
+		// Load containers
+		int playablesCount;
+		reader.ReadInt(playablesCount);
+		for (int i = 0; i < playablesCount; i++)
+		{
+			CSI_PlayerData container = new CSI_PlayerData();
+			container.Load(reader);
+			RPC_RegisterPlayable(container);
+		}
+
+		m_bRplLoaded = true;
+
+		return true;
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	// Returns the instance of the PlayerDataManager
 	protected static CSI_PlayerDataManager m_sInstance;

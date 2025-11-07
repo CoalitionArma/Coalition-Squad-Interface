@@ -168,26 +168,26 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	
 	//------------------------------------------------------------------------------------------------
-	bool RplSave(ScriptBitWriter writer)
+	void Save(ScriptBitWriter writer)
 	{
-		writer.Write(m_iColorTeam, 6);
-		writer.Write(m_iOverrideIcon, 6);
-		writer.Write(m_iDisplayIcon, 6);
-		writer.Write(m_iRank, 6);
-		writer.Write(m_bIsTeamLeader, 1);
-		writer.Write(m_bIsSquadLeader, 1);
+		writer.WriteInt(m_iColorTeam);
+		writer.WriteInt(m_iOverrideIcon);
+		writer.WriteInt(m_iDisplayIcon);
+		writer.WriteInt(m_iRank);
+		writer.WriteBool(m_bIsTeamLeader);
+		writer.WriteBool(m_bIsSquadLeader);
 		return true;
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	bool RplLoad(ScriptBitReader reader)
+	void Load(ScriptBitReader reader)
 	{
-		reader.Read(m_iColorTeam, 6);
-		reader.Read(m_iOverrideIcon, 6);
-		reader.Read(m_iDisplayIcon, 6);
-		reader.Read(m_iRank, 6);
-		reader.Read(m_bIsTeamLeader, 1);
-		reader.Read(m_bIsSquadLeader, 1);
+		reader.ReadInt(m_iColorTeam);
+		reader.ReadInt(m_iOverrideIcon);
+		reader.ReadInt(m_iDisplayIcon);
+		reader.ReadInt(m_iRank);
+		reader.ReadBool(m_bIsTeamLeader);
+		reader.ReadBool(m_bIsSquadLeader);
 		return true;
 	}
 	
