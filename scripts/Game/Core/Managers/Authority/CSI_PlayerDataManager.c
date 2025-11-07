@@ -35,8 +35,6 @@ class CSI_PlayerDataManager : ScriptComponent
 			
 		m_fTimeSinceLastUpdate += timeSlice;
 		
-		Print(m_fTimeSinceLastUpdate);
-		
 		if (m_fTimeSinceLastUpdate >= UPDATE_INTERVAL)
 		{
 			m_fTimeSinceLastUpdate = 0;
