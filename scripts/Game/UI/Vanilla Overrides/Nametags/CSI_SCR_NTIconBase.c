@@ -1,6 +1,7 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
+	protected CSI_PlayerData m_StoredPlayerData;
 	protected SCR_NameTagData m_StoredNameTagData;
 	protected int m_iStoredIndex;
 	
@@ -8,7 +9,7 @@ modded class SCR_NTIconBase
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
-		if (!iWidget || iWidget.GetName() != "IconNT")
+		if (!iWidget)
 			return;
 		
 		SCR_NTStateIcon stateConf = SCR_NTStateIcon.Cast( GetEntityStateConfig(data) );
@@ -20,33 +21,12 @@ modded class SCR_NTIconBase
 		m_iStoredIndex = index;
 		
 		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		Widget parent = iWidget.GetParent().GetParent();
 		
-		ImageWidget rightWidget = iWidget;
-		ImageWidget leftWidget = ImageWidget.Cast(parent.FindAnyWidget("RoleIconLeft"));
-		ImageWidget centerWidget = ImageWidget.Cast(parent.FindAnyWidget("RoleIconCenter"));
-		
-		ImageWidget widgetToEdit;
-		
-		switch (nametagPos)
+		switch (true)
 		{
-			case CSI_ENametagIconPosition.CENTER : {
-				data.SetVisibility(rightWidget, false, 0, false);
-				data.SetVisibility(leftWidget, false, 0, false);
-				widgetToEdit = centerWidget; 
-				break;
-			}
-			case CSI_ENametagIconPosition.RIGHT : {
-				data.SetVisibility(centerWidget, false, 0, false);
-				data.SetVisibility(leftWidget, false, 0, false);
-				widgetToEdit = rightWidget; 
-				break;
-			}
-			default : {
-				data.SetVisibility(centerWidget, false, 0, false);
-				data.SetVisibility(rightWidget, false, 0, false);
-				widgetToEdit = leftWidget; 
-			}
+			case (nametagPos == CSI_ENametagIconPosition.CENTER && (iWidget.GetName() != "RoleIconCenter")) : data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "IconNT")) : data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) : data.SetVisibility(iWidget, false, 0, false); return;
 		}
 		
 		Color colorTeam = stateConf.m_vColor;
@@ -55,6 +35,7 @@ modded class SCR_NTIconBase
 		if (data.m_iPlayerID > 0)
 		{
 			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
+			
 			if (playerData)
 			{
 				array<int> groupArray = CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds();
@@ -63,32 +44,39 @@ modded class SCR_NTIconBase
 					colorTeam = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
 				
 				iconString = CSI_UIHelper.GetIconString(playerData.GetDisplayIcon(), true);
+				
+				m_StoredPlayerData = playerData;
 				playerData.GetOnDataUpdate().Insert(DataRefresh);
 			};
 		};
 		
 		if (!iconString.IsEmpty() && (iconString != "MAN_ICON"))
 		{
-			widgetToEdit.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
-			widgetToEdit.SetColor(colorTeam);
-			data.SetVisibility(widgetToEdit, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
+			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
+			iWidget.SetColor(colorTeam);
+			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 		} else
-			data.SetVisibility(widgetToEdit, false, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
+			data.SetVisibility(iWidget, false, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 	}
 
 	protected void DataRefresh()
 	{	
 		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Remove(DataRefresh);
+		if (m_StoredPlayerData)
+			m_StoredPlayerData.GetOnDataUpdate().Remove(DataRefresh);
 		
-		if (m_StoredNameTagData.m_iPlayerID > 0)
+		if (m_StoredNameTagData.m_iPlayerID > 0 && m_StoredNameTagData.m_CharController && m_StoredNameTagData.m_CharController.GetCharacter())
 		{
 			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(m_StoredNameTagData.m_iPlayerID);
+			if (playerData == m_StoredPlayerData)
+				SetDefaults(m_StoredNameTagData, m_iStoredIndex);
+		} else {
+			ImageWidget iWidget = ImageWidget.Cast( m_StoredNameTagData.m_aNametagElements[m_iStoredIndex] );
+			if (!iWidget)
+				return;
 			
-			if (playerData)
-				playerData.GetOnDataUpdate().Remove(DataRefresh);
-			
-			SetDefaults(m_StoredNameTagData, m_iStoredIndex);
-		};
+			m_StoredNameTagData.SetVisibility(iWidget, false, 0, false);
+		}
 	}	
 }
 

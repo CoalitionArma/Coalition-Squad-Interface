@@ -6,6 +6,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	protected CSI_HUDManager m_HUDManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
+	protected CSI_PlayerData m_StoredPlayerData;
 	protected SCR_NameTagData m_StoredNameTagData;
 	protected int m_iStoredIndex;
 	
@@ -47,7 +48,6 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		{	
 			Color colorTeam = stateConf.m_vColor;
 			
-			bool ctSet = false;
 			if (data.m_iPlayerID > 0)
 			{
 				CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(data.m_iPlayerID);
@@ -55,6 +55,8 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				if (playerData && groupArray.Contains(data.m_iPlayerID))
 				{
 					colorTeam = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+					
+					m_StoredPlayerData = playerData;
 					playerData.GetOnDataUpdate().Insert(DataRefresh);
 				};
 			};
@@ -65,20 +67,27 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions	
 	}
 	
+	
+	
 	protected void DataRefresh()
-	{		
+	{	
 		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Remove(DataRefresh);
+		if (m_StoredPlayerData)
+			m_StoredPlayerData.GetOnDataUpdate().Remove(DataRefresh);
 		
-		if (m_StoredNameTagData.m_iPlayerID > 0)
+		if (m_StoredNameTagData.m_iPlayerID > 0 && m_StoredNameTagData.m_CharController && m_StoredNameTagData.m_CharController.GetCharacter())
 		{
 			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(m_StoredNameTagData.m_iPlayerID);
+			if (playerData == m_StoredPlayerData)
+				SetDefaults(m_StoredNameTagData, m_iStoredIndex);
+		} else {
+			TextWidget tWidget = TextWidget.Cast( m_StoredNameTagData.m_aNametagElements[m_iStoredIndex] );
+			if (!tWidget)
+				return;
 			
-			if (playerData)
-				playerData.GetOnDataUpdate().Remove(DataRefresh);
-			
-			SetDefaults(m_StoredNameTagData, m_iStoredIndex);
-		};
-	}	
+			m_StoredNameTagData.SetVisibility(tWidget, false, 0, false);
+		}
+	}		
 }
 
 //------------------------------------------------------------------------------------------------
