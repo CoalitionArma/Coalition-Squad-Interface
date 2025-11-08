@@ -74,12 +74,17 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		CSI_EOverrideIcon iconOverride = playerData.GetOverrideIcon();
 		CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
+		string displayIconStr = CSI_UIHelper.GetIconString(displayIcon, true);
 
 		if (iconOverride != CSI_EOverrideIcon.AUTO) 
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-		m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(displayIcon, true));
+		
+		if (displayIconStr == "MAN_ICON")
+			m_wIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
+		else
+           	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, displayIconStr);
 
 		m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));

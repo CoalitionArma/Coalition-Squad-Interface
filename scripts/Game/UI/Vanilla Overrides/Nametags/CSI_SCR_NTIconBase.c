@@ -49,9 +49,6 @@ modded class SCR_NTIconBase
 			}
 		}
 		
-		if (!widgetToEdit)
-			return;
-		
 		Color colorTeam = stateConf.m_vColor;
 		string iconString;
 		
@@ -60,7 +57,11 @@ modded class SCR_NTIconBase
 			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
 			if (playerData)
 			{
-				colorTeam = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+				array<int> groupArray = CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds();
+				
+				if (groupArray.Contains(data.m_iPlayerID))
+					colorTeam = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+				
 				iconString = CSI_UIHelper.GetIconString(playerData.GetDisplayIcon(), true);
 				playerData.GetOnDataUpdate().Insert(DataRefresh);
 			};
@@ -89,33 +90,13 @@ modded class SCR_NTIconBase
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconPlatform
 {	
-	protected SCR_NameTagData m_StoredNameTagData;
-	protected int m_iStoredIndex;
-	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
-		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
-		m_StoredNameTagData = data;
-		m_iStoredIndex = index;
+		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
+		if (!iWidget)
+			return;
 		
-		settingsManager.GetOnSettingsUpdate().Insert(DataRefresh);
-		CSI_ENametagIconPosition nametagPos = settingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		if (nametagPos == CSI_ENametagIconPosition.LEFT)
-		{
-			ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
-			if (!iWidget)
-				return;
-			
-			iWidget.SetVisible(false);
-		} else
-			super.SetDefaults(data, index);
+		iWidget.SetVisible(false);
 	}
-	
-	override protected void DataRefresh()
-	{
-		SetDefaults(m_StoredNameTagData, m_iStoredIndex);
-		
-		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Remove(DataRefresh);
-	}	
 };

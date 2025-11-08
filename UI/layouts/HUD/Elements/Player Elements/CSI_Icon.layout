@@ -38,7 +38,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
      Size 63 63
-     "Shadow Offset" 0.2 0.2
+     "Shadow Offset" 0 0
     }
     ImageWidgetClass "{6623052134C9CBC2}" {
      Name "Icon"
@@ -56,7 +56,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
      Size 31 31
-     "Shadow Offset" 0.2 0.2
+     "Shadow Offset" 0 0
     }
     ImageWidgetClass "{66A6B5A377FC8834}" {
      Name "Outline"
@@ -74,7 +74,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
      Size 31 31
-     "Shadow Offset" 0.2 0.2
+     "Shadow Offset" 0 0
     }
     ImageWidgetClass "{66C340735F1D38DC}" {
      Name "Icon_Large"
@@ -92,7 +92,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
      Size 63 63
-     "Shadow Offset" 0.2 0.2
+     "Shadow Offset" 0 0
     }
     ImageWidgetClass "{66C3407344436D8A}" {
      Name "Outline_Large"
@@ -110,7 +110,7 @@ ScaleWidgetClass {
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
      Size 63 63
-     "Shadow Offset" 0.2 0.2
+     "Shadow Offset" 0 0
     }
    }
   }

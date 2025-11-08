@@ -88,6 +88,42 @@ modded class SCR_NameTagData : Managed
 			m_Flags |= ENameTagFlags.NAME_UPDATE;
 		}
 	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Set visibility of nametag widget
+	override void SetVisibility(Widget widget, bool visible, float visibleOpacity, bool animate = true)
+	{
+		if (!widget)
+			return;
+						
+		float targetVal;
+		if (visible)
+		{
+			m_NameTagWidget.SetVisible(true);
+			if (widget == m_NameTagWidget)
+				m_fVisibleOpacity = visibleOpacity;
+			
+			m_Flags |= ENameTagFlags.VISIBLE;
+			m_Flags &= ~ENameTagFlags.UPDATE_DISABLE;
+			m_Flags &= ~ENameTagFlags.DISABLED;
+			targetVal = visibleOpacity;
+		}
+		else 
+			targetVal = 0;
+		
+		if (m_fTagFadeSpeed == 0)
+			animate = false;
+		
+		if (targetVal >= 0.1)
+			widget.SetVisible(true);
+		
+		if (animate)
+			AnimateWidget.Opacity(widget, targetVal, m_fTagFadeSpeed);
+		else {
+			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);
+			widget.SetOpacity(targetVal);
+		}
+	}
 
 	//------------------------------------------------------------------------------------------------
 	string GetGroupName()

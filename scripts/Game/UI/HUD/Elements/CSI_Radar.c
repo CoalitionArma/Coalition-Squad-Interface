@@ -43,7 +43,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
 
 				if (!playerCharacter)
+				{
+					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
+				};
 				
 				vector playerCharacterOrigin = playerCharacter.GetOrigin();
 
@@ -59,8 +62,11 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 					disT = dis * 2.0;
 				};
 				
-				if (dis > searchRadius) 
+				if (dis > searchRadius)
+				{
+					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
+				}
 
 				if (playerID != SCR_PlayerController.GetLocalPlayerId())
 				{
@@ -84,10 +90,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		} else
 			groupCount = 0;
 
-		if(m_iStoredGroupCount == groupCount)
-			return;
-		
-		m_iStoredGroupCount = groupCount;
 		for (int e = groupCount; e <= 24; e++)
 			UpdatePlayerRadarWidget(e, -1, 1, 0, 0, 0, 0);
 	}

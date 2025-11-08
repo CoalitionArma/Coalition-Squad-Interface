@@ -45,31 +45,24 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerName") 
 		{	
+			Color colorTeam = stateConf.m_vColor;
+			
 			bool ctSet = false;
 			if (data.m_iPlayerID > 0)
 			{
-				Color ct;
 				CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(data.m_iPlayerID);
 				array<int> groupArray = m_HUDManager.GetLocalGroupPlayerIds();
 				if (playerData && groupArray.Contains(data.m_iPlayerID))
 				{
-					ct = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
+					colorTeam = CSI_UIHelper.ConvertColorTeamToColor(playerData.GetColorTeam());
 					playerData.GetOnDataUpdate().Insert(DataRefresh);
-				};
-				
-				if (ct && !ct.IsZero()) 
-				{
-					ctSet = true;
-					tWidget.SetColor(ct);
 				};
 			};
 			
-			if (!ctSet)
-				tWidget.SetColor(stateConf.m_vColor);
+			tWidget.SetColor(colorTeam);
 		};
 		
-		data.UpdateAttatchedTo();
-		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
+		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions	
 	}
 	
 	protected void DataRefresh()
