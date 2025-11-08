@@ -78,12 +78,17 @@ modded class SCR_NTIconBase
 
 	protected void DataRefresh()
 	{	
-		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(m_StoredNameTagData.m_iPlayerID);
-		
-		playerData.GetOnDataUpdate().Remove(DataRefresh);
 		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Remove(DataRefresh);
 		
-		SetDefaults(m_StoredNameTagData, m_iStoredIndex);
+		if (m_StoredNameTagData.m_iPlayerID > 0)
+		{
+			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(m_StoredNameTagData.m_iPlayerID);
+			
+			if (playerData)
+				playerData.GetOnDataUpdate().Remove(DataRefresh);
+			
+			SetDefaults(m_StoredNameTagData, m_iStoredIndex);
+		};
 	}	
 }
 
