@@ -10,6 +10,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 	protected int m_iCurrentUpdateCycle = 12;
 	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
 	protected int m_iLocallyStoredGroupID = -1;
+	
+	protected ref CSI_SettingsJson m_SettingsJson;
 
 	//------------------------------------------------------------------------------------------------
 	override protected void OnPostInit(IEntity owner)
@@ -23,7 +25,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
 
 		if (RplSession.Mode() != RplMode.Dedicated) 
+		{
+			m_SettingsJson = new CSI_SettingsJson;
+			m_SettingsJson.LoadFromFile();
+			
 			SetEventMask(owner, EntityEvent.FRAME);
+		};
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -41,6 +48,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 		
 		UpdateAllLocalPlayerValues();
 		m_HUDManager.UpdateLocalHUDValues();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	CSI_SettingsJson GetLocalSettingsJson()
+	{
+		return m_SettingsJson;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -251,6 +264,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerID, playersGroup.IsPlayerLeader(playerID), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	protected void OpenLocalPlayerSettingsMenu()
 	{
 		

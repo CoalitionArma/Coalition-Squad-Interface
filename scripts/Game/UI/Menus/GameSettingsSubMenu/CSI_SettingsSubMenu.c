@@ -12,11 +12,10 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	{
 		super.OnTabHide();
 		SCR_PlayerController.SetGameUserSettings();
+		CSI_PlayerControllerManager.GetInstance().GetLocalSettingsJson().SaveToFile();
 		
 		if (m_SettingsManager && m_RplToAuthorityManager)
-		{
-			m_SettingsManager.RequestSettingsUpdate();
-			
+		{	
 			if (SCR_Global.IsAdmin())
 			{
 				Widget serverOverridesLayoutWidget = m_wRoot.FindAnyWidget("ServerOverrides");
@@ -45,6 +44,8 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 						m_RplToAuthorityManager.Owner_ChangeAuthoritySetting(settingStr, 0, false);
 				}
 			};
+			
+			m_SettingsManager.RequestSettingsUpdate();
 		};
 	}
 
