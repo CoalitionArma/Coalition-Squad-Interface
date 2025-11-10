@@ -11,8 +11,6 @@ class CSI_PlayerData
 	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
 	
-	protected int m_iPlayerValue;
-	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Replaces or sets the internal CSI_PlayerData record for the player.
@@ -33,40 +31,8 @@ class CSI_PlayerData
 			SetIsSquadLeader(newData.GetIsSquadLeader());
 		};
 		
-		m_iPlayerValue = UpdatePlayerValue(playerID);
-		
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the value associated with a player identified by their ID
-	 * @param playerID: The unique identifier of the player
-	 * @return Updated value for the specified player
-	 */
-	protected int UpdatePlayerValue(int playerID)
-	{
-		int value = 0;
-
-		// Sort player by their color so we can group color teams together (a lil bit racist).
-		switch (m_iColorTeam) 
-		{
-			case CSI_EColorTeam.RED    : value = -3; break;
-			case CSI_EColorTeam.BLUE   : value = -5; break;
-			case CSI_EColorTeam.YELLOW : value = -7; break;
-			case CSI_EColorTeam.GREEN  : value = -9; break;
-			default : {value = 2;  break;};
-		};
-
-		switch (true) 
-		{
-			case (m_bIsSquadLeader) : value = -1; break;
-			case (m_bIsTeamLeader && m_iColorTeam == CSI_EColorTeam.NONE) : value--; break;
-			case (m_bIsTeamLeader && m_iColorTeam != CSI_EColorTeam.NONE) : value++; break;
-		};
-
-		return value;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -123,12 +89,6 @@ class CSI_PlayerData
 	int GetPlayerID()
 	{
 		return m_iPlayerID;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	int GetPlayerValue()
-	{
-		return m_iPlayerValue;
 	}
 	
 	//------------------------------------------------------------------------------------------------

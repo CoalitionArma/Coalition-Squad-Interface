@@ -8,19 +8,25 @@ class CSI_ChararcterHelper
 	*/
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
 	{
-		AimingComponent playerControllerComponent = playerCharacter.GetHeadAimingComponent();
-		if (!playerControllerComponent) 
+		AimingComponent playerAimingComponent = playerCharacter.GetHeadAimingComponent();
+		if (!playerAimingComponent) 
 			return 0;
 
-		float yaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
+		float yaw = playerAimingComponent.GetAimingDirectionWorld().ToYaw();
 
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess)
+		BaseCompartmentSlot compartment = GetCharacterVehicleCompartment(playerCharacter);
+		if (compartment)
 		{
-			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-			if (compartment)
+			TurretControllerComponent turretControllerComp = TurretControllerComponent.Cast(compartment.GetController());
+			if (!turretControllerComp)
+				turretControllerComp = compartment.GetAttachedTurret();
+			
+			if (turretControllerComp)
+				yaw = -turretControllerComp.GetTurretComponent().GetAimingDirectionWorld().ToYaw();
+			else
 				yaw = -playerCharacter.GetYawPitchRoll()[0];
 		};
+		
 		return yaw;
 	}
 

@@ -44,7 +44,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			};
 			
 			m_wRoot.SetVisible(true);
-			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, GetGame().GetPlayerManager().GetPlayerName(playerID)));
+			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, CSI_UIHelper.GetPlayersName(playerID)));
 			
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerID);
 			

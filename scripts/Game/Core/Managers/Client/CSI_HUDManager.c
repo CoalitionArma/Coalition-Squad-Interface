@@ -103,7 +103,24 @@ class CSI_HUDManager : ScriptComponent
 			if (!playerData)
 				continue;
 			
-			int playerValue = playerData.GetPlayerValue();
+			int playerValue = 0;
+	
+			// Sort player by their color so we can group color teams together (a lil bit racist).
+			switch (playerData.GetColorTeam()) 
+			{
+				case CSI_EColorTeam.RED    : playerValue = -3; break;
+				case CSI_EColorTeam.BLUE   : playerValue = -5; break;
+				case CSI_EColorTeam.YELLOW : playerValue = -7; break;
+				case CSI_EColorTeam.GREEN  : playerValue = -9; break;
+				default : {playerValue = 2;  break;};
+			};
+	
+			switch (true) 
+			{
+				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
+				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() == CSI_EColorTeam.NONE) : playerValue--; break;
+				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() != CSI_EColorTeam.NONE) : playerValue++; break;
+			};
 			
 			// Format a string with what we need for displaying/sorting a player.
 			string playerStr = string.Format("%1;%2", playerValue, playerID);

@@ -90,29 +90,26 @@ class CSI_PlayerControllerManager : ScriptComponent
 			
 			// Check players current compartment type, then assign his Icon.
 			ECompartmentType compartmentType = compartment.GetType();
+			string comartmentName = compartment.GetCompartmentName();
 			
-			switch (compartmentType)
-			{
-				case ECompartmentType.CARGO  : displayIcon = CSI_EIcon.PASSANGER; break;
-				case ECompartmentType.TURRET : displayIcon = CSI_EIcon.GUNNER; break;
-				case ECompartmentType.PILOT  : {
-					UIInfo uiInfo = compartment.GetUIInfo();
-					if (uiInfo)
-					{
-						string name = uiInfo.GetName();
-						string comartmentName = compartment.GetCompartmentName();
+			UIInfo uiInfo = compartment.GetUIInfo();
+			string name = uiInfo.GetName();
+			
+			if ((uiInfo && name == "#AR-VehiclePosition_Commander") || comartmentName == "Commander")
+				displayIcon = CSI_EIcon.COMMANDER;
+			else {
+				switch (compartmentType)
+				{
+					case ECompartmentType.CARGO  : displayIcon = CSI_EIcon.PASSANGER; break;
+					case ECompartmentType.TURRET : displayIcon = CSI_EIcon.GUNNER; break;
+					case ECompartmentType.PILOT  : {
 						if (heloSim || planeSim)
-						{
-							if (name == "#AR-VehiclePosition_Copilot" || comartmentName == "CopilotCompartment")
+							if ((uiInfo && name == "#AR-VehiclePosition_Copilot") || comartmentName == "CopilotCompartment")
 								displayIcon = CSI_EIcon.HELICREW;
 							else
 								displayIcon = CSI_EIcon.HELIPILOT;
-						} else
-							if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
-								displayIcon = CSI_EIcon.COMMANDER;
-							else
-								displayIcon = CSI_EIcon.DRIVER;
-						break;
+						else
+							displayIcon = CSI_EIcon.DRIVER;
 					};
 				};
 			};

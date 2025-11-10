@@ -118,11 +118,21 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			
 			m_wIconLarge.SetVisible(true);
 			
-			if (icon != CSI_EIcon.GUNNER)
+			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
+			bool isPiloted = (icon == CSI_EIcon.HELIPILOT || icon == CSI_EIcon.HELICREW);
+			
+			if (isTurreted || isPiloted)
 			{
+				if (isTurreted)
+					m_wArrow.SetVisible(true);
+				else
+					m_wArrow.SetVisible(false);
+				
+				m_wOutlineLarge.SetVisible(false);
+			} else {
 				m_wArrow.SetVisible(false);
 				m_wOutlineLarge.SetVisible(true);
-			};
+			}
 		} else {
 			m_wIconLarge.SetVisible(false);
 			m_wOutlineLarge.SetVisible(false);

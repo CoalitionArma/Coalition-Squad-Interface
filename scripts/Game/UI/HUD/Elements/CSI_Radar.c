@@ -54,19 +54,15 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				dis = vector.Distance(localOrigin, playerCharacterOrigin);
 				
 				if (m_HUDManager.GetIsLocalPlayerInVehicle())
-				{
-					searchRadius = 8;
-					disT = dis * 6.215;
-				} else {
+					searchRadius = 3.5;
+				else
 					searchRadius = 24;
-					disT = dis * 2.0;
-				};
 				
 				if (dis > searchRadius)
 				{
 					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
-				}
+				};
 
 				if (playerID != SCR_PlayerController.GetLocalPlayerId())
 				{
@@ -77,7 +73,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 					float relDir = Math.Mod(((dir - localYaw) + 360), 360);
 					relDir = Math.Mod(relDir - (dir * 2), 360);
 					relDir = relDir * Math.DEG2RAD;
-		
+					
+					disT = (dis * (132 / (searchRadius * 2.725)));
 					x = (Math.Sin(relDir) * disT);
 					y = (Math.Cos(relDir) * disT);
 				};

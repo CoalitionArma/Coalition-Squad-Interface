@@ -68,14 +68,13 @@ OverlayWidgetClass {
        Name "PlayerGroupName"
        Slot FrameWidgetSlot "{6598E862901EB846}" {
         Anchor 0 0 0 0
-        PositionX 0
         OffsetLeft 0
-        PositionY 35.294
-        OffsetTop 35.3
-        SizeX 0
+        PositionY 34
+        OffsetTop 34
+        SizeX -0
         OffsetRight 0
         SizeY 0
-        OffsetBottom -35.3
+        OffsetBottom -34
         SizeToContent 1
        }
        Color 0.7529 0.7529 0.7529 1
@@ -114,6 +113,8 @@ OverlayWidgetClass {
       TextWidgetClass "{000000003DEE4CFF}" {
        Prefab "{000000003DEE4CFF}"
        Slot FrameWidgetSlot "{51DC7B064D3F5743}" {
+        Anchor 0 0 0 0
+        PositionX 0
         OffsetLeft 0
         PositionY 18
         OffsetTop 18
