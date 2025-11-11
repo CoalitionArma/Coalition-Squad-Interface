@@ -38,10 +38,12 @@ modded class SCR_VehicleTagData
 					{
 						// Check players current compartment type.
 						ECompartmentType compartmentType = compartment.GetType();
-						switch (compartmentType)
+						
+						if (compartmentType == ECompartmentType.TURRET)
 						{
-							case ECompartmentType.TURRET  : {m_MainTag = tagData; break;};
-						};
+							m_MainTag = tagData;
+							break;
+						}
 					};
 				};
 			}
@@ -50,37 +52,11 @@ modded class SCR_VehicleTagData
 		if (!m_MainTag)
 			m_MainTag = m_aPassengers[0];
 		
+		m_iPlayerID = m_MainTag.m_iPlayerID;
+		
 		if (m_MainTag.m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);
 		else if (m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			DeactivateEntityState(ENameTagEntityState.GROUP_MEMBER);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	override void GetName(out string name, out notnull array<string> nameParams)
-	{
-		UpdateMainTag();
-		
-		m_sName = string.Empty;
-		m_aNameParams = {};
-		
-		if (m_MainTag)
-		{			
-			m_MainTag.GetName(m_sName, m_aNameParams);
-			m_iPlayerID = m_MainTag.m_iPlayerID;
-
-			if (m_sName == string.Empty)	// passenger tag might need entity update in case of lost connection 
-			{
-				m_aPassengers[0].UpdateEntityType();
-				m_aPassengers[0].GetName(m_sName, m_aNameParams);
-			}
-			
-			int count = m_aPassengers.Count();
-			if (count > 1)
-				m_sName = m_sName + "  (+" + (count - 1).ToString() + ")";
-		}
-			
-		name = m_sName;
-		nameParams.Copy(m_aNameParams);
 	}
 };

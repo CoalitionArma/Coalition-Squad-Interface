@@ -106,9 +106,12 @@ class CSI_PlayerControllerManager : ScriptComponent
 			string comartmentName = compartment.GetCompartmentName();
 			
 			UIInfo uiInfo = compartment.GetUIInfo();
-			string name = uiInfo.GetName();
 			
-			if ((uiInfo && name == "#AR-VehiclePosition_Commander") || comartmentName == "Commander")
+			string name;
+			if (uiInfo)
+				name = uiInfo.GetName();
+			
+			if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
 				displayIcon = CSI_EIcon.COMMANDER;
 			else {
 				switch (compartmentType)
@@ -117,7 +120,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 					case ECompartmentType.TURRET : displayIcon = CSI_EIcon.GUNNER; break;
 					case ECompartmentType.PILOT  : {
 						if (heloSim || planeSim)
-							if ((uiInfo && name == "#AR-VehiclePosition_Copilot") || comartmentName == "CopilotCompartment")
+							if (name == "#AR-VehiclePosition_Copilot" || comartmentName == "CopilotCompartment")
 								displayIcon = CSI_EIcon.HELICREW;
 							else
 								displayIcon = CSI_EIcon.HELIPILOT;
