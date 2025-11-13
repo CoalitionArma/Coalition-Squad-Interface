@@ -138,7 +138,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Updates player data arrays that then update the information on all clients.
+	 * Updates player data map locally then updates the information and map on all clients.
 	 */
 	protected void DataUpdate(CSI_PlayerData playerData)
 	{
@@ -159,7 +159,7 @@ class CSI_PlayerDataManager : ScriptComponent
 		if(!oldPlayerData)
 			m_mPlayerDataMap.Set(playerID, playerData);
 		else
-			oldPlayerData.DataUpdate(playerID, playerData);
+			oldPlayerData.DataUpdate(playerData);
 	}
 	
 	//------------------------------------------------------------------------------------------------

@@ -16,10 +16,9 @@ class CSI_PlayerData
 	 * Replaces or sets the internal CSI_PlayerData record for the player.
 	 * If newData is non-null, the player's data is updated with the provided instance.
 	 *
-	 * @param playerID: ID of the player whose data should be updated.
 	 * @param newData: Pointer/reference to the new CSI_PlayerData to apply.
 	 */
-	void DataUpdate(int playerID, CSI_PlayerData newData = null)
+	void DataUpdate(CSI_PlayerData newData = null)
 	{	
 		if(newData)	
 		{

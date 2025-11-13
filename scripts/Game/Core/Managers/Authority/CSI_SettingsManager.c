@@ -6,6 +6,7 @@ class CSI_SettingsManager : ScriptComponent
 	const static int SERVER_OVERRIDE_FALSE = -1;
 	const static int SERVER_OVERRIDE_TRUE = -2;
 
+	protected bool m_bAuthorityIsSavingSettings;
 	protected ref ScriptInvoker m_OnSettingsUpdate;
 	protected UserSettings m_UserSettigs;
     protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
@@ -74,7 +75,7 @@ class CSI_SettingsManager : ScriptComponent
 	 * @param value: New integer value for the setting
 	 * @param serverOverrideEnabled: If true, enforce server-side override
 	 */
-	void UpdateServerSetting(string setting, int value, bool serverOverrideEnabled)
+	void UpdateAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
 		if (RplSession.Mode() != RplMode.Dedicated) 
 			return;
@@ -97,10 +98,27 @@ class CSI_SettingsManager : ScriptComponent
 			};
 			
 			m_UserSettigs.Set(setting, value);
-			GetGame().UserSettingsChanged();
+			
+			if(!m_bAuthorityIsSavingSettings)
+			{
+				m_bAuthorityIsSavingSettings = true;
+				GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 150, false);
+			}
+
 			UpdateAuthorityValueArray();
 			return;
 		};
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
+	 */
+	void SaveAuthoritySettingsDelay()
+	{
+		m_bAuthorityIsSavingSettings = false;
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
 	}
 	
 	//------------------------------------------------------------------------------------------------

@@ -239,7 +239,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (!CSI_GameSettings.GetSettingsArray().Contains(setting))
 			return;
 		
-		m_SettingsManager.UpdateServerSetting(setting, value, serverOverrideEnabled);
+		m_SettingsManager.UpdateAuthoritySetting(setting, value, serverOverrideEnabled);
 	}
 	
 	//------------------------------------------------------------------------------------------------
