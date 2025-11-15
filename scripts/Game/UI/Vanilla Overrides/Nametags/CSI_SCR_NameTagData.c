@@ -3,12 +3,26 @@ modded class SCR_NameTagData : Managed
 	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
 
 	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
+	CSI_PlayerData m_PlayerData;
 
+	//------------------------------------------------------------------------------------------------
+	override void UpdateEntityType()
+	{
+		super.UpdateEntityType();
+		
+		if (m_PlayerDataManager)
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		if (!m_SettingsManager) 
+		if (!m_SettingsManager || !m_PlayerDataManager) 
+		{
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
+			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		};
 		
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
@@ -32,7 +46,7 @@ modded class SCR_NameTagData : Managed
 
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
-	{
+	{	
 		if (m_eType == ENameTagEntityType.PLAYER)
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
 			
@@ -69,7 +83,10 @@ modded class SCR_NameTagData : Managed
 		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
 		
 		vector nametagOffsetVector = "0 0 0";
-		int nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
+		int nametagOffset = 0;
+		
+		if (m_SettingsManager)
+			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
 		
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
@@ -131,7 +148,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
+		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -150,10 +167,10 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
-		if (!m_SettingsManager) 
-			return;
-
-		ENameTagPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
+		ENameTagPosition nametagPos = ENameTagPosition.BODY;
+		
+		if (m_SettingsManager) 
+			nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
 
 		m_eAttachedTo = nametagPos;
 		m_eAttachedToLast = nametagPos;

@@ -25,22 +25,13 @@ modded class SCR_NTIconBase
 		
 		string iconString;
 		
-		if (data.m_iPlayerID > 0) 
-		{	
-			CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(data.m_iPlayerID);
-			
-			if (playerData)	
-			{
-				iconString = CSI_UIHelper.GetIconString(playerData.GetDisplayIcon(), true);
-				m_StoredPlayerData = playerData;
-			} else
-				m_StoredPlayerData = null;
-		};
+		if (data.m_PlayerData)
+				iconString = CSI_UIHelper.GetIconString(data.m_PlayerData.GetDisplayIcon(), true);
 		
 		if (!iconString.IsEmpty() && (iconString != "MAN_ICON"))
 			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 		else
-			data.SetVisibility(iWidget, false, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
+			data.SetVisibility(iWidget, false, stateConf.m_fOpacityDefault, false);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -52,17 +43,18 @@ modded class SCR_NTIconBase
 		if (!iWidget)
 			return;
 		
-		if (data.m_iPlayerID > 0 && m_StoredPlayerData && m_StoredPlayerData.GetPlayerID() == data.m_iPlayerID)
+		if (data.m_PlayerData)
 		{
-			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(m_StoredPlayerData.GetDisplayIcon(), true));
+			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(data.m_PlayerData.GetDisplayIcon(), true));
 	
 			if (CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
-				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_StoredPlayerData.GetColorTeam()));
+				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 		} else
 			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 	}	
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconPlatform
 {	

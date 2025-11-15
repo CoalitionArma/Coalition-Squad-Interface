@@ -71,7 +71,7 @@ OverlayWidgetClass {
         OffsetLeft 0
         PositionY 34
         OffsetTop 34
-        SizeX -0
+        SizeX 0
         OffsetRight 0
         SizeY 0
         OffsetBottom -34
@@ -79,7 +79,7 @@ OverlayWidgetClass {
        }
        Color 0.7529 0.7529 0.7529 1
        "Inherit Color" 1
-       Text "Group Name"
+       Text ""
        "Font Size" 10
        "Min Font Size" 10
        "Horizontal Alignment" Center
