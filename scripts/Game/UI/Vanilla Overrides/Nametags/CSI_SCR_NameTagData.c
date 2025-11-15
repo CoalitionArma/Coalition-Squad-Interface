@@ -32,6 +32,7 @@ modded class SCR_NameTagData : Managed
 		m_iZoneID = -1;
 		m_iGroupID = -1;
 		m_iPlayerID = -1;
+		m_PlayerData = null;
 		m_fTimeSliceUpdate = 1.0;
 		m_fTimeSliceVON = 0;
 		m_fTimeSlicePosChange = 0;
