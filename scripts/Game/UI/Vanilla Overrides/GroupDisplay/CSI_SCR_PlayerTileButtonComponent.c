@@ -21,11 +21,6 @@ modded class SCR_PlayerTileButtonComponent
 		{
 			CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(m_PlayerSettings.FindHandler(CSI_PlayerSettings));
             playerSettings.UpdatePlayerSettingsPlayerID(GetTilePlayerID());
-
-            CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(GetTilePlayerID());
-            
-			if (m_TileButton)
-				m_TileButton.UpdateScriptInvoker(playerData);
 			
 			m_PlayerSettings.SetVisible(true);
 			advSettings.SetVisible(true);

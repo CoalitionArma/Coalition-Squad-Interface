@@ -25,14 +25,14 @@ FrameWidgetClass {
       VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
        Prefab "{66C774414EE8E30E}"
        Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
-        PositionX -90
-        OffsetLeft -90
-        PositionY -225
-        OffsetTop -225
-        SizeX 180
-        OffsetRight -90
-        SizeY 450
-        OffsetBottom -225
+        PositionX -60
+        OffsetLeft -60
+        PositionY -177.5
+        OffsetTop -177.5
+        SizeX 120
+        OffsetRight -60
+        SizeY 355
+        OffsetBottom -177.5
        }
        {
         OverlayWidgetClass "{66C76B3671544CC3}" {
@@ -63,6 +63,7 @@ FrameWidgetClass {
             }
             TextWidgetClass "{5EC77AE9FA911A1F}" {
              Prefab "{5EC77AE9FA911A1F}"
+             Text "No Players Selected"
              "Font Size" 18
              "Min Font Size" 1
             }

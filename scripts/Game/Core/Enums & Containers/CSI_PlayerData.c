@@ -12,29 +12,6 @@ class CSI_PlayerData
 	protected ref ScriptInvoker m_OnDataUpdate;
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Replaces or sets the internal CSI_PlayerData record for the player.
-	 * If newData is non-null, the player's data is updated with the provided instance.
-	 *
-	 * @param newData: Pointer/reference to the new CSI_PlayerData to apply.
-	 */
-	void DataUpdate(CSI_PlayerData newData = null)
-	{	
-		if(newData)	
-		{
-			SetColorTeam(newData.GetColorTeam());
-			SetOverrideIcon(newData.GetOverrideIcon());
-			SetDisplayIcon(newData.GetDisplayIcon());
-			SetRank(newData.GetRank());
-			SetIsTeamLeader(newData.GetIsTeamLeader());
-			SetIsSquadLeader(newData.GetIsSquadLeader());
-		};
-		
-		if (m_OnDataUpdate)
-			m_OnDataUpdate.Invoke();
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	// SETTERS
 	//------------------------------------------------------------------------------------------------
 	
@@ -48,6 +25,9 @@ class CSI_PlayerData
 	void SetColorTeam(CSI_EColorTeam colorTeam)
 	{
 		m_iColorTeam = colorTeam;
+		
+		if (m_OnDataUpdate)
+			m_OnDataUpdate.Invoke();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -60,12 +40,18 @@ class CSI_PlayerData
 	void SetDisplayIcon(CSI_EIcon displayIcon)
 	{
 		m_iDisplayIcon = displayIcon;
+
+		if (m_OnDataUpdate)
+			m_OnDataUpdate.Invoke();
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	void SetRank(SCR_ECharacterRank rank)
 	{
 		m_iRank = rank;
+		
+		if (m_OnDataUpdate)
+			m_OnDataUpdate.Invoke();
 	}
 	
 	//------------------------------------------------------------------------------------------------

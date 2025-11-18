@@ -79,7 +79,7 @@ ScaleWidgetClass {
            Slot LayoutSlot "{66C774419BEC5BAA}" {
             Padding 5 0 5 0
            }
-           Text "#CSI-Player_Settings_No_Player_Selected"
+           Text "No Player Selected"
            "Font Size" 12
            "Min Font Size" 1
            "Horizontal Alignment" Center

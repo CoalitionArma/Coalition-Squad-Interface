@@ -90,6 +90,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 			return;
 		};
 		
+		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
@@ -263,8 +264,10 @@ class CSI_PlayerControllerManager : ScriptComponent
 		
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
-	
-		m_RplToAuthorityManager.Owner_UpdatePlayerData(playerID, playersGroup.IsPlayerLeader(playerID), displayIcon, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
+		
+		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLead(playerID, playersGroup.IsPlayerLeader(playerID));
+		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
+		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 	
 	//------------------------------------------------------------------------------------------------

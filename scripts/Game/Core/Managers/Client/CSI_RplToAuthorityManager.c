@@ -20,21 +20,18 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	/*!
-	 * Updates player data on authority (host) with provided icon, squad leader status and rank
+	 * Registers player data on authority (host)
 	 * @param playerID: ID of player to update
-	 * @param isSL: whether player is squad leader
-	 * @param icon: player's icon type
-	 * @param rank: rank of player
 	*/
-	void Owner_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void Owner_RegisterPlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
-		// Check if any data has updated
-		if(playerData && (icon == playerData.GetDisplayIcon() && rank == playerData.GetRank() && isSL == playerData.GetIsSquadLeader()))
+		// Check if any data exists
+		if(playerData)
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerData, playerID, isSL, icon, rank);
+		Rpc(RpcAsk_RegisterPlayerData, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -57,14 +54,31 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	/**
 	 * Update the specified player's team color on the authority.
 	 * @param playerID: ID of player to update
-	 * @param colorTeam: New color team to assign (CSI_EColorTeam)
+	 * @param displayIcon: Icon to assign to player (CSI_EIcon)
+	 */
+	void Owner_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
+	{
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		
+		// Check if any data has updated
+		if(!playerData || (playerData && displayIcon == playerData.GetDisplayIcon()))
+			return;
+		
+		Rpc(RpcAsk_UpdatePlayerDisplayIcon, playerID, displayIcon);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Update the specified player's team color on the authority.
+	 * @param playerID: ID of player to update
+	 * @param colorTeam: Color team to assign (CSI_EColorTeam)
 	 */
 	void Owner_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
-		if(playerData && colorTeam == playerData.GetColorTeam())
+		if(!playerData || (playerData && colorTeam == playerData.GetColorTeam()))
 			return;
 		
 		Rpc(RpcAsk_UpdatePlayerColorTeam, playerID, colorTeam);
@@ -74,17 +88,34 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	/**
 	 * Updates a player's icon override state on the authority.
 	 * @param playerID: ID of player to update
-	 * @param overrideIcon: The new override icon to apply
+	 * @param overrideIcon: The override icon to apply
 	 */
 	void Owner_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
-		if(playerData && overrideIcon == playerData.GetOverrideIcon())
+		if(!playerData || (playerData && overrideIcon == playerData.GetOverrideIcon()))
 			return;
 		
 		Rpc(RpcAsk_UpdatePlayerOverrideIcon, playerID, overrideIcon);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Update the specified player's team color on the authority.
+	 * @param playerID: ID of player to update
+	 * @param rank: Rank to assign to player (SCR_ECharacterRank)
+	 */
+	void Owner_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	{
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		
+		// Check if any data has updated
+		if(!playerData || (playerData && rank == playerData.GetRank()))
+			return;
+		
+		Rpc(RpcAsk_UpdatePlayerRank, playerID, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -98,10 +129,27 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
 		// Check if any data has updated
-		if(playerData && isTL == playerData.GetIsTeamLeader())
+		if(!playerData || (playerData && isTL == playerData.GetIsTeamLeader()))
 			return;
 		
 		Rpc(RpcAsk_UpdatePlayerTeamLeader, playerID, isTL);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Update the specified player's team color on the authority.
+	 * @param playerID: ID of player to update
+	 * @param isSL: New color team to assign (CSI_EColorTeam)
+	 */
+	void Owner_UpdatePlayerSquadLead(int playerID, bool isSL)
+	{
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		
+		// Check if any data has updated
+		if(!playerData || (playerData && isSL == playerData.GetIsSquadLeader()))
+			return;
+		
+		Rpc(RpcAsk_UpdatePlayerSquadLead, playerID, isSL);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -134,12 +182,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void RpcAsk_RegisterPlayerData(int playerID)
 	{	
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerData(playerID, isSL, icon, rank);
+		m_PlayerDataManager.RegisterPlayerData(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -152,6 +200,15 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		m_PlayerDataManager.ClearGroupSpecificData(playerID);
 	}
 	
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	void RpcAsk_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
+	{
+		if (playerID <= 0)
+			return;
+		
+		m_PlayerDataManager.UpdatePlayerDisplayIcon(playerID, displayIcon);
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
@@ -162,6 +219,15 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		m_PlayerDataManager.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	void RpcAsk_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	{
+		if (playerID <= 0)
+			return;
+		
+		m_PlayerDataManager.UpdatePlayerRank(playerID, rank);
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
@@ -170,6 +236,16 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return;
 		
 		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	protected void RpcAsk_UpdatePlayerSquadLead(int playerID, bool isSL)
+	{
+		if (playerID <= 0)
+			return;
+		
+		m_PlayerDataManager.UpdatePlayerSquadLead(playerID, isSL);
 	}
 	
 	//------------------------------------------------------------------------------------------------

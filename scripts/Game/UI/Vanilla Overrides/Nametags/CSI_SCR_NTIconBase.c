@@ -23,15 +23,7 @@ modded class SCR_NTIconBase
 			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) : data.SetVisibility(iWidget, false, 0, false); return;
 		}
 		
-		string iconString;
-		
-		if (data.m_PlayerData)
-				iconString = CSI_UIHelper.GetIconString(data.m_PlayerData.GetDisplayIcon(), true);
-		
-		if (!iconString.IsEmpty() && (iconString != "MAN_ICON"))
-			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
-		else
-			data.SetVisibility(iWidget, false, stateConf.m_fOpacityDefault, false);
+		data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -45,8 +37,13 @@ modded class SCR_NTIconBase
 		
 		if (data.m_PlayerData)
 		{
-			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(data.m_PlayerData.GetDisplayIcon(), true));
-	
+			CSI_EIcon dislayIcon = data.m_PlayerData.GetDisplayIcon();
+			
+			if (dislayIcon == CSI_EIcon.MAN)
+				dislayIcon = CSI_EIcon.EMPTY;
+			
+			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(dislayIcon, true));
+			
 			if (CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 		} else

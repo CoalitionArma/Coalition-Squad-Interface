@@ -11,6 +11,7 @@ class CSI_UIHelper
 		CSI_EIcon.SL,
 		CSI_EIcon.TL,
 		CSI_EIcon.RTO,
+		CSI_EIcon.EMPTY,
 	};
 	
 	static ref array<CSI_EIcon> m_aVehicleIcons =

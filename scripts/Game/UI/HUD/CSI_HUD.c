@@ -2,7 +2,7 @@ class CSI_HUD : SCR_InfoDisplay
 {
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDManager m_CSIHUDManager;
-	protected bool m_bIsVisible = true;
+	protected bool m_bIsVisible = false;
 	
 	protected Widget m_wStamina;
 	protected Widget m_wCompass;
@@ -20,8 +20,8 @@ class CSI_HUD : SCR_InfoDisplay
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_CSIHUDManager = CSI_HUDManager.GetInstance();
 		
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.DOWN, ToggleIsVisible);
-		GetGame().GetInputManager().AddActionListener("RevealCSIUI", EActionTrigger.UP, ToggleIsVisible);
+		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.DOWN, ToggleIsVisible);
+		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.UP, ToggleIsVisible);
 		
 		m_wStamina = m_wRoot.FindAnyWidget("Stamina");
 		m_wCompass = m_wRoot.FindAnyWidget("Compass");
@@ -32,9 +32,6 @@ class CSI_HUD : SCR_InfoDisplay
 		m_Compass = CSI_Compass.Cast(m_wCompass.FindHandler(CSI_Compass));
 		m_Radar = CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar));
 		m_Group = CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group));
-		
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD))
-			m_bIsVisible = false;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -59,5 +56,6 @@ class CSI_HUD : SCR_InfoDisplay
 	protected void ToggleIsVisible()
 	{
 		m_bIsVisible = !m_bIsVisible;
+		Print(m_bIsVisible);
 	};
 };
