@@ -265,7 +265,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
 		
-		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLead(playerID, playersGroup.IsPlayerLeader(playerID));
+		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
 		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
 		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}

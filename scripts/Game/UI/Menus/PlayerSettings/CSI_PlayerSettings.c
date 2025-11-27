@@ -84,7 +84,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		if (displayIconStr == "MAN_ICON")
 			m_wIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
 		else
-           	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, displayIconStr);
+           	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, displayIconStr);
 
 		m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));

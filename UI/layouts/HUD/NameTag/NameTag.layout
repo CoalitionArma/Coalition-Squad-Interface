@@ -34,7 +34,7 @@ OverlayWidgetClass {
        }
        "Is Visible" 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-       Image "CLASSIC GREN_ICON"
+       Image "EMPTY"
        Size 22 22
       }
       ImageWidgetClass "{614EF40E0273E961}" {
@@ -107,7 +107,7 @@ OverlayWidgetClass {
        }
        "Is Visible" 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-       Image "CLASSIC GREN_ICON"
+       Image "EMPTY"
        Size 22 22
       }
       TextWidgetClass "{000000003DEE4CFF}" {
@@ -153,7 +153,7 @@ OverlayWidgetClass {
        }
        "Is Visible" 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-       Image "CLASSIC GREN_ICON"
+       Image "EMPTY"
        Size 22 22
       }
      }

@@ -44,7 +44,6 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 			};
 			
 			m_wRoot.SetVisible(true);
-			m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, CSI_UIHelper.GetPlayersName(playerID)));
 			
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerID);
 			
@@ -66,6 +65,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 		
 		Color colorTeam = CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam());
 		
+		m_wPlayerName.SetText(CSI_UIHelper.CheckEllipsis(m_wPlayerName, 102, CSI_UIHelper.GetPlayersName(m_PlayerData.GetPlayerID())));
 		m_wPlayerName.SetColor(colorTeam); 
 	}
 }

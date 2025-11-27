@@ -2,8 +2,12 @@ SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
   CSI_PlayerDataManager "{66BCC39A74975F3C}" {
-  }
-  CSI_SettingsManager "{66BCC39A774363E3}" {
+   components {
+    CSI_RplBroadcastManager "{66F42D87C8245634}" {
+    }
+    CSI_SettingsManager "{66F42D87CC0A170D}" {
+    }
+   }
   }
  }
 }

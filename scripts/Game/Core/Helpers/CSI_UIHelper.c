@@ -1,8 +1,12 @@
 class CSI_UIHelper
 {	
-	const static string VANILLA_MAN = "{2E717F4664C6E49D}UI/Textures/Nametags/Nametag-Filter-Icons/Player.edds";
-	const static string STANDARD_COMPASS_RESOURCE = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
-	const static string CSI_ICONS_RESOURCE = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
+	// Vanilla Images/Imagesets
+	const static ResourceName VANILLA_MAN = "{2E717F4664C6E49D}UI/Textures/Nametags/Nametag-Filter-Icons/Player.edds";
+	const static ResourceName VANILLA_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
+	
+	// Modded Images/Imagesets
+	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
+	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
 
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
 	{

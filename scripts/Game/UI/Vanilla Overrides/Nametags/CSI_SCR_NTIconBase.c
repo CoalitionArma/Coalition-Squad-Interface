@@ -1,8 +1,6 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
-	protected CSI_PlayerData m_StoredPlayerData;
-	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
@@ -42,7 +40,7 @@ modded class SCR_NTIconBase
 			if (dislayIcon == CSI_EIcon.MAN)
 				dislayIcon = CSI_EIcon.EMPTY;
 			
-			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, CSI_UIHelper.GetIconString(dislayIcon, true));
+			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(dislayIcon, true));
 			
 			if (CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));

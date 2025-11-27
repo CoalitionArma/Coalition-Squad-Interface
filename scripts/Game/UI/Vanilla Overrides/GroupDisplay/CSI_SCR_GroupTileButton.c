@@ -127,7 +127,7 @@ modded class SCR_GroupTileButton
 			if (iconString == "MAN_ICON")
 				loadoutIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
 			else
-            	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
+            	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
 			
 			if (isLocalPlayerInGroup)
 			{

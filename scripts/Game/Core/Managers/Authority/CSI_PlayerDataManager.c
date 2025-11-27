@@ -4,32 +4,38 @@ class CSI_PlayerDataManager : ScriptComponent
 {	
 	// Primary Data Map
 	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
+
+	protected CSI_RplBroadcastManager m_RplBroadcastManager;
+	
+	//------------------------------------------------------------------------------------------------
+	override void OnPostInit(IEntity owner)
+	{
+		super.OnPostInit(owner);
+		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+	}
 	
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Sets the player's squad-leader status, display icon and character rank in the players data, this is updated only on the client and cannot be set by other players.
-	 * @param playerID: ID of the player to update.
-	 * @param isSL: True when the player should be flagged as squad leader; false otherwise.
-	 * @param icon: CSI_EIcon value to apply as the player's current icon.
-	 * @param rank: SCR_ECharacterRank value to assign as the player's rank.
+	 * Create the players data class.
+	 * @param playerID: ID of the player to register.
 	 */
-	void UpdatePlayerData(int playerID, bool isSL, CSI_EIcon icon, SCR_ECharacterRank rank)
+	void RegisterPlayerData(int playerID)
 	{
-		if (playerID <= 0)
-			return;
-
-		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
-		if (!playerData)
-			playerData = CreatePlayerData(playerID);
-		
-		playerData.SetDisplayIcon(icon);
-		playerData.SetRank(rank);
-		playerData.SetIsSquadLeader(isSL);
-		
-		DataUpdate(playerData);
+		if (!GetPlayerData(playerID))
+			CreatePlayerData(playerID);
 	}
-
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Removes a players data from the data map, primarily used to clean out disconnects
+	 * @param playerID: ID of the player to remove.
+	 */
+	void RemovePlayerData(int playerID)
+	{
+		if (GetPlayerData(playerID))
+			m_mPlayerDataMap.Remove(playerID);
+	}
+	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates player data to clear any group-specific values
@@ -37,19 +43,28 @@ class CSI_PlayerDataManager : ScriptComponent
 	 */
 	void ClearGroupSpecificData(int playerID)
 	{
-		if (playerID <= 0)
-			return;
-
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
 		if (playerData)
 		{
-			playerData.SetColorTeam(CSI_EColorTeam.NONE);
-			playerData.SetOverrideIcon(CSI_EOverrideIcon.AUTO);
-			playerData.SetIsTeamLeader(false);
+			m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
+			m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
+			m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, false);
 		}
-
-		DataUpdate(playerData);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the player's display icon.
+	 * @param playerID: ID of the player to update.
+	 * @param icon: CSI_EIcon value to apply as the player's current icon.
+	 */
+	void UpdatePlayerDisplayIcon(int playerID, CSI_EIcon icon)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		
+		if (playerData)
+			playerData.SetDisplayIcon(icon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -60,36 +75,39 @@ class CSI_PlayerDataManager : ScriptComponent
 	 */
 	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
-		if (playerID <= 0)
-			return;
-
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
 		if (playerData)
 			playerData.SetColorTeam(colorTeam);
-		
-		DataUpdate(playerData);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	/**
 	 * Update the temporary override icon for a player.
-	 *
 	 * Sets the specified player's CSI_EOverrideIcon value in the players data
 	 * @param playerID: ID of the player whose override icon is being changed.
 	 * @param overrideIcon: CSI_EOverrideIcon value indicating which override icon to set (use the enum's "AUTO" value to remove the override).
 	 */
 	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
-		if (playerID <= 0)
-			return;
-
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
 		if (playerData)
 			playerData.SetOverrideIcon(overrideIcon);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the specified player's rank value in their data
+	 * @param playerID: ID of the player whose color team will be updated.
+	 * @param rank: New rank value to assign.
+	 */
+	void UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
-		DataUpdate(playerData);
+		if (playerData)
+			playerData.SetRank(rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -100,15 +118,24 @@ class CSI_PlayerDataManager : ScriptComponent
 	 */
 	void UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
-		if (playerID <= 0)
-			return;
-
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
 		if (playerData)
 			playerData.SetIsTeamLeader(isTL);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the specified player's squad leader value in the players data
+	 * @param playerID: ID of the player whose leader status is being changed.
+	 * @param isSL: True to mark the player as squad leader; false to revoke leader status.
+	 */
+	void UpdatePlayerSquadLeader(int playerID, bool isSL)
+	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
-		DataUpdate(playerData);
+		if (playerData)
+			playerData.SetIsSquadLeader(isSL);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -137,32 +164,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates player data map locally then updates the information and map on all clients.
-	 */
-	protected void DataUpdate(CSI_PlayerData playerData)
-	{
-		RpcDo_PlayerDataUpdate(playerData);
-		Rpc(RpcDo_PlayerDataUpdate, playerData);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates and synchronizes the manager's authoritative player data with the current local data.
-	 */
-	[RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
-	protected void RpcDo_PlayerDataUpdate(CSI_PlayerData playerData)
-	{
-		int playerID = playerData.GetPlayerID();
-		CSI_PlayerData oldPlayerData = m_mPlayerDataMap.Get(playerID);
-
-		if(!oldPlayerData)
-			m_mPlayerDataMap.Set(playerID, playerData);
-		else
-			oldPlayerData.DataUpdate(playerData);
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	override protected bool RplSave(ScriptBitWriter writer)
 	{
 		// Save playerData
@@ -186,7 +187,11 @@ class CSI_PlayerDataManager : ScriptComponent
 		{
 			CSI_PlayerData playerData = new CSI_PlayerData();
 			playerData.Load(reader);
-			RpcDo_PlayerDataUpdate(playerData);
+			
+			int playerID = playerData.GetPlayerID();
+			
+			if (playerID > 0)
+				m_mPlayerDataMap.Set(playerID, playerData);
 		}
 
 		return true;

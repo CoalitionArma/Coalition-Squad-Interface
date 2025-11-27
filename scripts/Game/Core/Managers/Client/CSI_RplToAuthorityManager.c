@@ -2,6 +2,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 
 class CSI_RplToAuthorityManager : ScriptComponent
 {	
+	protected CSI_RplBroadcastManager m_RplBroadcastManager;
     protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
 
@@ -10,6 +11,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	{	
 		super.OnPostInit(owner);
 		
+		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
@@ -141,7 +143,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	 * @param playerID: ID of player to update
 	 * @param isSL: New color team to assign (CSI_EColorTeam)
 	 */
-	void Owner_UpdatePlayerSquadLead(int playerID, bool isSL)
+	void Owner_UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 		
@@ -149,7 +151,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if(!playerData || (playerData && isSL == playerData.GetIsSquadLeader()))
 			return;
 		
-		Rpc(RpcAsk_UpdatePlayerSquadLead, playerID, isSL);
+		Rpc(RpcAsk_UpdatePlayerSquadLeader, playerID, isSL);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -187,7 +189,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.RegisterPlayerData(playerID);
+		m_RplBroadcastManager.RegisterPlayerData(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -206,7 +208,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerDisplayIcon(playerID, displayIcon);
+		m_RplBroadcastManager.UpdatePlayerDisplayIcon(playerID, displayIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -216,7 +218,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerColorTeam(playerID, colorTeam);
+		m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
@@ -225,7 +227,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerRank(playerID, rank);
+		m_RplBroadcastManager.UpdatePlayerRank(playerID, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -235,17 +237,17 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
+		m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_UpdatePlayerSquadLead(int playerID, bool isSL)
+	protected void RpcAsk_UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerSquadLead(playerID, isSL);
+		m_RplBroadcastManager.UpdatePlayerSquadLeader(playerID, isSL);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -255,7 +257,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 		
-		m_PlayerDataManager.UpdatePlayerTeamLeader(playerID, isTL);
+		m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, isTL);
 	}
 
 	//------------------------------------------------------------------------------------------------
