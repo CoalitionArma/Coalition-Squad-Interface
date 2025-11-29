@@ -150,6 +150,12 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	map<int, ref CSI_PlayerData> GetPlayerDataMap()
+	{
+		return m_mPlayerDataMap;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	/**
 	 * Creates a new player data instance for the given player ID.
 	 * @param playerID: The ID of player to create data for
