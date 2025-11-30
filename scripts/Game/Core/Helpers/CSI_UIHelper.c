@@ -1,8 +1,9 @@
 class CSI_UIHelper
 {	
-	// Vanilla Images/Imagesets
+	// Vanilla Images/Imagesets/Colors
 	const static ResourceName VANILLA_MAN = "{2E717F4664C6E49D}UI/Textures/Nametags/Nametag-Filter-Icons/Player.edds";
 	const static ResourceName VANILLA_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
+	const static ref Color VANILLA_VON_COLOR = new Color(0.624, 0.506, 0.157, 1);
 	
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
@@ -45,7 +46,7 @@ class CSI_UIHelper
 			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break; // RED
 			case CSI_EColorTeam.GREEN : 	colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break; // GREEN
 			case CSI_EColorTeam.YELLOW : 	colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
-			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 165, 165, 165)); // NONE
+			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 180, 180, 180)); // NONE
 		}
 		
 		return colorFromInt; 

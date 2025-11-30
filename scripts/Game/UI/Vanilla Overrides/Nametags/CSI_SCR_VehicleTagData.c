@@ -53,6 +53,7 @@ modded class SCR_VehicleTagData
 			m_MainTag = m_aPassengers[0];
 		
 		m_iPlayerID = m_MainTag.m_iPlayerID;
+		m_PlayerData = m_MainTag.m_PlayerData;
 		
 		if (m_MainTag.m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);
