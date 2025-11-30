@@ -1,9 +1,9 @@
 ImageSetClass {
- RefSize 457 1107
+ RefSize 328 540
  Textures {
   ImageSetTextureClass "{66BCC3916ABA7707}" {
    screenSize FHD
-   size 457 1107
+   size 1 1
    path "{F51F7488C807DD8F}UI/Textures/HUD/Icons/CSI_ICONS.edds"
   }
  }
@@ -11,32 +11,32 @@ ImageSetClass {
   ImageSetGroupClass VEHICLE {
    Images {
     ImageSetDefClass DRIVER_ICON {
-     Pos 83 603
+     Pos 241 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass PASSANGER_ICON {
-     Pos 148 603
+     Pos 275 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass COMMANDER_ICON {
-     Pos 213 603
+     Pos 241 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass GUNNER_ICON {
-     Pos 278 603
+     Pos 275 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass HELIPILOT_ICON {
-     Pos 408 603
+     Pos 275 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass HELICREW_ICON {
-     Pos 343 603
+     Pos 241 304
      Size 31 31
      Flags 0 0
     }
@@ -45,52 +45,62 @@ ImageSetClass {
   ImageSetGroupClass GENERAL {
    Images {
     ImageSetDefClass OFFICER {
-     Pos 18 538
+     Pos 241 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass SL {
-     Pos 83 538
+     Pos 275 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass TL {
-     Pos 148 538
+     Pos 241 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass RTO {
-     Pos 213 538
+     Pos 275 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass OFFICER_ICON {
-     Pos 278 538
+     Pos 241 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass SL_ICON {
-     Pos 343 538
+     Pos 275 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass TL_ICON {
-     Pos 408 538
+     Pos 241 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass RTO_ICON {
-     Pos 18 603
+     Pos 275 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass MAN {
-     Pos 343 18
+     Pos 241 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass MAN_ICON {
-     Pos 408 18
+     Pos 275 66
+     Size 31 31
+     Flags 0 0
+    }
+    ImageSetDefClass EMPTY {
+     Pos 241 338
+     Size 31 31
+     Flags 0 0
+    }
+    ImageSetDefClass EMPTY_ICON {
+     Pos 275 338
      Size 31 31
      Flags 0 0
     }
@@ -99,72 +109,72 @@ ImageSetClass {
   ImageSetGroupClass CLASSIC {
    Images {
     ImageSetDefClass "CLASSIC ENG" {
-     Pos 18 83
+     Pos 3 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC AT" {
-     Pos 83 83
+     Pos 37 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC DEMO" {
-     Pos 148 83
+     Pos 71 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC SNIPER" {
-     Pos 213 83
+     Pos 105 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC GREN" {
-     Pos 278 83
+     Pos 139 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC MG" {
-     Pos 343 83
+     Pos 173 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC MEDIC" {
-     Pos 408 83
+     Pos 207 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC ENG_ICON" {
-     Pos 18 668
+     Pos 3 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC AT_ICON" {
-     Pos 83 668
+     Pos 37 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC DEMO_ICON" {
-     Pos 148 668
+     Pos 71 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC SNIPER_ICON" {
-     Pos 213 668
+     Pos 105 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC GREN_ICON" {
-     Pos 278 668
+     Pos 139 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC MG_ICON" {
-     Pos 343 668
+     Pos 173 304
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "CLASSIC MEDIC_ICON" {
-     Pos 408 668
+     Pos 207 304
      Size 31 31
      Flags 0 0
     }
@@ -173,72 +183,72 @@ ImageSetClass {
   ImageSetGroupClass REFORGER_ADV {
    Images {
     ImageSetDefClass "REFORGER_ADV ENG" {
-     Pos 18 148
+     Pos 3 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV AT" {
-     Pos 83 148
+     Pos 37 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV DEMO" {
-     Pos 148 148
+     Pos 71 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV SNIPER" {
-     Pos 213 148
+     Pos 105 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV GREN" {
-     Pos 278 148
+     Pos 139 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV MG" {
-     Pos 343 148
+     Pos 173 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV MEDIC" {
-     Pos 408 148
+     Pos 207 100
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV ENG_ICON" {
-     Pos 18 733
+     Pos 3 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV AT_ICON" {
-     Pos 83 733
+     Pos 37 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV DEMO_ICON" {
-     Pos 148 733
+     Pos 71 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV SNIPER_ICON" {
-     Pos 213 733
+     Pos 105 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV GREN_ICON" {
-     Pos 278 733
+     Pos 139 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV MG_ICON" {
-     Pos 343 733
+     Pos 173 338
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_ADV MEDIC_ICON" {
-     Pos 408 733
+     Pos 207 338
      Size 31 31
      Flags 0 0
     }
@@ -247,72 +257,72 @@ ImageSetClass {
   ImageSetGroupClass REFORGER_REG {
    Images {
     ImageSetDefClass "REFORGER_REG ENG" {
-     Pos 18 213
+     Pos 3 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG AT" {
-     Pos 83 213
+     Pos 37 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG DEMO" {
-     Pos 148 213
+     Pos 71 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG SNIPER" {
-     Pos 213 213
+     Pos 105 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG GREN" {
-     Pos 278 213
+     Pos 139 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG MG" {
-     Pos 343 213
+     Pos 173 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG MEDIC" {
-     Pos 408 213
+     Pos 207 134
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG ENG_ICON" {
-     Pos 18 798
+     Pos 3 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG AT_ICON" {
-     Pos 83 798
+     Pos 37 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG DEMO_ICON" {
-     Pos 148 798
+     Pos 71 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG SNIPER_ICON" {
-     Pos 213 798
+     Pos 105 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG GREN_ICON" {
-     Pos 278 798
+     Pos 139 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG MG_ICON" {
-     Pos 343 798
+     Pos 173 372
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "REFORGER_REG MEDIC_ICON" {
-     Pos 408 798
+     Pos 207 372
      Size 31 31
      Flags 0 0
     }
@@ -321,146 +331,146 @@ ImageSetClass {
   ImageSetGroupClass NATO {
    Images {
     ImageSetDefClass "NATO ENG" {
-     Pos 18 278
+     Pos 3 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO AT" {
-     Pos 83 278
+     Pos 37 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO DEMO" {
-     Pos 148 278
+     Pos 71 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO SNIPER" {
-     Pos 213 278
+     Pos 105 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO GREN" {
-     Pos 278 278
+     Pos 139 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO MG" {
-     Pos 343 278
+     Pos 173 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO MEDIC" {
-     Pos 408 278
+     Pos 207 168
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO ENG_ICON" {
-     Pos 18 863
+     Pos 3 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO AT_ICON" {
-     Pos 83 863
+     Pos 37 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO DEMO_ICON" {
-     Pos 148 863
+     Pos 71 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO SNIPER_ICON" {
-     Pos 213 863
+     Pos 105 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO GREN_ICON" {
-     Pos 278 863
+     Pos 139 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO MG_ICON" {
-     Pos 343 863
+     Pos 173 406
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "NATO MEDIC_ICON" {
-     Pos 408 863
+     Pos 207 406
      Size 31 31
      Flags 0 0
     }
    }
   }
-  ImageSetGroupClass "SCI_FI" {
+  ImageSetGroupClass SCI_FI {
    Images {
     ImageSetDefClass "SCI_FI ENG" {
-     Pos 18 343
+     Pos 3 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI AT" {
-     Pos 83 343
+     Pos 37 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI DEMO" {
-     Pos 148 343
+     Pos 71 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI SNIPER" {
-     Pos 213 343
+     Pos 105 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI GREN" {
-     Pos 278 343
+     Pos 139 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI MG" {
-     Pos 343 343
+     Pos 173 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI MEDIC" {
-     Pos 408 343
+     Pos 207 202
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI ENG_ICON" {
-     Pos 18 928
+     Pos 3 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI AT_ICON" {
-     Pos 83 928
+     Pos 37 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI DEMO_ICON" {
-     Pos 148 928
+     Pos 71 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI SNIPER_ICON" {
-     Pos 213 928
+     Pos 105 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI GREN_ICON" {
-     Pos 278 928
+     Pos 139 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI MG_ICON" {
-     Pos 343 928
+     Pos 173 440
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "SCI_FI MEDIC_ICON" {
-     Pos 408 928
+     Pos 207 440
      Size 31 31
      Flags 0 0
     }
@@ -469,72 +479,72 @@ ImageSetClass {
   ImageSetGroupClass WW2 {
    Images {
     ImageSetDefClass "WW2 ENG" {
-     Pos 18 408
+     Pos 3 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 AT" {
-     Pos 83 408
+     Pos 37 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 DEMO" {
-     Pos 148 408
+     Pos 71 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 SNIPER" {
-     Pos 213 408
+     Pos 105 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 GREN" {
-     Pos 278 408
+     Pos 139 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 MG" {
-     Pos 343 408
+     Pos 173 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 MEDIC" {
-     Pos 408 408
+     Pos 207 236
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 ENG_ICON" {
-     Pos 18 993
+     Pos 3 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 AT_ICON" {
-     Pos 83 993
+     Pos 37 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 DEMO_ICON" {
-     Pos 148 993
+     Pos 71 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 SNIPER_ICON" {
-     Pos 213 993
+     Pos 105 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 GREN_ICON" {
-     Pos 278 993
+     Pos 139 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 MG_ICON" {
-     Pos 343 993
+     Pos 173 474
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "WW2 MEDIC_ICON" {
-     Pos 408 993
+     Pos 207 474
      Size 31 31
      Flags 0 0
     }
@@ -543,72 +553,72 @@ ImageSetClass {
   ImageSetGroupClass MEDIEVAL {
    Images {
     ImageSetDefClass "MEDIEVAL ENG" {
-     Pos 18 473
+     Pos 3 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL AT" {
-     Pos 83 473
+     Pos 37 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL DEMO" {
-     Pos 148 473
+     Pos 71 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL SNIPER" {
-     Pos 213 473
+     Pos 105 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL GREN" {
-     Pos 278 473
+     Pos 139 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL MG" {
-     Pos 343 473
+     Pos 173 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL MEDIC" {
-     Pos 408 473
+     Pos 207 270
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL ENG_ICON" {
-     Pos 18 1058
+     Pos 3 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL AT_ICON" {
-     Pos 83 1058
+     Pos 37 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL DEMO_ICON" {
-     Pos 148 1058
+     Pos 71 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL SNIPER_ICON" {
-     Pos 213 1058
+     Pos 105 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL GREN_ICON" {
-     Pos 278 1058
+     Pos 139 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL MG_ICON" {
-     Pos 343 1058
+     Pos 173 508
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "MEDIEVAL MEDIC_ICON" {
-     Pos 408 1058
+     Pos 207 508
      Size 31 31
      Flags 0 0
     }
@@ -646,12 +656,12 @@ ImageSetClass {
   ImageSetGroupClass ICON {
    Images {
     ImageSetDefClass "ICON FILL" {
-     Pos 343 18
+     Pos 241 66
      Size 31 31
      Flags 0 0
     }
     ImageSetDefClass "ICON OUTLINE" {
-     Pos 408 18
+     Pos 275 66
      Size 31 31
      Flags 0 0
     }

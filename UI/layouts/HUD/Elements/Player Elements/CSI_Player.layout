@@ -8,6 +8,7 @@ ScaleWidgetClass {
   SizeY 25
   OffsetBottom -25
  }
+ Clipping True
  components {
   CSI_Player "{66A8318F2121D74D}" {
   }

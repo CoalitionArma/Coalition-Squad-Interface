@@ -37,7 +37,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			string compassImage;
 			switch (compassTheme)
 			{
-				default : compassImage = CSI_UIHelper.STANDARD_COMPASS_RESOURCE; break;
+				default : compassImage = CSI_UIHelper.CSI_STANDARD_COMPASS; break;
 			};
 			
 			if (m_sStoredCompass != compassImage)

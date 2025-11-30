@@ -5,7 +5,7 @@ class CSI_HUDManager : ScriptComponent
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;
-	protected ref array<int> m_aLocalGroupPlayerIds;
+	protected ref array<int> m_aLocalGroupPlayerIds = {};
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;

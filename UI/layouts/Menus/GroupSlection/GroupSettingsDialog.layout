@@ -39,7 +39,7 @@ FrameWidgetClass : "{E6B607B27BCC1477}UI/layouts/Menus/Dialogs/ConfigurableDialo
                        m_sLabel "Group Size"
                        m_fValue 6
                        m_fMinValue 1
-                       m_fMaxValue 99
+                       m_fMaxValue 16
                        m_fStep 1
                        m_sFormatText "%1"
                       }

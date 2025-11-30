@@ -1,22 +1,6 @@
-modded class SCR_GroupMenu
-{
-	//------------------------------------------------------------------------------------------------
-	override void OnMenuOpen()
-	{
-		super.OnMenuOpen();		
-		
-		Widget playerSettings = GetRootWidget().FindAnyWidget("PlayersSettings");
-		
-		if (playerSettings)
-			playerSettings.SetVisible(false);
-	}
-}
-
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 modded class SCR_GroupTileButton
 {	
-    protected CSI_PlayerData m_StoredPlayerData;
-
 	//------------------------------------------------------------------------------------------------
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
@@ -44,16 +28,6 @@ modded class SCR_GroupTileButton
 		
 		return currentWidget;
 	}
-
-	//------------------------------------------------------------------------------------------------
-    void UpdateScriptInvoker(CSI_PlayerData playerData)
-    {
-        if (m_StoredPlayerData)
-            m_StoredPlayerData.GetOnDataUpdate().Remove(RefreshPlayers);
-
-        playerData.GetOnDataUpdate().Insert(RefreshPlayers);
-        m_StoredPlayerData = playerData;
-    }
 
 	//------------------------------------------------------------------------------------------------
 	//TODO: setup should be taken care of by the player tile component
@@ -145,16 +119,20 @@ modded class SCR_GroupTileButton
 		
 		if (playerData && loadoutIcon && playerName && lineBackground)
 		{
+			playerData.GetOnDataUpdate().Remove(RefreshPlayers);
+			
 			CSI_EIcon icon = playerData.GetDisplayIcon();
             string iconString = CSI_UIHelper.GetIconString(icon, true);
 			
 			if (iconString == "MAN_ICON")
 				loadoutIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
 			else
-            	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
+            	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
 			
 			if (isLocalPlayerInGroup)
 			{
+				playerData.GetOnDataUpdate().Insert(RefreshPlayers);
+				
 				CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 				playerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 				loadoutIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));

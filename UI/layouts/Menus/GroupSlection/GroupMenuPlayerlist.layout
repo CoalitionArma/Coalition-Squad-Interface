@@ -16,6 +16,7 @@ VerticalLayoutWidgetClass {
        Slot LayoutSlot "{66C81377EF3C6201}" {
         SizeMode Fill
        }
+       "Is Visible" 0
        {
         FrameWidgetClass "{66C77442F6F8A5E9}" {
          Prefab "{66C77442F6F8A5E9}"

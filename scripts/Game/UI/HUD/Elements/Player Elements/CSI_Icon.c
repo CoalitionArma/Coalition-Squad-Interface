@@ -148,7 +148,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 				m_wOutline.SetVisible(false);
 		};
 		
-		iconToUse.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, iconString);
+		iconToUse.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
 		
 		SetArrowWidget();
 	}
@@ -164,6 +164,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		
-		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS_RESOURCE, arrowString);
+		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, arrowString);
 	}
 }
