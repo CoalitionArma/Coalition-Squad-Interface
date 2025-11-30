@@ -3,7 +3,7 @@ ImageSetClass {
  Textures {
   ImageSetTextureClass "{66BCC3916ABA7707}" {
    screenSize FHD
-   size 1 1
+   size 328 540
    path "{F51F7488C807DD8F}UI/Textures/HUD/Icons/CSI_ICONS.edds"
   }
  }

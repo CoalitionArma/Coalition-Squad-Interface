@@ -10,9 +10,7 @@ modded class SCR_NameTagData : Managed
 	override void UpdateEntityType()
 	{
 		super.UpdateEntityType();
-		
-		if (m_PlayerDataManager)
-			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+		UpdatePlayerData();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -49,9 +47,10 @@ modded class SCR_NameTagData : Managed
 	override void GetName(out string name, out notnull array<string> nameParams)
 	{	
 		if (m_eType == ENameTagEntityType.PLAYER)
+		{
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
-			
-		else if (m_eType == ENameTagEntityType.AI)
+			UpdatePlayerData();
+		} else if (m_eType == ENameTagEntityType.AI)
 		{
 			SCR_CharacterIdentityComponent scrCharIdentity = SCR_CharacterIdentityComponent.Cast(m_Entity.FindComponent(SCR_CharacterIdentityComponent));
 			if (scrCharIdentity)
@@ -63,48 +62,11 @@ modded class SCR_NameTagData : Managed
 					m_sName = charIdentity.GetIdentity().GetName();
 				else
 					m_sName = "No character identity!";
-			}
-		}
+			};
+		};
 
 		name = m_sName;
 		nameParams.Copy(m_aNameParams);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	//! Update tag position
-	override void UpdateTagPos()
-	{
-		UpdateAttatchedTo();
-		
-		vector matPos[4];
-		Animation anim = m_Entity.GetAnimation();
-		anim.GetBoneMatrix(m_iSpineBone, matPos);
-		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
-		anim.GetBoneMatrix(m_iHeadBone, matPos);
-		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
-		
-		vector nametagOffsetVector = "0 0 0";
-		int nametagOffset = 0;
-		
-		if (m_SettingsManager)
-			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
-		
-		if (m_eAttachedTo == ENameTagPosition.HEAD)
-		{
-			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
-			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
-		}
-		else if (m_eAttachedTo == ENameTagPosition.BODY)
-		{
-			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
-			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
-		}
-
-		if (m_eType != ENameTagEntityType.PLAYER && GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(m_Entity) > 0)
-		{
-			m_Flags |= ENameTagFlags.ENT_TYPE_UPDATE;
-			m_Flags |= ENameTagFlags.NAME_UPDATE;
-		}
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -163,6 +125,52 @@ modded class SCR_NameTagData : Managed
 		};
 
 		return groupName;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Update tag position
+	override void UpdateTagPos()
+	{
+		UpdateAttatchedTo();
+		
+		vector matPos[4];
+		Animation anim = m_Entity.GetAnimation();
+		anim.GetBoneMatrix(m_iSpineBone, matPos);
+		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
+		anim.GetBoneMatrix(m_iHeadBone, matPos);
+		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
+		
+		vector nametagOffsetVector = "0 0 0";
+		int nametagOffset = 0;
+		
+		if (m_SettingsManager)
+			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
+		
+		if (m_eAttachedTo == ENameTagPosition.HEAD)
+		{
+			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
+			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
+		}
+		else if (m_eAttachedTo == ENameTagPosition.BODY)
+		{
+			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
+			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
+		}
+
+		if (m_eType != ENameTagEntityType.PLAYER && GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(m_Entity) > 0)
+		{
+			m_Flags |= ENameTagFlags.ENT_TYPE_UPDATE;
+			m_Flags |= ENameTagFlags.NAME_UPDATE;
+		}
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void UpdatePlayerData()
+	{
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		
+		if (m_PlayerDataManager && m_iPlayerID > 0)
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 	}
 	
 	//------------------------------------------------------------------------------------------------
