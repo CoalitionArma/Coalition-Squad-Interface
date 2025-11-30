@@ -53,19 +53,18 @@ modded class SCR_NTIconBase
 			}
 		};
 			
-		if (CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
-		{
-			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
-				iWidget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
-			else
-				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
-		};
+		if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
+			iWidget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
+		else if (CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
+		else
+			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 	}	
 	
 	protected void SetImageAndSize(ImageWidget iWidget, ResourceName imageset, string image, int size)
 	{
-		iWidget.LoadImageFromSet(0, imageset, image);
 		iWidget.SetSize(size, size);
+		iWidget.LoadImageFromSet(0, imageset, image);
 	}
 }
 

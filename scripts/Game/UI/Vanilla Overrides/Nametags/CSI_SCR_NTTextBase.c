@@ -42,12 +42,14 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (!tWidget)
 			return;
 		
-		if (tWidget.GetName() == "PlayerName" && CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+		if (tWidget.GetName() == "PlayerName")
 		{
 			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
 				tWidget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
-			else if (data.m_PlayerData)
+			else if (data.m_PlayerData && CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
+			else
+				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 		}
 	}		
 }
