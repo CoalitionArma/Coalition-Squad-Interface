@@ -23,6 +23,8 @@ modded class SCR_NTIconBase
 		
 		if (data.m_iPlayerID > 0)
 			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
+		else
+			data.SetVisibility(iWidget, false, 0, false);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -31,41 +33,45 @@ modded class SCR_NTIconBase
 		super.UpdateElement(data, index);
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
-		if (!iWidget || !data.m_PlayerData)
-		{
-			if (iWidget)
-				iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+		if (!iWidget)
 			return;
-		};
 		
-		switch (true)
+		if (data.m_PlayerData)
 		{
-			case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS) 	: SetImageAndSize(iWidget, CSI_UIHelper.VANILLA_ICONS, "unconscious", 48); break;
-			case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: SetImageAndSize(iWidget, CSI_UIHelper.VANILLA_ICONS, "death", 48); break;
-			case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: SetImageAndSize(iWidget, CSI_UIHelper.VANILLA_ICONS, "VON", 48); break;
-			default : {
-				CSI_EIcon dislayIcon = data.m_PlayerData.GetDisplayIcon();
-				
-				if (dislayIcon == CSI_EIcon.MAN)
-					dislayIcon = CSI_EIcon.EMPTY;
-				
-				SetImageAndSize(iWidget, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(dislayIcon, true), 22);
-			}
-		};
+			switch (true)
+			{
+				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS) 	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
+				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
+				case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
+				default : {
+					bool setAlt = false; 
+					CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
+					
+					if (displayIcon == CSI_EIcon.DRIVER)
+						setAlt = true;
+					
+					if (displayIcon == CSI_EIcon.MAN)
+						iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
+					else
+						iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(displayIcon, true, setAlt));
+				}
+			};
 			
-		if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
-			iWidget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
-		else if (CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
-			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
-		else
-			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
+			Color colorToSet;
+				
+			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
+				colorToSet = CSI_UIHelper.VANILLA_VON_COLOR;
+			else if (CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam());
+			else
+				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE); 
+			
+			iWidget.SetColor(colorToSet);
+		} else {
+			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+		}
 	}	
-	
-	protected void SetImageAndSize(ImageWidget iWidget, ResourceName imageset, string image, int size)
-	{
-		iWidget.SetSize(size, size);
-		iWidget.LoadImageFromSet(0, imageset, image);
-	}
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

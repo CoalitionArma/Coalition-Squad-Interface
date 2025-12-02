@@ -82,7 +82,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		
 		if (displayIconStr == "MAN_ICON")
-			m_wIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
+			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 		else
            	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, displayIconStr);
 

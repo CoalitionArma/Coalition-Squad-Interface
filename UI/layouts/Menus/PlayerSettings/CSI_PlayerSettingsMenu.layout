@@ -5,13 +5,13 @@ FrameWidgetClass {
    Name "PlayersSettings"
    Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
     Anchor 0 0 1 1
-    PositionX 817.5
+    PositionX 0
     OffsetLeft 0
-    PositionY 377.5
+    PositionY 0
     OffsetTop 0
-    SizeX -1810
+    SizeX 0
     OffsetRight 0
-    SizeY -480
+    SizeY 0
     OffsetBottom 0
    }
    {
@@ -25,14 +25,15 @@ FrameWidgetClass {
       VerticalLayoutWidgetClass "{66C774414EE8E30E}" {
        Prefab "{66C774414EE8E30E}"
        Slot FrameWidgetSlot "{66C7744CBEC11C4F}" {
-        PositionX -60
-        OffsetLeft -60
-        PositionY -177.5
-        OffsetTop -177.5
-        SizeX 120
-        OffsetRight -60
-        SizeY 355
-        OffsetBottom -177.5
+        Anchor 0.469 0.336 0.531 0.664
+        PositionX 0
+        OffsetLeft 0
+        PositionY 0
+        OffsetTop 0
+        SizeX 0
+        OffsetRight 0
+        SizeY 0
+        OffsetBottom 0
        }
        {
         OverlayWidgetClass "{66C76B3671544CC3}" {
@@ -44,6 +45,7 @@ FrameWidgetClass {
             OverlayWidgetClass "{66CABAE08B9A0EE6}" {
              Name "CancelOverlay"
              Slot LayoutSlot "{66CC2DCCD5369A04}" {
+              Padding 0 -1 0 4
              }
              "Z Order" 1
              {

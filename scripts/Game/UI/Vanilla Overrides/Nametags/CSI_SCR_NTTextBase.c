@@ -22,7 +22,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			tWidget.SetText(data.GetGroupName());
 			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 		} else {
-			if (data.m_PlayerData)
+			if (data.m_PlayerData && CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(stateConf.m_vColor);

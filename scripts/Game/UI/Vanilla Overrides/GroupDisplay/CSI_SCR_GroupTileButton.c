@@ -121,11 +121,16 @@ modded class SCR_GroupTileButton
 		{
 			playerData.GetOnDataUpdate().Remove(RefreshPlayers);
 			
-			CSI_EIcon icon = playerData.GetDisplayIcon();
-            string iconString = CSI_UIHelper.GetIconString(icon, true);
+			CSI_EIcon displayIcon = playerData.GetDisplayIcon();
+			
+			bool setAlt = false;
+			if (displayIcon == CSI_EIcon.DRIVER)
+				setAlt = true;
+			
+            string iconString = CSI_UIHelper.GetIconString(displayIcon, true, setAlt);
 			
 			if (iconString == "MAN_ICON")
-				loadoutIcon.LoadImageTexture(0, CSI_UIHelper.VANILLA_MAN);
+				loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 			else
             	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
 			

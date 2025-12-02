@@ -40,6 +40,11 @@ ImageSetClass {
      Size 31 31
      Flags 0 0
     }
+    ImageSetDefClass DRIVER_ICON_ALT {
+     Pos 241 338
+     Size 31 31
+     Flags 0 0
+    }
    }
   }
   ImageSetGroupClass GENERAL {
@@ -95,7 +100,7 @@ ImageSetClass {
      Flags 0 0
     }
     ImageSetDefClass EMPTY {
-     Pos 241 338
+     Pos 275 338
      Size 31 31
      Flags 0 0
     }

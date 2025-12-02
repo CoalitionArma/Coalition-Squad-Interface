@@ -56,6 +56,5 @@ class CSI_HUD : SCR_InfoDisplay
 	protected void ToggleIsVisible()
 	{
 		m_bIsVisible = !m_bIsVisible;
-		Print(m_bIsVisible);
 	};
 };

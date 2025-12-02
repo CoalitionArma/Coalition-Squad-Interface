@@ -1,8 +1,7 @@
 class CSI_UIHelper
 {	
 	// Vanilla Images/Imagesets/Colors
-	const static ResourceName VANILLA_MAN = "{2E717F4664C6E49D}UI/Textures/Nametags/Nametag-Filter-Icons/Player.edds";
-	const static ResourceName VANILLA_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
+	const static ResourceName VANILLA_NAMETAG_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
 	const static ref Color VANILLA_VON_COLOR = new Color(0.624, 0.506, 0.157, 1);
 	
 	// Modded Images/Imagesets
@@ -59,7 +58,7 @@ class CSI_UIHelper
 	* @param isSimpleIcon: Should we return the simple (non-circular) Icon
 	* @return Icon string
 	*/
-	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false)
+	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false)
 	{
 		string iconString;
 		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.ICON_THEME);
@@ -71,6 +70,9 @@ class CSI_UIHelper
 
 		if (isSimpleIcon)
 			iconString = iconString + "_ICON";
+		
+		if (isAltIcon)
+			iconString = iconString + "_ALT";
 		
 		return iconString;
 	}

@@ -152,6 +152,7 @@ OverlayWidgetClass {
         SizeToContent 0
        }
        "Is Visible" 0
+       IsPixelPerfect 1
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
        Image "EMPTY"
        Size 22 22
