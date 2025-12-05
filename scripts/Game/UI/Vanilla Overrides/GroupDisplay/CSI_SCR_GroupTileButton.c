@@ -155,6 +155,7 @@ modded class SCR_GroupTileButton
 		m_aPlayerComponentsList.Insert(m_PlayerTileComponent);
 	}
 	
+
 	//------------------------------------------------------------------------------------------------
 	override void RefreshPlayers()
 	{
@@ -218,7 +219,16 @@ modded class SCR_GroupTileButton
 		else
 			m_JoinGroupButton.SetEnabled(true);
 		
-		SetSquadName(squadName, groupDetailType, group);
+		// This function can only be used in UI menu, where to change the language you need to close and open the shown menu, so it will be renewed.
+		squadName.SetText(SCR_GroupHelperUI.GetTranslatedGroupName(group));
+
+		Widget groupTypeOverlay = m_ParentSubMenu.GetRootWidget().FindAnyWidget("GroupTypeOverlay");
+		if (groupTypeOverlay)
+		{
+			string roleName = SCR_GroupHelperUI.GetRoleName(group);
+			groupTypeOverlay.SetVisible(!roleName.IsEmpty());
+			groupDetailType.SetText(roleName);
+		}
 
 		if (!group.GetCustomDescription().IsEmpty())
 			description.SetText(group.GetCustomDescription());
