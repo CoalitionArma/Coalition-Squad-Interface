@@ -433,7 +433,6 @@ ScaleWidgetClass {
            Slot LayoutSlot "{66C77442F6F8BE9D}" {
             Padding 2.5 0 2.5 0
            }
-           "Is Visible" 0
            {
             ImageWidgetClass "{6050358F4FF96275}" {
              Name "PromoteToSLIcon"
@@ -524,7 +523,6 @@ ScaleWidgetClass {
            Slot LayoutSlot "{66C77442F6F8BF64}" {
             Padding 2.5 0 2.5 3
            }
-           "Is Visible" 0
            {
             ImageWidgetClass "{605035931933B04A}" {
              Name "KickIcon"
