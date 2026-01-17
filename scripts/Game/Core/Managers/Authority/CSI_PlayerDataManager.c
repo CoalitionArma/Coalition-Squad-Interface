@@ -15,6 +15,12 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	map<int, ref CSI_PlayerData> GetPlayerDataMap()
+	{
+		return m_mPlayerDataMap;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	/**
 	 * Create the players data class.
 	 * @param playerID: ID of the player to register.
@@ -147,12 +153,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	CSI_PlayerData GetPlayerData(int playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	map<int, ref CSI_PlayerData> GetPlayerDataMap()
-	{
-		return m_mPlayerDataMap;
 	}
 	
 	//------------------------------------------------------------------------------------------------

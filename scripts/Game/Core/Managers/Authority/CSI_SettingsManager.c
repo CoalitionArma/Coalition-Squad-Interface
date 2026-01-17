@@ -31,6 +31,27 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	TIntArray GetServerSettingsArray() 
+	{
+		return m_aSettingsAuthorityValues;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void RequestSettingsUpdate()
+	{
+		SettingsUpdate();
+	};
+	
+	//------------------------------------------------------------------------------------------------
+	ScriptInvoker GetOnSettingsUpdate()
+	{
+		if (!m_OnSettingsUpdate)
+			m_OnSettingsUpdate = new ScriptInvoker();
+
+		return m_OnSettingsUpdate;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	/*!
 	 * Retrieves an boolean value for the specified setting name.
 	 * @param setting: The name of the setting to retrieve
@@ -55,18 +76,6 @@ class CSI_SettingsManager : ScriptComponent
 	{
 		return m_mSettingsLocalValues.Get(setting);
 	}
-	
-	//------------------------------------------------------------------------------------------------
-	TIntArray GetServerSettingsArray() 
-	{
-		return m_aSettingsAuthorityValues;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void RequestSettingsUpdate()
-	{
-		SettingsUpdate();
-	};
 	
 	//------------------------------------------------------------------------------------------------
 	/**
@@ -112,17 +121,6 @@ class CSI_SettingsManager : ScriptComponent
 	
 	//------------------------------------------------------------------------------------------------
 	/**
-	 * Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
-	 */
-	void SaveAuthoritySettingsDelay()
-	{
-		m_bAuthorityIsSavingSettings = false;
-		GetGame().UserSettingsChanged();
-		GetGame().SaveUserSettings();
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	/**
 	 * Updates the array of authority values used for settings.
 	 */
 	protected void UpdateAuthorityValueArray()
@@ -142,6 +140,17 @@ class CSI_SettingsManager : ScriptComponent
 		#ifdef WORKBENCH
 			SettingsUpdate();
 		#endif
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	/**
+	 * Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
+	 */
+	void SaveAuthoritySettingsDelay()
+	{
+		m_bAuthorityIsSavingSettings = false;
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -169,15 +178,6 @@ class CSI_SettingsManager : ScriptComponent
 		
 		if (m_OnSettingsUpdate)
 			m_OnSettingsUpdate.Invoke();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	ScriptInvoker GetOnSettingsUpdate()
-	{
-		if (!m_OnSettingsUpdate)
-			m_OnSettingsUpdate = new ScriptInvoker();
-
-		return m_OnSettingsUpdate;
 	}
 	
 	//------------------------------------------------------------------------------------------------

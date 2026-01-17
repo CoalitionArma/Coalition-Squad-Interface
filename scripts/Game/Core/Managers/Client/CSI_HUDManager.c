@@ -21,11 +21,50 @@ class CSI_HUDManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	SCR_ChimeraCharacter GetLocalPlayerCharacter()
+	{
+		return m_LocalPlayerCharacter;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	array<int> GetLocalGroupPlayerIds()
+	{
+		return m_aLocalGroupPlayerIds;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	bool GetIsLocalPlayerInVehicle()
+	{
+		return m_bIsLocalPlayerInVehicle;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	bool GetIsLocalPlayerInMortar()
+	{
+		return m_bIsLocalPlayerInMortar;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	int GetLocalGroupCount()
+	{
+		return m_iLocalGroupCount;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	float GetLocalYaw()
+	{
+		return m_iLocalYaw;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	/**
 	 * Updates the heads-up display values for the local client
 	 */
 	void UpdateLocalHUDValues()
 	{
+		if (!m_GroupsManagerComponent)
+			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
+		
 		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
 		
 		if (!m_LocalPlayerCharacter) 
@@ -92,6 +131,9 @@ class CSI_HUDManager : ScriptComponent
 	 */
 	array<int> GetSortedGroupArray(array<int> playerIDs)
 	{
+		if (!m_PlayerDataManager)
+			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
 
@@ -141,41 +183,6 @@ class CSI_HUDManager : ScriptComponent
 		return playersGroupArray;
 	};
 	
-	//------------------------------------------------------------------------------------------------
-	SCR_ChimeraCharacter GetLocalPlayerCharacter()
-	{
-		return m_LocalPlayerCharacter;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	array<int> GetLocalGroupPlayerIds()
-	{
-		return m_aLocalGroupPlayerIds;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	bool GetIsLocalPlayerInVehicle()
-	{
-		return m_bIsLocalPlayerInVehicle;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	bool GetIsLocalPlayerInMortar()
-	{
-		return m_bIsLocalPlayerInMortar;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	int GetLocalGroupCount()
-	{
-		return m_iLocalGroupCount;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	float GetLocalYaw()
-	{
-		return m_iLocalYaw;
-	}
 	
 	//------------------------------------------------------------------------------------------------
 	// Returns the instance of the HUDManager

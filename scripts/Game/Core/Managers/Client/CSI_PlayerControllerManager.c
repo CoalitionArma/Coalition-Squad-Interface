@@ -248,13 +248,13 @@ class CSI_PlayerControllerManager : ScriptComponent
 			switch (true)
 			{
 				case (validDisplayIcons.Contains(CSI_EIcon.RTO)) 		: displayIcon = CSI_EIcon.RTO; 		break;
-				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 	break; 
+				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 		break; 
 				case (validDisplayIcons.Contains(CSI_EIcon.ENG)) 		: displayIcon = CSI_EIcon.ENG; 		break;
-				case (validDisplayIcons.Contains(CSI_EIcon.DEMO)) 		: displayIcon = CSI_EIcon.DEMO; 	break;
+				case (validDisplayIcons.Contains(CSI_EIcon.DEMO)) 		: displayIcon = CSI_EIcon.DEMO; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.MG)) 		: displayIcon = CSI_EIcon.MG; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.SNIPER)) 	: displayIcon = CSI_EIcon.SNIPER; 	break;
 				case (validDisplayIcons.Contains(CSI_EIcon.AT)) 		: displayIcon = CSI_EIcon.AT; 		break;
-				case (validDisplayIcons.Contains(CSI_EIcon.GREN)) 		: displayIcon = CSI_EIcon.GREN; 	break;
+				case (validDisplayIcons.Contains(CSI_EIcon.GREN)) 		: displayIcon = CSI_EIcon.GREN; 		break;
 				default : displayIcon = CSI_EIcon.MAN;
 			}
 			
