@@ -49,7 +49,9 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 					}
 					
 					checkBoxWidget.SetChecked(true);
-					widget.SetEnabled(false);
+					
+					if (!SCR_Global.IsAdmin())
+						widget.SetEnabled(false);
 				} else
 					setVanillaSettingBind = true;
 			} else

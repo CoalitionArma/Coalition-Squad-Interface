@@ -8,6 +8,9 @@ class CSI_ChararcterHelper
 	*/
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
 	{
+		if (!playerCharacter)
+			return 0;
+		
 		AimingComponent playerAimingComponent = playerCharacter.GetHeadAimingComponent();
 		if (!playerAimingComponent) 
 			return 0;
@@ -38,6 +41,9 @@ class CSI_ChararcterHelper
 	*/
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
+		if (!playerCharacter)
+			return null;
+		
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
 		if (compartmentAccess) 
 		{

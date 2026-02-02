@@ -43,8 +43,8 @@ class CSI_UIHelper
 		{
 			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break; // BLUE
 			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break; // RED
-			case CSI_EColorTeam.GREEN : 	colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break; // GREEN
-			case CSI_EColorTeam.YELLOW : 	colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
+			case CSI_EColorTeam.GREEN : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break; // GREEN
+			case CSI_EColorTeam.YELLOW : 		colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
 			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 180, 180, 180)); // NONE
 		}
 		

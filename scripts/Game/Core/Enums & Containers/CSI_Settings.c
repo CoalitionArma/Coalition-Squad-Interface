@@ -53,7 +53,7 @@ class CSI_GameSettings : ModuleGameSettings
 		RADAR_ICON_SIZE
 	};
 
-	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
+	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 12;
 
 	//------------------------------------------------------------------------------------------------
 	static TStringArray GetSettingsArray() 
