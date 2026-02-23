@@ -1,4 +1,4 @@
-class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
+ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
@@ -42,6 +42,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		none.m_OnClicked.Insert(OnColorTeamClicked);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerSettingsPlayerID(int playerID)
 	{
 		m_iPlayerID = playerID;
@@ -154,6 +155,7 @@ class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);
 	};
 	
+	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
 		super.HandlerDeattached(w);

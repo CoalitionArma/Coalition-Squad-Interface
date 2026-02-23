@@ -74,7 +74,6 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	override void OnTabHide()
 	{
 		super.OnTabHide();
-		SCR_PlayerController.SetGameUserSettings();
 		m_PlayerControllerManager.GetLocalSettingsJson().SaveToFile();
 		
 		if (m_SettingsManager && m_RplToAuthorityManager)

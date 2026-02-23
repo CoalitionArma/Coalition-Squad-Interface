@@ -29,6 +29,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 			m_SettingsJson = new CSI_SettingsJson;
 			m_SettingsJson.LoadFromFile();
 			
+			GetGame().UserSettingsChanged();
+			GetGame().SaveUserSettings();
+			
+			CSI_SettingsManager.GetInstance().RequestSettingsUpdate();
+			
 			SetEventMask(owner, EntityEvent.FRAME);
 		};
 	}
