@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{2AA1FFAC7A556059}UI/layouts/Menus/SettingsMenu/CSI_Settings.layout"
+ Name "{2AA1FFAC7A556059}UI/layouts/Menus/SettingsSubMenus/CSI_SettingsSubMenu.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -12,8 +12,6 @@ MetaFileClass {
   LayoutResourceClass PS5 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
-  }
-  LayoutResourceClass Xbox : PC {
   }
  }
 }

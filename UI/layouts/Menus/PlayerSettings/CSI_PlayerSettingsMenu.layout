@@ -39,6 +39,9 @@ FrameWidgetClass {
         OverlayWidgetClass "{66C76B3671544CC3}" {
          Prefab "{66C76B3671544CC3}"
          {
+          ImageWidgetClass "{5EC651633FD7EAA1}" {
+           Prefab "{5EC651633FD7EAA1}"
+          }
           VerticalLayoutWidgetClass "{66C76B3609B8B145}" {
            Prefab "{66C76B3609B8B145}"
            {
@@ -60,14 +63,193 @@ FrameWidgetClass {
                  m_sLabel "Exit"
                 }
                }
+               {
+                HorizontalLayoutWidgetClass "{5DB89B776AA9CEFF}" {
+                 Prefab "{5DB89B776AA9CEFF}"
+                 {
+                  HorizontalLayoutWidgetClass "{5D8A71797D491473}" {
+                   Prefab "{5D8A71797D491473}"
+                   {
+                    SizeLayoutWidgetClass "{5D8ACEF129D3EC88}" {
+                     Prefab "{5D8ACEF129D3EC88}"
+                     {
+                      OverlayWidgetClass "{5D8ACEF04D578362}" {
+                       Prefab "{5D8ACEF04D578362}"
+                       {
+                        ImageWidgetClass "{5D8A717A30F080D4}" {
+                         Prefab "{5D8A717A30F080D4}"
+                        }
+                        ImageWidgetClass "{5D8A717A30F080D6}" {
+                         Prefab "{5D8A717A30F080D6}"
+                        }
+                        ImageWidgetClass "{5D8A717A30F080D9}" {
+                         Prefab "{5D8A717A30F080D9}"
+                        }
+                        OverlayWidgetClass "{5EF688060B7CC62F}" {
+                         Prefab "{5EF688060B7CC62F}"
+                         {
+                          ImageWidgetClass "{5D8A717A30F080DD}" {
+                           Prefab "{5D8A717A30F080DD}"
+                          }
+                         }
+                        }
+                        OverlayWidgetClass "{5D8A717A30F080D8}" {
+                         Prefab "{5D8A717A30F080D8}"
+                         {
+                          ImageWidgetClass "{5D8A717A30F080DB}" {
+                           Prefab "{5D8A717A30F080DB}"
+                          }
+                          ImageWidgetClass "{5D8A717A30F080DA}" {
+                           Prefab "{5D8A717A30F080DA}"
+                          }
+                         }
+                        }
+                        FrameWidgetClass "{5F0EADCCAC79E2FF}" {
+                         Prefab "{5F0EADCCAC79E2FF}"
+                         {
+                          ImageWidgetClass "{5F0EADCF933467F3}" {
+                           Prefab "{5F0EADCF933467F3}"
+                          }
+                         }
+                        }
+                        ImageWidgetClass "{5D8A717A30F080DC}" {
+                         Prefab "{5D8A717A30F080DC}"
+                        }
+                        SizeLayoutWidgetClass "{5D8A717A30F080DF}" {
+                         Prefab "{5D8A717A30F080DF}"
+                         {
+                          VerticalLayoutWidgetClass "{5D8A717A30F080E1}" {
+                           Prefab "{5D8A717A30F080E1}"
+                           {
+                            FrameWidgetClass "{5D8A717A30F080E0}" {
+                             Prefab "{5D8A717A30F080E0}"
+                            }
+                            RichTextWidgetClass "{5D8A717A30F080E3}" {
+                             Prefab "{5D8A717A30F080E3}"
+                            }
+                            FrameWidgetClass "{5D8A717A30F080E2}" {
+                             Prefab "{5D8A717A30F080E2}"
+                            }
+                           }
+                          }
+                         }
+                        }
+                       }
+                      }
+                     }
+                    }
+                   }
+                  }
+                  RichTextWidgetClass "{5DB89B776317E2A7}" {
+                   Prefab "{5DB89B776317E2A7}"
+                  }
+                 }
+                }
+               }
               }
              }
+            }
+            ImageWidgetClass "{5EC77B609A838867}" {
+             Prefab "{5EC77B609A838867}"
             }
             TextWidgetClass "{5EC77AE9FA911A1F}" {
              Prefab "{5EC77AE9FA911A1F}"
              Text "No Players Selected"
              "Font Size" 18
              "Min Font Size" 1
+            }
+            TextWidgetClass "{5ED010D861AD1015}" {
+             Prefab "{5ED010D861AD1015}"
+            }
+            HorizontalLayoutWidgetClass "{66C76B376C9C6C53}" {
+             Prefab "{66C76B376C9C6C53}"
+             {
+              XComboBoxWidgetClass "{5EC77B6095B7A4A8}" {
+               Prefab "{5EC77B6095B7A4A8}"
+              }
+              OverlayWidgetClass "{66C76B36999083EB}" {
+               Prefab "{66C76B36999083EB}"
+               {
+                ImageWidgetClass "{5EC77AD0E60C948B}" {
+                 Prefab "{5EC77AD0E60C948B}"
+                }
+                ButtonWidgetClass "{5EC77AD01504BED9}" {
+                 Prefab "{5EC77AD01504BED9}"
+                }
+               }
+              }
+             }
+            }
+            TextWidgetClass "{5ED010D84219987D}" {
+             Prefab "{5ED010D84219987D}"
+            }
+            VerticalLayoutWidgetClass "{66C76B37CB9EA833}" {
+             Prefab "{66C76B37CB9EA833}"
+             {
+              OverlayWidgetClass "{66C76B37B91FA633}" {
+               Prefab "{66C76B37B91FA633}"
+               {
+                WindowWidgetClass "{5EC77B62D6F82516}" {
+                 Prefab "{5EC77B62D6F82516}"
+                }
+                ImageWidgetClass "{5EC77B6C5671FF7D}" {
+                 Prefab "{5EC77B6C5671FF7D}"
+                }
+                ButtonWidgetClass "{5EC77B782C0E76A0}" {
+                 Prefab "{5EC77B782C0E76A0}"
+                }
+               }
+              }
+              GridLayoutWidgetClass "{66C76B35FF8CBD5F}" {
+               Prefab "{66C76B35FF8CBD5F}"
+               {
+                OverlayWidgetClass "{66C76B3516FAB680}" {
+                 Prefab "{66C76B3516FAB680}"
+                 {
+                  WindowWidgetClass "{5EC77B62A515EEB7}" {
+                   Prefab "{5EC77B62A515EEB7}"
+                  }
+                  ButtonWidgetClass "{5EC77B78C18FDC3E}" {
+                   Prefab "{5EC77B78C18FDC3E}"
+                  }
+                 }
+                }
+                OverlayWidgetClass "{66C76B351023D875}" {
+                 Prefab "{66C76B351023D875}"
+                 {
+                  WindowWidgetClass "{5EC77B62D2E03CB9}" {
+                   Prefab "{5EC77B62D2E03CB9}"
+                  }
+                  ButtonWidgetClass "{5EC77B78E8A01D0A}" {
+                   Prefab "{5EC77B78E8A01D0A}"
+                  }
+                 }
+                }
+                OverlayWidgetClass "{66C76B35111BB24F}" {
+                 Prefab "{66C76B35111BB24F}"
+                 {
+                  WindowWidgetClass "{5EC77B62AC637243}" {
+                   Prefab "{5EC77B62AC637243}"
+                  }
+                  ButtonWidgetClass "{5EC77B78016F0527}" {
+                   Prefab "{5EC77B78016F0527}"
+                  }
+                 }
+                }
+                OverlayWidgetClass "{66C76B3511FB3AD2}" {
+                 Prefab "{66C76B3511FB3AD2}"
+                 {
+                  WindowWidgetClass "{5EC77B62AA76B302}" {
+                   Prefab "{5EC77B62AA76B302}"
+                  }
+                  ButtonWidgetClass "{5EC77B780C772A19}" {
+                   Prefab "{5EC77B780C772A19}"
+                  }
+                 }
+                }
+               }
+              }
+             }
             }
            }
           }
@@ -76,6 +258,71 @@ FrameWidgetClass {
         OverlayWidgetClass "{66C77441724892C6}" {
          Prefab "{66C77441724892C6}"
          "Is Visible" 0
+         {
+          ImageWidgetClass "{605035926F91EF39}" {
+           Prefab "{605035926F91EF39}"
+          }
+          VerticalLayoutWidgetClass "{66C7744179487624}" {
+           Prefab "{66C7744179487624}"
+           {
+            OverlayWidgetClass "{66C7744083D5D331}" {
+             Prefab "{66C7744083D5D331}"
+             {
+              HorizontalLayoutWidgetClass "{66C774400E5F7722}" {
+               Prefab "{66C774400E5F7722}"
+               {
+                ImageWidgetClass "{60503593856FF961}" {
+                 Prefab "{60503593856FF961}"
+                }
+                TextWidgetClass "{60503593856FF8D2}" {
+                 Prefab "{60503593856FF8D2}"
+                }
+               }
+              }
+             }
+            }
+            OverlayWidgetClass "{66C774408334CAF0}" {
+             Prefab "{66C774408334CAF0}"
+             {
+              ImageWidgetClass "{6050358F4FF96275}" {
+               Prefab "{6050358F4FF96275}"
+              }
+              ButtonWidgetClass "{604F4D6FF9C3B934}" {
+               Prefab "{604F4D6FF9C3B934}"
+              }
+             }
+            }
+            TextWidgetClass "{604F4D6D24F350ED}" {
+             Prefab "{604F4D6D24F350ED}"
+            }
+            OverlayWidgetClass "{66C774408216A44B}" {
+             Prefab "{66C774408216A44B}"
+             {
+              ImageWidgetClass "{6050358FED8298C4}" {
+               Prefab "{6050358FED8298C4}"
+              }
+              ButtonWidgetClass "{604F4D6F182A3D59}" {
+               Prefab "{604F4D6F182A3D59}"
+              }
+             }
+            }
+            TextWidgetClass "{604F4D6C620AD487}" {
+             Prefab "{604F4D6C620AD487}"
+            }
+            OverlayWidgetClass "{66C77440818BDC1F}" {
+             Prefab "{66C77440818BDC1F}"
+             {
+              ImageWidgetClass "{605035931933B04A}" {
+               Prefab "{605035931933B04A}"
+              }
+              ButtonWidgetClass "{605035931933B04B}" {
+               Prefab "{605035931933B04B}"
+              }
+             }
+            }
+           }
+          }
+         }
         }
        }
       }

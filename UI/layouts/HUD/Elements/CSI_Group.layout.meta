@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{02CD6D23168020B1}Layouts/UI/COA_GroupDisplay.layout"
+ Name "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_Group.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -10,6 +10,8 @@ MetaFileClass {
   LayoutResourceClass PS4 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
+  }
+  LayoutResourceClass PS5 : PC {
   }
  }
 }

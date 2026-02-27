@@ -133,7 +133,15 @@ ScaleWidgetClass {
              }
              "Font Size" 18
              items {
-              "AUTO" "RTO" "ENG" "AT" "DEMO" "SNIPER" "GREN" "MG" "MEDIC"
+              "AUTO"
+              "RTO"
+              "ENG"
+              "AT"
+              "DEMO"
+              "SNIPER"
+              "GREN"
+              "MG"
+              "MEDIC"
              }
             }
             OverlayWidgetClass "{66C76B36999083EB}" {
@@ -237,10 +245,12 @@ ScaleWidgetClass {
               SizeMode Fill
              }
              RowFill {
-              0.5 0.5
+              0.5
+              0.5
              }
              ColumnFill {
-              0.5 0.5
+              0.5
+              0.5
              }
              {
               OverlayWidgetClass "{66C76B3516FAB680}" {

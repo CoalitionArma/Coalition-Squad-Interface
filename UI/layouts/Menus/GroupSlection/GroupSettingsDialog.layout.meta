@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{7C63AA7A1665759D}UI/layouts/Menus/Dialogs/GroupSettingsDialog.layout"
+ Name "{7C63AA7A1665759D}UI/layouts/Menus/GroupSlection/GroupSettingsDialog.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -12,8 +12,6 @@ MetaFileClass {
   LayoutResourceClass PS5 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
-  }
-  LayoutResourceClass Xbox : PC {
   }
  }
 }

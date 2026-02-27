@@ -4,11 +4,6 @@ class CSI_HUD : SCR_InfoDisplay
 	protected CSI_HUDManager m_CSIHUDManager;
 	protected bool m_bIsVisible = false;
 	
-	protected Widget m_wStamina;
-	protected Widget m_wCompass;
-	protected Widget m_wRadar;
-	protected Widget m_wGroup;
-	
 	protected CSI_Stamina m_Stamina;
 	protected CSI_Compass m_Compass;
 	protected CSI_Radar m_Radar;
@@ -23,15 +18,15 @@ class CSI_HUD : SCR_InfoDisplay
 		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.DOWN, ToggleIsVisible);
 		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.UP, ToggleIsVisible);
 		
-		m_wStamina = m_wRoot.FindAnyWidget("Stamina");
-		m_wCompass = m_wRoot.FindAnyWidget("Compass");
-		m_wRadar = m_wRoot.FindAnyWidget("Radar");
-		m_wGroup = m_wRoot.FindAnyWidget("Group");
+		Widget stamina = m_wRoot.FindAnyWidget("Stamina");
+		Widget compass = m_wRoot.FindAnyWidget("Compass");
+		Widget radar = m_wRoot.FindAnyWidget("Radar");
+		Widget group = m_wRoot.FindAnyWidget("Group");
 		
-		m_Stamina = CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina));
-		m_Compass = CSI_Compass.Cast(m_wCompass.FindHandler(CSI_Compass));
-		m_Radar = CSI_Radar.Cast(m_wRadar.FindHandler(CSI_Radar));
-		m_Group = CSI_Group.Cast(m_wGroup.FindHandler(CSI_Group));
+		m_Stamina = CSI_Stamina.Cast(stamina.FindHandler(CSI_Stamina));
+		m_Compass = CSI_Compass.Cast(compass.FindHandler(CSI_Compass));
+		m_Radar = CSI_Radar.Cast(radar.FindHandler(CSI_Radar));
+		m_Group = CSI_Group.Cast(group.FindHandler(CSI_Group));
 	}
 
 	//------------------------------------------------------------------------------------------------

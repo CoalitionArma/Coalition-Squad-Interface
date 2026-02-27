@@ -22,10 +22,18 @@ ScaleWidgetClass {
     VerticalAlign 3
    }
    RowFill {
-    0.2 0.2 0.2 0.2 0.2
+    0.2
+    0.2
+    0.2
+    0.2
+    0.2
    }
    ColumnFill {
-    0.2 0.2 0.2 0.2 0.2
+    0.2
+    0.2
+    0.2
+    0.2
+    0.2
    }
    {
     ScaleWidgetClass "{66B8C3DF4832D4CF}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
@@ -33,6 +41,46 @@ ScaleWidgetClass {
      Slot GridWidgetSlot "{66B8C3DF4832D52E}" {
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF495703FC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player1"
@@ -40,6 +88,46 @@ ScaleWidgetClass {
       Row 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF4A3D4978}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player2"
@@ -47,6 +135,46 @@ ScaleWidgetClass {
       Row 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF4B057223}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player3"
@@ -54,6 +182,46 @@ ScaleWidgetClass {
       Row 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7468AFA7}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player4"
@@ -61,6 +229,46 @@ ScaleWidgetClass {
       Row 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF75676B21}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player5"
@@ -68,6 +276,46 @@ ScaleWidgetClass {
       Column 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF75FC97AB}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player6"
@@ -76,6 +324,46 @@ ScaleWidgetClass {
       Column 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF76A9FDC4}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player7"
@@ -84,6 +372,46 @@ ScaleWidgetClass {
       Column 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF77833DEC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player8"
@@ -92,6 +420,46 @@ ScaleWidgetClass {
       Column 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF700D4224}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player9"
@@ -100,6 +468,46 @@ ScaleWidgetClass {
       Column 1
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF70958879}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player10"
@@ -107,6 +515,46 @@ ScaleWidgetClass {
       Column 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7140F449}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player11"
@@ -115,6 +563,46 @@ ScaleWidgetClass {
       Column 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF71C59AC6}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player12"
@@ -123,6 +611,46 @@ ScaleWidgetClass {
       Column 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF72EAC970}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player13"
@@ -131,6 +659,46 @@ ScaleWidgetClass {
       Column 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF736A728F}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player14"
@@ -139,6 +707,46 @@ ScaleWidgetClass {
       Column 2
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF73EE8299}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player15"
@@ -146,6 +754,46 @@ ScaleWidgetClass {
       Column 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7C682942}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player16"
@@ -154,6 +802,46 @@ ScaleWidgetClass {
       Column 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7CEC92F8}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player17"
@@ -162,6 +850,46 @@ ScaleWidgetClass {
       Column 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7D6A0D3C}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player18"
@@ -170,6 +898,46 @@ ScaleWidgetClass {
       Column 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7DF8684C}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player19"
@@ -178,6 +946,46 @@ ScaleWidgetClass {
       Column 3
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7E8237EE}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player20"
@@ -185,6 +993,46 @@ ScaleWidgetClass {
       Column 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7F0F200F}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player21"
@@ -193,6 +1041,46 @@ ScaleWidgetClass {
       Column 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF7FAB149E}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player22"
@@ -201,6 +1089,46 @@ ScaleWidgetClass {
       Column 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF784F93CC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player23"
@@ -209,6 +1137,46 @@ ScaleWidgetClass {
       Column 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
     ScaleWidgetClass "{66B8C3DF78E0C9B3}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player24"
@@ -217,6 +1185,46 @@ ScaleWidgetClass {
       Column 4
      }
      "Is Visible" 0
+     {
+      FrameWidgetClass "{66A831E5EDE01DB1}" {
+       Prefab "{66A831E5EDE01DB1}"
+       {
+        HorizontalLayoutWidgetClass "{66A831E2AD69F2F4}" {
+         Prefab "{66A831E2AD69F2F4}"
+         {
+          ScaleWidgetClass "{66A831E50814C1AB}" {
+           Prefab "{66A831E50814C1AB}"
+           {
+            FrameWidgetClass "{66A831E5CEE1BDCF}" {
+             Prefab "{66A831E5CEE1BDCF}"
+             {
+              ImageWidgetClass "{660612B98AFC2634}" {
+               Prefab "{660612B98AFC2634}"
+              }
+              ImageWidgetClass "{6623052134C9CBC2}" {
+               Prefab "{6623052134C9CBC2}"
+              }
+              ImageWidgetClass "{66A6B5A377FC8834}" {
+               Prefab "{66A6B5A377FC8834}"
+              }
+              ImageWidgetClass "{66C340735F1D38DC}" {
+               Prefab "{66C340735F1D38DC}"
+              }
+              ImageWidgetClass "{66C3407344436D8A}" {
+               Prefab "{66C3407344436D8A}"
+              }
+             }
+            }
+           }
+          }
+          RichTextWidgetClass "{66490C0182D57E7E}" {
+           Prefab "{66490C0182D57E7E}"
+          }
+         }
+        }
+       }
+      }
+     }
     }
    }
   }

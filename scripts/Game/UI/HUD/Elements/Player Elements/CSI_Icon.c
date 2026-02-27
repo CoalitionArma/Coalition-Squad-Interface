@@ -11,6 +11,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wIconLarge;
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
+	
+	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
+	bool m_bIsRadarWidget;
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -119,20 +122,16 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			m_wIconLarge.SetVisible(true);
 			
 			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
-			bool isPiloted = (icon == CSI_EIcon.HELIPILOT || icon == CSI_EIcon.HELICREW);
 			
-			if (isTurreted || isPiloted)
+			if (isTurreted && m_bIsRadarWidget)
 			{
-				if (isTurreted)
-					m_wArrow.SetVisible(true);
-				else
-					m_wArrow.SetVisible(false);
-				
+				m_wArrow.SetVisible(true);
 				m_wOutlineLarge.SetVisible(false);
-			} else {
-				m_wArrow.SetVisible(false);
+			} else { 
+				m_wArrow.SetVisible(false); 
 				m_wOutlineLarge.SetVisible(true);
-			}
+			};
+			
 		} else {
 			m_wIconLarge.SetVisible(false);
 			m_wOutlineLarge.SetVisible(false);

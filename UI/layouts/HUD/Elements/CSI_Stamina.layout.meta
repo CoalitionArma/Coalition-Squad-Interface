@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{AD61A34EB388CF6D}Layouts/UI/COA_StaminaBar.layout"
+ Name "{AD61A34EB388CF6D}UI/layouts/HUD/Elements/CSI_Stamina.layout"
  Configurations {
   LayoutResourceClass PC {
   }
@@ -10,6 +10,8 @@ MetaFileClass {
   LayoutResourceClass PS4 : PC {
   }
   LayoutResourceClass HEADLESS : PC {
+  }
+  LayoutResourceClass PS5 : PC {
   }
  }
 }
