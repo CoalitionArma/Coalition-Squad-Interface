@@ -7,13 +7,6 @@ ImageSetClass {
    path "{F51F7488C807DD8F}UI/Textures/HUD/Icons/CSI_ICONS.edds"
   }
  }
- Images {
-  ImageSetDefClass DRIVER_ICON_ALT {
-   Pos 241 338
-   Size 31 31
-   Flags 0 0
-  }
- }
  Groups {
   ImageSetGroupClass VEHICLE {
    Images {
@@ -44,6 +37,11 @@ ImageSetClass {
     }
     ImageSetDefClass HELICREW_ICON {
      Pos 241 304
+     Size 31 31
+     Flags 0 0
+    }
+    ImageSetDefClass DRIVER_ICON_ALT {
+     Pos 241 338
      Size 31 31
      Flags 0 0
     }
@@ -102,6 +100,11 @@ ImageSetClass {
      Flags 0 0
     }
     ImageSetDefClass EMPTY_ICON {
+     Pos 275 338
+     Size 31 31
+     Flags 0 0
+    }
+    ImageSetDefClass EMPTY {
      Pos 275 338
      Size 31 31
      Flags 0 0
