@@ -32,7 +32,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 			GetGame().UserSettingsChanged();
 			GetGame().SaveUserSettings();
 			
-			CSI_SettingsManager.GetInstance().RequestSettingsUpdate();
+			if (CSI_SettingsManager.GetInstance())
+				CSI_SettingsManager.GetInstance().RequestSettingsUpdate();
 			
 			SetEventMask(owner, EntityEvent.FRAME);
 		};
