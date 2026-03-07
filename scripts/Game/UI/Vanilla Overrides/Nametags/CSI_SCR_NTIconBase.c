@@ -16,9 +16,9 @@ modded class SCR_NTIconBase
 		
 		switch (true)
 		{
-			case (nametagPos == CSI_ENametagIconPosition.CENTER && (iWidget.GetName() != "RoleIconCenter")) : data.SetVisibility(iWidget, false, 0, false); return;
-			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "IconNT")) : data.SetVisibility(iWidget, false, 0, false); return;
-			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) : data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.CENTER && (iWidget.GetName() != "RoleIconCenter")) 	: data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "IconNT")) 			: data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) 		: data.SetVisibility(iWidget, false, 0, false); return;
 		}
 		
 		if (data.m_iPlayerID > 0)
@@ -40,8 +40,8 @@ modded class SCR_NTIconBase
 		{
 			switch (true)
 			{
-				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS) 	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
-				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
+				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
+				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
 				case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
 				default : {
 					bool setAlt = false; 
@@ -85,6 +85,22 @@ modded class SCR_NTIconPlatform
 		if (!iWidget)
 			return;
 		
-		iWidget.SetVisible(false);
+		data.SetVisibility(iWidget, false, 0, false);
 	}
+	
+	//------------------------------------------------------------------------------------------------
+	override void UpdateElement(SCR_NameTagData data, int index)
+	{	
+		if (!data.m_aNametagElements[index])
+			return;
+		
+		if (data.m_eType != ENameTagEntityType.PLAYER && data.m_eType != ENameTagEntityType.VEHICLE)
+			return;
+		
+		ImageWidget image = ImageWidget.Cast(data.m_aNametagElements[index]);
+		if (!image)
+			return;
+		
+		data.SetVisibility(image, false, 0, false);
+	};
 };
