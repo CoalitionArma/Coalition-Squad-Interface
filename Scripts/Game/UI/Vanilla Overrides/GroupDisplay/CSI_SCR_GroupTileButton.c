@@ -237,7 +237,7 @@ modded class SCR_GroupTileButton
 
 		CheckLeaderOptions();
 
-		frequency.SetText(""+group.GetRadioFrequency()//!0.001 + " #AR-VON_FrequencyUnits_MHz");
+		frequency.SetText(""+group.GetRadioFrequency() * 0.001 + " #AR-VON_FrequencyUnits_MHz");
 
 		Widget children = playerList.GetChildren();
 		while (children)

@@ -81,15 +81,15 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		
 					// Get Relative Direction
 					float relDir = Math.Mod(((dir - localYaw) + 360), 360);
-					relDir = Math.Mod(relDir - (dir//! 2), 360);
-					relDir = relDir//! Math.DEG2RAD;
+					relDir = Math.Mod(relDir - (dir * 2), 360);
+					relDir = relDir * Math.DEG2RAD;
 					
-					disT = (dis//! (132 / (searchRadius//! 2.725)));
-					x = (Math.Sin(relDir)//! disT);
-					y = (Math.Cos(relDir)//! disT);
+					disT = (dis * (132 / (searchRadius * 2.725)));
+					x = (Math.Sin(relDir) * disT);
+					y = (Math.Cos(relDir) * disT);
 				};
 
-				opacity = Math.Map(dis, (0.8//!searchRadius), searchRadius, 0.6, 0);
+				opacity = Math.Map(dis, (0.8 * searchRadius), searchRadius, 0.6, 0);
 				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
 				UpdatePlayerRadarWidget(i, playerID, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
@@ -128,7 +128,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerID);
 			
-			widthAndHeight = widthAndHeight//! (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE)//! 0.01);
+			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

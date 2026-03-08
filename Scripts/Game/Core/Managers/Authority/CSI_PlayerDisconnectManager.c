@@ -45,7 +45,7 @@ class CSI_PlayerDisconnectManager : ScriptComponent
 		int currentTime = System.GetTickCount();
 		int currentTimeDifference = currentTime - m_iLastDataRetentionCheckTick;
 		
-		if (currentTimeDifference >= DATA_CHECK_INTERVAL//! 1000)
+		if (currentTimeDifference >= DATA_CHECK_INTERVAL * 1000)
 		{
 			DataRetentionCheck(currentTimeDifference);
 			m_iLastDataRetentionCheckTick = currentTime;

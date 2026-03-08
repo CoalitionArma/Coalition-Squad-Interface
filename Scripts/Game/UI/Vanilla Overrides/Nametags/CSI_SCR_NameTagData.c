@@ -148,12 +148,12 @@ modded class SCR_NameTagData : Managed
 		
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
-			nametagOffsetVector[1] = ((nametagOffset + 1)//! 0.1);
+			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
 			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
 		}
 		else if (m_eAttachedTo == ENameTagPosition.BODY)
 		{
-			nametagOffsetVector[1] = ((nametagOffset - 5)//! 0.1);
+			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
 			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
 		}
 
