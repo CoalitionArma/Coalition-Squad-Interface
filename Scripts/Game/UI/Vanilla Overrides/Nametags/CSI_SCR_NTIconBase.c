@@ -12,7 +12,7 @@ modded class SCR_NTIconBase
 		if (!stateConf)
 			return;
 		
-		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
+		CSI_ENametagIconPosition nametagPos = CSI_SettingsSystem.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		
 		switch (true)
 		{
@@ -61,7 +61,7 @@ modded class SCR_NTIconBase
 				
 			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
 				colorToSet = CSI_UIHelper.VANILLA_VON_COLOR;
-			else if (CSI_HUDManager.GetInstance() && CSI_HUDManager.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			else if (CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam());
 			else
 				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE); 

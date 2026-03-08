@@ -3,24 +3,22 @@
 //! Attached to SCR_HUDManagerComponent which is a component of SCR_PlayerController
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
-	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
 
+	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
 		super.DisplayUpdate(owner, timeSlice);
 		
-		if (!m_SettingsManager) 
-		{
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-			return;
-		};
+		if (!m_SettingsSystem) 
+			m_SettingsSystem = CSI_SettingsSystem.GetInstance();
 
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
-		int nametagsRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		int nametagsRange = m_SettingsSystem.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 
-		nametagsRange = nametagsRange + (nametagsRange * ((int)(isZoomed) * ((m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) * 0.01) - 1))); // increase max distance if player is using a scope or binoculars
+		nametagsRange = nametagsRange + (nametagsRange * ((int)(isZoomed) * ((m_SettingsSystem.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) * 0.01) - 1))); // increase max distance if player is using a scope or binoculars
 		
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE)) 
+		if (!m_SettingsSystem.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE)) 
 			nametagsRange = 1;
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 

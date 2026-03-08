@@ -4,8 +4,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_HUDManager m_HUDManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_HUDSystem m_HUDSystem;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	
 	protected int m_iStoredGroupCount = -1;
@@ -23,8 +23,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		m_HUDManager = CSI_HUDManager.GetInstance();
+		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
 	}
@@ -37,17 +37,17 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//! Updates the radar display each frame.
 	void Update()
 	{			
-		SCR_ChimeraCharacter localCharacter = m_HUDManager.GetLocalPlayerCharacter();
+		SCR_ChimeraCharacter localCharacter = m_HUDSystem.GetLocalPlayerCharacter();
 		if (!localCharacter)
 			return;
 		
-		int groupCount = m_HUDManager.GetLocalGroupCount();
-        float localYaw = m_HUDManager.GetLocalYaw();
+		int groupCount = m_HUDSystem.GetLocalGroupCount();
+        float localYaw = m_HUDSystem.GetLocalYaw();
 		vector localOrigin = localCharacter.GetOrigin();
 
-		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
+		if (groupCount > 1 && m_SettingsSystem.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
 		{
-			foreach (int i, int playerID : m_HUDManager.GetLocalGroupPlayerIds())
+			foreach (int i, int playerID : m_HUDSystem.GetLocalGroupPlayerIds())
 			{
 				float x, y, opacity, rotation, disT, dis, searchRadius;
 				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
@@ -63,7 +63,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				// Get Distance
 				dis = vector.Distance(localOrigin, playerCharacterOrigin);
 				
-				if (m_HUDManager.GetIsLocalPlayerInVehicle())
+				if (m_HUDSystem.GetIsLocalPlayerInVehicle())
 					searchRadius = 3.5;
 				else
 					searchRadius = 24;
@@ -128,7 +128,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerID);
 			
-			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight * (m_SettingsSystem.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

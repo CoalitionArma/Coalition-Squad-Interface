@@ -4,8 +4,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_HUDManager m_HUDManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected ProgressBarWidget m_wStamBar;
 
@@ -18,8 +18,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		m_HUDManager = CSI_HUDManager.GetInstance();
+		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
 	}
@@ -32,14 +32,14 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	//! Update the stamina UI element each frame.
 	void Update()
 	{
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
+		if (!m_SettingsSystem.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
 		{
 			HideBar(0);
 			return;
 		}
 		
 		// Get local enity the player is controlling at the moment.
-		SCR_ChimeraCharacter character = m_HUDManager.GetLocalPlayerCharacter();
+		SCR_ChimeraCharacter character = m_HUDSystem.GetLocalPlayerCharacter();
 
 		// Can't run if these dont exist better exit out.
 		if (!character) 

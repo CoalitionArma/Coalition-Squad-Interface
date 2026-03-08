@@ -1,7 +1,7 @@
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 {
-	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
 	
 	//------------------------------------------------------------------------------------------------
 	//! Check if target is visible to the player
@@ -9,10 +9,10 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
-		if (!m_SettingsManager)
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		if (!m_SettingsSystem)
+			m_SettingsSystem = CSI_SettingsSystem.GetInstance();
 		
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
+		if (!m_SettingsSystem.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
 			return true;
 		
 		TraceParam param = new TraceParam;

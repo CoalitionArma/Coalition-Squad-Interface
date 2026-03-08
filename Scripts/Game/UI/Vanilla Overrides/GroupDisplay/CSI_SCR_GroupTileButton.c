@@ -253,7 +253,7 @@ modded class SCR_GroupTileButton
 			children = leaderList.GetChildren();
 		}
 		
-		array<int> playerIDs = CSI_HUDManager.GetInstance().GetSortedGroupArray(group.GetPlayerIDs());
+		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(group.GetPlayerIDs());
 		Widget playerTile;
 
 		int leaderID = group.GetLeaderID();

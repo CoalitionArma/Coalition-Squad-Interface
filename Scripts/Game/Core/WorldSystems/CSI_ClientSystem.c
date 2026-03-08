@@ -1,16 +1,12 @@
-class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
-
-class CSI_PlayerControllerManager : ScriptComponent
+class CSI_ClientSystem : GameSystem
 {		
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 RUNTIME VARIBLES
+//	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
+	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected CSI_HUDManager m_HUDManager;
 
-	protected int m_iUpdate;
 	protected int m_iCurrentUpdateCycle = 12;
 	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
 	protected int m_iLocallyStoredGroupID = -1;
@@ -22,50 +18,36 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	override protected void OnPostInit(IEntity owner)
+	override static void InitInfo(WorldSystemInfo outInfo)
 	{
-		super.OnPostInit(owner);
+		outInfo.SetAbstract(false)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void OnInit()
+	{
+		super.OnInit();
 
-		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_HUDManager = CSI_HUDManager.GetInstance();
-		
-		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
-
-		if (RplSession.Mode() != RplMode.Dedicated) 
-		{
-			m_SettingsJson = new CSI_SettingsJson;
-			m_SettingsJson.LoadFromFile();
-			
-			GetGame().UserSettingsChanged();
-			GetGame().SaveUserSettings();
-			
-			if (CSI_SettingsManager.GetInstance())
-				CSI_SettingsManager.GetInstance().RequestSettingsUpdate();
-			
-			SetEventMask(owner, EntityEvent.FRAME);
-		};
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 ONFRAME UPDATE METHODS
+//	 FIXEDFRAME UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
+	protected int m_iUpdate;
 	//------------------------------------------------------------------------------------------------
-	override protected void EOnFrame(IEntity owner, float timeSlice)
+	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
-		super.EOnFrame(owner, timeSlice);
-		
 		m_iUpdate++;
-		m_HUDManager.UpdateLocalAimingYaw();
 		
-		if (!(m_iUpdate >= 25))
+		if (!(m_iUpdate >= 35))
 			return;
 		else
 			m_iUpdate = 0;
 		
 		UpdateAllLocalPlayerValues();
-		m_HUDManager.UpdateLocalHUDValues();
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -96,11 +78,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (m_iLocallyStoredGroupID != playersGroupID) 
 		{
 			m_iLocallyStoredGroupID = playersGroupID;
-			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
+			m_RplToAuthoritySystem.Owner_ClearGroupSpecificData(playerID);
 			return;
 		};
 		
-		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
+		m_RplToAuthoritySystem.Owner_RegisterPlayerData(playerID);
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
@@ -275,49 +257,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
 		
-		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
-		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
-		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
-	}
-
-//=============================================================================================================================================================================================================================================================================================================================================================
-//	 JSON METHODS
-//=============================================================================================================================================================================================================================================================================================================================================================
-	
-	//------------------------------------------------------------------------------------------------
-	CSI_SettingsJson GetLocalSettingsJson()
-	{
-		return m_SettingsJson;
-	}
-
-//=============================================================================================================================================================================================================================================================================================================================================================
-//	 MENU METHODS
-//=============================================================================================================================================================================================================================================================================================================================================================
-	
-	//------------------------------------------------------------------------------------------------
-	protected void OpenLocalPlayerSettingsMenu()
-	{
-		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
-			GetGame().OpenGroupMenu();
-		else
-			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsMenu, 0, true);
-	}
-	
-//=============================================================================================================================================================================================================================================================================================================================================================
-//	 STATIC ACCESSOR
-//=============================================================================================================================================================================================================================================================================================================================================================
-
-	//------------------------------------------------------------------------------------------------
-	protected static CSI_PlayerControllerManager m_sInstance;
-	static CSI_PlayerControllerManager GetInstance()
-	{
-		return m_sInstance;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	void CSI_PlayerControllerManager(IEntityComponentSource src, IEntity ent, IEntity parent)
-	{
-		m_sInstance = this;
+		m_RplToAuthoritySystem.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
+		m_RplToAuthoritySystem.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
+		m_RplToAuthoritySystem.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 }

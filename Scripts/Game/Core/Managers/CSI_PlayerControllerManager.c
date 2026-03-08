@@ -1,69 +1,84 @@
-class CSI_Group : SCR_ScriptedWidgetComponent
-{
+class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
+
+class CSI_PlayerControllerManager : ScriptComponent
+{		
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
-
-	protected CSI_SettingsSystem m_SettingsSystem;
-	protected CSI_HUDSystem m_HUDSystem;
 	
-	protected ref array<int> m_aStoredGroupPlayerIDs;
-	protected ref array<Widget> m_aPlayerWidgets;
+	protected ref CSI_SettingsJson m_SettingsJson;
+	protected UserSettings m_UserSettigs;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 ELEMENT INITIALIZATION
+//	 MANAGER INITILIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
-
+	
 	//------------------------------------------------------------------------------------------------
-	override void HandlerAttached(Widget w)
+	override protected void OnPostInit(IEntity owner)
 	{
-		super.HandlerAttached(w);
-
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
-		m_HUDSystem = CSI_HUDSystem.GetInstance();
+		super.OnPostInit(owner);
 		
-		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
-	}
-	
-//=============================================================================================================================================================================================================================================================================================================================================================
-//	 ELEMENT UPDATE
-//=============================================================================================================================================================================================================================================================================================================================================================
-
-	//------------------------------------------------------------------------------------------------
-	//! Updates the group interface element on each frame
-	void Update()
-	{
-		array<int> groupArray = m_HUDSystem.GetLocalGroupPlayerIds();
-
-		if(m_aStoredGroupPlayerIDs == groupArray)
+		if (RplSession.Mode() == RplMode.Dedicated) 
 			return;
 		
-		int groupCount = m_HUDSystem.GetLocalGroupCount();
-		m_aStoredGroupPlayerIDs = groupArray;
+		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
 
-		if (groupCount > 1 && m_SettingsSystem.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
-			foreach (int i, int playerID : groupArray) 
-				UpdatePlayerWidget(i, playerID);
-		else
-			groupCount = 0;
+		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
+		m_SettingsJson = new CSI_SettingsJson;
+		m_SettingsJson.LoadFromFile();
 		
-		for (int e = groupCount; e <= 24; e++)
-			UpdatePlayerWidget(e, -1);
+		GetGame().UserSettingsChanged();
+		GetGame().SaveUserSettings();
+		
+		if (CSI_SettingsSystem.GetInstance())
+			CSI_SettingsSystem.GetInstance().RequestSettingsUpdate();
 	}
+	
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 ELEMENT SPECIFIC METHODS
+//	 SETTING METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	//! Updates the interface widget for a specific player in the group dsiplay
-	//! \param[in] widgetNumber Widget index to update
-	//! \param[in] playerID ID of the player to display
-	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
+	UserSettings GetUserSettings()
 	{
-		Widget player = m_aPlayerWidgets[widgetNumber];
+		return m_UserSettigs;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	CSI_SettingsJson GetLocalSettingsJson()
+	{
+		return m_SettingsJson;
+	}
 
-		if (player) 
-			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerID);
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 MENU METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	protected void OpenLocalPlayerSettingsMenu()
+	{
+		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
+			GetGame().OpenGroupMenu();
+		else
+			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsMenu, 0, true);
+	}
+	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC ACCESSOR
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	protected static CSI_PlayerControllerManager m_sInstance;
+	static CSI_PlayerControllerManager GetInstance()
+	{
+		return m_sInstance;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	void CSI_PlayerControllerManager(IEntityComponentSource src, IEntity ent, IEntity parent)
+	{
+		m_sInstance = this;
 	}
 }

@@ -1,6 +1,4 @@
-class CSI_PlayerDisconnectManagerClass : ScriptComponentClass {};
-
-class CSI_PlayerDisconnectManager : ScriptComponent
+class CSI_PlayerDisconnectSystem : GameSystem
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -8,7 +6,7 @@ class CSI_PlayerDisconnectManager : ScriptComponent
 
 	protected ref map<int, int> m_mPlayerTimeMap = new map<int, int>;
 	
-	protected CSI_RplBroadcastManager m_RplBroadcastManager;
+	protected CSI_RplBroadcastSystem m_RplBroadcastSystem;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
 	static int DATA_RETENTION_TIME = 900;
@@ -20,17 +18,18 @@ class CSI_PlayerDisconnectManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	override protected void OnPostInit(IEntity owner)
+	override static void InitInfo(WorldSystemInfo outInfo)
 	{
-		super.OnPostInit(owner);
-		
-		if (RplSession.Mode() == RplMode.Client) 
-			return;
+		outInfo.SetAbstract(false)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void OnInit()
+	{
+		super.OnInit();
 
-		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+		m_RplBroadcastSystem = CSI_RplBroadcastSystem.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		
-		SetEventMask(owner, EntityEvent.FRAME);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -38,11 +37,9 @@ class CSI_PlayerDisconnectManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	override protected void EOnFrame(IEntity owner, float timeSlice)
-	{
-		super.EOnFrame(owner, timeSlice);
-		
-		int currentTime = System.GetTickCount();
+	override void OnUpdatePoint(WorldUpdatePointArgs args)
+	{		
+		float currentTime = System.GetTickCount();
 		int currentTimeDifference = currentTime - m_iLastDataRetentionCheckTick;
 		
 		if (currentTimeDifference >= DATA_CHECK_INTERVAL * 1000)
@@ -67,9 +64,12 @@ class CSI_PlayerDisconnectManager : ScriptComponent
 				
 				m_mPlayerTimeMap.Set(playerID, currentPlayerDisconnectedTime);
 				
-				if (currentPlayerDisconnectedTime >= DATA_RETENTION_TIME)
+				Print(currentTimeDifference);
+				Print(currentPlayerDisconnectedTime >= (DATA_RETENTION_TIME * 1000));
+				
+				if (currentPlayerDisconnectedTime >= (DATA_RETENTION_TIME * 1000))
 				{
-					m_RplBroadcastManager.RemovePlayerData(playerID);
+					m_RplBroadcastSystem.RemovePlayerData(playerID);
 					m_mPlayerTimeMap.Remove(playerID);
 				};
 			} else if (m_mPlayerTimeMap.Get(playerID))

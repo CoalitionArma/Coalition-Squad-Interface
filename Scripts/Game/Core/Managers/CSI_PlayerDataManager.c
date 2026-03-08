@@ -9,17 +9,17 @@ class CSI_PlayerDataManager : ScriptComponent
 	// Primary Data Map
 	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
 
-	protected CSI_RplBroadcastManager m_RplBroadcastManager;
+	protected CSI_RplBroadcastSystem m_RplBroadcastSystem;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 SYSTEM INITILIZATION
+//	 MANAGER INITILIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
 	{
 		super.OnPostInit(owner);
-		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+		m_RplBroadcastSystem = CSI_RplBroadcastSystem.GetInstance();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -161,9 +161,9 @@ class CSI_PlayerDataManager : ScriptComponent
 
 		if (playerData)
 		{
-			m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
-			m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
-			m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, false);
+			m_RplBroadcastSystem.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
+			m_RplBroadcastSystem.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
+			m_RplBroadcastSystem.UpdatePlayerTeamLeader(playerID, false);
 		}
 	}
 
@@ -210,6 +210,7 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
+	// Returns the instance of the PlayerDataManager
 	protected static CSI_PlayerDataManager m_sInstance;
 	static CSI_PlayerDataManager GetInstance()
 	{

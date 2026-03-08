@@ -1,6 +1,4 @@
-class CSI_SettingsManagerClass : ScriptComponentClass {};
-
-class CSI_SettingsManager : ScriptComponent
+class CSI_SettingsSystem : GameSystem
 {	
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC VARIABLES
@@ -16,26 +14,33 @@ class CSI_SettingsManager : ScriptComponent
 
 	protected bool m_bAuthorityIsSavingSettings;
 	protected ref ScriptInvoker m_OnSettingsUpdate;
-	protected UserSettings m_UserSettigs;
-    protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aSettingsAuthorityValues = {};
 	
 	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;
+	
+	protected CSI_PlayerControllerManager m_PlayerControllerManager;
+	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SYSTEM INITILIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	override void OnPostInit(IEntity owner)
+	override static void InitInfo(WorldSystemInfo outInfo)
+	{
+		outInfo.SetAbstract(false)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override void OnInit()
 	{	
-		super.OnPostInit(owner);
+		super.OnInit();
 		
-		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
-		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_PlayerControllerManager = CSI_PlayerControllerManager.GetInstance();
+		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		
 		if (RplSession.Mode() != RplMode.Client) 
@@ -120,7 +125,7 @@ class CSI_SettingsManager : ScriptComponent
 				}
 			};
 			
-			m_UserSettigs.Set(setting, value);
+			m_PlayerControllerManager.GetUserSettings().Set(setting, value);
 			
 			if(!m_bAuthorityIsSavingSettings)
 			{
@@ -142,7 +147,7 @@ class CSI_SettingsManager : ScriptComponent
 		foreach (string setting : CSI_GameSettings.GetSettingsArray())
 		{
 			int settingValue;
-			m_UserSettigs.Get(setting, settingValue); 
+			m_PlayerControllerManager.GetUserSettings().Get(setting, settingValue); 
 			
 			m_aSettingsAuthorityValues.Insert(settingValue);
 		}
@@ -171,6 +176,9 @@ class CSI_SettingsManager : ScriptComponent
 	//! Updates CSI game settings all players pull from based on current server and/or client configuration
 	protected void SettingsUpdate()
 	{
+		if (m_aSettingsAuthorityValues.IsEmpty())
+			return;
+		
 		foreach (int i, string setting : CSI_GameSettings.GetSettingsArray())
 		{
 			int settingValue;
@@ -182,7 +190,7 @@ class CSI_SettingsManager : ScriptComponent
 				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
 				case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
 				case (serverSetting < 0) : settingValue = Math.AbsInt((serverSetting + SERVER_OVERRIDE_OFFSET)); break;
-				default : m_UserSettigs.Get(setting, settingValue);
+				default : m_PlayerControllerManager.GetUserSettings().Get(setting, settingValue);
 			}
 			
 			m_mSettingsLocalValues.Set(setting, settingValue);
@@ -197,15 +205,11 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	protected static CSI_SettingsManager m_sInstance;
-	static CSI_SettingsManager GetInstance()
+	static CSI_SettingsSystem GetInstance()
 	{
-		return m_sInstance;
-	}
-
-    //------------------------------------------------------------------------------------------------
-	void CSI_SettingsManager(IEntityComponentSource src, IEntity ent, IEntity parent)
-	{
-		m_sInstance = this;
+		World world = GetGame().GetWorld();
+		if (!world)
+			return null;
+		return CSI_SettingsSystem.Cast(world.FindSystem(CSI_SettingsSystem));
 	}
 }

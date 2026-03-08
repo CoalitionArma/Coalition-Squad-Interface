@@ -1,23 +1,31 @@
-class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
-
-class CSI_RplToAuthorityManager : ScriptComponent
+class CSI_RplToAuthoritySystem : GameSystem
 {	
-	protected CSI_RplBroadcastManager m_RplBroadcastManager;
-    protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected CSI_SettingsManager m_SettingsManager;
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RUNTIME VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	protected CSI_RplBroadcastSystem m_RplBroadcastSystem;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SYSTEM INITILIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	override void OnPostInit(IEntity owner)
+	override static void InitInfo(WorldSystemInfo outInfo)
+	{
+		outInfo.SetAbstract(false)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override void OnInit()
 	{	
-		super.OnPostInit(owner);
+		super.OnInit();
 		
-		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+		m_RplBroadcastSystem = CSI_RplBroadcastSystem.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -174,10 +182,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_RegisterPlayerData(int playerID)
 	{	
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.RegisterPlayerData(playerID);
+		m_RplBroadcastSystem.RegisterPlayerData(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -194,60 +202,60 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerDisplayIcon(playerID, displayIcon);
+		m_RplBroadcastSystem.UpdatePlayerDisplayIcon(playerID, displayIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, colorTeam);
+		m_RplBroadcastSystem.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerRank(playerID, rank);
+		m_RplBroadcastSystem.UpdatePlayerRank(playerID, rank);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, overrideIcon);
+		m_RplBroadcastSystem.UpdatePlayerOverrideIcon(playerID, overrideIcon);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerSquadLeader(playerID, isSL);
+		m_RplBroadcastSystem.UpdatePlayerSquadLeader(playerID, isSL);
 	}
 	
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
-		if (playerID <= 0 || !m_RplBroadcastManager)
+		if (playerID <= 0 || !m_RplBroadcastSystem)
 			return;
 		
-		m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, isTL);
+		m_RplBroadcastSystem.UpdatePlayerTeamLeader(playerID, isTL);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -304,10 +312,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		if (!m_SettingsManager || !CSI_GameSettings.GetSettingsArray().Contains(setting))
+		if (!m_SettingsSystem || !CSI_GameSettings.GetSettingsArray().Contains(setting))
 			return;
 		
-		m_SettingsManager.UpdateAuthoritySetting(setting, value, serverOverrideEnabled);
+		m_SettingsSystem.UpdateAuthoritySetting(setting, value, serverOverrideEnabled);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -315,15 +323,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	protected static CSI_RplToAuthorityManager m_sInstance;
-	static CSI_RplToAuthorityManager GetInstance()
+	static CSI_RplToAuthoritySystem GetInstance()
 	{
-		return m_sInstance;
-	}
-
-    //------------------------------------------------------------------------------------------------
-	void CSI_RplToAuthorityManager(IEntityComponentSource src, IEntity ent, IEntity parent)
-	{
-		m_sInstance = this;
+		World world = GetGame().GetWorld();
+		if (!world)
+			return null;
+		return CSI_RplToAuthoritySystem.Cast(world.FindSystem(CSI_RplToAuthoritySystem));
 	}
 }

@@ -1,6 +1,4 @@
-class CSI_HUDManagerClass : ScriptComponentClass {};
-
-class CSI_HUDManager : ScriptComponent
+class CSI_HUDSystem : GameSystem
 {	
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -20,9 +18,15 @@ class CSI_HUDManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	override protected void OnPostInit(IEntity owner)
+	override static void InitInfo(WorldSystemInfo outInfo)
 	{
-		super.OnPostInit(owner);
+		outInfo.SetAbstract(false)
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void OnInit()
+	{
+		super.OnInit();
 
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
@@ -72,10 +76,18 @@ class CSI_HUDManager : ScriptComponent
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
+	protected int m_iUpdate;
 	//------------------------------------------------------------------------------------------------
-	//! Updates the heads-up display values for the local client
-	void UpdateLocalHUDValues()
+	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
+		m_iUpdate++;
+		UpdateLocalAimingYaw();
+		
+		if (!(m_iUpdate >= 60))
+			return;
+		else
+			m_iUpdate = 0;
+		
 		if (!m_GroupsManagerComponent)
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 		
@@ -198,15 +210,11 @@ class CSI_HUDManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	protected static CSI_HUDManager m_sInstance;
-	static CSI_HUDManager GetInstance()
+	static CSI_HUDSystem GetInstance()
 	{
-		return m_sInstance;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	void CSI_HUDManager(IEntityComponentSource src, IEntity ent, IEntity parent)
-	{
-		m_sInstance = this;
+		World world = GetGame().GetWorld();
+		if (!world)
+			return null;
+		return CSI_HUDSystem.Cast(world.FindSystem(CSI_HUDSystem));
 	}
 }

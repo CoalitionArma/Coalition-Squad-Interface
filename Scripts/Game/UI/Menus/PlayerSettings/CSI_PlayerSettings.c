@@ -1,7 +1,7 @@
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
+	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
 
 	protected XComboBoxWidget m_wIconOveride;
 	protected TextWidget m_wPlayerName;
@@ -15,7 +15,7 @@
 		super.HandlerAttached(w);
 		
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
 		
 		m_wIconOveride = XComboBoxWidget.Cast(w.FindAnyWidget("IconOveride"));
 		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
@@ -109,7 +109,7 @@
 			default : colorTeam = CSI_EColorTeam.NONE;
 		}
 
-		m_RplToAuthorityManager.Owner_UpdatePlayerColorTeam(m_iPlayerID, colorTeam);
+		m_RplToAuthoritySystem.Owner_UpdatePlayerColorTeam(m_iPlayerID, colorTeam);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@
 		if (iconToOverride > 0)
 			iconToOverride = iconToOverride + 3;
 		
-		m_RplToAuthorityManager.Owner_UpdatePlayerOverrideIcon(m_iPlayerID, iconToOverride);
+		m_RplToAuthoritySystem.Owner_UpdatePlayerOverrideIcon(m_iPlayerID, iconToOverride);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@
 		if (m_iPlayerID <= 0 && SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
 			return;
 
-		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
+		m_RplToAuthoritySystem.Owner_PromotePlayerToSL(m_iPlayerID);
 		GetGame().GetMenuManager().CloseAllMenus();
 	};
 
@@ -143,7 +143,7 @@
 			return;
 
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
-		m_RplToAuthorityManager.Owner_UpdatePlayerTeamLeader(m_iPlayerID, !playerData.GetIsTeamLeader());
+		m_RplToAuthoritySystem.Owner_UpdatePlayerTeamLeader(m_iPlayerID, !playerData.GetIsTeamLeader());
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@
 		if (m_iPlayerID <= 0 && SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
 			return;
 
-		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);
+		m_RplToAuthoritySystem.Owner_RemovePlayerFromGroup(m_iPlayerID);
 	};
 	
 	//------------------------------------------------------------------------------------------------

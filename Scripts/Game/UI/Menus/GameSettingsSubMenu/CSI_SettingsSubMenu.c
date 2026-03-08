@@ -4,8 +4,8 @@ typedef ScriptInvokerBase<ScriptInvoker_CSI_SettingsSubMenu> ScriptInvoker_CSI_S
 
 class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 {	
-	protected CSI_SettingsManager m_SettingsManager;
-	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
 	protected CSI_PlayerControllerManager m_PlayerControllerManager;
 	
 	//------------------------------------------------------------------------------------------------
@@ -15,10 +15,10 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		
 		m_aSettingsBindings.Clear();
 		
-		if (!m_SettingsManager || !m_RplToAuthorityManager || !m_PlayerControllerManager)
+		if (!m_SettingsSystem || !m_RplToAuthoritySystem || !m_PlayerControllerManager)
 		{
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-			m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+			m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+			m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
 			m_PlayerControllerManager = CSI_PlayerControllerManager.GetInstance();
 		};
 		
@@ -27,9 +27,9 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		{
 			bool setVanillaSettingBind = false;
 			
-			if (m_SettingsManager)
+			if (m_SettingsSystem)
 			{	
-				if (m_SettingsManager.GetServerSettingsArray().Get(i) < 0)
+				if (m_SettingsSystem.GetServerSettingsArray().Get(i) < 0)
 				{	
 					Widget serverOverrideLayout = serverOverridesLayoutWidget.FindAnyWidget(settingStr);
 					CheckBoxWidget checkBoxWidget = CheckBoxWidget.Cast(serverOverrideLayout.FindAnyWidget("ServerOverride"));
@@ -43,9 +43,9 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 					
 					switch (true)
 					{
-						case (sliderComp) : sliderComp.SetValue(m_SettingsManager.GetSettingInt(settingStr)); break;
-						case (comboComp) : comboComp.SetCurrentItem(m_SettingsManager.GetSettingInt(settingStr), false, true); break;
-						case (spinComp) : spinComp.SetCurrentItem(m_SettingsManager.GetSettingInt(settingStr), false, true); break;
+						case (sliderComp) : sliderComp.SetValue(m_SettingsSystem.GetSettingInt(settingStr)); break;
+						case (comboComp) : comboComp.SetCurrentItem(m_SettingsSystem.GetSettingInt(settingStr), false, true); break;
+						case (spinComp) : spinComp.SetCurrentItem(m_SettingsSystem.GetSettingInt(settingStr), false, true); break;
 					}
 					
 					checkBoxWidget.SetChecked(true);
@@ -76,7 +76,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		super.OnTabHide();
 		m_PlayerControllerManager.GetLocalSettingsJson().SaveToFile();
 		
-		if (m_SettingsManager && m_RplToAuthorityManager)
+		if (m_SettingsSystem && m_RplToAuthoritySystem)
 		{	
 			if (SCR_Global.IsAdmin())
 			{
@@ -101,13 +101,13 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 					}
 					
 					if (checkBoxWidget.IsChecked())
-						m_RplToAuthorityManager.Owner_ChangeAuthoritySetting(settingStr, value, true);
+						m_RplToAuthoritySystem.Owner_ChangeAuthoritySetting(settingStr, value, true);
 					else
-						m_RplToAuthorityManager.Owner_ChangeAuthoritySetting(settingStr, 0, false);
+						m_RplToAuthoritySystem.Owner_ChangeAuthoritySetting(settingStr, 0, false);
 				}
 			};
 			
-			m_SettingsManager.RequestSettingsUpdate();
+			m_SettingsSystem.RequestSettingsUpdate();
 		};
 	}
 }

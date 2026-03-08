@@ -2,7 +2,7 @@ modded class SCR_NameTagData : Managed
 {
 	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
 
-	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_SettingsSystem m_SettingsSystem;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;
 
@@ -16,9 +16,9 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		if (!m_SettingsManager || !m_PlayerDataManager) 
+		if (!m_SettingsSystem || !m_PlayerDataManager) 
 		{
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
+			m_SettingsSystem = CSI_SettingsSystem.GetInstance();
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		};
 		
@@ -111,7 +111,7 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
+		if (!group || !m_SettingsSystem || !m_SettingsSystem.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
 			return "";
 
 		string groupName = group.GetCustomName();
@@ -143,8 +143,8 @@ modded class SCR_NameTagData : Managed
 		vector nametagOffsetVector = "0 0 0";
 		int nametagOffset = 0;
 		
-		if (m_SettingsManager)
-			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
+		if (m_SettingsSystem)
+			nametagOffset = m_SettingsSystem.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
 		
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
@@ -178,8 +178,8 @@ modded class SCR_NameTagData : Managed
 	{
 		ENameTagPosition nametagPos = ENameTagPosition.BODY;
 		
-		if (m_SettingsManager) 
-			nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
+		if (m_SettingsSystem) 
+			nametagPos = m_SettingsSystem.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
 
 		m_eAttachedTo = nametagPos;
 		m_eAttachedToLast = nametagPos;
