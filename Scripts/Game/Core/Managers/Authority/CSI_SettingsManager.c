@@ -2,9 +2,17 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 
 class CSI_SettingsManager : ScriptComponent
 {	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	const static int SERVER_OVERRIDE_OFFSET = 1;
 	const static int SERVER_OVERRIDE_FALSE = -1;
 	const static int SERVER_OVERRIDE_TRUE = -2;
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RUNTIME VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected bool m_bAuthorityIsSavingSettings;
 	protected ref ScriptInvoker m_OnSettingsUpdate;
@@ -16,6 +24,10 @@ class CSI_SettingsManager : ScriptComponent
 	protected ref TIntArray m_aSettingsAuthorityValues = {};
 	
 	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SYSTEM INITILIZATION
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
@@ -29,34 +41,21 @@ class CSI_SettingsManager : ScriptComponent
 		if (RplSession.Mode() != RplMode.Client) 
 			UpdateAuthorityValueArray();
 	}
-	
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 GETTER METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	//------------------------------------------------------------------------------------------------
 	TIntArray GetServerSettingsArray() 
 	{
 		return m_aSettingsAuthorityValues;
 	}
-	
-	//------------------------------------------------------------------------------------------------
-	void RequestSettingsUpdate()
-	{
-		SettingsUpdate();
-	};
-	
-	//------------------------------------------------------------------------------------------------
-	ScriptInvoker GetOnSettingsUpdate()
-	{
-		if (!m_OnSettingsUpdate)
-			m_OnSettingsUpdate = new ScriptInvoker();
 
-		return m_OnSettingsUpdate;
-	}
-	
 	//------------------------------------------------------------------------------------------------
-	/*!
-	 * Retrieves an boolean value for the specified setting name.
-	 * @param setting: The name of the setting to retrieve
-	 * @return True or false based on setting value
-	 */
+	//! Retrieves an boolean value for the specified setting name.
+	//! \param[in] setting: The name of the setting to retrieve
+	//! \return True or false based on setting value
 	bool GetSettingBool(string setting)
 	{
 		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
@@ -67,23 +66,38 @@ class CSI_SettingsManager : ScriptComponent
 	};	
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Retrieves an integer value for the specified setting name.
-	 * @param setting: The name of the setting to retrieve
-	 * @return The integer value of the setting
-	 */
+	//! Retrieves an integer value for the specified setting name.
+	//! \param[in] setting: The name of the setting to retrieve
+	//! \return The integer value of the setting
 	int GetSettingInt(string setting) 
 	{
 		return m_mSettingsLocalValues.Get(setting);
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the specified server setting to the provided integer value and optionally enforces a server-side override.
-	 * @param setting: Setting key to update
-	 * @param value: New integer value for the setting
-	 * @param serverOverrideEnabled: If true, enforce server-side override
-	 */
+	ScriptInvoker GetOnSettingsUpdate()
+	{
+		if (!m_OnSettingsUpdate)
+			m_OnSettingsUpdate = new ScriptInvoker();
+
+		return m_OnSettingsUpdate;
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 UPDATE SETTING METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	void RequestSettingsUpdate()
+	{
+		SettingsUpdate();
+	};
+
+	//------------------------------------------------------------------------------------------------
+	//! Updates the specified server setting to the provided integer value and optionally enforces a server-side override.
+	//! \param[in] setting: Setting key to update
+	//! \param[in] value: New integer value for the setting
+	//! \param[in] serverOverrideEnabled: If true, enforce server-side override
 	void UpdateAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
 		if (RplSession.Mode() != RplMode.Dedicated) 
@@ -120,9 +134,7 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the array of authority values used for settings.
-	 */
+	//! Updates the array of authority values used for settings.
 	protected void UpdateAuthorityValueArray()
 	{
 		m_aSettingsAuthorityValues.Clear();
@@ -143,9 +155,7 @@ class CSI_SettingsManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
-	 */
+	//! Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
 	void SaveAuthoritySettingsDelay()
 	{
 		m_bAuthorityIsSavingSettings = false;
@@ -153,10 +163,12 @@ class CSI_SettingsManager : ScriptComponent
 		GetGame().SaveUserSettings();
 	}
 
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 REPLICATION UPDATE METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates CSI game settings all players pull from based on current server and/or client configuration
-	 */
+	//! Updates CSI game settings all players pull from based on current server and/or client configuration
 	protected void SettingsUpdate()
 	{
 		foreach (int i, string setting : CSI_GameSettings.GetSettingsArray())
@@ -179,9 +191,12 @@ class CSI_SettingsManager : ScriptComponent
 		if (m_OnSettingsUpdate)
 			m_OnSettingsUpdate.Invoke();
 	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC ACCESSOR
+//=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the SettingsManager
 	protected static CSI_SettingsManager m_sInstance;
 	static CSI_SettingsManager GetInstance()
 	{

@@ -1,11 +1,15 @@
 class CSI_ChararcterHelper
 {	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC HELPER METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	//------------------------------------------------------------------------------------------------
-	/**
-	* Get characters yaw axis value
-	* @param playerCharacter: The inputed players character entity
-	* @return The yaw of the character entity
-	*/
+	
+	//! Get characters yaw axis value
+	//! \param[in] playerCharacter: The inputed players character entity
+	//! \return The yaw of the character entity
+	
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
 	{
 		if (!playerCharacter)
@@ -34,11 +38,11 @@ class CSI_ChararcterHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	/**
-	* Get characters current vehicle slot
-	* @param playerCharacterL The inputed players character entity
-	* @return The compartment the entity is in (will return null if they aren't in a vehicle)
-	*/
+	
+	//! Get characters current vehicle slot
+	//! \param[in] playerCharacterL The inputed players character entity
+	//! \return The compartment the entity is in (will return null if they aren't in a vehicle)
+	
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
 		if (!playerCharacter)

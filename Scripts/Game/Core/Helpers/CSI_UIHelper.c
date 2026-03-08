@@ -1,5 +1,9 @@
 class CSI_UIHelper
 {	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	// Vanilla Images/Imagesets/Colors
 	const static ResourceName VANILLA_NAMETAG_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
 	const static ref Color VANILLA_VON_COLOR = new Color(0.624, 0.506, 0.157, 1);
@@ -27,14 +31,16 @@ class CSI_UIHelper
 		CSI_EIcon.HELIPILOT,
 		CSI_EIcon.HELICREW,
 	};
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC HELPER METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	* Convert the color team enum to a color
-	* @param colorEnum: The color enum to convert into a color
-	* @param opacity: The opacity of the color (0-255)
-	* @return Color team color
-	*/
+	//! Convert the color team enum to a color
+	//! \param[in] colorEnum: The color enum to convert into a color
+	//! \param[in] opacity: The opacity of the color (0-255)
+	//! \return Color team color
 	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum, int opacity = 255)
 	{	
 		Color colorFromInt;
@@ -52,12 +58,10 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	/**
-	* Get icon string so we can set the icon through LoadImageFromSet
-	* @param icon: Icon to find the string of
-	* @param isSimpleIcon: Should we return the simple (non-circular) Icon
-	* @return Icon string
-	*/
+	//! Get icon string so we can set the icon through LoadImageFromSet
+	//! \param[in] icon: Icon to find the string of
+	//! \param[in] isSimpleIcon: Should we return the simple (non-circular) Icon
+	//! \return Icon string
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false)
 	{
 		string iconString;
@@ -78,11 +82,9 @@ class CSI_UIHelper
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	* Get players name, with a check if we need to add a players rank
-	* @param playerID: The inputed player ID to pull the name of and rank of
-	* @return Players name
-	*/
+	//! Get players name, with a check if we need to add a players rank
+	//! \param[in] playerID: The inputed player ID to pull the name of and rank of
+	//! \return Players name
 	static string GetPlayersName(int playerID)
 	{
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerID);
@@ -106,13 +108,11 @@ class CSI_UIHelper
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Search the widget hierarchy beginning at 'root' and collect icon widgets that match a given identifier.
-	 * @param root: Root widget to start the search from.
-	 * @param widgetString: Substring/pattern used to identify matching icon widgets (matched against widget names/identifiers).
-	 * @param count: Maximum number of matches to collect; if non-positive, function will collect all matches.
-	 * @return: An array of Widget handles for the matching icon widgets (empty if none found or if root is null).
-	 */
+	//! Search the widget hierarchy beginning at 'root' and collect icon widgets that match a given identifier.
+	//! \param[in] root: Root widget to start the search from.
+	//! \param[in] widgetString: Substring/pattern used to identify matching icon widgets (matched against widget names/identifiers).
+	//! \param[in] count: Maximum number of matches to collect; if non-positive, function will collect all matches.
+	//! \return: An array of Widget handles for the matching icon widgets (empty if none found or if root is null).
 	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
 		array<Widget> icons = {};

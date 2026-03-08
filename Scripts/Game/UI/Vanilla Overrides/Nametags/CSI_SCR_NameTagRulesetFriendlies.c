@@ -1,5 +1,3 @@
-//------------------------------------------------------------------------------------------------
-// Ruleset for display of all frindlies
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 {
@@ -7,7 +5,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	
 	//------------------------------------------------------------------------------------------------
 	//! Check if target is visible to the player
-	//! \param data is the subject nametag
+	//! \param[in] data is the subject nametag
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{

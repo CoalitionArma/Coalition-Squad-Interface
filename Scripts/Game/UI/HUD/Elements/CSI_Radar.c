@@ -1,5 +1,9 @@
 class CSI_Radar : SCR_ScriptedWidgetComponent
 {
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RUNTIME VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDManager m_HUDManager;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
@@ -8,6 +12,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref array<Widget> m_aRadarIcons;
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT INITIALIZATION
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -20,11 +28,13 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
 	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT UPDATE
+//=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the radar display each frame.
-	 */
+	//! Updates the radar display each frame.
 	void Update()
 	{			
 		SCR_ChimeraCharacter localCharacter = m_HUDManager.GetLocalPlayerCharacter();
@@ -71,15 +81,15 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		
 					// Get Relative Direction
 					float relDir = Math.Mod(((dir - localYaw) + 360), 360);
-					relDir = Math.Mod(relDir - (dir * 2), 360);
-					relDir = relDir * Math.DEG2RAD;
+					relDir = Math.Mod(relDir - (dir//! 2), 360);
+					relDir = relDir//! Math.DEG2RAD;
 					
-					disT = (dis * (132 / (searchRadius * 2.725)));
-					x = (Math.Sin(relDir) * disT);
-					y = (Math.Cos(relDir) * disT);
+					disT = (dis//! (132 / (searchRadius//! 2.725)));
+					x = (Math.Sin(relDir)//! disT);
+					y = (Math.Cos(relDir)//! disT);
 				};
 
-				opacity = Math.Map(dis, (0.8*searchRadius), searchRadius, 0.6, 0);
+				opacity = Math.Map(dis, (0.8//!searchRadius), searchRadius, 0.6, 0);
 				rotation = -Math.Mod((CSI_ChararcterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
 				UpdatePlayerRadarWidget(i, playerID, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
@@ -91,17 +101,19 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			UpdatePlayerRadarWidget(e, -1, 1, 0, 0, 0, 0);
 	}
 	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT SPECIFIC METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates radar widget properties for a specific player on the HUD.
-	 * @param widgetNumber The index of the radar widget to update
-	 * @param playerID ID of the player
-	 * @param widthAndHeight Width and height dimensions for the widget
-	 * @param opacity Transparency value for the widget
-	 * @param x X coordinate position
-	 * @param y Y coordinate position
-	 * @param rotation Rotation angle in degrees
-	 */
+	//! Updates radar widget properties for a specific player on the HUD.
+	//! \param[in] widgetNumber The index of the radar widget to update
+	//! \param[in] playerID ID of the player
+	//! \param[in] widthAndHeight Width and height dimensions for the widget
+	//! \param[in] opacity Transparency value for the widget
+	//! \param[in] x X coordinate position
+	//! \param[in] y Y coordinate position
+	//! \param[in] rotation Rotation angle in degrees
 	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerID, float widthAndHeight, float opacity, float x, float y, float rotation)
 	{
 		Widget radarIcon = m_aRadarIcons[widgetNumber];
@@ -116,7 +128,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerID);
 			
-			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight//! (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE)//! 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

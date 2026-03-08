@@ -1,5 +1,6 @@
 modded class SCR_VehicleTagData
 {
+	//------------------------------------------------------------------------------------------------
 	override protected void UpdateMainTag()
 	{
 		m_MainTag = null;

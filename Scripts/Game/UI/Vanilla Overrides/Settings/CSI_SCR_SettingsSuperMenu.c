@@ -1,5 +1,6 @@
 modded class SCR_SettingsSuperMenu {
 	
+    //------------------------------------------------------------------------------------------------
 	override void OnMenuOpen() 
 	{
 		super.OnMenuOpen();

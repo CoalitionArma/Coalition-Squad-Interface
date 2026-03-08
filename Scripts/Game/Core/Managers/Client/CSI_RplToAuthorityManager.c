@@ -6,6 +6,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
     protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
 
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SYSTEM INITILIZATION
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
 	{	
@@ -16,15 +20,13 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 	}
 
-	//------------------------------------------------------------------------------------------------
-	// CLIENT-SIDE METHODS - These send RPCs from client to authority (server)
-	//------------------------------------------------------------------------------------------------
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 CLIENT-SIDE METHODS - These send RPCs from client to authority (server)
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	/*!
-	 * Registers player data on authority (host)
-	 * @param playerID: ID of player to update
-	*/
+	//! Registers player data on authority (host)
+	//! \param[in] playerID: ID of player to update
 	void Owner_RegisterPlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -37,10 +39,8 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	/*!
-	 * Updates player data to clear any group-specific values
-	 * @param playerID: ID of player to clear
-	*/
+	//! Updates player data to clear any group-specific values
+	//! \param[in] playerID: ID of player to clear
 	void Owner_ClearGroupSpecificData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -53,11 +53,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Update the specified player's team color on the authority.
-	 * @param playerID: ID of player to update
-	 * @param displayIcon: Icon to assign to player (CSI_EIcon)
-	 */
+	//! Update the specified player's team color on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] displayIcon: Icon to assign to player (CSI_EIcon)
 	void Owner_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -69,12 +67,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		Rpc(RpcAsk_UpdatePlayerDisplayIcon, playerID, displayIcon);
 	}
 	
-	//------------------------------------------------------------------------------------------------
-	/**
-	 * Update the specified player's team color on the authority.
-	 * @param playerID: ID of player to update
-	 * @param colorTeam: Color team to assign (CSI_EColorTeam)
-	 */
+	//-------------------------------------------------------------------------------------------------
+	//! Update the specified player's team color on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] colorTeam: Color team to assign (CSI_EColorTeam)
 	void Owner_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -87,11 +83,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates a player's icon override state on the authority.
-	 * @param playerID: ID of player to update
-	 * @param overrideIcon: The override icon to apply
-	 */
+	//! Updates a player's icon override state on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] overrideIcon: The override icon to apply
 	void Owner_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -104,11 +98,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Update the specified player's team color on the authority.
-	 * @param playerID: ID of player to update
-	 * @param rank: Rank to assign to player (SCR_ECharacterRank)
-	 */
+	//! Update the specified player's team color on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] rank: Rank to assign to player (SCR_ECharacterRank)
 	void Owner_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -121,11 +113,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates team leader status on the authority.
-	 * @param playerID: ID of player to update
-	 * @param isTL: Whether player should be team leader
-	 */
+	//! Updates team leader status on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] isTL: Whether player should be team leader
 	void Owner_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -138,11 +128,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Update the specified player's team color on the authority.
-	 * @param playerID: ID of player to update
-	 * @param isSL: New color team to assign (CSI_EColorTeam)
-	 */
+	//! Update the specified player's team color on the authority.
+	//! \param[in] playerID: ID of player to update
+	//! \param[in] isSL: New color team to assign (CSI_EColorTeam)
 	void Owner_UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -178,9 +166,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value, serverOverrideEnabled);
 	}
 
-	//------------------------------------------------------------------------------------------------
-	// SERVER-SIDE RPC HANDLERS - Executed on the authority (server)
-	//------------------------------------------------------------------------------------------------
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SERVER-SIDE RPC HANDLERS - Executed on the authority (server)
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
@@ -202,6 +190,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		m_PlayerDataManager.ClearGroupSpecificData(playerID);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
 	{
@@ -221,6 +210,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, colorTeam);
 	}
 	
+	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	void RpcAsk_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
@@ -319,9 +309,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		
 		m_SettingsManager.UpdateAuthoritySetting(setting, value, serverOverrideEnabled);
 	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 STATIC ACCESSOR
+//=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	// Returns the instance of the RplToAuthorityManager
 	protected static CSI_RplToAuthorityManager m_sInstance;
 	static CSI_RplToAuthorityManager GetInstance()
 	{

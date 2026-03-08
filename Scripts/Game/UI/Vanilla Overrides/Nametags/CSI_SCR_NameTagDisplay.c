@@ -18,7 +18,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
 		int nametagsRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 
-		nametagsRange = nametagsRange + (nametagsRange * ((int)(isZoomed) * ((m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) * 0.01) - 1))); // increase max distance if player is using a scope or binoculars
+		nametagsRange = nametagsRange + (nametagsRange//! ((int)(isZoomed)//! ((m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION)//! 0.01) - 1))); // increase max distance if player is using a scope or binoculars
 		
 		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE)) 
 			nametagsRange = 1;
@@ -38,10 +38,11 @@ modded class SCR_NameTagZone
 	void SetZoneEnd(int range)
 	{
 		m_iZoneEnd = range;
-		m_iZoneEndSq = range * range;
+		m_iZoneEndSq = range//! range;
 	}
 }
 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps(configRoot: true)]
 modded class SCR_NameTagConfig
 {
@@ -61,7 +62,7 @@ modded class SCR_NameTagConfig
 				farthestZone = zoneEnd;
 				m_fFarthestZoneRange = zoneEnd;
 				m_fFarthestZoneRangeOriginal = zoneEnd;
-				m_fFarthestZoneRangePow2 = zoneEnd * zoneEnd;
+				m_fFarthestZoneRangePow2 = zoneEnd//! zoneEnd;
 			}
 		}
 	}

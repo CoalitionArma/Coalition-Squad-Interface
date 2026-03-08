@@ -1,5 +1,9 @@
 class CSI_Icon : SCR_ScriptedWidgetComponent
 {	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RUNTIME VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
+
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
@@ -14,6 +18,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT INITIALIZATION
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -33,12 +41,14 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wOutlineLarge = ImageWidget.Cast(w.FindAnyWidget("Outline_Large"));
 		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
 	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT UPDATE
+//=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the icon state for a specific player
-	 * @param playerID The ID of the player to update the icon for
-	 */
+	//! Updates the icon state for a specific player
+	//! \param[in] playerID The ID of the player to update the icon for
 	void IconUpdate(int playerID)
 	{
 		if (m_iPlayerId != playerID)
@@ -65,12 +75,26 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			DataUpdate();
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Sets the rotation angle of the icon.
-	 * @param yaw The rotation angle in degrees
-	 */
+	//! Updates the visual data representation of the player's icon.
+	protected void DataUpdate()
+	{	
+		if (!m_PlayerData)
+			return;
+		
+		SetIconWidget(m_PlayerData.GetDisplayIcon());
+		
+		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam())); 
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 ELEMENT SPECIFIC METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets the rotation angle of the icon.
+	//! \param[in] yaw The rotation angle in degrees
 	void SetRotation(float yaw)
 	{
 		m_wArrow.SetRotation(yaw);
@@ -85,24 +109,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	};
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Updates the visual data representation of the player's icon.
-	 */
-	protected void DataUpdate()
-	{	
-		if (!m_PlayerData)
-			return;
-		
-		SetIconWidget(m_PlayerData.GetDisplayIcon());
-		
-		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam())); 
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	/**
-	 * Sets the icon type for the widget.
-	 * @param icon The enum icon type to be set
-	 */
+	//! Sets the icon type for the widget.
+	//! \param[in] icon The enum icon type to be set
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
@@ -153,9 +161,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	/**
-	 * Sets up the arrow imagewidget within the icon.
-	 */
+	//! Sets up the arrow imagewidget within the icon.
 	protected void SetArrowWidget()
 	{
 		// do settings check here
