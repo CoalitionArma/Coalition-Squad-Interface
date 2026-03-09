@@ -1,4 +1,6 @@
-class CSI_SettingsSystem : GameSystem
+class CSI_SettingsManagerClass : ScriptComponentClass {};
+
+class CSI_SettingsManager : ScriptComponent
 {	
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC VARIABLES
@@ -20,42 +22,32 @@ class CSI_SettingsSystem : GameSystem
 	
 	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;
 	
-	protected CSI_PlayerControllerManager m_PlayerControllerManager;
-	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
+	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
+	
+	protected UserSettings m_UserSettigs;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 SYSTEM INITILIZATION
+//	 MANAGER INITILIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
-
-	//------------------------------------------------------------------------------------------------
-	override static void InitInfo(WorldSystemInfo outInfo)
-	{
-		outInfo.SetAbstract(false)
-	}
 	
 	//------------------------------------------------------------------------------------------------
-	override void OnInit()
+	override void OnPostInit(IEntity owner)
 	{	
-		super.OnInit();
+		super.OnPostInit(owner);
 		
-		m_PlayerControllerManager = CSI_PlayerControllerManager.GetInstance();
-		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
+		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
+		
+		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		
-		if (RplSession.Mode() != RplMode.Client) 
+		if (RplSession.Mode() != RplMode.Client && GetGame().InPlayMode()) 
 			UpdateAuthorityValueArray();
-	}
-
+	}	
+	
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-
-	//------------------------------------------------------------------------------------------------
-	TIntArray GetServerSettingsArray() 
-	{
-		return m_aSettingsAuthorityValues;
-	}
 
 	//------------------------------------------------------------------------------------------------
 	//! Retrieves an boolean value for the specified setting name.
@@ -77,6 +69,12 @@ class CSI_SettingsSystem : GameSystem
 	int GetSettingInt(string setting) 
 	{
 		return m_mSettingsLocalValues.Get(setting);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	TIntArray GetServerSettingsArray() 
+	{
+		return m_aSettingsAuthorityValues;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -125,7 +123,7 @@ class CSI_SettingsSystem : GameSystem
 				}
 			};
 			
-			m_PlayerControllerManager.GetUserSettings().Set(setting, value);
+			m_UserSettigs.Set(setting, value);
 			
 			if(!m_bAuthorityIsSavingSettings)
 			{
@@ -147,7 +145,7 @@ class CSI_SettingsSystem : GameSystem
 		foreach (string setting : CSI_GameSettings.GetSettingsArray())
 		{
 			int settingValue;
-			m_PlayerControllerManager.GetUserSettings().Get(setting, settingValue); 
+			m_UserSettigs.Get(setting, settingValue); 
 			
 			m_aSettingsAuthorityValues.Insert(settingValue);
 		}
@@ -190,7 +188,7 @@ class CSI_SettingsSystem : GameSystem
 				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;
 				case (IsBool && serverSetting == SERVER_OVERRIDE_TRUE) : settingValue = 1; break;
 				case (serverSetting < 0) : settingValue = Math.AbsInt((serverSetting + SERVER_OVERRIDE_OFFSET)); break;
-				default : m_PlayerControllerManager.GetUserSettings().Get(setting, settingValue);
+				default : m_UserSettigs.Get(setting, settingValue);
 			}
 			
 			m_mSettingsLocalValues.Set(setting, settingValue);
@@ -205,11 +203,15 @@ class CSI_SettingsSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	static CSI_SettingsSystem GetInstance()
+	protected static CSI_SettingsManager m_sInstance;
+	static CSI_SettingsManager GetInstance()
 	{
-		World world = GetGame().GetWorld();
-		if (!world)
-			return null;
-		return CSI_SettingsSystem.Cast(world.FindSystem(CSI_SettingsSystem));
+		return m_sInstance;
+	}
+
+    //------------------------------------------------------------------------------------------------
+	void CSI_SettingsManager(IEntityComponentSource src, IEntity ent, IEntity parent)
+	{
+		m_sInstance = this;
 	}
 }

@@ -1,7 +1,7 @@
 modded class GroupSettingsDialogUI
 {
 	protected SCR_SliderComponent m_GroupSize;
-	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
+	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 
 	//------------------------------------------------------------------------------------------------
 	override void OnPrivilegeCallback(UserPrivilege privilege, UserPrivilegeResult result)
@@ -21,7 +21,7 @@ modded class GroupSettingsDialogUI
 			return;
 		
 		groupSize.SetValue(playerGroup.GetMaxMembers());
-		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
+		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -31,8 +31,8 @@ modded class GroupSettingsDialogUI
 		if (!groupSize)
 			return;
 		
-		if (m_RplToAuthoritySystem && groupSize)
-			m_RplToAuthoritySystem.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), groupSize.GetValue());
+		if (m_RplToAuthorityManager && groupSize)
+			m_RplToAuthorityManager.Owner_SetMaxGroupMembers(SCR_PlayerController.GetLocalPlayerId(), groupSize.GetValue());
 		
 		super.OnConfirm();
 	}

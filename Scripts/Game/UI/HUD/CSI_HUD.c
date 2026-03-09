@@ -4,7 +4,7 @@ class CSI_HUD : SCR_InfoDisplay
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_CSIHUDSystem;
 	protected bool m_bIsVisible = false;
 	
@@ -21,7 +21,7 @@ class CSI_HUD : SCR_InfoDisplay
 	protected override event void OnStartDraw(IEntity owner)
 	{
 		super.OnStartDraw(owner);
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_CSIHUDSystem = CSI_HUDSystem.GetInstance();
 		
 		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.DOWN, ToggleIsVisible);
@@ -47,7 +47,7 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 		
-		if ((!m_bIsVisible && m_SettingsSystem.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) || m_CSIHUDSystem.GetIsLocalPlayerInMortar())
+		if ((!m_bIsVisible && m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) || m_CSIHUDSystem.GetIsLocalPlayerInMortar())
 		{
 			m_wRoot.SetVisible(false);
 			return;

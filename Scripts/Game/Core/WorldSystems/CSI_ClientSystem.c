@@ -4,7 +4,7 @@ class CSI_ClientSystem : GameSystem
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_RplToAuthoritySystem m_RplToAuthoritySystem;
+	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
 	protected int m_iCurrentUpdateCycle = 12;
@@ -14,32 +14,20 @@ class CSI_ClientSystem : GameSystem
 	protected ref CSI_SettingsJson m_SettingsJson;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 SYSTEM INITILIZATION
-//=============================================================================================================================================================================================================================================================================================================================================================
-
-	//------------------------------------------------------------------------------------------------
-	override static void InitInfo(WorldSystemInfo outInfo)
-	{
-		outInfo.SetAbstract(false)
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	override protected void OnInit()
-	{
-		super.OnInit();
-
-		m_RplToAuthoritySystem = CSI_RplToAuthoritySystem.GetInstance();
-		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-	}
-
-//=============================================================================================================================================================================================================================================================================================================================================================
-//	 FIXEDFRAME UPDATE METHODS
+//	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	protected int m_iUpdate;
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
+		if (!m_RplToAuthorityManager || !m_PlayerDataManager)
+		{
+			m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+			return;
+		}
+		
 		m_iUpdate++;
 		
 		if (!(m_iUpdate >= 35))
@@ -78,11 +66,11 @@ class CSI_ClientSystem : GameSystem
 		if (m_iLocallyStoredGroupID != playersGroupID) 
 		{
 			m_iLocallyStoredGroupID = playersGroupID;
-			m_RplToAuthoritySystem.Owner_ClearGroupSpecificData(playerID);
+			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
 			return;
 		};
 		
-		m_RplToAuthoritySystem.Owner_RegisterPlayerData(playerID);
+		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
@@ -257,8 +245,8 @@ class CSI_ClientSystem : GameSystem
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
 		
-		m_RplToAuthoritySystem.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
-		m_RplToAuthoritySystem.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
-		m_RplToAuthoritySystem.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
+		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
+		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
+		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));
 	}
 }

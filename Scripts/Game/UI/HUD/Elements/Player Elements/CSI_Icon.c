@@ -5,7 +5,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
 	protected int m_iPlayerId;
 	
@@ -29,10 +29,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
-		if (m_SettingsSystem)
-			m_SettingsSystem.GetOnSettingsUpdate().Insert(DataUpdate);
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -99,7 +99,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		m_wArrow.SetRotation(yaw);
 
-		if (m_SettingsSystem.GetSettingBool(CSI_GameSettings.ONLY_RADAR_ICON_ARROWS_ROTATE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.ONLY_RADAR_ICON_ARROWS_ROTATE))
 			yaw = 0;
 
 		m_wIcon.SetRotation(yaw);
@@ -114,7 +114,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
-		if (m_SettingsSystem.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+		if (m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
 		
 		ImageWidget iconToUse;
@@ -165,7 +165,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrowTheme arrow = m_SettingsSystem.GetSettingInt(CSI_GameSettings.ARROW_THEME);
+		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		

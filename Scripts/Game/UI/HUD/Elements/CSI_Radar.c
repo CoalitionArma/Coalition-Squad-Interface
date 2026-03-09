@@ -4,7 +4,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	
@@ -23,7 +23,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
@@ -45,7 +45,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
         float localYaw = m_HUDSystem.GetLocalYaw();
 		vector localOrigin = localCharacter.GetOrigin();
 
-		if (groupCount > 1 && m_SettingsSystem.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
 		{
 			foreach (int i, int playerID : m_HUDSystem.GetLocalGroupPlayerIds())
 			{
@@ -128,7 +128,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			
 			icon.IconUpdate(playerID);
 			
-			widthAndHeight = widthAndHeight * (m_SettingsSystem.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);

@@ -12,7 +12,7 @@ modded class SCR_NTIconBase
 		if (!stateConf)
 			return;
 		
-		CSI_ENametagIconPosition nametagPos = CSI_SettingsSystem.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
+		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		
 		switch (true)
 		{

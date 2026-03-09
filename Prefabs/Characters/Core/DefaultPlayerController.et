@@ -2,6 +2,10 @@ SCR_PlayerController {
  ID "1A9BA6BEFA06E3B1"
  components {
   CSI_PlayerControllerManager "{66BA79683C60E83C}" {
+   components {
+    CSI_RplToAuthorityManager "{68D2438E2F41D3AC}" {
+    }
+   }
   }
   SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
    InfoDisplays {

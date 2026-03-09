@@ -7,7 +7,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	protected string m_sStoredCompass;
 	protected float m_fStoredYaw;
 	
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected TextWidget m_wBearing;
@@ -22,7 +22,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
@@ -41,9 +41,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
         float yaw = m_HUDSystem.GetLocalYaw();
 		yawInt = -yaw;
 		
-		if (m_SettingsSystem.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE))
 		{
-			CSI_ECompassTheme compassTheme = m_SettingsSystem.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
+			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
 			string compassImage;
 			switch (compassTheme)
 			{
@@ -66,7 +66,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		} else 
 			m_wCompass.SetVisible(false);
 
-		if (m_SettingsSystem.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
+		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
 		{
 			string bearingAdd = "";
 			

@@ -4,7 +4,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected ProgressBarWidget m_wStamBar;
@@ -18,7 +18,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
@@ -32,7 +32,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	//! Update the stamina UI element each frame.
 	void Update()
 	{
-		if (!m_SettingsSystem.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
+		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
 		{
 			HideBar(0);
 			return;

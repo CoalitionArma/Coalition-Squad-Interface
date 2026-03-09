@@ -4,7 +4,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsSystem m_SettingsSystem;
+	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected ref array<int> m_aStoredGroupPlayerIDs;
@@ -19,7 +19,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_SettingsSystem = CSI_SettingsSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
@@ -41,7 +41,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		int groupCount = m_HUDSystem.GetLocalGroupCount();
 		m_aStoredGroupPlayerIDs = groupArray;
 
-		if (groupCount > 1 && m_SettingsSystem.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
+		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
 			foreach (int i, int playerID : groupArray) 
 				UpdatePlayerWidget(i, playerID);
 		else
