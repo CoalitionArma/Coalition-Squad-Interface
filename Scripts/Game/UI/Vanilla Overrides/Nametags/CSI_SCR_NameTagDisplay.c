@@ -22,7 +22,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			nametagsRange = 1;
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 
-			nTZone.SetZoneEnd(nametagsRange);
+			if (nTZone.GetZoneName() == "Near")
+				nTZone.SetZoneEnd(nametagsRange);
 
 		s_NametagCfg.ResetFarthestZone();
 	}
