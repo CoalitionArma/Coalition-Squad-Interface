@@ -35,7 +35,7 @@ ScaleWidgetClass {
       OffsetBottom 0
      }
      {
-      ScaleWidgetClass "{66A831E50814C1AB}" : "{4E4F52A9958E840C}UI/layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+      ScaleWidgetClass "{66A831E50814C1AB}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
        Name "Icon"
        Slot LayoutSlot "{66A831E2E95A965B}" {
         VerticalAlign 3

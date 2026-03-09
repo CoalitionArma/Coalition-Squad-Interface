@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{DABC068D0A568195}UI/layouts/Menus/GroupSlection/GroupMenuPlayerlist.layout"
+ Name "{DABC068D0A568195}UI/Layouts/Menus/GroupSlection/GroupMenuPlayerlist.layout"
  Configurations {
   LayoutResourceClass PC {
   }

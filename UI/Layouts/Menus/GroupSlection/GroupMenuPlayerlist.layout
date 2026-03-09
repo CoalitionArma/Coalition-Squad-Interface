@@ -77,7 +77,7 @@ VerticalLayoutWidgetClass {
      "Z Order" 1
      "Fill Origin" Center
      {
-      ScaleWidgetClass "{66C81377EF3C623A}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
+      ScaleWidgetClass "{66C81377EF3C623A}" : "{CDAE569CD2A70854}UI/Layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
        Name "PlayersSettings"
        Slot LayoutSlot "{66C81377EF3C6201}" {
         SizeMode Fill

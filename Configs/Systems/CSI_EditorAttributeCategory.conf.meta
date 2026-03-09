@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{09F77E0F79B927E1}Configs/System/CSI_EditorAttributeCategory.conf"
+ Name "{09F77E0F79B927E1}Configs/Systems/CSI_EditorAttributeCategory.conf"
  Configurations {
   CONFResourceClass PC {
   }

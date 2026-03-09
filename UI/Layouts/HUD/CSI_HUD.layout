@@ -1,7 +1,7 @@
 FrameWidgetClass {
  Name "rootFrame"
  {
-  ScaleWidgetClass "{66B8C3E3798DA427}" : "{AD61A34EB388CF6D}UI/layouts/HUD/Elements/CSI_Stamina.layout" {
+  ScaleWidgetClass "{66B8C3E3798DA427}" : "{AD61A34EB388CF6D}UI/Layouts/HUD/Elements/CSI_Stamina.layout" {
    Name "Stamina"
    Slot FrameWidgetSlot "{66B8C3DE186DE6AB}" {
     Anchor 0 1 0 1
@@ -20,7 +20,7 @@ FrameWidgetClass {
     }
    }
   }
-  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_Group.layout" {
+  ScaleWidgetClass "{66A83186D1577FB0}" : "{02CD6D23168020B1}UI/Layouts/HUD/Elements/CSI_Group.layout" {
    Name "Group"
    Slot FrameWidgetSlot "{66A83196E3AE5829}" {
     Anchor 0.5 1 0.5 1
@@ -1120,7 +1120,7 @@ FrameWidgetClass {
     }
    }
   }
-  ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/layouts/HUD/Elements/CSI_Compass.layout" {
+  ScaleWidgetClass "{66A83186D06A7C63}" : "{6A51445F28C412B3}UI/Layouts/HUD/Elements/CSI_Compass.layout" {
    Name "Compass"
    Slot FrameWidgetSlot "{66A8318AD64681BA}" {
     Anchor 0.5 1 0.5 1

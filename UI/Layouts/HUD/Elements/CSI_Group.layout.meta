@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{02CD6D23168020B1}UI/layouts/HUD/Elements/CSI_Group.layout"
+ Name "{02CD6D23168020B1}UI/Layouts/HUD/Elements/CSI_Group.layout"
  Configurations {
   LayoutResourceClass PC {
   }

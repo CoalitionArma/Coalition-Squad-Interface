@@ -60,7 +60,7 @@ ScaleWidgetClass {
         SizeMode Fill
        }
        {
-        ScaleWidgetClass "{66B8C3E49230831B}" : "{D45CA5F9BA346BF7}UI/layouts/HUD/Elements/CSI_Radar.layout" {
+        ScaleWidgetClass "{66B8C3E49230831B}" : "{D45CA5F9BA346BF7}UI/Layouts/HUD/Elements/CSI_Radar.layout" {
          Name "Radar"
          Slot FrameWidgetSlot "{66B8C3DFC9AE8CC6}" {
           Anchor 0 0 1 1

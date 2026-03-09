@@ -1,7 +1,7 @@
 FrameWidgetClass {
  Name "rootFrame"
  {
-  ScaleWidgetClass "{66CABAEDF86B94F5}" : "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
+  ScaleWidgetClass "{66CABAEDF86B94F5}" : "{CDAE569CD2A70854}UI/Layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout" {
    Name "PlayersSettings"
    Slot FrameWidgetSlot "{66C77442C1EDDF6D}" {
     Anchor 0 0 1 1

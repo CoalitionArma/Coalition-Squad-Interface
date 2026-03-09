@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{7C63AA7A1665759D}UI/layouts/Menus/GroupSlection/GroupSettingsDialog.layout"
+ Name "{7C63AA7A1665759D}UI/Layouts/Menus/GroupSlection/GroupSettingsDialog.layout"
  Configurations {
   LayoutResourceClass PC {
   }

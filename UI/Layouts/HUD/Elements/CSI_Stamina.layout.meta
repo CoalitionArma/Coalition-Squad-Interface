@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{AD61A34EB388CF6D}UI/layouts/HUD/Elements/CSI_Stamina.layout"
+ Name "{AD61A34EB388CF6D}UI/Layouts/HUD/Elements/CSI_Stamina.layout"
  Configurations {
   LayoutResourceClass PC {
   }

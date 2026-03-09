@@ -36,7 +36,7 @@ ScaleWidgetClass {
     0.2
    }
    {
-    ScaleWidgetClass "{66B8C3DF4832D4CF}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF4832D4CF}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player0"
      Slot GridWidgetSlot "{66B8C3DF4832D52E}" {
      }
@@ -82,7 +82,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF495703FC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF495703FC}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player1"
      Slot GridWidgetSlot "{66B8C3DF495703C9}" {
       Row 1
@@ -129,7 +129,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF4A3D4978}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF4A3D4978}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player2"
      Slot GridWidgetSlot "{66B8C3DF4A3D49B6}" {
       Row 2
@@ -176,7 +176,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF4B057223}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF4B057223}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player3"
      Slot GridWidgetSlot "{66B8C3DF4B057272}" {
       Row 3
@@ -223,7 +223,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7468AFA7}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7468AFA7}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player4"
      Slot GridWidgetSlot "{66B8C3DF7468AFF5}" {
       Row 4
@@ -270,7 +270,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF75676B21}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF75676B21}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player5"
      Slot GridWidgetSlot "{66B8C3DF75676B78}" {
       Column 1
@@ -317,7 +317,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF75FC97AB}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF75FC97AB}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player6"
      Slot GridWidgetSlot "{66B8C3DF75FC97FB}" {
       Row 1
@@ -365,7 +365,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF76A9FDC4}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF76A9FDC4}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player7"
      Slot GridWidgetSlot "{66B8C3DF76A9FA15}" {
       Row 2
@@ -413,7 +413,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF77833DEC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF77833DEC}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player8"
      Slot GridWidgetSlot "{66B8C3DF77833A3A}" {
       Row 3
@@ -461,7 +461,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF700D4224}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF700D4224}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player9"
      Slot GridWidgetSlot "{66B8C3DF700D4270}" {
       Row 4
@@ -509,7 +509,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF70958879}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF70958879}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player10"
      Slot GridWidgetSlot "{66B8C3DF7095884B}" {
       Column 2
@@ -556,7 +556,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7140F449}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7140F449}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player11"
      Slot GridWidgetSlot "{66B8C3DF7140F49C}" {
       Row 1
@@ -604,7 +604,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF71C59AC6}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF71C59AC6}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player12"
      Slot GridWidgetSlot "{66B8C3DF71C59B12}" {
       Row 2
@@ -652,7 +652,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF72EAC970}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF72EAC970}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player13"
      Slot GridWidgetSlot "{66B8C3DF72EAC9B7}" {
       Row 3
@@ -700,7 +700,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF736A728F}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF736A728F}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player14"
      Slot GridWidgetSlot "{66B8C3DF736A72C7}" {
       Row 4
@@ -748,7 +748,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF73EE8299}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF73EE8299}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player15"
      Slot GridWidgetSlot "{66B8C3DF73EE82D2}" {
       Column 3
@@ -795,7 +795,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7C682942}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7C682942}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player16"
      Slot GridWidgetSlot "{66B8C3DF7C682994}" {
       Row 1
@@ -843,7 +843,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7CEC92F8}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7CEC92F8}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player17"
      Slot GridWidgetSlot "{66B8C3DF7CEC92CA}" {
       Row 2
@@ -891,7 +891,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7D6A0D3C}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7D6A0D3C}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player18"
      Slot GridWidgetSlot "{66B8C3DF7D6A0D0D}" {
       Row 3
@@ -939,7 +939,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7DF8684C}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7DF8684C}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player19"
      Slot GridWidgetSlot "{66B8C3DF7DF868AC}" {
       Row 4
@@ -987,7 +987,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7E8237EE}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7E8237EE}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player20"
      Slot GridWidgetSlot "{66B8C3DF7E823426}" {
       Column 4
@@ -1034,7 +1034,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7F0F200F}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7F0F200F}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player21"
      Slot GridWidgetSlot "{66B8C3DF7F0F2051}" {
       Row 1
@@ -1082,7 +1082,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF7FAB149E}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF7FAB149E}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player22"
      Slot GridWidgetSlot "{66B8C3DF7FAB14E7}" {
       Row 2
@@ -1130,7 +1130,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF784F93CC}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF784F93CC}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player23"
      Slot GridWidgetSlot "{66B8C3DF784F901B}" {
       Row 3
@@ -1178,7 +1178,7 @@ ScaleWidgetClass {
       }
      }
     }
-    ScaleWidgetClass "{66B8C3DF78E0C9B3}" : "{8904AB7E4A74F558}UI/layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
+    ScaleWidgetClass "{66B8C3DF78E0C9B3}" : "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout" {
      Name "Player24"
      Slot GridWidgetSlot "{66B8C3DF78E0C996}" {
       Row 4

@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{CDAE569CD2A70854}UI/layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout"
+ Name "{CDAE569CD2A70854}UI/Layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout"
  Configurations {
   LayoutResourceClass PC {
   }

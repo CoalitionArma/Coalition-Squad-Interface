@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{2AA1FFAC7A556059}UI/layouts/Menus/SettingsSubMenus/CSI_SettingsSubMenu.layout"
+ Name "{2AA1FFAC7A556059}UI/Layouts/Menus/SettingsSubMenus/CSI_SettingsSubMenu.layout"
  Configurations {
   LayoutResourceClass PC {
   }

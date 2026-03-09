@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{D45CA5F9BA346BF7}UI/layouts/HUD/Elements/CSI_Radar.layout"
+ Name "{D45CA5F9BA346BF7}UI/Layouts/HUD/Elements/CSI_Radar.layout"
  Configurations {
   LayoutResourceClass PC {
   }
