@@ -1,6 +1,8 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
+	ref CSI_WidgetOpacityHelper m_WidgetOpacityHelper = new CSI_WidgetOpacityHelper;
+	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
@@ -27,7 +29,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				tWidget.SetColor(stateConf.m_vColor);
 		};
 
-		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
+		m_WidgetOpacityHelper.SetWidget(tWidget);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -43,16 +45,26 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (!stateConf)
 			return;
 		
-		int dist = ((data.m_fDistance / 2) / 10);
-		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
-		int cutoffDist = scale * CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		//At least one zone always need to be defined
+		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
+		if (!zone)
+			return;
 		
-		if (dist > cutoffDist 
+		// avoid 0 as a starting point
+		int zoneStart = zone.GetZoneStart();
+		if ( zoneStart < 1 )
+			zoneStart = 1;
+		
+		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
+		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
+		float cutoffDist = scale * CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		
+		if (dist > cutoffDist
 			&& data.m_eType != ENameTagEntityType.AI 
 			&& data.m_eType != ENameTagEntityType.VEHICLE)
-			data.SetVisibility(tWidget, false, 0, true);
+			m_WidgetOpacityHelper.FadeAndHideWidget();
 		else
-			data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault); // transitions
+			m_WidgetOpacityHelper.UnHideAndShowWidget();
 		
 		if (tWidget.GetName() == "PlayerName")
 		{
@@ -67,7 +79,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	
 	//------------------------------------------------------------------------------------------------
 	//! Get the scale of text for nametags based on CSI_GameSettings.NAMTEAG_SCALE
-	static int GetNametagTextScale()
+	protected int GetNametagTextScale()
 	{
 		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
 		
@@ -82,5 +94,11 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		}
 		
 		return 13;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void ~SCR_NTTextBase()
+	{
+		delete m_WidgetOpacityHelper;
 	}
 }

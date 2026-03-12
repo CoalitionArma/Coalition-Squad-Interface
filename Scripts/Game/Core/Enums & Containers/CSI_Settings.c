@@ -34,7 +34,8 @@ class CSI_GameSettings : ModuleGameSettings
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-    const static ref TStringArray m_aSettingsArray = 
+	// ALWAYS ADD IT TO THE END, NEVER ADD SETTINGS IN THE MIDDLE OF THE ARRAY
+    const static ref TStringArray m_aSettingsArray =
 	{
 		COMPASS_VISIBLE,
 		BEARING_VISIBLE,
@@ -62,6 +63,7 @@ class CSI_GameSettings : ModuleGameSettings
 		NAMTEAG_SCALE
 	};
 
+	//------------------------------------------------------------------------------------------------
 	const static ref TStringArray SETTINGS_THAT_ARE_BOOLEAN = 
 	{
 		COMPASS_VISIBLE,

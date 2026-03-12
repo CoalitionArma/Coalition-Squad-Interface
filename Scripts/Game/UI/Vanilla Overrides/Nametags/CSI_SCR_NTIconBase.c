@@ -77,7 +77,7 @@ modded class SCR_NTIconBase
 	
 	//------------------------------------------------------------------------------------------------
 	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
-	static int GetNametagImageScale()
+	protected int GetNametagImageScale()
 	{
 		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
 		
