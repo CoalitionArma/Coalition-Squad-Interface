@@ -45,21 +45,19 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (!stateConf)
 			return;
 		
-		//At least one zone always need to be defined
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
 		if (!zone)
 			return;
 		
-		// avoid 0 as a starting point
 		int zoneStart = zone.GetZoneStart();
-		if ( zoneStart < 1 )
+		if (zoneStart < 1)
 			zoneStart = 1;
 		
-		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
+		float invDist = Math.InverseLerp(zone.m_iZoneEnd, zoneStart, data.m_fDistance);
 		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
-		float cutoffDist = scale * CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		float cutoffDist = scale * zone.m_iZoneEnd;
 		
-		if (dist > cutoffDist
+		if (invDist > cutoffDist
 			&& data.m_eType != ENameTagEntityType.AI 
 			&& data.m_eType != ENameTagEntityType.VEHICLE)
 			m_WidgetOpacityHelper.FadeAndHideWidget();
@@ -73,7 +71,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			else if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
-				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
+				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 		}
 	}
 	
