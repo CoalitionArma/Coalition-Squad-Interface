@@ -17,16 +17,19 @@ modded class SCR_NTIconBase
 		switch (true)
 		{
 			case (nametagPos == CSI_ENametagIconPosition.CENTER && (iWidget.GetName() != "RoleIconCenter")) 	: data.SetVisibility(iWidget, false, 0, false); return;
-			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "IconNT")) 			: data.SetVisibility(iWidget, false, 0, false); return;
+			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "RoleIconRight")) 	: data.SetVisibility(iWidget, false, 0, false); return;
 			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) 		: data.SetVisibility(iWidget, false, 0, false); return;
 		}
+		
+		int scale = CSI_UIHelper.GetNametagImageScale();
+		iWidget.SetSize(scale, scale);
 		
 		if (data.m_iPlayerID > 0)
 			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 		else
 			data.SetVisibility(iWidget, false, 0, false);
 	}
-
+	
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{	

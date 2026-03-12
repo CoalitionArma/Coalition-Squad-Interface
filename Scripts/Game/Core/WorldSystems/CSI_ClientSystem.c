@@ -47,7 +47,7 @@ class CSI_ClientSystem : GameSystem
 		// Get local player entity.
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
-		if (!localplayer) 
+		if (!localplayer)
 			return;
 		
 		// Get base group manager component

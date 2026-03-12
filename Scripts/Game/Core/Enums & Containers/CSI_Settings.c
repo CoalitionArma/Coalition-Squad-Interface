@@ -1,7 +1,7 @@
 class CSI_GameSettings : ModuleGameSettings
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 STATIC STRING POINTERS TO SETTING VARIABLES
+//	 STATIC STRING POINTERS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	const static string COMPASS_VISIBLE = "m_bCompassVisible";
@@ -24,6 +24,8 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string NAMETAG_ROLE_ICON_POSITION = "m_iNametagRoleIconPosition";
 	const static string NAMETAG_POSITION_OFFSET = "m_iNametagPositionOffset";
 	const static string NAMETAG_RANGE = "m_iNametagRange";
+	const static string NAMTEAG_RANGE_SIMPLIFIED = "m_iNametagRangeSimplifiedPercentage";
+	const static string NAMTEAG_SCALE = "m_iNametagScale";
 	const static string NAMETAG_MAGNIFICATION_MULTIPLICATION = "m_iNametagMagnificationMultiplication";
 	const static string RADAR_ICON_SIZE = "m_iRadarIconSize";
 	
@@ -32,9 +34,8 @@ class CSI_GameSettings : ModuleGameSettings
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-    static ref TStringArray m_aSettingsArray = 
+    const static ref TStringArray m_aSettingsArray = 
 	{
-		//BOOLEAN SETTINGS
 		COMPASS_VISIBLE,
 		BEARING_VISIBLE,
 		RADAR_VISIBLE,
@@ -47,8 +48,6 @@ class CSI_GameSettings : ModuleGameSettings
 		GROUP_IN_NAMETAG_VISIBLE,
 		NAMETAG_LOS_VISIBLE,
 		AUTO_HIDE_HUD,
-	
-		//INTIGER SETTINGS
 		ICON_THEME,
 		ICON_TYPE,
 		ARROW_THEME,
@@ -58,10 +57,26 @@ class CSI_GameSettings : ModuleGameSettings
 		NAMETAG_POSITION_OFFSET,
 		NAMETAG_RANGE,
 		NAMETAG_MAGNIFICATION_MULTIPLICATION,
-		RADAR_ICON_SIZE
+		RADAR_ICON_SIZE,
+		NAMTEAG_RANGE_SIMPLIFIED,
+		NAMTEAG_SCALE
 	};
 
-	const static int INDEX_WHERE_BOOL_SETTINGS_STOP = 11;
+	const static ref TStringArray SETTINGS_THAT_ARE_BOOLEAN = 
+	{
+		COMPASS_VISIBLE,
+		BEARING_VISIBLE,
+		RADAR_VISIBLE,
+		ONLY_RADAR_ICON_ARROWS_ROTATE,
+		GROUP_VISIBLE,
+		STAMINA_VISIBLE,
+		NAMETAG_VISIBLE,
+		RANK_VISIBLE,
+		ROLE_IN_NAMETAG_VISIBLE,
+		GROUP_IN_NAMETAG_VISIBLE,
+		NAMETAG_LOS_VISIBLE,
+		AUTO_HIDE_HUD
+	};
 
 	//------------------------------------------------------------------------------------------------
 	static TStringArray GetSettingsArray() 
@@ -115,8 +130,14 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "35", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
 	int m_iNametagRange;
 	
+	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "50 95 1", desc: "Percentage Of Range That Nametags Are Simplified Down To A Base Icon")]
+	int m_iNametagRangeSimplifiedPercentage;
+	
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "When Looking Through A Magnified Sight/Binos, Multiply The Nametag Range By This Percent")]
 	int m_iNametagMagnificationMultiplication;
+	
+	[Attribute(defvalue: "80", uiwidget: UIWidgets.Slider, params: "80 100 20", desc: "Nametag Scale")]
+	int m_iNametagScale;
 	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Roles In Players Nametags")]
 	int m_bRoleIconInNametagVisible;

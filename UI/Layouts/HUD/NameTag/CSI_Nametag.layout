@@ -1,0 +1,161 @@
+OverlayWidgetClass {
+ Name "NameTag"
+ Slot FrameWidgetSlot "{68D2673C6BFBE1AE}" {
+  OffsetLeft 0
+  OffsetTop 0
+  OffsetRight -100
+  SizeY 50
+  OffsetBottom -50
+  Alignment 0.5 0.5
+  SizeToContent 1
+ }
+ {
+  HorizontalLayoutWidgetClass "{68D26701735166C9}" {
+   Name "HorizontalLayout"
+   Slot OverlayWidgetSlot "{68D2670173516724}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   Clipping True
+   {
+    VerticalLayoutWidgetClass "{68D26703AEDED40A}" {
+     Name "CenterFrame"
+     Slot LayoutSlot "{68D267029C4504D1}" {
+     }
+     {
+      ImageWidgetClass "{68D26700C86D19EE}" {
+       Name "RoleIconCenter"
+       Slot LayoutSlot "{68D267029C450525}" {
+        HorizontalAlign 1
+       }
+       "Is Visible" 0
+       Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+       Image "SL_ICON"
+       Size 22 22
+      }
+      HorizontalLayoutWidgetClass "{68D26704D07B68E6}" {
+       Name "HorizontalLayoutCenter"
+       Slot LayoutSlot "{68D26704D07B68DD}" {
+       }
+       {
+        VerticalLayoutWidgetClass "{68D26700BC5CADA8}" {
+         Name "LeftFrame"
+         Slot LayoutSlot "{68D26700BC5CAD88}" {
+         }
+         Clipping False
+         {
+          ImageWidgetClass "{68D26700C1A31C03}" {
+           Name "RoleIconLeft"
+           Slot LayoutSlot "{68D26702D54DB78D}" {
+           }
+           "Is Visible" 0
+           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+           Image "SL_ICON"
+           Size 22 22
+          }
+         }
+        }
+        VerticalLayoutWidgetClass "{68D26704C6B2F494}" {
+         Name "VerticalLayoutCenter"
+         Slot LayoutSlot "{68D26704C6B2F4E1}" {
+         }
+         {
+          TextWidgetClass "{68D26700C86D19CD}" {
+           Name "PlayerName"
+           Slot LayoutSlot "{68D267029C450505}" {
+            Padding 0 -1 0 0
+           }
+           Clipping False
+           Text "My very long Username"
+           "Font Size" 13
+           "Min Font Size" 13
+           FontProperties FontProperties "{68D267004CD300F9}" {
+            Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+            DisabledColor 0.198 0.198 0.198 1
+            OutlineColor 0.305 0.305 0.305 1
+            ShadowSize 10
+           }
+          }
+          TextWidgetClass "{68D26700C86D195E}" {
+           Name "PlayerGroupName"
+           Slot LayoutSlot "{68D267029C45054B}" {
+           }
+           Clipping False
+           Color 0.7529 0.7529 0.7529 1
+           "Inherit Color" 1
+           Text "Test Test Test"
+           "Font Size" 10
+           "Min Font Size" 10
+           "Vertical Alignment" Center
+           FontProperties FontProperties "{6598E8628DE433C6}" {
+            Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+            DisabledColor 0.198 0.198 0.198 1
+            OutlineColor 0.305 0.305 0.305 1
+            ShadowSize 10
+            ShadowOffset 0 0
+           }
+          }
+         }
+        }
+        VerticalLayoutWidgetClass "{68D26700BF77A144}" {
+         Name "RightFrame"
+         Slot LayoutSlot "{68D26700BF77A1A8}" {
+         }
+         Clipping False
+         {
+          ImageWidgetClass "{68D26700F119BA21}" {
+           Name "RoleIconRight"
+           Slot LayoutSlot "{68D26702AA3EFD9C}" {
+           }
+           "Is Visible" 0
+           IsPixelPerfect 1
+           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+           Image "SL_ICON"
+           Size 22 22
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+  FrameWidgetClass "{68D26709CA381659}" {
+   Name "HiddenElements"
+   Slot OverlayWidgetSlot "{68D26709CA3816B9}" {
+   }
+   "Is Visible" 0
+   Opacity 0
+   {
+    ImageWidgetClass "{68D26709FF5496DC}" {
+     Name "IconNT"
+     Slot FrameWidgetSlot "{68D26709FF54972D}" {
+     }
+     "Is Visible" 0
+     Opacity 0
+    }
+    ImageWidgetClass "{68D26709F8C9B039}" {
+     Name "IconShadowNT"
+     Slot FrameWidgetSlot "{68D26709F8C9B008}" {
+     }
+     "Is Visible" 0
+     Opacity 0
+    }
+    ImageWidgetClass "{68D26709F970126D}" {
+     Name "IconNTPlatform"
+     Slot FrameWidgetSlot "{68D26709F970127D}" {
+     }
+     "Is Visible" 0
+     Opacity 0
+    }
+    ImageWidgetClass "{68D26709FA13D11D}" {
+     Name "IconShadowPlatform"
+     Slot FrameWidgetSlot "{68D26709FA13D16C}" {
+     }
+     "Is Visible" 0
+    }
+   }
+  }
+ }
+}
