@@ -14,7 +14,8 @@ class CSI_SettingsJson : JsonApiStruct
 		
 			UserSettings userSettings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 			foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
-				userSettings.Set(settingStr, m_aSettingsValues.Get(i));
+				if (m_aSettingsValues.IsIndexValid(i))
+					userSettings.Set(settingStr, m_aSettingsValues.Get(i));
         };
     }
 

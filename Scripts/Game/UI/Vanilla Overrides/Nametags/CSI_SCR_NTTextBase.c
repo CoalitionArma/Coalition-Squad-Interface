@@ -14,24 +14,19 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		tWidget.SetFont(m_FontResource);
 		
-		if (!m_bScaleElement)
-			tWidget.SetExactFontSize(m_fTextSizeMax);
-		
 		if (tWidget.GetName() == "PlayerGroupName")
 		{
 			tWidget.SetText(data.GetGroupName());
 			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
+			tWidget.SetExactFontSize(GetNametagTextScale() - 2);
 		} else {
+			tWidget.SetExactFontSize(GetNametagTextScale());
 			if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(stateConf.m_vColor);
 		};
-		
-		//tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
-		
-		tWidget.SetExactFontSize(CSI_UIHelper.GetNametagTextScale());
-		
+
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 	
@@ -52,10 +47,9 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
 		int cutoffDist = scale * CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 		
-		Print(scale);
-		Print(cutoffDist);
-		
-		if (dist > cutoffDist)
+		if (dist > cutoffDist 
+			&& data.m_eType != ENameTagEntityType.AI 
+			&& data.m_eType != ENameTagEntityType.VEHICLE)
 			data.SetVisibility(tWidget, false, 0, true);
 		else
 			data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault); // transitions
@@ -70,8 +64,23 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 		}
 	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Get the scale of text for nametags based on CSI_GameSettings.NAMTEAG_SCALE
+	static int GetNametagTextScale()
+	{
+		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
+		
+		switch (scale)
+		{
+			case 0 : return 8;
+			case 20 : return 9;
+			case 40 : return 10;
+			case 60 : return 11;
+			case 80 : return 12;
+			default : return 13;
+		}
+		
+		return 13;
+	}
 }
-
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-[BaseContainerProps(), SCR_NameTagElementTitle()]
-class CSI_NTGroupName : SCR_NTTextBase {}

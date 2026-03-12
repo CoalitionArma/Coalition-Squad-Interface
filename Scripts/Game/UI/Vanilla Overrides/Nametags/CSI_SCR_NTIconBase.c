@@ -13,18 +13,17 @@ modded class SCR_NTIconBase
 			return;
 		
 		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
+		int scale = GetNametagImageScale();
 		
-		switch (true)
+		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)))
 		{
-			case (nametagPos == CSI_ENametagIconPosition.CENTER && (iWidget.GetName() != "RoleIconCenter")) 	: data.SetVisibility(iWidget, false, 0, false); return;
-			case (nametagPos == CSI_ENametagIconPosition.RIGHT && (iWidget.GetName() != "RoleIconRight")) 	: data.SetVisibility(iWidget, false, 0, false); return;
-			case (nametagPos == CSI_ENametagIconPosition.LEFT && (iWidget.GetName() != "RoleIconLeft")) 		: data.SetVisibility(iWidget, false, 0, false); return;
-		}
+			data.SetVisibility(iWidget, false, 0, false);
+			return;
+		};
 		
-		int scale = CSI_UIHelper.GetNametagImageScale();
 		iWidget.SetSize(scale, scale);
 		
-		if (data.m_iPlayerID > 0)
+		if (data.m_eType != ENameTagEntityType.AI)
 			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 		else
 			data.SetVisibility(iWidget, false, 0, false);
@@ -47,7 +46,7 @@ modded class SCR_NTIconBase
 				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
 				case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
 				default : {
-					bool setAlt = false; 
+					bool setAlt = false;
 					CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
 					
 					if (displayIcon == CSI_EIcon.DRIVER)
@@ -67,7 +66,7 @@ modded class SCR_NTIconBase
 			else if (CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam());
 			else
-				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE); 
+				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE);
 			
 			iWidget.SetColor(colorToSet);
 		} else {
@@ -75,35 +74,23 @@ modded class SCR_NTIconBase
 			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
 		}
 	}	
-}
-
-//------------------------------------------------------------------------------------------------
-[BaseContainerProps(), SCR_NameTagElementTitle()]
-modded class SCR_NTIconPlatform
-{	
-	//------------------------------------------------------------------------------------------------	
-	override void SetDefaults(SCR_NameTagData data, int index)
-	{
-		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
-		if (!iWidget)
-			return;
-		
-		data.SetVisibility(iWidget, false, 0, false);
-	}
 	
 	//------------------------------------------------------------------------------------------------
-	override void UpdateElement(SCR_NameTagData data, int index)
-	{	
-		if (!data.m_aNametagElements[index])
-			return;
+	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
+	static int GetNametagImageScale()
+	{
+		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
 		
-		if (data.m_eType != ENameTagEntityType.PLAYER && data.m_eType != ENameTagEntityType.VEHICLE)
-			return;
+		switch (scale)
+		{
+			case 0 : return 12;
+			case 20 : return 14;
+			case 40 : return 16;
+			case 60 : return 18;
+			case 80 : return 20;
+			default : return 22;
+		}
 		
-		ImageWidget image = ImageWidget.Cast(data.m_aNametagElements[index]);
-		if (!image)
-			return;
-		
-		data.SetVisibility(image, false, 0, false);
-	};
-};
+		return 22;
+	}
+}

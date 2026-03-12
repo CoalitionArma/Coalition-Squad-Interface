@@ -24,7 +24,7 @@ OverlayWidgetClass {
      }
      {
       ImageWidgetClass "{68D26700C86D19EE}" {
-       Name "RoleIconCenter"
+       Name "RoleIconCENTER"
        Slot LayoutSlot "{68D267029C450525}" {
         HorizontalAlign 1
        }
@@ -45,7 +45,7 @@ OverlayWidgetClass {
          Clipping False
          {
           ImageWidgetClass "{68D26700C1A31C03}" {
-           Name "RoleIconLeft"
+           Name "RoleIconLEFT"
            Slot LayoutSlot "{68D26702D54DB78D}" {
            }
            "Is Visible" 0
@@ -81,7 +81,6 @@ OverlayWidgetClass {
            Slot LayoutSlot "{68D267029C45054B}" {
            }
            Clipping False
-           Color 0.7529 0.7529 0.7529 1
            "Inherit Color" 1
            Text "Test Test Test"
            "Font Size" 10
@@ -104,7 +103,7 @@ OverlayWidgetClass {
          Clipping False
          {
           ImageWidgetClass "{68D26700F119BA21}" {
-           Name "RoleIconRight"
+           Name "RoleIconRIGHT"
            Slot LayoutSlot "{68D26702AA3EFD9C}" {
            }
            "Is Visible" 0

@@ -130,42 +130,4 @@ class CSI_UIHelper
 		
 		return icons;
 	};
-	
-	//------------------------------------------------------------------------------------------------
-	//! Get the scale of text for nametags based on CSI_GameSettings.NAMTEAG_SCALE
-	static int GetNametagTextScale()
-	{
-		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
-		
-		switch (scale)
-		{
-			case 0 : return 8;
-			case 20 : return 9;
-			case 40 : return 10;
-			case 60 : return 11;
-			case 80 : return 12;
-			default : return 13;
-		}
-		
-		return 13;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
-	static int GetNametagImageScale()
-	{
-		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
-		
-		switch (scale)
-		{
-			case 0 : return 12;
-			case 20 : return 14;
-			case 40 : return 16;
-			case 60 : return 18;
-			case 80 : return 20;
-			default : return 22;
-		}
-		
-		return 22;
-	}
 }
