@@ -5,6 +5,7 @@ modded class SCR_NameTagData : Managed
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;
+	string m_sGroupName;
 
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()
@@ -40,6 +41,7 @@ modded class SCR_NameTagData : Managed
 		m_fDistance = 0;
 		m_fOpacityFade = 1;
 		m_sName = string.Empty;
+		m_sGroupName = string.Empty;
 		m_aNameParams = {};
 	};
 
@@ -106,25 +108,23 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
-	string GetGroupName()
+	void GetGroupName()
 	{
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
 		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
-			return "";
+			return;
 
-		string groupName = group.GetCustomName();
+		m_sGroupName = group.GetCustomName();
 
-		if (groupName.IsEmpty())
+		if (m_sGroupName.IsEmpty())
 		{
 			string company, platoon, squad, character, format;
 			group.GetCallsigns(company, platoon, squad, character, format);
 			company = WidgetManager.Translate(company);
-			groupName = string.Format(format, company, platoon, squad, character);
+			m_sGroupName = string.Format(format, company, platoon, squad, character);
 		};
-
-		return groupName;
 	}
 	
 	//------------------------------------------------------------------------------------------------
