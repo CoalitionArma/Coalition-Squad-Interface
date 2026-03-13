@@ -106,11 +106,3 @@ enum CSI_EOverrideIcon
 	MG,
 	MEDIC,
 }
-
-//------------------------------------------------------------------------------------
-enum CSI_EName
-{
-	EMPTY,
-	NAME,
-	GROUP
-}

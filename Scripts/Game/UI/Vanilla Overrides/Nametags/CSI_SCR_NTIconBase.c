@@ -1,9 +1,18 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
+	protected CSI_HUDSystem m_HUDSystem;
+	protected CSI_SettingsManager m_SettingsManager;
+
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
+		if (!m_HUDSystem || !m_SettingsManager)
+		{
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		};
+
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget)
 			return;
@@ -12,21 +21,17 @@ modded class SCR_NTIconBase
 		if (!stateConf)
 			return;
 		
-		CSI_ENametagIconPosition nametagPos = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		int scale = GetNametagImageScale();
-		
-		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)))
+		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
+		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || data.m_eType == ENameTagEntityType.AI)
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			return;
 		};
 		
+		int scale = GetNametagImageScale();
 		iWidget.SetSize(scale, scale);
 		
-		if (data.m_eType != ENameTagEntityType.AI)
-			data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
-		else
-			data.SetVisibility(iWidget, false, 0, false);
+		data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -63,7 +68,7 @@ modded class SCR_NTIconBase
 				
 			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
 				colorToSet = CSI_UIHelper.VANILLA_VON_COLOR;
-			else if (CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			else if (m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam());
 			else
 				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE);
@@ -79,7 +84,7 @@ modded class SCR_NTIconBase
 	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
 	protected int GetNametagImageScale()
 	{
-		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
+		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
 		
 		switch (scale)
 		{
