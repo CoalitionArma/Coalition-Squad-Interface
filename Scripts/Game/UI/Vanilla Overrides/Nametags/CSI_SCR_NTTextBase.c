@@ -1,10 +1,6 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
-	string localGroupName;
-	string localPlayerName;
-	ref array<string> localPlayerNameParams = {};
-	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
@@ -22,10 +18,8 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		{
 			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 			tWidget.SetExactFontSize(GetNametagTextScale() - 2);
-			localGroupName = data.GetGroupName();
 		} else {
 			tWidget.SetExactFontSize(GetNametagTextScale());
-			data.GetName(localPlayerName, localPlayerNameParams);
 			if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
@@ -90,17 +84,17 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		{
 			//-----------------------------------------
 			case CSI_EName.EMPTY: {	
-				SetText(data, "", localPlayerNameParams, index);
+				SetText(data, "", data.m_aNameParams, index);
 				break;
 			}
 			//-----------------------------------------
 			case CSI_EName.GROUP: {	
-				SetText(data, localGroupName, localPlayerNameParams, index);
+				SetText(data, data.m_sGroupName, data.m_aNameParams, index);
 				break;
 			}
 			//-----------------------------------------
 			case CSI_EName.NAME: {
-				SetText(data, localPlayerName, localPlayerNameParams, index);
+				SetText(data, data.m_sName, data.m_aNameParams, index);
 				break;
 			}
 		}
