@@ -53,11 +53,12 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (zoneStart < 1)
 			zoneStart = 1;
 		
-		float invDist = Math.InverseLerp(zone.m_iZoneEnd, zoneStart, data.m_fDistance);
+		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
 		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
 		float cutoffDist = scale * zone.m_iZoneEnd;
+		cutoffDist = zone.m_iZoneEnd - cutoffDist;// flip it arround
 		
-		if (invDist > cutoffDist
+		if (dist > cutoffDist
 			&& data.m_eType != ENameTagEntityType.AI 
 			&& data.m_eType != ENameTagEntityType.VEHICLE)
 			m_WidgetOpacityHelper.FadeAndHideWidget();
