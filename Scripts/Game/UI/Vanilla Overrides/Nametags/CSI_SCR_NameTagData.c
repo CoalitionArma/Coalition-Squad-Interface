@@ -91,10 +91,13 @@ modded class SCR_NameTagData : Managed
 		else 
 			targetVal = 0;
 		
+		if (m_fTagFadeSpeed == 0)
+			animate = false;
+		
 		if (targetVal >= 0.1)
 			widget.SetVisible(true);
 		
-		if (m_fTagFadeSpeed > 0)
+		if (animate)
 			AnimateWidget.Opacity(widget, targetVal, m_fTagFadeSpeed);
 		else {
 			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);

@@ -1,7 +1,9 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
-	ref CSI_WidgetOpacityHelper m_WidgetOpacityHelper = new CSI_WidgetOpacityHelper;
+	string localGroupName;
+	string localPlayerName;
+	ref array<string> localPlayerNameParams = {};
 	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
@@ -18,18 +20,21 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerGroupName")
 		{
-			tWidget.SetText(data.GetGroupName());
 			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 			tWidget.SetExactFontSize(GetNametagTextScale() - 2);
+			localGroupName = data.GetGroupName();
 		} else {
 			tWidget.SetExactFontSize(GetNametagTextScale());
+			data.GetName(localPlayerName, localPlayerNameParams);
 			if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(stateConf.m_vColor);
 		};
-
-		m_WidgetOpacityHelper.SetWidget(tWidget);
+		
+		//tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
+		
+		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -58,12 +63,14 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		float cutoffDist = scale * zone.m_iZoneEnd;
 		cutoffDist = zone.m_iZoneEnd - cutoffDist;// flip it arround
 		
-		if (dist > cutoffDist
-			&& data.m_eType != ENameTagEntityType.AI 
-			&& data.m_eType != ENameTagEntityType.VEHICLE)
-			m_WidgetOpacityHelper.FadeAndHideWidget();
-		else
-			m_WidgetOpacityHelper.UnHideAndShowWidget();
+		if (dist > cutoffDist && data.m_eType != ENameTagEntityType.AI && data.m_eType != ENameTagEntityType.VEHICLE)
+			ChangeNameText(data, index, CSI_EName.EMPTY);
+		else {
+			if (tWidget.GetName() == "PlayerGroupName")
+				ChangeNameText(data, index, CSI_EName.GROUP);
+			else
+				ChangeNameText(data, index, CSI_EName.NAME);
+		};
 		
 		if (tWidget.GetName() == "PlayerName")
 		{
@@ -73,6 +80,29 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+		}
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void ChangeNameText(SCR_NameTagData data, int index, CSI_EName nameToSet)
+	{
+		switch (nameToSet)
+		{
+			//-----------------------------------------
+			case CSI_EName.EMPTY: {	
+				SetText(data, "", localPlayerNameParams, index);
+				break;
+			}
+			//-----------------------------------------
+			case CSI_EName.GROUP: {	
+				SetText(data, localGroupName, localPlayerNameParams, index);
+				break;
+			}
+			//-----------------------------------------
+			case CSI_EName.NAME: {
+				SetText(data, localPlayerName, localPlayerNameParams, index);
+				break;
+			}
 		}
 	}
 	
@@ -93,11 +123,5 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		}
 		
 		return 13;
-	}
-	
-	//------------------------------------------------------------------------------------------------
-	void ~SCR_NTTextBase()
-	{
-		delete m_WidgetOpacityHelper;
 	}
 }

@@ -129,10 +129,10 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "3", uiwidget: UIWidgets.Slider, params: "0 5 1", desc: "Z Offset Of Nametags From The Nametag Position")]
 	int m_iNametagPositionOffset;
 
-	[Attribute(defvalue: "35", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
+	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
 	int m_iNametagRange;
 	
-	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Percentage Of Range That Nametags Are Simplified Down To A Base Icon")]
+	[Attribute(defvalue: "75", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Percentage Of Range That Nametags Are Simplified Down To A Base Icon")]
 	int m_iNametagRangeSimplifiedPercentage;
 	
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "When Looking Through A Magnified Sight/Binos, Multiply The Nametag Range By This Percent")]
