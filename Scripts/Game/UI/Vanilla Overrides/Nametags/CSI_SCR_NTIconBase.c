@@ -22,7 +22,7 @@ modded class SCR_NTIconBase
 			return;
 		
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || data.m_eType == ENameTagEntityType.AI)
+		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || data.m_eType == ENameTagEntityType.AI || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			return;
