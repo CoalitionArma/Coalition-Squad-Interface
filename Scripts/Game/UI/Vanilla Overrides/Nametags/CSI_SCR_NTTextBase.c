@@ -1,11 +1,6 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
-	protected float m_fScale;
-	protected float m_fCutoffDist;
-	protected int m_iZoneStart;
-	protected int m_iZoneEnd;
-
 	protected CSI_HUDSystem m_HUDSystem;
 	protected CSI_SettingsManager m_SettingsManager;
 
@@ -25,10 +20,6 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		SCR_NTStateText stateConf = SCR_NTStateText.Cast( GetEntityStateConfig(data) );
 		if (!stateConf)
 			return;
-
-		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
-		if (!zone)
-			return;
 		
 		//-----------------------------------------------------------------------
 		// Initial Appearence And Settings Of The Text Widget
@@ -45,17 +36,6 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			else
 				tWidget.SetColor(stateConf.m_vColor);
 		};
-
-		//-----------------------------------------------------------------------
-		// Basic Static Distance Calculations, Done Only On Init Of The Nametag For Performance
-		int m_iZoneStart = zone.GetZoneStart();
-		if (m_iZoneStart < 1)
-			m_iZoneStart = 1;
-
-		m_iZoneEnd = zone.m_iZoneEnd;
-		float m_fScale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
-		float m_fCutoffDist = m_fScale * m_iZoneEnd;
-		m_fCutoffDist = m_iZoneEnd - m_fCutoffDist;// flip it arround
 		
 		//-----------------------------------------------------------------------
 		// Actually Make The Widget Visible
@@ -67,16 +47,36 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	{	
 		super.UpdateElement(data, index);
 		
+		if (!m_HUDSystem || !m_SettingsManager)
+		{
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		};
+		
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!tWidget)
 			return;
+		
+		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
+		if (!zone)
+			return;
 
 		//-----------------------------------------------------------------------
-		// Distance Calculations For Our Emulation Of Icon Nametags In Vanilla
-		float dist = Math.InverseLerp(m_iZoneStart, m_iZoneEnd, data.m_fDistance);
+		// Basic Static Distance Calculations
+		int zoneStart = zone.GetZoneStart();
+		if (zoneStart < 1)
+			zoneStart = 1;
 		
-		if (dist > m_fCutoffDist
-			&& m_fScale != 0
+		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
+		float cutoffDist = scale * zone.m_iZoneEnd;
+		cutoffDist = zone.m_iZoneEnd - cutoffDist;// flip it arround
+		
+		//-----------------------------------------------------------------------
+		// Dysnamic Distance Calculation For Our Emulation Of Icon Nametags In Vanilla
+		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
+		
+		if (dist > cutoffDist
+			&& scale != 0
 			&& data.m_eType != ENameTagEntityType.AI 
 			&& data.m_eType != ENameTagEntityType.VEHICLE 
 			&& m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))

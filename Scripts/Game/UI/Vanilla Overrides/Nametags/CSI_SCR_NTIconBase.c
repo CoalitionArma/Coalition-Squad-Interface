@@ -38,6 +38,12 @@ modded class SCR_NTIconBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{	
 		super.UpdateElement(data, index);
+		
+		if (!m_HUDSystem || !m_SettingsManager)
+		{
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		};
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget)
