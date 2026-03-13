@@ -1,0 +1,17 @@
+MetaFileClass {
+ Name "{CDAE569CD2A70854}UI/Layouts/Menus/PlayerSettings/CSI_PlayerSettings.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+  LayoutResourceClass PS5 : PC {
+  }
+ }
+}

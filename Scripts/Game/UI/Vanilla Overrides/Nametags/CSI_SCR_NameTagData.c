@@ -1,0 +1,184 @@
+modded class SCR_NameTagData : Managed
+{
+	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
+
+	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_PlayerDataManager m_PlayerDataManager;
+	CSI_PlayerData m_PlayerData;
+
+	//------------------------------------------------------------------------------------------------
+	override void UpdateEntityType()
+	{
+		super.UpdateEntityType();
+		UpdatePlayerData();
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	override protected void InitDefaults()
+	{
+		if (!m_SettingsManager || !m_PlayerDataManager) 
+		{
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		};
+		
+		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
+	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
+
+		UpdateAttatchedTo();
+		
+		m_iZoneID = -1;
+		m_iGroupID = -1;
+		m_iPlayerID = -1;
+		m_PlayerData = null;
+		m_fTimeSliceUpdate = 1.0;
+		m_fTimeSliceVON = 0;
+		m_fTimeSlicePosChange = 0;
+		m_fTimeSliceCleanup = 0;
+		m_fTimeSliceFade = 0;
+		m_fTimeSliceVisibility = 0;
+		m_fDistance = 0;
+		m_fOpacityFade = 1;
+		m_sName = string.Empty;
+		m_aNameParams = {};
+	};
+
+	//------------------------------------------------------------------------------------------------
+	override void GetName(out string name, out notnull array<string> nameParams)
+	{	
+		if (m_eType == ENameTagEntityType.PLAYER)
+		{
+			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
+			UpdatePlayerData();
+		} else if (m_eType == ENameTagEntityType.AI)
+		{
+			SCR_CharacterIdentityComponent scrCharIdentity = SCR_CharacterIdentityComponent.Cast(m_Entity.FindComponent(SCR_CharacterIdentityComponent));
+			if (scrCharIdentity)
+			{
+				scrCharIdentity.GetFormattedFullName(m_sName, m_aNameParams);
+			} else {
+				CharacterIdentityComponent charIdentity = CharacterIdentityComponent.Cast(m_Entity.FindComponent(CharacterIdentityComponent));
+				if (charIdentity && charIdentity.GetIdentity())
+					m_sName = charIdentity.GetIdentity().GetName();
+				else
+					m_sName = "No character identity!";
+			};
+		};
+
+		name = m_sName;
+		nameParams.Copy(m_aNameParams);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Set visibility of nametag widget
+	override void SetVisibility(Widget widget, bool visible, float visibleOpacity, bool animate = true)
+	{
+		if (!widget)
+			return;
+						
+		float targetVal;
+		if (visible)
+		{
+			m_NameTagWidget.SetVisible(true);
+			if (widget == m_NameTagWidget)
+				m_fVisibleOpacity = visibleOpacity;
+			
+			m_Flags |= ENameTagFlags.VISIBLE;
+			m_Flags &= ~ENameTagFlags.UPDATE_DISABLE;
+			m_Flags &= ~ENameTagFlags.DISABLED;
+			targetVal = visibleOpacity;
+		}
+		else 
+			targetVal = 0;
+		
+		if (targetVal >= 0.1)
+			widget.SetVisible(true);
+		
+		if (m_fTagFadeSpeed > 0)
+			AnimateWidget.Opacity(widget, targetVal, m_fTagFadeSpeed);
+		else {
+			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);
+			widget.SetOpacity(targetVal);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	string GetGroupName()
+	{
+		// TODO: Better AI handling
+		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
+
+		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
+			return "";
+
+		string groupName = group.GetCustomName();
+
+		if (groupName.IsEmpty())
+		{
+			string company, platoon, squad, character, format;
+			group.GetCallsigns(company, platoon, squad, character, format);
+			company = WidgetManager.Translate(company);
+			groupName = string.Format(format, company, platoon, squad, character);
+		};
+
+		return groupName;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Update tag position
+	override void UpdateTagPos()
+	{
+		UpdateAttatchedTo();
+		
+		vector matPos[4];
+		Animation anim = m_Entity.GetAnimation();
+		anim.GetBoneMatrix(m_iSpineBone, matPos);
+		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
+		anim.GetBoneMatrix(m_iHeadBone, matPos);
+		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
+		
+		vector nametagOffsetVector = "0 0 0";
+		int nametagOffset = 0;
+		
+		if (m_SettingsManager)
+			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
+		
+		if (m_eAttachedTo == ENameTagPosition.HEAD)
+		{
+			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
+			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
+		}
+		else if (m_eAttachedTo == ENameTagPosition.BODY)
+		{
+			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
+			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
+		}
+
+		if (m_eType != ENameTagEntityType.PLAYER && GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(m_Entity) > 0)
+		{
+			m_Flags |= ENameTagFlags.ENT_TYPE_UPDATE;
+			m_Flags |= ENameTagFlags.NAME_UPDATE;
+		}
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	protected void UpdatePlayerData()
+	{
+		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		
+		if (m_PlayerDataManager && m_iPlayerID > 0)
+			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdateAttatchedTo()
+	{
+		ENameTagPosition nametagPos = ENameTagPosition.BODY;
+		
+		if (m_SettingsManager) 
+			nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
+
+		m_eAttachedTo = nametagPos;
+		m_eAttachedToLast = nametagPos;
+	}
+}

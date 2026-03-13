@@ -3,11 +3,9 @@ SCR_BaseGameMode {
  components {
   CSI_PlayerDataManager "{66BCC39A74975F3C}" {
    components {
-    CSI_PlayerDisconnectManager "{66F530778981D713}" {
+    CSI_RplBroadcastManager "{68D2438E5F716C34}" {
     }
-    CSI_RplBroadcastManager "{66F42D87C8245634}" {
-    }
-    CSI_SettingsManager "{66F42D87CC0A170D}" {
+    CSI_SettingsManager "{68D2438E526590D5}" {
     }
    }
   }
