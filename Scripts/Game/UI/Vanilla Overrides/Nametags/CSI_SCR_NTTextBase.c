@@ -73,7 +73,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 
 		//-----------------------------------------------------------------------
 		// Distance Calculations For Our Emulation Of Icon Nametags In Vanilla
-		float dist = Math.InverseLerp(m_iZoneStart, zone.m_iZoneEnd, data.m_fDistance);
+		float dist = Math.InverseLerp(m_iZoneStart, m_iZoneEnd, data.m_fDistance);
 		
 		if (dist > m_fCutoffDist
 			&& m_fScale != 0
