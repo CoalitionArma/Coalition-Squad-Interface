@@ -83,7 +83,7 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			SetText(data, "", data.m_aNameParams, index);
 		else {
 			if (tWidget.GetName() == "PlayerGroupName")
-				SetText(data, data.m_sGroupName, data.m_aNameParams, index);
+				SetText(data, data.GetGroupName(), data.m_aNameParams, index);
 			else
 				SetText(data, data.m_sName, data.m_aNameParams, index);
 		};

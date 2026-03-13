@@ -5,7 +5,6 @@ modded class SCR_NameTagData : Managed
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;
-	string m_sGroupName;
 
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()
@@ -41,7 +40,6 @@ modded class SCR_NameTagData : Managed
 		m_fDistance = 0;
 		m_fOpacityFade = 1;
 		m_sName = string.Empty;
-		m_sGroupName = string.Empty;
 		m_aNameParams = {};
 	};
 
@@ -51,7 +49,6 @@ modded class SCR_NameTagData : Managed
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
-			m_sGroupName = GetGroupName();
 			UpdatePlayerData();
 		} else if (m_eType == ENameTagEntityType.AI)
 		{
