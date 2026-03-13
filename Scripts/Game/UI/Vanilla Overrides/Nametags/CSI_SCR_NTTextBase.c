@@ -1,7 +1,9 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
-	CSI_EName currentName;
+	string localGroupName;
+	string localPlayerName;
+	ref array<string> localPlayerNameParams = {};
 	
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
@@ -18,18 +20,21 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		
 		if (tWidget.GetName() == "PlayerGroupName")
 		{
-			tWidget.SetText(data.GetGroupName());
 			tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE)); 
 			tWidget.SetExactFontSize(GetNametagTextScale() - 2);
-			currentName = CSI_EName.GROUP;
+			localGroupName = data.GetGroupName();
 		} else {
 			tWidget.SetExactFontSize(GetNametagTextScale());
-			currentName = CSI_EName.NAME;
+			data.GetName(localPlayerName, localPlayerNameParams);
 			if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(stateConf.m_vColor);
 		};
+		
+		//tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
+		
+		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -81,35 +86,23 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	//------------------------------------------------------------------------------------------------
 	protected void ChangeNameText(SCR_NameTagData data, int index, CSI_EName nameToSet)
 	{
-		if (currentName != nameToSet)
+		switch (nameToSet)
 		{
-			string name;
-			array<string> nameParams = {};
-			data.GetName(name, nameParams);
-			
-			switch (nameToSet)
-			{
-				//-----------------------------------------
-				case CSI_EName.EMPTY: {	
-					Print("EMPTY");
-					SetText(data, "EMPTY", nameParams, index);
-					break;
-				}
-				//-----------------------------------------
-				case CSI_EName.GROUP: {	
-					Print(data.GetGroupName());
-					SetText(data, data.GetGroupName(), nameParams, index);
-					break;
-				}
-				//-----------------------------------------
-				case CSI_EName.NAME: {
-					Print(name);
-					SetText(data, name, nameParams, index);
-					break;
-				}
+			//-----------------------------------------
+			case CSI_EName.EMPTY: {	
+				SetText(data, "", localPlayerNameParams, index);
+				break;
 			}
-			
-			currentName = nameToSet
+			//-----------------------------------------
+			case CSI_EName.GROUP: {	
+				SetText(data, localGroupName, localPlayerNameParams, index);
+				break;
+			}
+			//-----------------------------------------
+			case CSI_EName.NAME: {
+				SetText(data, localPlayerName, localPlayerNameParams, index);
+				break;
+			}
 		}
 	}
 	
