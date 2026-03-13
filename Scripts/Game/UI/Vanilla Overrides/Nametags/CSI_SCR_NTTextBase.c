@@ -1,9 +1,18 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTTextBase : SCR_NTElementBase
 {	
+	protected CSI_HUDSystem m_HUDSystem;
+	protected CSI_SettingsManager m_SettingsManager;
+
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
+		if (!m_HUDSystem || !m_SettingsManager)
+		{
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		};
+		
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!tWidget)
 			return;
@@ -12,6 +21,8 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 		if (!stateConf)
 			return;
 		
+		//-----------------------------------------------------------------------
+		// Initial Appearence And Settings Of The Text Widget
 		tWidget.SetFont(m_FontResource);
 		
 		if (tWidget.GetName() == "PlayerGroupName")
@@ -20,14 +31,14 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 			tWidget.SetExactFontSize(GetNametagTextScale() - 2);
 		} else {
 			tWidget.SetExactFontSize(GetNametagTextScale());
-			if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			if (data.m_PlayerData && m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(stateConf.m_vColor);
 		};
 		
-		//tWidget.SetShadow( stateConf.m_fShadowSize, stateConf.m_vShadowColor.PackToInt(), stateConf.m_fShadowOpacity, 0, 0);
-		
+		//-----------------------------------------------------------------------
+		// Actually Make The Widget Visible
 		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
 	}
 	
@@ -36,41 +47,54 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	{	
 		super.UpdateElement(data, index);
 		
+		if (!m_HUDSystem || !m_SettingsManager)
+		{
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+		};
+		
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!tWidget)
-			return;
-		
-		SCR_NTStateText stateConf = SCR_NTStateText.Cast( GetEntityStateConfig(data) );
-		if (!stateConf)
 			return;
 		
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
 		if (!zone)
 			return;
-		
+
+		//-----------------------------------------------------------------------
+		// Basic Static Distance Calculations
 		int zoneStart = zone.GetZoneStart();
 		if (zoneStart < 1)
 			zoneStart = 1;
 		
-		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
-		float scale = (CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
+		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
 		float cutoffDist = scale * zone.m_iZoneEnd;
 		cutoffDist = zone.m_iZoneEnd - cutoffDist;// flip it arround
 		
-		if (dist > cutoffDist && data.m_eType != ENameTagEntityType.AI && data.m_eType != ENameTagEntityType.VEHICLE)
-			ChangeNameText(data, index, CSI_EName.EMPTY);
+		//-----------------------------------------------------------------------
+		// Dysnamic Distance Calculation For Our Emulation Of Icon Nametags In Vanilla
+		float dist = Math.InverseLerp(zoneStart, zone.m_iZoneEnd, data.m_fDistance);
+		
+		if (dist > cutoffDist
+			&& scale != 0
+			&& data.m_eType != ENameTagEntityType.AI 
+			&& data.m_eType != ENameTagEntityType.VEHICLE 
+			&& m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+			SetText(data, "", data.m_aNameParams, index);
 		else {
 			if (tWidget.GetName() == "PlayerGroupName")
-				ChangeNameText(data, index, CSI_EName.GROUP);
+				SetText(data, data.m_sGroupName, data.m_aNameParams, index);
 			else
-				ChangeNameText(data, index, CSI_EName.NAME);
+				SetText(data, data.m_sName, data.m_aNameParams, index);
 		};
-		
+
+		//-----------------------------------------------------------------------
+		// Color Updates For VON/Color Teams
 		if (tWidget.GetName() == "PlayerName")
 		{
 			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
 				tWidget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
-			else if (data.m_PlayerData && CSI_HUDSystem.GetInstance() && CSI_HUDSystem.GetInstance().GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			else if (data.m_PlayerData && m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
 			else
 				tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
@@ -78,33 +102,10 @@ modded class SCR_NTTextBase : SCR_NTElementBase
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void ChangeNameText(SCR_NameTagData data, int index, CSI_EName nameToSet)
-	{
-		switch (nameToSet)
-		{
-			//-----------------------------------------
-			case CSI_EName.EMPTY: {	
-				SetText(data, "", data.m_aNameParams, index);
-				break;
-			}
-			//-----------------------------------------
-			case CSI_EName.GROUP: {	
-				SetText(data, data.m_sGroupName, data.m_aNameParams, index);
-				break;
-			}
-			//-----------------------------------------
-			case CSI_EName.NAME: {
-				SetText(data, data.m_sName, data.m_aNameParams, index);
-				break;
-			}
-		}
-	}
-	
-	//------------------------------------------------------------------------------------------------
 	//! Get the scale of text for nametags based on CSI_GameSettings.NAMTEAG_SCALE
 	protected int GetNametagTextScale()
 	{
-		int scale = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
+		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
 		
 		switch (scale)
 		{
