@@ -25,7 +25,7 @@ modded class SCR_NameTagData : Managed
 		
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
-
+		
 		UpdateAttatchedTo();
 		
 		m_iZoneID = -1;
@@ -113,8 +113,11 @@ modded class SCR_NameTagData : Managed
 		// TODO: Better AI handling
 		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE)) 
+		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE))
+		{
+			m_sGroupName = "";
 			return;
+		}
 
 		m_sGroupName = group.GetCustomName();
 
