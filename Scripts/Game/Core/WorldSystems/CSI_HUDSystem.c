@@ -84,7 +84,7 @@ class CSI_HUDSystem : GameSystem
 		if (!m_LocalPlayerCharacter) 
 			return;
 		
-		BaseCompartmentSlot vehicleCompartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
+		BaseCompartmentSlot vehicleCompartment = CSI_CharacterHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
 		
 		if (vehicleCompartment)
 		{ 

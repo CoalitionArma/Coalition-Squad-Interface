@@ -132,13 +132,13 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "Nametag Range")]
 	int m_iNametagRange;
 	
-	[Attribute(defvalue: "75", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Percentage Of Range That Nametags Are Simplified Down To A Base Icon")]
+	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Percentage Of Range That Nametags Are Simplified Down To A Base Icon")]
 	int m_iNametagRangeSimplifiedPercentage;
 	
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "When Looking Through A Magnified Sight/Binos, Multiply The Nametag Range By This Percent")]
 	int m_iNametagMagnificationMultiplication;
 	
-	[Attribute(defvalue: "60", uiwidget: UIWidgets.Slider, params: "0 100 20", desc: "Nametag Scale")]
+	[Attribute(defvalue: "40", uiwidget: UIWidgets.Slider, params: "0 100 20", desc: "Nametag Scale")]
 	int m_iNametagScale;
 	
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Enable/Disable Visibility Of Roles In Players Nametags")]

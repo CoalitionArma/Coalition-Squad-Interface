@@ -66,7 +66,7 @@ OverlayWidgetClass {
             Padding 0 -1 0 0
            }
            Clipping False
-           Text "My very long Username"
+           Text ""
            "Font Size" 13
            "Min Font Size" 13
            FontProperties FontProperties "{68D267004CD300F9}" {
@@ -82,10 +82,9 @@ OverlayWidgetClass {
            }
            Clipping False
            "Inherit Color" 1
-           Text "Test Test Test"
+           Text ""
            "Font Size" 10
            "Min Font Size" 10
-           "Vertical Alignment" Center
            FontProperties FontProperties "{6598E8628DE433C6}" {
             Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
             DisabledColor 0.198 0.198 0.198 1

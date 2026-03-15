@@ -7,11 +7,8 @@ modded class SCR_NTIconBase
 	//------------------------------------------------------------------------------------------------	
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
-		if (!m_HUDSystem || !m_SettingsManager)
-		{
-			m_HUDSystem = CSI_HUDSystem.GetInstance();
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-		};
+		m_HUDSystem = CSI_HUDSystem.GetInstance();
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget)
@@ -21,6 +18,8 @@ modded class SCR_NTIconBase
 		if (!stateConf)
 			return;
 		
+		//-----------------------------------------------------------------------
+		// Hide All Icon Widgets Not Being Used
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || data.m_eType == ENameTagEntityType.AI || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 		{
@@ -28,9 +27,13 @@ modded class SCR_NTIconBase
 			return;
 		};
 		
+		//-----------------------------------------------------------------------
+		// Set Static Scale Of The Icon
 		int scale = GetNametagImageScale();
 		iWidget.SetSize(scale, scale);
 		
+		//-----------------------------------------------------------------------
+		// Actually Make The Widget Visible
 		data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 	}
 	
@@ -38,19 +41,15 @@ modded class SCR_NTIconBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{	
 		super.UpdateElement(data, index);
-		
-		if (!m_HUDSystem || !m_SettingsManager)
-		{
-			m_HUDSystem = CSI_HUDSystem.GetInstance();
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-		};
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
-		if (!iWidget)
+		if (!iWidget || !iWidget.IsVisible())
 			return;
 		
 		if (data.m_PlayerData)
 		{
+			//-----------------------------------------------------------------------
+			// Icon Updates
 			switch (true)
 			{
 				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
@@ -70,38 +69,12 @@ modded class SCR_NTIconBase
 				}
 			};
 			
-			Color colorToSet;
-				
-			if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
-				colorToSet = CSI_UIHelper.VANILLA_VON_COLOR;
-			else if (m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
-				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam());
-			else
-				colorToSet = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE);
-			
-			iWidget.SetColor(colorToSet);
+			//-----------------------------------------------------------------------
+			// Color Updates For VON/Color Teams
+			SetWidgetCSIColor(data, index);
 		} else {
 			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
 		}
 	}	
-	
-	//------------------------------------------------------------------------------------------------
-	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
-	protected int GetNametagImageScale()
-	{
-		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
-		
-		switch (scale)
-		{
-			case 0 : return 12;
-			case 20 : return 14;
-			case 40 : return 16;
-			case 60 : return 18;
-			case 80 : return 20;
-			default : return 22;
-		}
-		
-		return 22;
-	}
 }

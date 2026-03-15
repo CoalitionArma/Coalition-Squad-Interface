@@ -4,6 +4,7 @@ modded class SCR_VehicleTagData
 	override protected void UpdateMainTag()
 	{
 		m_MainTag = null;
+		SCR_NameTagData localMainTag;
 		
 		if (!m_Entity)
 			return;
@@ -16,19 +17,19 @@ modded class SCR_VehicleTagData
 		{
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 			{
-				if (tagData.m_Entity == pilot)
-				{
-					m_MainTag = tagData;
-					break;
-				}
+				VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(m_Entity.FindComponent(VehicleHelicopterSimulation));
+				VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(m_Entity.FindComponent(VehicleFixedWingSimulation));
+					
+				if (tagData.m_Entity == pilot && (heloSim || planeSim))
+					localMainTag = tagData;
 			}
 		}
 		
-		if (!m_MainTag) 
+		if (!localMainTag) 
 		{
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 			{
-				if (m_MainTag) break;
+				if (localMainTag) break;
 				// Check if player is in a vehicle.
 				CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(tagData.m_Entity.FindComponent(CompartmentAccessComponent));
 				if (compartmentAccess)
@@ -41,17 +42,23 @@ modded class SCR_VehicleTagData
 						ECompartmentType compartmentType = compartment.GetType();
 						
 						if (compartmentType == ECompartmentType.TURRET)
-						{
-							m_MainTag = tagData;
-							break;
-						}
+							localMainTag = tagData;
 					};
 				};
 			}
 		};
 		
-		if (!m_MainTag)
-			m_MainTag = m_aPassengers[0];
+		if (pilot && !localMainTag)
+		{
+			foreach (SCR_NameTagData tagData : m_aPassengers)
+				if (tagData.m_Entity == pilot)
+					localMainTag = tagData;
+		}
+		
+		if (!localMainTag)
+			localMainTag = m_aPassengers[0];
+		
+		m_MainTag = localMainTag;
 		
 		m_iPlayerID = m_MainTag.m_iPlayerID;
 		m_PlayerData = m_MainTag.m_PlayerData;
@@ -60,5 +67,7 @@ modded class SCR_VehicleTagData
 			ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);
 		else if (m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			DeactivateEntityState(ENameTagEntityState.GROUP_MEMBER);
+		
+		GetGroupName();
 	}
 };

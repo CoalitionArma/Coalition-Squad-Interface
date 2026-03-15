@@ -30,6 +30,7 @@ class CSI_ClientSystem : GameSystem
 		
 		m_iUpdate++;
 		
+		// only update every 35 frames
 		if (!(m_iUpdate >= 35))
 			return;
 		else
@@ -76,7 +77,7 @@ class CSI_ClientSystem : GameSystem
 
 		//------------------------------------------------------------------------------------------------
 		// Vehicle Icons, they supercede any other Icon
-		BaseCompartmentSlot compartment = CSI_ChararcterHelper.GetCharacterVehicleCompartment(localplayer);
+		BaseCompartmentSlot compartment = CSI_CharacterHelper.GetCharacterVehicleCompartment(localplayer);
 		if (compartment)
 		{
 			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));
