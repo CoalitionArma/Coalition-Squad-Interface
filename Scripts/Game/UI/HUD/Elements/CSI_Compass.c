@@ -4,14 +4,17 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected string m_sStoredCompass;
+	protected CSI_ECompassTheme m_StoredCompassTheme;
 	protected float m_fStoredYaw;
 	
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
+	
+	protected bool m_bCompassVisible;
+	protected bool m_bBearingVisible;
+	protected CSI_ECompassTheme m_CompassTheme;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -22,7 +25,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 		
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+		OnSettingsUpdate();
+		
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
@@ -37,50 +42,59 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	//! Updates the compass HUD element state and position each frame
 	void Update()
 	{		
-		int yawInt;
-        float yaw = m_HUDSystem.GetLocalYaw();
-		yawInt = -yaw;
+		float yaw = m_HUDSystem.GetLocalYaw();
+		int negYaw = -yaw;
 		
-		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE))
+		if (m_bCompassVisible)
 		{
-			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
-			string compassImage;
-			switch (compassTheme)
+			if (m_StoredCompassTheme != m_CompassTheme)
 			{
-				default : compassImage = CSI_UIHelper.CSI_STANDARD_COMPASS; break;
-			};
-			
-			if (m_sStoredCompass != compassImage)
-			{
-				m_wCompass.LoadImageTexture(0, compassImage);
-				m_sStoredCompass = compassImage;
+				m_wCompass.LoadImageTexture(0, CSI_UIHelper.GetCompassThemeResource(m_CompassTheme));
+				m_StoredCompassTheme = m_CompassTheme;
 			};
 			
 			m_wCompass.SetVisible(true);
-			
-			if (m_fStoredYaw != yaw)
-			{
-				m_wCompass.SetRotation(yaw);
-				m_fStoredYaw = yaw;
-			};
 		} else 
 			m_wCompass.SetVisible(false);
 
-		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
+		if (m_bBearingVisible)
 		{
-			string bearingAdd = "";
-			
-			if (yawInt < 0)
-				yawInt = 360 - Math.AbsInt(yawInt);
-			
-			if (yawInt >= 0 & yawInt < 10)
-				bearingAdd = "00";
-			
-			if (yawInt >= 10 & yawInt < 100)
-				bearingAdd = "0";
-			
-			m_wBearing.SetText(bearingAdd + (yawInt.ToString()));
+			if (m_fStoredYaw != yaw)
+			{
+				string bearingAdd = "";
+				
+				if (negYaw < 0)
+					negYaw = 360 - Math.AbsInt(negYaw);
+				
+				if (negYaw >= 0 & negYaw < 10)
+					bearingAdd = "00";
+				
+				if (negYaw >= 10 & negYaw < 100)
+					bearingAdd = "0";
+				
+				m_wBearing.SetText(bearingAdd + (negYaw.ToString()));
+			};
 		} else
 			m_wBearing.SetText("");
+		
+		if (m_fStoredYaw != yaw)
+		{
+			m_wCompass.SetRotation(yaw);
+			m_fStoredYaw = yaw;
+		};
+	}
+	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SETTINGS UPDATE
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	protected void OnSettingsUpdate()
+	{
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		
+		m_bCompassVisible = settingsManager.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE);
+		m_bBearingVisible = settingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE);
+		m_CompassTheme = settingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
 	}
 }

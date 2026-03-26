@@ -4,11 +4,12 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
-	protected ref array<int> m_aStoredGroupPlayerIDs;
-	protected ref array<Widget> m_aPlayerWidgets;
+	protected ref array<int> m_aStoredGroupPlayerIDs = {};
+	protected ref array<CSI_Player> m_aPlayerWidgetsClasses = {};
+	
+	protected bool m_bGroupVisible;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -19,10 +20,15 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
-		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+		OnSettingsUpdate();
+		
+		array<Widget> playerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
+		
+		foreach (Widget playerWidget : playerWidgets)
+			m_aPlayerWidgetsClasses.Insert(CSI_Player.Cast(playerWidget.FindHandler(CSI_Player)));
 	}
 	
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -41,29 +47,23 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		int groupCount = m_HUDSystem.GetLocalGroupCount();
 		m_aStoredGroupPlayerIDs = groupArray;
 
-		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
+		if (groupCount > 1 && m_bGroupVisible)
 			foreach (int i, int playerID : groupArray) 
-				UpdatePlayerWidget(i, playerID);
+				m_aPlayerWidgetsClasses[i].PlayerUpdate(playerID);
 		else
 			groupCount = 0;
 		
 		for (int e = groupCount; e <= 24; e++)
-			UpdatePlayerWidget(e, -1);
+			m_aPlayerWidgetsClasses[e].PlayerUpdate(-1);
 	}
-
+	
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 ELEMENT SPECIFIC METHODS
+//	 SETTINGS UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
 	
 	//------------------------------------------------------------------------------------------------
-	//! Updates the interface widget for a specific player in the group dsiplay
-	//! \param[in] widgetNumber Widget index to update
-	//! \param[in] playerID ID of the player to display
-	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
+	protected void OnSettingsUpdate()
 	{
-		Widget player = m_aPlayerWidgets[widgetNumber];
-
-		if (player) 
-			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerID);
+		m_bGroupVisible = CSI_SettingsManager.GetInstance().GetSettingBool(CSI_GameSettings.GROUP_VISIBLE);
 	}
 }

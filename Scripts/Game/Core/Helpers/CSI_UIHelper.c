@@ -82,6 +82,21 @@ class CSI_UIHelper
 	}
 	
 	//------------------------------------------------------------------------------------------------
+	//! Just a simple method to hold a switch statement for converting the compass enum to a resourceName
+	//! \param[in] compassTheme: The inputed compass theme enum
+	//! \return ResourceName of the inputed compass theme
+	static ResourceName GetCompassThemeResource(CSI_ECompassTheme compassTheme)
+	{
+		switch (compassTheme)
+		{
+			default : return CSI_STANDARD_COMPASS;
+		};
+		
+		// So the compiler doesnt yell at us
+		return CSI_STANDARD_COMPASS;
+	}
+	
+	//------------------------------------------------------------------------------------------------
 	//! Get players name, with a check if we need to add a players rank
 	//! \param[in] playerID: The inputed player ID to pull the name of and rank of
 	//! \return Players name

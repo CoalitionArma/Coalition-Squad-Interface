@@ -4,10 +4,16 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
+	const static ref Color STAM_GREEN = new Color(0.035996, 0.091997, 0.050004, 1.000000);
+	const static ref Color STAM_YELLOW = new Color(0.091997, 0.083009, 0.035996, 1.000000);
+	const static ref Color STAM_RED = new Color(0.188724, 0.046860, 0.037476, 1.000000);
+	
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 	
 	protected ProgressBarWidget m_wStamBar;
+		
+	protected Color m_CurrentColor;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -83,9 +89,9 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		// Color
 		switch (true)
 		{
-			case (stamina < 0.7 && stamina > 0.3) : { m_wStamBar.SetColor(new Color(0.091997, 0.083009, 0.035996, 1.000000)); break;};
-			case (stamina < 0.3)                  : { m_wStamBar.SetColor(new Color(0.188724, 0.046860, 0.037476, 1.000000)); break;};
-			default                               : { m_wStamBar.SetColor(new Color(0.035996, 0.091997, 0.050004, 1.000000)); break;};
+			case (stamina < 0.7 && stamina > 0.3 && m_CurrentColor != STAM_RED)	: { m_wStamBar.SetColor(STAM_RED); m_CurrentColor = STAM_RED; 		break;};
+			case (stamina < 0.3 && m_CurrentColor != STAM_YELLOW)				: { m_wStamBar.SetColor(STAM_YELLOW); m_CurrentColor = STAM_YELLOW;	break;};
+			case (m_CurrentColor != STAM_GREEN)								: { m_wStamBar.SetColor(STAM_GREEN); m_CurrentColor = STAM_GREEN;	break;};
 		};
 
 		float currentOpacity = m_wStamBar.GetOpacity();

@@ -5,7 +5,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
 	protected int m_iPlayerId;
 	
@@ -18,6 +17,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;
+	
+	protected bool m_bOnlyRadarIconArrowsRotate;
+	protected CSI_EIconType m_IconType;
+	protected CSI_EArrowTheme m_ArrowTheme;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -29,10 +32,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		super.HandlerAttached(w);
 
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		
-		if (m_SettingsManager)
-			m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+		OnSettingsUpdate();
 		
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -99,7 +101,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	{
 		m_wArrow.SetRotation(yaw);
 
-		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.ONLY_RADAR_ICON_ARROWS_ROTATE))
+		if (m_bOnlyRadarIconArrowsRotate)
 			yaw = 0;
 
 		m_wIcon.SetRotation(yaw);
@@ -114,7 +116,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetIconWidget(CSI_EIcon icon)
 	{		
 		bool simpleIcon = true;
-		if (m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
+		if (m_IconType == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
 		
 		ImageWidget iconToUse;
@@ -165,10 +167,26 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected void SetArrowWidget()
 	{
 		// do settings check here
-		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
+		CSI_EArrowTheme arrow = m_ArrowTheme;
 		
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
 		
 		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, arrowString);
+	}
+	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SETTINGS UPDATE
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	protected void OnSettingsUpdate()
+	{
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		
+		m_bOnlyRadarIconArrowsRotate = settingsManager.GetSettingBool(CSI_GameSettings.ONLY_RADAR_ICON_ARROWS_ROTATE);
+		m_IconType = settingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE);
+		m_ArrowTheme = settingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
+		
+		DataUpdate();
 	}
 }

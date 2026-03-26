@@ -9,9 +9,13 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	
 	protected int m_iStoredGroupCount = -1;
-	protected ref array<Widget> m_aRadarIcons;
+	protected ref array<Widget> m_aRadarIcons = {};
+	protected ref array<CSI_Icon> m_aRadarIconsClasses = {};
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
+	
+	protected bool m_bRadarVisible;
+	protected int m_iRadarIconSize;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -26,7 +30,13 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
+		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+		OnSettingsUpdate();
+		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
+		
+		foreach (Widget radarIcon : m_aRadarIcons)
+			m_aRadarIconsClasses.Insert(CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon)));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -42,10 +52,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			return;
 		
 		int groupCount = m_HUDSystem.GetLocalGroupCount();
-        float localYaw = m_HUDSystem.GetLocalYaw();
+		float localYaw = m_HUDSystem.GetLocalYaw();
 		vector localOrigin = localCharacter.GetOrigin();
 
-		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
+		if (groupCount > 1 && m_bRadarVisible)
 		{
 			foreach (int i, int playerID : m_HUDSystem.GetLocalGroupPlayerIds())
 			{
@@ -117,24 +127,36 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerID, float widthAndHeight, float opacity, float x, float y, float rotation)
 	{
 		Widget radarIcon = m_aRadarIcons[widgetNumber];
-
-		if (radarIcon) 
+		CSI_Icon iconClass = m_aRadarIconsClasses[widgetNumber];
+		
+		if (radarIcon && iconClass)
 		{
 			float iconOpacity = radarIcon.GetOpacity();
 			if (iconOpacity == 0 && iconOpacity == opacity)
 				return;
 			
-			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
+			iconClass.IconUpdate(playerID);
 			
-			icon.IconUpdate(playerID);
-			
-			widthAndHeight = widthAndHeight * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+			widthAndHeight = widthAndHeight * (m_iRadarIconSize * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
 
-			icon.SetRotation(rotation);
+			iconClass.SetRotation(rotation);
 			radarIcon.SetOpacity(opacity);
 		};
+	}
+	
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SETTINGS UPDATE
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	protected void OnSettingsUpdate()
+	{
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		
+		m_bRadarVisible = settingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE);
+		m_iRadarIconSize = settingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_SIZE);
 	}
 }
