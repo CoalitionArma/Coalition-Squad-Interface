@@ -64,7 +64,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 				if (!playerCharacter)
 				{
-					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
+					if (m_aRadarIcons[i].GetOpacity() > 0)
+						UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
 				};
 				
@@ -80,7 +81,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				
 				if (dis > searchRadius)
 				{
-					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
+					if (m_aRadarIcons[i].GetOpacity() > 0)
+						UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
 				};
 
@@ -108,7 +110,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			groupCount = 0;
 
 		for (int e = groupCount; e <= 24; e++)
-			UpdatePlayerRadarWidget(e, -1, 1, 0, 0, 0, 0);
+		{
+			if (m_aRadarIcons[e].GetOpacity() > 0) // this simple check makes the radar disturbingly more efficent
+				UpdatePlayerRadarWidget(e, -1, 1, 0, 0, 0, 0);
+		}
 	}
 	
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -130,11 +135,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		CSI_Icon iconClass = m_aRadarIconsClasses[widgetNumber];
 		
 		if (radarIcon && iconClass)
-		{
-			float iconOpacity = radarIcon.GetOpacity();
-			if (iconOpacity == 0 && iconOpacity == opacity)
-				return;
-			
+		{	
 			iconClass.IconUpdate(playerID);
 			
 			widthAndHeight = widthAndHeight * (m_iRadarIconSize * 0.01);
