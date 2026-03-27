@@ -10,7 +10,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	
 	protected int m_iStoredGroupCount = -1;
 	protected ref array<Widget> m_aRadarIcons = {};
-	protected ref array<CSI_Icon> m_aRadarIconsClasses = {};
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
 	
@@ -34,9 +33,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		OnSettingsUpdate();
 		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
-		
-		foreach (Widget radarIcon : m_aRadarIcons)
-			m_aRadarIconsClasses.Insert(CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon)));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -132,18 +128,18 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected void UpdatePlayerRadarWidget(int widgetNumber, int playerID, float widthAndHeight, float opacity, float x, float y, float rotation)
 	{
 		Widget radarIcon = m_aRadarIcons[widgetNumber];
-		CSI_Icon iconClass = m_aRadarIconsClasses[widgetNumber];
 		
-		if (radarIcon && iconClass)
+		if (radarIcon)
 		{	
-			iconClass.IconUpdate(playerID);
+			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
+			icon.IconUpdate(playerID);
 			
 			widthAndHeight = widthAndHeight * (m_iRadarIconSize * 0.01);
 
 			FrameSlot.SetPos(radarIcon, (x - widthAndHeight/2), (y - widthAndHeight/2));
 			FrameSlot.SetSize(radarIcon, widthAndHeight, widthAndHeight);
 
-			iconClass.SetRotation(rotation);
+			icon.SetRotation(rotation);
 			radarIcon.SetOpacity(opacity);
 		};
 	}
