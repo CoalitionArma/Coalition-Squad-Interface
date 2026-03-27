@@ -154,6 +154,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
 		
 		m_bRadarVisible = settingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE);
-		m_iRadarIconSize = settingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_SIZE);
+		m_iRadarIconSize = settingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE);
 	}
 }
