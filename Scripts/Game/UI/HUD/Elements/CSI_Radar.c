@@ -107,7 +107,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		for (int e = groupCount; e <= 24; e++)
 		{
-			if (m_aRadarIcons[e].GetOpacity() > 0) // this simple check makes the radar disturbingly more efficent
+			if (m_aRadarIcons[e].GetOpacity() > 0)
 				UpdatePlayerRadarWidget(e, -1, 1, 0, 0, 0, 0);
 		}
 	}
