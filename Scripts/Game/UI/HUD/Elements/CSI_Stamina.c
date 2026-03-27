@@ -89,9 +89,9 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		// Color
 		switch (true)
 		{
-			case (stamina < 0.7 && stamina > 0.3 && m_CurrentColor != STAM_RED)	: { m_wStamBar.SetColor(STAM_RED); m_CurrentColor = STAM_RED; 		break;};
-			case (stamina < 0.3 && m_CurrentColor != STAM_YELLOW)				: { m_wStamBar.SetColor(STAM_YELLOW); m_CurrentColor = STAM_YELLOW;	break;};
-			case (m_CurrentColor != STAM_GREEN)								: { m_wStamBar.SetColor(STAM_GREEN); m_CurrentColor = STAM_GREEN;	break;};
+			case (stamina > 0.7 && m_CurrentColor != STAM_GREEN)					: { m_wStamBar.SetColor(STAM_GREEN); m_CurrentColor = STAM_GREEN;		break;};
+			case (stamina < 0.7 && stamina > 0.3 && m_CurrentColor != STAM_YELLOW)	: { m_wStamBar.SetColor(STAM_YELLOW); m_CurrentColor = STAM_YELLOW; 	break;};
+			case (stamina < 0.3 && m_CurrentColor != STAM_RED)						: { m_wStamBar.SetColor(STAM_RED); m_CurrentColor = STAM_RED;			break;};
 		};
 
 		float currentOpacity = m_wStamBar.GetOpacity();
