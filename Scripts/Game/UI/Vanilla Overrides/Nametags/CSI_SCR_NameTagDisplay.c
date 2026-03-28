@@ -14,11 +14,14 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
-		int nametagsRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		int baseRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+		int nametagsRange;
+		if (isZoomed)
+			nametagsRange = baseRange * m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) / 100; // increase max distance if player is using a scope or binoculars
+		else
+			nametagsRange = baseRange;
 
-		nametagsRange = nametagsRange + (nametagsRange * ((int)(isZoomed) * ((m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) * 0.01) - 1))); // increase max distance if player is using a scope or binoculars
-		
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE)) 
+		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE))
 			nametagsRange = 1;
 
 		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 

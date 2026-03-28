@@ -47,9 +47,19 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
 		{
+			// Hoist loop-invariant values
+			int localPlayerId = SCR_PlayerController.GetLocalPlayerId();
+			float searchRadius;
+			if (m_HUDSystem.GetIsLocalPlayerInVehicle())
+				searchRadius = 3.5;
+			else
+				searchRadius = 24;
+			float searchRadiusFadeStart = 0.8 * searchRadius;
+			float radarScale = 132.0 / (searchRadius * 2.725);
+
 			foreach (int i, int playerID : m_HUDSystem.GetLocalGroupPlayerIds())
 			{
-				float x, y, opacity, rotation, disT, dis, searchRadius;
+				float x, y, opacity, rotation, disT, dis;
 				SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(GetGame().GetPlayerManager().GetPlayerControlledEntity(playerID));
 
 				if (!playerCharacter)
@@ -63,33 +73,24 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				// Get Distance
 				dis = vector.Distance(localOrigin, playerCharacterOrigin);
 				
-				if (m_HUDSystem.GetIsLocalPlayerInVehicle())
-					searchRadius = 3.5;
-				else
-					searchRadius = 24;
-				
 				if (dis > searchRadius)
 				{
 					UpdatePlayerRadarWidget(i, -1, 1, 0, 0, 0, 0);
 					continue;
 				};
 
-				if (playerID != SCR_PlayerController.GetLocalPlayerId())
+				if (playerID != localPlayerId)
 				{
-					// Get Direction
+					// Get Relative Direction (algebraic simplification of the original two-step Mod)
 					float dir = vector.Direction(playerCharacterOrigin, localOrigin).ToYaw();
-		
-					// Get Relative Direction
-					float relDir = Math.Mod(((dir - localYaw) + 360), 360);
-					relDir = Math.Mod(relDir - (dir * 2), 360);
-					relDir = relDir * Math.DEG2RAD;
+					float relDir = Math.Mod(360 - dir - localYaw, 360) * Math.DEG2RAD;
 					
-					disT = (dis * (132 / (searchRadius * 2.725)));
-					x = (Math.Sin(relDir) * disT);
-					y = (Math.Cos(relDir) * disT);
+					disT = dis * radarScale;
+					x = Math.Sin(relDir) * disT;
+					y = Math.Cos(relDir) * disT;
 				};
 
-				opacity = Math.Map(dis, (0.8 * searchRadius), searchRadius, 0.6, 0);
+				opacity = Math.Map(dis, searchRadiusFadeStart, searchRadius, 0.6, 0);
 				rotation = -Math.Mod((CSI_CharacterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
 				UpdatePlayerRadarWidget(i, playerID, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
