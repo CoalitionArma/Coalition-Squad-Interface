@@ -4,14 +4,14 @@ class CSI_PlayerDisconnectSystem : GameSystem
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected ref map<int, int> m_mPlayerTimeMap = new map<int, int>;
+	protected ref map<int, float> m_mPlayerTimeMap = new map<int, float>;
 	
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	
 	static int DATA_RETENTION_TIME = 390; //6.5 minutes
 	static int DATA_CHECK_INTERVAL = 60;
-	protected int m_iLastDataRetentionCheckTick;
+	protected float m_fLastDataRetentionCheckTick;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
@@ -28,17 +28,17 @@ class CSI_PlayerDisconnectSystem : GameSystem
 		}
 		
 		float currentTime = System.GetTickCount();
-		int currentTimeDifference = currentTime - m_iLastDataRetentionCheckTick;
+		float currentTimeDifference = currentTime - m_fLastDataRetentionCheckTick;
 		
 		if (currentTimeDifference >= DATA_CHECK_INTERVAL * 1000)
 		{
 			DataRetentionCheck(currentTimeDifference);
-			m_iLastDataRetentionCheckTick = currentTime;
+			m_fLastDataRetentionCheckTick = currentTime;
 		}
 	}
 	
 	//------------------------------------------------------------------------------------------------
-	protected void DataRetentionCheck(int currentTimeDifference)
+	protected void DataRetentionCheck(float currentTimeDifference)
 	{
 		array<int> outPlayers = new array<int>;
 		GetGame().GetPlayerManager().GetPlayers(outPlayers);
@@ -47,7 +47,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 		{
 			if (!outPlayers.Contains(playerID)) 
 			{
-				int currentPlayerDisconnectedTime = m_mPlayerTimeMap.Get(playerID);
+				float currentPlayerDisconnectedTime = m_mPlayerTimeMap.Get(playerID);
 				currentPlayerDisconnectedTime = currentPlayerDisconnectedTime + currentTimeDifference;
 				
 				m_mPlayerTimeMap.Set(playerID, currentPlayerDisconnectedTime);

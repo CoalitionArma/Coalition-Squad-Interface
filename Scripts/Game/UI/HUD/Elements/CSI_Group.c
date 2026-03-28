@@ -22,7 +22,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
-		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
+		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 25);
 	}
 	
 //=============================================================================================================================================================================================================================================================================================================================================================

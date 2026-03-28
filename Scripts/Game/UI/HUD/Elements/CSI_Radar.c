@@ -26,7 +26,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
-		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 24);
+		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 25);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

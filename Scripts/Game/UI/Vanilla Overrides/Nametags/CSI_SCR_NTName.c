@@ -52,13 +52,11 @@ modded class SCR_NTName : SCR_NTTextBase
 			
 			GetText(data, name, nameParams);
 			
+			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
+			data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
+			
 			if (name.IsEmpty())
 				SetText(data, "GETNAME_ERROR", nameParams, index);
-			else
-			{
-				data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
-				data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
-			}
 		}
 
 		//-----------------------------------------------------------------------
