@@ -28,7 +28,7 @@ modded class SCR_NTElementBase
 		
 		//-----------------------------------------------------------------------
 		// Dynamic Distance Calculation For Our Emulation Of Icon Nametags In Vanilla
-		float dist = data.m_fDistance;
+		float dist = Math.InverseLerp(zoneStart, zoneEnd, data.m_fDistance);
 		
 		if (dist > cutoffDist
 			&& scale != 0
