@@ -25,7 +25,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		CSI_SettingsManager.GetInstance().GetOnSettingsUpdate().Insert(OnSettingsUpdate);
 		OnSettingsUpdate();
 		
-		array<Widget> playerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 24);
+		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 25);
 		
 		foreach (Widget playerWidget : playerWidgets)
 			m_aPlayerWidgetsClasses.Insert(CSI_Player.Cast(playerWidget.FindHandler(CSI_Player)));
