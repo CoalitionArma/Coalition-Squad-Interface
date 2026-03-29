@@ -120,7 +120,7 @@ class CSI_UIHelper
 		if (!root || widgetString.IsEmpty() || count <= 0)
 			return icons;
 		
-		for (int e = 0; e <= count; e++)
+		for (int e = 0; e < count; e++)
 		{
 			Widget icon = root.FindAnyWidget(widgetString + e.ToString());
 			

@@ -199,7 +199,7 @@ class CSI_ClientSystem : GameSystem
 					switch (weaponType)
 					{
 						case EWeaponType.WT_MACHINEGUN : 
-							validDisplayIcons.Insert(CSI_EIcon.MG); 
+							validDisplayIcons.Insert(CSI_EIcon.MG);
 							break;
 						case EWeaponType.WT_SNIPERRIFLE : 
 							validDisplayIcons.Insert(CSI_EIcon.SNIPER);
@@ -208,6 +208,10 @@ class CSI_ClientSystem : GameSystem
 							validDisplayIcons.Insert(CSI_EIcon.AT);
 							break;
 					};
+					
+					// MG is the highest-priority weapon icon; no need to scan remaining items
+					if (validDisplayIcons.Contains(CSI_EIcon.MG))
+						break;
 
 					array<BaseMuzzleComponent> muzzles = {};						
 					// Get muzzle types (e.g., underslung grenade launcher)

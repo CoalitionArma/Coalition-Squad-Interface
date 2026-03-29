@@ -129,7 +129,7 @@
 	//------------------------------------------------------------------------------------------------
 	protected void OnPromoteToSLClicked()
 	{
-		if (m_iPlayerID <= 0 && SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
@@ -149,7 +149,7 @@
 	//------------------------------------------------------------------------------------------------
 	protected void OnKickClicked()
 	{
-		if (m_iPlayerID <= 0 && SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);

@@ -62,14 +62,14 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	void RevealBar(float currentOpacity)
 	{
-		float setOpacity = currentOpacity + 0.005;
+		float setOpacity = Math.Clamp(currentOpacity + 0.005, 0.0, 1.0);
 		m_wStamBar.SetOpacity(setOpacity);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void HideBar(float currentOpacity)
 	{
-		float setOpacity = currentOpacity -0.005;
+		float setOpacity = Math.Clamp(currentOpacity - 0.005, 0.0, 1.0);
 		m_wStamBar.SetOpacity(setOpacity);
 	}
 
