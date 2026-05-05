@@ -149,6 +149,7 @@ class CSI_ClientSystem : GameSystem
 			
 			array<IEntity> allPlayerItems = {};
 			characterInventory.GetItems(allPlayerItems);
+			array<BaseMuzzleComponent> muzzles = {};
 			// Parse through all items.
 			foreach (IEntity item : allPlayerItems)
 			{	
@@ -213,9 +214,9 @@ class CSI_ClientSystem : GameSystem
 					if (validDisplayIcons.Contains(CSI_EIcon.MG))
 						break;
 
-					array<BaseMuzzleComponent> muzzles = {};						
+					muzzles.Clear();
 					// Get muzzle types (e.g., underslung grenade launcher)
-					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++)
+					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++))
 					{
 						// Convert muzzle types to weapon types (ToDo: Not hardcoded?)
 						EWeaponType muzzleWeaponType = -1;

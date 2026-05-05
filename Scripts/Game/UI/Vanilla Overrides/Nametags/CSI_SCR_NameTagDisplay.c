@@ -4,6 +4,8 @@
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
 	protected CSI_SettingsManager m_SettingsManager;
+	protected SCR_NameTagZone m_CachedNearZone;
+	protected int m_iLastNametagsRange = -1;
 
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
@@ -24,11 +26,20 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE))
 			nametagsRange = 1;
 
-		foreach (SCR_NameTagZone nTZone : GetNametagZones()) 
-			if (nTZone.GetZoneName() == "Near")
-				nTZone.SetZoneEnd(nametagsRange);
+		if (nametagsRange != m_iLastNametagsRange)
+		{
+			m_iLastNametagsRange = nametagsRange;
 
-		s_NametagCfg.ResetFarthestZone();
+			if (!m_CachedNearZone)
+				foreach (SCR_NameTagZone nTZone : GetNametagZones())
+					if (nTZone.GetZoneName() == "Near")
+						m_CachedNearZone = nTZone;
+
+			if (m_CachedNearZone)
+				m_CachedNearZone.SetZoneEnd(nametagsRange);
+
+			s_NametagCfg.ResetFarthestZone();
+		}
 	}
 }
 

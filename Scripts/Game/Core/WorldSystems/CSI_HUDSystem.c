@@ -182,9 +182,10 @@ class CSI_HUDSystem : GameSystem
 
 		tempLocalGroupArray.Sort(false);
 
+		array<string> outPlayerStrArray = {};
 		foreach (string playerStr : tempLocalGroupArray) 
 		{
-			array<string> outPlayerStrArray = {};
+			outPlayerStrArray.Clear();
 			playerStr.Split(";", outPlayerStrArray, false);
 			
 			playersGroupArray.Insert(outPlayerStrArray[1].ToInt());
