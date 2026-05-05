@@ -216,7 +216,7 @@ class CSI_ClientSystem : GameSystem
 
 					muzzles.Clear();
 					// Get muzzle types (e.g., underslung grenade launcher)
-					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++))
+					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++)
 					{
 						// Convert muzzle types to weapon types (ToDo: Not hardcoded?)
 						EWeaponType muzzleWeaponType = -1;
