@@ -137,7 +137,16 @@ class CSI_PlayerDataManager : ScriptComponent
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		
 		if (playerData)
+		{
 			playerData.SetIsTeamLeader(isTL);
+			
+			// Immediately reflect TL status in the display icon so all widgets update at once
+			// rather than waiting for the promoted player's 35-frame icon recomputation cycle.
+			if (isTL && !playerData.GetIsSquadLeader())
+				playerData.SetDisplayIcon(CSI_EIcon.TL);
+			else if (!isTL && playerData.GetDisplayIcon() == CSI_EIcon.TL)
+				playerData.SetDisplayIcon(CSI_EIcon.MAN);
+		}
 	}
 	
 	//------------------------------------------------------------------------------------------------
