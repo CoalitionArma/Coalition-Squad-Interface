@@ -10,6 +10,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	
 	protected int m_iStoredGroupCount = -1;
 	protected ref array<Widget> m_aRadarIcons;
+	protected ref array<CSI_Icon> m_aRadarIconHandlers;
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;
 
@@ -27,6 +28,15 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		
 		m_aRadarIcons = CSI_UIHelper.GetAllIcons(m_wRoot, "RadarIcon", 25);
+
+		m_aRadarIconHandlers = {};
+		foreach (Widget radarIcon : m_aRadarIcons)
+		{
+			if (radarIcon)
+				m_aRadarIconHandlers.Insert(CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon)));
+			else
+				m_aRadarIconHandlers.Insert(null);
+		};
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -125,7 +135,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			if (iconOpacity == 0 && iconOpacity == opacity)
 				return;
 			
-			CSI_Icon icon = CSI_Icon.Cast(radarIcon.FindHandler(CSI_Icon));
+			CSI_Icon icon = m_aRadarIconHandlers[widgetNumber];
 			
 			icon.IconUpdate(playerID);
 			
