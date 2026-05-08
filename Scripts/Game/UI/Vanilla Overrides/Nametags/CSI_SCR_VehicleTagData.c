@@ -15,11 +15,11 @@ modded class SCR_VehicleTagData
 		IEntity pilot = Vehicle.Cast(m_Entity).GetPilot();
 		if (pilot)
 		{
+			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(m_Entity.FindComponent(VehicleHelicopterSimulation));
+			VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(m_Entity.FindComponent(VehicleFixedWingSimulation));
+
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 			{
-				VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(m_Entity.FindComponent(VehicleHelicopterSimulation));
-				VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(m_Entity.FindComponent(VehicleFixedWingSimulation));
-					
 				if (tagData.m_Entity == pilot && (heloSim || planeSim))
 					localMainTag = tagData;
 			}
