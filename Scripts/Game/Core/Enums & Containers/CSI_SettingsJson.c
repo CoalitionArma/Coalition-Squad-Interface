@@ -8,7 +8,7 @@ class CSI_SettingsJson : JsonApiStruct
 	{
         if (FileIO.FileExists(m_sSettingsPath)) 
 		{
-            SCR_JsonLoadContext jsonLoad = new SCR_JsonLoadContext(false);
+            JsonLoadContext jsonLoad = new JsonLoadContext(false);
             jsonLoad.LoadFromFile(m_sSettingsPath);
             jsonLoad.ReadValue("m_aSettingsValues", m_aSettingsValues);
 		
@@ -31,7 +31,7 @@ class CSI_SettingsJson : JsonApiStruct
 			m_aSettingsValues.Insert(settingValue);
 		}
 		
-		SCR_JsonSaveContext jsonSave = new SCR_JsonSaveContext();
+		JsonSaveContext jsonSave = new JsonSaveContext();
         jsonSave.WriteValue("m_aSettingsValues", m_aSettingsValues);
         jsonSave.SaveToFile(m_sSettingsPath);
     }

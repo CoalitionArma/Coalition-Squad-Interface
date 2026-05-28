@@ -15,7 +15,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager) 
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_BinocularsComponent.IsZoomedView()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
+		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || (SCR_PlayerController.s_pLocalPlayerController && SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed())) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
 		int baseRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 		int nametagsRange;
 		if (isZoomed)
