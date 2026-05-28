@@ -74,6 +74,14 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	override void OnTabHide()
 	{
 		super.OnTabHide();
+		
+		if (!m_SettingsManager || !m_RplToAuthorityManager || !m_PlayerControllerManager)
+		{
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+			m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+			m_PlayerControllerManager = CSI_PlayerControllerManager.GetInstance();
+		};	
+
 		m_PlayerControllerManager.GetLocalSettingsJson().SaveToFile();
 		
 		if (m_SettingsManager && m_RplToAuthorityManager)

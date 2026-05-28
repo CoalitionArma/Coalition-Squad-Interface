@@ -11,8 +11,28 @@ class CSI_HUDSystem : GameSystem
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
-	protected float m_iLocalYaw;
+	protected float m_fLocalYaw;
 
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 INIT METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------
+	override static void InitInfo(WorldSystemInfo outInfo)
+	{
+		super.InitInfo(outInfo);
+		outInfo.SetAbstract(false)
+			.SetLocation(WorldSystemLocation.Client)
+			.AddPoint(WorldSystemPoint.Frame);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Should be paused when simulation is paused
+	override bool ShouldBePaused()
+	{
+		return true;
+	}
+	
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -50,7 +70,7 @@ class CSI_HUDSystem : GameSystem
 	//------------------------------------------------------------------------------------------------
 	float GetLocalYaw()
 	{
-		return m_iLocalYaw;
+		return m_fLocalYaw;
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -132,7 +152,7 @@ class CSI_HUDSystem : GameSystem
 		} else
 			yaw = playerControllerComponent.GetAimingDirectionWorld().ToYaw();
 
-		m_iLocalYaw = yaw;
+		m_fLocalYaw = yaw;
 	}
 	
 	//------------------------------------------------------------------------------------------------
@@ -146,7 +166,23 @@ class CSI_HUDSystem : GameSystem
 		
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
-
+		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
+		
+		foreach (int playerID : playerIDs)
+		{
+			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+			
+			if (!playerData)
+				continue;
+		
+			if (playerData.GetIsSquadLeader())
+				currentSLColorTeam = playerData.GetColorTeam();
+		};
+		
+		array<CSI_EColorTeam> playersCTArray = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.YELLOW, CSI_EColorTeam.GREEN, CSI_EColorTeam.NONE};
+		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
+		playersCTArray.InsertAt(currentSLColorTeam, 0);
+		
 		// Parse through current group array.
 		foreach (int playerID : playerIDs)
 		{
@@ -158,16 +194,17 @@ class CSI_HUDSystem : GameSystem
 			int playerValue = 0;
 	
 			// Sort player by their color so we can group color teams together (a lil bit racist).
-			switch (playerData.GetColorTeam()) 
+			switch (playerData.GetColorTeam())
 			{
-				case CSI_EColorTeam.RED    : playerValue = -3; break;
-				case CSI_EColorTeam.BLUE   : playerValue = -5; break;
-				case CSI_EColorTeam.YELLOW : playerValue = -7; break;
-				case CSI_EColorTeam.GREEN  : playerValue = -9; break;
+				case playersCTArray[0]	: playerValue = -3; break;
+				case playersCTArray[1]	: playerValue = -5; break;
+				case playersCTArray[2]	: playerValue = -7; break;
+				case playersCTArray[3]	: playerValue = -9; break;
+				case playersCTArray[4]	: playerValue = 2; break;
 				default : {playerValue = 2;  break;};
 			};
-	
-			switch (true) 
+			
+			switch (true)
 			{
 				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
 				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() == CSI_EColorTeam.NONE) : playerValue--; break;

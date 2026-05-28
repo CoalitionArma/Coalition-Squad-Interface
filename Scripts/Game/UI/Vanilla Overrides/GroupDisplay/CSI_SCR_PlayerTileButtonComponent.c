@@ -24,9 +24,11 @@ modded class SCR_PlayerTileButtonComponent
 			
 			m_PlayerSettings.SetVisible(true);
 			advSettings.SetVisible(true);
+			return true;
 		} else {
 			m_PlayerSettings.SetVisible(false);
 			advSettings.SetVisible(false);
+			return true;
 		};
 		
 		return super.OnClick(w, x, y, button);

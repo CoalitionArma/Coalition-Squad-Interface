@@ -10,7 +10,7 @@ modded class SCR_NTElementBase
 	protected bool ShouldWeClearText(SCR_NameTagData data)
 	{
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
-		if (!zone)
+		if (!zone || data.m_eType == ENameTagEntityType.AI)
 			return true;
 		
 		//-----------------------------------------------------------------------

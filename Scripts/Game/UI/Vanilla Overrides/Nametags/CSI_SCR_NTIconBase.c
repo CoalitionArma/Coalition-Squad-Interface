@@ -21,7 +21,7 @@ modded class SCR_NTIconBase
 		//-----------------------------------------------------------------------
 		// Hide All Icon Widgets Not Being Used
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || data.m_eType == ENameTagEntityType.AI || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			return;
@@ -53,7 +53,7 @@ modded class SCR_NTIconBase
 			switch (true)
 			{
 				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
-				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
+				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
 				case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
 				default : {
 					bool setAlt = false;
@@ -74,7 +74,11 @@ modded class SCR_NTIconBase
 			SetWidgetCSIColor(data, index);
 		} else {
 			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
-			iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+			
+			if (data.m_eType == ENameTagEntityType.AI) 
+				iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "ai");
+			else
+				iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
 		}
 	}	
 }
