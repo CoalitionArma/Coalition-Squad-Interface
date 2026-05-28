@@ -22,7 +22,6 @@ class CSI_ClientSystem : GameSystem
 	{
 		super.InitInfo(outInfo);
 		outInfo.SetAbstract(false)
-			.SetUnique(true)
 			.SetLocation(WorldSystemLocation.Client)
 			.AddPoint(WorldSystemPoint.FixedFrame);
 	}

@@ -22,7 +22,6 @@ class CSI_PlayerDisconnectSystem : GameSystem
 	{
 		super.InitInfo(outInfo);
 		outInfo.SetAbstract(false)
-			.SetUnique(true)
 			.SetLocation(WorldSystemLocation.Server)
 			.AddPoint(WorldSystemPoint.FrameStart);
 	}

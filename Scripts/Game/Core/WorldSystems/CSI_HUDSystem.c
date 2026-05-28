@@ -22,7 +22,6 @@ class CSI_HUDSystem : GameSystem
 	{
 		super.InitInfo(outInfo);
 		outInfo.SetAbstract(false)
-			.SetUnique(true)
 			.SetLocation(WorldSystemLocation.Client)
 			.AddPoint(WorldSystemPoint.Frame);
 	}
@@ -179,7 +178,7 @@ class CSI_HUDSystem : GameSystem
 			int playerValue = 0;
 	
 			// Sort player by their color so we can group color teams together (a lil bit racist).
-			switch (playerData.GetColorTeam()) 
+			switch (playerData.GetColorTeam())
 			{
 				case CSI_EColorTeam.RED    : playerValue = -3; break;
 				case CSI_EColorTeam.BLUE   : playerValue = -5; break;
@@ -187,7 +186,7 @@ class CSI_HUDSystem : GameSystem
 				case CSI_EColorTeam.GREEN  : playerValue = -9; break;
 				default : {playerValue = 2;  break;};
 			};
-	
+			
 			switch (true) 
 			{
 				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
