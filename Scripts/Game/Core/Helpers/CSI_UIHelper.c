@@ -11,6 +11,8 @@ class CSI_UIHelper
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
 	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
+	
+	const static ResourceName CSI_ICON_LAYOUT = "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout";
 
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
 	{
@@ -96,7 +98,7 @@ class CSI_UIHelper
 		SCR_ECharacterRank rankEnum = playerData.GetRank();
 		SCR_Faction faction = SCR_Faction.Cast(SCR_FactionManager.SGetPlayerFaction(playerID));
 		
-		if (!faction)
+		if (!faction || !faction.GetRanks())
 			return name;
 		
 		string rank = faction.GetRanks().GetRankNameShort(rankEnum);

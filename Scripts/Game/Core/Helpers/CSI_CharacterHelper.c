@@ -37,7 +37,7 @@ class CSI_CharacterHelper
 
 	//------------------------------------------------------------------------------------------------
 	//! Get characters current vehicle slot
-	//! \param[in] playerCharacterL The inputed players character entity
+	//! \param[in] playerCharacter: The inputed players character entity
 	//! \return The compartment the entity is in (will return null if they aren't in a vehicle)
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
