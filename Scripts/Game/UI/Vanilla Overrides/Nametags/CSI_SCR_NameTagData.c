@@ -111,14 +111,16 @@ modded class SCR_NameTagData : Managed
 			
 		if (m_Entity && targetOpacity != 0)
 		{
-			float opactityValue = CSI_EntityHelper.GetEntityIlluminationFactor(m_Entity);
+			//float opactityValue = CSI_EntityHelper.GetEntityIlluminationFactor(m_Entity);
 			
-			targetOpacity = opactityValue * 0.85; // we only want 85% of the actual ilum factor, otherwise it's too bright in the day (imo).
+			float opactityValue = 1; //fml
+			
+			targetOpacity = opactityValue * 0.885; // we only want 88.5% of the actual illum factor, otherwise it's too bright in the day (imo).
 
 			if (opactityValue < 0.8)
-				targetOpacity = opactityValue * 0.6; // we only want 60% of the actual ilum factor, otherwise it's too bright at dusk.
+				targetOpacity = opactityValue * 0.6; // we only want 60% of the actual illum factor, otherwise it's too bright at dusk.
 			else if (opactityValue < 0.25)
-				targetOpacity = opactityValue * 0.4; // we only want 45% of the actual ilum factor, otherwise it's too bright at night.
+				targetOpacity = opactityValue * 0.4; // we only want 40% of the actual illum factor, otherwise it's too bright at night.
 		} else
 			targetOpacity = 0;
 	
