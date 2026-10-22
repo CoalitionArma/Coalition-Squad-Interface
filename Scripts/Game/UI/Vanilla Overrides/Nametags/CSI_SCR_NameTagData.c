@@ -93,17 +93,41 @@ modded class SCR_NameTagData : Managed
 		else 
 			targetVal = 0;
 		
-		if (m_fTagFadeSpeed == 0)
-			animate = false;
-		
 		if (targetVal >= 0.1)
 			widget.SetVisible(true);
 		
-		if (animate)
-			AnimateWidget.Opacity(widget, targetVal, m_fTagFadeSpeed);
-		else {
+		UpdateOpacity(widget, targetVal);
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	void UpdateOpacity(Widget widget, float targetOpacity = 0.85, SCR_NameTagData data = null, int index = 0)
+	{	
+		if (!widget)
+		{
+			widget = data.m_aNametagElements[index];
+			if (!widget)
+				return;
+		};
+			
+		if (m_Entity && targetOpacity != 0)
+		{
+			float opactityValue = CSI_EntityHelper.GetEntityIlluminationFactor(m_Entity);
+			
+			targetOpacity = opactityValue * 0.85; // we only want 85% of the actual ilum factor, otherwise it's too bright in the day (imo).
+
+			if (opactityValue < 0.8)
+				targetOpacity = opactityValue * 0.6; // we only want 60% of the actual ilum factor, otherwise it's too bright at dusk.
+			else if (opactityValue < 0.25)
+				targetOpacity = opactityValue * 0.4; // we only want 45% of the actual ilum factor, otherwise it's too bright at night.
+		} else
+			targetOpacity = 0;
+	
+		if (m_fTagFadeSpeed != 0)
+			AnimateWidget.Opacity(widget, targetOpacity, m_fTagFadeSpeed);
+		else 
+		{
 			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);
-			widget.SetOpacity(targetVal);
+			widget.SetOpacity(targetOpacity);
 		}
 	}
 

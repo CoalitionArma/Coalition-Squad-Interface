@@ -101,7 +101,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				};
 
 				opacity = Math.Map(dis, searchRadiusFadeStart, searchRadius, 0.6, 0);
-				rotation = -Math.Mod((CSI_CharacterHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
+				rotation = -Math.Mod((CSI_EntityHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
 				UpdatePlayerRadarWidget(i, playerID, ICON_WIDTH_AND_HEIGHT, opacity, x, y, rotation);
 			};

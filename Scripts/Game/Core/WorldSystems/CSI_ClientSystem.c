@@ -90,7 +90,7 @@ class CSI_ClientSystem : GameSystem
 
 		//------------------------------------------------------------------------------------------------
 		// Vehicle Icons, they supercede any other Icon
-		BaseCompartmentSlot compartment = CSI_CharacterHelper.GetCharacterVehicleCompartment(localplayer);
+		BaseCompartmentSlot compartment = CSI_EntityHelper.GetCharacterVehicleCompartment(localplayer);
 		if (compartment)
 		{
 			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));

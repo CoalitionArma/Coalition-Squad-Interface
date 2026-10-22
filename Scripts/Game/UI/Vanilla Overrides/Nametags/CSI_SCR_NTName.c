@@ -29,6 +29,10 @@ modded class SCR_NTName : SCR_NTTextBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
 		//-----------------------------------------------------------------------
+		// Update Widget Opacity
+		data.UpdateOpacity(null, data: data, index: index);
+		
+		//-----------------------------------------------------------------------
 		// Initial setup (can't call super due to the vanilla implimetation, so we just manually do it) - TODO: make less fucky
 		if ( !data.m_aNametagElements[index] )
 		{

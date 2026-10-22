@@ -33,6 +33,10 @@ class SCR_NTGroupName : SCR_NTTextBase
 		super.UpdateElement(data, index);
 		
 		//-----------------------------------------------------------------------
+		// Update Widget Opacity
+		data.UpdateOpacity(null, data: data, index: index);
+		
+		//-----------------------------------------------------------------------
 		// Set The Text Of The Widget Based On Our Current Distance
 		if (ShouldWeClearText(data))
 			SetText(data, string.Empty, data.m_aNameParams, index);

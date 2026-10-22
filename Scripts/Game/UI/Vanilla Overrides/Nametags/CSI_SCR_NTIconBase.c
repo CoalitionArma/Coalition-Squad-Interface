@@ -46,6 +46,10 @@ modded class SCR_NTIconBase
 		if (!iWidget || !iWidget.IsVisible())
 			return;
 		
+		//-----------------------------------------------------------------------
+		// Update Widget Opacity
+		data.UpdateOpacity(iWidget);
+		
 		if (data.m_PlayerData)
 		{
 			//-----------------------------------------------------------------------

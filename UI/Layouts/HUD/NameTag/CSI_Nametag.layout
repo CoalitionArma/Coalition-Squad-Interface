@@ -29,6 +29,7 @@ OverlayWidgetClass {
         HorizontalAlign 1
        }
        "Is Visible" 0
+       Opacity 0
        Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
        Image "SL_ICON"
        Size 22 22
@@ -49,6 +50,7 @@ OverlayWidgetClass {
            Slot LayoutSlot "{68D26702D54DB78D}" {
            }
            "Is Visible" 0
+           Opacity 0
            Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
            Image "SL_ICON"
            Size 22 22
@@ -65,6 +67,7 @@ OverlayWidgetClass {
            Slot LayoutSlot "{68D267029C450505}" {
             Padding 0 -1 0 0
            }
+           Opacity 0
            Clipping False
            Text ""
            "Font Size" 13
@@ -80,6 +83,7 @@ OverlayWidgetClass {
            Name "PlayerGroupName"
            Slot LayoutSlot "{68D267029C45054B}" {
            }
+           Opacity 0
            Clipping False
            "Inherit Color" 1
            Text ""
@@ -107,6 +111,7 @@ OverlayWidgetClass {
            }
            "Is Visible" 0
            IsPixelPerfect 1
+           Opacity 0
            Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
            Image "SL_ICON"
            Size 22 22
