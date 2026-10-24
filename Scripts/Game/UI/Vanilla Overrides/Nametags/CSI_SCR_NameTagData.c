@@ -111,16 +111,24 @@ modded class SCR_NameTagData : Managed
 			
 		if (m_Entity && targetOpacity != 0)
 		{
-			//float opactityValue = CSI_EntityHelper.GetEntityIlluminationFactor(m_Entity);
+			float brightness;
+			BaseWorld world = GetGame().GetWorld();
 			
-			float opactityValue = 1; //fml
-			
-			targetOpacity = opactityValue * 0.885; // we only want 88.5% of the actual illum factor, otherwise it's too bright in the day (imo).
+			if (world)
+			{
+				brightness = world.GetCameraSceneMiddleBrightness(0);
+				
+				brightness = brightness * 3; // need to multiply the incoming raw value by 3 or else nametags appear too dimm	.
+				brightness = Math.Clamp(brightness, 0.135, 1);
+			} else 
+				brightness = 1;
+				
+			targetOpacity = brightness * 0.825; // reduce or it's too bright in the day.
 
-			if (opactityValue < 0.8)
-				targetOpacity = opactityValue * 0.6; // we only want 60% of the actual illum factor, otherwise it's too bright at dusk.
-			else if (opactityValue < 0.25)
-				targetOpacity = opactityValue * 0.4; // we only want 40% of the actual illum factor, otherwise it's too bright at night.
+			if (brightness < 0.5)
+				targetOpacity = brightness * 0.6; // reduce even more or it's too bright at dusk.
+			else if (brightness < 0.25)
+				targetOpacity = brightness * 0.4; // reduce EVEN MOAR or it's too bright at night.
 		} else
 			targetOpacity = 0;
 	
