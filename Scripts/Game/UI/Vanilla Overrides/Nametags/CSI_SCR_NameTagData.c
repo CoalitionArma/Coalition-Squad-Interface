@@ -111,21 +111,31 @@ modded class SCR_NameTagData : Managed
 			
 		if (m_Entity && targetOpacity != 0)
 		{
-			float brightness;
+			float brightness = 1;
 			BaseWorld world = GetGame().GetWorld();
+			CameraManager cameraManager = GetGame().GetCameraManager();
 			
-			if (world)
+			if (world && cameraManager)
 			{
-				brightness = world.GetCameraSceneMiddleBrightness(0);
-				
-				brightness = brightness * 3.75; // need to multiply the incoming raw value by 3.75 or else nametags appear too dimm.
-				brightness = Math.Clamp(brightness, 0.135, 1);
-			} else 
-				brightness = 1;
+				CameraBase camera = cameraManager.CurrentCamera();
+				if (camera)
+				{
+					int cameraIndex = camera.GetCameraIndex();	
+
+					brightness = world.GetCameraSceneMiddleBrightness(cameraIndex);
+					float hdrBrightnessFactor = world.GetCameraHDRBrightness(cameraIndex);
+					hdrBrightnessFactor = Math.Lerp(0, 4, hdrBrightnessFactor);
+					hdrBrightnessFactor = Math.Clamp(hdrBrightnessFactor, 1, 50);
+					hdrBrightnessFactor = hdrBrightnessFactor * 3.75; // need to multiply the incoming raw value by 3.75 or else nametags appear too dimm.
+					
+					brightness = brightness * hdrBrightnessFactor;
+					brightness = Math.Clamp(brightness, 0.135, 1);
+				 }
+			}
 			
 			switch (true)
 			{ // Might add more to this switch as I tweak it, just gonna leave it for now.
-				case (brightness < 0.25) : targetOpacity = brightness * 0.4; break;
+				case (brightness < 0.25) : targetOpacity = brightness * 0.5; break;
 				default : targetOpacity = brightness * 0.885;
 			};
 		} else
