@@ -118,17 +118,16 @@ modded class SCR_NameTagData : Managed
 			{
 				brightness = world.GetCameraSceneMiddleBrightness(0);
 				
-				brightness = brightness * 3; // need to multiply the incoming raw value by 3 or else nametags appear too dimm	.
+				brightness = brightness * 3.75; // need to multiply the incoming raw value by 3.75 or else nametags appear too dimm.
 				brightness = Math.Clamp(brightness, 0.135, 1);
 			} else 
 				brightness = 1;
-				
-			targetOpacity = brightness * 0.825; // reduce or it's too bright in the day.
-
-			if (brightness < 0.5)
-				targetOpacity = brightness * 0.6; // reduce even more or it's too bright at dusk.
-			else if (brightness < 0.25)
-				targetOpacity = brightness * 0.4; // reduce EVEN MOAR or it's too bright at night.
+			
+			switch (true)
+			{ // Might add more to this switch as I tweak it, just gonna leave it for now.
+				case (brightness < 0.25) : targetOpacity = brightness * 0.4; break;
+				default : targetOpacity = brightness * 0.885;
+			};
 		} else
 			targetOpacity = 0;
 	
