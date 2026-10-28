@@ -126,21 +126,26 @@ class CSI_ClientSystem : GameSystem
 			};
 		};
 		
+		// Get player data
+		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
+		
 		//------------------------------------------------------------------------------------------------
 		//	OFFICER Icon
 		if (displayIcon == CSI_EIcon.MAN && SCR_FactionCommanderPlayerComponent.IsLocalPlayerCommander())
 			displayIcon = CSI_EIcon.OFFICER;
 
-		//------------------------------------------------------------------------------------------------
-		//	SL Icon
-		if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerID))
-			displayIcon = CSI_EIcon.SL;
-
-		//------------------------------------------------------------------------------------------------
-		//	TL Icon
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
-			displayIcon = CSI_EIcon.TL;
+		if (playersGroup.GetPlayerCount() > 1)
+		{
+			//------------------------------------------------------------------------------------------------
+			//	SL Icon
+			if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerID))
+				displayIcon = CSI_EIcon.SL;
+	
+			//------------------------------------------------------------------------------------------------
+			//	TL Icon
+			if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
+				displayIcon = CSI_EIcon.TL;
+		};
 		
 		//------------------------------------------------------------------------------------------------
 		//	Override Icon
