@@ -1,7 +1,5 @@
 modded class SCR_NameTagData : Managed
 {
-	const vector BODY_OFFSET = "0 -0.315 0"; // tag visual position offset for body
-
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;

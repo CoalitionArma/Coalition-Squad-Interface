@@ -6,6 +6,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected CSI_SettingsManager m_SettingsManager;
 	protected SCR_NameTagZone m_CachedNearZone;
 	protected int m_iLastNametagsRange = -1;
+	protected bool m_b2DSightsActive = false;
 
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
@@ -15,7 +16,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager) 
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
+		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || m_b2DSightsActive || SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
 		int baseRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 		int nametagsRange;
 		if (isZoomed)
@@ -40,6 +41,18 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 
 			s_NametagCfg.ResetFarthestZone();
 		}
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	//! Adjust zone range based on zoom
+	//! \param adjust determines if we are adjusting the ranges or restorign them to default
+	//! \param FOVZoomed is the new FOV we are adjusting to
+	protected override void AdjustRange(bool adjust, float FOVZoomed)
+	{
+		if (adjust)
+			m_b2DSightsActive = true;
+		else 
+			m_b2DSightsActive = false;
 	}
 }
 

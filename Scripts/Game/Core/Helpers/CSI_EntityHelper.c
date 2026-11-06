@@ -17,7 +17,7 @@ class CSI_EntityHelper
 		if (!playerAimingComponent) 
 			return 0;
 
-		float yaw = playerAimingComponent.GetAimingDirectionWorld().ToYaw();
+		float yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
 
 		BaseCompartmentSlot compartment = GetCharacterVehicleCompartment(playerCharacter);
 		if (compartment)

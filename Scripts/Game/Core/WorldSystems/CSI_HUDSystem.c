@@ -137,11 +137,22 @@ class CSI_HUDSystem : GameSystem
 	{
 		if (!m_LocalPlayerCharacter)
 			return;
+		float yaw;
 
-		vector transform[4];
-		GetGame().GetWorld().GetCurrentCamera(transform);
+		AimingComponent playerAimingComponent = m_LocalPlayerCharacter.GetHeadAimingComponent();
+		if (!playerAimingComponent) 
+			return;
 
-		m_fLocalYaw = -Math3D.MatrixToAngles(transform)[0];
+		if (m_bIsLocalPlayerInVehicle || playerAimingComponent.GetAimingDirection().ToYaw() > 0)
+		{
+			vector transform[4];
+			GetGame().GetWorld().GetCurrentCamera(transform);
+
+			yaw = -Math3D.MatrixToAngles(transform)[0];
+		} else
+			yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
+		
+		m_fLocalYaw = yaw;
 	}
 	
 	//------------------------------------------------------------------------------------------------
