@@ -1,14 +1,24 @@
 class CSI_SettingsManagerClass : ScriptComponentClass {};
 
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Effective CSI settings for the local player: their own CSI_GameSettings values with server overrides applied.
+//! 				The server replicates one value per setting in m_aSettingsAuthorityValues: >= 0 means "use the client's value",
+//! 				a negative value is a forced override (encoding below).
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_SettingsManager : ScriptComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	const static int SERVER_OVERRIDE_OFFSET = 1;
-	const static int SERVER_OVERRIDE_FALSE = -1;
-	const static int SERVER_OVERRIDE_TRUE = -2;
+	const static int SERVER_OVERRIDE_OFFSET = 1;	//!< non-boolean override is stored as -(value + SERVER_OVERRIDE_OFFSET)
+	const static int SERVER_OVERRIDE_FALSE = -1;	//!< boolean override: forced off
+	const static int SERVER_OVERRIDE_TRUE = -2;		//!< boolean override: forced on
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -18,9 +28,9 @@ class CSI_SettingsManager : ScriptComponent
 	protected ref ScriptInvoker m_OnSettingsUpdate;
 
 	[RplProp(onRplName: "SettingsUpdate")]
-	protected ref TIntArray m_aSettingsAuthorityValues = {};
+	protected ref TIntArray m_aSettingsAuthorityValues = {};	//!< server values by CSI_GameSettings.GetSettingsArray() index
 
-	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;
+	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;	//!< effective values, read by GetSetting*
 
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
@@ -28,7 +38,7 @@ class CSI_SettingsManager : ScriptComponent
 	protected UserSettings m_UserSettigs;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 MANAGER INITILIZATION
+//	 MANAGER INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
@@ -41,6 +51,7 @@ class CSI_SettingsManager : ScriptComponent
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
+		// Server (dedicated or listen host) publishes its settings as the override array
 		if (RplSession.Mode() != RplMode.Client && GetGame().InPlayMode())
 			UpdateAuthorityValueArray();
 	}
@@ -50,9 +61,8 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Retrieves an boolean value for the specified setting name.
-	//! \param[in] setting: The name of the setting to retrieve
-	//! \return True or false based on setting value
+	//! \param[in] setting CSI_GameSettings name
+	//! \return effective value; false if the setting isn't boolean
 	bool GetSettingBool(string setting)
 	{
 		if (CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting))
@@ -62,21 +72,22 @@ class CSI_SettingsManager : ScriptComponent
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Retrieves an integer value for the specified setting name.
-	//! \param[in] setting: The name of the setting to retrieve
-	//! \return The integer value of the setting
+	//! \param[in] setting CSI_GameSettings name
+	//! \return effective value (server override if set, else the client's own)
 	int GetSettingInt(string setting)
 	{
 		return m_mSettingsLocalValues.Get(setting);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return replicated server values (encoded, see class description); empty until replicated
 	TIntArray GetServerSettingsArray()
 	{
 		return m_aSettingsAuthorityValues;
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return invoker fired after the effective settings are recalculated (created on first use)
 	ScriptInvoker GetOnSettingsUpdate()
 	{
 		if (!m_OnSettingsUpdate)
@@ -90,18 +101,20 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Recalculates the effective settings, e.g. after the local settings changed.
 	void RequestSettingsUpdate()
 	{
 		SettingsUpdate();
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the specified server setting to the provided integer value and optionally enforces a server-side override.
-	//! \param[in] setting: Setting key to update
-	//! \param[in] value: New integer value for the setting
-	//! \param[in] serverOverrideEnabled: If true, enforce server-side override
+	//! Server: stores a setting, encoded as an override if enabled, and replicates the updated array.
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value
+	//! \param[in] serverOverrideEnabled false stores the plain value, so clients use their own
 	void UpdateAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
+		// Dedicated servers only (a listen server host can't change server settings)
 		if (RplSession.Mode() != RplMode.Dedicated)
 			return;
 
@@ -110,6 +123,7 @@ class CSI_SettingsManager : ScriptComponent
 		{
 			if(serverOverrideEnabled)
 			{
+				// Encode as negative, see SERVER_OVERRIDE_* constants
 				if (CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting))
 				{
 					if (value == 0)
@@ -124,6 +138,7 @@ class CSI_SettingsManager : ScriptComponent
 
 			m_UserSettigs.Set(setting, value);
 
+			// Batch saves when an admin changes several settings at once
 			if(!m_bAuthorityIsSavingSettings)
 			{
 				m_bAuthorityIsSavingSettings = true;
@@ -136,7 +151,7 @@ class CSI_SettingsManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the array of authority values used for settings.
+	//! Server: rebuilds the replicated array from the server's user settings.
 	protected void UpdateAuthorityValueArray()
 	{
 		m_aSettingsAuthorityValues.Clear();
@@ -151,13 +166,14 @@ class CSI_SettingsManager : ScriptComponent
 
 		Replication.BumpMe();
 
+		// The onRplName callback only runs on clients; apply directly when playing in Workbench
 		#ifdef WORKBENCH
 			SettingsUpdate();
 		#endif
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Simple delay for saving authority settings so we dont jam up the queue if a server admin changed more than one setting at a time
+	//! Saves the server's user settings; delayed so several admin changes in a row are saved once.
 	void SaveAuthoritySettingsDelay()
 	{
 		m_bAuthorityIsSavingSettings = false;
@@ -170,7 +186,8 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates CSI game settings all players pull from based on current server and/or client configuration
+	//! Recalculates the effective settings from the server array and the local values, then invokes GetOnSettingsUpdate().
+	//! Also the onRplName callback of m_aSettingsAuthorityValues.
 	protected void SettingsUpdate()
 	{
 		if (m_aSettingsAuthorityValues.IsEmpty())
@@ -182,6 +199,7 @@ class CSI_SettingsManager : ScriptComponent
 			bool IsBool = CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting);
 			int serverSetting = m_aSettingsAuthorityValues.Get(i);
 
+			// Decode the server value; >= 0 means no override, so use the client's own setting
 			switch (true)
 			{
 				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;

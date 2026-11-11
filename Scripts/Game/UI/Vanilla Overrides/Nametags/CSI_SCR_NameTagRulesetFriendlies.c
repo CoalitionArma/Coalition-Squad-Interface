@@ -1,7 +1,16 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: the line of sight check can be turned off (NAMETAG_LOS_VISIBLE) and traces to the body when tags
+//! 				are on the body. TraceLOS is a copy of vanilla SCR_NameTagRulesetBase.TraceLOS, with CSI's lines marked "CSI:".
+//! 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 {
-	const vector BODY_LOS_OFFSET = "0 -0.18 0"; // tag visual position offset for body
+	const vector BODY_LOS_OFFSET = "0 -0.18 0"; //!< tag visual position offset for body
 	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
@@ -10,12 +19,14 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
+		// CSI: LOS check disabled in settings, every tag counts as visible
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
 			return true;
 
+		// CSI: trace to the body when tags are on the body (vanilla always traces to the head)
 		vector targetPos;
 
 		if (data.m_eAttachedTo == ENameTagPosition.HEAD)

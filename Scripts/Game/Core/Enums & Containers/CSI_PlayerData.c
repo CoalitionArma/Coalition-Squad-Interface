@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	One player's CSI state: color team, override and display icons, rank and leader flags.
+//! 				Setters for displayed values fire GetOnDataUpdate() so the UI can refresh.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_PlayerData
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -6,13 +15,12 @@ class CSI_PlayerData
 
 	protected int m_iPlayerID;
 	protected CSI_EColorTeam m_iColorTeam = CSI_EColorTeam.NONE;
-	protected CSI_EOverrideIcon m_iOverrideIcon = CSI_EOverrideIcon.AUTO;
-	protected CSI_EIcon m_iDisplayIcon = CSI_EIcon.MAN;
+	protected CSI_EOverrideIcon m_iOverrideIcon = CSI_EOverrideIcon.AUTO;	//!< set by the squad leader
+	protected CSI_EIcon m_iDisplayIcon = CSI_EIcon.MAN;						//!< self-reported by the owning client
 	protected SCR_ECharacterRank m_iRank = SCR_ECharacterRank.PRIVATE;
 	protected bool m_bIsTeamLeader;
 	protected bool m_bIsSquadLeader;
 
-	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -35,6 +43,8 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Doesn't invoke GetOnDataUpdate().
+	//! \param[in] overrideIcon
 	void SetOverrideIcon(CSI_EOverrideIcon overrideIcon)
 	{
 		m_iOverrideIcon = overrideIcon;
@@ -59,12 +69,16 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Doesn't invoke GetOnDataUpdate().
+	//! \param[in] isTL
 	void SetIsTeamLeader(bool isTL)
 	{
 		m_bIsTeamLeader = isTL;
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Doesn't invoke GetOnDataUpdate().
+	//! \param[in] isSL
 	void SetIsSquadLeader(bool isSL)
 	{
 		m_bIsSquadLeader = isSL;
@@ -87,6 +101,7 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return AUTO if there's no override
 	CSI_EOverrideIcon GetOverrideIcon()
 	{
 		return m_iOverrideIcon;
@@ -117,6 +132,7 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return invoker fired when the color team, display icon or rank changes (created on first use)
 	ScriptInvoker GetOnDataUpdate()
 	{
 		if (!m_OnDataUpdate)
@@ -130,6 +146,8 @@ class CSI_PlayerData
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! JIP serialization, called from CSI_PlayerDataManager.RplSave. Field order must match Load.
+	//! \param[in] writer
 	void Save(ScriptBitWriter writer)
 	{
 		writer.WriteInt(m_iPlayerID);
@@ -142,6 +160,8 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! JIP deserialization, called from CSI_PlayerDataManager.RplLoad. Field order must match Save.
+	//! \param[in] reader
 	void Load(ScriptBitReader reader)
 	{
 		reader.ReadInt(m_iPlayerID);

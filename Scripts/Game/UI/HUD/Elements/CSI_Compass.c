@@ -1,10 +1,18 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	HUD compass: texture rotated to the local yaw and a three-digit bearing above it.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_Compass : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected string m_sStoredCompass;
+	protected string m_sStoredCompass;	//!< currently loaded texture, to avoid reloading it every frame
 	protected float m_fStoredYaw;
 
 	protected CSI_SettingsManager m_SettingsManager;
@@ -34,7 +42,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the compass HUD element state and position each frame
+	//! Called every frame by CSI_HUD.
 	void Update()
 	{
 		int yawInt;
@@ -45,6 +53,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		{
 			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
 			string compassImage;
+			// Only the standard texture exists so far
 			switch (compassTheme)
 			{
 				default : compassImage = CSI_UIHelper.CSI_STANDARD_COMPASS; break;
@@ -70,6 +79,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		{
 			string bearingAdd = "";
 
+			// Wrap to 0-359 and zero-pad to three digits
 			if (yawInt < 0)
 				yawInt = 360 - Math.AbsInt(yawInt);
 

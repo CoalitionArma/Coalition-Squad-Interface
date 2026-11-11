@@ -1,18 +1,27 @@
 class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Game mode component holding every player's CSI_PlayerData. The server and each client keep their own
+//! 				copy: CSI_RplBroadcastManager keeps them in sync, RplSave/RplLoad cover join-in-progress.
+//! 				Public API: CRF calls GetInstance and GetPlayerData.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_PlayerDataManager : ScriptComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	// Primary Data Map
-	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
+	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;	//!< keyed by player ID
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 MANAGER INITILIZATION
+//	 MANAGER INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
@@ -27,9 +36,8 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Retrieves player data instance for a given player ID
-	//! \param[in] playerID: The ID of player to get data for
-	//! \return CSI_PlayerData instance
+	//! \param[in] playerID
+	//! \return null until the player's client has registered (needs a character and a group)
 	CSI_PlayerData GetPlayerData(int playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);
@@ -42,12 +50,12 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 REGISER/DE-REGISTER METHODS
+//	 REGISTER/DE-REGISTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Create the players data class.
-	//! \param[in] playerID: ID of the player to register.
+	//! Creates the player's data if it doesn't exist yet.
+	//! \param[in] playerID
 	void RegisterPlayerData(int playerID)
 	{
 		if (!GetPlayerData(playerID))
@@ -55,8 +63,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Removes a players data from the data map, primarily used to clean out disconnects
-	//! \param[in] playerID: ID of the player to remove.
+	//! Removes the player's data, e.g. after they've been disconnected for a while (CSI_PlayerDisconnectSystem).
+	//! \param[in] playerID
 	void RemovePlayerData(int playerID)
 	{
 		if (GetPlayerData(playerID))
@@ -64,9 +72,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates a new player data instance for the given player ID.
-	//! \param[in] playerID: The ID of player to create data for
-	//! \return CSI_PlayerData instance
+	//! \param[in] playerID
+	//! \return the new data
 	protected CSI_PlayerData CreatePlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = new CSI_PlayerData;
@@ -80,9 +87,6 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the player's display icon.
-	//! \param[in] playerID: ID of the player to update.
-	//! \param[in] icon: CSI_EIcon value to apply as the player's current icon.
 	void UpdatePlayerDisplayIcon(int playerID, CSI_EIcon icon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -92,9 +96,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's CSI_EColorTeam value in the players data
-	//! \param[in] playerID: ID of the player whose color team will be updated.
-	//! \param[in] colorTeam: New color team value to assign.
 	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -104,10 +105,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Update the temporary override icon for a player.
-	//! Sets the specified player's CSI_EOverrideIcon value in the players data
-	//! \param[in] playerID: ID of the player whose override icon is being changed.
-	//! \param[in] overrideIcon: CSI_EOverrideIcon value indicating which override icon to set (use the enum's "AUTO" value to remove the override).
+	//! \param[in] playerID
+	//! \param[in] overrideIcon AUTO removes the override
 	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -117,9 +116,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's rank value in their data
-	//! \param[in] playerID: ID of the player whose color team will be updated.
-	//! \param[in] rank: New rank value to assign.
 	void UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -129,9 +125,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's team leader value in the players data
-	//! \param[in] playerID: ID of the player whose leader status is being changed.
-	//! \param[in] isTL: True to mark the player as team leader; false to revoke leader status.
 	void UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -141,9 +134,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's squad leader value in the players data
-	//! \param[in] playerID: ID of the player whose leader status is being changed.
-	//! \param[in] isSL: True to mark the player as squad leader; false to revoke leader status.
 	void UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -153,8 +143,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates player data to clear any group-specific values
-	//! \param[in] playerID: ID of player to clear
+	//! Server only: resets color team, override icon and team leader flag for everyone through the broadcast manager.
+	//! \param[in] playerID
 	void ClearGroupSpecificData(int playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -172,9 +162,12 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Sends the whole map to a joining client.
+	//! \param[in] writer
+	//! \return
 	override protected bool RplSave(ScriptBitWriter writer)
 	{
-		// Save playerData
+		// Count first so RplLoad knows how many entries follow
 		int playablesCount = m_mPlayerDataMap.Count();
 		writer.WriteInt(playablesCount);
 		foreach (int PlayerID, CSI_PlayerData playerData : m_mPlayerDataMap)
@@ -188,7 +181,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	override protected bool RplLoad(ScriptBitReader reader)
 	{
-		// Load playerData
 		int playablesCount;
 		reader.ReadInt(playablesCount);
 		for (int i = 0; i < playablesCount; i++)
@@ -198,6 +190,7 @@ class CSI_PlayerDataManager : ScriptComponent
 
 			int playerID = playerData.GetPlayerID();
 
+			// Read every entry to keep the stream aligned, but only keep valid IDs
 			if (playerID > 0)
 				m_mPlayerDataMap.Set(playerID, playerData);
 		}

@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: the group size slider starts at the group's max members, and confirming sends the new size
+//! 				to the server (CSI_RplToAuthorityManager.Owner_SetMaxGroupMembers).
+//! 
+//------------------------------------------------------------------------------------------------
 modded class GroupSettingsDialogUI
 {
 	protected SCR_SliderComponent m_GroupSize;

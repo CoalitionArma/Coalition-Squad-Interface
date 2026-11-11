@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	One row of the HUD group list: the player's name in their color team plus a CSI_Icon.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_Player : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -32,8 +40,8 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the player widget state for a specific player
-	//! \param[in] playerID  Player ID to update
+	//! Points the row at a player and subscribes to their data. Does nothing if it already shows that player.
+	//! \param[in] playerID <= 0 hides the row
 	void PlayerUpdate(int playerID)
 	{
 		if (m_iPlayerId != playerID)
@@ -43,6 +51,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 
 			icon.IconUpdate(playerID);
 
+			// Stop listening to the previous player's data
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 
@@ -65,7 +74,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates player related data within the HUD element.
+	//! Applies the player's name (with rank, if enabled) and color team.
 	protected void DataUpdate()
 	{
 		if (!m_PlayerData)

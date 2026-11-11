@@ -1,5 +1,12 @@
 //------------------------------------------------------------------------------------------------
-//! Nametag zone element base class, not for setup
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: shared helpers for CSI's nametag elements: distance-based text clearing, color team coloring,
+//! 				and text and icon sizes from NAMTEAG_SCALE.
+//! 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
 modded class SCR_NTElementBase
 {
@@ -7,6 +14,8 @@ modded class SCR_NTElementBase
 	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] data
+	//! \return true if the tag should show only its icon: AI, no zone, or beyond the NAMTEAG_RANGE_SIMPLIFIED cutoff
 	protected bool ShouldWeClearText(SCR_NameTagData data)
 	{
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
@@ -21,15 +30,16 @@ modded class SCR_NTElementBase
 			zoneStart = 1;
 
 		//-----------------------------------------------------------------------
-		// Get Scale And Cutoff Distance Based On The Percentage The Player Set In Settings
+		// Cutoff from the setting: the farthest N% of the zone shows icons only
 		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
 		float cutoffDist = scale * zoneEnd;
-		cutoffDist = zoneEnd - cutoffDist;// flip it arround
+		cutoffDist = zoneEnd - cutoffDist;// flip it around
 
 		//-----------------------------------------------------------------------
 		// Dynamic Distance Calculation For Our Emulation Of Icon Nametags In Vanilla
 		float dist = Math.InverseLerp(zoneStart, zoneEnd, data.m_fDistance);
 
+		// Only players get simplified, and only when role icons are shown
 		if (dist > cutoffDist
 			&& scale != 0
 			&& data.m_eType != ENameTagEntityType.AI
@@ -41,6 +51,9 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Colors an element: VON color while talking, color team for the local player's group members, else NONE.
+	//! \param[in] data
+	//! \param[in] index
 	protected void SetWidgetCSIColor(SCR_NameTagData data, int index)
 	{
 		Widget widget = data.m_aNametagElements[index];
@@ -56,7 +69,7 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get the scale of text for nametags based on CSI_GameSettings.NAMTEAG_SCALE
+	//! \return font size for the NAMTEAG_SCALE setting (0-100 in steps of 20 maps to 8-13)
 	protected int GetNametagTextScale()
 	{
 		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
@@ -75,7 +88,7 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get the scale of icons for nametags based on CSI_GameSettings.NAMTEAG_SCALE
+	//! \return icon size in px for the NAMTEAG_SCALE setting (0-100 in steps of 20 maps to 12-22)
 	protected int GetNametagImageScale()
 	{
 		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);

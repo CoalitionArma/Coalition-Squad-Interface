@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
+//! 				which applies server overrides on top of these.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_GameSettings : ModuleGameSettings
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -34,7 +43,7 @@ class CSI_GameSettings : ModuleGameSettings
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	// ALWAYS ADD IT TO THE END, NEVER ADD SETTINGS IN THE MIDDLE OF THE ARRAY
+	// Server overrides and CSI_Settings.json store values by index in this array: only ever append, never insert or reorder
     const static ref TStringArray m_aSettingsArray =
 	{
 		COMPASS_VISIBLE,
@@ -64,6 +73,7 @@ class CSI_GameSettings : ModuleGameSettings
 	};
 
 	//------------------------------------------------------------------------------------------------
+	// Use the boolean server override encoding (see CSI_SettingsManager)
 	const static ref TStringArray SETTINGS_THAT_ARE_BOOLEAN =
 	{
 		COMPASS_VISIBLE,
@@ -81,6 +91,7 @@ class CSI_GameSettings : ModuleGameSettings
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! \return setting names in replication (index) order
 	static TStringArray GetSettingsArray()
 	{
 		return m_aSettingsArray;

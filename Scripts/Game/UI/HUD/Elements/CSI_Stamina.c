@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	HUD stamina bar: fades in while stamina is below full and out when full; the color shows the stamina band.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_Stamina : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -29,7 +37,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Update the stamina UI element each frame.
+	//! Called every frame by CSI_HUD.
 	void Update()
 	{
 		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
@@ -38,20 +46,16 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 			return;
 		}
 
-		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = m_HUDSystem.GetLocalPlayerCharacter();
 
-		// Can't run if these dont exist better exit out.
 		if (!character)
 			return;
 
-		// Get Charachter Controller of the locally played entity.
 		SCR_CharacterControllerComponent characterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
 
 		if (!characterController)
 			return;
 
-		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
 		OnStaminaChange(characterController.GetStamina());
 	}
 
@@ -60,6 +64,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Raises the bar's opacity one step (0.005 per frame).
+	//! \param[in] currentOpacity
 	void RevealBar(float currentOpacity)
 	{
 		float setOpacity = Math.Clamp(currentOpacity + 0.005, 0.0, 1.0);
@@ -67,6 +73,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Lowers the bar's opacity one step (0.005 per frame).
+	//! \param[in] currentOpacity
 	protected void HideBar(float currentOpacity)
 	{
 		float setOpacity = Math.Clamp(currentOpacity - 0.005, 0.0, 1.0);
@@ -74,13 +82,13 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the color and opacity of the samina bar widget.
-	//! \param[in] stamina stamina value to set the bar to
+	//! Sets the bar's value, color and fade direction.
+	//! \param[in] stamina 0 - 1
 	void OnStaminaChange(float stamina)
 	{
 		m_wStamBar.SetCurrent(stamina);
 
-		// Color
+		// Color: green above 70%, amber 30-70%, red below 30%
 		switch (true)
 		{
 			case (stamina < 0.7 && stamina > 0.3) : { m_wStamBar.SetColor(new Color(0.091997, 0.083009, 0.035996, 1.000000)); break;};
@@ -90,7 +98,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 		float currentOpacity = m_wStamBar.GetOpacity();
 
-		// Opacity
+		// Opacity: fade in while below full, fade out once full
 		switch (true)
 		{
 			case (stamina < 1 && currentOpacity < 1)  : { RevealBar(currentOpacity); break;};

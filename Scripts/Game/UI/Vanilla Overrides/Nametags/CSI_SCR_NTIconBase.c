@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: the role icon element shows the player's CSI icon (or unconscious, dead, VON), only in the
+//! 				RoleIcon widget chosen by NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored by color team.
+//! 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
@@ -19,7 +28,7 @@ modded class SCR_NTIconBase
 			return;
 
 		//-----------------------------------------------------------------------
-		// Hide All Icon Widgets Not Being Used
+		// Hide All Icon Widgets Not Being Used ("RoleIcon" + LEFT/CENTER/RIGHT)
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 		{
@@ -53,7 +62,7 @@ modded class SCR_NTIconBase
 		if (data.m_PlayerData)
 		{
 			//-----------------------------------------------------------------------
-			// Icon Updates
+			// Icon: state icons first, then the CSI display icon (MAN uses vanilla's pointer)
 			switch (true)
 			{
 				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
@@ -77,6 +86,7 @@ modded class SCR_NTIconBase
 			// Color Updates For VON/Color Teams
 			SetWidgetCSIColor(data, index);
 		} else {
+			// No CSI data: AI icon for AI, empty icon for players who haven't registered yet
 			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 
 			if (data.m_eType == ENameTagEntityType.AI)
