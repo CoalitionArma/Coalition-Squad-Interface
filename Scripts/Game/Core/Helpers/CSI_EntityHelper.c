@@ -1,5 +1,5 @@
 class CSI_EntityHelper
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC HELPER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -12,9 +12,9 @@ class CSI_EntityHelper
 	{
 		if (!playerCharacter)
 			return 0;
-		
+
 		AimingComponent playerAimingComponent = playerCharacter.GetHeadAimingComponent();
-		if (!playerAimingComponent) 
+		if (!playerAimingComponent)
 			return 0;
 
 		float yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
@@ -25,13 +25,13 @@ class CSI_EntityHelper
 			TurretControllerComponent turretControllerComp = TurretControllerComponent.Cast(compartment.GetController());
 			if (!turretControllerComp)
 				turretControllerComp = compartment.GetAttachedTurret();
-			
+
 			if (turretControllerComp)
 				yaw = -turretControllerComp.GetTurretComponent().GetAimingDirectionWorld().ToYaw();
 			else
 				yaw = -playerCharacter.GetYawPitchRoll()[0];
 		};
-		
+
 		return yaw;
 	}
 
@@ -43,9 +43,9 @@ class CSI_EntityHelper
 	{
 		if (!playerCharacter)
 			return null;
-		
+
 		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess) 
+		if (compartmentAccess)
 		{
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 			return compartment;

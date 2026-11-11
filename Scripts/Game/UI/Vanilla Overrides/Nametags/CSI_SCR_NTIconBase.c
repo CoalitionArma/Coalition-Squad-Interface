@@ -4,7 +4,7 @@ modded class SCR_NTIconBase
 	protected CSI_HUDSystem m_HUDSystem;
 	protected CSI_SettingsManager m_SettingsManager;
 
-	//------------------------------------------------------------------------------------------------	
+	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
@@ -13,11 +13,11 @@ modded class SCR_NTIconBase
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget)
 			return;
-		
+
 		SCR_NTStateIcon stateConf = SCR_NTStateIcon.Cast( GetEntityStateConfig(data) );
 		if (!stateConf)
 			return;
-		
+
 		//-----------------------------------------------------------------------
 		// Hide All Icon Widgets Not Being Used
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
@@ -26,30 +26,30 @@ modded class SCR_NTIconBase
 			data.SetVisibility(iWidget, false, 0, false);
 			return;
 		};
-		
+
 		//-----------------------------------------------------------------------
 		// Set Static Scale Of The Icon
 		int scale = GetNametagImageScale();
 		iWidget.SetSize(scale, scale);
-		
+
 		//-----------------------------------------------------------------------
 		// Actually Make The Widget Visible
 		data.SetVisibility(iWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
-	{	
+	{
 		super.UpdateElement(data, index);
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget || !iWidget.IsVisible())
 			return;
-		
+
 		//-----------------------------------------------------------------------
 		// Update Widget Opacity
 		data.UpdateOpacity(iWidget);
-		
+
 		if (data.m_PlayerData)
 		{
 			//-----------------------------------------------------------------------
@@ -62,27 +62,27 @@ modded class SCR_NTIconBase
 				default : {
 					bool setAlt = false;
 					CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
-					
+
 					if (displayIcon == CSI_EIcon.DRIVER)
 						setAlt = true;
-					
+
 					if (displayIcon == CSI_EIcon.MAN)
 						iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 					else
 						iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(displayIcon, true, setAlt));
 				}
 			};
-			
+
 			//-----------------------------------------------------------------------
 			// Color Updates For VON/Color Teams
 			SetWidgetCSIColor(data, index);
 		} else {
 			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
-			
-			if (data.m_eType == ENameTagEntityType.AI) 
+
+			if (data.m_eType == ENameTagEntityType.AI)
 				iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "ai");
 			else
 				iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
 		}
-	}	
+	}
 }

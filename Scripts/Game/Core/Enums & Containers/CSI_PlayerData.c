@@ -11,14 +11,14 @@ class CSI_PlayerData
 	protected SCR_ECharacterRank m_iRank = SCR_ECharacterRank.PRIVATE;
 	protected bool m_bIsTeamLeader;
 	protected bool m_bIsSquadLeader;
-	
+
 	// Invoker for data updates
 	protected ref ScriptInvoker m_OnDataUpdate;
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	void SetPlayerID(int playerID)
 	{
@@ -29,7 +29,7 @@ class CSI_PlayerData
 	void SetColorTeam(CSI_EColorTeam colorTeam)
 	{
 		m_iColorTeam = colorTeam;
-		
+
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();
 	}
@@ -48,44 +48,44 @@ class CSI_PlayerData
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void SetRank(SCR_ECharacterRank rank)
 	{
 		m_iRank = rank;
-		
+
 		if (m_OnDataUpdate)
 			m_OnDataUpdate.Invoke();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void SetIsTeamLeader(bool isTL)
 	{
 		m_bIsTeamLeader = isTL;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void SetIsSquadLeader(bool isSL)
 	{
 		m_bIsSquadLeader = isSL;
 	}
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	int GetPlayerID()
 	{
 		return m_iPlayerID;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	CSI_EColorTeam GetColorTeam()
 	{
 		return m_iColorTeam;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	CSI_EOverrideIcon GetOverrideIcon()
 	{
@@ -97,25 +97,25 @@ class CSI_PlayerData
 	{
 		return m_iDisplayIcon;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	SCR_ECharacterRank GetRank()
 	{
 		return m_iRank;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsTeamLeader()
 	{
 		return m_bIsTeamLeader;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsSquadLeader()
 	{
 		return m_bIsSquadLeader;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	ScriptInvoker GetOnDataUpdate()
 	{
@@ -124,11 +124,11 @@ class CSI_PlayerData
 
 		return m_OnDataUpdate;
 	}
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 REPLICATION METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	void Save(ScriptBitWriter writer)
 	{
@@ -140,7 +140,7 @@ class CSI_PlayerData
 		writer.WriteBool(m_bIsTeamLeader);
 		writer.WriteBool(m_bIsSquadLeader);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void Load(ScriptBitReader reader)
 	{
@@ -152,7 +152,7 @@ class CSI_PlayerData
 		reader.ReadBool(m_bIsTeamLeader);
 		reader.ReadBool(m_bIsSquadLeader);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static bool Extract(CSI_PlayerData instance, ScriptCtx ctx, SSnapSerializerBase snapshot)
 	{
@@ -165,7 +165,7 @@ class CSI_PlayerData
 		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
 		return true;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static bool Inject(SSnapSerializerBase snapshot, ScriptCtx ctx, CSI_PlayerData instance)
 	{
@@ -178,7 +178,7 @@ class CSI_PlayerData
 		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
 		return true;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static void Encode(SSnapSerializerBase snapshot, ScriptCtx ctx, ScriptBitSerializer packet)
 	{
@@ -190,7 +190,7 @@ class CSI_PlayerData
 		snapshot.EncodeBool(packet);
 		snapshot.EncodeBool(packet);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static bool Decode(ScriptBitSerializer packet, ScriptCtx ctx, SSnapSerializerBase snapshot)
 	{
@@ -203,7 +203,7 @@ class CSI_PlayerData
 		snapshot.DecodeBool(packet);
 		return true;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static bool SnapCompare(SSnapSerializerBase lhs, SSnapSerializerBase rhs, ScriptCtx ctx)
 	{
@@ -215,7 +215,7 @@ class CSI_PlayerData
 			&& lhs.CompareSnapshots(rhs, 4)
 			&& lhs.CompareSnapshots(rhs, 4);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	static bool PropCompare(CSI_PlayerData instance, SSnapSerializerBase snapshot, ScriptCtx ctx)
 	{

@@ -8,15 +8,15 @@
 	protected ImageWidget m_wIcon;
 	protected int m_iPlayerID = -1;
 	protected ScriptInvoker m_PlayerUpdate;
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
-		
+
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		
+
 		m_wIconOveride = XComboBoxWidget.Cast(w.FindAnyWidget("IconOveride"));
 		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
@@ -41,7 +41,7 @@
 		green.m_OnClicked.Insert(OnColorTeamClicked);
 		none.m_OnClicked.Insert(OnColorTeamClicked);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerSettingsPlayerID(int playerID)
 	{
@@ -58,30 +58,30 @@
 	{
 		if (m_iPlayerID <= 0)
 			return;
-		
+
 		if (m_PlayerUpdate)
 		{
 			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);
 			m_PlayerUpdate = null;
 		};
-		
+
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
-		
+
 		m_PlayerUpdate = playerData.GetOnDataUpdate();
 
 		if (m_PlayerUpdate)
 			m_PlayerUpdate.Insert(UpdatePlayerSettingsInformation);
-		
+
 		CSI_EOverrideIcon iconOverride = playerData.GetOverrideIcon();
 		CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
 		string displayIconStr = CSI_UIHelper.GetIconString(displayIcon, true);
 
-		if (iconOverride != CSI_EOverrideIcon.AUTO) 
+		if (iconOverride != CSI_EOverrideIcon.AUTO)
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-		
+
 		if (displayIconStr == "MAN_ICON")
 			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 		else
@@ -99,7 +99,7 @@
 
 		CSI_EColorTeam colorTeam;
 		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();
-		
+
 		switch (colorTeamButtonName)
 		{
 			case "Red" : colorTeam = CSI_EColorTeam.RED; break;
@@ -122,7 +122,7 @@
 
 		if (iconToOverride > 0)
 			iconToOverride = iconToOverride + 3;
-		
+
 		m_RplToAuthorityManager.Owner_UpdatePlayerOverrideIcon(m_iPlayerID, iconToOverride);
 	}
 
@@ -154,12 +154,12 @@
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);
 	};
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
 		super.HandlerDeattached(w);
-		
+
 		if (m_PlayerUpdate)
 		{
 			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);

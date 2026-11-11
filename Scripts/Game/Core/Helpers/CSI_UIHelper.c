@@ -1,5 +1,5 @@
 class CSI_UIHelper
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -7,11 +7,11 @@ class CSI_UIHelper
 	// Vanilla Images/Imagesets/Colors
 	const static ResourceName VANILLA_NAMETAG_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
 	const static ref Color VANILLA_VON_COLOR = new Color(0.624, 0.506, 0.157, 1);
-	
+
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
 	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
-	
+
 	const static ResourceName CSI_ICON_LAYOUT = "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout";
 
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
@@ -23,7 +23,7 @@ class CSI_UIHelper
 		CSI_EIcon.RTO,
 		CSI_EIcon.EMPTY,
 	};
-	
+
 	static ref array<CSI_EIcon> m_aVehicleIcons =
 	{
 		CSI_EIcon.DRIVER,
@@ -37,16 +37,16 @@ class CSI_UIHelper
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC HELPER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Convert the color team enum to a color
 	//! \param[in] colorEnum: The color enum to convert into a color
 	//! \param[in] opacity: The opacity of the color (0-255)
 	//! \return Color team color
 	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum, int opacity = 255)
-	{	
+	{
 		Color colorFromInt;
-		
+
 		switch(colorEnum)
 		{
 			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break; // BLUE
@@ -55,8 +55,8 @@ class CSI_UIHelper
 			case CSI_EColorTeam.YELLOW : 		colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
 			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 225, 225, 225)); // NONE
 		}
-		
-		return colorFromInt; 
+
+		return colorFromInt;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -68,21 +68,21 @@ class CSI_UIHelper
 	{
 		string iconString;
 		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.ICON_THEME);
-		
+
 		if (m_aNonThemedRegularIcons.Contains(icon) || m_aVehicleIcons.Contains(icon))
 			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
-		else	
+		else
 			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
 
 		if (isSimpleIcon)
 			iconString = iconString + "_ICON";
-		
+
 		if (isAltIcon)
 			iconString = iconString + "_ALT";
-		
+
 		return iconString;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Get players name, with a check if we need to add a players rank
 	//! \param[in] playerID: The inputed player ID to pull the name of and rank of
@@ -91,24 +91,24 @@ class CSI_UIHelper
 	{
 		string name = GetGame().GetPlayerManager().GetPlayerName(playerID);
 		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
-		
+
 		if (!playerData || !CSI_SettingsManager.GetInstance().GetSettingBool(CSI_GameSettings.RANK_VISIBLE))
 			return name;
-		
+
 		SCR_ECharacterRank rankEnum = playerData.GetRank();
 		SCR_Faction faction = SCR_Faction.Cast(SCR_FactionManager.SGetPlayerFaction(playerID));
-		
+
 		if (!faction || !faction.GetRanks())
 			return name;
-		
+
 		string rank = faction.GetRanks().GetRankNameShort(rankEnum);
-		
+
 		if (rank.IsEmpty())
 			return name;
-		
+
 		return string.Format("%1 %2", rank, name);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Search the widget hierarchy beginning at 'root' and collect icon widgets that match a given identifier
 	//! \param[in] root: Root widget to start the search from.
@@ -118,18 +118,18 @@ class CSI_UIHelper
 	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
 		array<Widget> icons = {};
-		
+
 		if (!root || widgetString.IsEmpty() || count <= 0)
 			return icons;
-		
+
 		for (int e = 0; e < count; e++)
 		{
 			Widget icon = root.FindAnyWidget(widgetString + e.ToString());
-			
+
 			if (icon)
 				icons.Insert(icon);
 		};
-		
+
 		return icons;
 	};
 }

@@ -1,5 +1,5 @@
 class CSI_Icon : SCR_ScriptedWidgetComponent
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -8,14 +8,14 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerData m_PlayerData;
 	protected int m_iPlayerId;
-	
+
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	protected ImageWidget m_wOutline;
 	protected ImageWidget m_wIconLarge;
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
-	
+
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;
 
@@ -30,10 +30,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		
+
 		if (m_SettingsManager)
 			m_SettingsManager.GetOnSettingsUpdate().Insert(DataUpdate);
-		
+
 		m_wArrow = ImageWidget.Cast(w.FindAnyWidget("Arrow"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
 		m_wOutline = ImageWidget.Cast(w.FindAnyWidget("Outline"));
@@ -45,7 +45,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Updates the icon state for a specific player
 	//! \param[in] playerID The ID of the player to update the icon for
@@ -54,24 +54,24 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		if (m_iPlayerId != playerID)
 		{
 			m_iPlayerId = playerID;
-			
+
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
-			
+
 			if (playerID <= 0)
 			{
 				m_wRoot.SetVisible(false);
 				return;
 			};
-			
+
 			m_wRoot.SetVisible(true);
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(playerID);
-			
+
 			if (!m_PlayerData)
 				return;
-			
+
 			m_PlayerData.GetOnDataUpdate().Insert(DataUpdate);
-			
+
 			DataUpdate();
 		}
 	}
@@ -79,13 +79,13 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Updates the visual data representation of the player's icon.
 	protected void DataUpdate()
-	{	
+	{
 		if (!m_PlayerData)
 			return;
-		
+
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
-		
-		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam())); 
+
+		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam()));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -107,68 +107,68 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wIconLarge.SetRotation(yaw);
 		m_wOutlineLarge.SetRotation(yaw);
 	};
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Sets the icon type for the widget.
 	//! \param[in] icon The enum icon type to be set
 	protected void SetIconWidget(CSI_EIcon icon)
-	{		
+	{
 		bool simpleIcon = true;
 		if (m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
-		
+
 		ImageWidget iconToUse;
 		string iconString = CSI_UIHelper.GetIconString(icon, simpleIcon);
-		
+
 		if (CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 		{
 			m_wOutline.SetVisible(false);
 			m_wIcon.SetVisible(false);
-			
+
 			iconToUse = m_wIconLarge;
-			
+
 			m_wIconLarge.SetVisible(true);
-			
+
 			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
-			
+
 			if (isTurreted && m_bIsRadarWidget)
 			{
 				m_wArrow.SetVisible(true);
 				m_wOutlineLarge.SetVisible(false);
-			} else { 
-				m_wArrow.SetVisible(false); 
+			} else {
+				m_wArrow.SetVisible(false);
 				m_wOutlineLarge.SetVisible(true);
 			};
-			
+
 		} else {
 			m_wIconLarge.SetVisible(false);
 			m_wOutlineLarge.SetVisible(false);
-			
+
 			iconToUse = m_wIcon;
-			
+
 			m_wArrow.SetVisible(true);
 			m_wIcon.SetVisible(true);
-			
+
 			if (simpleIcon)
 				m_wOutline.SetVisible(true);
 			else
 				m_wOutline.SetVisible(false);
 		};
-		
+
 		iconToUse.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
-		
+
 		SetArrowWidget();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Sets up the arrow imagewidget within the icon.
 	protected void SetArrowWidget()
 	{
 		// do settings check here
 		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
-		
+
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));
-		
+
 		m_wArrow.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, arrowString);
 	}
 }

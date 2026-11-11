@@ -1,4 +1,4 @@
-class CSI_SettingsJson : JsonApiStruct 
+class CSI_SettingsJson : JsonApiStruct
 {
 	protected static string m_sSettingsPath = "$profile:CSI_Settings.json";
     protected ref array<int> m_aSettingsValues = new array<int>;
@@ -6,12 +6,12 @@ class CSI_SettingsJson : JsonApiStruct
 	//------------------------------------------------------------------------------------------------
     void LoadFromFile()
 	{
-        if (FileIO.FileExists(m_sSettingsPath)) 
+        if (FileIO.FileExists(m_sSettingsPath))
 		{
             JsonLoadContext jsonLoad = new JsonLoadContext(false);
             jsonLoad.LoadFromFile(m_sSettingsPath);
             jsonLoad.ReadValue("m_aSettingsValues", m_aSettingsValues);
-		
+
 			UserSettings userSettings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 			foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
 				if (m_aSettingsValues.IsIndexValid(i))
@@ -30,14 +30,14 @@ class CSI_SettingsJson : JsonApiStruct
 			userSettings.Get(settingStr, settingValue);
 			m_aSettingsValues.Insert(settingValue);
 		}
-		
+
 		JsonSaveContext jsonSave = new JsonSaveContext();
         jsonSave.WriteValue("m_aSettingsValues", m_aSettingsValues);
         jsonSave.SaveToFile(m_sSettingsPath);
     }
 
 	//------------------------------------------------------------------------------------------------
-    void CSI_SettingsJson() 
+    void CSI_SettingsJson()
 	{
 		RegV("m_aSettingsValues");
     }

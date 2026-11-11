@@ -12,8 +12,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
 		super.DisplayUpdate(owner, timeSlice);
-		
-		if (!m_SettingsManager) 
+
+		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || m_b2DSightsActive || SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
@@ -42,7 +42,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			s_NametagCfg.ResetFarthestZone();
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Adjust zone range based on zoom
 	//! \param adjust determines if we are adjusting the ranges or restorign them to default
@@ -51,7 +51,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	{
 		if (adjust)
 			m_b2DSightsActive = true;
-		else 
+		else
 			m_b2DSightsActive = false;
 	}
 }

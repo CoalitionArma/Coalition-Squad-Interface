@@ -5,13 +5,13 @@ modded class SCR_VehicleTagData
 	{
 		m_MainTag = null;
 		SCR_NameTagData localMainTag;
-		
+
 		if (!m_Entity)
 			return;
-		
+
 		if (m_aPassengers.IsEmpty())
 			return;
-		
+
 		IEntity pilot = Vehicle.Cast(m_Entity).GetPilot();
 		if (pilot)
 		{
@@ -24,8 +24,8 @@ modded class SCR_VehicleTagData
 					localMainTag = tagData;
 			}
 		}
-		
-		if (!localMainTag) 
+
+		if (!localMainTag)
 		{
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 			{
@@ -40,34 +40,34 @@ modded class SCR_VehicleTagData
 					{
 						// Check players current compartment type.
 						ECompartmentType compartmentType = compartment.GetType();
-						
+
 						if (compartmentType == ECompartmentType.TURRET)
 							localMainTag = tagData;
 					};
 				};
 			}
 		};
-		
+
 		if (pilot && !localMainTag)
 		{
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 				if (tagData.m_Entity == pilot)
 					localMainTag = tagData;
 		}
-		
+
 		if (!localMainTag)
 			localMainTag = m_aPassengers[0];
-		
+
 		m_MainTag = localMainTag;
-		
+
 		m_iPlayerID = m_MainTag.m_iPlayerID;
 		m_PlayerData = m_MainTag.m_PlayerData;
-		
+
 		if (m_MainTag.m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);
 		else if (m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			DeactivateEntityState(ENameTagEntityState.GROUP_MEMBER);
-		
+
 		GetGroupName();
 	}
 };

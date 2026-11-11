@@ -6,7 +6,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
-	
+
 	protected ref array<int> m_aStoredGroupPlayerIDs;
 	protected ref array<Widget> m_aPlayerWidgets;
 
@@ -21,10 +21,10 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
-		
+
 		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 25);
 	}
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -37,16 +37,16 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 
 		if(m_aStoredGroupPlayerIDs == groupArray)
 			return;
-		
+
 		int groupCount = m_HUDSystem.GetLocalGroupCount();
 		m_aStoredGroupPlayerIDs = groupArray;
 
 		if (groupCount > 1 && m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_VISIBLE))
-			foreach (int i, int playerID : groupArray) 
+			foreach (int i, int playerID : groupArray)
 				UpdatePlayerWidget(i, playerID);
 		else
 			groupCount = 0;
-		
+
 		for (int e = groupCount; e <= 24; e++)
 			UpdatePlayerWidget(e, -1);
 	}
@@ -54,7 +54,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT SPECIFIC METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Updates the interface widget for a specific player in the group dsiplay
 	//! \param[in] widgetNumber Widget index to update
@@ -63,7 +63,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		Widget player = m_aPlayerWidgets[widgetNumber];
 
-		if (player) 
+		if (player)
 			CSI_Player.Cast(player.FindHandler(CSI_Player)).PlayerUpdate(playerID);
 	}
 }

@@ -1,5 +1,5 @@
 class CSI_ClientSystem : GameSystem
-{		
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -10,13 +10,13 @@ class CSI_ClientSystem : GameSystem
 	protected int m_iCurrentUpdateCycle = 12;
 	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
 	protected int m_iLocallyStoredGroupID = -1;
-	
+
 	protected ref CSI_SettingsJson m_SettingsJson;
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override static void InitInfo(WorldSystemInfo outInfo)
 	{
@@ -29,7 +29,7 @@ class CSI_ClientSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	protected int m_iUpdate;
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
@@ -40,50 +40,50 @@ class CSI_ClientSystem : GameSystem
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 			return;
 		}
-		
+
 		m_iUpdate++;
-		
+
 		// only update every 35 frames
 		if (!(m_iUpdate >= 35))
 			return;
 		else
 			m_iUpdate = 0;
-		
+
 		UpdateAllLocalPlayerValues();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Updates all local player values to their current state within the CSI system.
 	protected void UpdateAllLocalPlayerValues()
 	{
 		int playerID = SCR_PlayerController.GetLocalPlayerId();
-		
+
 		// Get local player entity.
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
 		if (!localplayer)
 			return;
-		
+
 		// Get base group manager component
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
-		if (!groupsManagerComponent) 
+		if (!groupsManagerComponent)
 			return;
-		
+
 		// Get players current group.
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		if (!playersGroup)
 			return;
-		
+
 		int playersGroupID = playersGroup.GetGroupID();
-		if (m_iLocallyStoredGroupID != playersGroupID) 
+		if (m_iLocallyStoredGroupID != playersGroupID)
 		{
 			m_iLocallyStoredGroupID = playersGroupID;
 			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
 			return;
 		};
-		
+
 		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
 		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
@@ -95,17 +95,17 @@ class CSI_ClientSystem : GameSystem
 		{
 			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));
 			VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleFixedWingSimulation));
-			
+
 			// Check players current compartment type, then assign his Icon.
 			ECompartmentType compartmentType = compartment.GetType();
 			string comartmentName = compartment.GetCompartmentName();
-			
+
 			UIInfo uiInfo = compartment.GetUIInfo();
-			
+
 			string name;
 			if (uiInfo)
 				name = uiInfo.GetName();
-			
+
 			if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
 				displayIcon = CSI_EIcon.COMMANDER;
 			else {
@@ -125,10 +125,10 @@ class CSI_ClientSystem : GameSystem
 				};
 			};
 		};
-		
+
 		// Get player data
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		
+
 		//------------------------------------------------------------------------------------------------
 		//	OFFICER Icon
 		if (displayIcon == CSI_EIcon.MAN && SCR_FactionCommanderPlayerComponent.IsLocalPlayerCommander())
@@ -140,13 +140,13 @@ class CSI_ClientSystem : GameSystem
 			//	SL Icon
 			if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerID))
 				displayIcon = CSI_EIcon.SL;
-	
+
 			//------------------------------------------------------------------------------------------------
 			//	TL Icon
 			if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
 				displayIcon = CSI_EIcon.TL;
 		};
-		
+
 		//------------------------------------------------------------------------------------------------
 		//	Override Icon
 		if (playerData)
@@ -161,16 +161,17 @@ class CSI_ClientSystem : GameSystem
 		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 12) 
 		{
 			array<CSI_EIcon> validDisplayIcons = {};
-			
+
 			// Get players inventory component
 			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-			
+
 			array<IEntity> allPlayerItems = {};
-			characterInventory.GetItems(allPlayerItems);
+				characterInventory.GetItems(allPlayerItems);
+
 			array<BaseMuzzleComponent> muzzles = {};
 			// Parse through all items.
 			foreach (IEntity item : allPlayerItems)
-			{	
+			{
 				// Check if item is RTO related
 				SCR_RadioComponent radioComp = SCR_RadioComponent.Cast(item.FindComponent(SCR_RadioComponent));
 				SCR_RestrictedDeployableSpawnPointComponent spawnPoint = SCR_RestrictedDeployableSpawnPointComponent.Cast(item.FindComponent(SCR_RestrictedDeployableSpawnPointComponent));
@@ -179,7 +180,7 @@ class CSI_ClientSystem : GameSystem
 					validDisplayIcons.Insert(CSI_EIcon.RTO);
 					break;
 				};
-				
+
 				// Check if item is medical related
 				SCR_HealSupportStationComponent medTool = SCR_HealSupportStationComponent.Cast(item.FindComponent(SCR_HealSupportStationComponent));
 				if(medTool)
@@ -187,7 +188,7 @@ class CSI_ClientSystem : GameSystem
 					validDisplayIcons.Insert(CSI_EIcon.MEDIC);
 					break;
 				};
-				
+
 				// Check if item is enginner related
 				SCR_RepairSupportStationComponent engTool = SCR_RepairSupportStationComponent.Cast(item.FindComponent(SCR_RepairSupportStationComponent));
 				if(engTool)
@@ -195,7 +196,7 @@ class CSI_ClientSystem : GameSystem
 					validDisplayIcons.Insert(CSI_EIcon.ENG);
 					break;
 				};
-				
+
 				// Check if item is explosives related
 				SCR_DetonatorGadgetComponent detonator = SCR_DetonatorGadgetComponent.Cast(item.FindComponent(SCR_DetonatorGadgetComponent));
 				SCR_ExplosiveChargeComponent explosives = SCR_ExplosiveChargeComponent.Cast(item.FindComponent(SCR_ExplosiveChargeComponent));
@@ -205,29 +206,29 @@ class CSI_ClientSystem : GameSystem
 					validDisplayIcons.Insert(CSI_EIcon.DEMO);
 					break;
 				};
-					
+
 				// Check if item is a weapon.
 				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
-				if (weaponComp) 
+				if (weaponComp)
 				{
 					// Get weapon type
 					EWeaponType weaponType = weaponComp.GetWeaponType();
 					if (weaponType == EWeaponType.WT_NONE)
 						continue;
-					
+
 					switch (weaponType)
 					{
-						case EWeaponType.WT_MACHINEGUN : 
+						case EWeaponType.WT_MACHINEGUN :
 							validDisplayIcons.Insert(CSI_EIcon.MG);
 							break;
-						case EWeaponType.WT_SNIPERRIFLE : 
+						case EWeaponType.WT_SNIPERRIFLE :
 							validDisplayIcons.Insert(CSI_EIcon.SNIPER);
 							break;
-						case EWeaponType.WT_ROCKETLAUNCHER : 
+						case EWeaponType.WT_ROCKETLAUNCHER :
 							validDisplayIcons.Insert(CSI_EIcon.AT);
 							break;
 					};
-					
+
 					// MG is the highest-priority weapon icon; no need to scan remaining items
 					if (validDisplayIcons.Contains(CSI_EIcon.MG))
 						break;
@@ -240,19 +241,19 @@ class CSI_ClientSystem : GameSystem
 						EWeaponType muzzleWeaponType = -1;
 						switch (muzzles[m].GetMuzzleType())
 						{
-							case EMuzzleType.MT_UGLMuzzle: 
+							case EMuzzleType.MT_UGLMuzzle:
 								validDisplayIcons.Insert(CSI_EIcon.GREN);
 								break;
 						}
 					}
 				};
 			}
-			
+
 			// We use an array and switch to set priority on what to show other players
 			switch (true)
 			{
 				case (validDisplayIcons.Contains(CSI_EIcon.RTO)) 		: displayIcon = CSI_EIcon.RTO; 		break;
-				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 		break; 
+				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.ENG)) 		: displayIcon = CSI_EIcon.ENG; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.DEMO)) 		: displayIcon = CSI_EIcon.DEMO; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.MG)) 		: displayIcon = CSI_EIcon.MG; 		break;
@@ -261,14 +262,14 @@ class CSI_ClientSystem : GameSystem
 				case (validDisplayIcons.Contains(CSI_EIcon.GREN)) 		: displayIcon = CSI_EIcon.GREN; 		break;
 				default : displayIcon = CSI_EIcon.MAN;
 			}
-			
+
 			m_iCurrentUpdateCycle = 0;
 			m_iLocallyStoredSpecialtyIcon = displayIcon;
 		}
-		
+
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
-		
+
 		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
 		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
 		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));

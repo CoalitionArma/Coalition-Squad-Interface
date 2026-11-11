@@ -6,28 +6,28 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
-	
+
 	protected ProgressBarWidget m_wStamBar;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
-		
+
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
-		
+
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Update the stamina UI element each frame.
 	void Update()
@@ -37,18 +37,18 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 			HideBar(0);
 			return;
 		}
-		
+
 		// Get local enity the player is controlling at the moment.
 		SCR_ChimeraCharacter character = m_HUDSystem.GetLocalPlayerCharacter();
 
 		// Can't run if these dont exist better exit out.
-		if (!character) 
+		if (!character)
 			return;
 
 		// Get Charachter Controller of the locally played entity.
 		SCR_CharacterControllerComponent characterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
 
-		if (!characterController) 
+		if (!characterController)
 			return;
 
 		// Use local Charachter Controller to get the current players stamina, then use custom function OnStaminaChange() to show current stamina on players screen.
@@ -78,7 +78,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	//! \param[in] stamina stamina value to set the bar to
 	void OnStaminaChange(float stamina)
 	{
-		m_wStamBar.SetCurrent(stamina); 
+		m_wStamBar.SetCurrent(stamina);
 
 		// Color
 		switch (true)

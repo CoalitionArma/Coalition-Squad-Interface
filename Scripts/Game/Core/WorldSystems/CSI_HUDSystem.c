@@ -1,5 +1,5 @@
 class CSI_HUDSystem : GameSystem
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -16,7 +16,7 @@ class CSI_HUDSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override static void InitInfo(WorldSystemInfo outInfo)
 	{
@@ -25,48 +25,48 @@ class CSI_HUDSystem : GameSystem
 			.SetLocation(WorldSystemLocation.Client)
 			.AddPoint(WorldSystemPoint.Frame);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Should be paused when simulation is paused
 	override bool ShouldBePaused()
 	{
 		return true;
 	}
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	SCR_ChimeraCharacter GetLocalPlayerCharacter()
 	{
 		return m_LocalPlayerCharacter;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	array<int> GetLocalGroupPlayerIds()
 	{
 		return m_aLocalGroupPlayerIds;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsLocalPlayerInVehicle()
 	{
 		return m_bIsLocalPlayerInVehicle;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsLocalPlayerInMortar()
 	{
 		return m_bIsLocalPlayerInMortar;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	int GetLocalGroupCount()
 	{
 		return m_iLocalGroupCount;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	float GetLocalYaw()
 	{
@@ -76,7 +76,7 @@ class CSI_HUDSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	protected int m_iUpdate;
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
@@ -87,32 +87,32 @@ class CSI_HUDSystem : GameSystem
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 			return;
 		}
-		
+
 		m_iUpdate++;
 		UpdateLocalAimingYaw();
-		
+
 		if (!(m_iUpdate >= 60))
 			return;
 		else
 			m_iUpdate = 0;
-		
+
 		if (!m_GroupsManagerComponent)
 			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
+
 		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
-		
-		if (!m_LocalPlayerCharacter) 
+
+		if (!m_LocalPlayerCharacter)
 			return;
-		
+
 		BaseCompartmentSlot vehicleCompartment = CSI_EntityHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
-		
+
 		if (vehicleCompartment)
-		{ 
+		{
 			IEntity vehicle = vehicleCompartment.GetVehicle();
 			if (vehicle)
 			{
 				m_bIsLocalPlayerInVehicle = true;
-				
+
 				if (SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)))
 					m_bIsLocalPlayerInMortar = true;
 			};
@@ -120,17 +120,17 @@ class CSI_HUDSystem : GameSystem
 			m_bIsLocalPlayerInVehicle = false;
 			m_bIsLocalPlayerInMortar = false;
 		};
-		
+
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		
+
 		if (playersGroup)
 		{
 			m_aLocalGroupPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
 			m_iLocalGroupCount = m_aLocalGroupPlayerIds.Count();
 		} else
 			m_iLocalGroupCount = 0;
-	}
-	
+		}
+
 	//------------------------------------------------------------------------------------------------
 	//! Updates the local player's aiming yaw angle.
 	void UpdateLocalAimingYaw()
@@ -140,7 +140,7 @@ class CSI_HUDSystem : GameSystem
 		float yaw;
 
 		AimingComponent playerAimingComponent = m_LocalPlayerCharacter.GetHeadAimingComponent();
-		if (!playerAimingComponent) 
+		if (!playerAimingComponent)
 			return;
 
 		if (m_bIsLocalPlayerInVehicle || playerAimingComponent.GetAimingDirection().ToYaw() > 0)
@@ -151,10 +151,10 @@ class CSI_HUDSystem : GameSystem
 			yaw = -Math3D.MatrixToAngles(transform)[0];
 		} else
 			yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
-		
+
 		m_fLocalYaw = yaw;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Returns a sorted array of player IDs based on their group assignments
 	//! \param[in] playerIDs: Array of player IDs to sort
@@ -163,36 +163,36 @@ class CSI_HUDSystem : GameSystem
 	{
 		if (!m_PlayerDataManager)
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		
+
 		array<int> playersGroupArray = {};
 		array<string> tempLocalGroupArray = {};
 		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
-		
+
 		foreach (int playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-			
+
 			if (!playerData)
 				continue;
-		
+
 			if (playerData.GetIsSquadLeader())
 				currentSLColorTeam = playerData.GetColorTeam();
 		};
-		
+
 		array<CSI_EColorTeam> playersCTArray = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.YELLOW, CSI_EColorTeam.GREEN, CSI_EColorTeam.NONE};
 		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
 		playersCTArray.InsertAt(currentSLColorTeam, 0);
-		
+
 		// Parse through current group array.
 		foreach (int playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-			
+
 			if (!playerData)
 				continue;
-			
+
 			int playerValue = 0;
-	
+
 			// Sort player by their color so we can group color teams together (a lil bit racist).
 			switch (playerData.GetColorTeam())
 			{
@@ -203,34 +203,34 @@ class CSI_HUDSystem : GameSystem
 				case playersCTArray[4]	: playerValue = 2; break;
 				default : {playerValue = 2;  break;};
 			};
-			
+
 			switch (true)
 			{
 				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
 				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() == CSI_EColorTeam.NONE) : playerValue--; break;
 				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() != CSI_EColorTeam.NONE) : playerValue++; break;
 			};
-			
+
 			// Format a string with what we need for displaying/sorting a player.
 			string playerStr = string.Format("%1;%2", playerValue, playerID);
-			
+
 			tempLocalGroupArray.Insert(playerStr);
 		};
 
 		tempLocalGroupArray.Sort(false);
 
 		array<string> outPlayerStrArray = {};
-		foreach (string playerStr : tempLocalGroupArray) 
+		foreach (string playerStr : tempLocalGroupArray)
 		{
 			outPlayerStrArray.Clear();
 			playerStr.Split(";", outPlayerStrArray, false);
-			
+
 			playersGroupArray.Insert(outPlayerStrArray[1].ToInt());
 		}
-		
+
 		return playersGroupArray;
 	};
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC ACCESSOR
 //=============================================================================================================================================================================================================================================================================================================================================================

@@ -11,21 +11,21 @@ modded class SCR_NameTagData : Managed
 		super.UpdateEntityType();
 		UpdatePlayerData();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		if (!m_SettingsManager || !m_PlayerDataManager) 
+		if (!m_SettingsManager || !m_PlayerDataManager)
 		{
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		};
-		
+
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
-		
+
 		UpdateAttatchedTo();
-		
+
 		m_iZoneID = -1;
 		m_iGroupID = -1;
 		m_iPlayerID = -1;
@@ -45,7 +45,7 @@ modded class SCR_NameTagData : Managed
 
 	//------------------------------------------------------------------------------------------------
 	override void GetName(out string name, out notnull array<string> nameParams)
-	{	
+	{
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
@@ -68,51 +68,51 @@ modded class SCR_NameTagData : Managed
 		name = m_sName;
 		nameParams.Copy(m_aNameParams);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Set visibility of nametag widget
 	override void SetVisibility(Widget widget, bool visible, float visibleOpacity, bool animate = true)
 	{
 		if (!widget)
 			return;
-						
+
 		float targetVal;
 		if (visible)
 		{
 			m_NameTagWidget.SetVisible(true);
 			if (widget == m_NameTagWidget)
 				m_fVisibleOpacity = visibleOpacity;
-			
+
 			m_Flags |= ENameTagFlags.VISIBLE;
 			m_Flags &= ~ENameTagFlags.UPDATE_DISABLE;
 			m_Flags &= ~ENameTagFlags.DISABLED;
 			targetVal = visibleOpacity;
 		}
-		else 
+		else
 			targetVal = 0;
-		
+
 		if (targetVal >= 0.1)
 			widget.SetVisible(true);
-		
+
 		UpdateOpacity(widget, targetVal);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void UpdateOpacity(Widget widget, float targetOpacity = 0.85, SCR_NameTagData data = null, int index = 0)
-	{	
+	{
 		if (!widget)
 		{
 			widget = data.m_aNametagElements[index];
 			if (!widget)
 				return;
 		};
-			
+
 		if (m_Entity && targetOpacity != 0)
 		{
 			float brightness = 1;
 			BaseWorld world = GetGame().GetWorld();
 			CameraManager cameraManager = GetGame().GetCameraManager();
-			
+
 			if (world && cameraManager)
 			{
 				CameraBase camera = cameraManager.CurrentCamera();
@@ -138,10 +138,10 @@ modded class SCR_NameTagData : Managed
 			};
 		} else
 			targetOpacity = 0;
-	
+
 		if (m_fTagFadeSpeed != 0)
 			AnimateWidget.Opacity(widget, targetOpacity, m_fTagFadeSpeed);
-		else 
+		else
 		{
 			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);
 			widget.SetOpacity(targetOpacity);
@@ -170,26 +170,26 @@ modded class SCR_NameTagData : Managed
 			m_sGroupName = string.Format(format, company, platoon, squad, character);
 		};
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Update tag position
 	override void UpdateTagPos()
 	{
 		UpdateAttatchedTo();
-		
+
 		vector matPos[4];
 		Animation anim = m_Entity.GetAnimation();
 		anim.GetBoneMatrix(m_iSpineBone, matPos);
 		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
 		anim.GetBoneMatrix(m_iHeadBone, matPos);
 		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
-		
+
 		vector nametagOffsetVector = "0 0 0";
 		int nametagOffset = 0;
-		
+
 		if (m_SettingsManager)
 			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
-		
+
 		if (m_eAttachedTo == ENameTagPosition.HEAD)
 		{
 			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
@@ -207,22 +207,22 @@ modded class SCR_NameTagData : Managed
 			m_Flags |= ENameTagFlags.NAME_UPDATE;
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerData()
 	{
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		
+
 		if (m_PlayerDataManager && m_iPlayerID > 0)
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	void UpdateAttatchedTo()
 	{
 		ENameTagPosition nametagPos = ENameTagPosition.BODY;
-		
-		if (m_SettingsManager) 
+
+		if (m_SettingsManager)
 			nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
 
 		m_eAttachedTo = nametagPos;
