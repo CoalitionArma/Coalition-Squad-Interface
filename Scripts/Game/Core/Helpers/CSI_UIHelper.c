@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Static UI helpers: resource paths, color team colors, icon imageset names and player display names.
+//! 				Public API: CRF calls ConvertColorTeamToColor; BFS-CustomPlayerNamesCSI may override GetPlayersName.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_UIHelper
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -14,6 +23,7 @@ class CSI_UIHelper
 
 	const static ResourceName CSI_ICON_LAYOUT = "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout";
 
+	// Icons with a single image regardless of CSI_EIconTheme
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =
 	{
 		CSI_EIcon.MAN,
@@ -24,6 +34,7 @@ class CSI_UIHelper
 		CSI_EIcon.EMPTY,
 	};
 
+	// Seat icons; also unthemed, and drawn with the large icon widgets
 	static ref array<CSI_EIcon> m_aVehicleIcons =
 	{
 		CSI_EIcon.DRIVER,
@@ -39,20 +50,19 @@ class CSI_UIHelper
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Convert the color team enum to a color
-	//! \param[in] colorEnum: The color enum to convert into a color
-	//! \param[in] opacity: The opacity of the color (0-255)
-	//! \return Color team color
+	//! \param[in] colorEnum
+	//! \param[in] opacity alpha (0-255)
+	//! \return the color team's color, light grey for NONE
 	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum, int opacity = 255)
 	{
 		Color colorFromInt;
 
 		switch(colorEnum)
 		{
-			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break; // BLUE
-			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break; // RED
-			case CSI_EColorTeam.GREEN : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break; // GREEN
-			case CSI_EColorTeam.YELLOW : 		colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break; // YELLOW
+			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break;
+			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break;
+			case CSI_EColorTeam.GREEN : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break;
+			case CSI_EColorTeam.YELLOW : 		colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break;
 			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 225, 225, 225)); // NONE
 		}
 
@@ -60,10 +70,11 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get icon string so we can set the icon through LoadImageFromSet
-	//! \param[in] icon: Icon to find the string of
-	//! \param[in] isSimpleIcon: Should we return the simple (non-circular) Icon
-	//! \return Icon string
+	//! Imageset entry name for an icon, for LoadImageFromSet with CSI_ICONS. Themed icons use the ICON_THEME setting.
+	//! \param[in] icon
+	//! \param[in] isSimpleIcon use the simple (non-circular) version ("_ICON" suffix)
+	//! \param[in] isAltIcon use the alternative version ("_ALT" suffix)
+	//! \return e.g. "CLASSIC MEDIC_ICON"
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false)
 	{
 		string iconString;
@@ -84,12 +95,16 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get players name, with a check if we need to add a players rank
-	//! \param[in] playerID: The inputed player ID to pull the name of and rank of
-	//! \return Players name
+	//! Player's display name, prefixed with their short rank when RANK_VISIBLE is on.
+	//! \param[in] playerID
+	//! \return
 	static string GetPlayersName(int playerID)
 	{
-		string name = GetGame().GetPlayerManager().GetPlayerName(playerID);
+		// Vanilla nametags and group menu use the filtered display name (respects blocked users / platform UGC restrictions)
+		string name = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);
+		if (name.IsEmpty())
+			name = GetGame().GetPlayerManager().GetPlayerName(playerID);
+
 		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 
 		if (!playerData || !CSI_SettingsManager.GetInstance().GetSettingBool(CSI_GameSettings.RANK_VISIBLE))
@@ -110,11 +125,11 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Search the widget hierarchy beginning at 'root' and collect icon widgets that match a given identifier
-	//! \param[in] root: Root widget to start the search from.
-	//! \param[in] widgetString: Substring/pattern used to identify matching icon widgets (matched against widget names/identifiers).
-	//! \param[in] count: Maximum number of matches to collect; if non-positive, function will collect all matches.
-	//! \return: An array of Widget handles for the matching icon widgets (empty if none found or if root is null).
+	//! Finds the widgets named widgetString + 0 to widgetString + (count - 1) under root.
+	//! \param[in] root
+	//! \param[in] widgetString name prefix, e.g. "Player"
+	//! \param[in] count number of indices to look up
+	//! \return found widgets in index order (missing ones skipped); empty if root is null or count <= 0
 	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
 		array<Widget> icons = {};

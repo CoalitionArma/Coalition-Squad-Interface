@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Static helpers for a character's facing and vehicle seat.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_EntityHelper
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -5,9 +13,9 @@ class CSI_EntityHelper
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Get characters yaw axis value
-	//! \param[in] playerCharacter: The inputed players character entity
-	//! \return The yaw of the character entity
+	//! Yaw the character is facing: head aim on foot, turret aim in a turret, vehicle yaw in other seats.
+	//! \param[in] playerCharacter
+	//! \return negated world yaw in degrees, 0 if it can't be read
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
 	{
 		if (!playerCharacter)
@@ -36,15 +44,22 @@ class CSI_EntityHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get characters current vehicle slot
-	//! \param[in] playerCharacter: The inputed players character entity
-	//! \return The compartment the entity is in (will return null if they aren't in a vehicle)
+	//! \param[in] playerCharacter
+	//! \return the vehicle compartment the entity is in, null if it isn't in a vehicle
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
 		if (!playerCharacter)
 			return null;
 
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
+		// Characters expose their compartment access directly (as vanilla uses it), avoiding a component search;
+		// fall back to FindComponent for any other entity type
+		CompartmentAccessComponent compartmentAccess;
+		ChimeraCharacter character = ChimeraCharacter.Cast(playerCharacter);
+		if (character)
+			compartmentAccess = character.GetCompartmentAccessComponent();
+		else
+			compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
+
 		if (compartmentAccess)
 		{
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
