@@ -77,19 +77,11 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
 		{
-			string bearingAdd = "";
-
-			// Wrap to 0-359 and zero-pad to three digits
+			// Wrap to 0-359; ToString(3) zero-pads to three digits
 			if (yawInt < 0)
-				yawInt = 360 - Math.AbsInt(yawInt);
+				yawInt += 360;
 
-			if (yawInt >= 0 & yawInt < 10)
-				bearingAdd = "00";
-
-			if (yawInt >= 10 & yawInt < 100)
-				bearingAdd = "0";
-
-			m_wBearing.SetText(bearingAdd + (yawInt.ToString()));
+			m_wBearing.SetText(yawInt.ToString(3));
 		} else
 			m_wBearing.SetText("");
 	}

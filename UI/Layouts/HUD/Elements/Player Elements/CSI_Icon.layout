@@ -33,7 +33,6 @@ ScaleWidgetClass {
       SizeY -60.16
       OffsetBottom 0
      }
-     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ARROW CLASSIC"
@@ -51,7 +50,6 @@ ScaleWidgetClass {
       SizeY -1.26
       OffsetBottom 0
      }
-     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
@@ -69,7 +67,6 @@ ScaleWidgetClass {
       SizeY -1.222
       OffsetBottom 0
      }
-     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"
@@ -87,7 +84,6 @@ ScaleWidgetClass {
       SizeY 3.15
       OffsetBottom 0
      }
-     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "MAN"
@@ -107,7 +103,6 @@ ScaleWidgetClass {
       SizeY 3.15
       OffsetBottom 0
      }
-     "Is Visible" 0
      "Inherit Color" 1
      Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
      Image "ICON OUTLINE"

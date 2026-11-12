@@ -49,6 +49,40 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wIconLarge = ImageWidget.Cast(w.FindAnyWidget("Icon_Large"));
 		m_wOutlineLarge = ImageWidget.Cast(w.FindAnyWidget("Outline_Large"));
 		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
+
+		// Visible in the layout (and Workbench's layout editor) so they can be edited; SetIconWidget shows the ones
+		// the icon uses
+		if (SCR_Global.IsEditMode())
+			return;
+
+		array<Widget> parts = {m_wArrow, m_wIcon, m_wOutline, m_wIconLarge, m_wOutlineLarge};
+		foreach (Widget part : parts)
+		{
+			if (part)
+				part.SetVisible(false);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Unsubscribe from invokers, radar icons are created and deleted at runtime so this runs regularly
+	//! \param[in] w
+	override void HandlerDeattached(Widget w)
+	{
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Remove(DataUpdate);
+
+		if (m_PlayerData)
+			m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
+
+		super.HandlerDeattached(w);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Set from script for icons created at runtime (the radar), equivalent to ticking m_bIsRadarWidget in a layout
+	//! \param[in] isRadarWidget
+	void SetIsRadarWidget(bool isRadarWidget)
+	{
+		m_bIsRadarWidget = isRadarWidget;
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

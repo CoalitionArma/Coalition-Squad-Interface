@@ -80,7 +80,7 @@ class CSI_HUD : SCR_InfoDisplay
 		m_Stamina.Update();
 		m_Compass.Update();
 		m_Group.Update();
-		m_Radar.Update();
+		m_Radar.Update(timeSlice);
 	};
 
 	//------------------------------------------------------------------------------------------------

@@ -31,7 +31,35 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 
+		// CSI_HUDSystem only hands out a new group array when the group changed, so also refresh when settings
+		// change (group visibility). Same settings invoker CSI_Icon listens to.
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+
 		m_aPlayerWidgets = CSI_UIHelper.GetAllIcons(m_wRoot, "Player", 25);
+
+		// Visible in the layout (and Workbench's layout editor) so they can be edited; Update shows the ones in use
+		if (SCR_Global.IsEditMode())
+			return;
+
+		foreach (Widget player : m_aPlayerWidgets)
+			player.SetVisible(false);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void HandlerDeattached(Widget w)
+	{
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Remove(OnSettingsUpdate);
+
+		super.HandlerDeattached(w);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Forces the next Update to re-apply every player widget
+	protected void OnSettingsUpdate()
+	{
+		m_aStoredGroupPlayerIDs = null;
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

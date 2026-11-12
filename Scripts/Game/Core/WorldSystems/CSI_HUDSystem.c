@@ -180,8 +180,7 @@ class CSI_HUDSystem : GameSystem
 		if (!m_PlayerDataManager)
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
-		array<int> playersGroupArray = {};
-		array<string> tempLocalGroupArray = {};
+		SCR_SortedArray<int> sortedPlayerIDs = new SCR_SortedArray<int>();	// lowest key first; equal keys keep group order
 		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
 
 		foreach (int playerID : playerIDs)
@@ -207,43 +206,24 @@ class CSI_HUDSystem : GameSystem
 			if (!playerData)
 				continue;
 
-			int playerValue = 0;
-
-			// Sort player by their color so we can group color teams together (a lil bit racist).
-			switch (playerData.GetColorTeam())
+			// Sort key: SL 1, then two keys per team in playersCTArray order, TL before members (2-3, 4-5, ...)
+			int sortKey = 1;
+			if (!playerData.GetIsSquadLeader())
 			{
-				case playersCTArray[0]	: playerValue = -3; break;
-				case playersCTArray[1]	: playerValue = -5; break;
-				case playersCTArray[2]	: playerValue = -7; break;
-				case playersCTArray[3]	: playerValue = -9; break;
-				case playersCTArray[4]	: playerValue = 2; break;
-				default : {playerValue = 2;  break;};
-			};
+				int teamIndex = playersCTArray.Find(playerData.GetColorTeam());
+				if (teamIndex < 0)
+					teamIndex = playersCTArray.Count() - 1;
 
-			switch (true)
-			{
-				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
-				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() == CSI_EColorTeam.NONE) : playerValue--; break;
-				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() != CSI_EColorTeam.NONE) : playerValue++; break;
-			};
+				sortKey = teamIndex * 2 + 3;
+				if (playerData.GetIsTeamLeader())
+					sortKey--;
+			}
 
-			// Format a string with what we need for displaying/sorting a player.
-			string playerStr = string.Format("%1;%2", playerValue, playerID);
-
-			tempLocalGroupArray.Insert(playerStr);
+			sortedPlayerIDs.Insert(sortKey, playerID);
 		};
 
-		tempLocalGroupArray.Sort(false);
-
-		array<string> outPlayerStrArray = {};
-		foreach (string playerStr : tempLocalGroupArray)
-		{
-			outPlayerStrArray.Clear();
-			playerStr.Split(";", outPlayerStrArray, false);
-
-			playersGroupArray.Insert(outPlayerStrArray[1].ToInt());
-		}
-
+		array<int> playersGroupArray = {};
+		sortedPlayerIDs.ToArray(playersGroupArray);
 		return playersGroupArray;
 	};
 

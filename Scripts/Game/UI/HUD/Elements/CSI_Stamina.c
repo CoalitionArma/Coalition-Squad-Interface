@@ -30,6 +30,10 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
+
+		// Opaque in the layout (and Workbench's layout editor) so it can be edited; fades in while stamina is below full
+		if (m_wStamBar && !SCR_Global.IsEditMode())
+			m_wStamBar.SetOpacity(0);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
