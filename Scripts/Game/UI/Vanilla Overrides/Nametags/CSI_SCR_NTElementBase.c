@@ -41,11 +41,18 @@ modded class SCR_NTElementBase
 		float dist = Math.InverseLerp(zoneStart, zoneEnd, data.m_fDistance);
 
 		// Only players get simplified, and only when role icons are shown
-		if (dist > cutoffDist
-			&& scale != 0
-			&& data.m_eType != ENameTagEntityType.AI
-			&& data.m_eType != ENameTagEntityType.VEHICLE
-			&& m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+		if (data.m_eType == ENameTagEntityType.VEHICLE || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+			return false;
+
+		if (dist > cutoffDist && scale != 0)
+			return true;
+
+		//-----------------------------------------------------------------------
+		// The outer N% of the field of view shows icons only too (kept within the slider's range in case a saved file or
+		// server value is outside it)
+		int fieldOfViewPercentage = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), 0, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX);
+		float fieldOfViewScale = fieldOfViewPercentage * 0.01;
+		if (fieldOfViewScale != 0 && data.m_fFieldOfViewFraction > 1 - fieldOfViewScale)
 			return true;
 
 		return false;

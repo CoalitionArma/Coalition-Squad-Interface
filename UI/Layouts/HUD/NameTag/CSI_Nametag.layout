@@ -34,14 +34,15 @@ OverlayWidgetClass {
        Image "SL_ICON"
        Size 22 22
       }
-      HorizontalLayoutWidgetClass "{68D26704D07B68E6}" {
-       Name "HorizontalLayoutCenter"
+      GridLayoutWidgetClass "{6A9C2E41B8E00001}" {
+       Name "NameGrid"
        Slot LayoutSlot "{68D26704D07B68DD}" {
        }
        {
         VerticalLayoutWidgetClass "{68D26700BC5CADA8}" {
          Name "LeftFrame"
-         Slot LayoutSlot "{68D26700BC5CAD88}" {
+         Slot GridWidgetSlot "{6A9C2E41B8E00002}" {
+          VerticalAlign 0
          }
          Clipping False
          {
@@ -57,51 +58,28 @@ OverlayWidgetClass {
           }
          }
         }
-        VerticalLayoutWidgetClass "{68D26704C6B2F494}" {
-         Name "VerticalLayoutCenter"
-         Slot LayoutSlot "{68D26704C6B2F4E1}" {
+        TextWidgetClass "{68D26700C86D19CD}" {
+         Name "PlayerName"
+         Slot GridWidgetSlot "{6A9C2E41B8E00003}" {
+          Column 1
          }
-         {
-          TextWidgetClass "{68D26700C86D19CD}" {
-           Name "PlayerName"
-           Slot LayoutSlot "{68D267029C450505}" {
-            Padding 0 -1 0 0
-           }
-           Opacity 0
-           Clipping False
-           Text ""
-           "Font Size" 13
-           "Min Font Size" 13
-           FontProperties FontProperties "{68D267004CD300F9}" {
-            Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
-            DisabledColor 0.198 0.198 0.198 1
-            OutlineColor 0.305 0.305 0.305 1
-            ShadowSize 10
-           }
-          }
-          TextWidgetClass "{68D26700C86D195E}" {
-           Name "PlayerGroupName"
-           Slot LayoutSlot "{68D267029C45054B}" {
-           }
-           Opacity 0
-           Clipping False
-           "Inherit Color" 1
-           Text ""
-           "Font Size" 10
-           "Min Font Size" 10
-           FontProperties FontProperties "{6598E8628DE433C6}" {
-            Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
-            DisabledColor 0.198 0.198 0.198 1
-            OutlineColor 0.305 0.305 0.305 1
-            ShadowSize 10
-            ShadowOffset 0 0
-           }
-          }
+         Clipping False
+         Text ""
+         "Font Size" 13
+         "Min Font Size" 13
+         "Vertical Alignment" Center
+         FontProperties FontProperties "{68D267004CD300F9}" {
+          Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+          DisabledColor 0.198 0.198 0.198 1
+          OutlineColor 0.305 0.305 0.305 1
+          ShadowSize 10
          }
         }
         VerticalLayoutWidgetClass "{68D26700BF77A144}" {
          Name "RightFrame"
-         Slot LayoutSlot "{68D26700BF77A1A8}" {
+         Slot GridWidgetSlot "{6A9C2E41B8E00004}" {
+          VerticalAlign 0
+          Column 2
          }
          Clipping False
          {
@@ -116,6 +94,25 @@ OverlayWidgetClass {
            Image "SL_ICON"
            Size 22 22
           }
+         }
+        }
+        TextWidgetClass "{68D26700C86D195E}" {
+         Name "PlayerGroupName"
+         Slot GridWidgetSlot "{6A9C2E41B8E00005}" {
+          Row 1
+          Column 1
+         }
+         Clipping False
+         "Inherit Color" 1
+         Text ""
+         "Font Size" 10
+         "Min Font Size" 10
+         FontProperties FontProperties "{6598E8628DE433C6}" {
+          Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+          DisabledColor 0.198 0.198 0.198 1
+          OutlineColor 0.305 0.305 0.305 1
+          ShadowSize 10
+          ShadowOffset 0 0
          }
         }
        }

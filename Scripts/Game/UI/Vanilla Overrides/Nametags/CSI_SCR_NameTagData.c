@@ -13,8 +13,9 @@ modded class SCR_NameTagData : Managed
 {
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	CSI_PlayerData m_PlayerData;
-	string m_sGroupName;
+	CSI_PlayerData m_PlayerData;	//!< null for AI and players without CSI data
+	string m_sGroupName;			//!< set by GetGroupName
+	float m_fFieldOfViewFraction;	//!< angle to screen centre as a share of the angle the tag may show in (0 centre, 1 edge), set by SCR_NameTagRulesetFriendlies.TestVisibilityFiltered
 
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()
@@ -134,33 +135,28 @@ modded class SCR_NameTagData : Managed
 
 		if (m_Entity && targetOpacity != 0)
 		{
-			float brightness = 1;
 			BaseWorld world = GetGame().GetWorld();
 			CameraManager cameraManager = GetGame().GetCameraManager();
 
-			if (world && cameraManager)
+			// Day/night dimming can be turned off in settings; then the caller's target opacity is kept
+			bool dimWithBrightness = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING);
+
+			if (world && cameraManager && dimWithBrightness)
 			{
 				CameraBase camera = cameraManager.CurrentCamera();
 				if (camera)
 				{
-					int cameraIndex = camera.GetCameraIndex();	
+					int cameraIndex = camera.GetCameraIndex();
 
-					brightness = world.GetCameraSceneMiddleBrightness(cameraIndex);
+					float brightness = Math.Clamp(world.GetCameraSceneMiddleBrightness(cameraIndex), 0.1, 10);
+
 					float hdrBrightnessFactor = world.GetCameraHDRBrightness(cameraIndex);
-					hdrBrightnessFactor = Math.Lerp(0, 4, hdrBrightnessFactor);
-					hdrBrightnessFactor = Math.Clamp(hdrBrightnessFactor, 1, 50);
-					hdrBrightnessFactor = hdrBrightnessFactor * 3.75; // need to multiply the incoming raw value by 3.75 or else nametags appear too dimm.
-					
-					brightness = brightness * hdrBrightnessFactor;
-					brightness = Math.Clamp(brightness, 0.135, 1);
+					if (hdrBrightnessFactor > 1) // Need HDR brightness to actually add to the overall brightness, not take away (easier method to detect NVGs)
+						brightness = brightness * hdrBrightnessFactor;
+
+					targetOpacity = Math.Clamp(brightness, 0.1, 1);
 				 }
 			}
-			
-			switch (true)
-			{ // Might add more to this switch as I tweak it, just gonna leave it for now.
-				case (brightness < 0.25) : targetOpacity = brightness * 0.5; break;
-				default : targetOpacity = brightness * 0.885;
-			};
 		} else
 			targetOpacity = 0;
 

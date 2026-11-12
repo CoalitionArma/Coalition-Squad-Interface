@@ -16,6 +16,41 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	protected CSI_SettingsManager m_SettingsManager;
 
 	//------------------------------------------------------------------------------------------------
+	override protected void DetermineVisibility(float timeSlice)
+	{
+		// CSI: vanilla m_iMaxAngle (set in NametagFriendlies.conf) follows the player's field of view setting, kept within
+		// the slider's range in case a saved file or server value is outside it. 0 means the setting isn't loaded yet,
+		// so the config's value is kept.
+		if (!m_SettingsManager)
+			m_SettingsManager = CSI_SettingsManager.GetInstance();
+
+		if (m_SettingsManager)
+		{
+			int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW);
+			if (fieldOfView > 0)
+				m_iMaxAngle = Math.ClampInt(fieldOfView, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MIN, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MAX);
+		}
+
+		super.DetermineVisibility(timeSlice);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override protected bool TestVisibilityFiltered(SCR_NameTagData data, float timeSlice)
+	{
+		bool visible = super.TestVisibilityFiltered(data, timeSlice);
+
+		// CSI: where the tag is within the angle it may show in at its distance, worked out like vanilla's check above,
+		// so the outer part of the field of view can be simplified (SCR_NTElementBase.ShouldWeClearText)
+		float visibleAngle = Math.InverseLerp(m_ZoneCfg.m_fFarthestZoneRangePow2, 0, data.m_fDistance) * (m_iMaxAngle / 2);
+		if (visibleAngle > 0)
+			data.m_fFieldOfViewFraction = data.m_fAngleToScreenCenter / visibleAngle;
+		else
+			data.m_fFieldOfViewFraction = 1;
+
+		return visible;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Check if target is visible to the player
 	//! \param[in] data is the subject nametag
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
