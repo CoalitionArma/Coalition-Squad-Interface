@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Client world system: every 35 fixed frames registers the local player's CSI data and reports their
-//! 				display icon, rank and squad leader status to the server. Specialty icons come from an inventory scan.
+//!	\Description: 	Client world system: every UPDATE_INTERVAL registers the local player's CSI data and reports their display
+//! 				icon, rank and squad leader status to the server. Specialty icons come from an inventory scan that reruns
+//! 				when the local character's inventory changes or the player gets a new character.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_ClientSystem : GameSystem
@@ -16,9 +17,12 @@ class CSI_ClientSystem : GameSystem
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
-	protected int m_iCurrentUpdateCycle = 12;
-	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
-	protected int m_iLocallyStoredGroupID = -1;
+	// The specialty icon inventory scan only reruns after the local character's inventory reports a change,
+	// the way vanilla SCR_AvailableActionsConditionData refetches its inventory data (m_bCanFetchInventory)
+	protected SCR_InventoryStorageManagerComponent m_StorageManager;	//!< local character's inventory, listened to for changes
+	protected bool m_bInventoryChanged = true;							//!< rescan on the next update cycle
+	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;					//!< result of the last inventory scan
+	protected int m_iLocallyStoredGroupID = -1;							//!< used to detect group changes
 
 	protected ref CSI_SettingsJson m_SettingsJson;
 
@@ -35,11 +39,68 @@ class CSI_ClientSystem : GameSystem
 			.AddPoint(WorldSystemPoint.FixedFrame);
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! The inventory listeners are added from OnUpdatePoint, which only runs between OnStarted and OnStopped.
+	override protected void OnStopped()
+	{
+		RemoveInventoryListeners();
+		super.OnStopped();
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 INVENTORY EVENTS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
+	//! Keeps the inventory listeners on the local character's storage manager: added for the first character (initial
+	//! spawn) and moved to the new one when the character changes (respawn). Same pattern as vanilla
+	//! SCR_AvailableActionsConditionData.
+	//! \param[in] localPlayer
+	protected void UpdateInventoryListeners(notnull IEntity localPlayer)
+	{
+		SCR_InventoryStorageManagerComponent storageManager = SCR_InventoryStorageManagerComponent.Cast(localPlayer.FindComponent(SCR_InventoryStorageManagerComponent));
+		if (storageManager == m_StorageManager)
+			return;
+
+		RemoveInventoryListeners();
+
+		// Scan what the new character already carries, as vanilla SCR_GadgetManagerComponent.RegisterInitialGadgets does
+		m_StorageManager = storageManager;
+		m_bInventoryChanged = true;
+
+		if (!m_StorageManager)
+			return;
+
+		m_StorageManager.m_OnItemAddedInvoker.Insert(OnInventoryChanged);
+		m_StorageManager.m_OnItemRemovedInvoker.Insert(OnInventoryChanged);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void RemoveInventoryListeners()
+	{
+		if (!m_StorageManager)
+			return;
+
+		m_StorageManager.m_OnItemAddedInvoker.Remove(OnInventoryChanged);
+		m_StorageManager.m_OnItemRemovedInvoker.Remove(OnInventoryChanged);
+		m_StorageManager = null;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Fires for every item moved in or out (very often during spawn), so only flag it; the scan runs on the next update cycle.
+	//! \param[in] item
+	//! \param[in] storageOwner
+	protected void OnInventoryChanged(IEntity item, BaseInventoryStorageComponent storageOwner)
+	{
+		m_bInventoryChanged = true;
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected int m_iUpdate;	//!< fixed frames since the last update cycle
+	protected static const float UPDATE_INTERVAL = 0.5;	//!< seconds between update cycles
+	protected float m_fTimeSinceUpdate;					//!< seconds since the last update cycle
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
@@ -51,14 +112,12 @@ class CSI_ClientSystem : GameSystem
 			return;
 		}
 
-		m_iUpdate++;
-
-		// only update every 35 frames
-		if (!(m_iUpdate >= 35))
+		// Time based like vanilla fixed frame systems (SCR_AIEnemyMarkingSystem) rather than a count of fixed frames
+		m_fTimeSinceUpdate += args.GetTimeSliceSeconds();
+		if (m_fTimeSinceUpdate < UPDATE_INTERVAL)
 			return;
-		else
-			m_iUpdate = 0;
 
+		m_fTimeSinceUpdate = 0;
 		UpdateAllLocalPlayerValues();
 	}
 
@@ -69,6 +128,8 @@ class CSI_ClientSystem : GameSystem
 	{
 		int playerID = SCR_PlayerController.GetLocalPlayerId();
 
+		// Main entity: the player's own character, also while a Game Master possesses another one. Checked every cycle, so a
+		// first spawn or respawn is picked up on the next one (UpdateInventoryListeners then rescans the new character).
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
 		if (!localplayer)
@@ -100,7 +161,7 @@ class CSI_ClientSystem : GameSystem
 		};
 
 		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
-		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
+		UpdateInventoryListeners(localplayer);
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
 		//------------------------------------------------------------------------------------------------
@@ -173,14 +234,13 @@ class CSI_ClientSystem : GameSystem
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 12) 
+		if (displayIcon == CSI_EIcon.MAN && m_bInventoryChanged)
 		{
 			array<CSI_EIcon> validDisplayIcons = {};
 
-			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-
 			array<IEntity> allPlayerItems = {};
-				characterInventory.GetItems(allPlayerItems);
+			if (m_StorageManager)
+				m_StorageManager.GetItems(allPlayerItems);
 
 			array<BaseMuzzleComponent> muzzles = {};
 			// Parse through all items. Only RTO (the highest priority) ends the scan early, every other match
@@ -201,7 +261,7 @@ class CSI_ClientSystem : GameSystem
 				if(medTool)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.MEDIC);
-					break;
+					continue;
 				};
 
 				// Engineer: repair support station (repair kit)
@@ -209,7 +269,7 @@ class CSI_ClientSystem : GameSystem
 				if(engTool)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.ENG);
-					break;
+					continue;
 				};
 
 				// Demo: detonator, explosive charge or mine
@@ -219,7 +279,7 @@ class CSI_ClientSystem : GameSystem
 				if(detonator || explosives || mine)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.DEMO);
-					break;
+					continue;
 				};
 
 				// Weapons: MG, sniper, launcher, or an underslung grenade launcher muzzle
@@ -243,9 +303,9 @@ class CSI_ClientSystem : GameSystem
 							break;
 					};
 
-					// MG is the highest-priority weapon icon; no need to scan remaining items
-					if (validDisplayIcons.Contains(CSI_EIcon.MG))
-						break;
+					// MG is the highest-priority weapon icon; no need to check this weapon's muzzles
+					if (weaponType == EWeaponType.WT_MACHINEGUN)
+						continue;
 
 					muzzles.Clear();
 					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++)
@@ -276,7 +336,7 @@ class CSI_ClientSystem : GameSystem
 				default : displayIcon = CSI_EIcon.MAN;
 			}
 
-			m_iCurrentUpdateCycle = 0;
+			m_bInventoryChanged = false;
 			m_iLocallyStoredSpecialtyIcon = displayIcon;
 		}
 
