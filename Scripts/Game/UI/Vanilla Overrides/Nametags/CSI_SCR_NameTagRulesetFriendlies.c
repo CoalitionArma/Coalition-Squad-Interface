@@ -25,7 +25,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
+		if (m_SettingsManager && !m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
 			return true;
 
 		// CSI: trace to the body when tags are on the body (vanilla always traces to the head)

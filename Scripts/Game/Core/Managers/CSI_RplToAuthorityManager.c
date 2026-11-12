@@ -263,7 +263,14 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return;
 
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!groupManager)
+			return;
+
 		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
+
+		if (!playersGroup || playersGroup.IsPlayerLeader(playerID))
+			return;
+
 		playersGroup.SetGroupLeader(playerID);
 	}
 
@@ -278,9 +285,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return;
 
 		SCR_GroupsManagerComponent groupManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!groupManager)
+			return;
+
 		SCR_AIGroup playersGroup = groupManager.GetPlayerGroup(playerID);
 
-		if (!playersGroup.IsPlayerLeader(playerID))
+		if (!playersGroup || !playersGroup.IsPlayerLeader(playerID))
 			return;
 
 		// Never below the current member count
@@ -330,6 +340,18 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//! \return the local player's instance
 	static CSI_RplToAuthorityManager GetInstance()
 	{
+		PlayerController localController = GetGame().GetPlayerController();
+		if (localController)
+		{
+			CSI_PlayerControllerManager controllerManager = CSI_PlayerControllerManager.Cast(localController.FindComponent(CSI_PlayerControllerManager));
+			if (controllerManager)
+			{
+				CSI_RplToAuthorityManager localInstance = CSI_RplToAuthorityManager.Cast(controllerManager.FindComponent(CSI_RplToAuthorityManager));
+				if (localInstance)
+					return localInstance;
+			}
+		}
+
 		return m_sInstance;
 	}
 

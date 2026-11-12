@@ -33,7 +33,14 @@ class CSI_PlayerSettingsMenu : ChimeraMenuBase
     //------------------------------------------------------------------------------------------------
 	protected void OnMenuBack()
 	{
-		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		GetGame().GetMenuManager().CloseAllMenus();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Remove the listener however the menu gets closed, not only through OnMenuBack
+	override void OnMenuClose()
+	{
+		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
+		super.OnMenuClose();
 	}
 }

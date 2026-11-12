@@ -48,6 +48,18 @@ class CSI_HUD : SCR_InfoDisplay
 		m_Group = CSI_Group.Cast(group.FindHandler(CSI_Group));
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Remove the listeners added in OnStartDraw, otherwise each restart of the display stacks another pair
+	//! and the DOWN/UP toggles cancel each other out
+	//! \param[in] owner
+	protected override event void OnStopDraw(IEntity owner)
+	{
+		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.DOWN, ToggleIsVisible);
+		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.UP, ToggleIsVisible);
+
+		super.OnStopDraw(owner);
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================

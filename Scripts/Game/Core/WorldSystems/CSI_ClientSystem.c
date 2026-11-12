@@ -74,7 +74,11 @@ class CSI_ClientSystem : GameSystem
 		if (!localplayer)
 			return;
 
-		// Get base group manager component
+		// Re-resolve each cycle; on a listen server the instance cached before the host's controller existed may belong to another player
+		CSI_RplToAuthorityManager localRplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		if (localRplToAuthorityManager)
+			m_RplToAuthorityManager = localRplToAuthorityManager;
+
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
 		if (!groupsManagerComponent)

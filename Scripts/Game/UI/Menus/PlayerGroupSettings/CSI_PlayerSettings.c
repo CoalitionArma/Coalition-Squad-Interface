@@ -79,6 +79,13 @@
 
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 
+		// Player hasn't registered CSI data yet (e.g. hasn't spawned since joining)
+		if (!playerData)
+		{
+			m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
+			return;
+		}
+
 		m_PlayerUpdate = playerData.GetOnDataUpdate();
 
 		if (m_PlayerUpdate)
@@ -93,6 +100,8 @@
 		// Reset to AUTO (item 0) too, otherwise the previously viewed player's override stays selected
 		if (iconOverride != CSI_EOverrideIcon.AUTO)
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
+		else
+			m_wIconOveride.SetCurrentItem(0);
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 
@@ -149,7 +158,11 @@
 	//! Makes the player squad leader, then closes the menus.
 	protected void OnPromoteToSLClicked()
 	{
-		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0)
+			return;
+
+		SCR_AIGroup localGroup = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (!localGroup || localGroup.IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
@@ -164,6 +177,9 @@
 			return;
 
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+		if (!playerData)
+			return;
+
 		m_RplToAuthorityManager.Owner_UpdatePlayerTeamLeader(m_iPlayerID, !playerData.GetIsTeamLeader());
 	};
 
@@ -171,7 +187,11 @@
 	//! Kicks the player from the group (vanilla kick, see CSI_RplToAuthorityManager.RpcAsk_RemovePlayerFromGroup).
 	protected void OnKickClicked()
 	{
-		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0)
+			return;
+
+		SCR_AIGroup localGroup = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (!localGroup || localGroup.IsPlayerLeader(m_iPlayerID))
 			return;
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);

@@ -43,6 +43,17 @@ class CSI_PlayerControllerManager : ScriptComponent
 			CSI_SettingsManager.GetInstance().RequestSettingsUpdate();
 	}
 
+	//------------------------------------------------------------------------------------------------
+	override protected void OnDelete(IEntity owner)
+	{
+		// Pairs with the listener added in OnPostInit (harmless on a dedicated server, where none was added)
+		InputManager inputManager = GetGame().GetInputManager();
+		if (inputManager)
+			inputManager.RemoveActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
+
+		super.OnDelete(owner);
+	}
+
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTING METHODS
@@ -63,6 +74,10 @@ class CSI_PlayerControllerManager : ScriptComponent
 	//! CSI_PlayerSettingsMenu action: group leaders get the group menu, everyone else the player settings menu.
 	protected void OpenLocalPlayerSettingsMenu()
 	{
+		// On a listen server every player's controller registers this listener; only the host's own should act
+		if (GetOwner() != GetGame().GetPlayerController())
+			return;
+
 		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
 			GetGame().OpenGroupMenu();
@@ -79,6 +94,14 @@ class CSI_PlayerControllerManager : ScriptComponent
 	//! \return the local player's instance (see CSI_RplToAuthorityManager.GetInstance)
 	static CSI_PlayerControllerManager GetInstance()
 	{
+		PlayerController localController = GetGame().GetPlayerController();
+		if (localController)
+		{
+			CSI_PlayerControllerManager localInstance = CSI_PlayerControllerManager.Cast(localController.FindComponent(CSI_PlayerControllerManager));
+			if (localInstance)
+				return localInstance;
+		}
+
 		return m_sInstance;
 	}
 

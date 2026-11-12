@@ -71,6 +71,10 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	//! \param[in] playerID player to show; -1 hides the widget
 	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
 	{
+		// Groups larger than the layout's 25 player widgets would otherwise index out of bounds
+		if (!m_aPlayerWidgets.IsIndexValid(widgetNumber))
+			return;
+
 		Widget player = m_aPlayerWidgets[widgetNumber];
 
 		if (player)

@@ -64,11 +64,15 @@ modded class SCR_NTName : SCR_NTTextBase
 
 			GetText(data, name, nameParams);
 
-			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
-			data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
-			
+			// Like vanilla SCR_NTName, only clear the update flags once a name was actually found,
+			// so a player whose name isn't available yet is retried next update instead of staying blank
 			if (name.IsEmpty())
 				SetText(data, "GETNAME_ERROR", nameParams, index);
+			else
+			{
+				data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
+				data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
+			}
 		}
 
 		//-----------------------------------------------------------------------

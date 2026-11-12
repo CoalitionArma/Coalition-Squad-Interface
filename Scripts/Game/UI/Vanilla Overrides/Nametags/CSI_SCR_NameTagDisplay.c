@@ -22,6 +22,10 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
+		// Can be missing while dead/respawning or before the game mode streams in
+		if (!m_SettingsManager || !m_CurrentPlayerTag || !m_CurrentPlayerTag.m_CharController || !SCR_PlayerController.s_pLocalPlayerController)
+			return;
+
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || m_b2DSightsActive || SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
 		int baseRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
 		int nametagsRange;

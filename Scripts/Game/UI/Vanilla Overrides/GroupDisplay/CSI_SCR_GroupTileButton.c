@@ -21,7 +21,10 @@ modded class SCR_GroupTileButton
 	{
 		super.OnClick(w, x, y, button);
 
-		Widget playerSettings = GetRootFrame(m_wRoot).FindAnyWidget("PlayersSettings");
+		Widget rootFrame = GetRootFrame(m_wRoot);
+		Widget playerSettings;
+		if (rootFrame)
+			playerSettings = rootFrame.FindAnyWidget("PlayersSettings");
 
 		if (playerSettings)
 			playerSettings.SetVisible(false);
@@ -39,7 +42,7 @@ modded class SCR_GroupTileButton
 
 		for (int e; e <= 50; e++)
 		{
-			if (currentWidget.GetName() == "rootFrame")
+			if (!currentWidget || currentWidget.GetName() == "rootFrame")
 				break;
 			currentWidget = currentWidget.GetParent();
 		}

@@ -128,8 +128,8 @@ class CSI_HUDSystem : GameSystem
 			{
 				m_bIsLocalPlayerInVehicle = true;
 
-				if (SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)))
-					m_bIsLocalPlayerInMortar = true;
+				// Assigned (not just set true) so moving straight from a mortar into another vehicle clears it
+				m_bIsLocalPlayerInMortar = SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)) != null;
 			};
 		} else {
 			m_bIsLocalPlayerInVehicle = false;

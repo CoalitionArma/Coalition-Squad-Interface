@@ -19,8 +19,12 @@ modded class SCR_PlayerTileButtonComponent
 	{
 		m_TileButton = tileButton;
 
-		if (m_TileButton)
-			m_PlayerSettings = m_TileButton.GetRootFrame(m_wRoot).FindAnyWidget("PlayersSettings");
+		if (!m_TileButton)
+			return;
+
+		Widget rootFrame = m_TileButton.GetRootFrame(m_wRoot);
+		if (rootFrame)
+			m_PlayerSettings = rootFrame.FindAnyWidget("PlayersSettings");
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -33,22 +37,25 @@ modded class SCR_PlayerTileButtonComponent
 	//! \return
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
-		Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");
+		if (!m_PlayerSettings)
+			return super.OnClick(w, x, y, button);
 
-        if (m_PlayerSettings && SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(GetTilePlayerID()).IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
+		Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");
+		SCR_AIGroup tilePlayersGroup = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(GetTilePlayerID());
+		bool showSettings = tilePlayersGroup && tilePlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId());
+
+		if (showSettings)
 		{
 			CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(m_PlayerSettings.FindHandler(CSI_PlayerSettings));
+			if (playerSettings)
 				playerSettings.UpdatePlayerSettingsPlayerID(GetTilePlayerID());
+		}
 
-			m_PlayerSettings.SetVisible(true);
-			advSettings.SetVisible(true);
-			return true;
-		} else {
-			m_PlayerSettings.SetVisible(false);
-			advSettings.SetVisible(false);
-			return true;
-		};
+		m_PlayerSettings.SetVisible(showSettings);
 
-		return super.OnClick(w, x, y, button);
+		if (advSettings)
+			advSettings.SetVisible(showSettings);
+
+		return true;
 	}
 }
