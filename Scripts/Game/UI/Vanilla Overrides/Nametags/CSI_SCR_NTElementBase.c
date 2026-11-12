@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: shared helpers for CSI's nametag elements: distance-based text clearing, color team coloring,
-//! 				and text and icon sizes from NAMTEAG_SCALE.
+//!	\Description: 	CSI changes: shared helpers for CSI's nametag elements: text clearing by distance and by place in the field
+//! 				of view, color team coloring, and text and icon sizes from NAMTEAG_SCALE.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
@@ -15,7 +15,8 @@ modded class SCR_NTElementBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] data
-	//! \return true if the tag should show only its icon: AI, no zone, or beyond the NAMTEAG_RANGE_SIMPLIFIED cutoff
+	//! \return true if the tag should show only its icon: AI, no zone, beyond the NAMTEAG_RANGE_SIMPLIFIED cutoff, or in the
+	//! outer part of the field of view (NAMETAG_FIELD_OF_VIEW_SIMPLIFIED)
 	protected bool ShouldWeClearText(SCR_NameTagData data)
 	{
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);

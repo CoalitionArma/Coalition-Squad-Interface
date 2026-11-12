@@ -2,6 +2,19 @@ void ScriptInvoker_CSI_SettingsSubMenu(CSI_SettingsSubMenu menu);
 typedef func ScriptInvoker_CSI_SettingsSubMenu;
 typedef ScriptInvokerBase<ScriptInvoker_CSI_SettingsSubMenu> ScriptInvoker_CSI_SettingsSubMenuChanged;
 
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	CSI tab in Settings. Settings the server overrides show the forced value and are locked for non-admins;
+//! 				admins get a server override checkbox per setting (sent when the tab closes). The right side holds two
+//! 				sub-layouts with their own components, driven from here like CSI_HUD drives its elements: Setting Info for
+//! 				the hovered setting (CSI_SettingInfo) and, at the bottom, the admin-only Server Admin panel (CSI_ServerAdmin).
+//! 				Players without saved settings see the server's defaults here; their settings file is only written once
+//! 				they change something.
+//!
+//------------------------------------------------------------------------------------------------
 class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 {
 	protected CSI_SettingsManager m_SettingsManager;
@@ -13,6 +26,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	{
 		super.OnTabCreate(menuRoot, buttonsLayout, index);
 
+		// Bindings are rebuilt below, skipping server-overridden settings
 		m_aSettingsBindings.Clear();
 
 		if (!m_SettingsManager || !m_RplToAuthorityManager || !m_PlayerControllerManager)
@@ -88,6 +102,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		{
 			if (SCR_Global.IsAdmin())
 			{
+				// Send every setting: checked = override with the widget's value, unchecked = clear the override
 				Widget serverOverridesLayoutWidget = m_wRoot.FindAnyWidget("ServerOverrides");
 				foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
 				{

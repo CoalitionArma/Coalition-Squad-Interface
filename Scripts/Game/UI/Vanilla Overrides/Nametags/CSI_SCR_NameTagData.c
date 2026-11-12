@@ -1,3 +1,14 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: names come from CSI_UIHelper.GetPlayersName; adds the player's CSI_PlayerData, group name and
+//! 				place within the field of view for CSI's nametag elements; tag position and height come from settings;
+//! 				opacity follows screen brightness.
+//! 				InitDefaults, GetName, SetVisibility and UpdateTagPos are copies of vanilla, with CSI's lines marked "CSI:".
+//! 
+//------------------------------------------------------------------------------------------------
 modded class SCR_NameTagData : Managed
 {
 	protected CSI_SettingsManager m_SettingsManager;
@@ -15,6 +26,7 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
+		// CSI: managers used by the CSI overrides
 		if (!m_SettingsManager || !m_PlayerDataManager)
 		{
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
@@ -24,12 +36,12 @@ modded class SCR_NameTagData : Managed
 		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
 	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
 
-		UpdateAttatchedTo();
+		UpdateAttatchedTo();	// CSI: position from NAMETAG_POSITION instead of vanilla's HEAD
 
 		m_iZoneID = -1;
 		m_iGroupID = -1;
 		m_iPlayerID = -1;
-		m_PlayerData = null;
+		m_PlayerData = null;	// CSI
 		m_fTimeSliceUpdate = 1.0;
 		m_fTimeSliceVON = 0;
 		m_fTimeSlicePosChange = 0;
@@ -39,7 +51,7 @@ modded class SCR_NameTagData : Managed
 		m_fDistance = 0;
 		m_fOpacityFade = 1;
 		m_sName = string.Empty;
-		m_sGroupName = string.Empty;
+		m_sGroupName = string.Empty;	// CSI
 		m_aNameParams = {};
 	};
 
@@ -48,6 +60,7 @@ modded class SCR_NameTagData : Managed
 	{
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
+			// CSI: name with rank via CSI_UIHelper, and refresh the player's CSI data
 			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
 			UpdatePlayerData();
 		} else if (m_eType == ENameTagEntityType.AI)
@@ -71,6 +84,10 @@ modded class SCR_NameTagData : Managed
 
 	//------------------------------------------------------------------------------------------------
 	//! Set visibility of nametag widget
+	//! \param[in] widget
+	//! \param[in] visible
+	//! \param[in] visibleOpacity
+	//! \param[in] animate unused by CSI, UpdateOpacity decides whether to animate
 	override void SetVisibility(Widget widget, bool visible, float visibleOpacity, bool animate = true)
 	{
 		if (!widget)
@@ -91,6 +108,7 @@ modded class SCR_NameTagData : Managed
 		else
 			targetVal = 0;
 
+		// CSI: replaces vanilla's animate/SetOpacity block; opacity goes through UpdateOpacity (brightness-based)
 		if (targetVal >= 0.1)
 			widget.SetVisible(true);
 
@@ -98,6 +116,13 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Sets a nametag element's opacity from the current camera's scene brightness (boosted by the HDR factor for NVGs),
+	//! fading if the tag has a fade speed. A target of 0 (or no entity) hides it. With NAMETAG_BRIGHTNESS_DIMMING off,
+	//! the target opacity is used as is.
+	//! \param[in] widget element to update; if null, data.m_aNametagElements[index] is used
+	//! \param[in] targetOpacity only checked for 0
+	//! \param[in] data
+	//! \param[in] index
 	void UpdateOpacity(Widget widget, float targetOpacity = 0.85, SCR_NameTagData data = null, int index = 0)
 	{
 		if (!widget)
@@ -149,6 +174,8 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Caches the player's group name in m_sGroupName: the group's custom name, else its callsign.
+	//! Empty if they have no group or GROUP_IN_NAMETAG_VISIBLE is off.
 	void GetGroupName()
 	{
 		// TODO: Better AI handling
@@ -175,7 +202,7 @@ modded class SCR_NameTagData : Managed
 	//! Update tag position
 	override void UpdateTagPos()
 	{
-		UpdateAttatchedTo();
+		UpdateAttatchedTo();	// CSI: pick up NAMETAG_POSITION changes
 
 		vector matPos[4];
 		Animation anim = m_Entity.GetAnimation();
@@ -184,6 +211,7 @@ modded class SCR_NameTagData : Managed
 		anim.GetBoneMatrix(m_iHeadBone, matPos);
 		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
 
+		// CSI: height offset from NAMETAG_POSITION_OFFSET (0-5, 0.1 m steps) instead of vanilla's HEAD_OFFSET/BODY_OFFSET
 		vector nametagOffsetVector = "0 0 0";
 		int nametagOffset = 0;
 
@@ -209,6 +237,7 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Looks up m_PlayerData for m_iPlayerID.
 	protected void UpdatePlayerData()
 	{
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
@@ -218,6 +247,7 @@ modded class SCR_NameTagData : Managed
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Sets the tag position (head or body) from the NAMETAG_POSITION setting; BODY until settings exist.
 	void UpdateAttatchedTo()
 	{
 		ENameTagPosition nametagPos = ENameTagPosition.BODY;

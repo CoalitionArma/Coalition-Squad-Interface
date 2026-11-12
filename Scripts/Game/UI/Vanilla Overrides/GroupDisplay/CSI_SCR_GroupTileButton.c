@@ -1,7 +1,22 @@
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: player tiles show CSI names, role icons and color teams; members are listed in CSI's sorted order;
+//! 				clicking a group hides the CSI player settings panel. SetupPlayerTile and RefreshPlayers are copies of vanilla,
+//! 				with CSI's lines marked "CSI:".
+//! 
+//------------------------------------------------------------------------------------------------
 modded class SCR_GroupTileButton
 {
 	//------------------------------------------------------------------------------------------------
+	//! Also hides the CSI player settings panel.
+	//! \param[in] w
+	//! \param[in] x
+	//! \param[in] y
+	//! \param[in] button
+	//! \return
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
 		super.OnClick(w, x, y, button);
@@ -15,6 +30,9 @@ modded class SCR_GroupTileButton
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Walks up from w (at most 50 levels) to the group menu's "rootFrame" widget.
+	//! \param[in] w
+	//! \return "rootFrame", or null if the top of the hierarchy is reached first
 	Widget GetRootFrame(Widget w)
 	{
 		Widget currentWidget = w;
@@ -41,6 +59,7 @@ modded class SCR_GroupTileButton
 		if (!group)
 			return;
 
+		// CSI: color teams are only shown to members of this group
 		bool isLocalPlayerInGroup = group.GetPlayerIDs().Contains(SCR_PlayerController.GetLocalPlayerId());
 		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 
@@ -69,18 +88,19 @@ modded class SCR_GroupTileButton
 		loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget("LoadoutIcon"));
 		ImageWidget m_wIconSymbol = ImageWidget.Cast(playerTile.FindAnyWidget("TaskIconSymbol"));
 		ImageWidget platformIcon = ImageWidget.Cast(playerTile.FindAnyWidget("PlatformIcon"));
-		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));
+		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));	// CSI: tinted by color team
 
 		playerButton = ButtonWidget.Cast(playerTile.FindAnyWidget("PlayerButton"));
 		if (!playerButton)
 			return;
 
 		m_PlayerTileComponent = SCR_PlayerTileButtonComponent.Cast(playerButton.FindHandler(SCR_PlayerTileButtonComponent));
-		m_PlayerTileComponent.SetGroupTileButton(this);
+		m_PlayerTileComponent.SetGroupTileButton(this);	// CSI: lets the tile find the CSI player settings panel
 		m_PlayerTileComponent.SetTilePlayerID(playerID);
 
 		SetupOptionsCombo(playerTile);
 
+		// CSI: name with rank (CSI_UIHelper), vanilla's filtered name as fallback
         string playerText = CSI_UIHelper.GetPlayersName(playerID);
 
         if (playerText.IsEmpty())
@@ -104,6 +124,8 @@ modded class SCR_GroupTileButton
 			}
 		}
 
+		// CSI: vanilla's own-name color is dropped; names use the color team instead
+
 		//set the state of mute
 		PlayerController pc = GetGame().GetPlayerController();
 		// Using another PlayerController variable to not alter rest of code
@@ -117,8 +139,10 @@ modded class SCR_GroupTileButton
 			};
 		};
 
+		// CSI: replaces vanilla's loadout icon, leader icon and badge color with the CSI role icon and color team
 		if (playerData && loadoutIcon && playerName && lineBackground)
 		{
+			// Remove first so repeated setups don't stack subscriptions
 			playerData.GetOnDataUpdate().Remove(RefreshPlayers);
 
 			CSI_EIcon displayIcon = playerData.GetDisplayIcon();
@@ -129,6 +153,7 @@ modded class SCR_GroupTileButton
 
             string iconString = CSI_UIHelper.GetIconString(displayIcon, true, setAlt);
 
+			// MAN uses vanilla's pointer icon
 			if (iconString == "MAN_ICON")
 				loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 			else

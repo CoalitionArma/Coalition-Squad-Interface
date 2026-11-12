@@ -1,3 +1,14 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Radar inside the compass: an icon per group member within range, positioned and rotated relative to the
+//! 				local player. Icons are created from CSI_Icon.layout when a member comes into range and deleted when they leave it.
+//! 				The range comes from RADAR_RANGE_ON_FOOT or RADAR_RANGE_IN_VEHICLE. Members outside the RADAR_FIELD_OF_VIEW
+//! 				angle around where the local player looks slowly fade out.
+//!
+//------------------------------------------------------------------------------------------------
 class CSI_Radar : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -59,6 +70,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		{
 			// Hoist loop-invariant values
 		int localPlayerId = SCR_PlayerController.GetLocalPlayerId();
+
+		// Radar range in metres from the settings, one for on foot and one for in vehicles
 		float searchRadius;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
 			searchRadius = 3.5;
@@ -91,7 +104,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			if (playerID != localPlayerId)
 			{
-					// Get Relative Direction (algebraic simplification of the original two-step Mod)
+				// Bearing to the player relative to where the local player is facing
 				float dir = vector.Direction(playerCharacterOrigin, localOrigin).ToYaw();
 				float relDir = Math.Mod(360 - dir - localYaw, 360) * Math.DEG2RAD;
 

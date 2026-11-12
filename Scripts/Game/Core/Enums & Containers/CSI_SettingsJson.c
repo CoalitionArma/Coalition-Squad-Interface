@@ -4,8 +4,9 @@
 //! \Last Updated: 	2026-11-11
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Saves and loads the local player's CSI settings as an int array in $profile:CSI_Settings.json,
-//! 				indexed like CSI_GameSettings.GetSettingsArray().
-//! 
+//! 				indexed like CSI_GameSettings.GetSettingsArray(). The file is only written when the player saves their
+//! 				settings (closing the CSI settings tab), so a server's default settings never end up in it.
+//!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsJson : JsonApiStruct
 {
@@ -13,7 +14,7 @@ class CSI_SettingsJson : JsonApiStruct
     protected ref array<int> m_aSettingsValues = new array<int>;
 
 	//------------------------------------------------------------------------------------------------
-	//! Loads the saved values into the CSI_GameSettings user settings module. Does nothing if there's no file yet.
+	//! Loads the saved values into the CSI_GameSettings user settings module. Does nothing if there's no valid file yet.
     void LoadFromFile()
 	{
         if (FileIO.FileExists(m_sSettingsPath))

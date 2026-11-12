@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
 //! 				which applies server overrides on top of these.

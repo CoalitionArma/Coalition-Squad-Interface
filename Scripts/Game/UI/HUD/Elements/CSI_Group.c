@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	HUD group list beside the compass: fills the layout's 25 fixed Player0..24 widgets in CSI_HUDSystem's sorted order.
+//! 				Only shown in groups with more than one player.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_Group : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -7,7 +16,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
 
-	protected ref array<int> m_aStoredGroupPlayerIDs;
+	protected ref array<int> m_aStoredGroupPlayerIDs;	//!< last array applied; null forces a refresh
 	protected ref array<Widget> m_aPlayerWidgets;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -30,11 +39,12 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the group interface element on each frame
+	//! Called every frame by CSI_HUD; only does work when the group array changed.
 	void Update()
 	{
 		array<int> groupArray = m_HUDSystem.GetLocalGroupPlayerIds();
 
+		// Same array reference = same group (CSI_HUDSystem hands out a new array on change)
 		if(m_aStoredGroupPlayerIDs == groupArray)
 			return;
 
@@ -47,6 +57,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		else
 			groupCount = 0;
 
+		// Hide the unused widgets
 		for (int e = groupCount; e <= 24; e++)
 			UpdatePlayerWidget(e, -1);
 	}
@@ -56,9 +67,8 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the interface widget for a specific player in the group dsiplay
-	//! \param[in] widgetNumber Widget index to update
-	//! \param[in] playerID ID of the player to display
+	//! \param[in] widgetNumber index of the Player widget
+	//! \param[in] playerID player to show; -1 hides the widget
 	protected void UpdatePlayerWidget(int widgetNumber, int playerID)
 	{
 		Widget player = m_aPlayerWidgets[widgetNumber];

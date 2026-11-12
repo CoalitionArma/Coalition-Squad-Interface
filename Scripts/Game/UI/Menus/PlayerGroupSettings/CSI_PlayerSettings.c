@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Player settings panel (in the group menu for leaders, in CSI_PlayerSettingsMenu otherwise): shows a player's
+//! 				name and icon and sends color team, icon override, promote to SL/TL and kick requests to the server.
+//! 
+//------------------------------------------------------------------------------------------------
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
 	protected CSI_PlayerDataManager m_PlayerDataManager;
@@ -6,8 +15,8 @@
 	protected XComboBoxWidget m_wIconOveride;
 	protected TextWidget m_wPlayerName;
 	protected ImageWidget m_wIcon;
-	protected int m_iPlayerID = -1;
-	protected ScriptInvoker m_PlayerUpdate;
+	protected int m_iPlayerID = -1;		//!< player the panel shows
+	protected ScriptInvoker m_PlayerUpdate;	//!< that player's GetOnDataUpdate(), while subscribed
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -43,6 +52,8 @@
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Shows a player in the panel.
+	//! \param[in] playerID
 	void UpdatePlayerSettingsPlayerID(int playerID)
 	{
 		m_iPlayerID = playerID;
@@ -54,6 +65,7 @@
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Refreshes the panel from the player's data and (re)subscribes to its updates.
 	protected void UpdatePlayerSettingsInformation()
 	{
 		if (m_iPlayerID <= 0)
@@ -77,11 +89,14 @@
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
 		string displayIconStr = CSI_UIHelper.GetIconString(displayIcon, true);
 
+		// Combo items: 0 = AUTO, then RTO (4) onwards, so item = value - 3.
+		// Reset to AUTO (item 0) too, otherwise the previously viewed player's override stays selected
 		if (iconOverride != CSI_EOverrideIcon.AUTO)
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 
+		// MAN uses vanilla's pointer icon
 		if (displayIconStr == "MAN_ICON")
 			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 		else
@@ -92,6 +107,8 @@
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Sets the color team named by the clicked button ("Red", "Blue", "Yellow", "Green", else NONE).
+	//! \param[in] CTcomponent
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
 		if (m_iPlayerID <= 0)
@@ -113,6 +130,7 @@
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Applies the icon override selected in the combo.
 	protected void OnOverrideIconClicked()
 	{
 		if (m_iPlayerID <= 0)
@@ -120,6 +138,7 @@
 
 		CSI_EOverrideIcon iconToOverride = m_wIconOveride.GetCurrentItem();
 
+		// Combo item to enum value (item 1 = RTO = 4); item 0 stays AUTO
 		if (iconToOverride > 0)
 			iconToOverride = iconToOverride + 3;
 
@@ -127,6 +146,7 @@
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Makes the player squad leader, then closes the menus.
 	protected void OnPromoteToSLClicked()
 	{
 		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
@@ -137,6 +157,7 @@
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Toggles the player's team leader flag.
 	protected void OnPromoteToTLClicked()
 	{
 		if (m_iPlayerID <= 0)
@@ -147,6 +168,7 @@
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Kicks the player from the group (vanilla kick, see CSI_RplToAuthorityManager.RpcAsk_RemovePlayerFromGroup).
 	protected void OnKickClicked()
 	{
 		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))

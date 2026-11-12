@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Client world system that feeds the HUD and nametags: local character, yaw, vehicle/mortar state and the
+//! 				sorted group member list (every 60 frames).
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_HUDSystem : GameSystem
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -7,7 +16,7 @@ class CSI_HUDSystem : GameSystem
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;
-	protected ref array<int> m_aLocalGroupPlayerIds = {};
+	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< replaced (not modified) when the group changes, so readers can compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
@@ -28,6 +37,7 @@ class CSI_HUDSystem : GameSystem
 
 	//------------------------------------------------------------------------------------------------
 	//! Should be paused when simulation is paused
+	//! \return
 	override bool ShouldBePaused()
 	{
 		return true;
@@ -38,12 +48,14 @@ class CSI_HUDSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! \return null while the local player has no character
 	SCR_ChimeraCharacter GetLocalPlayerCharacter()
 	{
 		return m_LocalPlayerCharacter;
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return local group's player IDs in display order (see GetSortedGroupArray); a new array when the group changes
 	array<int> GetLocalGroupPlayerIds()
 	{
 		return m_aLocalGroupPlayerIds;
@@ -68,6 +80,7 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return negated yaw the compass and radar face, updated every frame
 	float GetLocalYaw()
 	{
 		return m_fLocalYaw;
@@ -77,7 +90,7 @@ class CSI_HUDSystem : GameSystem
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected int m_iUpdate;
+	protected int m_iUpdate;	//!< frames since the last group/vehicle refresh
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
@@ -88,9 +101,11 @@ class CSI_HUDSystem : GameSystem
 			return;
 		}
 
+		// Every frame: yaw
 		m_iUpdate++;
 		UpdateLocalAimingYaw();
 
+		// Every 60 frames: character, vehicle state and group list
 		if (!(m_iUpdate >= 60))
 			return;
 		else
@@ -132,7 +147,7 @@ class CSI_HUDSystem : GameSystem
 		}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the local player's aiming yaw angle.
+	//! Caches the local yaw for the compass and radar: camera yaw in vehicles (or when aim yaw is positive), else head aim.
 	void UpdateLocalAimingYaw()
 	{
 		if (!m_LocalPlayerCharacter)
@@ -156,9 +171,10 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Returns a sorted array of player IDs based on their group assignments
-	//! \param[in] playerIDs: Array of player IDs to sort
-	//! \return Sorted array of player IDs
+	//! Sorts group members for display: squad leader, then the SL's color team, the other teams, and unassigned
+	//! players last; each team's TL first. Players without CSI data are left out.
+	//! \param[in] playerIDs
+	//! \return sorted player IDs
 	array<int> GetSortedGroupArray(array<int> playerIDs)
 	{
 		if (!m_PlayerDataManager)
@@ -179,11 +195,11 @@ class CSI_HUDSystem : GameSystem
 				currentSLColorTeam = playerData.GetColorTeam();
 		};
 
+		// Team order, with the SL's own team moved to the front
 		array<CSI_EColorTeam> playersCTArray = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.YELLOW, CSI_EColorTeam.GREEN, CSI_EColorTeam.NONE};
 		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
 		playersCTArray.InsertAt(currentSLColorTeam, 0);
 
-		// Parse through current group array.
 		foreach (int playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);

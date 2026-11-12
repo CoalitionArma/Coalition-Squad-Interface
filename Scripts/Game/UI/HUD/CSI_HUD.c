@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	CSI's HUD InfoDisplay: finds the stamina bar, compass, radar and group list in its layout and updates them every frame.
+//! 				Public API: CRF mods UpdateValues and uses m_wRoot.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_HUD : SCR_InfoDisplay
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -6,7 +15,7 @@ class CSI_HUD : SCR_InfoDisplay
 
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_CSIHUDSystem;
-	protected bool m_bIsVisible = false;
+	protected bool m_bIsVisible = false;	//!< toggled by CSI_RevealUI, only used with AUTO_HIDE_HUD
 
 	protected CSI_Stamina m_Stamina;
 	protected CSI_Compass m_Compass;
@@ -24,6 +33,7 @@ class CSI_HUD : SCR_InfoDisplay
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_CSIHUDSystem = CSI_HUDSystem.GetInstance();
 
+		// Toggled on press and release, so the HUD shows while the key is held
 		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.DOWN, ToggleIsVisible);
 		GetGame().GetInputManager().AddActionListener("CSI_RevealUI", EActionTrigger.UP, ToggleIsVisible);
 
@@ -47,6 +57,7 @@ class CSI_HUD : SCR_InfoDisplay
 	{
 		super.UpdateValues(owner, timeSlice);
 
+		// Hidden while auto-hide is on and the reveal key isn't held, and while using a mortar
 		if ((!m_bIsVisible && m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) || m_CSIHUDSystem.GetIsLocalPlayerInMortar())
 		{
 			m_wRoot.SetVisible(false);
@@ -61,6 +72,7 @@ class CSI_HUD : SCR_InfoDisplay
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! CSI_RevealUI listener (DOWN and UP).
 	protected void ToggleIsVisible()
 	{
 		m_bIsVisible = !m_bIsVisible;

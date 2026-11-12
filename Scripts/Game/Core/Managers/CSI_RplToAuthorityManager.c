@@ -1,5 +1,15 @@
 class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Client to server bridge on each player controller (child of CSI_PlayerControllerManager).
+//! 				Owner_* methods run on the owning client and send RpcAsk_* to the server, which hands off to
+//! 				CSI_RplBroadcastManager, CSI_SettingsManager or vanilla group APIs.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_RplToAuthorityManager : ScriptComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -11,7 +21,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	protected CSI_SettingsManager m_SettingsManager;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 SYSTEM INITILIZATION
+//	 SYSTEM INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
@@ -29,13 +39,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Registers player data on authority (host)
-	//! \param[in] playerID: ID of player to update
+	//! Asks the server to create the player's data, unless this client already has it.
+	//! \param[in] playerID
 	void Owner_RegisterPlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data exists
 		if(playerData)
 			return;
 
@@ -43,13 +52,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates player data to clear any group-specific values
-	//! \param[in] playerID: ID of player to clear
+	//! Asks the server to reset the player's group-specific data (color team, override icon, team leader).
+	//! \param[in] playerID
 	void Owner_ClearGroupSpecificData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if player has any data
 		if(!playerData)
 			return;
 
@@ -57,14 +65,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Update the specified player's team color on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] displayIcon: Icon to assign to player (CSI_EIcon)
 	void Owner_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed (called every update cycle)
 		if(!playerData || (playerData && displayIcon == playerData.GetDisplayIcon()))
 			return;
 
@@ -72,14 +77,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	//! Update the specified player's team color on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] colorTeam: Color team to assign (CSI_EColorTeam)
 	void Owner_UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed
 		if(!playerData || (playerData && colorTeam == playerData.GetColorTeam()))
 			return;
 
@@ -87,14 +89,13 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates a player's icon override state on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] overrideIcon: The override icon to apply
+	//! \param[in] playerID
+	//! \param[in] overrideIcon AUTO removes the override
 	void Owner_UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed
 		if(!playerData || (playerData && overrideIcon == playerData.GetOverrideIcon()))
 			return;
 
@@ -102,14 +103,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Update the specified player's team color on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] rank: Rank to assign to player (SCR_ECharacterRank)
 	void Owner_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed (called every update cycle)
 		if(!playerData || (playerData && rank == playerData.GetRank()))
 			return;
 
@@ -117,14 +115,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates team leader status on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] isTL: Whether player should be team leader
 	void Owner_UpdatePlayerTeamLeader(int playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed
 		if(!playerData || (playerData && isTL == playerData.GetIsTeamLeader()))
 			return;
 
@@ -132,14 +127,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Update the specified player's team color on the authority.
-	//! \param[in] playerID: ID of player to update
-	//! \param[in] isSL: New color team to assign (CSI_EColorTeam)
 	void Owner_UpdatePlayerSquadLeader(int playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Check if any data has updated
+		// Only send when the value changed (called every update cycle)
 		if(!playerData || (playerData && isSL == playerData.GetIsSquadLeader()))
 			return;
 
@@ -147,24 +139,31 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] playerID player to make leader of their group
 	void Owner_PromotePlayerToSL(int playerID)
 	{
 		Rpc(RpcAsk_PromotePlayerToSL, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] playerID leader of the group to resize
+	//! \param[in] maxMembers
 	void Owner_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
 		Rpc(RpcAsk_SetMaxGroupMembers, playerID, maxMembers);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] playerID player to kick from the local player's group
 	void Owner_RemovePlayerFromGroup(int playerID)
 	{
 		Rpc(RpcAsk_RemovePlayerFromGroup, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value
+	//! \param[in] serverOverrideEnabled false clears the server override
 	void Owner_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
 		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value, serverOverrideEnabled);
@@ -255,6 +254,8 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Makes the player leader of their group, using the same call as vanilla's groups manager.
+	//! \param[in] playerID
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
@@ -267,6 +268,9 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Sets the max size of the group led by playerID. No vanilla RPC does this.
+	//! \param[in] playerID
+	//! \param[in] maxMembers
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_SetMaxGroupMembers(int playerID, int maxMembers)
 	{
@@ -279,6 +283,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (!playersGroup.IsPlayerLeader(playerID))
 			return;
 
+		// Never below the current member count
 		if (maxMembers < playersGroup.GetPlayerCount())
 			maxMembers = playersGroup.GetPlayerCount();
 
@@ -319,7 +324,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	protected static CSI_RplToAuthorityManager m_sInstance;
+	protected static CSI_RplToAuthorityManager m_sInstance;	//!< last constructed instance, only a fallback
+	//! Every player controller has one of these components, so on a listen server the last constructed
+	//! one isn't necessarily the host's. Resolves through the local player controller instead.
+	//! \return the local player's instance
 	static CSI_RplToAuthorityManager GetInstance()
 	{
 		return m_sInstance;

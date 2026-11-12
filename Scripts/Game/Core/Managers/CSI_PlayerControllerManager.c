@@ -1,5 +1,14 @@
 class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Per-player component on the player controller: loads the local settings JSON and opens the CSI
+//! 				settings (group menu for leaders, CSI_PlayerSettingsMenu otherwise). The server has one per player.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_PlayerControllerManager : ScriptComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -9,7 +18,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 	protected ref CSI_SettingsJson m_SettingsJson;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 MANAGER INITILIZATION
+//	 MANAGER INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
@@ -17,11 +26,13 @@ class CSI_PlayerControllerManager : ScriptComponent
 	{
 		super.OnPostInit(owner);
 
+		// No local player or UI on a dedicated server
 		if (RplSession.Mode() == RplMode.Dedicated)
 			return;
 
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
 
+		// Apply the saved CSI settings, then let the settings manager merge in server overrides
 		m_SettingsJson = new CSI_SettingsJson;
 		m_SettingsJson.LoadFromFile();
 
@@ -38,6 +49,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! \return null on a dedicated server
 	CSI_SettingsJson GetLocalSettingsJson()
 	{
 		return m_SettingsJson;
@@ -48,6 +60,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! CSI_PlayerSettingsMenu action: group leaders get the group menu, everyone else the player settings menu.
 	protected void OpenLocalPlayerSettingsMenu()
 	{
 		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
@@ -62,7 +75,8 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	protected static CSI_PlayerControllerManager m_sInstance;
+	protected static CSI_PlayerControllerManager m_sInstance;	//!< last constructed instance, only a fallback
+	//! \return the local player's instance (see CSI_RplToAuthorityManager.GetInstance)
 	static CSI_PlayerControllerManager GetInstance()
 	{
 		return m_sInstance;

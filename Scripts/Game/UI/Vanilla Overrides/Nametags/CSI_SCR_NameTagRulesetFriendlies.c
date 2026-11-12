@@ -1,11 +1,13 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the line of sight check can be turned off (NAMETAG_LOS_VISIBLE) and traces to the body when tags
-//! 				are on the body. TraceLOS is a copy of vanilla SCR_NameTagRulesetBase.TraceLOS, with CSI's lines marked "CSI:".
-//! 
+//!	\Description: 	CSI changes: the field of view tags show in (vanilla m_iMaxAngle) comes from NAMETAG_FIELD_OF_VIEW and each tag
+//! 				records where it is within it (for NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), the line of sight check can be turned
+//! 				off (NAMETAG_LOS_VISIBLE) and traces to the body when tags are on the body.
+//! 				TraceLOS is a copy of vanilla SCR_NameTagRulesetBase.TraceLOS, with CSI's lines marked "CSI:".
+//!
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
 modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
@@ -19,7 +21,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
-		// CSI: LOS check disabled in settings, every tag counts as visible
+		// CSI: LOS check disabled in settings, every tag counts as visible (without the settings manager, trace like vanilla)
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 

@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Standalone menu showing the local player's own CSI_PlayerSettings panel. Opened by CSI_PlayerControllerManager
+//! 				for players who aren't group leaders.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_PlayerSettingsMenu : ChimeraMenuBase
 {
     protected Widget m_wRoot;
@@ -15,6 +24,7 @@ class CSI_PlayerSettingsMenu : ChimeraMenuBase
         if (playerSettings)
             playerSettings.UpdatePlayerSettingsPlayerID(SCR_PlayerController.GetLocalPlayerId());
 
+		// Removed in OnMenuClose
 		GetGame().GetInputManager().AddActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);
 		SCR_InputButtonComponent cancel = SCR_InputButtonComponent.Cast(m_wRoot.FindAnyWidget("Cancel").FindHandler(SCR_InputButtonComponent));
 		cancel.m_OnClicked.Insert(OnMenuBack);

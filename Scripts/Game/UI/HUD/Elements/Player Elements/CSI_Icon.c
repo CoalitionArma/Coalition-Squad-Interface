@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	One player icon (HUD group list and radar): role icon, facing arrow and color team, refreshed from the
+//! 				player's CSI_PlayerData and the settings invokers.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_Icon : SCR_ScriptedWidgetComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -12,12 +21,12 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	protected ImageWidget m_wOutline;
-	protected ImageWidget m_wIconLarge;
+	protected ImageWidget m_wIconLarge;		//!< used for vehicle seat icons
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
 
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
-	bool m_bIsRadarWidget;
+	bool m_bIsRadarWidget;	//!< radar icons show the arrow on turreted seats
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -47,14 +56,15 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the icon state for a specific player
-	//! \param[in] playerID The ID of the player to update the icon for
+	//! Points the icon at a player and subscribes to their data. Does nothing if it already shows that player.
+	//! \param[in] playerID <= 0 hides the icon
 	void IconUpdate(int playerID)
 	{
 		if (m_iPlayerId != playerID)
 		{
 			m_iPlayerId = playerID;
 
+			// Stop listening to the previous player's data
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 
@@ -77,7 +87,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the visual data representation of the player's icon.
+	//! Applies the player's display icon and color team. Called on player data and settings changes.
 	protected void DataUpdate()
 	{
 		if (!m_PlayerData)
@@ -93,8 +103,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the rotation angle of the icon.
-	//! \param[in] yaw The rotation angle in degrees
+	//! Rotates the arrow, and the icon too unless RADAR_ICON_ARROWS_ROTATE is on.
+	//! \param[in] yaw degrees
 	void SetRotation(float yaw)
 	{
 		m_wArrow.SetRotation(yaw);
@@ -109,10 +119,11 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the icon type for the widget.
-	//! \param[in] icon The enum icon type to be set
+	//! Shows the icon in the right widget set: large widgets for vehicle seats, regular ones otherwise.
+	//! \param[in] icon
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
+		// Simple icons for the INVERTED type and for all vehicle seats
 		bool simpleIcon = true;
 		if (m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_TYPE) == CSI_EIconType.REGULAR && !CSI_UIHelper.m_aVehicleIcons.Contains(icon))
 			simpleIcon = false;
@@ -129,6 +140,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 			m_wIconLarge.SetVisible(true);
 
+			// Turreted seats on the radar show the arrow (turret direction) instead of the outline
 			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
 
 			if (isTurreted && m_bIsRadarWidget)
@@ -161,10 +173,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets up the arrow imagewidget within the icon.
+	//! Loads the arrow image for the ARROW_THEME setting.
 	protected void SetArrowWidget()
 	{
-		// do settings check here
 		CSI_EArrowTheme arrow = m_SettingsManager.GetSettingInt(CSI_GameSettings.ARROW_THEME);
 
 		string arrowString = string.Format("ARROW %1", SCR_Enum.GetEnumName(CSI_EArrowTheme, arrow));

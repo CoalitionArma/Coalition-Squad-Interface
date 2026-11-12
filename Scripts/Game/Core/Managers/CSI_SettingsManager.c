@@ -3,12 +3,15 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Effective CSI settings for the local player: their own CSI_GameSettings values with server overrides applied.
 //! 				The server replicates one value per setting in m_aSettingsAuthorityValues: >= 0 means "use the client's value",
-//! 				a negative value is a forced override (encoding below).
-//! 
+//! 				a negative value is a forced override (encoding below). Also holds the admin-set max group size and the
+//! 				server's default settings, which apply to players without their own saved settings (see CSI_SettingsJson).
+//! 				Both are set in game from the CSI settings tab; the server saves them to $profile:CSI_ServerDefaults.json
+//! 				(CSI_ServerDefaultsJson) and loads them again when it starts.
+//!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsManager : ScriptComponent
 {
@@ -51,7 +54,8 @@ class CSI_SettingsManager : ScriptComponent
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
-		// Server (dedicated or listen host) publishes its settings as the override array
+		// Server (dedicated or listen host) restores the defaults and max group size saved in an earlier session, then
+		// publishes its settings as the override array; both before anything replicates to clients
 		if (RplSession.Mode() != RplMode.Client && GetGame().InPlayMode())
 			UpdateAuthorityValueArray();
 	}
@@ -187,7 +191,7 @@ class CSI_SettingsManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Recalculates the effective settings from the server array and the local values, then invokes GetOnSettingsUpdate().
-	//! Also the onRplName callback of m_aSettingsAuthorityValues.
+	//! Also the onRplName callback of m_aSettingsAuthorityValues and m_aSettingsDefaultValues.
 	protected void SettingsUpdate()
 	{
 		if (m_aSettingsAuthorityValues.IsEmpty())
@@ -199,7 +203,7 @@ class CSI_SettingsManager : ScriptComponent
 			bool IsBool = CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting);
 			int serverSetting = m_aSettingsAuthorityValues.Get(i);
 
-			// Decode the server value; >= 0 means no override, so use the client's own setting
+			// Decode the server value; >= 0 means no override, so use the server default or the client's own setting
 			switch (true)
 			{
 				case (IsBool && serverSetting == SERVER_OVERRIDE_FALSE) : settingValue = 0; break;

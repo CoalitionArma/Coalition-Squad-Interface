@@ -1,9 +1,20 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: clicking a player tile opens CSI's player settings panel (for the group's leader) instead of
+//! 				vanilla's options combo.
+//! 
+//------------------------------------------------------------------------------------------------
 modded class SCR_PlayerTileButtonComponent
 {
-	Widget m_PlayerSettings;
+	Widget m_PlayerSettings;			//!< CSI player settings panel in the group menu
 	SCR_GroupTileButton m_TileButton;
 
 	//------------------------------------------------------------------------------------------------
+	//! Called from SCR_GroupTileButton.SetupPlayerTile; also finds the CSI player settings panel.
+	//! \param[in] tileButton
 	void SetGroupTileButton(SCR_GroupTileButton tileButton)
 	{
 		m_TileButton = tileButton;
@@ -13,6 +24,13 @@ modded class SCR_PlayerTileButtonComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Shows the CSI player settings for this tile's player if the local player leads their group, otherwise hides them.
+	//! Falls back to vanilla when the panel isn't in the layout.
+	//! \param[in] w
+	//! \param[in] x
+	//! \param[in] y
+	//! \param[in] button
+	//! \return
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
 		Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");

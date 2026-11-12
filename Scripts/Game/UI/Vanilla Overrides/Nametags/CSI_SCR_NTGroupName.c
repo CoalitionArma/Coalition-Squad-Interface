@@ -1,5 +1,12 @@
 //------------------------------------------------------------------------------------------------
-//! Nametag element for name text
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-12
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Nametag element showing the player's group name under their name. New class (not modded),
+//! 				used in NametagFriendlies.conf.
+//!
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 class SCR_NTGroupName : SCR_NTTextBase
 {
@@ -15,7 +22,7 @@ class SCR_NTGroupName : SCR_NTTextBase
 			return;
 
 		//-----------------------------------------------------------------------
-		// Initial Appearence And Settings Of The Text Widget
+		// Font, size (two smaller than the name) and neutral color
 		tWidget.SetFont(m_FontResource);
 		tWidget.SetExactFontSize(GetNametagTextScale() - 2);
 		tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));

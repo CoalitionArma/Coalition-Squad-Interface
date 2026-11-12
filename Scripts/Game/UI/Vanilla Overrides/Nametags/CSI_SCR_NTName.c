@@ -1,5 +1,12 @@
 //------------------------------------------------------------------------------------------------
-//! Nametag element for name text
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-11
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: the name text uses CSI's size and colors and is cleared beyond the simplified-range cutoff.
+//! 				UpdateElement re-implements vanilla's SCR_NTElementBase and SCR_NTName versions, with CSI's lines marked "CSI:".
+//! 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName : SCR_NTTextBase
 {
@@ -15,7 +22,7 @@ modded class SCR_NTName : SCR_NTTextBase
 			return;
 
 		//-----------------------------------------------------------------------
-		// Initial Appearence And Settings Of The Text Widget
+		// Font, size from NAMTEAG_SCALE and color team color
 		tWidget.SetFont(m_FontResource);
 		tWidget.SetExactFontSize(GetNametagTextScale());
 		SetWidgetCSIColor(data, index);
@@ -29,11 +36,12 @@ modded class SCR_NTName : SCR_NTTextBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
 		//-----------------------------------------------------------------------
-		// Update Widget Opacity
+		// CSI: brightness-based opacity
 		data.UpdateOpacity(null, data: data, index: index);
 
 		//-----------------------------------------------------------------------
-		// Initial setup (can't call super due to the vanilla implimetation, so we just manually do it) - TODO: make less fucky
+		// Base element setup (vanilla SCR_NTElementBase.UpdateElement), done here instead of calling super
+		// because vanilla SCR_NTName.UpdateElement also sets the text
 		if ( !data.m_aNametagElements[index] )
 		{
 			InitElementWidget(data, index);
@@ -48,7 +56,7 @@ modded class SCR_NTName : SCR_NTTextBase
 		}
 
 		//-----------------------------------------------------------------------
-		// Vanilla Implimentation
+		// Vanilla SCR_NTName name update, minus its SetText (the text is set below)
 		if (data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE)
 		{
 			string name;
@@ -64,14 +72,14 @@ modded class SCR_NTName : SCR_NTTextBase
 		}
 
 		//-----------------------------------------------------------------------
-		// Set The Text Of The Widget Based On Our Current Distance
+		// CSI: text cleared beyond the simplified-range cutoff
 		if (ShouldWeClearText(data))
 			SetText(data, string.Empty, data.m_aNameParams, index);
 		else
 			SetText(data, data.m_sName, data.m_aNameParams, index);
 
 		//-----------------------------------------------------------------------
-		// Color Updates For VON/Color Teams
+		// CSI: color updates for VON/color teams
 		SetWidgetCSIColor(data, index);
 	}
 };
