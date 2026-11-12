@@ -204,6 +204,8 @@ modded class SCR_GroupTileButton
 		if (m_ParentSubMenu == null)
 			FindParentMenu();
 
+		SetSelectedGroupTaskInfo(group);
+
 		m_aPlayerComponentsList.Clear();
 
 		VerticalLayoutWidget playerList = VerticalLayoutWidget.Cast(m_ParentSubMenu.GetRootWidget().FindAnyWidget("PlayerList"));
@@ -243,9 +245,9 @@ modded class SCR_GroupTileButton
 			return;
 
 		if (!s_PlayerGroupController.CanPlayerJoinGroup(playerController.GetPlayerId(), m_GroupManager.FindGroup(m_iGroupID)))
-			m_JoinGroupButton.SetEnabled(false);
+			SetJoinButtonVisible(false);
 		else
-			m_JoinGroupButton.SetEnabled(true);
+			SetJoinButtonVisible(true);
 
 		// This function can only be used in UI menu, where to change the language you need to close and open the shown menu, so it will be renewed.
 		squadName.SetText(SCR_GroupHelperUI.GetTranslatedGroupName(group));
@@ -281,7 +283,17 @@ modded class SCR_GroupTileButton
 			children = leaderList.GetChildren();
 		}
 
-		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(group.GetPlayerIDs());
+		// CSI: list members in CSI's sorted order (SL, color teams, unassigned)
+		array<int> groupPlayerIDs = group.GetPlayerIDs();
+		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(groupPlayerIDs);
+
+		// CSI: GetSortedGroupArray skips players without CSI data yet (e.g. joined but not spawned), vanilla lists everyone
+		foreach (int groupPlayerID : groupPlayerIDs)
+		{
+			if (!playerIDs.Contains(groupPlayerID))
+				playerIDs.Insert(groupPlayerID);
+		}
+
 		Widget playerTile;
 
 		int leaderID = group.GetLeaderID();

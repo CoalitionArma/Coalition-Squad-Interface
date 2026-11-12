@@ -307,16 +307,14 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 
-		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
-		SCR_PlayerControllerGroupComponent playerGroupController = SCR_PlayerControllerGroupComponent.GetPlayerControllerComponent(playerID);
-		SCR_AIGroup group = groupsManager.GetPlayerGroup(playerID);
-
-		SCR_AIGroup newGroup = groupsManager.CreateNewPlayableGroup(group.GetFaction());
-
-		if (!newGroup)
+		// Hand off to vanilla's kick on the sender's own group controller, so CSI kicks behave exactly like vanilla:
+		// it rejects self-kicks and non-leaders, then moves the player to a RESERVES group, else the first group
+		// that isn't full, else a new group. Called directly because we're already on the authority.
+		SCR_PlayerControllerGroupComponent senderGroupController = SCR_PlayerControllerGroupComponent.Cast(GetOwner().FindComponent(SCR_PlayerControllerGroupComponent));
+		if (!senderGroupController)
 			return;
 
-		playerGroupController.RequestJoinGroup(newGroup.GetGroupID());
+		senderGroupController.RPC_AskKickPlayer(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
