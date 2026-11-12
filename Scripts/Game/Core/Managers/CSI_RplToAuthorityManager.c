@@ -169,6 +169,30 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		Rpc(RpcAsk_ChangeAuthoritySetting, setting, value, serverOverrideEnabled);
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Admin: sets the server's max group size (top of the leaders' group size slider).
+	//! \param[in] maxGroupSize
+	void Owner_SetServerMaxGroupSize(int maxGroupSize)
+	{
+		Rpc(RpcAsk_SetServerMaxGroupSize, maxGroupSize);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Admin: sets one of the server's default settings for players without saved settings.
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value
+	void Owner_SetServerDefault(string setting, int value)
+	{
+		Rpc(RpcAsk_SetServerDefault, setting, value);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Admin: removes all of the server's default settings.
+	void Owner_ClearServerDefaults()
+	{
+		Rpc(RpcAsk_ClearServerDefaults);
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SERVER-SIDE RPC HANDLERS - Executed on the authority (server)
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -321,10 +345,54 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		if (!m_SettingsManager || !CSI_GameSettings.GetSettingsArray().Contains(setting))
+		// Only admins (the settings tab only sends this for them), and only known setting names
+		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()) || !CSI_GameSettings.GetSettingsArray().Contains(setting))
 			return;
 
 		m_SettingsManager.UpdateAuthoritySetting(setting, value, serverOverrideEnabled);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	protected void RpcAsk_SetServerMaxGroupSize(int maxGroupSize)
+	{
+		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()))
+			return;
+
+		m_SettingsManager.UpdateMaxGroupSize(maxGroupSize);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	protected void RpcAsk_SetServerDefault(string setting, int value)
+	{
+		// Only admins, and only known setting names
+		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()) || !CSI_GameSettings.GetSettingsArray().Contains(setting))
+			return;
+
+		m_SettingsManager.UpdateServerDefault(setting, value);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	protected void RpcAsk_ClearServerDefaults()
+	{
+		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()))
+			return;
+
+		m_SettingsManager.ClearServerDefaults();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Server: the player who sent an RpcAsk_ is the owner of the controller this component is on, never a client-sent ID.
+	//! \return 0 if the owner isn't a player controller
+	protected int GetSenderPlayerID()
+	{
+		PlayerController controller = PlayerController.Cast(GetOwner());
+		if (!controller)
+			return 0;
+
+		return controller.GetPlayerId();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

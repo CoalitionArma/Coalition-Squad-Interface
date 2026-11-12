@@ -29,6 +29,11 @@ modded class GroupSettingsDialogUI
 		if (!playerGroup)
 			return;
 
+		// The server's max group size is the slider's top
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		if (settingsManager)
+			groupSize.SetMax(settingsManager.GetMaxGroupSize());
+
 		groupSize.SetValue(playerGroup.GetMaxMembers());
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 	}

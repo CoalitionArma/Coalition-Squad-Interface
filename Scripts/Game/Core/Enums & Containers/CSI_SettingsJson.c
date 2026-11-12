@@ -12,6 +12,7 @@ class CSI_SettingsJson : JsonApiStruct
 {
 	protected static string m_sSettingsPath = "$profile:CSI_Settings.json";
     protected ref array<int> m_aSettingsValues = new array<int>;
+	protected bool m_bHasSavedSettings;	//!< a valid file was loaded, or the player has saved this session
 
 	//------------------------------------------------------------------------------------------------
 	//! Loads the saved values into the CSI_GameSettings user settings module. Does nothing if there's no valid file yet.
@@ -20,8 +21,13 @@ class CSI_SettingsJson : JsonApiStruct
         if (FileIO.FileExists(m_sSettingsPath))
 		{
             JsonLoadContext jsonLoad = new JsonLoadContext(false);
-            jsonLoad.LoadFromFile(m_sSettingsPath);
+            if (!jsonLoad.LoadFromFile(m_sSettingsPath))
+				return;
+
             jsonLoad.ReadValue("m_aSettingsValues", m_aSettingsValues);
+
+			// A file without values counts as no saved settings, so server defaults still apply
+			m_bHasSavedSettings = !m_aSettingsValues.IsEmpty();
 
 			// Settings added after the file was saved have no entry and keep their defaults
 			UserSettings userSettings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
@@ -47,7 +53,16 @@ class CSI_SettingsJson : JsonApiStruct
 		JsonSaveContext jsonSave = new JsonSaveContext();
         jsonSave.WriteValue("m_aSettingsValues", m_aSettingsValues);
         jsonSave.SaveToFile(m_sSettingsPath);
+
+		m_bHasSavedSettings = true;
     }
+
+	//------------------------------------------------------------------------------------------------
+	//! \return true if the player has their own saved settings; if not, the server's default settings apply
+	bool HasSavedSettings()
+	{
+		return m_bHasSavedSettings;
+	}
 
 	//------------------------------------------------------------------------------------------------
     void CSI_SettingsJson()

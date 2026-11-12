@@ -1591,16 +1591,46 @@ HorizontalLayoutWidgetClass {
     }
    }
   }
-  VerticalLayoutWidgetClass "{66C340BE23FDF316}" {
-   Name "Description"
-   Slot LayoutSlot "{54890CCD7A457969}" {
+  OverlayWidgetClass "{6A9C2E41B7D70001}" {
+   Name "DescriptionOverlay"
+   Slot LayoutSlot "{6A9C2E41B7D70002}" {
+    Padding 0 72 0 0
     SizeMode Fill
    }
    {
-    FrameWidgetClass "{66C55DAD14E2360B}" {
-     Name "Frame"
-     Slot LayoutSlot "{66C55DAD14E2365D}" {
-      SizeMode Fill
+    ImageWidgetClass "{6A9C2E41B7D70003}" {
+     Name "DescriptionBackground"
+     Slot OverlayWidgetSlot "{6A9C2E41B7D70004}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     Color 0 0 0 0.12
+    }
+    VerticalLayoutWidgetClass "{66C340BE23FDF316}" {
+     Name "Description"
+     Slot OverlayWidgetSlot "{6A9C2E41B7D70005}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     {
+      VerticalLayoutWidgetClass "{6A9C2E41B7D60001}" : "{8BF6A5346E9090AF}UI/Layouts/Menus/SettingsSubMenus/CSI_SettingInfo.layout" {
+       Name "SettingInfo"
+       Slot LayoutSlot "{6A9C2E41B7D60002}" {
+        Padding 8 8 8 0
+       }
+      }
+      FrameWidgetClass "{66C55DAD14E2360B}" {
+       Name "Frame"
+       Slot LayoutSlot "{66C55DAD14E2365D}" {
+        SizeMode Fill
+       }
+      }
+      VerticalLayoutWidgetClass "{6A9C2E41B7D40001}" : "{0452A462A0E5C676}UI/Layouts/Menus/SettingsSubMenus/CSI_ServerAdmin.layout" {
+       Name "ServerAdmin"
+       Slot LayoutSlot "{6A9C2E41B7D40002}" {
+        Padding 8 16 8 16
+       }
+      }
      }
     }
    }
