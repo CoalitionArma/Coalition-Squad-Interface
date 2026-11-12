@@ -1,0 +1,27 @@
+FrameWidgetClass {
+ Name "HudExamples"
+ Slot FrameWidgetSlot "{6A9C2E41B8000004}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 480
+  OffsetRight -480
+  SizeY 200
+  OffsetBottom -200
+ }
+ components {
+  CSI_SettingInfoHudExamples "{6A9C2E41B8F00010}" {
+  }
+ }
+ {
+  FrameWidgetClass "{6A9C2E41B8000006}" : "{24C145EEC397BAE7}UI/Layouts/HUD/CSI_HUD.layout" {
+   Name "Hud"
+   Slot FrameWidgetSlot "{6A9C2E41B8000005}" {
+    Anchor 0 0 1 1
+    OffsetLeft 0
+    OffsetTop 0
+    OffsetRight 0
+    OffsetBottom 0
+   }
+  }
+ }
+}

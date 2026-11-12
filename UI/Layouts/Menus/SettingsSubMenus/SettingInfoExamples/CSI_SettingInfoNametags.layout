@@ -1,0 +1,1075 @@
+FrameWidgetClass {
+ Name "NametagExamples"
+ Slot FrameWidgetSlot "{6A9C2E41B80000AD}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 480
+  OffsetRight -480
+  SizeY 1200
+  OffsetBottom -1200
+ }
+ components {
+  CSI_SettingInfoNametagExamples "{6A9C2E41B8F00012}" {
+  }
+ }
+ {
+  FrameWidgetClass "{6A9C2E41B8000031}" {
+   Name "Single"
+   Slot FrameWidgetSlot "{6A9C2E41B8000030}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 0
+    OffsetRight 0
+    OffsetBottom -200
+   }
+   Clipping True
+   {
+    OverlayWidgetClass "{6A9C2E41B800002F}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "Tag"
+     Slot FrameWidgetSlot "{6A9C2E41B800002E}" {
+      Anchor 0.5 0.5 0.5 0.5
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom -50
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B8000045}" {
+   Name "DayNight"
+   Slot FrameWidgetSlot "{6A9C2E41B8000044}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 200
+    OffsetRight 0
+    OffsetBottom -400
+   }
+   Clipping True
+   {
+    ImageWidgetClass "{6A9C2E41B8000033}" {
+     Name "DayBackground"
+     Slot FrameWidgetSlot "{6A9C2E41B8000032}" {
+      Anchor 0 0 0.5 1
+      OffsetLeft 0
+      OffsetTop 0
+      OffsetRight 0
+      OffsetBottom 0
+     }
+     Color 0.55 0.7 0.9 0.03
+    }
+    ImageWidgetClass "{6A9C2E41B8000035}" {
+     Name "NightBackground"
+     Slot FrameWidgetSlot "{6A9C2E41B8000034}" {
+      Anchor 0.5 0 1 1
+      OffsetLeft 0
+      OffsetTop 0
+      OffsetRight 0
+      OffsetBottom 0
+     }
+     Color 0.01 0.02 0.06 0.15
+    }
+    ImageWidgetClass "{6A9C2E41B8000037}" {
+     Name "SunIcon"
+     Slot FrameWidgetSlot "{6A9C2E41B8000036}" {
+      Anchor 0.25 0 0.25 0
+      PositionX 0
+      OffsetLeft 0
+      PositionY 12
+      OffsetTop 12
+      SizeX 40
+      OffsetRight -40
+      SizeY 40
+      OffsetBottom -52
+      Alignment 0.5 0
+     }
+     Opacity 0.6
+     Color 1 0.85 0.4 1
+     Texture "{1F170BA4B611B7D6}UI/Textures/Editor/Attributes/Time/Attribute_Time_Midday.edds"
+    }
+    ImageWidgetClass "{6A9C2E41B8000039}" {
+     Name "MoonIcon"
+     Slot FrameWidgetSlot "{6A9C2E41B8000038}" {
+      Anchor 0.75 0 0.75 0
+      PositionX 0
+      OffsetLeft 0
+      PositionY 12
+      OffsetTop 12
+      SizeX 40
+      OffsetRight -40
+      SizeY 40
+      OffsetBottom -52
+      Alignment 0.5 0
+     }
+     Opacity 0.6
+     Color 0.75 0.8 1 1
+     Texture "{5E793A7B8DA84847}UI/Textures/Editor/Attributes/Time/Attribute_Time_Midnight.edds"
+    }
+    OverlayWidgetClass "{6A9C2E41B800003B}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "DayTag"
+     Slot FrameWidgetSlot "{6A9C2E41B800003A}" {
+      Anchor 0.25 0.5 0.25 0.5
+      PositionX 0
+      OffsetLeft 0
+      PositionY 18
+      OffsetTop 18
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom -68
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+    OverlayWidgetClass "{6A9C2E41B800003D}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "NightTag"
+     Slot FrameWidgetSlot "{6A9C2E41B800003C}" {
+      Anchor 0.75 0.5 0.75 0.5
+      PositionX 0
+      OffsetLeft 0
+      PositionY 18
+      OffsetTop 18
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom -68
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+    TextWidgetClass "{6A9C2E41B8000040}" {
+     Name "DayLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B800003F}" {
+      Anchor 0.25 1 0.25 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Day"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B800003E}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000043}" {
+     Name "NightLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000042}" {
+      Anchor 0.75 1 0.75 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Night"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000041}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B8000066}" {
+   Name "Range"
+   Slot FrameWidgetSlot "{6A9C2E41B8000065}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 400
+    OffsetRight 0
+    OffsetBottom -600
+   }
+   Clipping True
+   {
+    ImageWidgetClass "{6A9C2E41B8000047}" {
+     Name "Axis"
+     Slot FrameWidgetSlot "{6A9C2E41B8000046}" {
+      Anchor 0.08 1 0.71 1
+      OffsetLeft 0
+      OffsetTop -47
+      OffsetRight 0
+      OffsetBottom 44
+     }
+     Color 0.7605 0.3916 0.0782 1
+    }
+    ImageWidgetClass "{6A9C2E41B8000049}" {
+     Name "AxisOut"
+     Slot FrameWidgetSlot "{6A9C2E41B8000048}" {
+      Anchor 0.71 1 0.92 1
+      OffsetLeft 0
+      OffsetTop -47
+      OffsetRight 0
+      OffsetBottom 44
+     }
+     Color 1 1 1 0.25
+    }
+    ImageWidgetClass "{6A9C2E41B800004B}" {
+     Name "TickStart"
+     Slot FrameWidgetSlot "{6A9C2E41B800004A}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -40
+      OffsetTop -40
+      SizeX 2
+      OffsetRight -2
+      SizeY 11
+      OffsetBottom 29
+      Alignment 0.5 1
+     }
+     Color 0.8 0.8 0.8 1
+    }
+    ImageWidgetClass "{6A9C2E41B800004D}" {
+     Name "TickRange"
+     Slot FrameWidgetSlot "{6A9C2E41B800004C}" {
+      Anchor 0.71 1 0.71 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -40
+      OffsetTop -40
+      SizeX 2
+      OffsetRight -2
+      SizeY 11
+      OffsetBottom 29
+      Alignment 0.5 1
+     }
+     Color 0.8 0.8 0.8 1
+    }
+    TextWidgetClass "{6A9C2E41B8000050}" {
+     Name "YouLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B800004F}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "You"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B800004E}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000053}" {
+     Name "RangeLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000052}" {
+      Anchor 0.71 1 0.71 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "50 m"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000051}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B8000055}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "You"
+     Slot FrameWidgetSlot "{6A9C2E41B8000054}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B8000057}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "Mate"
+     Slot FrameWidgetSlot "{6A9C2E41B8000056}" {
+      Anchor 0.458 1 0.458 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+    }
+    TextWidgetClass "{6A9C2E41B800005A}" {
+     Name "MateLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000059}" {
+      Anchor 0.458 1 0.458 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Friendly"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000058}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    OverlayWidgetClass "{6A9C2E41B800005C}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "Tag"
+     Slot FrameWidgetSlot "{6A9C2E41B800005B}" {
+      Anchor 0.458 1 0.458 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -154.6
+      OffsetTop -154.6
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom 104.6
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+    FrameWidgetClass "{6A9C2E41B800005E}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "FarMate"
+     Slot FrameWidgetSlot "{6A9C2E41B800005D}" {
+      Anchor 0.826 1 0.826 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+     Opacity 0.4
+    }
+    TextWidgetClass "{6A9C2E41B8000061}" {
+     Name "FarMateLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000060}" {
+      Anchor 0.826 1 0.826 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 1 1 1 0.25
+     Text "Friendly"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B800005F}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000064}" {
+     Name "NoNametagLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000063}" {
+      Anchor 0.826 1 0.826 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -148.6
+      OffsetTop -148.6
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 132.6
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 1 1 1 0.25
+     Text "No nametag"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000062}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B800008B}" {
+   Name "Simplified"
+   Slot FrameWidgetSlot "{6A9C2E41B800008A}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 600
+    OffsetRight 0
+    OffsetBottom -800
+   }
+   Clipping True
+   {
+    ImageWidgetClass "{6A9C2E41B8000068}" {
+     Name "Axis"
+     Slot FrameWidgetSlot "{6A9C2E41B8000067}" {
+      Anchor 0.08 1 0.92 1
+      OffsetLeft 0
+      OffsetTop -47
+      OffsetRight 0
+      OffsetBottom 44
+     }
+     Color 1 1 1 0.25
+    }
+    ImageWidgetClass "{6A9C2E41B800006A}" {
+     Name "NearAxis"
+     Slot FrameWidgetSlot "{6A9C2E41B8000069}" {
+      Anchor 0.08 1 0.4 1
+      OffsetLeft 0
+      OffsetTop -47
+      OffsetRight 0
+      OffsetBottom 44
+     }
+     "Z Order" 1
+     Color 0.7605 0.3916 0.0782 1
+    }
+    ImageWidgetClass "{6A9C2E41B800006C}" {
+     Name "TickStart"
+     Slot FrameWidgetSlot "{6A9C2E41B800006B}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -40
+      OffsetTop -40
+      SizeX 2
+      OffsetRight -2
+      SizeY 11
+      OffsetBottom 29
+      Alignment 0.5 1
+     }
+     Color 0.8 0.8 0.8 1
+    }
+    ImageWidgetClass "{6A9C2E41B800006E}" {
+     Name "TickEnd"
+     Slot FrameWidgetSlot "{6A9C2E41B800006D}" {
+      Anchor 0.92 1 0.92 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -40
+      OffsetTop -40
+      SizeX 2
+      OffsetRight -2
+      SizeY 11
+      OffsetBottom 29
+      Alignment 0.5 1
+     }
+     Color 0.8 0.8 0.8 1
+    }
+    ImageWidgetClass "{6A9C2E41B8000070}" {
+     Name "TickSplit"
+     Slot FrameWidgetSlot "{6A9C2E41B800006F}" {
+      Anchor 0.4 1 0.4 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -40
+      OffsetTop -40
+      SizeX 2
+      OffsetRight -2
+      SizeY 11
+      OffsetBottom 29
+      Alignment 0.5 1
+     }
+     Color 0.8 0.8 0.8 1
+    }
+    TextWidgetClass "{6A9C2E41B8000073}" {
+     Name "YouLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000072}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "You"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000071}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000076}" {
+     Name "RangeLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000075}" {
+      Anchor 0.92 1 0.92 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "50 m"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000074}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000079}" {
+     Name "SplitLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000078}" {
+      Anchor 0.4 1 0.4 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.7605 0.3916 0.0782 1
+     Text "19 m"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000077}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B800007B}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "You"
+     Slot FrameWidgetSlot "{6A9C2E41B800007A}" {
+      Anchor 0.08 1 0.08 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B800007D}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "FullMate"
+     Slot FrameWidgetSlot "{6A9C2E41B800007C}" {
+      Anchor 0.25 1 0.25 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000080}" {
+     Name "FullMateLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B800007F}" {
+      Anchor 0.25 1 0.25 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Friendly"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B800007E}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    OverlayWidgetClass "{6A9C2E41B8000082}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "FullTag"
+     Slot FrameWidgetSlot "{6A9C2E41B8000081}" {
+      Anchor 0.25 1 0.25 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -154.6
+      OffsetTop -154.6
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom 104.6
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+    FrameWidgetClass "{6A9C2E41B8000084}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "IconMate"
+     Slot FrameWidgetSlot "{6A9C2E41B8000083}" {
+      Anchor 0.66 1 0.66 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -57
+      OffsetTop -57
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -18.6
+      Alignment 0.5 1
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000087}" {
+     Name "IconMateLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000086}" {
+      Anchor 0.66 1 0.66 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -20
+      OffsetTop -20
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 4
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Friendly"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000085}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    OverlayWidgetClass "{6A9C2E41B8000089}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "IconTag"
+     Slot FrameWidgetSlot "{6A9C2E41B8000088}" {
+      Anchor 0.66 1 0.66 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -154.6
+      OffsetTop -154.6
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom 104.6
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B80000A6}" {
+   Name "LineOfSight"
+   Slot FrameWidgetSlot "{6A9C2E41B80000A5}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 800
+    OffsetRight 0
+    OffsetBottom -1000
+   }
+   Clipping True
+   {
+    FrameWidgetClass "{6A9C2E41B8000091}" {
+     Name "HillClip"
+     Slot FrameWidgetSlot "{6A9C2E41B800008E}" {
+      Anchor 0.48 1 0.48 1
+      PositionX -0.775
+      OffsetLeft -0.775
+      PositionY -0.306
+      OffsetTop -0.306
+      SizeX 220
+      OffsetRight -219.225
+      SizeY 110
+      OffsetBottom -109.694
+      Alignment 0.5 1
+     }
+     "Z Order" 1
+     Clipping True
+     {
+      ImageWidgetClass "{6A9C2E41B8000090}" {
+       Name "Hill"
+       Slot FrameWidgetSlot "{6A9C2E41B800008F}" {
+        Anchor 0.5 1 0.5 1
+        PositionX 0
+        OffsetLeft 0
+        PositionY 0
+        OffsetTop 0
+        SizeX 220
+        OffsetRight -220
+        SizeY 220
+        OffsetBottom -220
+        Alignment 0.5 0.5
+       }
+       Color 0.3 0.36 0.24 1
+       Texture "{0443B2C7DED0B2F3}UI/Textures/RadialMenu/radialInnerCircleFull512_UI.edds"
+      }
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B8000093}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "You"
+     Slot FrameWidgetSlot "{6A9C2E41B8000092}" {
+      Anchor 0.1 1 0.1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -22
+      OffsetTop -22
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -53.6
+      Alignment 0.5 1
+     }
+    }
+    FrameWidgetClass "{6A9C2E41B8000095}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "Mate"
+     Slot FrameWidgetSlot "{6A9C2E41B8000094}" {
+      Anchor 0.84 1 0.84 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -22
+      OffsetTop -22
+      SizeX 24.686
+      OffsetRight -24.686
+      SizeY 75.6
+      OffsetBottom -53.6
+      Alignment 0.5 1
+     }
+    }
+    TextWidgetClass "{6A9C2E41B8000098}" {
+     Name "YouLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B8000097}" {
+      Anchor 0.1 1 0.1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "You"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000096}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B800009B}" {
+     Name "MateLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B800009A}" {
+      Anchor 0.84 1 0.84 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "Friendly"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B8000099}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    ImageWidgetClass "{6A9C2E41B800009D}" {
+     Name "SightBlocked"
+     Slot FrameWidgetSlot "{6A9C2E41B800009C}" {
+      Anchor 0.1 1 0.48 1
+      OffsetLeft 18.343
+      OffsetTop -92.04
+      OffsetRight 0
+      OffsetBottom 90.04
+     }
+     Color 0.7605 0.3916 0.0782 1
+    }
+    ImageWidgetClass "{6A9C2E41B800009F}" {
+     Name "SightClear"
+     Slot FrameWidgetSlot "{6A9C2E41B800009E}" {
+      Anchor 0.1 1 0.84 1
+      OffsetLeft 18.343
+      OffsetTop -92.04
+      OffsetRight 18.343
+      OffsetBottom 90.04
+     }
+     "Z Order" 2
+     Color 0.7605 0.3916 0.0782 1
+    }
+    OverlayWidgetClass "{6A9C2E41B80000A1}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "Tag"
+     Slot FrameWidgetSlot "{6A9C2E41B80000A0}" {
+      Anchor 0.84 1 0.84 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -119.6
+      OffsetTop -119.6
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom 69.6
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+    TextWidgetClass "{6A9C2E41B80000A4}" {
+     Name "HiddenLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B80000A3}" {
+      Anchor 0.84 1 0.84 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -113.6
+      OffsetTop -113.6
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 97.6
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 1 1 1 0.25
+     Text "Hidden"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B80000A2}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B80000AC}" {
+   Name "BodyPosition"
+   Slot FrameWidgetSlot "{6A9C2E41B80000AB}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 1000
+    OffsetRight 0
+    OffsetBottom -1200
+   }
+   Clipping True
+   {
+    FrameWidgetClass "{6A9C2E41B80000A8}" : "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout" {
+     Name "Figure"
+     Slot FrameWidgetSlot "{6A9C2E41B80000A7}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY 133
+      OffsetTop 133
+      SizeX 82.286
+      OffsetRight -82.286
+      SizeY 252
+      OffsetBottom -385
+      Alignment 0.5 1
+     }
+     Opacity 0.35
+    }
+    OverlayWidgetClass "{6A9C2E41B80000AA}" : "{B4EB1AF2120500B6}UI/Layouts/HUD/NameTag/CSI_Nametag.layout" {
+     Name "Tag"
+     Slot FrameWidgetSlot "{6A9C2E41B80000A9}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -49
+      OffsetTop -49
+      SizeX 100
+      OffsetRight -100
+      SizeY 50
+      OffsetBottom -1
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     "Z Order" 3
+    }
+   }
+  }
+  FrameWidgetClass "{6A9C2E41B80000B0}" {
+   Name "FieldOfView"
+   Slot FrameWidgetSlot "{6A9C2E41B80000B1}" {
+    Anchor 0 0 1 0
+    OffsetLeft 0
+    OffsetTop 1200
+    OffsetRight 0
+    OffsetBottom -1400
+   }
+   Clipping True
+   {
+    CanvasWidgetClass "{6A9C2E41B80000C9}" {
+     Name "Canvas"
+     Slot FrameWidgetSlot "{6A9C2E41B80000CA}" {
+      Anchor 0 0 1 1
+      OffsetLeft 0
+      OffsetTop 0
+      OffsetRight 0
+      OffsetBottom 0
+     }
+    }
+    ImageWidgetClass "{6A9C2E41B80000B2}" {
+     Name "ViewLine"
+     Slot FrameWidgetSlot "{6A9C2E41B80000B3}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -90
+      OffsetTop -90
+      SizeX 2
+      OffsetRight -2
+      SizeY 85
+      OffsetBottom 5
+      Alignment 0.5 1
+     }
+     Color 1 1 1 0.25
+    }
+    ImageWidgetClass "{6A9C2E41B80000B8}" {
+     Name "You"
+     Slot FrameWidgetSlot "{6A9C2E41B80000B9}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -90
+      OffsetTop -90
+      SizeX 14
+      OffsetRight -14
+      SizeY 14
+      OffsetBottom 76
+      Alignment 0.5 0.5
+     }
+     "Z Order" 2
+     Color 0.8 0.8 0.8 1
+     Texture "{0443B2C7DED0B2F3}UI/Textures/RadialMenu/radialInnerCircleFull512_UI.edds"
+    }
+    TextWidgetClass "{6A9C2E41B80000BA}" {
+     Name "YouLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B80000BB}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -64
+      OffsetTop -64
+      SizeX 40
+      OffsetRight -40
+      SizeY 16
+      OffsetBottom 48
+      Alignment 0.5 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "You"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B80000BC}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+    TextWidgetClass "{6A9C2E41B80000BD}" {
+     Name "AngleLabel"
+     Slot FrameWidgetSlot "{6A9C2E41B80000BE}" {
+      Anchor 0 1 0 1
+      PositionX 8
+      OffsetLeft 8
+      PositionY -4
+      OffsetTop -4
+      SizeX 40
+      OffsetRight -48
+      SizeY 16
+      OffsetBottom -12
+      Alignment 0 1
+      SizeToContent 1
+     }
+     "Z Order" 3
+     Color 0.8 0.8 0.8 1
+     Text "125° field of view"
+     "Font Size" 13
+     "Min Font Size" 13
+     FontProperties FontProperties "{6A9C2E41B80000BF}" {
+      Font "{EABA4FE9D014CCEF}UI/Fonts/RobotoCondensed/RobotoCondensed_Bold.fnt"
+     }
+    }
+   }
+  }
+ }
+}

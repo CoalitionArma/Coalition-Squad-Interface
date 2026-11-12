@@ -1,0 +1,115 @@
+VerticalLayoutWidgetClass {
+ Name "SettingInfo"
+ Slot FrameWidgetSlot "{6A9C2E41B8F00020}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 480
+  OffsetRight -480
+  SizeY 380
+  OffsetBottom -380
+ }
+ components {
+  CSI_SettingInfo "{6A9C2E41B7D60010}" {
+  }
+ }
+ {
+  TextWidgetClass "{6A9C2E41B7D60003}" {
+   Name "SettingInfoName"
+   Slot LayoutSlot "{6A9C2E41B7D60004}" {
+    Padding 8 0 8 8
+   }
+   Color 0.7605 0.3916 0.0782 1
+   Text "Setting Info"
+   "Font Size" 20
+   "Min Font Size" 20
+   Wrap 1
+   FontProperties FontProperties "{6A9C2E41B7D60005}" {
+    Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+   }
+  }
+  SizeLayoutWidgetClass "{6A9C2E41B7D60006}" {
+   Name "SettingInfoPreviewSize"
+   Slot LayoutSlot "{6A9C2E41B7D60007}" {
+    Padding 8 0 8 8
+   }
+   AllowHeightOverride 1
+   HeightOverride 200
+   {
+    FrameWidgetClass "{6A9C2E41B7D60008}" {
+     Name "SettingInfoPreview"
+     Slot AlignableSlot "{6A9C2E41B7D60009}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     Clipping True
+     {
+      ImageWidgetClass "{6A9C2E41B7D6000A}" {
+       Name "SettingInfoPreviewBackground"
+       Slot FrameWidgetSlot "{6A9C2E41B7D6000B}" {
+        Anchor 0 0 1 1
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight 0
+        OffsetBottom 0
+       }
+       Color 0 0 0 0.35
+      }
+      FrameWidgetClass "{6A9C2E41B8F00001}" : "{F943602B03028B36}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoHud.layout" {
+       Name "HudExamples"
+       Slot FrameWidgetSlot "{6A9C2E41B8F00002}" {
+        Anchor 0 0 1 1
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight 0
+        OffsetBottom 0
+       }
+      }
+      FrameWidgetClass "{6A9C2E41B8F00003}" : "{944CAA47310D9D1F}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoIcons.layout" {
+       Name "IconExamples"
+       Slot FrameWidgetSlot "{6A9C2E41B8F00004}" {
+        Anchor 0 0 1 1
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight 0
+        OffsetBottom 0
+       }
+      }
+      FrameWidgetClass "{6A9C2E41B8F00005}" : "{9796C5476B69DCDD}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoNametags.layout" {
+       Name "NametagExamples"
+       Slot FrameWidgetSlot "{6A9C2E41B8F00006}" {
+        Anchor 0 0 1 1
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight 0
+        OffsetBottom 0
+       }
+      }
+     }
+    }
+   }
+  }
+  TextWidgetClass "{6A9C2E41B7D6000C}" {
+   Name "SettingInfoCaption"
+   Slot LayoutSlot "{6A9C2E41B7D6000D}" {
+    HorizontalAlign 1
+    Padding 8 0 8 8
+   }
+   Color 0.7605 0.3916 0.0782 1
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   "Horizontal Alignment" Center
+   Wrap 1
+  }
+  TextWidgetClass "{6A9C2E41B7D6000E}" {
+   Name "SettingInfoDescription"
+   Slot LayoutSlot "{6A9C2E41B7D6000F}" {
+    Padding 8 0 8 0
+   }
+   Text ""
+   "Font Size" 16
+   "Min Font Size" 16
+   Wrap 1
+  }
+ }
+}

@@ -40,7 +40,7 @@ enum CSI_ECompassTheme
 enum CSI_EIconType
 {
 	REGULAR,
-	OUTLINE
+	INVERTED
 }
 
 //------------------------------------------------------------------------------------

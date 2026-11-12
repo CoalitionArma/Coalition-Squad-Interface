@@ -1,0 +1,26 @@
+FrameWidgetClass {
+ Name "Figure"
+ Slot FrameWidgetSlot "{6A9C2E41B8000001}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 16
+  OffsetRight -16
+  SizeY 49
+  OffsetBottom -49
+ }
+ Color 0.8 0.8 0.8 1
+ {
+  ImageWidgetClass "{6A9C2E41B8000003}" {
+   Name "Image"
+   Slot FrameWidgetSlot "{6A9C2E41B8000002}" {
+    Anchor -1.438 -0.143 2.563 1.163
+    OffsetLeft 0
+    OffsetTop 0
+    OffsetRight 0
+    OffsetBottom 0
+   }
+   "Inherit Color" 1
+   Texture "{C3901A809DA9FD4A}UI/Textures/Editor/ContentBrowser/ContentBrowser_Type_Character.edds"
+  }
+ }
+}

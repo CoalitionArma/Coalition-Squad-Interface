@@ -1,0 +1,304 @@
+FrameWidgetClass {
+ Name "IconExamples"
+ Slot FrameWidgetSlot "{6A9C2E41B800002B}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 480
+  OffsetRight -480
+  SizeY 200
+  OffsetBottom -200
+ }
+ components {
+  CSI_SettingInfoIconExamples "{6A9C2E41B8F00011}" {
+  }
+ }
+ {
+  FrameWidgetClass "{6A9C2E41B800002D}" {
+   Name "IconGrid"
+   Slot FrameWidgetSlot "{6A9C2E41B800002C}" {
+    Anchor 0.5 0.5 0.5 0.5
+    PositionX 0
+    OffsetLeft 0
+    PositionY 0
+    OffsetTop 0
+    SizeX 324
+    OffsetRight -324
+    SizeY 162
+    OffsetBottom -162
+    Alignment 0.5 0.5
+   }
+   {
+    ScaleWidgetClass "{6A9C2E41B8000008}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon0"
+     Slot FrameWidgetSlot "{6A9C2E41B8000007}" {
+      Anchor 0 0 0 0
+      PositionX 6
+      OffsetLeft 6
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -48
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800000A}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon1"
+     Slot FrameWidgetSlot "{6A9C2E41B8000009}" {
+      Anchor 0 0 0 0
+      PositionX 60
+      OffsetLeft 60
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -102
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800000C}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon2"
+     Slot FrameWidgetSlot "{6A9C2E41B800000B}" {
+      Anchor 0 0 0 0
+      PositionX 114
+      OffsetLeft 114
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -156
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800000E}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon3"
+     Slot FrameWidgetSlot "{6A9C2E41B800000D}" {
+      Anchor 0 0 0 0
+      PositionX 168
+      OffsetLeft 168
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -210
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000010}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon4"
+     Slot FrameWidgetSlot "{6A9C2E41B800000F}" {
+      Anchor 0 0 0 0
+      PositionX 222
+      OffsetLeft 222
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -264
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000012}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon5"
+     Slot FrameWidgetSlot "{6A9C2E41B8000011}" {
+      Anchor 0 0 0 0
+      PositionX 276
+      OffsetLeft 276
+      PositionY 6
+      OffsetTop 6
+      SizeX 42
+      OffsetRight -318
+      SizeY 42
+      OffsetBottom -48
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000014}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon6"
+     Slot FrameWidgetSlot "{6A9C2E41B8000013}" {
+      Anchor 0 0 0 0
+      PositionX 6
+      OffsetLeft 6
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -48
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000016}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon7"
+     Slot FrameWidgetSlot "{6A9C2E41B8000015}" {
+      Anchor 0 0 0 0
+      PositionX 60
+      OffsetLeft 60
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -102
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000018}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon8"
+     Slot FrameWidgetSlot "{6A9C2E41B8000017}" {
+      Anchor 0 0 0 0
+      PositionX 114
+      OffsetLeft 114
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -156
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800001A}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon9"
+     Slot FrameWidgetSlot "{6A9C2E41B8000019}" {
+      Anchor 0 0 0 0
+      PositionX 168
+      OffsetLeft 168
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -210
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800001C}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon10"
+     Slot FrameWidgetSlot "{6A9C2E41B800001B}" {
+      Anchor 0 0 0 0
+      PositionX 222
+      OffsetLeft 222
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -264
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800001E}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon11"
+     Slot FrameWidgetSlot "{6A9C2E41B800001D}" {
+      Anchor 0 0 0 0
+      PositionX 276
+      OffsetLeft 276
+      PositionY 60
+      OffsetTop 60
+      SizeX 42
+      OffsetRight -318
+      SizeY 42
+      OffsetBottom -102
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000020}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon12"
+     Slot FrameWidgetSlot "{6A9C2E41B800001F}" {
+      Anchor 0 0 0 0
+      PositionX 6
+      OffsetLeft 6
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -48
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000022}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon13"
+     Slot FrameWidgetSlot "{6A9C2E41B8000021}" {
+      Anchor 0 0 0 0
+      PositionX 60
+      OffsetLeft 60
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -102
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000024}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon14"
+     Slot FrameWidgetSlot "{6A9C2E41B8000023}" {
+      Anchor 0 0 0 0
+      PositionX 114
+      OffsetLeft 114
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -156
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000026}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon15"
+     Slot FrameWidgetSlot "{6A9C2E41B8000025}" {
+      Anchor 0 0 0 0
+      PositionX 168
+      OffsetLeft 168
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -210
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B8000028}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon16"
+     Slot FrameWidgetSlot "{6A9C2E41B8000027}" {
+      Anchor 0 0 0 0
+      PositionX 222
+      OffsetLeft 222
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -264
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+    ScaleWidgetClass "{6A9C2E41B800002A}" : "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout" {
+     Name "Icon17"
+     Slot FrameWidgetSlot "{6A9C2E41B8000029}" {
+      Anchor 0 0 0 0
+      PositionX 276
+      OffsetLeft 276
+      PositionY 114
+      OffsetTop 114
+      SizeX 42
+      OffsetRight -318
+      SizeY 42
+      OffsetBottom -156
+      Alignment 0 0
+     }
+    }
+   }
+  }
+ }
+}
