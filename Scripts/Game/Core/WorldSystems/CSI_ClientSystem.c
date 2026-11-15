@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system: registers the local player's CSI data and reports their display icon, rank
 //! 				and squad leader status to the server, scanning the inventory for specialty icons when it changes.
@@ -19,7 +19,6 @@ class CSI_ClientSystem : GameSystem
 	protected SCR_InventoryStorageManagerComponent m_StorageManager;	//!< local character's inventory, listened to for changes
 	protected bool m_bInventoryChanged = true;							//!< rescan on the next update cycle
 	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;					//!< result of the last inventory scan
-	protected int m_iLocallyStoredGroupID = -1;							//!< used to detect group changes
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
@@ -140,15 +139,6 @@ class CSI_ClientSystem : GameSystem
 
 		if (!playersGroup)
 			return;
-
-		// Group changed: clear group-specific data, continue next cycle
-		int playersGroupID = playersGroup.GetGroupID();
-		if (m_iLocallyStoredGroupID != playersGroupID)
-		{
-			m_iLocallyStoredGroupID = playersGroupID;
-			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
-			return;
-		};
 
 		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
 		UpdateInventoryListeners(localplayer);

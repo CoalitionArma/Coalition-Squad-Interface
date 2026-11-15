@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Static UI helpers: resource paths, color team colors, compass textures, icon names and player names.
 //! 
@@ -116,14 +116,18 @@ class CSI_UIHelper
 	//! \return
 	static string GetPlayersName(PlayerId playerID)
 	{
-		// Filtered name: respects blocked users and platform UGC restrictions
+		// Player name with '<', '>' and '#' removed
 		string name = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);
-		if (name.IsEmpty())
-			name = GetGame().GetPlayerManager().GetPlayerName(playerID);
 
-		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
+		// Plain name on game modes without CSI's managers
+		CSI_PlayerDataManager playerDataManager = CSI_PlayerDataManager.GetInstance();
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		if (!playerDataManager || !settingsManager)
+			return name;
 
-		if (!playerData || !CSI_SettingsManager.GetInstance().GetSettingBool(CSI_GameSettings.RANK_VISIBLE))
+		CSI_PlayerData playerData = playerDataManager.GetPlayerData(playerID);
+
+		if (!playerData || !settingsManager.GetSettingBool(CSI_GameSettings.RANK_VISIBLE))
 			return name;
 
 		SCR_ECharacterRank rankEnum = playerData.GetRank();

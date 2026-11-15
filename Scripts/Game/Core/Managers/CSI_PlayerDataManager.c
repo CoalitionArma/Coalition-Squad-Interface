@@ -3,9 +3,10 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
+//! 				The server clears a player's group-specific data when they join a different group.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerDataManager : ScriptComponent
@@ -15,6 +16,7 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected ref map<PlayerId, ref CSI_PlayerData> m_mPlayerDataMap = new map<PlayerId, ref CSI_PlayerData>;	//!< keyed by player ID
+	protected ref map<PlayerId, int> m_mLastGroupIDs = new map<PlayerId, int>;	//!< server only: player ID to the last group they joined
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 
@@ -27,6 +29,14 @@ class CSI_PlayerDataManager : ScriptComponent
 	{
 		super.OnPostInit(owner);
 		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+		SCR_AIGroup.GetOnPlayerAdded().Insert(OnGroupPlayerAdded);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void OnDelete(IEntity owner)
+	{
+		super.OnDelete(owner);
+		SCR_AIGroup.GetOnPlayerAdded().Remove(OnGroupPlayerAdded);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -63,6 +73,8 @@ class CSI_PlayerDataManager : ScriptComponent
 	{
 		if (GetPlayerData(playerID))
 			m_mPlayerDataMap.Remove(playerID);
+
+		m_mLastGroupIDs.Remove(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -141,12 +153,29 @@ class CSI_PlayerDataManager : ScriptComponent
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
-		if (playerData)
+		if (playerData && m_RplBroadcastManager)
 		{
 			m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
 			m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
 			m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, false);
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Server: clears the player's group-specific data when they join a different group than their last one.
+	//! \param[in] group
+	//! \param[in] playerID
+	protected void OnGroupPlayerAdded(SCR_AIGroup group, PlayerId playerID)
+	{
+		if (!Replication.IsServer())
+			return;
+
+		// Rejoining the same group (e.g. after a reconnect) keeps the data
+		int lastGroupID;
+		if (m_mLastGroupIDs.Find(playerID, lastGroupID) && lastGroupID != group.GetGroupID())
+			ClearGroupSpecificData(playerID);
+
+		m_mLastGroupIDs.Set(playerID, group.GetGroupID());
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

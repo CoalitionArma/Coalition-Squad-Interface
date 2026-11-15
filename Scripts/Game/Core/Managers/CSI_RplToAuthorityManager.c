@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
 //! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager or the group APIs.
@@ -46,17 +46,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return;
 
 		Rpc(RpcAsk_RegisterPlayerData, playerID);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	void Owner_ClearGroupSpecificData(PlayerId playerID)
-	{
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-
-		if(!playerData)
-			return;
-
-		Rpc(RpcAsk_ClearGroupSpecificData, playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -196,16 +185,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return;
 
 		m_RplBroadcastManager.RegisterPlayerData(playerID);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_ClearGroupSpecificData(PlayerId playerID)
-	{
-		if (playerID <= 0 || !m_PlayerDataManager)
-			return;
-
-		m_PlayerDataManager.ClearGroupSpecificData(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
