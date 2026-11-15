@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD group list: a CSI_Player row per group member (up to 25), filling a 5 x 5 grid a column at a time.
 //! 				Hidden in groups of one.
@@ -41,6 +41,8 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
 
 		m_wGrid = w.FindAnyWidget("GroupGridLayout");
+		if (!m_wGrid)
+			Print("CSI_Group: grid 'GroupGridLayout' not found, the group list won't show", LogLevel.WARNING);
 	}
 
 	//------------------------------------------------------------------------------------------------

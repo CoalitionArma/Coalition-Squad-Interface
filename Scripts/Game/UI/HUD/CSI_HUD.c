@@ -1,12 +1,13 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, radar and group list every frame.
+//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, radar and group list every frame. Hidden without
+//! 				a controlled character, in the pause menu and editor, by Auto-hide HUD until revealed, and in mortars.
 //! 
 //------------------------------------------------------------------------------------------------
-class CSI_HUD : SCR_InfoDisplay
+class CSI_HUD : SCR_InfoDisplayExtended
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -26,9 +27,9 @@ class CSI_HUD : SCR_InfoDisplay
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	protected override event void OnStartDraw(IEntity owner)
+	protected override void DisplayStartDraw(IEntity owner)
 	{
-		super.OnStartDraw(owner);
+		super.DisplayStartDraw(owner);
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_CSIHUDSystem = CSI_HUDSystem.GetInstance();
 
@@ -57,12 +58,12 @@ class CSI_HUD : SCR_InfoDisplay
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected override event void OnStopDraw(IEntity owner)
+	protected override void DisplayStopDraw(IEntity owner)
 	{
 		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.DOWN, OnRevealUIPressed);
 		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.UP, OnRevealUIReleased);
 
-		super.OnStopDraw(owner);
+		super.DisplayStopDraw(owner);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -70,20 +71,21 @@ class CSI_HUD : SCR_InfoDisplay
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	protected override event void UpdateValues(IEntity owner, float timeSlice)
+	//! Not called without a controlled character or while the pause menu or editor is open.
+	protected override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
-		super.UpdateValues(owner, timeSlice);
+		super.DisplayUpdate(owner, timeSlice);
 
 		if (!m_wRoot || !m_SettingsManager || !m_CSIHUDSystem)
 			return;
 
-		if ((!m_bIsVisible && m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) || m_CSIHUDSystem.GetIsLocalPlayerInMortar())
-		{
-			m_wRoot.SetVisible(false);
-			return;
-		}
+		// Hidden by Auto-hide HUD until revealed, and in mortars
+		bool show = (m_bIsVisible || !m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) && !m_CSIHUDSystem.GetIsLocalPlayerInMortar();
+		if (m_bShown != show)
+			Show(show);
 
-		m_wRoot.SetVisible(true);
+		if (!show)
+			return;
 
 		if (m_Stamina)
 			m_Stamina.Update(timeSlice);

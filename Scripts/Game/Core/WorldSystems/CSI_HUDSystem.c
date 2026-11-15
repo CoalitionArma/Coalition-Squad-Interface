@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
 //! 				vehicle/mortar state and the sorted group member list.
@@ -17,13 +17,14 @@ class CSI_HUDSystem : GameSystem
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected SCR_PlayerController m_PlayerController;		//!< local, listened to for controlled entity changes
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;	//!< locally controlled character
+	protected SCR_CompartmentAccessComponent m_LocalCompartmentAccess;	//!< local character's, listened to for vehicle and mortar state
 	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< new array each refresh; readers compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
-	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between vehicle and group refreshes
+	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between group refreshes
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
@@ -52,7 +53,14 @@ class CSI_HUDSystem : GameSystem
 		if (m_PlayerController)
 			m_PlayerController.m_OnControlledEntityChanged.Remove(OnControlledEntityChanged);
 
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Remove(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Remove(OnCompartmentLeft);
+		}
+
 		m_PlayerController = null;
+		m_LocalCompartmentAccess = null;
 		super.OnStopped();
 	}
 
@@ -127,41 +135,74 @@ class CSI_HUDSystem : GameSystem
 		// Every frame: yaw
 		UpdateLocalAimingYaw();
 
-		// Every REFRESH_INTERVAL: vehicle state and group list
+		// Every REFRESH_INTERVAL: group list
 		m_fTimeSinceRefresh += args.GetTimeSliceSeconds();
 		if (m_fTimeSinceRefresh < REFRESH_INTERVAL)
 			return;
 
 		m_fTimeSinceRefresh = 0;
-		UpdateLocalVehicleState();
 		UpdateLocalGroup();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Switches character and forces a refresh on the next update.
+	//! Switches character, moves the compartment listeners to it and forces a group refresh on the next update.
 	//! \param[in] from
 	//! \param[in] to
 	protected void OnControlledEntityChanged(IEntity from, IEntity to)
 	{
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Remove(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Remove(OnCompartmentLeft);
+		}
+
 		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(to);
+
+		m_LocalCompartmentAccess = null;
+		if (m_LocalPlayerCharacter)
+			m_LocalCompartmentAccess = SCR_CompartmentAccessComponent.Cast(m_LocalPlayerCharacter.GetCompartmentAccessComponent());
+
+		// Catch up with the seat the character is already in
+		BaseCompartmentSlot compartment;
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Insert(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Insert(OnCompartmentLeft);
+			compartment = m_LocalCompartmentAccess.GetCompartment();
+		}
+
+		UpdateLocalVehicleState(compartment);
 		m_fTimeSinceRefresh = REFRESH_INTERVAL;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected void UpdateLocalVehicleState()
+	protected void OnCompartmentEntered(IEntity targetEntity, BaseCompartmentManagerComponent manager, int mgrID, int slotID, bool move)
 	{
-		// Cleared first so they don't stick after dying in a vehicle
+		if (manager)
+			UpdateLocalVehicleState(manager.FindCompartment(slotID, mgrID));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void OnCompartmentLeft(IEntity targetEntity, BaseCompartmentManagerComponent manager, int mgrID, int slotID, bool move)
+	{
+		// Seat switches also enter the new seat
+		if (move)
+			return;
+
+		UpdateLocalVehicleState(null);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] compartment the local character's seat, null if it isn't in one
+	protected void UpdateLocalVehicleState(BaseCompartmentSlot compartment)
+	{
 		m_bIsLocalPlayerInVehicle = false;
 		m_bIsLocalPlayerInMortar = false;
 
-		if (!m_LocalPlayerCharacter)
+		if (!compartment)
 			return;
 
-		BaseCompartmentSlot vehicleCompartment = CSI_EntityHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
-		if (!vehicleCompartment)
-			return;
-
-		IEntity vehicle = vehicleCompartment.GetVehicle();
+		IEntity vehicle = compartment.GetVehicle();
 		if (!vehicle)
 			return;
 
@@ -189,27 +230,13 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Camera yaw in vehicles or when aim yaw is positive, else head aim.
+	//! Stores the current camera's yaw, negated.
 	void UpdateLocalAimingYaw()
 	{
-		if (!m_LocalPlayerCharacter)
-			return;
-		float yaw;
+		vector transform[4];
+		GetGame().GetWorld().GetCurrentCamera(transform);
 
-		AimingComponent playerAimingComponent = m_LocalPlayerCharacter.GetHeadAimingComponent();
-		if (!playerAimingComponent)
-			return;
-
-		if (m_bIsLocalPlayerInVehicle || playerAimingComponent.GetAimingDirection().ToYaw() > 0)
-		{
-			vector transform[4];
-			GetGame().GetWorld().GetCurrentCamera(transform);
-
-			yaw = -Math3D.MatrixToAngles(transform)[0];
-		} else
-			yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
-
-		m_fLocalYaw = yaw;
+		m_fLocalYaw = -Math3D.MatrixToAngles(transform)[0];
 	}
 
 	//------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Player icon for the group list and radar: role icon, facing arrow and color team,
 //! 				refreshed on player data and settings changes.
@@ -51,6 +51,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wOutlineLarge = ImageWidget.Cast(w.FindAnyWidget("Outline_Large"));
 		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
 		m_bHasAllParts = m_wArrow && m_wIcon && m_wOutline && m_wIconLarge && m_wOutlineLarge && m_wIconFrame;
+		if (!m_bHasAllParts)
+			Print("CSI_Icon: 'Arrow', 'Icon', 'Outline', 'Icon_Large', 'Outline_Large' or 'IconFrame' not found, the player icon won't show", LogLevel.WARNING);
 
 		// Visible in the layout for editing; SetIconWidget shows the ones in use
 		if (SCR_Global.IsEditMode())

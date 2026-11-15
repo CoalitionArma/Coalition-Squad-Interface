@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD compass: themed texture rotated to the local yaw, with the bearing above it.
 //! 				Both use the Compass colour setting.
@@ -37,7 +37,12 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 
 		m_wCompass = ImageWidget.Cast(w.FindAnyWidget("Compass"));
+		if (!m_wCompass)
+			Print("CSI_Compass: image 'Compass' not found, the compass and bearing won't show", LogLevel.WARNING);
+
 		m_wBearing = TextWidget.Cast(w.FindAnyWidget("Bearing"));
+		if (!m_wBearing)
+			Print("CSI_Compass: text 'Bearing' not found, the compass and bearing won't show", LogLevel.WARNING);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -51,9 +56,8 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 		if (!m_wCompass || !m_wBearing)
 			return;
 
-		int yawInt;
-        float yaw = m_HUDSystem.GetLocalYaw();
-		yawInt = -yaw;
+		float yaw = m_HUDSystem.GetLocalYaw();
+		int yawInt = Math.Repeat(Math.Floor(-yaw), 360);	// bearing 0-359, rounded down
 
 		int compassColor = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_COLOR);
 		if (m_iStoredCompassColor != compassColor)
@@ -87,10 +91,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
 		{
-			// Wrap to 0-359; ToString(3) zero-pads
-			if (yawInt < 0)
-				yawInt += 360;
-
+			// ToString(3) zero-pads
 			if (m_iStoredBearing != yawInt)
 			{
 				m_wBearing.SetText(yawInt.ToString(3));

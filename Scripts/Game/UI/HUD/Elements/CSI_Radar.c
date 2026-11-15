@@ -79,9 +79,16 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		// Radar range in metres
 		float searchRadius;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
-			searchRadius = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE, m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE));
+			searchRadius = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE);
 		else
-			searchRadius = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_ON_FOOT, m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT));
+			searchRadius = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT);
+
+		// 0 until the settings arrive
+		if (searchRadius <= 0)
+		{
+			ClearRadarIcons();
+			return;
+		}
 
 		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade out over the last 20% of the range
 		float radarScale = 132.0 / (searchRadius * 2.725);			// metres to radar px
@@ -91,8 +98,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		// Members outside this angle around straight ahead fade out; none at the max
 		int fieldOfViewMin, fieldOfViewMax;
-		CSI_GameSettings.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
-		int fieldOfView = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW), fieldOfViewMin, fieldOfViewMax);
+		m_SettingsManager.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
+		int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW);
 		float halfFieldOfView = fieldOfView * 0.5;
 
 		array<int> groupPlayerIDs = m_HUDSystem.GetLocalGroupPlayerIds();
