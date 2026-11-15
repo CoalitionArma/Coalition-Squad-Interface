@@ -1,36 +1,31 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	On each CSI settings tab row: tells CSI_SettingInfo which setting is hovered, focused or changed,
 //! 				and previews a hovered colour box.
 //!
 //------------------------------------------------------------------------------------------------
-class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
+class CSI_SettingInfoHandler
 {
 	protected string m_sSetting;
 	protected CSI_SettingInfo m_SettingInfo;	//!< not ref: CSI_SettingInfo owns this handler
 	protected Widget m_wSetting;
+	protected SCR_ModularButtonComponent m_RowButton;
 	protected SCR_ChangeableComponentBase m_Changeable;
 	protected SCR_ToolboxComponent m_ColorRow;	//!< colour rows only
 
 	//------------------------------------------------------------------------------------------------
-	override bool OnMouseEnter(Widget w, int x, int y)
+	protected void OnRowMouseEnter(SCR_ModularButtonComponent comp, bool mouseInput)
 	{
-		if (m_SettingInfo)
-			m_SettingInfo.ShowSetting(m_sSetting);
-
-		return false;
+		ShowThisSetting();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	override bool OnFocus(Widget w, int x, int y)
+	protected void OnRowFocus(SCR_ModularButtonComponent comp)
 	{
-		if (m_SettingInfo)
-			m_SettingInfo.ShowSetting(m_sSetting);
-
-		return false;
+		ShowThisSetting();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -119,7 +114,17 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	void Attach(notnull Widget settingWidget)
 	{
 		m_wSetting = settingWidget;
-		m_wSetting.AddHandler(this);
+
+		m_RowButton = SCR_ModularButtonComponent.Cast(settingWidget.FindHandler(SCR_ModularButtonComponent));
+		if (m_RowButton)
+		{
+			m_RowButton.m_OnMouseEnter.Insert(OnRowMouseEnter);
+			m_RowButton.m_OnFocus.Insert(OnRowFocus);
+		}
+		else
+		{
+			PrintFormat("CSI_SettingInfoHandler: row '%1' has no SCR_ModularButtonComponent, hovering or focusing it won't show it in Setting Info", m_sSetting, level: LogLevel.WARNING);
+		}
 
 		m_Changeable = SCR_ChangeableComponentBase.Cast(settingWidget.FindHandler(SCR_ChangeableComponentBase));
 		if (m_Changeable)
@@ -137,21 +142,25 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	{
 		GetGame().GetCallqueue().Remove(ShowThisSetting);
 
+		if (m_RowButton)
+		{
+			m_RowButton.m_OnMouseEnter.Remove(OnRowMouseEnter);
+			m_RowButton.m_OnFocus.Remove(OnRowFocus);
+		}
+
 		if (m_Changeable)
 			m_Changeable.m_OnChanged.Remove(OnValueChanged);
 
 		if (m_ColorRow)
 			SubscribeColorBoxes(false);
-
-		if (m_wSetting)
-			m_wSetting.RemoveHandler(this);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! \return the row's label, empty if none
 	string GetLabelText()
 	{
-		if (!m_Changeable)
+		// GetLabel needs the label widget, which rows without a label don't have
+		if (!m_Changeable || !m_Changeable.GetLabelWidget())
 			return string.Empty;
 
 		TextWidget label = m_Changeable.GetLabel();
@@ -172,7 +181,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	"Setting Info" panel of the CSI settings tab: the hovered setting's name, description and example
 //! 				(SettingInfoExamples/), plus static helpers the examples share.
@@ -211,8 +220,14 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		m_wCaption = TextWidget.Cast(w.FindAnyWidget("SettingInfoCaption"));
 		m_wDescription = TextWidget.Cast(w.FindAnyWidget("SettingInfoDescription"));
 		// Layout editor: keep the examples visible so they can be edited
-		if (!m_wName || !m_wCaption || !m_wDescription || SCR_Global.IsEditMode())
+		if (SCR_Global.IsEditMode())
 			return;
+
+		if (!m_wName || !m_wCaption || !m_wDescription)
+		{
+			Print("CSI_SettingInfo: 'SettingInfoName', 'SettingInfoCaption' or 'SettingInfoDescription' not found, Setting Info won't show settings", LogLevel.WARNING);
+			return;
+		}
 
 		FindExamples();
 		ShowNothing();
@@ -236,11 +251,11 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] settingsRoot CSI settings tab root
 	void SetSettingsRoot(Widget settingsRoot)
 	{
-		if (!settingsRoot || !m_wName)
+		if (!settingsRoot || !m_wName || !m_wCaption || !m_wDescription)
 			return;
 
-		// Again, in case the examples attached after this component
-		FindExamples();
+		// Again, in case the examples attached after this component, warning about missing ones
+		FindExamples(true);
 		ShowNothing();
 
 		if (m_HudExamples)
@@ -278,7 +293,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] setting CSI_GameSettings name
 	void ShowSetting(string setting)
 	{
-		if (!m_wName)
+		if (!m_wName || !m_wCaption || !m_wDescription)
 			return;
 
 		// The row's label, or the readable variable name without one
@@ -328,19 +343,29 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected void FindExamples()
+	//! \param[in] warn log the examples that are missing
+	protected void FindExamples(bool warn = false)
 	{
 		Widget hudExamples = m_wRoot.FindAnyWidget("HudExamples");
 		if (hudExamples)
 			m_HudExamples = CSI_SettingInfoHudExamples.Cast(hudExamples.FindHandler(CSI_SettingInfoHudExamples));
 
+		if (!m_HudExamples && warn)
+			Print("CSI_SettingInfo: 'HudExamples' with CSI_SettingInfoHudExamples not found, the HUD settings won't show examples", LogLevel.WARNING);
+
 		Widget iconExamples = m_wRoot.FindAnyWidget("IconExamples");
 		if (iconExamples)
 			m_IconExamples = CSI_SettingInfoIconExamples.Cast(iconExamples.FindHandler(CSI_SettingInfoIconExamples));
 
+		if (!m_IconExamples && warn)
+			Print("CSI_SettingInfo: 'IconExamples' with CSI_SettingInfoIconExamples not found, the icon settings won't show examples", LogLevel.WARNING);
+
 		Widget nametagExamples = m_wRoot.FindAnyWidget("NametagExamples");
 		if (nametagExamples)
 			m_NametagExamples = CSI_SettingInfoNametagExamples.Cast(nametagExamples.FindHandler(CSI_SettingInfoNametagExamples));
+
+		if (!m_NametagExamples && warn)
+			Print("CSI_SettingInfo: 'NametagExamples' with CSI_SettingInfoNametagExamples not found, the nametag settings won't show examples", LogLevel.WARNING);
 	}
 
 	//------------------------------------------------------------------------------------------------

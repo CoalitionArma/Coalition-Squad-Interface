@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Setting Info example for the icon settings: every CSI_EIcon (Icon0-Icon17, in enum order), drawn
 //! 				with the tab's icon theme, type and arrow.
@@ -21,9 +21,12 @@ class CSI_SettingInfoIconExamples : SCR_ScriptedWidgetComponent
 
 		for (int iconIndex = 0; iconIndex < ICON_COUNT; iconIndex++)
 		{
+			// Missing icons keep their slot: an icon's role is its index
 			Widget icon = w.FindAnyWidget("Icon" + iconIndex);
-			if (icon)
-				m_aIcons.Insert(icon);
+			if (!icon)
+				PrintFormat("CSI_SettingInfoIconExamples: 'Icon%1' not found, the icon examples won't show %2", iconIndex, SCR_Enum.GetEnumName(CSI_EIcon, iconIndex), level: LogLevel.WARNING);
+
+			m_aIcons.Insert(icon);
 		}
 	}
 

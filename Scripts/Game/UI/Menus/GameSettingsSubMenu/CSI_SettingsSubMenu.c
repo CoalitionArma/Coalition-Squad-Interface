@@ -1,11 +1,7 @@
-void ScriptInvoker_CSI_SettingsSubMenu(CSI_SettingsSubMenu menu);
-typedef func ScriptInvoker_CSI_SettingsSubMenu;
-typedef ScriptInvokerBase<ScriptInvoker_CSI_SettingsSubMenu> ScriptInvoker_CSI_SettingsSubMenuChanged;
-
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI tab in Settings: server overrides (set by admins, locked for others), server defaults for players
 //! 				without saved settings, settings nested under their switch, and the Setting Info and Server Admin panels.
@@ -53,6 +49,10 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	protected ref TIntArray m_aValuesBeforeServerDefaults;	//!< user settings before showing server defaults
 	protected bool m_bShowingServerDefaults;
 
+	// Server override rows as loaded or last sent, so only changes are sent (SendServerOverrides)
+	protected ref map<string, bool> m_mSentServerOverrides = new map<string, bool>();	//!< setting -> checkbox checked
+	protected ref map<string, int> m_mSentServerOverrideValues = new map<string, int>();	//!< setting -> row value
+
 	// Right side panels, owned by their widgets
 	protected CSI_SettingInfo m_SettingInfo;
 	protected CSI_ServerAdmin m_ServerAdmin;
@@ -90,6 +90,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		SetupColorSettings();
 		SetupSettingBindings();
 		LoadSettings();
+		SnapshotServerOverrides();
 
 		SetupSidePanels();
 		SetupNestedSettings();
@@ -111,10 +112,18 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	//! Saves local settings, sends admin changes and updates the effective settings.
 	override void OnTabHide()
 	{
-		super.OnTabHide();
+		// Closing the menu hides every tab, also ones a tab switch already hid
+		if (!GetShown())
+		{
+			super.OnTabHide();
+			return;
+		}
 
+		// Before super saves the user settings, so it saves the player's own values
 		FindManagers();
 		SaveLocalSettings();
+
+		super.OnTabHide();
 
 		if (!m_SettingsManager || !m_RplToAuthorityManager)
 			return;
@@ -247,7 +256,14 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 				// Admins can still edit it, to change the override
 				if (!isAdmin)
-					row.SetEnabled(false);
+				{
+					// Through the row's component, which also dims it
+					SCR_WLibComponentBase rowComponent = SCR_WLibComponentBase.Cast(row.FindHandler(SCR_WLibComponentBase));
+					if (rowComponent)
+						rowComponent.SetEnabled(false, false);
+					else
+						row.SetEnabled(false);
+				}
 			}
 
 			CheckBoxWidget checkBox = GetServerOverrideCheckBox(serverOverrides, setting);
@@ -264,7 +280,27 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends each override checkbox: checked overrides with the row's value, unchecked clears it.
+	//! Remembers each override checkbox and its row's value, for SendServerOverrides.
+	protected void SnapshotServerOverrides()
+	{
+		m_mSentServerOverrides.Clear();
+		m_mSentServerOverrideValues.Clear();
+
+		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
+		foreach (string setting : CSI_GameSettings.GetSettingsArray())
+		{
+			CheckBoxWidget checkBox = GetServerOverrideCheckBox(serverOverrides, setting);
+			int value;
+			if (!checkBox || !CSI_SettingInfo.GetWidgetValue(m_wRoot, setting, value))
+				continue;
+
+			m_mSentServerOverrides.Set(setting, checkBox.IsChecked());
+			m_mSentServerOverrideValues.Set(setting, value);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sends the override checkboxes changed since the snapshot: checked with the row's value, unchecked clears it.
 	protected void SendServerOverrides()
 	{
 		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
@@ -275,10 +311,18 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			if (!checkBox || !CSI_SettingInfo.GetWidgetValue(m_wRoot, setting, value))
 				continue;
 
-			if (checkBox.IsChecked())
+			// Unchanged, or only the player's own value changed
+			bool overridden = checkBox.IsChecked();
+			if (overridden == m_mSentServerOverrides.Get(setting) && (!overridden || value == m_mSentServerOverrideValues.Get(setting)))
+				continue;
+
+			if (overridden)
 				m_RplToAuthorityManager.Owner_ChangeAuthoritySetting(setting, value, true);
 			else
 				m_RplToAuthorityManager.Owner_ChangeAuthoritySetting(setting, 0, false);
+
+			m_mSentServerOverrides.Set(setting, overridden);
+			m_mSentServerOverrideValues.Set(setting, value);
 		}
 	}
 
@@ -617,8 +661,12 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		// Main menu: no player controller
 		if (!m_PlayerControllerManager || !m_PlayerControllerManager.GetLocalSettingsJson())
 		{
-			CSI_SettingsJson settingsJson = new CSI_SettingsJson();
-			settingsJson.SaveToFile();
+			if (CSI_SettingsJson.HasSettingsFile() || !m_aValuesOnOpen || !SCR_ArrayHelperT<int>.AreEqual(GetUserSettingValues(), m_aValuesOnOpen))
+			{
+				CSI_SettingsJson settingsJson = new CSI_SettingsJson();
+				settingsJson.SaveToFile();
+			}
+
 			return;
 		}
 
@@ -631,6 +679,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		else if (m_bShowingServerDefaults)
 		{
 			SetUserSettingValues(m_aValuesBeforeServerDefaults);
+			GetGame().UserSettingsChanged();
 		}
 	}
 

@@ -3,10 +3,11 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Effective CSI settings for the local player: their own values with server overrides applied.
-//! 				Also holds the admin-set max group size and server default settings, saved between server restarts.
+//! 				Also holds the admin-set server overrides, max group size and server default settings, saved
+//! 				between server restarts.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsManager : ScriptComponent
@@ -18,6 +19,7 @@ class CSI_SettingsManager : ScriptComponent
 	const static int SERVER_OVERRIDE_OFFSET = 1;	//!< non-boolean override stored as -(value + offset)
 	const static int SERVER_OVERRIDE_FALSE = -1;	//!< boolean override: forced off
 	const static int SERVER_OVERRIDE_TRUE = -2;		//!< boolean override: forced on
+	const static int NO_SERVER_OVERRIDE = 0;		//!< setting has no server override (any value >= 0)
 
 	const static int MAX_GROUP_SIZE_LIMIT = 99;		//!< highest max group size an admin can set
 	const static int DEFAULT_MAX_GROUP_SIZE = 8;
@@ -28,13 +30,18 @@ class CSI_SettingsManager : ScriptComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected bool m_bAuthorityIsSavingSettings;
 	protected ref ScriptInvoker m_OnSettingsUpdate;
 
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aSettingsAuthorityValues = {};	//!< encoded server values by settings index
 
+	protected ref TIntArray m_aSettingsOverrideValues = {};	//!< server only: encoded overrides by settings index, saved; empty = none
+
 	protected ref map<string, int> m_mSettingsLocalValues = new map<string, int>;	//!< effective values, read by GetSetting*
+
+	// Slider limits of the settings that have them, read once (GetSettingLimits)
+	protected ref map<string, int> m_mSettingMinValues;
+	protected ref map<string, int> m_mSettingMaxValues;
 
 	[RplProp()]
 	protected int m_iMaxGroupSize = DEFAULT_MAX_GROUP_SIZE;	//!< top of the leaders' group size slider
@@ -58,8 +65,11 @@ class CSI_SettingsManager : ScriptComponent
 
 		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 
-		// Server: load saved defaults and publish overrides before anything replicates
-		if (RplSession.Mode() != RplMode.Client && GetGame().InPlayMode())
+		// Recalculate whenever the user settings change, e.g. in the settings menu
+		GetGame().OnUserSettingsChangedInvoker().Insert(SettingsUpdate);
+
+		// Server: load saved defaults and overrides and publish them before anything replicates
+		if (GetGame().InPlayMode() && Replication.IsServer())
 		{
 			LoadServerDefaults();
 			UpdateAuthorityValueArray();
@@ -69,7 +79,10 @@ class CSI_SettingsManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	override protected void OnDelete(IEntity owner)
 	{
-		// Write a queued defaults save now so it isn't lost
+		if (GetGame())
+			GetGame().OnUserSettingsChangedInvoker().Remove(SettingsUpdate);
+
+		// Write a queued save now so it isn't lost
 		if (m_bServerDefaultsSavePending)
 		{
 			if (GetGame())
@@ -78,18 +91,11 @@ class CSI_SettingsManager : ScriptComponent
 			SaveServerDefaults();
 		}
 
-		// Same for a queued overrides save
-		if (m_bAuthorityIsSavingSettings && GetGame())
-		{
-			GetGame().GetCallqueue().Remove(SaveAuthoritySettingsDelay);
-			SaveAuthoritySettingsDelay();
-		}
-
 		super.OnDelete(owner);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: loads the saved defaults and max group size.
+	//! Server: loads the saved defaults, overrides and max group size.
 	protected void LoadServerDefaults()
 	{
 		if (!m_ServerDefaultsJson)
@@ -97,7 +103,13 @@ class CSI_SettingsManager : ScriptComponent
 
 		TIntArray savedDefaults = {};
 		int savedMaxGroupSize;
-		if (!m_ServerDefaultsJson.LoadFromProfile(savedDefaults, savedMaxGroupSize))
+		bool hasSavedFile = m_ServerDefaultsJson.LoadFromProfile(savedDefaults, savedMaxGroupSize, m_aSettingsOverrideValues);
+
+		// Older versions kept a dedicated server's overrides in its user settings
+		if (m_aSettingsOverrideValues.IsEmpty() && RplSession.Mode() == RplMode.Dedicated)
+			MigrateUserSettingsOverrides();
+
+		if (!hasSavedFile)
 			return;
 
 		m_iMaxGroupSize = Math.ClampInt(savedMaxGroupSize, 1, MAX_GROUP_SIZE_LIMIT);
@@ -112,6 +124,34 @@ class CSI_SettingsManager : ScriptComponent
 
 			m_aSettingsDefaultValues.Insert(defaultValue);
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Dedicated server: copies the overrides (negative values) from its user settings and saves them.
+	protected void MigrateUserSettingsOverrides()
+	{
+		if (!m_UserSettigs)
+			return;
+
+		TIntArray overrideValues = {};
+		bool hasOverrides;
+		foreach (string setting : CSI_GameSettings.GetSettingsArray())
+		{
+			int value;
+			m_UserSettigs.Get(setting, value);
+			if (value < 0)
+				hasOverrides = true;
+			else
+				value = NO_SERVER_OVERRIDE;
+
+			overrideValues.Insert(value);
+		}
+
+		if (!hasOverrides)
+			return;
+
+		m_aSettingsOverrideValues = overrideValues;
+		QueueServerDefaultsSave();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -131,10 +171,41 @@ class CSI_SettingsManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting CSI_GameSettings name
-	//! \return effective value (server overrides applied)
+	//! \return effective value (server overrides applied), within the setting's limits
 	int GetSettingInt(string setting)
 	{
 		return m_mSettingsLocalValues.Get(setting);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Slider range of a setting, read once from its attribute.
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[out] min
+	//! \param[out] max
+	//! \return false if the setting has no min and max
+	bool GetSettingLimits(string setting, out int min, out int max)
+	{
+		if (!m_mSettingMinValues)
+			CacheSettingLimits();
+
+		return m_mSettingMinValues.Find(setting, min) && m_mSettingMaxValues.Find(setting, max);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void CacheSettingLimits()
+	{
+		m_mSettingMinValues = new map<string, int>();
+		m_mSettingMaxValues = new map<string, int>();
+
+		foreach (string setting : CSI_GameSettings.GetSettingsArray())
+		{
+			int min, max;
+			if (!CSI_GameSettings.GetSettingLimits(setting, min, max))
+				continue;
+
+			m_mSettingMinValues.Set(setting, min);
+			m_mSettingMaxValues.Set(setting, max);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -203,14 +274,13 @@ class CSI_SettingsManager : ScriptComponent
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: stores a setting, encoded as an override if enabled, and replicates it.
+	//! Server: stores a setting's override, encoded, then saves and replicates it.
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] value
 	//! \param[in] serverOverrideEnabled false lets clients use their own value
 	void UpdateAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		// Dedicated servers only
-		if (RplSession.Mode() != RplMode.Dedicated)
+		if (!Replication.IsServer())
 			return;
 
 		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
@@ -233,16 +303,18 @@ class CSI_SettingsManager : ScriptComponent
 					value = value + SERVER_OVERRIDE_OFFSET;
 					value = -value;
 				}
-			};
-
-			m_UserSettigs.Set(setting, value);
-
-			// Batch saves when an admin changes several settings at once
-			if(!m_bAuthorityIsSavingSettings)
-			{
-				m_bAuthorityIsSavingSettings = true;
-				GetGame().GetCallqueue().CallLater(SaveAuthoritySettingsDelay, 150, false);
 			}
+			else
+			{
+				value = NO_SERVER_OVERRIDE;
+			}
+
+			// First override: one entry per setting, none set yet
+			while (m_aSettingsOverrideValues.Count() < CSI_GameSettings.GetSettingsArray().Count())
+				m_aSettingsOverrideValues.Insert(NO_SERVER_OVERRIDE);
+
+			m_aSettingsOverrideValues.Set(index, value);
+			QueueServerDefaultsSave();
 
 			UpdateAuthorityValueArray();
 			return;
@@ -250,15 +322,17 @@ class CSI_SettingsManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: rebuilds the replicated array from the server's user settings.
+	//! Server: rebuilds the replicated array from the stored overrides.
 	protected void UpdateAuthorityValueArray()
 	{
 		m_aSettingsAuthorityValues.Clear();
 
-		foreach (string setting : CSI_GameSettings.GetSettingsArray())
+		int settingsCount = CSI_GameSettings.GetSettingsArray().Count();
+		for (int i = 0; i < settingsCount; i++)
 		{
-			int settingValue;
-			m_UserSettigs.Get(setting, settingValue);
+			int settingValue = NO_SERVER_OVERRIDE;
+			if (m_aSettingsOverrideValues.IsIndexValid(i))
+				settingValue = m_aSettingsOverrideValues[i];
 
 			m_aSettingsAuthorityValues.Insert(settingValue);
 		}
@@ -267,15 +341,6 @@ class CSI_SettingsManager : ScriptComponent
 
 		// onRplName only runs on clients, so update here too
 		SettingsUpdate();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Delayed save of the server's user settings.
-	void SaveAuthoritySettingsDelay()
-	{
-		m_bAuthorityIsSavingSettings = false;
-		GetGame().UserSettingsChanged();
-		GetGame().SaveUserSettings();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -347,7 +412,7 @@ class CSI_SettingsManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Writes the defaults and max group size to CSI_ServerDefaults.json.
+	//! Writes the defaults, overrides and max group size to CSI_ServerDefaults.json.
 	protected void SaveServerDefaults()
 	{
 		m_bServerDefaultsSavePending = false;
@@ -355,7 +420,7 @@ class CSI_SettingsManager : ScriptComponent
 		if (!m_ServerDefaultsJson)
 			m_ServerDefaultsJson = new CSI_ServerDefaultsJson();
 
-		m_ServerDefaultsJson.SaveToProfile(m_aSettingsDefaultValues, m_iMaxGroupSize);
+		m_ServerDefaultsJson.SaveToProfile(m_aSettingsDefaultValues, m_iMaxGroupSize, m_aSettingsOverrideValues);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -407,6 +472,11 @@ class CSI_SettingsManager : ScriptComponent
 						m_UserSettigs.Get(setting, settingValue);
 				}
 			}
+
+			// Within the setting's slider range, wherever the value came from
+			int min, max;
+			if (GetSettingLimits(setting, min, max))
+				settingValue = Math.ClampInt(settingValue, min, max);
 
 			m_mSettingsLocalValues.Set(setting, settingValue);
 		}

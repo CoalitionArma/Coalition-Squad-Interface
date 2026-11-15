@@ -280,18 +280,8 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void ShuffleDemoSquadNames()
 	{
-		foreach (string demoName : DEMO_SQUAD_NAMES)
-		{
-			m_aDemoSquadNames.Insert(demoName);
-		}
-
-		for (int nameIndex = m_aDemoSquadNames.Count() - 1; nameIndex > 0; nameIndex--)
-		{
-			int swapIndex = Math.RandomInt(0, nameIndex + 1);
-			string swapName = m_aDemoSquadNames[nameIndex];
-			m_aDemoSquadNames[nameIndex] = m_aDemoSquadNames[swapIndex];
-			m_aDemoSquadNames[swapIndex] = swapName;
-		}
+		m_aDemoSquadNames.Copy(DEMO_SQUAD_NAMES);
+		SCR_ArrayHelperT<string>.Shuffle(m_aDemoSquadNames);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

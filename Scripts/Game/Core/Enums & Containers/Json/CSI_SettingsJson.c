@@ -1,12 +1,12 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Saves and loads the local player's CSI settings in $profile:CSI_Settings.json, by settings index.
 //!
 //------------------------------------------------------------------------------------------------
-class CSI_SettingsJson : JsonApiStruct
+class CSI_SettingsJson
 {
 	protected static string m_sSettingsPath = "$profile:CSI_Settings.json";
     protected ref array<int> m_aSettingsValues = new array<int>;
@@ -49,7 +49,11 @@ class CSI_SettingsJson : JsonApiStruct
 
 		JsonSaveContext jsonSave = new JsonSaveContext();
         jsonSave.WriteValue("m_aSettingsValues", m_aSettingsValues);
-        jsonSave.SaveToFile(m_sSettingsPath);
+		if (!jsonSave.SaveToFile(m_sSettingsPath))
+		{
+			PrintFormat("CSI_SettingsJson: couldn't write %1, CSI settings weren't saved", m_sSettingsPath, level: LogLevel.WARNING);
+			return;
+		}
 
 		m_bHasSavedSettings = true;
     }
@@ -61,8 +65,9 @@ class CSI_SettingsJson : JsonApiStruct
 	}
 
 	//------------------------------------------------------------------------------------------------
-    void CSI_SettingsJson()
+	//! \return true if CSI_Settings.json exists
+	static bool HasSettingsFile()
 	{
-		RegV("m_aSettingsValues");
-    }
+		return FileIO.FileExists(m_sSettingsPath);
+	}
 }
