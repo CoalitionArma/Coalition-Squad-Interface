@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Standalone menu showing the local player's own CSI_PlayerSettings panel. Opened by CSI_PlayerControllerManager
-//! 				for players who aren't group leaders.
+//!	\Description: 	Menu with the local player's own CSI_PlayerSettings panel, for players who aren't group leaders.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerSettingsMenu : ChimeraMenuBase
@@ -37,7 +36,6 @@ class CSI_PlayerSettingsMenu : ChimeraMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Remove the listener however the menu gets closed, not only through OnMenuBack
 	override void OnMenuClose()
 	{
 		GetGame().GetInputManager().RemoveActionListener("MenuBack", EActionTrigger.DOWN, OnMenuBack);

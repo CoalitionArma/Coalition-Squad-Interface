@@ -3,11 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible. The layout
-//! 				has one panel per kind of example (Single, DayNight, Range, Simplified, LineOfSight, BodyPosition,
-//! 				FieldOfView); this shows one, fills in the local player's nametag with the tab's settings, and moves
-//! 				the widgets that depend on values (range split, tag height, field of view edges and shaded zones).
-//! 				Missing panels are logged as warnings when it's created.
+//!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible: shows the
+//! 				setting's panel with the local player's nametag, laid out for the tab's values.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
@@ -29,19 +26,19 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	// Nametags are drawn this much larger than in game
 	protected static const float NAMETAG_PREVIEW_SCALE = 4.9;	//!< Single: a nametag on its own
 	protected static const float NAMETAG_COMPARE_SCALE = 2.8;	//!< DayNight: two nametags side by side
-	protected static const float NAMETAG_DIAGRAM_SCALE = 1.4;	//!< Range, Simplified, LineOfSight and FieldOfView: next to the figures
+	protected static const float NAMETAG_DIAGRAM_SCALE = 1.4;	//!< for the Range, Simplified, LineOfSight and FieldOfView panels
 	protected static const float NAMETAG_BODY_SCALE = 2.24;		//!< BodyPosition: over the zoomed-in figure
 	protected static const float NIGHT_DIMMED_OPACITY = 0.35;	//!< DayNight: the night tag with brightness dimming on
 
-	// Simplified: where the squadmates stand along the range, as fractions of the panel's width
+	// Simplified: positions along the range, as fractions of the panel's width
 	protected static const float ZONE_MARGIN = 0.06;			//!< left for the "You" figure at the start
 	protected static const float MATE_SPACING = 0.08;			//!< closest a mate stands to the figure before them
-	protected static const float FIGURE_HALF_WIDTH = 0.02;		//!< half a figure's width
+	protected static const float FIGURE_HALF_WIDTH = 0.02;
 
-	// BodyPosition: the figure (task-man.edds) and the bones nametags attach to, as standing heights in metres
+	// BodyPosition: figure (task-man.edds) and bone heights when standing, in metres
 	protected static const float FIGURE_HEIGHT = 1.8;			//!< the character in the figure image, head to feet
-	protected static const float FIGURE_FEET = 0.986;			//!< the character's feet, as a fraction of the image height (head at the top)
-	protected static const float TORSO_CENTRE_HEIGHT = 1.07;	//!< middle of the torso: task-man.edds measured, shoulders 1.44 m to hips 0.69 m
+	protected static const float FIGURE_FEET = 0.986;			//!< feet, as a fraction of the image height from the top
+	protected static const float TORSO_CENTRE_HEIGHT = 1.07;	//!< between shoulders (1.44 m) and hips (0.69 m)
 	protected static const float NECK_BONE_HEIGHT = 1.5;		//!< approximately, the Neck1 bone BODY tags attach to
 	protected static const float HEAD_BONE_HEIGHT = 1.62;		//!< approximately, the head bone HEAD tags attach to
 	protected static const float BODY_TAG_TOP_MARGIN = 6;		//!< px: closest the tag's top gets to the panel's top
@@ -51,12 +48,12 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	protected static const float FOV_EDGE_LENGTH = 215;			//!< to the last dot of each edge (as long as ViewLine)
 	protected static const int FOV_EDGE_DOTS = 21;				//!< dots per edge
 	protected static const float FOV_EDGE_DOT_SIZE = 5.6;		//!< px: dot width and height
-	protected static const ResourceName FOV_EDGE_DOT_TEXTURE = "{73B3D8BBB785B5B9}UI/Textures/Common/circleFull.edds";	//!< vanilla filled circle
-	protected static const int FOV_ZONE_ARC_STEPS = 16;			//!< straight pieces making up each shaded zone's curved edge
-	protected static const float FOV_ZONE_OPACITY = 0.3;		//!< shaded zones' opacity
+	protected static const ResourceName FOV_EDGE_DOT_TEXTURE = "{73B3D8BBB785B5B9}UI/Textures/Common/circleFull.edds";
+	protected static const int FOV_ZONE_ARC_STEPS = 16;			//!< segments per shaded zone's curved edge
+	protected static const float FOV_ZONE_OPACITY = 0.3;
 	protected static const float FOV_FULL_MATE_DISTANCE = 157;	//!< to the squadmate with a full nametag
-	protected static const float FOV_ICON_MATE_DISTANCE = 83.5;	//!< to the icon-only squadmate (closer, so its tag stays below the other dot)
-	protected static const float FOV_TAG_GAP = 9.8;				//!< from a squadmate's dot centre up to the bottom of their nametag
+	protected static const float FOV_ICON_MATE_DISTANCE = 83.5;	//!< to the icon-only squadmate (tag stays below the other dot)
+	protected static const float FOV_TAG_GAP = 9.8;				//!< from a squadmate's dot centre up to their nametag
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -93,7 +90,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
-		// Pending retries of DrawFieldOfViewCanvas and PlaceBodyPositionTag
+		// Pending retries
 		if (GetGame())
 		{
 			GetGame().GetCallqueue().Remove(DrawFieldOfViewCanvas);
@@ -104,7 +101,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] settingsRoot CSI settings tab root
 	void SetSettingsRoot(Widget settingsRoot)
 	{
 		m_wSettingsRoot = settingsRoot;
@@ -115,7 +111,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the example for a setting, if this layout has one.
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[out] caption text under the example (may be empty)
 	//! \return false if this layout has no example for the setting
@@ -205,7 +200,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		{
 			int fieldOfView = Math.ClampInt(GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW), CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MIN, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MAX);
 
-			// The field of view on its own; the shaded zones and squadmates belong to the simplified percentage
+			// No shaded zones or squadmates: those show the simplified percentage
 			if (setting == CSI_GameSettings.NAMETAG_FIELD_OF_VIEW)
 			{
 				ShowFieldOfView(fieldOfView, 0, false);
@@ -213,7 +208,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 				return true;
 			}
 
-			// Like in game, nothing is simplified without role icons
+			// Nothing is simplified without role icons
 			int simplifiedPercentage = Math.ClampInt(GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), 0, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX);
 			if (!GetValue(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 				simplifiedPercentage = 0;
@@ -248,7 +243,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! DayNight panel: the same nametag by day and by night, the night one faded with brightness dimming.
+	//! DayNight panel: the nametag by day and by night.
 	//! \param[in] dimming NAMETAG_BRIGHTNESS_DIMMING value
 	protected void ShowDayNight(bool dimming)
 	{
@@ -307,8 +302,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Simplified panel: its Axis is the whole range; NearAxis and the split widgets move to where tags drop to
-	//! the role icon only.
+	//! Simplified panel: marks where along the range tags drop to the role icon only.
 	//! \param[in] percentage NAMTEAG_RANGE_SIMPLIFIED value
 	protected void ShowSimplifiedRange(int percentage)
 	{
@@ -334,7 +328,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		}
 
 		float splitX = Math.Lerp(startX, endX, distance / range);
-		// The name zone; none at 100%, where it would only be a sliver at "You"
+		// The name zone, hidden at 100%
 		Widget nearAxis = panel.FindAnyWidget("NearAxis");
 		if (nearAxis)
 		{
@@ -344,9 +338,8 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		SetChildText(panel, "RangeLabel", string.Format("%1 m", range));
 
-		// Each mate stands in the middle of their own zone, but at least MATE_SPACING after the figure before them, so a
-		// mate in a narrow zone stands at its edge instead of disappearing. The named mate is only left out when that
-		// would put them past the split, i.e. names never show (100%). The full zone starts after the "You" figure.
+		// Each mate stands mid-zone but at least MATE_SPACING past the figure before them;
+		// the named mate is hidden only if that puts them past the split (100%)
 		float fullZoneStart = startX + ZONE_MARGIN;
 		float fullX = Math.Max(Math.Lerp(fullZoneStart, splitX, 0.5), startX + MATE_SPACING);
 		bool showFull = fullX - FIGURE_HALF_WIDTH <= splitX;
@@ -359,7 +352,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			ShowSampleNametag(panel.FindAnyWidget("FullTag"), NAMETAG_DIAGRAM_SCALE, 1, true);
 		}
 
-		// No split at 100%: every tag is icon only ("Always icon")
+		// No split at 100%: every tag is icon only
 		bool showSplit = simplifies && percentage < 100;
 		SetChildVisible(panel, "TickSplit", showSplit);
 		SetChildVisible(panel, "SplitLabel", showSplit);
@@ -408,8 +401,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Distance where nametags drop to icon only, using the same formula as SCR_NTElementBase.ShouldWeClearText
-	//! (squared distance against the near zone, start 1 m).
+	//! Distance where nametags drop to icon only.
 	//! \param[in] percentage NAMTEAG_RANGE_SIMPLIFIED value
 	//! \param[in] range metres
 	//! \return metres; range or more means never within range
@@ -424,8 +416,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! BodyPosition panel: a see-through Figure zoomed to the upper body; the tag moves to where
-	//! CSI_SCR_NameTagData.UpdateTagPos puts it for the tab's position and offset (PlaceBodyPositionTag).
+	//! BodyPosition panel: the tag on the zoomed-in figure at the tab's position and offset.
 	protected void ShowBodyPosition()
 	{
 		Widget panel = ShowPanel(BODY_POSITION_PANEL);
@@ -441,10 +432,8 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! BodyPosition: centres the tag (as SCR_NameTagRulesetBase centres it on its bone) at GetTagHeight on the figure as
-	//! it's drawn. Measured on screen from the Figure's Image, so it follows however the figure layout is arranged:
-	//! the character's head is at the image's top and their feet at FIGURE_FEET of its height, which stands for
-	//! FIGURE_HEIGHT. Waits for the panel to be laid out, like DrawFieldOfViewCanvas.
+	//! Centres the tag at GetTagHeight on the figure, measured on screen from its Image.
+	//! Retries until the panel is laid out.
 	protected void PlaceBodyPositionTag()
 	{
 		GetGame().GetCallqueue().Remove(PlaceBodyPositionTag);
@@ -484,7 +473,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		float bodyPixels = imageHeight * FIGURE_FEET;
 		float tagScreenY = imageY + bodyPixels - GetTagHeight() / FIGURE_HEIGHT * bodyPixels;
 
-		// Held inside the example: high HEAD offsets would otherwise push the tag above the panel's top
+		// Keep high HEAD offsets inside the panel
 		float tagWidth, tagScreenHeight;
 		tag.GetScreenSize(tagWidth, tagScreenHeight);
 		if (tagScreenHeight <= 0)
@@ -500,8 +489,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Where the tab's NAMETAG_POSITION and NAMETAG_POSITION_OFFSET put the tag on a standing character, with the offsets
-	//! of CSI_SCR_NameTagData.UpdateTagPos: HEAD = head bone + 0.1-0.6 m, BODY = Neck1 bone - 0.5-0 m.
+	//! Tag height on a standing character: HEAD = head bone + 0.1-0.6 m, BODY = Neck1 bone - 0.5-0 m.
 	//! \return metres above the feet
 	protected float GetTagHeight()
 	{
@@ -513,8 +501,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return where NAMETAG_POSITION and NAMETAG_POSITION_OFFSET put the tag. BODY is measured from the middle of the
-	//! torso (TORSO_CENTRE_HEIGHT), to the nearest 5 cm.
+	//! \return where the tag sits; BODY from the torso's middle, to the nearest 5 cm
 	protected string GetTagPositionCaption()
 	{
 		if (IsHeadPosition())
@@ -534,7 +521,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return true if the tab's NAMETAG_POSITION is HEAD
 	protected bool IsHeadPosition()
 	{
 		return SCR_Enum.GetEnumName(ENameTagPosition, GetValue(CSI_GameSettings.NAMETAG_POSITION)) == "HEAD";
@@ -545,13 +531,10 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! FieldOfView panel, seen from above: dotted edges at half the angle either side of the view line, like
-	//! SCR_NameTagRulesetFriendlies (m_iMaxAngle / 2 up close). For the simplified percentage, the simplified outer part
-	//! is shaded with a squadmate in each part. Positions are offsets from the panel's bottom centre; "You" stands where
-	//! the layout puts it.
+	//! FieldOfView panel, seen from above: dotted edges at half the angle either side of the view line.
 	//! \param[in] fieldOfView NAMETAG_FIELD_OF_VIEW value (degrees)
 	//! \param[in] simplifiedPercentage NAMETAG_FIELD_OF_VIEW_SIMPLIFIED value, 0 for no shaded zones
-	//! \param[in] showSquadmates show the squadmates with full and icon-only nametags (simplified percentage example)
+	//! \param[in] showSquadmates show the full and icon-only squadmates
 	protected void ShowFieldOfView(int fieldOfView, int simplifiedPercentage, bool showSquadmates)
 	{
 		Widget panel = ShowPanel(FIELD_OF_VIEW_PANEL);
@@ -573,7 +556,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		float youX = youPos[0];
 		float youY = youPos[1];
 
-		// Edges as dotted lines: rotated image widgets didn't draw here, positioned dots do
 		CreateFieldOfViewEdgeDots(panel);
 		foreach (int i, Widget dot : m_aFieldOfViewEdgeDots)
 		{
@@ -591,8 +573,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			FrameSlot.SetPos(dot, dotPos[0], dotPos[1]);
 		}
 
-		// Like the Simplified range example: a squadmate in the clear middle (left of the view line) with their full
-		// nametag, and one in the middle of a shaded zone (right) with the role icon only, when there is one
+		// Full-tag squadmate in the clear middle, icon-only one in a shaded zone
 		float innerAngle = halfAngle * (1 - simplifiedPercentage * 0.01);
 		vector fullPos = GetPointAround(youX, youY, -innerAngle * 0.5, FOV_FULL_MATE_DISTANCE);
 		vector iconPos = GetPointAround(youX, youY, (innerAngle + halfAngle) * 0.5, FOV_ICON_MATE_DISTANCE);
@@ -631,11 +612,8 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Draws the FieldOfView panel's view line and shaded simplified zones (the outer part of each side of the field of
-	//! view) on its canvas, with polygons like vanilla SCR_SpiderNet. The line is drawn here instead of by the ViewLine
-	//! widget so it sits exactly between the zones: the canvas and widgets land on screen pixels slightly differently.
-	//! ViewLine stays in the layout (hidden at runtime) and gives the line its position, length, width and color.
-	//! The canvas works in screen pixels, so layout units are converted with WorkspaceWidget.DPIScale.
+	//! Draws the view line and shaded zones on the canvas, sized from the hidden ViewLine.
+	//! The line is drawn here, not by ViewLine, so it sits exactly between the zones.
 	protected void DrawFieldOfViewCanvas()
 	{
 		GetGame().GetCallqueue().Remove(DrawFieldOfViewCanvas);
@@ -656,8 +634,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		float width, height;
 		canvas.GetScreenSize(width, height);
 
-		// Not laid out yet (the panel was just shown): try again shortly, like vanilla SCR_SpiderNet.DrawSpiderNet.
-		// Until then the ViewLine widget still shows the line.
+		// Not laid out yet: retry shortly; ViewLine shows the line meanwhile
 		if (width <= 0 || height <= 0)
 		{
 			GetGame().GetCallqueue().CallLater(DrawFieldOfViewCanvas, 10);
@@ -666,7 +643,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		viewLine.SetVisible(false);
 
-		// ViewLine starts at "You" and points straight ahead; its position is an offset from the panel's bottom centre
+		// ViewLine starts at "You"; its position is offset from the panel's bottom centre
 		vector linePos = FrameSlot.GetPos(viewLine);
 		vector lineSize = FrameSlot.GetSize(viewLine);
 		float centerX = width * 0.5 + workspace.DPIScale(linePos[0]);
@@ -680,7 +657,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			float halfAngle = m_iFieldOfViewAngle * 0.5;
 			float innerAngle = halfAngle * (1 - m_iFieldOfViewSimplifiedPercentage * 0.01);
 
-			// Vanilla's Reforger orange like the edges, see-through (a copy, as vanilla UIColors.CopyColor advises)
+			// See-through Reforger orange
 			Color zoneColor = UIColors.CopyColor(UIColors.CONTRAST_COLOR);
 			zoneColor.SetA(FOV_ZONE_OPACITY);
 
@@ -715,8 +692,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates the FieldOfView edge dots once, anchored like "You" (panel bottom centre), the way vanilla
-	//! SCR_BaseAnalogGauge.CreateRingMark creates its marks.
+	//! Creates the edge dots once, anchored at the panel's bottom centre.
 	//! \param[in] panel FieldOfView panel
 	protected void CreateFieldOfViewEdgeDots(notnull Widget panel)
 	{
@@ -729,7 +705,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		for (int i = 0; i < FOV_EDGE_DOTS * 2; i++)
 		{
-			// Vanilla's Reforger orange, as the line of sight example's sight line
+			// Reforger orange
 			ImageWidget dot = ImageWidget.Cast(workspace.CreateWidget(WidgetType.ImageWidgetTypeID, WidgetFlags.BLEND | WidgetFlags.VISIBLE | WidgetFlags.STRETCH | WidgetFlags.INHERIT_CLIPPING, UIColors.CONTRAST_COLOR, 1, panel));
 			if (!dot)
 				continue;
@@ -774,7 +750,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! The local player's nametag, using the tab's nametag scale, role icon, rank and group settings.
+	//! Shows the local player's nametag with the tab's nametag settings.
 	//! \param[in] nametag CSI_Nametag.layout instance
 	//! \param[in] previewScale size multiplier over the in-game size
 	//! \param[in] opacity
@@ -786,7 +762,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
 
-		// Same sizes as SCR_NTElementBase.GetNametagTextScale / GetNametagImageScale, scaled for the example
+		// In-game text and icon sizes, scaled for the example
 		int scaleStep = Math.ClampInt(GetValue(CSI_GameSettings.NAMTEAG_SCALE) / 20, 0, 5);
 		int textSize = (8 + scaleStep) * previewScale;
 		int groupTextSize = (6 + scaleStep) * previewScale;
@@ -817,7 +793,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		int iconPosition = GetValue(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		CSI_EIcon role = CSI_SettingInfo.GetPlayerIcon(localPlayerID);
 
-		// Icon-only tags always show their icon, like simplified tags in game
+		// Icon-only tags always show their icon
 		if (!showName)
 			showIcon = true;
 
@@ -833,7 +809,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			if (!visible)
 				continue;
 
-			// Same images as CSI_SCR_NTIconBase: vanilla pointer for MAN, simple CSI icons otherwise
 			if (role == CSI_EIcon.MAN)
 			{
 				iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
@@ -860,10 +835,9 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the layout with only the given panel, filling it. The layout stacks the panels one below another so each
-	//! can be edited in Workbench.
+	//! Shows the panel, stretched to fill the layout.
 	//! \param[in] panelName one of PANELS
-	//! \return the panel, null if the layout doesn't have it (warned about in HandlerAttached)
+	//! \return the panel, null if the layout doesn't have it
 	protected Widget ShowPanel(string panelName)
 	{
 		if (!m_wRoot)
@@ -883,9 +857,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] panel
-	//! \param[in] childName
-	//! \param[in] text
 	protected void SetChildText(notnull Widget panel, string childName, string text)
 	{
 		TextWidget textWidget = TextWidget.Cast(panel.FindAnyWidget(childName));
@@ -894,9 +865,6 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] panel
-	//! \param[in] childName
-	//! \param[in] visible
 	protected void SetChildVisible(notnull Widget panel, string childName, bool visible)
 	{
 		Widget child = panel.FindAnyWidget(childName);

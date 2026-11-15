@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Player settings panel (in the group menu for leaders, in CSI_PlayerSettingsMenu otherwise): shows a player's
-//! 				name and icon and sends color team, icon override, promote to SL/TL and kick requests to the server.
+//!	\Description: 	Player settings panel (group menu or CSI_PlayerSettingsMenu): shows a player's name and icon and sends
+//! 				color team, icon override, promote and kick requests to the server.
 //! 
 //------------------------------------------------------------------------------------------------
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
@@ -79,7 +79,7 @@
 
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 
-		// Player hasn't registered CSI data yet (e.g. hasn't spawned since joining)
+		// No CSI data yet (not spawned since joining)
 		if (!playerData)
 		{
 			m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
@@ -96,8 +96,7 @@
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
 		string displayIconStr = CSI_UIHelper.GetIconString(displayIcon, true);
 
-		// Combo items: 0 = AUTO, then RTO (4) onwards, so item = value - 3.
-		// Reset to AUTO (item 0) too, otherwise the previously viewed player's override stays selected
+		// Combo item 0 = AUTO, other items = value - 3 (RTO = 4)
 		if (iconOverride != CSI_EOverrideIcon.AUTO)
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
 		else
@@ -105,7 +104,7 @@
 
 		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 
-		// MAN uses vanilla's pointer icon
+		// MAN uses the pointer icon
 		if (displayIconStr == "MAN_ICON")
 			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 		else
@@ -116,7 +115,7 @@
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the color team named by the clicked button ("Red", "Blue", "Yellow", "Green", else NONE).
+	//! Sets the color team named by the clicked button.
 	//! \param[in] CTcomponent
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
@@ -184,7 +183,7 @@
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Kicks the player from the group (vanilla kick, see CSI_RplToAuthorityManager.RpcAsk_RemovePlayerFromGroup).
+	//! Kicks the player from the group.
 	protected void OnKickClicked()
 	{
 		if (m_iPlayerID <= 0)

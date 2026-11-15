@@ -1,11 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Server Admin panel (CSI_ServerAdmin.layout) at the bottom right of the CSI settings tab, for admins
-//! 				in a session: max group size and the server's default settings. CSI_SettingsSubMenu finds it and
-//! 				drives it, like CSI_HUD does its elements.
+//!	\Description: 	Server Admin panel of the CSI settings tab (admins only): max group size and server defaults.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
@@ -17,7 +15,7 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 
-	protected Widget m_wSettingsRoot;	//!< CSI settings tab root, to read the values saved as server defaults
+	protected Widget m_wSettingsRoot;	//!< CSI settings tab root
 	protected SCR_SliderComponent m_MaxGroupSizeSlider;
 	protected SCR_ButtonBaseComponent m_SaveDefaultsButton;
 	protected SCR_ButtonBaseComponent m_ClearDefaultsButton;
@@ -34,14 +32,14 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		// Workbench's layout editor runs this too: keep the panel visible there so it can be edited
+		// Layout editor: keep the panel visible so it can be edited
 		if (SCR_Global.IsEditMode())
 			return;
 
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 
-		// Admins only, and there's no server to change from the main menu
+		// Admins in a session only
 		if (!SCR_Global.IsAdmin() || !m_SettingsManager || !m_RplToAuthorityManager)
 		{
 			w.SetVisible(false);
@@ -81,7 +79,6 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] settingsRoot CSI settings tab root, where the setting widgets are
 	void SetSettingsRoot(Widget settingsRoot)
 	{
 		m_wSettingsRoot = settingsRoot;
@@ -92,7 +89,7 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends the max group size to the server if the admin changed it. Called when the tab closes.
+	//! Sends the max group size if the admin changed it.
 	void SendMaxGroupSize()
 	{
 		if (!m_MaxGroupSizeSlider || !m_RplToAuthorityManager)
@@ -107,7 +104,7 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends the values currently shown in the tab to the server as its default settings.
+	//! Sends the tab's shown values as the server defaults.
 	protected void OnSaveServerDefaultsClicked()
 	{
 		if (!m_RplToAuthorityManager || !m_wSettingsRoot)
@@ -134,7 +131,6 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] hasDefaults
 	protected void SetServerDefaultsStatus(bool hasDefaults)
 	{
 		if (!m_wServerDefaultsStatus)

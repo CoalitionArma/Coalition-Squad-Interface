@@ -1,17 +1,17 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Icon examples (CSI_SettingInfoIcons.layout) for the Icons settings: Icon0-Icon17, every CSI_EIcon but
-//! 				EMPTY in enum order, drawn in the icon theme, type and arrow selected in the settings tab.
+//!	\Description: 	Setting Info example for the icon settings: every CSI_EIcon (Icon0-Icon17, in enum order), drawn
+//! 				with the tab's icon theme, type and arrow.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoIconExamples : SCR_ScriptedWidgetComponent
 {
 	protected static const int ICON_COUNT = 18;
 
-	protected Widget m_wSettingsRoot;	//!< CSI settings tab root, for the selected values
+	protected Widget m_wSettingsRoot;	//!< CSI settings tab root
 	protected ref array<Widget> m_aIcons = {};
 
 	//------------------------------------------------------------------------------------------------
@@ -28,17 +28,15 @@ class CSI_SettingInfoIconExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] settingsRoot CSI settings tab root
 	void SetSettingsRoot(Widget settingsRoot)
 	{
 		m_wSettingsRoot = settingsRoot;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the example for a setting, if this layout has one.
 	//! \param[in] setting CSI_GameSettings name
-	//! \param[out] caption text under the example (may be empty)
-	//! \return false if this layout has no example for the setting
+	//! \param[out] caption text under the example
+	//! \return false if this layout has no example for it
 	bool ShowExample(string setting, out string caption)
 	{
 		if (setting != CSI_GameSettings.ICON_THEME && setting != CSI_GameSettings.ICON_TYPE && setting != CSI_GameSettings.ARROW_THEME)

@@ -1,17 +1,17 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE (multiplied while zoomed through sights or
-//! 				binoculars), and nametags are hidden when NAMETAG_VISIBLE is off.
+//!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed;
+//! 				nametags are hidden when NAMETAG_VISIBLE is off.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
 	protected CSI_SettingsManager m_SettingsManager;
 	protected SCR_NameTagZone m_CachedNearZone;
-	protected int m_iLastNametagsRange = -1;	//!< last range applied, so zones are only reset on change
+	protected int m_iLastNametagsRange = -1;	//!< last range applied
 	protected bool m_b2DSightsActive = false;
 
 	//------------------------------------------------------------------------------------------------
@@ -22,7 +22,6 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
-		// Can be missing while dead/respawning or before the game mode streams in
 		if (!m_SettingsManager || !m_CurrentPlayerTag || !m_CurrentPlayerTag.m_CharController || !SCR_PlayerController.s_pLocalPlayerController)
 			return;
 
@@ -56,9 +55,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Adjust zone range based on zoom. CSI only records whether 2D sights are zoomed; DisplayUpdate applies the range.
-	//! \param[in] adjust determines if we are adjusting the ranges or restoring them to default
-	//! \param[in] FOVZoomed is the new FOV we are adjusting to
+	//! Records whether 2D sights are zoomed; DisplayUpdate applies the range.
+	//! \param[in] adjust true while zoomed
+	//! \param[in] FOVZoomed unused
 	protected override void AdjustRange(bool adjust, float FOVZoomed)
 	{
 		if (adjust)
@@ -71,9 +70,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: adds SetZoneEnd so a zone's range can change at runtime.
+//!	\Description: 	CSI changes: adds SetZoneEnd to resize a zone at runtime.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagZoneTitle()]
@@ -91,7 +90,7 @@ modded class SCR_NameTagZone
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: adds ResetFarthestZone to recompute the farthest zone range after a zone is resized.
 //! 
@@ -100,7 +99,7 @@ modded class SCR_NameTagZone
 modded class SCR_NameTagConfig
 {
 	//------------------------------------------------------------------------------------------------
-	//! Recomputes m_fFarthestZoneRange (and its original and squared values) from the current zones.
+	//! Recomputes the farthest zone range values from the current zones.
 	void ResetFarthestZone()
 	{
 		m_iZoneCount = m_aZones.Count();

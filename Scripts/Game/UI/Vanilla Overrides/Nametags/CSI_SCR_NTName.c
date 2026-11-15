@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the name text uses CSI's size and colors and is cleared beyond the simplified-range cutoff.
-//! 				UpdateElement re-implements vanilla's SCR_NTElementBase and SCR_NTName versions, with CSI's lines marked "CSI:".
+//!	\Description: 	CSI changes: the name text uses CSI's size and colors and is cleared when the tag is simplified.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
@@ -40,8 +39,7 @@ modded class SCR_NTName : SCR_NTTextBase
 		data.UpdateOpacity(null, data: data, index: index);
 
 		//-----------------------------------------------------------------------
-		// Base element setup (vanilla SCR_NTElementBase.UpdateElement), done here instead of calling super
-		// because vanilla SCR_NTName.UpdateElement also sets the text
+		// Base element setup, done here since super also sets the text
 		if ( !data.m_aNametagElements[index] )
 		{
 			InitElementWidget(data, index);
@@ -56,7 +54,7 @@ modded class SCR_NTName : SCR_NTTextBase
 		}
 
 		//-----------------------------------------------------------------------
-		// Vanilla SCR_NTName name update, minus its SetText (the text is set below)
+		// Name update (text is set below)
 		if (data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE)
 		{
 			string name;
@@ -64,8 +62,7 @@ modded class SCR_NTName : SCR_NTTextBase
 
 			GetText(data, name, nameParams);
 
-			// Like vanilla SCR_NTName, only clear the update flags once a name was actually found,
-			// so a player whose name isn't available yet is retried next update instead of staying blank
+			// Keep the flags until a name is found, so it's retried
 			if (name.IsEmpty())
 				SetText(data, "GETNAME_ERROR", nameParams, index);
 			else
@@ -76,7 +73,7 @@ modded class SCR_NTName : SCR_NTTextBase
 		}
 
 		//-----------------------------------------------------------------------
-		// CSI: text cleared beyond the simplified-range cutoff
+		// CSI: clear text when simplified
 		if (ShouldWeClearText(data))
 			SetText(data, string.Empty, data.m_aNameParams, index);
 		else

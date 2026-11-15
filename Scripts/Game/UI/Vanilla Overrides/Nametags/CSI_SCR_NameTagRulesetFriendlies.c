@@ -1,12 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the field of view tags show in (vanilla m_iMaxAngle) comes from NAMETAG_FIELD_OF_VIEW and each tag
-//! 				records where it is within it (for NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), the line of sight check can be turned
-//! 				off (NAMETAG_LOS_VISIBLE) and traces to the body when tags are on the body.
-//! 				TraceLOS is a copy of vanilla SCR_NameTagRulesetBase.TraceLOS, with CSI's lines marked "CSI:".
+//!	\Description: 	CSI changes: tag field of view from NAMETAG_FIELD_OF_VIEW, with each tag's place in it recorded;
+//! 				the line of sight check can be turned off and traces to the body when tags are on the body.
 //!
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
@@ -18,9 +16,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//------------------------------------------------------------------------------------------------
 	override protected void DetermineVisibility(float timeSlice)
 	{
-		// CSI: vanilla m_iMaxAngle (set in NametagFriendlies.conf) follows the player's field of view setting, kept within
-		// the slider's range in case a saved file or server value is outside it. 0 means the setting isn't loaded yet,
-		// so the config's value is kept.
+		// CSI: m_iMaxAngle from the field of view setting; 0 = not loaded yet
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
@@ -39,8 +35,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	{
 		bool visible = super.TestVisibilityFiltered(data, timeSlice);
 
-		// CSI: where the tag is within the angle it may show in at its distance, worked out like vanilla's check above,
-		// so the outer part of the field of view can be simplified (SCR_NTElementBase.ShouldWeClearText)
+		// CSI: record the tag's place in its visible angle, for ShouldWeClearText
 		float visibleAngle = Math.InverseLerp(m_ZoneCfg.m_fFarthestZoneRangePow2, 0, data.m_fDistance) * (m_iMaxAngle / 2);
 		if (visibleAngle > 0)
 			data.m_fFieldOfViewFraction = data.m_fAngleToScreenCenter / visibleAngle;
@@ -56,14 +51,14 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	//! \return Returns true if the tested target is visible/not obstructed in current players line of sight
 	override protected bool TraceLOS(SCR_NameTagData data)
 	{
-		// CSI: LOS check disabled in settings, every tag counts as visible (without the settings manager, trace like vanilla)
+		// CSI: LOS check off in settings, every tag is visible
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		if (m_SettingsManager && !m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_LOS_VISIBLE))
 			return true;
 
-		// CSI: trace to the body when tags are on the body (vanilla always traces to the head)
+		// CSI: trace to the body when tags are on the body
 		vector targetPos;
 
 		if (data.m_eAttachedTo == ENameTagPosition.HEAD)

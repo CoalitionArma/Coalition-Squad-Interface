@@ -3,9 +3,7 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Binds a CSI settings tab row to its CSI_GameSettings value: vanilla SCR_SettingBindingGameplay, which loads
-//! 				and saves spin boxes, sliders, checkboxes and combo boxes, plus plain toolboxes (the colour rows), bound
-//! 				the way vanilla InitSpinBox binds a spin box.
+//!	\Description: 	Binds a CSI settings tab row to its CSI_GameSettings value, including toolboxes (the colour rows).
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingBinding : SCR_SettingBindingGameplay
@@ -23,7 +21,7 @@ class CSI_SettingBinding : SCR_SettingBindingGameplay
 		if (!m_Setting || m_iItem < 0)
 			return;
 
-		// Vanilla already binds its checkbox, which is a toolbox
+		// Checkboxes are toolboxes, already bound by super
 		SCR_ToolboxComponent toolbox = SCR_ToolboxComponent.Cast(GetComponent(m_sWidgetName, parent));
 		if (!toolbox || SCR_CheckboxComponent.Cast(toolbox))
 			return;

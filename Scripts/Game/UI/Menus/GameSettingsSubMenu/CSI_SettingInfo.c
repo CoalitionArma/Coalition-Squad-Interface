@@ -3,9 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Added to each setting row in the CSI settings tab: tells CSI_SettingInfo which setting the
-//! 				player is hovering, focusing or changing, and gives it the row's label for the title. On a colour row,
-//! 				the hovered box's colour is previewed (CSI_SettingInfo.PreviewSetting).
+//!	\Description: 	On each CSI settings tab row: tells CSI_SettingInfo which setting is hovered, focused or changed,
+//! 				and previews a hovered colour box.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
@@ -14,7 +13,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	protected CSI_SettingInfo m_SettingInfo;	//!< not ref: CSI_SettingInfo owns this handler
 	protected Widget m_wSetting;
 	protected SCR_ChangeableComponentBase m_Changeable;
-	protected SCR_ToolboxComponent m_ColorRow;	//!< colour rows only: its boxes preview their colour while hovered
+	protected SCR_ToolboxComponent m_ColorRow;	//!< colour rows only
 
 	//------------------------------------------------------------------------------------------------
 	override bool OnMouseEnter(Widget w, int x, int y)
@@ -35,8 +34,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Subscribed to the row's SCR_ChangeableComponentBase.m_OnChanged, so the example follows the new value. Shown a
-	//! frame later: a clicked toolbox box reports the change before the toolbox has selected it.
+	//! Shows the new value a frame later: a clicked toolbox reports the change before selecting it.
 	void OnValueChanged()
 	{
 		ScriptCallQueue callQueue = GetGame().GetCallqueue();
@@ -52,8 +50,8 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Colour row box under the mouse: the example shows its colour, unless the row is locked by a server override.
-	//! \param[in] w the box's root widget
+	//! Previews the hovered box's colour, unless the row is locked.
+	//! \param[in] w box root widget
 	protected void OnColorBoxEntered(Widget w)
 	{
 		if (!m_SettingInfo || !m_wSetting || !m_wSetting.IsEnabled())
@@ -65,7 +63,6 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] w the box's root widget
 	protected void OnColorBoxLeft(Widget w)
 	{
 		if (m_SettingInfo)
@@ -73,8 +70,8 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] w a box's root widget
-	//! \return the box's index in the row, which is its CSI_EColorPreset value; -1 if it isn't one of the row's boxes
+	//! \param[in] w box root widget
+	//! \return the box's index, its CSI_EColorPreset; -1 if not a box of this row
 	protected int FindColorBox(Widget w)
 	{
 		if (!m_ColorRow)
@@ -117,8 +114,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Hooks the setting's row: hover and focus through this handler, value changes through its m_OnChanged, and on a
-	//! colour row, hovering each box (CSI_ColorPresets builds them before this runs).
+	//! Hooks the row's hover, focus and value changes, and each colour box's hover.
 	//! \param[in] settingWidget
 	void Attach(notnull Widget settingWidget)
 	{
@@ -137,7 +133,6 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Undoes Attach.
 	void Detach()
 	{
 		GetGame().GetCallqueue().Remove(ShowThisSetting);
@@ -153,7 +148,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return the row's label as the tab shows it (vanilla SCR_ChangeableComponentBase.GetLabel), empty if it has none
+	//! \return the row's label, empty if none
 	string GetLabelText()
 	{
 		if (!m_Changeable)
@@ -167,8 +162,6 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] settingInfo
 	void CSI_SettingInfoHandler(string setting, CSI_SettingInfo settingInfo)
 	{
 		m_sSetting = setting;
@@ -181,14 +174,8 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	"Setting Info" panel (CSI_SettingInfo.layout) at the top right of the CSI settings tab, for everyone:
-//! 				the hovered setting's name (its row's label, so both read the same), its CSI_GameSettings
-//! 				attribute desc, and an example, which shows a hovered colour box's colour before it's picked
-//! 				(PreviewSetting). The examples are the layouts in SettingInfoExamples/, each with its
-//! 				own component (CSI_SettingInfoHudExamples, CSI_SettingInfoIconExamples, CSI_SettingInfoNametagExamples),
-//! 				found and driven from here like CSI_HUD does its elements. Also holds the static helpers they share
-//! 				(the tab's values, the local player's name, icon and group, drawing a role icon).
-//! 				CSI_SettingsSubMenu finds it and hands it the tab root.
+//!	\Description: 	"Setting Info" panel of the CSI settings tab: the hovered setting's name, description and example
+//! 				(SettingInfoExamples/), plus static helpers the examples share.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfo : SCR_ScriptedWidgetComponent
@@ -198,7 +185,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	protected TextWidget m_wDescription;
 
 	protected ref array<ref CSI_SettingInfoHandler> m_aHandlers = {};
-	protected ref map<string, string> m_mSettingLabels = new map<string, string>();	//!< setting name -> its row's label, the title ShowSetting shows
+	protected ref map<string, string> m_mSettingLabels = new map<string, string>();	//!< setting -> its row's label
 
 	// Example components, owned by their widgets
 	protected CSI_SettingInfoHudExamples m_HudExamples;
@@ -207,7 +194,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	protected static string s_sProfileName;	//!< cached by GetProfileName
 
-	// A value the player is only pointing at, such as a hovered colour box (PreviewSetting); GetValue returns it
+	// Previewed value, e.g. a hovered colour box (PreviewSetting)
 	protected static string s_sPreviewSetting;
 	protected static int s_iPreviewValue;
 
@@ -223,7 +210,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		m_wName = TextWidget.Cast(w.FindAnyWidget("SettingInfoName"));
 		m_wCaption = TextWidget.Cast(w.FindAnyWidget("SettingInfoCaption"));
 		m_wDescription = TextWidget.Cast(w.FindAnyWidget("SettingInfoDescription"));
-		// Workbench's layout editor runs this too: keep the examples visible there so they can be edited
+		// Layout editor: keep the examples visible so they can be edited
 		if (!m_wName || !m_wCaption || !m_wDescription || SCR_Global.IsEditMode())
 			return;
 
@@ -245,14 +232,14 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Hooks every setting row of the tab, so hovering, focusing or changing one shows it here.
+	//! Hooks every setting row, so hovering, focusing or changing one shows it here.
 	//! \param[in] settingsRoot CSI settings tab root
 	void SetSettingsRoot(Widget settingsRoot)
 	{
 		if (!settingsRoot || !m_wName)
 			return;
 
-		// Again here, once the whole tab exists, in case the example components attached after this one
+		// Again, in case the examples attached after this component
 		FindExamples();
 		ShowNothing();
 
@@ -267,7 +254,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		foreach (string setting : CSI_GameSettings.GetSettingsArray())
 		{
-			// The settings column comes before the override column, so this finds the setting's own row
+			// Finds the setting row, not its override row (the list comes first)
 			Widget settingWidget = settingsRoot.FindAnyWidget(setting);
 			if (!settingWidget)
 				continue;
@@ -294,7 +281,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		if (!m_wName)
 			return;
 
-		// The row's label, like the tab shows it; the variable name made readable for a row without one
+		// The row's label, or the readable variable name without one
 		string name;
 		if (!m_mSettingLabels.Find(setting, name))
 			name = SCR_StringHelper.FormatValueNameToUserFriendly(setting);
@@ -304,7 +291,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		HideExamples();
 
-		// Each example layout shows the settings it has an example for
 		string caption;
 		if (!m_HudExamples || !m_HudExamples.ShowExample(setting, caption))
 		{
@@ -319,9 +305,9 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows a setting with a value the player is only pointing at, such as a hovered colour box, until EndPreview.
+	//! Shows a setting with a hovered value (e.g. a colour box) until EndPreview.
 	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] value shown in place of the tab's value
+	//! \param[in] value shown instead of the tab's value
 	void PreviewSetting(string setting, int value)
 	{
 		s_sPreviewSetting = setting;
@@ -330,9 +316,8 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Ends PreviewSetting: the setting shows its value in the tab again.
 	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] value the previewed value; a newer preview (the next box, if it was entered first) is kept
+	//! \param[in] value previewed value; a newer preview is kept
 	void EndPreview(string setting, int value)
 	{
 		if (s_sPreviewSetting != setting || s_iPreviewValue != value)
@@ -343,7 +328,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Finds the example components on the example layouts (HudExamples, IconExamples, NametagExamples).
 	protected void FindExamples()
 	{
 		Widget hudExamples = m_wRoot.FindAnyWidget("HudExamples");
@@ -373,8 +357,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Text shown before the player has hovered a setting. The example layouts are visible in their layout files
-	//! (so they can be edited), so this hides them.
+	//! Placeholder shown before a setting is hovered; also hides the examples.
 	protected void ShowNothing()
 	{
 		HideExamples();
@@ -389,9 +372,9 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] root CSI settings tab root
-	//! \param[in] setting CSI_GameSettings name, also the name of its widget in the tab
-	//! \param[out] value the value shown in the tab
-	//! \return false if the setting has no slider, combo box, spin box or toolbox (colour row)
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[out] value shown value
+	//! \return false if the setting has no value widget
 	static bool GetWidgetValue(Widget root, string setting, out int value)
 	{
 		if (!root)
@@ -433,11 +416,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows a value in the setting's widget (the counterpart of GetWidgetValue), e.g. a server-forced value.
 	//! \param[in] root CSI settings tab root
-	//! \param[in] setting CSI_GameSettings name, also the name of its widget in the tab
+	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] value
-	//! \return false if the setting has no slider, combo box, spin box or toolbox (colour row)
+	//! \return false if the setting has no value widget
 	static bool SetWidgetValue(Widget root, string setting, int value)
 	{
 		if (!root)
@@ -481,7 +463,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting
-	//! \return the value selected in the tab (or being previewed, see PreviewSetting), 0 if the setting has no widget
+	//! \return the tab's or previewed value, 0 without a widget
 	static int GetValue(Widget root, string setting)
 	{
 		if (!s_sPreviewSetting.IsEmpty() && setting == s_sPreviewSetting)
@@ -495,7 +477,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Reads a member's [Attribute] desc, so settings are described where they're declared (see CSI_GameSettings).
 	//! \param[in] type class declaring the member
 	//! \param[in] variableName
 	//! \return empty if the member has no Attribute
@@ -522,10 +503,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Draws a role icon like CSI_Icon.SetIconWidget, using the tab's icon theme, icon type and arrow theme.
+	//! Draws a role icon with the tab's icon theme, icon type and arrow theme.
 	//! \param[in] root CSI settings tab root
 	//! \param[in] icon CSI_Icon.layout instance
-	//! \param[in] size px; 0 keeps the size the layout gives it
+	//! \param[in] size px, 0 keeps the layout's size
 	//! \param[in] role
 	//! \param[in] colorTeam
 	//! \param[in] iconRotation degrees
@@ -583,7 +564,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Same imageset names as CSI_UIHelper.GetIconString, but with the tab's icon theme rather than the saved one.
+	//! Imageset name of a role icon, in the tab's icon theme.
 	//! \param[in] root CSI settings tab root
 	//! \param[in] role
 	//! \param[in] simpleIcon
@@ -601,7 +582,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Members of the local player's group, in HUD order. Outside a group: just the local player, if any.
+	//! Local player's group in HUD order, or just the local player outside a group.
 	//! \param[out] memberIDs
 	//! \param[in] maxCount
 	static void GetPreviewGroupMembers(notnull array<int> memberIDs, int maxCount)
@@ -626,8 +607,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Vanilla SCR_Global.GetProfileName, looked up once: without a profile name (e.g. in Workbench) it logs
-	//! "Profile - Using MachineName!" on every call, and the examples redraw on every hovered setting.
+	//! Cached: without a profile name, SCR_Global.GetProfileName logs on every call.
 	//! \return
 	static string GetProfileName()
 	{
@@ -638,7 +618,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Player name like CSI_UIHelper.GetPlayersName, but with the tab's rank setting.
+	//! Player name, with a rank if the tab's rank setting is on.
 	//! \param[in] root CSI settings tab root
 	//! \param[in] playerID 0 outside a session or for placeholders
 	//! \param[in] fallbackName used without a player or name
@@ -667,7 +647,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
-	//! \return the player's short rank, or "Pvt." when it isn't known (main menu, placeholders)
+	//! \return "Pvt." if unknown
 	static string GetRankShortName(int playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
@@ -687,7 +667,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
-	//! \return the player's current display icon, MAN without CSI data
+	//! \return MAN without CSI data
 	static CSI_EIcon GetPlayerIcon(int playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);

@@ -7,17 +7,8 @@ typedef ScriptInvokerBase<ScriptInvoker_CSI_SettingsSubMenu> ScriptInvoker_CSI_S
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	CSI tab in Settings. Settings the server overrides show the forced value and are locked for non-admins;
-//! 				admins get a server override checkbox per setting (sent when the tab closes). Settings in
-//! 				CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE have no checkbox and are never locked. The right side
-//! 				holds two sub-layouts with their own components, driven from here like CSI_HUD drives its elements: Setting
-//! 				Info for the hovered setting (CSI_SettingInfo) and, at the bottom, the admin-only Server Admin panel
-//! 				(CSI_ServerAdmin). Players without saved settings see the server's defaults here; their settings file is
-//! 				only written once they change something. Settings that only matter while a switch is on are nested under
-//! 				it (RegisterDependentSettings): indented, joined to it by tree lines (DrawSettingsTree), and only shown
-//! 				while every switch above them is on. Colour settings (CSI_GameSettings.COLOR_SETTINGS) are rows of colour
-//! 				boxes, built by CSI_ColorPresets and bound by CSI_SettingBinding. Missing widgets are logged as warnings
-//! 				when the tab is created.
+//!	\Description: 	CSI tab in Settings: server overrides (set by admins, locked for others), server defaults for players
+//! 				without saved settings, settings nested under their switch, and the Setting Info and Server Admin panels.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
@@ -26,7 +17,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //	 CONSTANTS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	// Widgets in CSI_SettingsSubMenu.layout; each setting's row and server override row are named after the setting
+	// Widgets in CSI_SettingsSubMenu.layout; rows are named after their setting
 	protected const string SETTINGS_LIST_WIDGET_NAME = "Content";				//!< the setting rows
 	protected const string SETTINGS_TREE_WIDGET_NAME = "SettingsTree";			//!< canvas over the setting rows
 	protected const string SERVER_OVERRIDES_WIDGET_NAME = "ServerOverrides";	//!< column of server override checkboxes
@@ -34,20 +25,20 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	protected const string SETTING_INFO_WIDGET_NAME = "SettingInfo";
 	protected const string SERVER_ADMIN_WIDGET_NAME = "ServerAdmin";
 
-	// Inside each setting row's label (vanilla WLib_Label.layout)
+	// Inside each setting row's label (WLib_Label.layout)
 	protected const string LABEL_ROOT_WIDGET_NAME = "LabelRoot";
 	protected const string LABEL_FRAME_WIDGET_NAME = "Frame0";				//!< frame around the text, padded to indent it
 	protected const string LABEL_TEXT_WIDGET_NAME = "Text";
 
 	protected const string SETTINGS_MODULE_NAME = "CSI_GameSettings";
 
-	protected static const float NESTED_SETTING_INDENT = 24;		//!< px a nested setting's label moves right per nesting level
+	protected static const float NESTED_SETTING_INDENT = 24;		//!< px per nesting level
 
 	protected static const float TREE_LINE_WIDTH = 2;				//!< px
 	protected static const float TREE_LINE_INSET = 7;				//!< px from a switch's label start to its line
-	protected static const float TREE_LINE_TOP_GAP = 3;				//!< px between a switch's label and the top of its line
-	protected static const float TREE_BRANCH_GAP = 5;				//!< px between the end of a branch and the nested label
-	protected static const int TREE_REDRAW_FRAMES = 5;				//!< frames the tree is redrawn after a change, while the rows move
+	protected static const float TREE_LINE_TOP_GAP = 3;				//!< px between a switch's label and its line
+	protected static const float TREE_BRANCH_GAP = 5;				//!< px between a branch and its nested label
+	protected static const int TREE_REDRAW_FRAMES = 5;				//!< frames to redraw the tree after a change
 	protected static const ref Color TREE_LINE_COLOR = new Color(1, 1, 1, 0.35);
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -58,21 +49,21 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerControllerManager m_PlayerControllerManager;
 
-	protected ref TIntArray m_aValuesOnOpen;				//!< user settings when the tab opened, to tell whether the player changed anything
-	protected ref TIntArray m_aValuesBeforeServerDefaults;	//!< user settings before the server defaults were shown, restored if not saved
-	protected bool m_bShowingServerDefaults;				//!< the player has no saved settings, so this tab shows the server's defaults
+	protected ref TIntArray m_aValuesOnOpen;				//!< user settings when the tab opened, to detect changes
+	protected ref TIntArray m_aValuesBeforeServerDefaults;	//!< user settings before showing server defaults
+	protected bool m_bShowingServerDefaults;
 
-	// Components of the right side's sub-layouts, owned by their widgets
+	// Right side panels, owned by their widgets
 	protected CSI_SettingInfo m_SettingInfo;
 	protected CSI_ServerAdmin m_ServerAdmin;
 
 	// Nested settings (RegisterDependentSettings)
-	protected ref map<string, string> m_mSettingParents;				//!< setting -> the on/off setting it's nested under
-	protected ref array<SCR_SpinBoxComponent> m_aParentSpinBoxes = {};	//!< those on/off settings' rows, whose changes show or hide the others
+	protected ref map<string, string> m_mSettingParents;				//!< setting -> its switch
+	protected ref array<SCR_SpinBoxComponent> m_aParentSpinBoxes = {};	//!< the switches' spin boxes
 
 	// Tree lines from each switch to its nested settings (DrawSettingsTree)
 	protected CanvasWidget m_wSettingsTree;
-	protected ref array<ref CanvasWidgetCommand> m_aSettingsTreeCommands = {};	//!< the tree's lines, kept while the canvas draws them
+	protected ref array<ref CanvasWidgetCommand> m_aSettingsTreeCommands = {};	//!< kept while the canvas draws them
 	protected int m_iSettingsTreeRedraws;										//!< frames left to redraw the tree
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -86,7 +77,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 		FindManagers();
 
-		// Players without saved settings get the server's defaults in game, so show (and let them edit) those here
+		// Players without saved settings see (and can edit) the server's defaults
 		m_aValuesOnOpen = GetUserSettingValues();
 		if (IsInSessionWithoutSavedSettings() && m_SettingsManager && m_SettingsManager.HasServerDefaults())
 		{
@@ -111,13 +102,13 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 		m_iSettingsTreeRedraws = TREE_REDRAW_FRAMES;
 
-		// Back on the tab after OnTabHide restored the player's own values: the widgets still show the defaults
+		// OnTabHide restored the player's values; the widgets still show the defaults
 		if (m_bShowingServerDefaults && m_SettingsManager)
 			m_SettingsManager.ApplyServerDefaultsToUserSettings();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Saves the local settings JSON, sends admin changes to the server and recalculates the effective settings.
+	//! Saves local settings, sends admin changes and updates the effective settings.
 	override void OnTabHide()
 	{
 		super.OnTabHide();
@@ -158,7 +149,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	{
 		super.OnMenuUpdate(tDelta);
 
-		// Rows only move once the layout has updated after they're shown or hidden, so the tree is redrawn for a few frames
+		// Redraw for a few frames: rows only move once the layout updates
 		if (m_iSettingsTreeRedraws > 0 && DrawSettingsTree())
 			m_iSettingsTreeRedraws--;
 	}
@@ -175,7 +166,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Finds the right side's Setting Info and Server Admin components and hands them the tab root.
+	//! Finds the Setting Info and Server Admin panels and hands them the tab root.
 	protected void SetupSidePanels()
 	{
 		Widget settingInfo = m_wRoot.FindAnyWidget(SETTING_INFO_WIDGET_NAME);
@@ -202,12 +193,11 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Turns each colour setting's row (a vanilla toolbox) into a row of colour boxes, before the values are loaded.
+	//! Fills each colour setting's toolbox with colour boxes, before the values load.
 	protected void SetupColorSettings()
 	{
 		foreach (string setting : CSI_GameSettings.COLOR_SETTINGS)
 		{
-			// Vanilla's finder warns if the row is missing
 			SCR_ToolboxComponent toolbox = SCR_ToolboxComponent.GetToolboxComponent(setting, m_wRoot);
 			if (!toolbox)
 			{
@@ -221,8 +211,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Binds each setting's row to its user setting, except settings the server overrides: those show the forced value
-	//! unbound, so the player's own value isn't overwritten, and are locked for non-admins.
+	//! Binds rows to user settings. Overridden rows show the forced value unbound, keeping the player's own.
 	protected void SetupSettingBindings()
 	{
 		m_aSettingsBindings.Clear();
@@ -231,7 +220,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		if (!serverOverrides)
 			PrintFormat("CSI_SettingsSubMenu: server override column '%1' not found", SERVER_OVERRIDES_WIDGET_NAME, level: LogLevel.WARNING);
 
-		// The authority array can be empty before replication arrives, or shorter if the server runs an older version
+		// May be empty before replication, or shorter on an older server version
 		TIntArray serverSettings;
 		if (m_SettingsManager)
 			serverSettings = m_SettingsManager.GetServerSettingsArray();
@@ -243,11 +232,11 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			if (!row)
 				PrintFormat("CSI_SettingsSubMenu: row for setting '%1' not found", setting, level: LogLevel.WARNING);
 
-			// Negative = overridden by the server (see CSI_SettingsManager); personal settings never are
+			// Negative = server override (CSI_SettingsManager); personal settings have none
 			bool overridden = serverSettings && serverSettings.IsIndexValid(i) && serverSettings[i] < 0;
 			if (!overridden || CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE.Contains(setting))
 			{
-				// Vanilla's binding, which can also bind the colour rows' toolboxes
+				// Also binds the colour rows' toolboxes
 				m_aSettingsBindings.Insert(new CSI_SettingBinding(SETTINGS_MODULE_NAME, setting, setting));
 				continue;
 			}
@@ -275,7 +264,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends every setting with an override checkbox: checked = override with the row's value, unchecked = clear it.
+	//! Sends each override checkbox: checked overrides with the row's value, unchecked clears it.
 	protected void SendServerOverrides()
 	{
 		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
@@ -294,9 +283,9 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] serverOverrides the tab's server override column
-	//! \param[in] setting CSI_GameSettings name, also the name of its row in that column
-	//! \return the setting's server override checkbox, null if the column or row is missing or the setting has none
+	//! \param[in] serverOverrides server override column
+	//! \param[in] setting CSI_GameSettings name
+	//! \return null if missing
 	protected CheckBoxWidget GetServerOverrideCheckBox(Widget serverOverrides, string setting)
 	{
 		if (!serverOverrides)
@@ -314,8 +303,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Nests the settings that only matter while a switch is on under it: indents their labels, follows the switches'
-	//! rows as they change (as vanilla SCR_InterfaceSettingsSubMenu follows its master switch) and draws the tree.
+	//! Indents nested settings and shows or hides them as their switches change.
 	protected void SetupNestedSettings()
 	{
 		m_wSettingsTree = CanvasWidget.Cast(m_wRoot.FindAnyWidget(SETTINGS_TREE_WIDGET_NAME));
@@ -345,9 +333,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills m_mSettingParents: each setting that only matters while an on/off setting above it is on, nested under it.
-	//! A nested switch can have its own children (Role icons under Nametags). Add new nested
-	//! settings here.
+	//! Fills m_mSettingParents (setting -> its switch). Add new nested settings here.
 	protected void RegisterDependentSettings()
 	{
 		m_mSettingParents = new map<string, string>();
@@ -397,8 +383,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows each nested setting's row (and its place in the server override column, keeping the two columns aligned)
-	//! only while every switch it's nested under is on. Called on each switch change.
+	//! Shows nested rows and their override rows only while every switch above them is on.
 	protected void UpdateDependentSettingsVisibility()
 	{
 		if (!m_mSettingParents)
@@ -409,7 +394,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		{
 			bool shown = IsSettingShown(dependentSetting);
 
-			// The settings list comes before the override column, so this finds the setting's own row
+			// Finds the setting row, not its override row (the list comes first)
 			Widget row = m_wRoot.FindAnyWidget(dependentSetting);
 			if (row)
 				row.SetVisible(shown);
@@ -427,7 +412,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting CSI_GameSettings name
-	//! \return true if the setting's row should show: not nested, or its switch is shown and on
+	//! \return true if not nested, or its switch is shown and on
 	protected bool IsSettingShown(string setting)
 	{
 		string parentSetting;
@@ -439,7 +424,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting an on/off CSI_GameSettings name
-	//! \return true if the setting's row shows on (its shown value, so a server-forced one counts too)
+	//! \return true if the row shows on, server-forced values included
 	protected bool IsSettingRowOn(string setting)
 	{
 		int value;
@@ -451,7 +436,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting CSI_GameSettings name
-	//! \return how many switches the setting is nested under (0 for top-level settings)
+	//! \return 0 for top-level settings
 	protected int GetNestingDepth(string setting)
 	{
 		int depth;
@@ -466,9 +451,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Moves a setting's label right by NESTED_SETTING_INDENT per nesting level. The padding goes on the text's frame
-	//! inside the label, not on the label itself, so the label keeps its share of the row and the setting's control
-	//! stays lined up with the others.
+	//! Pads the label's inner frame, not the label, so the row's control stays lined up.
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] depth nesting level
 	protected void IndentSettingLabel(string setting, int depth)
@@ -489,7 +472,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] row setting row
-	//! \return the row's label (vanilla WLib_Label root), null if the row or label is missing
+	//! \return null if missing
 	protected Widget GetLabelRoot(Widget row)
 	{
 		if (!row)
@@ -503,9 +486,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Draws the tree lines on the SettingsTree canvas, like a file tree: from under each switch's label a line runs down
-	//! to its last shown nested setting, with a branch across to each nested label. Positions are measured from the labels
-	//! on screen, relative to the canvas, which scrolls with the settings list. Lines on canvases as in vanilla SCR_SpiderNet.
+	//! Draws a line down from each switch's label with a branch to each shown nested label.
 	//! \return false if the list isn't laid out yet
 	protected bool DrawSettingsTree()
 	{
@@ -565,8 +546,8 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] settingsList the settings list widget, whose children are the rows in the order shown
-	//! \return each switch's shown nested rows, in that order
+	//! \param[in] settingsList settings list, whose children are the rows
+	//! \return switch -> its shown nested rows, in list order
 	protected map<string, ref array<Widget>> GetShownNestedRows(notnull Widget settingsList)
 	{
 		map<string, ref array<Widget>> branches = new map<string, ref array<Widget>>();
@@ -594,12 +575,6 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] fromX
-	//! \param[in] fromY
-	//! \param[in] toX
-	//! \param[in] toY
-	//! \param[in] width
-	//! \param[in] color packed
 	protected void AddSettingsTreeLine(float fromX, float fromY, float toX, float toY, float width, int color)
 	{
 		LineDrawCommand line = new LineDrawCommand();
@@ -611,11 +586,11 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] row setting row
-	//! \param[out] x screen position of the row's label text
+	//! \param[out] x screen position
 	//! \param[out] y
-	//! \param[out] width screen size of the row's label text
+	//! \param[out] width screen size
 	//! \param[out] height
-	//! \return false if the row or its label text is missing, or not laid out yet
+	//! \return false if missing or not laid out yet
 	protected bool GetLabelTextRect(Widget row, out float x, out float y, out float width, out float height)
 	{
 		Widget labelRoot = GetLabelRoot(row);
@@ -636,11 +611,10 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Writes the local settings JSON, but only once the player has their own settings or changed something here, so a
-	//! server's defaults never end up in their file just from looking at this tab.
+	//! Saves the settings JSON only if the player already has one or changed something here.
 	protected void SaveLocalSettings()
 	{
-		// No player controller exists when settings are opened from the main menu
+		// Main menu: no player controller
 		if (!m_PlayerControllerManager || !m_PlayerControllerManager.GetLocalSettingsJson())
 		{
 			CSI_SettingsJson settingsJson = new CSI_SettingsJson();
@@ -661,14 +635,13 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return true when a player controller exists (not the main menu) and the player has no saved settings
 	protected bool IsInSessionWithoutSavedSettings()
 	{
 		return m_PlayerControllerManager && m_PlayerControllerManager.GetLocalSettingsJson() && !m_PlayerControllerManager.GetLocalSettingsJson().HasSavedSettings();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return the CSI_GameSettings user settings values, by settings index
+	//! \return values by settings index
 	protected TIntArray GetUserSettingValues()
 	{
 		TIntArray values = {};
@@ -687,7 +660,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] values by settings index, as returned by GetUserSettingValues
+	//! \param[in] values by settings index
 	protected void SetUserSettingValues(TIntArray values)
 	{
 		UserSettings userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);

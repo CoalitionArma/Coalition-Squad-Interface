@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: shared helpers for CSI's nametag elements: text clearing by distance and by place in the field
-//! 				of view, color team coloring, and text and icon sizes from NAMTEAG_SCALE.
+//!	\Description: 	CSI changes: helpers for CSI's nametag elements: text clearing by distance and field of view,
+//! 				color team colors, and text and icon sizes from NAMTEAG_SCALE.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
@@ -15,8 +15,7 @@ modded class SCR_NTElementBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] data
-	//! \return true if the tag should show only its icon: AI, no zone, beyond the NAMTEAG_RANGE_SIMPLIFIED cutoff, or in the
-	//! outer part of the field of view (NAMETAG_FIELD_OF_VIEW_SIMPLIFIED)
+	//! \return true if the tag should show only its icon
 	protected bool ShouldWeClearText(SCR_NameTagData data)
 	{
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
@@ -31,7 +30,7 @@ modded class SCR_NTElementBase
 			zoneStart = 1;
 
 		//-----------------------------------------------------------------------
-		// Cutoff from the setting: the farthest N% of the zone shows icons only
+		// The farthest N% of the zone shows icons only
 		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
 		float cutoffDist = scale * zoneEnd;
 		cutoffDist = zoneEnd - cutoffDist;// flip it around
@@ -48,8 +47,7 @@ modded class SCR_NTElementBase
 			return true;
 
 		//-----------------------------------------------------------------------
-		// The outer N% of the field of view shows icons only too (kept within the slider's range in case a saved file or
-		// server value is outside it)
+		// The outer N% of the field of view shows icons only too
 		int fieldOfViewPercentage = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), 0, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX);
 		float fieldOfViewScale = fieldOfViewPercentage * 0.01;
 		if (fieldOfViewScale != 0 && data.m_fFieldOfViewFraction > 1 - fieldOfViewScale)
@@ -59,7 +57,7 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Colors an element: VON color while talking, color team for the local player's group members, else NONE.
+	//! VON color while talking, color team for local group members, else NONE.
 	//! \param[in] data
 	//! \param[in] index
 	protected void SetWidgetCSIColor(SCR_NameTagData data, int index)
@@ -77,7 +75,7 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return font size for the NAMTEAG_SCALE setting (0-100 in steps of 20 maps to 8-13)
+	//! \return font size (8-13) for NAMTEAG_SCALE
 	protected int GetNametagTextScale()
 	{
 		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);
@@ -96,7 +94,7 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return icon size in px for the NAMTEAG_SCALE setting (0-100 in steps of 20 maps to 12-22)
+	//! \return icon size in px (12-22) for NAMTEAG_SCALE
 	protected int GetNametagImageScale()
 	{
 		int scale = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_SCALE);

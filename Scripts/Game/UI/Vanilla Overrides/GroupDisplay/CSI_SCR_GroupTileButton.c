@@ -1,11 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: player tiles show CSI names, role icons and color teams; members are listed in CSI's sorted order;
-//! 				clicking a group hides the CSI player settings panel. SetupPlayerTile and RefreshPlayers are copies of vanilla,
-//! 				with CSI's lines marked "CSI:".
+//! 				clicking a group hides the CSI player settings panel.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_GroupTileButton
@@ -103,7 +102,7 @@ modded class SCR_GroupTileButton
 
 		SetupOptionsCombo(playerTile);
 
-		// CSI: name with rank (CSI_UIHelper), vanilla's filtered name as fallback
+		// CSI: name with rank, filtered display name as fallback
         string playerText = CSI_UIHelper.GetPlayersName(playerID);
 
         if (playerText.IsEmpty())
@@ -127,7 +126,7 @@ modded class SCR_GroupTileButton
 			}
 		}
 
-		// CSI: vanilla's own-name color is dropped; names use the color team instead
+		// CSI: no own-name color, names use the color team
 
 		//set the state of mute
 		PlayerController pc = GetGame().GetPlayerController();
@@ -142,7 +141,7 @@ modded class SCR_GroupTileButton
 			};
 		};
 
-		// CSI: replaces vanilla's loadout icon, leader icon and badge color with the CSI role icon and color team
+		// CSI: role icon and color team replace loadout/leader icons and badge color
 		if (playerData && loadoutIcon && playerName && lineBackground)
 		{
 			// Remove first so repeated setups don't stack subscriptions
@@ -156,7 +155,7 @@ modded class SCR_GroupTileButton
 
             string iconString = CSI_UIHelper.GetIconString(displayIcon, true, setAlt);
 
-			// MAN uses vanilla's pointer icon
+			// MAN uses the pointer icon
 			if (iconString == "MAN_ICON")
 				loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 			else
@@ -287,7 +286,7 @@ modded class SCR_GroupTileButton
 		array<int> groupPlayerIDs = group.GetPlayerIDs();
 		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(groupPlayerIDs);
 
-		// CSI: GetSortedGroupArray skips players without CSI data yet (e.g. joined but not spawned), vanilla lists everyone
+		// CSI: also list members without CSI data (GetSortedGroupArray skips them)
 		foreach (int groupPlayerID : groupPlayerIDs)
 		{
 			if (!playerIDs.Contains(groupPlayerID))

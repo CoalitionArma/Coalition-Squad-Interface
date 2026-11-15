@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the group size slider starts at the group's max members and goes up to the server's max
-//! 				group size; confirming sends the new size to the server (CSI_RplToAuthorityManager.Owner_SetMaxGroupMembers).
+//!	\Description: 	CSI changes: the group size slider shows the group's max members, up to the server's max group size;
+//! 				confirming sends the new size to the server.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class GroupSettingsDialogUI
@@ -29,7 +29,6 @@ modded class GroupSettingsDialogUI
 		if (!playerGroup)
 			return;
 
-		// The server's max group size is the slider's top
 		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
 		if (settingsManager)
 			groupSize.SetMax(settingsManager.GetMaxGroupSize());

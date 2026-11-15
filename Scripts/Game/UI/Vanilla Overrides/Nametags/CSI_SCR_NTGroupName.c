@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Nametag element showing the player's group name under their name. New class (not modded),
-//! 				used in NametagFriendlies.conf.
+//!	\Description: 	Nametag element showing the player's group name under their name; used in NametagFriendlies.conf.
 //!
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
