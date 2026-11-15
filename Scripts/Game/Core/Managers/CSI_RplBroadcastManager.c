@@ -3,11 +3,9 @@ class CSI_RplBroadcastManagerClass : ScriptComponentClass {}
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Server to all clients: each method applies a player data change on the server, then broadcasts it with RpcDo_*.
-//! 				Called directly on the server (CSI_RplToAuthorityManager, CRF), so it doesn't validate senders.
-//! 				Public API: CRF calls GetInstance and UpdatePlayerColorTeam.
+//!	\Description: 	Server to all clients: applies player data changes on the server, then broadcasts them with RpcDo_*.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_RplBroadcastManager : ScriptComponent

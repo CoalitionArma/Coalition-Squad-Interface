@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Static helpers for a character's facing and vehicle seat.
 //! 
@@ -13,7 +13,7 @@ class CSI_EntityHelper
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Yaw the character is facing: head aim on foot, turret aim in a turret, vehicle yaw in other seats.
+	//! Head aim on foot, turret aim in a turret, vehicle yaw in other seats.
 	//! \param[in] playerCharacter
 	//! \return negated world yaw in degrees, 0 if it can't be read
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
@@ -44,15 +44,11 @@ class CSI_EntityHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] playerCharacter
-	//! \return the vehicle compartment the entity is in, null if it isn't in a vehicle
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
 		if (!playerCharacter)
 			return null;
 
-		// Characters expose their compartment access directly (as vanilla uses it), avoiding a component search;
-		// fall back to FindComponent for any other entity type
 		CompartmentAccessComponent compartmentAccess;
 		ChimeraCharacter character = ChimeraCharacter.Cast(playerCharacter);
 		if (character)

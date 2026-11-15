@@ -1,12 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Radar inside the compass: an icon per group member within range, positioned and rotated relative to the
-//! 				local player. Icons are created from CSI_Icon.layout when a member comes into range and deleted when they leave it.
-//! 				The range comes from RADAR_RANGE_ON_FOOT or RADAR_RANGE_IN_VEHICLE. Members outside the RADAR_FIELD_OF_VIEW
-//! 				angle around where the local player looks slowly fade out.
+//!	\Description: 	Radar inside the compass: an icon per group member in range, placed and rotated relative to the
+//! 				local player. Members outside the radar's field of view fade out.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_Radar : SCR_ScriptedWidgetComponent
@@ -20,14 +18,14 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 	protected Widget m_wRadarFrame;	//!< parent of the icon widgets
 
-	protected ref map<int, CSI_Icon> m_mRadarIcons = new map<int, CSI_Icon>();		//!< icons on the radar by player ID: created when a member comes into range, deleted when they leave it
+	protected ref map<int, CSI_Icon> m_mRadarIcons = new map<int, CSI_Icon>();		//!< radar icons by player ID
 	protected ref array<int> m_aRadarIconsToRemove = {};							//!< reused each update
-	protected ref map<int, float> m_mFieldOfViewFades = new map<int, float>();	//!< field of view fade by player ID, 1 shown to 0 faded out; kept as long as the icon
+	protected ref map<int, float> m_mFieldOfViewFades = new map<int, float>();	//!< field of view fade by player ID, 1 shown to 0 faded out
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;	//!< px at 100% RADAR_ICON_SIZE
-	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds for a member who leaves the field of view to fade out
-	protected static const float FIELD_OF_VIEW_FADE_IN_TIME = 0.25;	//!< seconds for a member back in the field of view to fade in
-	protected static const float AHEAD_BEARING = 180;					//!< relative bearing (as worked out in Update) of straight ahead, the top of the radar
+	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds
+	protected static const float FIELD_OF_VIEW_FADE_IN_TIME = 0.25;	//!< seconds
+	protected static const float AHEAD_BEARING = 180;					//!< relative bearing of straight ahead (top of the radar)
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -49,7 +47,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
-		// The icon widgets are children of this layout and get destroyed with it
+		// Icon widgets are children of this layout, destroyed with it
 		m_mRadarIcons.Clear();
 		m_mFieldOfViewFades.Clear();
 
@@ -62,7 +60,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Called every frame by CSI_HUD.
-	//! \param[in] timeSlice seconds since the last update, for the field of view fade
+	//! \param[in] timeSlice
 	void Update(float timeSlice)
 	{
 		SCR_ChimeraCharacter localCharacter = m_HUDSystem.GetLocalPlayerCharacter();
@@ -78,7 +76,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		vector localOrigin = localCharacter.GetOrigin();
 		int localPlayerId = SCR_PlayerController.GetLocalPlayerId();
 
-		// Radar range in metres from the settings, one for on foot and one for in vehicles
+		// Radar range in metres
 		float searchRadius;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
 			searchRadius = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE), CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MIN, CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MAX);
@@ -91,7 +89,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		float searchRadiusSq = searchRadius * searchRadius;
 
-		// Members further than this from straight ahead fade out; the full 360 shows everyone
+		// Members outside this angle around straight ahead fade out
 		int fieldOfView = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW), CSI_GameSettings.RADAR_FIELD_OF_VIEW_MIN, CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX);
 		float halfFieldOfView = fieldOfView * 0.5;
 
@@ -109,7 +107,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			vector playerCharacterOrigin = playerCharacter.GetOrigin();
 
-			// Range check on squared distance (no square root) - most group members are usually out of radar range
+			// Squared distance avoids a square root for out-of-range members
 			float disSq = vector.DistanceSq(localOrigin, playerCharacterOrigin);
 
 			if (disSq > searchRadiusSq)
@@ -120,14 +118,14 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			float dis = Math.Sqrt(disSq);
 
-			// The local player stays in the centre of the radar, always shown
+			// Defaults for the local player: centre, fully shown
 			float x = 0;
 			float y = 0;
 			float fieldOfViewFade = 1;
 
 			if (playerID != localPlayerId)
 			{
-				// Bearing to the player relative to where the local player is facing
+				// Bearing relative to the local player's facing
 				float dir = vector.Direction(playerCharacterOrigin, localOrigin).ToYaw();
 				float relDirDegrees = Math.Mod(360 - dir - localYaw, 360);
 				float relDir = relDirDegrees * Math.DEG2RAD;
@@ -140,7 +138,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				fieldOfViewFade = UpdateFieldOfViewFade(playerID, inFieldOfView, timeSlice);
 			};
 
-			// Clamped so the field of view fade shows: the distance fade is above 1 for most of the range
+			// Clamped: the distance fade is above 1 for most of the range
 			float opacity = Math.Clamp(Math.Map(dis, searchRadiusFadeStart, searchRadius, 0.6, 0), 0, 1) * fieldOfViewFade;
 			float rotation = -Math.Mod((CSI_EntityHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
@@ -158,7 +156,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			radarIcon.SetOpacity(opacity);
 		};
 
-		// Delete icons of players who have left the group (or whose widget no longer exists)
+		// Delete icons of players who left the group or whose widget is gone
 		m_aRadarIconsToRemove.Clear();
 		foreach (int playerID, CSI_Icon icon : m_mRadarIcons)
 		{
@@ -175,9 +173,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Returns the radar icon for a player, creating it from CSI_Icon.layout if they don't have one yet.
 	//! \param[in] playerID
-	//! \return the icon's handler, or null if the widget couldn't be created
+	//! \return the icon, or null if it couldn't be created
 	protected CSI_Icon GetOrCreateRadarIcon(int playerID)
 	{
 		CSI_Icon icon = m_mRadarIcons.Get(playerID);
@@ -195,7 +192,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			return null;
 		};
 
-		// Same setup the icons placed in CSI_Radar.layout had: anchored to the radar's centre, radar arrows on turreted seats
+		// Anchor to the radar's centre; radar icons show arrows on turreted seats
 		FrameSlot.SetAnchor(radarIcon, 0.5, 0.5);
 		icon.SetIsRadarWidget(true);
 		icon.IconUpdate(playerID);
@@ -205,12 +202,11 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Moves a member's field of view fade towards shown or faded out. A member new on the radar starts at the end they
-	//! belong at, rather than fading in or out as they appear.
+	//! Steps a member's fade towards shown or faded out; new members start at their target.
 	//! \param[in] playerID
 	//! \param[in] inFieldOfView
-	//! \param[in] timeSlice seconds since the last update
-	//! \return the fade, 1 shown to 0 faded out
+	//! \param[in] timeSlice
+	//! \return 1 shown to 0 faded out
 	protected float UpdateFieldOfViewFade(int playerID, bool inFieldOfView, float timeSlice)
 	{
 		float fade;
@@ -234,8 +230,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Deletes a player's radar icon, if they have one.
-	//! \param[in] playerID
 	protected void RemoveRadarIcon(int playerID)
 	{
 		m_mFieldOfViewFades.Remove(playerID);
@@ -251,7 +245,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Deletes every radar icon.
 	protected void ClearRadarIcons()
 	{
 		m_mFieldOfViewFades.Clear();
@@ -259,7 +252,6 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		if (m_mRadarIcons.IsEmpty())
 			return;
 
-		// Every entry goes, so delete the widgets and clear the map in one go (no key copy needed)
 		foreach (int playerID, CSI_Icon icon : m_mRadarIcons)
 		{
 			if (icon && icon.GetRootWidget())

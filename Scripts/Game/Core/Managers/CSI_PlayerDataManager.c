@@ -3,11 +3,9 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Game mode component holding every player's CSI_PlayerData. The server and each client keep their own
-//! 				copy: CSI_RplBroadcastManager keeps them in sync, RplSave/RplLoad cover join-in-progress.
-//! 				Public API: CRF calls GetInstance and GetPlayerData.
+//!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerDataManager : ScriptComponent
@@ -37,7 +35,7 @@ class CSI_PlayerDataManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
-	//! \return null until the player's client has registered (needs a character and a group)
+	//! \return null until the client registers it (needs a character and a group)
 	CSI_PlayerData GetPlayerData(int playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);
@@ -54,8 +52,6 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates the player's data if it doesn't exist yet.
-	//! \param[in] playerID
 	void RegisterPlayerData(int playerID)
 	{
 		if (!GetPlayerData(playerID))
@@ -63,8 +59,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Removes the player's data, e.g. after they've been disconnected for a while (CSI_PlayerDisconnectSystem).
-	//! \param[in] playerID
 	void RemovePlayerData(int playerID)
 	{
 		if (GetPlayerData(playerID))
@@ -72,8 +66,6 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] playerID
-	//! \return the new data
 	protected CSI_PlayerData CreatePlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = new CSI_PlayerData;
@@ -143,7 +135,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Server only: resets color team, override icon and team leader flag for everyone through the broadcast manager.
+	//! Server: resets the player's color team, override icon and team leader flag.
 	//! \param[in] playerID
 	void ClearGroupSpecificData(int playerID)
 	{
@@ -162,9 +154,6 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends the whole map to a joining client.
-	//! \param[in] writer
-	//! \return
 	override protected bool RplSave(ScriptBitWriter writer)
 	{
 		// Count first so RplLoad knows how many entries follow

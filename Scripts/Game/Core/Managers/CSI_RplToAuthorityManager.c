@@ -3,11 +3,10 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Client to server bridge on each player controller (child of CSI_PlayerControllerManager).
-//! 				Owner_* methods run on the owning client and send RpcAsk_* to the server, which hands off to
-//! 				CSI_RplBroadcastManager, CSI_SettingsManager or vanilla group APIs.
+//!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
+//! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager or the group APIs.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_RplToAuthorityManager : ScriptComponent
@@ -39,8 +38,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Asks the server to create the player's data, unless this client already has it.
-	//! \param[in] playerID
 	void Owner_RegisterPlayerData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -52,8 +49,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Asks the server to reset the player's group-specific data (color team, override icon, team leader).
-	//! \param[in] playerID
 	void Owner_ClearGroupSpecificData(int playerID)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
@@ -81,7 +76,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Only send when the value changed
 		if(!playerData || (playerData && colorTeam == playerData.GetColorTeam()))
 			return;
 
@@ -95,7 +89,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Only send when the value changed
 		if(!playerData || (playerData && overrideIcon == playerData.GetOverrideIcon()))
 			return;
 
@@ -119,7 +112,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
-		// Only send when the value changed
 		if(!playerData || (playerData && isTL == playerData.GetIsTeamLeader()))
 			return;
 
@@ -139,7 +131,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] playerID player to make leader of their group
 	void Owner_PromotePlayerToSL(int playerID)
 	{
 		Rpc(RpcAsk_PromotePlayerToSL, playerID);
@@ -170,7 +161,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Admin: sets the server's max group size (top of the leaders' group size slider).
+	//! Admin: sets the top of the leaders' group size slider.
 	//! \param[in] maxGroupSize
 	void Owner_SetServerMaxGroupSize(int maxGroupSize)
 	{
@@ -178,7 +169,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Admin: sets one of the server's default settings for players without saved settings.
+	//! Admin: sets a default for players without saved settings.
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] value
 	void Owner_SetServerDefault(string setting, int value)
@@ -187,7 +178,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Admin: removes all of the server's default settings.
+	//! Admin: clears the server's default settings.
 	void Owner_ClearServerDefaults()
 	{
 		Rpc(RpcAsk_ClearServerDefaults);
@@ -278,8 +269,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Makes the player leader of their group, using the same call as vanilla's groups manager.
-	//! \param[in] playerID
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_PromotePlayerToSL(int playerID)
 	{
@@ -299,7 +288,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the max size of the group led by playerID. No vanilla RPC does this.
+	//! Sets the max size of the group led by playerID.
 	//! \param[in] playerID
 	//! \param[in] maxMembers
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
@@ -331,9 +320,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 		if (playerID <= 0)
 			return;
 
-		// Hand off to vanilla's kick on the sender's own group controller, so CSI kicks behave exactly like vanilla:
-		// it rejects self-kicks and non-leaders, then moves the player to a RESERVES group, else the first group
-		// that isn't full, else a new group. Called directly because we're already on the authority.
+		// The sender's group controller validates the kick and moves the player
 		SCR_PlayerControllerGroupComponent senderGroupController = SCR_PlayerControllerGroupComponent.Cast(GetOwner().FindComponent(SCR_PlayerControllerGroupComponent));
 		if (!senderGroupController)
 			return;
@@ -345,7 +332,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	protected void RpcAsk_ChangeAuthoritySetting(string setting, int value, bool serverOverrideEnabled)
 	{
-		// Only admins (the settings tab only sends this for them), and only known setting names
+		// Only admins, and only known setting names
 		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()) || !CSI_GameSettings.GetSettingsArray().Contains(setting))
 			return;
 
@@ -384,7 +371,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: the player who sent an RpcAsk_ is the owner of the controller this component is on, never a client-sent ID.
+	//! Server: ID of the player who sent the RpcAsk_ (this controller's owner).
 	//! \return 0 if the owner isn't a player controller
 	protected int GetSenderPlayerID()
 	{
@@ -401,8 +388,6 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	protected static CSI_RplToAuthorityManager m_sInstance;	//!< last constructed instance, only a fallback
-	//! Every player controller has one of these components, so on a listen server the last constructed
-	//! one isn't necessarily the host's. Resolves through the local player controller instead.
 	//! \return the local player's instance
 	static CSI_RplToAuthorityManager GetInstance()
 	{

@@ -3,8 +3,7 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Static UI helpers: resource paths, color team colors, compass textures, icon imageset names and player display names.
-//! 				Public API: CRF calls ConvertColorTeamToColor; BFS-CustomPlayerNamesCSI may override GetPlayersName.
+//!	\Description: 	Static UI helpers: resource paths, color team colors, compass textures, icon names and player names.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_UIHelper
@@ -19,7 +18,7 @@ class CSI_UIHelper
 
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
-	const static ResourceName CSI_SCI_FI_COMPASS = "{64AB432AC7BB503C}UI/Textures/HUD/Compasses/SciFi_Compass.edds";	//!< its two faint rings sit at a third and two thirds of the radar range
+	const static ResourceName CSI_SCI_FI_COMPASS = "{64AB432AC7BB503C}UI/Textures/HUD/Compasses/SciFi_Compass.edds";	//!< faint rings at 1/3 and 2/3 of radar range
 	const static ResourceName CSI_WW2_COMPASS = "{77D4A8C53182F77A}UI/Textures/HUD/Compasses/WW2_Compass.edds";
 	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
 
@@ -73,8 +72,8 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] theme COMPASS_THEME value
-	//! \return the theme's compass texture, the standard one for a value without its own
+	//! \param[in] theme
+	//! \return the theme's texture, the standard one if it has none
 	static ResourceName GetCompassTexture(CSI_ECompassTheme theme)
 	{
 		switch (theme)
@@ -87,10 +86,10 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Imageset entry name for an icon, for LoadImageFromSet with CSI_ICONS. Themed icons use the ICON_THEME setting.
+	//! Imageset entry name in CSI_ICONS; themed icons follow the ICON_THEME setting.
 	//! \param[in] icon
-	//! \param[in] isSimpleIcon use the simple (non-circular) version ("_ICON" suffix)
-	//! \param[in] isAltIcon use the alternative version ("_ALT" suffix)
+	//! \param[in] isSimpleIcon non-circular version ("_ICON")
+	//! \param[in] isAltIcon alternative version ("_ALT")
 	//! \return e.g. "CLASSIC MEDIC_ICON"
 	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false)
 	{
@@ -117,7 +116,7 @@ class CSI_UIHelper
 	//! \return
 	static string GetPlayersName(int playerID)
 	{
-		// Vanilla nametags and group menu use the filtered display name (respects blocked users / platform UGC restrictions)
+		// Filtered name: respects blocked users and platform UGC restrictions
 		string name = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);
 		if (name.IsEmpty())
 			name = GetGame().GetPlayerManager().GetPlayerName(playerID);
@@ -144,9 +143,9 @@ class CSI_UIHelper
 	//------------------------------------------------------------------------------------------------
 	//! Finds the widgets named widgetString + 0 to widgetString + (count - 1) under root.
 	//! \param[in] root
-	//! \param[in] widgetString name prefix, e.g. "Player"
-	//! \param[in] count number of indices to look up
-	//! \return found widgets in index order (missing ones skipped); empty if root is null or count <= 0
+	//! \param[in] widgetString name prefix
+	//! \param[in] count
+	//! \return found widgets in index order
 	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
 	{
 		array<Widget> icons = {};

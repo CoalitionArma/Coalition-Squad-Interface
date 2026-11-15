@@ -1,11 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Client world system: every UPDATE_INTERVAL registers the local player's CSI data and reports their display
-//! 				icon, rank and squad leader status to the server. Specialty icons come from an inventory scan that reruns
-//! 				when the local character's inventory changes or the player gets a new character.
+//!	\Description: 	Client world system: registers the local player's CSI data and reports their display icon, rank
+//! 				and squad leader status to the server, scanning the inventory for specialty icons when it changes.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_ClientSystem : GameSystem
@@ -17,8 +16,6 @@ class CSI_ClientSystem : GameSystem
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
-	// The specialty icon inventory scan only reruns after the local character's inventory reports a change,
-	// the way vanilla SCR_AvailableActionsConditionData refetches its inventory data (m_bCanFetchInventory)
 	protected SCR_InventoryStorageManagerComponent m_StorageManager;	//!< local character's inventory, listened to for changes
 	protected bool m_bInventoryChanged = true;							//!< rescan on the next update cycle
 	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;					//!< result of the last inventory scan
@@ -38,7 +35,6 @@ class CSI_ClientSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! The inventory listeners are added from OnUpdatePoint, which only runs between OnStarted and OnStopped.
 	override protected void OnStopped()
 	{
 		RemoveInventoryListeners();
@@ -50,9 +46,7 @@ class CSI_ClientSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Keeps the inventory listeners on the local character's storage manager: added for the first character (initial
-	//! spawn) and moved to the new one when the character changes (respawn). Same pattern as vanilla
-	//! SCR_AvailableActionsConditionData.
+	//! Moves the inventory listeners to this character's storage manager.
 	//! \param[in] localPlayer
 	protected void UpdateInventoryListeners(notnull IEntity localPlayer)
 	{
@@ -62,7 +56,7 @@ class CSI_ClientSystem : GameSystem
 
 		RemoveInventoryListeners();
 
-		// Scan what the new character already carries, as vanilla SCR_GadgetManagerComponent.RegisterInitialGadgets does
+		// Scan what the new character already carries
 		m_StorageManager = storageManager;
 		m_bInventoryChanged = true;
 
@@ -85,7 +79,7 @@ class CSI_ClientSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fires for every item moved in or out (very often during spawn), so only flag it; the scan runs on the next update cycle.
+	//! Fires per item moved, so only flags a rescan for the next update.
 	//! \param[in] item
 	//! \param[in] storageOwner
 	protected void OnInventoryChanged(IEntity item, BaseInventoryStorageComponent storageOwner)
@@ -110,7 +104,6 @@ class CSI_ClientSystem : GameSystem
 			return;
 		}
 
-		// Time based like vanilla fixed frame systems (SCR_AIEnemyMarkingSystem) rather than a count of fixed frames
 		m_fTimeSinceUpdate += args.GetTimeSliceSeconds();
 		if (m_fTimeSinceUpdate < UPDATE_INTERVAL)
 			return;
@@ -120,20 +113,19 @@ class CSI_ClientSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Works out the local player's display icon and reports it, their rank and squad leader status to the server.
-	//! Icon priority: vehicle seat > officer > SL > TL > leader's override > specialty from inventory > MAN.
+	//! Reports the local player's display icon, rank and squad leader status to the server.
+	//! Icon priority: vehicle seat > officer > SL > TL > override > specialty > MAN.
 	protected void UpdateAllLocalPlayerValues()
 	{
 		int playerID = SCR_PlayerController.GetLocalPlayerId();
 
-		// Main entity: the player's own character, also while a Game Master possesses another one. Checked every cycle, so a
-		// first spawn or respawn is picked up on the next one (UpdateInventoryListeners then rescans the new character).
+		// The player's own character, also while possessing another one
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
 		if (!localplayer)
 			return;
 
-		// Re-resolve each cycle; on a listen server the instance cached before the host's controller existed may belong to another player
+		// Listen server: the cached instance may be another player's
 		CSI_RplToAuthorityManager localRplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 		if (localRplToAuthorityManager)
 			m_RplToAuthorityManager = localRplToAuthorityManager;
@@ -149,7 +141,7 @@ class CSI_ClientSystem : GameSystem
 		if (!playersGroup)
 			return;
 
-		// Group changed: clear the old group's color team, override and TL flag, then continue next cycle
+		// Group changed: clear group-specific data, continue next cycle
 		int playersGroupID = playersGroup.GetGroupID();
 		if (m_iLocallyStoredGroupID != playersGroupID)
 		{
@@ -179,7 +171,7 @@ class CSI_ClientSystem : GameSystem
 			if (uiInfo)
 				name = uiInfo.GetName();
 
-			// Commander and copilot seats are matched by name; everything else by compartment type
+			// Commander and copilot seats by name, others by compartment type
 			if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
 				displayIcon = CSI_EIcon.COMMANDER;
 			else {
@@ -241,8 +233,7 @@ class CSI_ClientSystem : GameSystem
 				m_StorageManager.GetItems(allPlayerItems);
 
 			array<BaseMuzzleComponent> muzzles = {};
-			// Parse through all items. Only RTO (the highest priority) ends the scan early, every other match
-			// keeps scanning so a higher-priority item later in the inventory still wins in the switch below.
+			// Only RTO (top priority) ends the scan early
 			foreach (IEntity item : allPlayerItems)
 			{
 				// RTO: backpack radio or deployable spawn point
@@ -301,7 +292,7 @@ class CSI_ClientSystem : GameSystem
 							break;
 					};
 
-					// MG is the highest-priority weapon icon; no need to check this weapon's muzzles
+					// MG outranks GREN, so skip its muzzles
 					if (weaponType == EWeaponType.WT_MACHINEGUN)
 						continue;
 

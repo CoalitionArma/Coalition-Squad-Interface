@@ -1,11 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Client world system that feeds the HUD and nametags: the locally controlled character (switched as soon as
-//! 				it changes, like vanilla SCR_InfoDisplayExtended), yaw, vehicle/mortar state and the sorted group member
-//! 				list (every REFRESH_INTERVAL).
+//!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
+//! 				vehicle/mortar state and the sorted group member list.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_HUDSystem : GameSystem
@@ -16,15 +15,15 @@ class CSI_HUDSystem : GameSystem
 
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected SCR_PlayerController m_PlayerController;		//!< local player controller, listened to for controlled entity changes
+	protected SCR_PlayerController m_PlayerController;		//!< local, listened to for controlled entity changes
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;	//!< locally controlled character
-	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< replaced (not modified) on every refresh, so readers can compare references
+	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< new array each refresh; readers compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
-	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between vehicle state and group list refreshes
+	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between vehicle and group refreshes
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
@@ -48,7 +47,6 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! The controlled entity listener is added from OnUpdatePoint, which only runs between OnStarted and OnStopped.
 	override protected void OnStopped()
 	{
 		if (m_PlayerController)
@@ -63,14 +61,13 @@ class CSI_HUDSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! \return the locally controlled character, null while the local player has none
 	SCR_ChimeraCharacter GetLocalPlayerCharacter()
 	{
 		return m_LocalPlayerCharacter;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return local group's player IDs in display order (see GetSortedGroupArray); a new array on every refresh, empty without a group
+	//! \return IDs in display order, a new array each refresh
 	array<int> GetLocalGroupPlayerIds()
 	{
 		return m_aLocalGroupPlayerIds;
@@ -95,7 +92,7 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return negated yaw the compass and radar face, updated every frame
+	//! \return negated yaw for the compass and radar
 	float GetLocalYaw()
 	{
 		return m_fLocalYaw;
@@ -105,7 +102,7 @@ class CSI_HUDSystem : GameSystem
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected float m_fTimeSinceRefresh;	//!< seconds since the last vehicle state and group list refresh
+	protected float m_fTimeSinceRefresh;	//!< seconds since the last refresh
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
@@ -116,8 +113,7 @@ class CSI_HUDSystem : GameSystem
 			return;
 		}
 
-		// The local player controller may not exist yet. Like vanilla SCR_InfoDisplayExtended, listen for controlled entity
-		// changes (spawn, respawn, possession) and catch up with the entity controlled right now.
+		// Follow controlled entity changes and catch up with the current one
 		if (!m_PlayerController)
 		{
 			m_PlayerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
@@ -131,8 +127,7 @@ class CSI_HUDSystem : GameSystem
 		// Every frame: yaw
 		UpdateLocalAimingYaw();
 
-		// Every REFRESH_INTERVAL: vehicle state and group list. Time based like vanilla systems (SCR_AIEnemyMarkingSystem),
-		// so the rate doesn't depend on the frame rate.
+		// Every REFRESH_INTERVAL: vehicle state and group list
 		m_fTimeSinceRefresh += args.GetTimeSliceSeconds();
 		if (m_fTimeSinceRefresh < REFRESH_INTERVAL)
 			return;
@@ -143,10 +138,9 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Switches to the newly controlled character and has the next update refresh the vehicle state and group list,
-	//! rather than keeping the old character's for up to REFRESH_INTERVAL.
-	//! \param[in] from previously controlled entity
-	//! \param[in] to newly controlled entity, null while the player has none
+	//! Switches character and forces a refresh on the next update.
+	//! \param[in] from
+	//! \param[in] to
 	protected void OnControlledEntityChanged(IEntity from, IEntity to)
 	{
 		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(to);
@@ -154,10 +148,9 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Works out whether the local character is in a vehicle, and whether that vehicle is a mortar.
 	protected void UpdateLocalVehicleState()
 	{
-		// Cleared first, so neither sticks from a character that died in a vehicle
+		// Cleared first so they don't stick after dying in a vehicle
 		m_bIsLocalPlayerInVehicle = false;
 		m_bIsLocalPlayerInMortar = false;
 
@@ -177,14 +170,13 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Refreshes the sorted group member list. The group belongs to the player, not the character, so this also runs
-	//! while the player has no character.
+	//! Also runs without a character, as the group belongs to the player.
 	protected void UpdateLocalGroup()
 	{
 		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		if (!playersGroup)
 		{
-			// A new empty array, so readers comparing references notice the group is gone
+			// Replace rather than clear, so readers comparing references notice
 			if (!m_aLocalGroupPlayerIds.IsEmpty())
 				m_aLocalGroupPlayerIds = {};
 
@@ -197,7 +189,7 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Caches the local yaw for the compass and radar: camera yaw in vehicles (or when aim yaw is positive), else head aim.
+	//! Camera yaw in vehicles or when aim yaw is positive, else head aim.
 	void UpdateLocalAimingYaw()
 	{
 		if (!m_LocalPlayerCharacter)
@@ -221,8 +213,8 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sorts group members for display: squad leader, then the SL's color team, the other teams, and unassigned
-	//! players last; each team's TL first. Players without CSI data are left out.
+	//! Display order: SL, the SL's team, other teams, unassigned; each team's TL first.
+	//! Players without CSI data are left out.
 	//! \param[in] playerIDs
 	//! \return sorted player IDs
 	array<int> GetSortedGroupArray(array<int> playerIDs)
@@ -256,7 +248,7 @@ class CSI_HUDSystem : GameSystem
 			if (!playerData)
 				continue;
 
-			// Sort key: SL 1, then two keys per team in playersCTArray order, TL before members (2-3, 4-5, ...)
+			// Sort key: SL 1, then two per team in playersCTArray order, TL first
 			int sortKey = 1;
 			if (!playerData.GetIsSquadLeader())
 			{

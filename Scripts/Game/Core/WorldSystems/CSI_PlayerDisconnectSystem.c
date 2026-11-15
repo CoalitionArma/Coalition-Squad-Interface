@@ -1,11 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Server world system: keeps a disconnected player's CSI data for DATA_RETENTION_TIME in case they reconnect,
-//! 				then removes it on every machine through CSI_RplBroadcastManager. Every disconnect starts a new window,
-//! 				timed with a WorldTimestamp like vanilla SCR_ReconnectComponent's reconnect window.
+//!	\Description: 	Server world system: keeps a disconnected player's CSI data for DATA_RETENTION_TIME in case they
+//! 				reconnect, then removes it on every machine through CSI_RplBroadcastManager.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerDisconnectSystem : GameSystem
@@ -14,7 +13,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected ref map<int, WorldTimestamp> m_mDataExpiries = new map<int, WorldTimestamp>();	//!< disconnected player ID to when their CSI data is removed
+	protected ref map<int, WorldTimestamp> m_mDataExpiries = new map<int, WorldTimestamp>();	//!< disconnected player ID to data expiry
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
@@ -22,7 +21,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 
 	static const int DATA_RETENTION_TIME = 390;	//!< seconds (6.5 minutes)
 	static const int DATA_CHECK_INTERVAL = 60;	//!< seconds between checks
-	protected float m_fTimeSinceLastCheck;		//!< seconds since the last retention check
+	protected float m_fTimeSinceLastCheck;		//!< seconds since the last check
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
@@ -38,7 +37,6 @@ class CSI_PlayerDisconnectSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! The disconnect listener is added from OnUpdatePoint, which only runs between OnStarted and OnStopped.
 	override protected void OnStopped()
 	{
 		if (m_GameMode)
@@ -71,7 +69,6 @@ class CSI_PlayerDisconnectSystem : GameSystem
 			m_GameMode.GetOnPlayerDisconnected().Insert(OnPlayerDisconnected);
 		}
 
-		// Accumulate frame time like vanilla world systems; System.GetTickCount() is an int that overflows after ~24.8 days of uptime
 		m_fTimeSinceLastCheck += args.GetTimeSliceSeconds();
 
 		if (m_fTimeSinceLastCheck >= DATA_CHECK_INTERVAL)
@@ -82,7 +79,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Starts the player's retention window. A player who reconnected and left again gets a new one.
+	//! Starts the player's retention window, replacing any earlier one.
 	//! \param[in] playerID
 	//! \param[in] cause
 	//! \param[in] timeout
@@ -92,7 +89,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Removes the CSI data of players whose retention window has passed. Players who are connected again lose their window.
+	//! Removes expired players' CSI data and reconnected players' windows.
 	protected void DataRetentionCheck()
 	{
 		PlayerManager playerManager = GetGame().GetPlayerManager();
@@ -101,14 +98,14 @@ class CSI_PlayerDisconnectSystem : GameSystem
 
 		WorldTimestamp now = GetGame().GetWorld().GetTimestamp();
 
-		// Safety net: data of a player who left before the disconnect listener was added still gets a window
+		// Give a window to players who left before the listener was added
 		foreach (int playerID, CSI_PlayerData playerData : m_PlayerDataManager.GetPlayerDataMap())
 		{
 			if (!m_mDataExpiries.Contains(playerID) && !playerManager.IsPlayerConnected(playerID))
 				m_mDataExpiries.Set(playerID, now.PlusSeconds(DATA_RETENTION_TIME));
 		}
 
-		// Collect first and remove after the loop, as the map can't change while it's iterated
+		// Collect first: the map can't change while it's iterated
 		array<int> reconnectedPlayerIDs = {};
 		array<int> expiredPlayerIDs = {};
 		foreach (int windowPlayerID, WorldTimestamp expiry : m_mDataExpiries)

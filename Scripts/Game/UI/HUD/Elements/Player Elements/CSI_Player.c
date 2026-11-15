@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One row of the HUD group list: the player's name in their color team plus a CSI_Icon.
 //! 
@@ -36,8 +36,6 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Unsubscribes from the player's data, as CSI_Icon does; the rows go whenever the HUD stops drawing
-	//! \param[in] w
 	override void HandlerDeattached(Widget w)
 	{
 		if (m_PlayerData)
@@ -51,7 +49,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Points the row at a player and subscribes to their data. Does nothing if it already shows that player.
+	//! Points the row at a player and subscribes to their data.
 	//! \param[in] playerID <= 0 hides the row
 	void PlayerUpdate(int playerID)
 	{

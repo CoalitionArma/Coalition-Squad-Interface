@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	One player icon (HUD group list and radar): role icon, facing arrow and color team, refreshed from the
-//! 				player's CSI_PlayerData and the settings invokers.
+//!	\Description: 	Player icon for the group list and radar: role icon, facing arrow and color team,
+//! 				refreshed on player data and settings changes.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Icon : SCR_ScriptedWidgetComponent
@@ -21,10 +21,10 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wArrow;
 	protected ImageWidget m_wIcon;
 	protected ImageWidget m_wOutline;
-	protected ImageWidget m_wIconLarge;		//!< used for vehicle seat icons
+	protected ImageWidget m_wIconLarge;		//!< vehicle seat icons
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
-	protected bool m_bHasAllParts;	//!< every widget above was found; DataUpdate and SetRotation do nothing otherwise
+	protected bool m_bHasAllParts;	//!< all widgets above were found
 
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;	//!< radar icons show the arrow on turreted seats
@@ -52,8 +52,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
 		m_bHasAllParts = m_wArrow && m_wIcon && m_wOutline && m_wIconLarge && m_wOutlineLarge && m_wIconFrame;
 
-		// Visible in the layout (and Workbench's layout editor) so they can be edited; SetIconWidget shows the ones
-		// the icon uses
+		// Visible in the layout for editing; SetIconWidget shows the ones in use
 		if (SCR_Global.IsEditMode())
 			return;
 
@@ -66,8 +65,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Unsubscribe from invokers, radar icons are created and deleted at runtime so this runs regularly
-	//! \param[in] w
 	override void HandlerDeattached(Widget w)
 	{
 		if (m_SettingsManager)
@@ -80,8 +77,6 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Set from script for icons created at runtime (the radar), equivalent to ticking m_bIsRadarWidget in a layout
-	//! \param[in] isRadarWidget
 	void SetIsRadarWidget(bool isRadarWidget)
 	{
 		m_bIsRadarWidget = isRadarWidget;
@@ -92,7 +87,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Points the icon at a player and subscribes to their data. Does nothing if it already shows that player.
+	//! Points the icon at a player and subscribes to their data.
 	//! \param[in] playerID <= 0 hides the icon
 	void IconUpdate(int playerID)
 	{
@@ -125,7 +120,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Applies the player's display icon and color team. Called on player data and settings changes.
+	//! Applies the player's display icon and color team.
 	protected void DataUpdate()
 	{
 		if (!m_PlayerData || !m_bHasAllParts)
@@ -160,7 +155,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	};
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the icon in the right widget set: large widgets for vehicle seats, regular ones otherwise.
+	//! Shows the icon: large widgets for vehicle seats, regular ones otherwise.
 	//! \param[in] icon
 	protected void SetIconWidget(CSI_EIcon icon)
 	{
@@ -181,7 +176,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 			m_wIconLarge.SetVisible(true);
 
-			// Turreted seats on the radar show the arrow (turret direction) instead of the outline
+			// Radar: turreted seats show the turret arrow instead of the outline
 			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
 
 			if (isTurreted && m_bIsRadarWidget)

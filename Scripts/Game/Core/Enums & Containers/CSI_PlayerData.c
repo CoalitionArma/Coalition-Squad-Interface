@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One player's CSI state: color team, override and display icons, rank and leader flags.
-//! 				Setters for displayed values fire GetOnDataUpdate() when the value changes, so the UI can refresh.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerData
@@ -36,7 +35,6 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	void SetColorTeam(CSI_EColorTeam colorTeam)
 	{
-		// CRF re-sends color teams; only refresh the UI on a real change
 		if (m_iColorTeam == colorTeam)
 			return;
 
@@ -142,7 +140,7 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return invoker fired when the color team, display icon or rank changes (created on first use)
+	//! \return fired when the color team, display icon or rank changes
 	ScriptInvoker GetOnDataUpdate()
 	{
 		if (!m_OnDataUpdate)
@@ -156,7 +154,7 @@ class CSI_PlayerData
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! JIP serialization, called from CSI_PlayerDataManager.RplSave. Field order must match Load.
+	//! JIP save; field order must match Load.
 	//! \param[in] writer
 	void Save(ScriptBitWriter writer)
 	{
@@ -170,7 +168,7 @@ class CSI_PlayerData
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! JIP deserialization, called from CSI_PlayerDataManager.RplLoad. Field order must match Save.
+	//! JIP load; field order must match Save.
 	//! \param[in] reader
 	void Load(ScriptBitReader reader)
 	{

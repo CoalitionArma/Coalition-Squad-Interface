@@ -29,7 +29,7 @@ enum CSI_ENametagIconPosition
 }
 
 //------------------------------------------------------------------------------------
-//! How the Reveal UI key shows the HUD while AUTO_HIDE_HUD is on (REVEAL_UI_MODE)
+//! How the Reveal UI key shows the auto-hidden HUD
 enum CSI_ERevealUIMode
 {
 	HOLD,	//!< shown while the key is held
@@ -64,7 +64,7 @@ enum CSI_EIconTheme
 }
 
 //------------------------------------------------------------------------------------
-//! Colours a colour setting can pick (CSI_ColorPresets). Saved as these numbers, so only ever append.
+//! Colour setting values (CSI_ColorPresets). Saved by number: only ever append.
 enum CSI_EColorPreset
 {
 	WHITE,

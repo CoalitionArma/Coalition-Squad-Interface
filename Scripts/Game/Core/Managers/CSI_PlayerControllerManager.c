@@ -3,11 +3,10 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Per-player component on the player controller: loads the local settings JSON and opens the CSI
-//! 				settings (group menu for leaders, CSI_PlayerSettingsMenu otherwise). The server has one per player;
-//! 				the local setup only runs for the local player's controller.
+//!	\Description: 	Player controller component: loads the local settings JSON and opens the CSI settings
+//! 				(group menu for leaders, CSI_PlayerSettingsMenu otherwise).
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerControllerManager : ScriptComponent
@@ -31,21 +30,19 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (RplSession.Mode() == RplMode.Dedicated)
 			return;
 
-		// A listen server host runs this for every player's controller. Skip the ones that clearly aren't the host's:
-		// reloading and saving the host's settings each time a player joins could save settings shown in the CSI tab.
+		// Listen server host: skip other players' controllers
 		PlayerController localController = GetGame().GetPlayerController();
 		if (localController && localController != owner)
 			return;
 
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
 
-		// Like vanilla SCR_PlayerControllerCommandingComponent: undo the local setup if this controller turns out to be
-		// another player's (its ownership moves to them)
+		// Undo the local setup if another player takes this controller
 		SCR_PlayerController playerController = SCR_PlayerController.Cast(owner);
 		if (playerController)
 			playerController.GetOnOwnershipChangedInvoker().Insert(OnOwnershipChanged);
 
-		// Apply the saved CSI settings, then let the settings manager merge in server overrides
+		// Load saved settings, then apply server overrides
 		m_SettingsJson = new CSI_SettingsJson;
 		m_SettingsJson.LoadFromFile();
 
@@ -59,7 +56,6 @@ class CSI_PlayerControllerManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	override protected void OnDelete(IEntity owner)
 	{
-		// Pairs with the listener added in OnPostInit (harmless on a dedicated server, where none was added)
 		InputManager inputManager = GetGame().GetInputManager();
 		if (inputManager)
 			inputManager.RemoveActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
@@ -68,7 +64,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Ownership moved to another player, so this isn't the local controller: removes the local setup from OnPostInit.
+	//! Removes the local setup when another player takes this controller.
 	//! \param[in] isChanging
 	//! \param[in] becameOwner
 	protected void OnOwnershipChanged(bool isChanging, bool becameOwner)
@@ -99,10 +95,10 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! CSI_PlayerSettingsMenu action: group leaders get the group menu, everyone else the player settings menu.
+	//! Opens the group menu for group leaders, else CSI_PlayerSettingsMenu.
 	protected void OpenLocalPlayerSettingsMenu()
 	{
-		// On a listen server every player's controller registers this listener; only the host's own should act
+		// Listen server: only the host's own controller acts
 		if (GetOwner() != GetGame().GetPlayerController())
 			return;
 
@@ -123,7 +119,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	protected static CSI_PlayerControllerManager m_sInstance;	//!< last constructed instance, only a fallback
-	//! \return the local player's instance (see CSI_RplToAuthorityManager.GetInstance)
+	//! \return the local player's instance
 	static CSI_PlayerControllerManager GetInstance()
 	{
 		PlayerController localController = GetGame().GetPlayerController();

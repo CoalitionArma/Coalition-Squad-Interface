@@ -1,21 +1,19 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Saves and loads the local player's CSI settings as an int array in $profile:CSI_Settings.json,
-//! 				indexed like CSI_GameSettings.GetSettingsArray(). The file is only written when the player saves their
-//! 				settings (closing the CSI settings tab), so a server's default settings never end up in it.
+//!	\Description: 	Saves and loads the local player's CSI settings in $profile:CSI_Settings.json, by settings index.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsJson : JsonApiStruct
 {
 	protected static string m_sSettingsPath = "$profile:CSI_Settings.json";
     protected ref array<int> m_aSettingsValues = new array<int>;
-	protected bool m_bHasSavedSettings;	//!< a valid file was loaded, or the player has saved this session
+	protected bool m_bHasSavedSettings;	//!< loaded from file or saved this session
 
 	//------------------------------------------------------------------------------------------------
-	//! Loads the saved values into the CSI_GameSettings user settings module. Does nothing if there's no valid file yet.
+	//! Loads the saved values into the CSI_GameSettings user settings.
     void LoadFromFile()
 	{
         if (FileIO.FileExists(m_sSettingsPath))
@@ -26,10 +24,10 @@ class CSI_SettingsJson : JsonApiStruct
 
             jsonLoad.ReadValue("m_aSettingsValues", m_aSettingsValues);
 
-			// A file without values counts as no saved settings, so server defaults still apply
+			// An empty file counts as no saved settings
 			m_bHasSavedSettings = !m_aSettingsValues.IsEmpty();
 
-			// Settings added after the file was saved have no entry and keep their defaults
+			// Settings newer than the file keep their defaults
 			UserSettings userSettings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
 			foreach (int i, string settingStr : CSI_GameSettings.GetSettingsArray())
 				if (m_aSettingsValues.IsIndexValid(i))
@@ -38,7 +36,6 @@ class CSI_SettingsJson : JsonApiStruct
     }
 
 	//------------------------------------------------------------------------------------------------
-	//! Writes the current CSI_GameSettings values to the profile file.
     void SaveToFile()
 	{
 		m_aSettingsValues.Clear();
@@ -58,7 +55,6 @@ class CSI_SettingsJson : JsonApiStruct
     }
 
 	//------------------------------------------------------------------------------------------------
-	//! \return true if the player has their own saved settings; if not, the server's default settings apply
 	bool HasSavedSettings()
 	{
 		return m_bHasSavedSettings;

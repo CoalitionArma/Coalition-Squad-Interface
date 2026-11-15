@@ -46,22 +46,22 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
 	const static string COMPASS_COLOR = "m_iCompassColor";
 
-	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, same as the m_iNametagFieldOfView slider
-	const static int NAMETAG_FIELD_OF_VIEW_MAX = 145;	//!< degrees, same as the m_iNametagFieldOfView slider
-	const static int NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX = 95;	//!< percent, same as the m_iNametagFieldOfViewSimplifiedPercentage slider
-	const static int RADAR_FIELD_OF_VIEW_MIN = 5;		//!< degrees, same as the m_iRadarFieldOfView slider
-	const static int RADAR_FIELD_OF_VIEW_MAX = 360;		//!< degrees, same as the m_iRadarFieldOfView slider; nobody fades at this value
-	const static int RADAR_RANGE_ON_FOOT_MIN = 5;		//!< metres, same as the m_iRadarRangeOnFoot slider
-	const static int RADAR_RANGE_ON_FOOT_MAX = 100;		//!< metres, same as the m_iRadarRangeOnFoot slider
-	const static int RADAR_RANGE_IN_VEHICLE_MIN = 1;	//!< metres, same as the m_iRadarRangeInVehicle slider
-	const static int RADAR_RANGE_IN_VEHICLE_MAX = 10;	//!< metres, same as the m_iRadarRangeInVehicle slider
+	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, matches the slider
+	const static int NAMETAG_FIELD_OF_VIEW_MAX = 145;	//!< degrees, matches the slider
+	const static int NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX = 95;	//!< percent, matches the slider
+	const static int RADAR_FIELD_OF_VIEW_MIN = 5;		//!< degrees, matches the slider
+	const static int RADAR_FIELD_OF_VIEW_MAX = 360;		//!< degrees, matches the slider; no fading at this value
+	const static int RADAR_RANGE_ON_FOOT_MIN = 5;		//!< metres, matches the slider
+	const static int RADAR_RANGE_ON_FOOT_MAX = 100;		//!< metres, matches the slider
+	const static int RADAR_RANGE_IN_VEHICLE_MIN = 1;	//!< metres, matches the slider
+	const static int RADAR_RANGE_IN_VEHICLE_MAX = 10;	//!< metres, matches the slider
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTINGS ARRAY (USED FOR AUTHORITY OVERRIDE OF SETTINGS)
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	// Server overrides and CSI_Settings.json store values by index in this array: only ever append, never insert or reorder
+	// Overrides and saved settings use these indices: only ever append
     const static ref TStringArray m_aSettingsArray =
 	{
 		COMPASS_VISIBLE,
@@ -118,14 +118,14 @@ class CSI_GameSettings : ModuleGameSettings
 	};
 
 	//------------------------------------------------------------------------------------------------
-	// Personal preferences the server can't override: no override checkbox in the CSI tab, and any override is ignored
+	// Personal preferences the server can't override
 	const static ref TStringArray SETTINGS_WITHOUT_SERVER_OVERRIDE =
 	{
 		REVEAL_UI_MODE
 	};
 
 	//------------------------------------------------------------------------------------------------
-	// Colour settings: a CSI_EColorPreset value, shown in the CSI tab as a row of colour boxes (CSI_ColorPresets)
+	// CSI_EColorPreset values, shown as a row of colour boxes
 	const static ref TStringArray COLOR_SETTINGS =
 	{
 		COMPASS_COLOR

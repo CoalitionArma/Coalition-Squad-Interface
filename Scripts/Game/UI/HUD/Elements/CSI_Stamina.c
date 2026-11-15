@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD stamina bar: fades in while stamina is below full and out when full (time based, FADE_SPEED); the color
-//! 				shows the stamina band.
+//!	\Description: 	HUD stamina bar: fades in while stamina is below full; its color shows the stamina level.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Stamina : SCR_ScriptedWidgetComponent
@@ -18,7 +17,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 	protected ProgressBarWidget m_wStamBar;
 
-	protected static const float FADE_SPEED = 0.3;	//!< opacity per second while fading, about 3 s for a full fade
+	protected static const float FADE_SPEED = 0.3;	//!< opacity per second (full fade about 3 s)
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -34,7 +33,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 		m_wStamBar = ProgressBarWidget.Cast(w.FindWidget("StamBar"));
 
-		// Opaque in the layout (and Workbench's layout editor) so it can be edited; fades in while stamina is below full
+		// Opaque in the layout for editing; starts hidden in game
 		if (m_wStamBar && !SCR_Global.IsEditMode())
 			m_wStamBar.SetOpacity(0);
 	}
@@ -45,7 +44,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Called every frame by CSI_HUD.
-	//! \param[in] timeSlice seconds since the last frame, for the fade
+	//! \param[in] timeSlice
 	void Update(float timeSlice)
 	{
 		if (!m_wStamBar)
@@ -70,7 +69,6 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		float stamina = characterController.GetStamina();
 		OnStaminaChange(stamina);
 
-		// Fade in while below full, out once full. Time based, so the fade takes as long at any frame rate
 		float fadeStep = FADE_SPEED * timeSlice;
 		if (stamina < 1)
 			m_wStamBar.SetOpacity(Math.Min(m_wStamBar.GetOpacity() + fadeStep, 1));
@@ -83,7 +81,7 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets the bar's value and color. Update fades it; the Setting Info preview calls this directly.
+	//! Sets the bar's value and color; also called by the Setting Info preview.
 	//! \param[in] stamina 0 - 1
 	void OnStaminaChange(float stamina)
 	{

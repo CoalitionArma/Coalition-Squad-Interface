@@ -3,8 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD compass: the COMPASS_THEME setting's texture rotated to the local yaw, and a three-digit bearing
-//! 				above it, both in the COMPASS_COLOR setting's colour.
+//!	\Description: 	HUD compass: themed texture rotated to the local yaw, with the bearing above it.
+//! 				Both use the Compass colour setting.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Compass : SCR_ScriptedWidgetComponent
@@ -13,10 +13,10 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected string m_sStoredCompass;	//!< currently loaded texture, to avoid reloading it every frame
-	protected int m_iStoredCompassColor = -1;	//!< COMPASS_COLOR value applied, to avoid recolouring every frame
+	protected string m_sStoredCompass;	//!< loaded texture
+	protected int m_iStoredCompassColor = -1;	//!< COMPASS_COLOR value applied
 	protected float m_fStoredYaw;
-	protected int m_iStoredBearing = -2;	//!< bearing text shown (-1 hidden, -2 not set yet), to avoid setting it every frame
+	protected int m_iStoredBearing = -2;	//!< bearing shown; -1 hidden, -2 not set yet
 
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
@@ -55,7 +55,6 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
         float yaw = m_HUDSystem.GetLocalYaw();
 		yawInt = -yaw;
 
-		// The compass and its bearing take the COMPASS_COLOR setting's colour
 		int compassColor = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_COLOR);
 		if (m_iStoredCompassColor != compassColor)
 		{
@@ -88,7 +87,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.BEARING_VISIBLE))
 		{
-			// Wrap to 0-359; ToString(3) zero-pads to three digits
+			// Wrap to 0-359; ToString(3) zero-pads
 			if (yawInt < 0)
 				yawInt += 360;
 

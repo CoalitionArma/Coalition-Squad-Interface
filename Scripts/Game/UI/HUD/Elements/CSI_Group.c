@@ -1,11 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD group list beside the compass: a CSI_Player row per group member in CSI_HUDSystem's sorted order, up to
-//! 				MAX_PLAYER_ROWS. Rows are created from CSI_Player.layout as the group grows and deleted as it shrinks,
-//! 				filling the layout's 5 x 5 grid a column at a time. Only shown in groups with more than one player.
+//!	\Description: 	HUD group list: a CSI_Player row per group member (up to 25), filling a 5 x 5 grid a column at a time.
+//! 				Hidden in groups of one.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Group : SCR_ScriptedWidgetComponent
@@ -20,10 +19,10 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	protected Widget m_wGrid;	//!< parent of the rows
 
 	protected ref array<int> m_aStoredGroupPlayerIDs;	//!< last array applied; null forces a refresh
-	protected ref array<CSI_Player> m_aPlayerRows = {};	//!< rows in grid order, one per listed group member
+	protected ref array<CSI_Player> m_aPlayerRows = {};	//!< rows in grid order
 
-	protected static const int MAX_PLAYER_ROWS = 25;	//!< the grid's cells; larger groups list their first 25 members
-	protected static const int GRID_ROWS = 5;			//!< rows per grid column (the layout's RowFill), filled top to bottom
+	protected static const int MAX_PLAYER_ROWS = 25;	//!< grid cells; extra members aren't listed
+	protected static const int GRID_ROWS = 5;			//!< rows per grid column (the layout's RowFill)
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -37,8 +36,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 
-		// CSI_HUDSystem only hands out a new group array when it refreshes, so also refresh when settings change
-		// (group visibility). Same settings invoker CSI_Icon listens to.
+		// Settings changes (group visibility) also need a refresh
 		if (m_SettingsManager)
 			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
 
@@ -51,7 +49,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 		if (m_SettingsManager)
 			m_SettingsManager.GetOnSettingsUpdate().Remove(OnSettingsUpdate);
 
-		// The rows are children of this layout and get destroyed with it
+		// Rows are child widgets, destroyed with this layout
 		m_aPlayerRows.Clear();
 
 		super.HandlerDeattached(w);
@@ -69,12 +67,12 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Called every frame by CSI_HUD; only does work when the group array was refreshed or the settings changed.
+	//! Called every frame by CSI_HUD; acts only on a new group array or settings change.
 	void Update()
 	{
 		array<int> groupArray = m_HUDSystem.GetLocalGroupPlayerIds();
 
-		// Same array reference = no refresh since the last update (CSI_HUDSystem hands out a new array each refresh)
+		// Same array reference: no group refresh since the last update
 		if (m_aStoredGroupPlayerIDs == groupArray)
 			return;
 
@@ -86,7 +84,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 
 		SetPlayerRowCount(rowCount);
 
-		// A row only resubscribes when the member at its place changed
+		// Rows only resubscribe when their member changed
 		foreach (int i, CSI_Player row : m_aPlayerRows)
 		{
 			if (row)
@@ -99,11 +97,9 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates or deletes rows at the end of the list until there are count of them.
-	//! \param[in] count
 	protected void SetPlayerRowCount(int count)
 	{
-		// Deleting a row also unsubscribes its CSI_Player and CSI_Icon (HandlerDeattached)
+		// Removing a row unsubscribes it (HandlerDeattached)
 		for (int i = m_aPlayerRows.Count() - 1; i >= count; i--)
 		{
 			CSI_Player row = m_aPlayerRows[i];
@@ -121,8 +117,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates the next row from CSI_Player.layout, in the grid cell for its place in the list.
-	//! \return the row's handler, or null if the widget couldn't be created
+	//! \return the row, or null if it couldn't be created
 	protected CSI_Player CreatePlayerRow()
 	{
 		if (!m_wGrid)

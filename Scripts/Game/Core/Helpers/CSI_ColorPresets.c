@@ -3,37 +3,33 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	The colours a colour setting can pick (CSI_EColorPreset), and the settings tab's colour rows: a vanilla
-//! 				toolbox (WLib_Toolbox.layout) whose elements are vanilla map marker colour entries
-//! 				(MapColorSelectorEntry.layout), shown as small solid boxes in a row. Any setting listed in
-//! 				CSI_GameSettings.COLOR_SETTINGS gets such a row; read its colour with GetSettingColor.
+//!	\Description: 	The colours a colour setting can pick (CSI_EColorPreset), and the settings tab's colour box rows
+//! 				for CSI_GameSettings.COLOR_SETTINGS. Read a setting's colour with GetSettingColor.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_ColorPresets
 {
-	// Every box shows this solid white image, tinted, instead of vanilla's soft dot (radial-shadow)
+	// Solid white image, tinted per box
 	protected static const ResourceName SOLID_IMAGESET = "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset";
 	protected static const string SOLID_IMAGE = "Pixel_White_100";
 
-	protected static const float BOX_INSET = 4;	//!< px between a box's colour and its tile, which turns orange when selected
+	protected static const float BOX_INSET = 4;	//!< px between a box's colour and its tile
 
 	//------------------------------------------------------------------------------------------------
-	//! The bright half of vanilla's map marker colours (Configs/Map/MapMarkerConfig.conf, m_aPlacedMarkerColors), in its
-	//! order, then a purple; its dark ones don't show on the HUD's dark backgrounds.
 	//! \param[in] preset CSI_EColorPreset value
-	//! \return a new colour, white for a value outside the list
+	//! \return a new colour, white for an unknown value
 	static Color GetColor(int preset)
 	{
 		switch (preset)
 		{
-			case CSI_EColorPreset.AMBER :	return new Color(0.947, 0.651, 0.136, 1);	// vanilla "orange"
-			case CSI_EColorPreset.ORANGE :	return new Color(0.761, 0.392, 0.078, 1);	// vanilla "darkOrange", the UI orange
+			case CSI_EColorPreset.AMBER :	return new Color(0.947, 0.651, 0.136, 1);
+			case CSI_EColorPreset.ORANGE :	return new Color(0.761, 0.392, 0.078, 1);	// the UI orange
 			case CSI_EColorPreset.RED :		return new Color(0.855, 0.027, 0.028, 1);
 			case CSI_EColorPreset.GREEN :	return new Color(0.014, 0.445, 0.08, 1);
 			case CSI_EColorPreset.BLUE :	return new Color(0.002, 0.198, 0.847, 1);
 			case CSI_EColorPreset.CYAN :	return new Color(0.014, 0.546, 0.896, 1);
 			case CSI_EColorPreset.PINK :	return new Color(0.871, 0.039, 0.705, 1);
-			case CSI_EColorPreset.PURPLE :	return new Color(0.45, 0.08, 0.86, 1);	// not vanilla's: its marker purple is one of the dark ones
+			case CSI_EColorPreset.PURPLE :	return new Color(0.45, 0.08, 0.86, 1);
 		}
 
 		return new Color(1, 1, 1, 1);
@@ -41,7 +37,7 @@ class CSI_ColorPresets
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] preset CSI_EColorPreset value
-	//! \return the colour's name as players see it (Setting Info caption), empty for a value outside the list
+	//! \return name shown to players, empty for an unknown value
 	static string GetName(int preset)
 	{
 		switch (preset)
@@ -61,7 +57,7 @@ class CSI_ColorPresets
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return how many colours there are, the values 0 to Count() - 1
+	//! \return number of colours (values 0 to Count() - 1)
 	static int Count()
 	{
 		array<int> presets = {};
@@ -70,7 +66,7 @@ class CSI_ColorPresets
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting a CSI_GameSettings.COLOR_SETTINGS name
-	//! \return the colour the setting picks (server override applied), white before the settings manager exists
+	//! \return the setting's colour, white without a settings manager
 	static Color GetSettingColor(string setting)
 	{
 		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
@@ -81,16 +77,16 @@ class CSI_ColorPresets
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Turns a settings tab toolbox into a colour row: one small box per colour, in CSI_EColorPreset order, so the
-	//! toolbox's selected index is the colour. Call once the toolbox is attached and before its value is loaded.
-	//! \param[in] toolbox vanilla toolbox whose m_ElementLayout is MapColorSelectorEntry.layout
-	//! \return false if its elements aren't image buttons, so the boxes can't show their colours
+	//! Fills the toolbox with one box per colour, so its selected index is the colour.
+	//! Call before its value is loaded.
+	//! \param[in] toolbox with MapColorSelectorEntry.layout elements
+	//! \return false if its elements aren't image buttons
 	static bool FillToolbox(notnull SCR_ToolboxComponent toolbox)
 	{
 		toolbox.ClearAll();
 		for (int i, count = Count(); i < count; i++)
 		{
-			// Vanilla rebuilds the elements on each AddItem
+			// AddItem rebuilds every element, so style them afterwards
 			toolbox.AddItem(GetName(i));
 		}
 
@@ -112,11 +108,10 @@ class CSI_ColorPresets
 	//! \return false if it isn't an image button
 	protected static bool StyleBox(notnull SCR_ButtonBaseComponent box, notnull Color color)
 	{
-		// The toolbox only shows the selected element, and only reports a new selection, if its elements can be
-		// toggled; vanilla's colour entry can't by default
+		// Without this the toolbox neither shows nor reports a selection
 		box.SetToggleable(true);
 
-		// Small boxes side by side, rather than stretched across the row as vanilla toolbox elements are
+		// Small boxes side by side, not stretched across the row
 		Widget boxRoot = box.GetRootWidget();
 		if (boxRoot)
 		{
@@ -136,7 +131,7 @@ class CSI_ColorPresets
 
 		image.SetColor(color);
 
-		// Inset, so the element's own background shows round it: dark, or vanilla's orange when selected
+		// Inset so the tile shows round it: dark, or orange when selected
 		Widget imageFrame = image.GetParent();
 		if (imageFrame)
 			AlignableSlot.SetPadding(imageFrame, BOX_INSET, BOX_INSET, BOX_INSET, BOX_INSET);

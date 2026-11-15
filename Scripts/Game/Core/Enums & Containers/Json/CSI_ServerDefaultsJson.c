@@ -1,12 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Saves and loads the server's default settings and max group size in $profile:CSI_ServerDefaults.json
-//! 				(the server's profile folder), so they last between server restarts. Written and read by CSI_SettingsManager
-//! 				on the server. The defaults are an int array indexed like CSI_GameSettings.GetSettingsArray(), with
-//! 				CSI_SettingsManager.NO_SERVER_DEFAULT for settings without one; an empty array means no defaults.
+//!	\Description: 	Saves and loads the server's default settings and max group size in $profile:CSI_ServerDefaults.json,
+//! 				so they last between server restarts.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_ServerDefaultsJson : JsonApiStruct
@@ -16,8 +14,8 @@ class CSI_ServerDefaultsJson : JsonApiStruct
 	protected int m_iMaxGroupSize;
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[out] defaultValues filled with the saved defaults by settings index; left empty if there are none
-	//! \param[out] maxGroupSize the saved max group size; CSI_SettingsManager.DEFAULT_MAX_GROUP_SIZE if the file has none
+	//! \param[out] defaultValues by settings index; empty if none
+	//! \param[out] maxGroupSize DEFAULT_MAX_GROUP_SIZE if the file has none
 	//! \return false if there's no valid file yet
 	bool LoadFromProfile(notnull array<int> defaultValues, out int maxGroupSize)
 	{
