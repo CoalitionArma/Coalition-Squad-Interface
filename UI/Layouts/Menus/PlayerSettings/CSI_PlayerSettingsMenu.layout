@@ -257,7 +257,6 @@ FrameWidgetClass {
         }
         OverlayWidgetClass "{66C77441724892C6}" {
          Prefab "{66C77441724892C6}"
-         "Is Visible" 0
          {
           ImageWidgetClass "{605035926F91EF39}" {
            Prefab "{605035926F91EF39}"

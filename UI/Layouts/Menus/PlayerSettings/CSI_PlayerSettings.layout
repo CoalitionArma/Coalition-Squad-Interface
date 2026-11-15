@@ -118,8 +118,6 @@ ScaleWidgetClass {
              }
              Color 0.305 0.305 0.305 1
              components {
-              SCR_ComboBoxComponent "{6093726C5F548801}" {
-              }
               ButtonComponent "{60B40B7B41F8F1C5}" {
                m_ColorButtonDefault 1 1 1 0.608
                m_ColorButtonFocused 1 1 1 1

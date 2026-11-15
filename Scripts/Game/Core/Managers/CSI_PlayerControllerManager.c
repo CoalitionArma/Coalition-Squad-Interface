@@ -3,10 +3,10 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Player controller component: loads the local settings JSON and opens the CSI settings
-//! 				(group menu for leaders, CSI_PlayerSettingsMenu otherwise).
+//! 				(group menu for group and team leaders, CSI_PlayerSettingsMenu otherwise).
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerControllerManager : ScriptComponent
@@ -95,7 +95,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Opens the group menu for group leaders, else CSI_PlayerSettingsMenu.
+	//! Opens the group menu for group leaders and team leaders, else CSI_PlayerSettingsMenu.
 	protected void OpenLocalPlayerSettingsMenu()
 	{
 		// Listen server: only the host's own controller acts
@@ -107,7 +107,7 @@ class CSI_PlayerControllerManager : ScriptComponent
 			return;
 
 		SCR_AIGroup group = groupsManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
+		if (CSI_PlayerSettings.CanLocalPlayerEditMembers(group))
 			GetGame().OpenGroupMenu();
 		else
 			GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.CSI_PlayerSettingsMenu, 0, true);

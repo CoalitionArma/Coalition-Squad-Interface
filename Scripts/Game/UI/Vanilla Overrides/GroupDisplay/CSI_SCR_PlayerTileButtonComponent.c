@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: clicking a player tile opens the CSI player settings panel (group leader only)
-//! 				instead of the options combo.
+//!	\Description: 	CSI changes: clicking a player tile opens the CSI player settings panel (group leader and team
+//! 				leaders) instead of the options combo.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_PlayerTileButtonComponent
@@ -28,7 +28,7 @@ modded class SCR_PlayerTileButtonComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the CSI player settings panel if the local player leads this player's group.
+	//! Shows the CSI player settings panel if the local player leads this player's group or is a team leader in it.
 	//! \param[in] w
 	//! \param[in] x
 	//! \param[in] y
@@ -39,10 +39,13 @@ modded class SCR_PlayerTileButtonComponent
 		if (!m_PlayerSettings)
 			return super.OnClick(w, x, y, button);
 
-		Widget advSettings = m_PlayerSettings.FindAnyWidget("AdvancedSettingsOverlay");
-		SCR_AIGroup tilePlayersGroup = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(GetTilePlayerID());
-		bool showSettings = tilePlayersGroup && tilePlayersGroup.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId());
+		SCR_AIGroup tilePlayersGroup;
+		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
+		if (groupsManager)
+			tilePlayersGroup = groupsManager.GetPlayerGroup(GetTilePlayerID());
 
+		// The panel shows promote and kick to the leader only
+		bool showSettings = CSI_PlayerSettings.CanLocalPlayerEditMembers(tilePlayersGroup);
 		if (showSettings)
 		{
 			CSI_PlayerSettings playerSettings = CSI_PlayerSettings.Cast(m_PlayerSettings.FindHandler(CSI_PlayerSettings));
@@ -51,10 +54,6 @@ modded class SCR_PlayerTileButtonComponent
 		}
 
 		m_PlayerSettings.SetVisible(showSettings);
-
-		if (advSettings)
-			advSettings.SetVisible(showSettings);
-
 		return true;
 	}
 }
