@@ -1,9 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD compass: texture rotated to the local yaw and a three-digit bearing above it.
+//!	\Description: 	HUD compass: the COMPASS_THEME setting's texture rotated to the local yaw, and a three-digit bearing
+//! 				above it, both in the COMPASS_COLOR setting's colour.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Compass : SCR_ScriptedWidgetComponent
@@ -13,6 +14,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected string m_sStoredCompass;	//!< currently loaded texture, to avoid reloading it every frame
+	protected int m_iStoredCompassColor = -1;	//!< COMPASS_COLOR value applied, to avoid recolouring every frame
 	protected float m_fStoredYaw;
 	protected int m_iStoredBearing = -2;	//!< bearing text shown (-1 hidden, -2 not set yet), to avoid setting it every frame
 
@@ -53,15 +55,20 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
         float yaw = m_HUDSystem.GetLocalYaw();
 		yawInt = -yaw;
 
+		// The compass and its bearing take the COMPASS_COLOR setting's colour
+		int compassColor = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_COLOR);
+		if (m_iStoredCompassColor != compassColor)
+		{
+			Color color = CSI_ColorPresets.GetColor(compassColor);
+			m_wCompass.SetColor(color);
+			m_wBearing.SetColor(color);
+			m_iStoredCompassColor = compassColor;
+		}
+
 		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.COMPASS_VISIBLE))
 		{
 			CSI_ECompassTheme compassTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.COMPASS_THEME);
-			string compassImage;
-			// Only the standard texture exists so far
-			switch (compassTheme)
-			{
-				default : compassImage = CSI_UIHelper.CSI_STANDARD_COMPASS; break;
-			};
+			string compassImage = CSI_UIHelper.GetCompassTexture(compassTheme);
 
 			if (m_sStoredCompass != compassImage)
 			{

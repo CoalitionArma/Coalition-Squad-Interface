@@ -549,6 +549,22 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          ButtonWidgetClass "{6A9C2E41B7E10001}" : "{DE4FF98B6BB98B14}UI/layouts/WidgetLibrary/ToolBoxes/WLib_Toolbox.layout" {
+           Name "m_iCompassColor"
+           Slot LayoutSlot "{5536C935787A6814}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_ToolboxComponent "{5478CE8F8EE55D9D}" {
+             m_sLabel "Compass colour"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_aElementNames {
+              "White" "Amber" "Orange" "Red" "Green" "Blue" "Cyan" "Pink" "Purple"
+             }
+             m_ElementLayout "{8A5D43FC8AC6C171}UI/layouts/Map/MapColorSelectorEntry.layout"
+            }
+           }
+          }
           ButtonWidgetClass "{66C340D00347FDA0}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bBearingVisible"
            Slot LayoutSlot "{54890CCD61050681}" {
@@ -1419,6 +1435,33 @@ HorizontalLayoutWidgetClass {
              }
              components {
               ButtonComponent "{66C6723C5F4627CE}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7E10002}" {
+           Name "m_iCompassColor"
+           Slot LayoutSlot "{6A9C2E41B7E10003}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7E10004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E10005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7E10006}" {
                m_ColorButtonDefault 1 1 1 0.7
                m_ColorButtonFocused 0.761 0.392 0.078 1
                m_ColorButtonPressed 0.761 0.392 0.078 1

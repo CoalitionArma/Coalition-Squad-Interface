@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Added to each setting row in the CSI settings tab: tells CSI_SettingInfo which setting the
-//! 				player is hovering, focusing or changing.
+//! 				player is hovering, focusing or changing, and gives it the row's label for the title. On a colour row,
+//! 				the hovered box's colour is previewed (CSI_SettingInfo.PreviewSetting).
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
@@ -13,6 +14,7 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	protected CSI_SettingInfo m_SettingInfo;	//!< not ref: CSI_SettingInfo owns this handler
 	protected Widget m_wSetting;
 	protected SCR_ChangeableComponentBase m_Changeable;
+	protected SCR_ToolboxComponent m_ColorRow;	//!< colour rows only: its boxes preview their colour while hovered
 
 	//------------------------------------------------------------------------------------------------
 	override bool OnMouseEnter(Widget w, int x, int y)
@@ -33,15 +35,90 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Subscribed to the row's SCR_ChangeableComponentBase.m_OnChanged, so the example follows the new value.
+	//! Subscribed to the row's SCR_ChangeableComponentBase.m_OnChanged, so the example follows the new value. Shown a
+	//! frame later: a clicked toolbox box reports the change before the toolbox has selected it.
 	void OnValueChanged()
+	{
+		ScriptCallQueue callQueue = GetGame().GetCallqueue();
+		callQueue.Remove(ShowThisSetting);
+		callQueue.CallLater(ShowThisSetting);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void ShowThisSetting()
 	{
 		if (m_SettingInfo)
 			m_SettingInfo.ShowSetting(m_sSetting);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Hooks the setting's row: hover and focus through this handler, value changes through its m_OnChanged.
+	//! Colour row box under the mouse: the example shows its colour, unless the row is locked by a server override.
+	//! \param[in] w the box's root widget
+	protected void OnColorBoxEntered(Widget w)
+	{
+		if (!m_SettingInfo || !m_wSetting || !m_wSetting.IsEnabled())
+			return;
+
+		int preset = FindColorBox(w);
+		if (preset >= 0)
+			m_SettingInfo.PreviewSetting(m_sSetting, preset);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] w the box's root widget
+	protected void OnColorBoxLeft(Widget w)
+	{
+		if (m_SettingInfo)
+			m_SettingInfo.EndPreview(m_sSetting, FindColorBox(w));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] w a box's root widget
+	//! \return the box's index in the row, which is its CSI_EColorPreset value; -1 if it isn't one of the row's boxes
+	protected int FindColorBox(Widget w)
+	{
+		if (!m_ColorRow)
+			return -1;
+
+		array<SCR_ButtonBaseComponent> boxes = {};
+		m_ColorRow.GetItems(boxes);
+		foreach (int preset, SCR_ButtonBaseComponent box : boxes)
+		{
+			if (box.GetRootWidget() == w)
+				return preset;
+		}
+
+		return -1;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] subscribe false to unsubscribe
+	protected void SubscribeColorBoxes(bool subscribe)
+	{
+		array<SCR_ButtonBaseComponent> boxes = {};
+		m_ColorRow.GetItems(boxes);
+		foreach (SCR_ButtonBaseComponent box : boxes)
+		{
+			SCR_ButtonImageComponent imageBox = SCR_ButtonImageComponent.Cast(box);
+			if (!imageBox)
+				continue;
+
+			if (subscribe)
+			{
+				imageBox.m_OnMouseEnter.Insert(OnColorBoxEntered);
+				imageBox.m_OnMouseLeave.Insert(OnColorBoxLeft);
+			}
+			else
+			{
+				imageBox.m_OnMouseEnter.Remove(OnColorBoxEntered);
+				imageBox.m_OnMouseLeave.Remove(OnColorBoxLeft);
+			}
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Hooks the setting's row: hover and focus through this handler, value changes through its m_OnChanged, and on a
+	//! colour row, hovering each box (CSI_ColorPresets builds them before this runs).
 	//! \param[in] settingWidget
 	void Attach(notnull Widget settingWidget)
 	{
@@ -51,14 +128,25 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 		m_Changeable = SCR_ChangeableComponentBase.Cast(settingWidget.FindHandler(SCR_ChangeableComponentBase));
 		if (m_Changeable)
 			m_Changeable.m_OnChanged.Insert(OnValueChanged);
+
+		if (CSI_GameSettings.COLOR_SETTINGS.Contains(m_sSetting))
+			m_ColorRow = SCR_ToolboxComponent.Cast(m_Changeable);
+
+		if (m_ColorRow)
+			SubscribeColorBoxes(true);
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! Undoes Attach.
 	void Detach()
 	{
+		GetGame().GetCallqueue().Remove(ShowThisSetting);
+
 		if (m_Changeable)
 			m_Changeable.m_OnChanged.Remove(OnValueChanged);
+
+		if (m_ColorRow)
+			SubscribeColorBoxes(false);
 
 		if (m_wSetting)
 			m_wSetting.RemoveHandler(this);
@@ -91,11 +179,12 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	"Setting Info" panel (CSI_SettingInfo.layout) at the top right of the CSI settings tab, for everyone:
-//! 				the hovered setting's name (from its variable name, vanilla SCR_StringHelper), its CSI_GameSettings
-//! 				attribute desc, and an example. The examples are the layouts in SettingInfoExamples/, each with its
+//! 				the hovered setting's name (its row's label, so both read the same), its CSI_GameSettings
+//! 				attribute desc, and an example, which shows a hovered colour box's colour before it's picked
+//! 				(PreviewSetting). The examples are the layouts in SettingInfoExamples/, each with its
 //! 				own component (CSI_SettingInfoHudExamples, CSI_SettingInfoIconExamples, CSI_SettingInfoNametagExamples),
 //! 				found and driven from here like CSI_HUD does its elements. Also holds the static helpers they share
 //! 				(the tab's values, the local player's name, icon and group, drawing a role icon).
@@ -117,6 +206,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	protected CSI_SettingInfoNametagExamples m_NametagExamples;
 
 	protected static string s_sProfileName;	//!< cached by GetProfileName
+
+	// A value the player is only pointing at, such as a hovered colour box (PreviewSetting); GetValue returns it
+	protected static string s_sPreviewSetting;
+	protected static int s_iPreviewValue;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -146,6 +239,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		m_aHandlers.Clear();
 		m_mSettingLabels.Clear();
+		s_sPreviewSetting = string.Empty;
 
 		super.HandlerDeattached(w);
 	}
@@ -225,6 +319,30 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Shows a setting with a value the player is only pointing at, such as a hovered colour box, until EndPreview.
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value shown in place of the tab's value
+	void PreviewSetting(string setting, int value)
+	{
+		s_sPreviewSetting = setting;
+		s_iPreviewValue = value;
+		ShowSetting(setting);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Ends PreviewSetting: the setting shows its value in the tab again.
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value the previewed value; a newer preview (the next box, if it was entered first) is kept
+	void EndPreview(string setting, int value)
+	{
+		if (s_sPreviewSetting != setting || s_iPreviewValue != value)
+			return;
+
+		s_sPreviewSetting = string.Empty;
+		ShowSetting(setting);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Finds the example components on the example layouts (HudExamples, IconExamples, NametagExamples).
 	protected void FindExamples()
 	{
@@ -273,7 +391,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting CSI_GameSettings name, also the name of its widget in the tab
 	//! \param[out] value the value shown in the tab
-	//! \return false if the setting has no slider, combo box or spin box
+	//! \return false if the setting has no slider, combo box, spin box or toolbox (colour row)
 	static bool GetWidgetValue(Widget root, string setting, out int value)
 	{
 		if (!root)
@@ -304,6 +422,13 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			return true;
 		}
 
+		SCR_ToolboxComponent toolboxComp = SCR_ToolboxComponent.Cast(widget.FindHandler(SCR_ToolboxComponent));
+		if (toolboxComp)
+		{
+			value = toolboxComp.GetCurrentIndex();
+			return true;
+		}
+
 		return false;
 	}
 
@@ -312,7 +437,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting CSI_GameSettings name, also the name of its widget in the tab
 	//! \param[in] value
-	//! \return false if the setting has no slider, combo box or spin box
+	//! \return false if the setting has no slider, combo box, spin box or toolbox (colour row)
 	static bool SetWidgetValue(Widget root, string setting, int value)
 	{
 		if (!root)
@@ -343,15 +468,25 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			return true;
 		}
 
+		SCR_ToolboxComponent toolboxComp = SCR_ToolboxComponent.Cast(widget.FindHandler(SCR_ToolboxComponent));
+		if (toolboxComp)
+		{
+			toolboxComp.SetCurrentItem(value, false, true);
+			return true;
+		}
+
 		return false;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting
-	//! \return the value selected in the tab, 0 if the setting has no widget
+	//! \return the value selected in the tab (or being previewed, see PreviewSetting), 0 if the setting has no widget
 	static int GetValue(Widget root, string setting)
 	{
+		if (!s_sPreviewSetting.IsEmpty() && setting == s_sPreviewSetting)
+			return s_iPreviewValue;
+
 		int value;
 		if (!GetWidgetValue(root, setting, value))
 			return 0;

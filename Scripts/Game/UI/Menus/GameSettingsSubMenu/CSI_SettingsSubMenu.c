@@ -15,7 +15,9 @@ typedef ScriptInvokerBase<ScriptInvoker_CSI_SettingsSubMenu> ScriptInvoker_CSI_S
 //! 				(CSI_ServerAdmin). Players without saved settings see the server's defaults here; their settings file is
 //! 				only written once they change something. Settings that only matter while a switch is on are nested under
 //! 				it (RegisterDependentSettings): indented, joined to it by tree lines (DrawSettingsTree), and only shown
-//! 				while every switch above them is on. Missing widgets are logged as warnings when the tab is created.
+//! 				while every switch above them is on. Colour settings (CSI_GameSettings.COLOR_SETTINGS) are rows of colour
+//! 				boxes, built by CSI_ColorPresets and bound by CSI_SettingBinding. Missing widgets are logged as warnings
+//! 				when the tab is created.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
@@ -94,6 +96,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			m_bShowingServerDefaults = true;
 		}
 
+		SetupColorSettings();
 		SetupSettingBindings();
 		LoadSettings();
 
@@ -199,6 +202,25 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Turns each colour setting's row (a vanilla toolbox) into a row of colour boxes, before the values are loaded.
+	protected void SetupColorSettings()
+	{
+		foreach (string setting : CSI_GameSettings.COLOR_SETTINGS)
+		{
+			// Vanilla's finder warns if the row is missing
+			SCR_ToolboxComponent toolbox = SCR_ToolboxComponent.GetToolboxComponent(setting, m_wRoot);
+			if (!toolbox)
+			{
+				PrintFormat("CSI_SettingsSubMenu: colour setting '%1' has no toolbox row, it can't be changed here", setting, level: LogLevel.WARNING);
+				continue;
+			}
+
+			if (!CSI_ColorPresets.FillToolbox(toolbox))
+				PrintFormat("CSI_SettingsSubMenu: colour setting '%1' row's boxes aren't image buttons, they won't show their colours", setting, level: LogLevel.WARNING);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Binds each setting's row to its user setting, except settings the server overrides: those show the forced value
 	//! unbound, so the player's own value isn't overwritten, and are locked for non-admins.
 	protected void SetupSettingBindings()
@@ -225,7 +247,8 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			bool overridden = serverSettings && serverSettings.IsIndexValid(i) && serverSettings[i] < 0;
 			if (!overridden || CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE.Contains(setting))
 			{
-				m_aSettingsBindings.Insert(new SCR_SettingBindingGameplay(SETTINGS_MODULE_NAME, setting, setting));
+				// Vanilla's binding, which can also bind the colour rows' toolboxes
+				m_aSettingsBindings.Insert(new CSI_SettingBinding(SETTINGS_MODULE_NAME, setting, setting));
 				continue;
 			}
 
@@ -350,7 +373,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		TStringArray roleIcon = {CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION};
 		NestSettings(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE, roleIcon);
 
-		TStringArray compass = {CSI_GameSettings.COMPASS_THEME};
+		TStringArray compass = {CSI_GameSettings.COMPASS_THEME, CSI_GameSettings.COMPASS_COLOR};
 		NestSettings(CSI_GameSettings.COMPASS_VISIBLE, compass);
 
 		TStringArray radar = {

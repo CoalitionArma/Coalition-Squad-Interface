@@ -421,6 +421,13 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			return true;
 		}
 
+		if (setting == CSI_GameSettings.COMPASS_COLOR)
+		{
+			ShowHud(true, false, false, 1, true);
+			caption = CSI_ColorPresets.GetName(value);
+			return true;
+		}
+
 		if (setting == CSI_GameSettings.RADAR_VISIBLE || setting == CSI_GameSettings.RADAR_ICON_SIZE)
 		{
 			ShowHud(true, false, false, 1, true);
@@ -569,12 +576,15 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets what CSI_Compass.Update would for a PREVIEW_HEADING heading, with the tab's compass and bearing settings.
+	//! Sets what CSI_Compass.Update would for a PREVIEW_HEADING heading, with the tab's compass theme, colour, compass and
+	//! bearing settings.
 	protected void UpdateCompass()
 	{
+		Color compassColor = CSI_ColorPresets.GetColor(GetValue(CSI_GameSettings.COMPASS_COLOR));
 		if (m_wCompassImage)
 		{
-			m_wCompassImage.LoadImageTexture(0, CSI_UIHelper.CSI_STANDARD_COMPASS);	// only the standard compass exists so far
+			m_wCompassImage.LoadImageTexture(0, CSI_UIHelper.GetCompassTexture(GetValue(CSI_GameSettings.COMPASS_THEME)));
+			m_wCompassImage.SetColor(compassColor);
 			m_wCompassImage.SetRotation(-PREVIEW_HEADING);
 			m_wCompassImage.SetVisible(GetValue(CSI_GameSettings.COMPASS_VISIBLE));
 		}
@@ -582,6 +592,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		if (!m_wBearing)
 			return;
 
+		m_wBearing.SetColor(compassColor);
 		int heading = PREVIEW_HEADING;
 		if (GetValue(CSI_GameSettings.BEARING_VISIBLE))
 			m_wBearing.SetText(heading.ToString(3));

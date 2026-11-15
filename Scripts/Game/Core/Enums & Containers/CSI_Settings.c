@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
 //! 				which applies server overrides on top of these.
@@ -44,6 +44,7 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string RADAR_RANGE_ON_FOOT = "m_iRadarRangeOnFoot";
 	const static string RADAR_RANGE_IN_VEHICLE = "m_iRadarRangeInVehicle";
 	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
+	const static string COMPASS_COLOR = "m_iCompassColor";
 
 	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, same as the m_iNametagFieldOfView slider
 	const static int NAMETAG_FIELD_OF_VIEW_MAX = 145;	//!< degrees, same as the m_iNametagFieldOfView slider
@@ -93,7 +94,8 @@ class CSI_GameSettings : ModuleGameSettings
 		RADAR_FIELD_OF_VIEW,
 		RADAR_RANGE_ON_FOOT,
 		RADAR_RANGE_IN_VEHICLE,
-		REVEAL_UI_MODE
+		REVEAL_UI_MODE,
+		COMPASS_COLOR
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -120,6 +122,13 @@ class CSI_GameSettings : ModuleGameSettings
 	const static ref TStringArray SETTINGS_WITHOUT_SERVER_OVERRIDE =
 	{
 		REVEAL_UI_MODE
+	};
+
+	//------------------------------------------------------------------------------------------------
+	// Colour settings: a CSI_EColorPreset value, shown in the CSI tab as a row of colour boxes (CSI_ColorPresets)
+	const static ref TStringArray COLOR_SETTINGS =
+	{
+		COMPASS_COLOR
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -203,8 +212,11 @@ class CSI_GameSettings : ModuleGameSettings
 	int m_bNametagBrightnessDimming;
 
 	// Compass & radar
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ECompassTheme.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ECompassTheme), desc: "Style of the compass. Only Regular exists so far.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ECompassTheme.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ECompassTheme), desc: "Style of the compass: Classic, Sci-fi or WW2. Sci-fi's two faint rings mark a third and two thirds of the radar range.")]
 	int m_iCompassTheme;
+
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.WHITE), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Colour of the compass: its ring, marks and letters, and the bearing above it.")]
+	int m_iCompassColor;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the compass at the bottom of the screen, turning as you look around.")]
 	int m_bCompassVisible;

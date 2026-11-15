@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Static UI helpers: resource paths, color team colors, icon imageset names and player display names.
+//!	\Description: 	Static UI helpers: resource paths, color team colors, compass textures, icon imageset names and player display names.
 //! 				Public API: CRF calls ConvertColorTeamToColor; BFS-CustomPlayerNamesCSI may override GetPlayersName.
 //! 
 //------------------------------------------------------------------------------------------------
@@ -19,6 +19,8 @@ class CSI_UIHelper
 
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
+	const static ResourceName CSI_SCI_FI_COMPASS = "{64AB432AC7BB503C}UI/Textures/HUD/Compasses/SciFi_Compass.edds";	//!< its two faint rings sit at a third and two thirds of the radar range
+	const static ResourceName CSI_WW2_COMPASS = "{77D4A8C53182F77A}UI/Textures/HUD/Compasses/WW2_Compass.edds";
 	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
 
 	const static ResourceName CSI_ICON_LAYOUT = "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout";
@@ -68,6 +70,20 @@ class CSI_UIHelper
 		}
 
 		return colorFromInt;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] theme COMPASS_THEME value
+	//! \return the theme's compass texture, the standard one for a value without its own
+	static ResourceName GetCompassTexture(CSI_ECompassTheme theme)
+	{
+		switch (theme)
+		{
+			case CSI_ECompassTheme.SCI_FI :	return CSI_SCI_FI_COMPASS;
+			case CSI_ECompassTheme.WW2 :	return CSI_WW2_COMPASS;
+		}
+
+		return CSI_STANDARD_COMPASS;
 	}
 
 	//------------------------------------------------------------------------------------------------
