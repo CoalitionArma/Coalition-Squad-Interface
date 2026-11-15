@@ -49,9 +49,6 @@ class CSI_SettingsManager : ScriptComponent
 	protected ref CSI_ServerDefaultsJson m_ServerDefaultsJson;	//!< server: file the defaults and max group size are saved to
 	protected bool m_bServerDefaultsSavePending;				//!< server: a save of that file is queued
 
-	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
-	protected CSI_PlayerDataManager m_PlayerDataManager;
-
 	protected UserSettings m_UserSettigs;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -64,9 +61,6 @@ class CSI_SettingsManager : ScriptComponent
 		super.OnPostInit(owner);
 
 		m_UserSettigs = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
-
-		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
 		// Server (dedicated or listen host) restores the defaults and max group size saved in an earlier session, then
 		// publishes its settings as the override array; both before anything replicates to clients
@@ -87,6 +81,13 @@ class CSI_SettingsManager : ScriptComponent
 				GetGame().GetCallqueue().Remove(SaveServerDefaults);
 
 			SaveServerDefaults();
+		}
+
+		// Same for a queued save of the server's override settings
+		if (m_bAuthorityIsSavingSettings && GetGame())
+		{
+			GetGame().GetCallqueue().Remove(SaveAuthoritySettingsDelay);
+			SaveAuthoritySettingsDelay();
 		}
 
 		super.OnDelete(owner);
@@ -267,10 +268,8 @@ class CSI_SettingsManager : ScriptComponent
 
 		Replication.BumpMe();
 
-		// The onRplName callback only runs on clients; apply directly when playing in Workbench
-		#ifdef WORKBENCH
-			SettingsUpdate();
-		#endif
+		// onRplName only runs on clients, so call it on the server too, as vanilla does for its RplProp callbacks
+		SettingsUpdate();
 	}
 
 	//------------------------------------------------------------------------------------------------

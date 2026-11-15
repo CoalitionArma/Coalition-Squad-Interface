@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One player's CSI state: color team, override and display icons, rank and leader flags.
-//! 				Setters for displayed values fire GetOnDataUpdate() so the UI can refresh.
+//! 				Setters for displayed values fire GetOnDataUpdate() when the value changes, so the UI can refresh.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerData
@@ -36,6 +36,10 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	void SetColorTeam(CSI_EColorTeam colorTeam)
 	{
+		// CRF re-sends color teams; only refresh the UI on a real change
+		if (m_iColorTeam == colorTeam)
+			return;
+
 		m_iColorTeam = colorTeam;
 
 		if (m_OnDataUpdate)
@@ -53,6 +57,9 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	void SetDisplayIcon(CSI_EIcon displayIcon)
 	{
+		if (m_iDisplayIcon == displayIcon)
+			return;
+
 		m_iDisplayIcon = displayIcon;
 
 		if (m_OnDataUpdate)
@@ -62,6 +69,9 @@ class CSI_PlayerData
 	//------------------------------------------------------------------------------------------------
 	void SetRank(SCR_ECharacterRank rank)
 	{
+		if (m_iRank == rank)
+			return;
+
 		m_iRank = rank;
 
 		if (m_OnDataUpdate)

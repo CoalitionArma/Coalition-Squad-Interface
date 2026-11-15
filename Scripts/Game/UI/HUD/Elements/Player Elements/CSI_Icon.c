@@ -24,6 +24,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wIconLarge;		//!< used for vehicle seat icons
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
+	protected bool m_bHasAllParts;	//!< every widget above was found; DataUpdate and SetRotation do nothing otherwise
 
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;	//!< radar icons show the arrow on turreted seats
@@ -49,6 +50,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_wIconLarge = ImageWidget.Cast(w.FindAnyWidget("Icon_Large"));
 		m_wOutlineLarge = ImageWidget.Cast(w.FindAnyWidget("Outline_Large"));
 		m_wIconFrame = FrameWidget.Cast(w.FindAnyWidget("IconFrame"));
+		m_bHasAllParts = m_wArrow && m_wIcon && m_wOutline && m_wIconLarge && m_wOutlineLarge && m_wIconFrame;
 
 		// Visible in the layout (and Workbench's layout editor) so they can be edited; SetIconWidget shows the ones
 		// the icon uses
@@ -102,6 +104,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 
+			m_PlayerData = null;
+
 			if (playerID <= 0)
 			{
 				m_wRoot.SetVisible(false);
@@ -124,7 +128,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//! Applies the player's display icon and color team. Called on player data and settings changes.
 	protected void DataUpdate()
 	{
-		if (!m_PlayerData)
+		if (!m_PlayerData || !m_bHasAllParts)
 			return;
 
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
@@ -141,6 +145,9 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//! \param[in] yaw degrees
 	void SetRotation(float yaw)
 	{
+		if (!m_bHasAllParts)
+			return;
+
 		m_wArrow.SetRotation(yaw);
 
 		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE))

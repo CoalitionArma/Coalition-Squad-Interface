@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller (child of CSI_PlayerControllerManager).
 //! 				Owner_* methods run on the owning client and send RpcAsk_* to the server, which hands off to
@@ -199,7 +199,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_RegisterPlayerData(int playerID)
+	protected void RpcAsk_RegisterPlayerData(int playerID)
 	{
 		if (playerID <= 0 || !m_RplBroadcastManager)
 			return;
@@ -209,7 +209,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_ClearGroupSpecificData(int playerID)
+	protected void RpcAsk_ClearGroupSpecificData(int playerID)
 	{
 		if (playerID <= 0 || !m_PlayerDataManager)
 			return;
@@ -219,7 +219,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
+	protected void RpcAsk_UpdatePlayerDisplayIcon(int playerID, CSI_EIcon displayIcon)
 	{
 		if (playerID <= 0 || !m_RplBroadcastManager)
 			return;
@@ -239,7 +239,7 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	void RpcAsk_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	protected void RpcAsk_UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
 	{
 		if (playerID <= 0 || !m_RplBroadcastManager)
 			return;

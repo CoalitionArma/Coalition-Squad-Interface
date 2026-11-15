@@ -3,10 +3,11 @@ class CSI_PlayerControllerManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Per-player component on the player controller: loads the local settings JSON and opens the CSI
-//! 				settings (group menu for leaders, CSI_PlayerSettingsMenu otherwise). The server has one per player.
+//! 				settings (group menu for leaders, CSI_PlayerSettingsMenu otherwise). The server has one per player;
+//! 				the local setup only runs for the local player's controller.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_PlayerControllerManager : ScriptComponent
@@ -30,7 +31,19 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (RplSession.Mode() == RplMode.Dedicated)
 			return;
 
+		// A listen server host runs this for every player's controller. Skip the ones that clearly aren't the host's:
+		// reloading and saving the host's settings each time a player joins could save settings shown in the CSI tab.
+		PlayerController localController = GetGame().GetPlayerController();
+		if (localController && localController != owner)
+			return;
+
 		GetGame().GetInputManager().AddActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
+
+		// Like vanilla SCR_PlayerControllerCommandingComponent: undo the local setup if this controller turns out to be
+		// another player's (its ownership moves to them)
+		SCR_PlayerController playerController = SCR_PlayerController.Cast(owner);
+		if (playerController)
+			playerController.GetOnOwnershipChangedInvoker().Insert(OnOwnershipChanged);
 
 		// Apply the saved CSI settings, then let the settings manager merge in server overrides
 		m_SettingsJson = new CSI_SettingsJson;
@@ -54,6 +67,21 @@ class CSI_PlayerControllerManager : ScriptComponent
 		super.OnDelete(owner);
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Ownership moved to another player, so this isn't the local controller: removes the local setup from OnPostInit.
+	//! \param[in] isChanging
+	//! \param[in] becameOwner
+	protected void OnOwnershipChanged(bool isChanging, bool becameOwner)
+	{
+		if (isChanging || becameOwner)
+			return;
+
+		InputManager inputManager = GetGame().GetInputManager();
+		if (inputManager)
+			inputManager.RemoveActionListener("CSI_PlayerSettingsMenu", EActionTrigger.DOWN, OpenLocalPlayerSettingsMenu);
+
+		m_SettingsJson = null;
+	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTING METHODS
@@ -78,7 +106,11 @@ class CSI_PlayerControllerManager : ScriptComponent
 		if (GetOwner() != GetGame().GetPlayerController())
 			return;
 
-		SCR_AIGroup group = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!groupsManager)
+			return;
+
+		SCR_AIGroup group = groupsManager.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
 		if (group && group.IsPlayerLeader(SCR_PlayerController.GetLocalPlayerId()))
 			GetGame().OpenGroupMenu();
 		else
