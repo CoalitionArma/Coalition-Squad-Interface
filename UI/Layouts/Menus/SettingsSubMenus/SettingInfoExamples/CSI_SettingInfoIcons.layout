@@ -3,10 +3,10 @@ FrameWidgetClass {
  Slot FrameWidgetSlot "{6A9C2E41B800002B}" {
   OffsetLeft 0
   OffsetTop 0
-  SizeX 480
-  OffsetRight -480
-  SizeY 200
-  OffsetBottom -200
+  SizeX 672
+  OffsetRight -672
+  SizeY 280
+  OffsetBottom -280
  }
  components {
   CSI_SettingInfoIconExamples "{6A9C2E41B8F00011}" {
@@ -21,10 +21,10 @@ FrameWidgetClass {
     OffsetLeft 0
     PositionY 0
     OffsetTop 0
-    SizeX 324
-    OffsetRight -324
-    SizeY 162
-    OffsetBottom -162
+    SizeX 453.6
+    OffsetRight -453.6
+    SizeY 226.8
+    OffsetBottom -226.8
     Alignment 0.5 0.5
    }
    {
@@ -32,14 +32,14 @@ FrameWidgetClass {
      Name "Icon0"
      Slot FrameWidgetSlot "{6A9C2E41B8000007}" {
       Anchor 0 0 0 0
-      PositionX 6
-      OffsetLeft 6
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -48
-      SizeY 42
-      OffsetBottom -48
+      PositionX 8.4
+      OffsetLeft 8.4
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -67.2
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -47,14 +47,14 @@ FrameWidgetClass {
      Name "Icon1"
      Slot FrameWidgetSlot "{6A9C2E41B8000009}" {
       Anchor 0 0 0 0
-      PositionX 60
-      OffsetLeft 60
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -102
-      SizeY 42
-      OffsetBottom -48
+      PositionX 84
+      OffsetLeft 84
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -142.8
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -62,14 +62,14 @@ FrameWidgetClass {
      Name "Icon2"
      Slot FrameWidgetSlot "{6A9C2E41B800000B}" {
       Anchor 0 0 0 0
-      PositionX 114
-      OffsetLeft 114
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -156
-      SizeY 42
-      OffsetBottom -48
+      PositionX 159.6
+      OffsetLeft 159.6
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -218.4
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -77,14 +77,14 @@ FrameWidgetClass {
      Name "Icon3"
      Slot FrameWidgetSlot "{6A9C2E41B800000D}" {
       Anchor 0 0 0 0
-      PositionX 168
-      OffsetLeft 168
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -210
-      SizeY 42
-      OffsetBottom -48
+      PositionX 235.2
+      OffsetLeft 235.2
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -294
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -92,14 +92,14 @@ FrameWidgetClass {
      Name "Icon4"
      Slot FrameWidgetSlot "{6A9C2E41B800000F}" {
       Anchor 0 0 0 0
-      PositionX 222
-      OffsetLeft 222
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -264
-      SizeY 42
-      OffsetBottom -48
+      PositionX 310.8
+      OffsetLeft 310.8
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -369.6
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -107,14 +107,14 @@ FrameWidgetClass {
      Name "Icon5"
      Slot FrameWidgetSlot "{6A9C2E41B8000011}" {
       Anchor 0 0 0 0
-      PositionX 276
-      OffsetLeft 276
-      PositionY 6
-      OffsetTop 6
-      SizeX 42
-      OffsetRight -318
-      SizeY 42
-      OffsetBottom -48
+      PositionX 386.4
+      OffsetLeft 386.4
+      PositionY 8.4
+      OffsetTop 8.4
+      SizeX 58.8
+      OffsetRight -445.2
+      SizeY 58.8
+      OffsetBottom -67.2
       Alignment 0 0
      }
     }
@@ -122,14 +122,14 @@ FrameWidgetClass {
      Name "Icon6"
      Slot FrameWidgetSlot "{6A9C2E41B8000013}" {
       Anchor 0 0 0 0
-      PositionX 6
-      OffsetLeft 6
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -48
-      SizeY 42
-      OffsetBottom -102
+      PositionX 8.4
+      OffsetLeft 8.4
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -67.2
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -137,14 +137,14 @@ FrameWidgetClass {
      Name "Icon7"
      Slot FrameWidgetSlot "{6A9C2E41B8000015}" {
       Anchor 0 0 0 0
-      PositionX 60
-      OffsetLeft 60
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -102
-      SizeY 42
-      OffsetBottom -102
+      PositionX 84
+      OffsetLeft 84
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -142.8
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -152,14 +152,14 @@ FrameWidgetClass {
      Name "Icon8"
      Slot FrameWidgetSlot "{6A9C2E41B8000017}" {
       Anchor 0 0 0 0
-      PositionX 114
-      OffsetLeft 114
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -156
-      SizeY 42
-      OffsetBottom -102
+      PositionX 159.6
+      OffsetLeft 159.6
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -218.4
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -167,14 +167,14 @@ FrameWidgetClass {
      Name "Icon9"
      Slot FrameWidgetSlot "{6A9C2E41B8000019}" {
       Anchor 0 0 0 0
-      PositionX 168
-      OffsetLeft 168
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -210
-      SizeY 42
-      OffsetBottom -102
+      PositionX 235.2
+      OffsetLeft 235.2
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -294
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -182,14 +182,14 @@ FrameWidgetClass {
      Name "Icon10"
      Slot FrameWidgetSlot "{6A9C2E41B800001B}" {
       Anchor 0 0 0 0
-      PositionX 222
-      OffsetLeft 222
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -264
-      SizeY 42
-      OffsetBottom -102
+      PositionX 310.8
+      OffsetLeft 310.8
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -369.6
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -197,14 +197,14 @@ FrameWidgetClass {
      Name "Icon11"
      Slot FrameWidgetSlot "{6A9C2E41B800001D}" {
       Anchor 0 0 0 0
-      PositionX 276
-      OffsetLeft 276
-      PositionY 60
-      OffsetTop 60
-      SizeX 42
-      OffsetRight -318
-      SizeY 42
-      OffsetBottom -102
+      PositionX 386.4
+      OffsetLeft 386.4
+      PositionY 84
+      OffsetTop 84
+      SizeX 58.8
+      OffsetRight -445.2
+      SizeY 58.8
+      OffsetBottom -142.8
       Alignment 0 0
      }
     }
@@ -212,14 +212,14 @@ FrameWidgetClass {
      Name "Icon12"
      Slot FrameWidgetSlot "{6A9C2E41B800001F}" {
       Anchor 0 0 0 0
-      PositionX 6
-      OffsetLeft 6
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -48
-      SizeY 42
-      OffsetBottom -156
+      PositionX 8.4
+      OffsetLeft 8.4
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -67.2
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }
@@ -227,14 +227,14 @@ FrameWidgetClass {
      Name "Icon13"
      Slot FrameWidgetSlot "{6A9C2E41B8000021}" {
       Anchor 0 0 0 0
-      PositionX 60
-      OffsetLeft 60
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -102
-      SizeY 42
-      OffsetBottom -156
+      PositionX 84
+      OffsetLeft 84
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -142.8
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }
@@ -242,14 +242,14 @@ FrameWidgetClass {
      Name "Icon14"
      Slot FrameWidgetSlot "{6A9C2E41B8000023}" {
       Anchor 0 0 0 0
-      PositionX 114
-      OffsetLeft 114
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -156
-      SizeY 42
-      OffsetBottom -156
+      PositionX 159.6
+      OffsetLeft 159.6
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -218.4
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }
@@ -257,14 +257,14 @@ FrameWidgetClass {
      Name "Icon15"
      Slot FrameWidgetSlot "{6A9C2E41B8000025}" {
       Anchor 0 0 0 0
-      PositionX 168
-      OffsetLeft 168
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -210
-      SizeY 42
-      OffsetBottom -156
+      PositionX 235.2
+      OffsetLeft 235.2
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -294
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }
@@ -272,14 +272,14 @@ FrameWidgetClass {
      Name "Icon16"
      Slot FrameWidgetSlot "{6A9C2E41B8000027}" {
       Anchor 0 0 0 0
-      PositionX 222
-      OffsetLeft 222
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -264
-      SizeY 42
-      OffsetBottom -156
+      PositionX 310.8
+      OffsetLeft 310.8
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -369.6
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }
@@ -287,14 +287,14 @@ FrameWidgetClass {
      Name "Icon17"
      Slot FrameWidgetSlot "{6A9C2E41B8000029}" {
       Anchor 0 0 0 0
-      PositionX 276
-      OffsetLeft 276
-      PositionY 114
-      OffsetTop 114
-      SizeX 42
-      OffsetRight -318
-      SizeY 42
-      OffsetBottom -156
+      PositionX 386.4
+      OffsetLeft 386.4
+      PositionY 159.6
+      OffsetTop 159.6
+      SizeX 58.8
+      OffsetRight -445.2
+      SizeY 58.8
+      OffsetBottom -218.4
       Alignment 0 0
      }
     }

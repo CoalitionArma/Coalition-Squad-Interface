@@ -33,7 +33,7 @@ VerticalLayoutWidgetClass {
     Padding 8 0 8 8
    }
    AllowHeightOverride 1
-   HeightOverride 200
+   HeightOverride 280
    {
     FrameWidgetClass "{6A9C2E41B7D60008}" {
      Name "SettingInfoPreview"
@@ -83,6 +83,19 @@ VerticalLayoutWidgetClass {
         OffsetRight 0
         OffsetBottom 0
        }
+      }
+      PanelWidgetClass "{6A9C2E41B8F00040}" {
+       Name "SettingInfoPreviewBorder"
+       Slot FrameWidgetSlot "{6A9C2E41B8F00041}" {
+        Anchor 0 0 1 1
+        OffsetLeft 0
+        OffsetTop 0
+        OffsetRight 0
+        OffsetBottom 0
+       }
+       Clipping False
+       Color 0.761 0.386 0.078 1
+       style outline_2px
       }
      }
     }

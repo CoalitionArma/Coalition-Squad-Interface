@@ -65,6 +65,20 @@ class CSI_SettingInfoHandler : ScriptedWidgetEventHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return the row's label as the tab shows it (vanilla SCR_ChangeableComponentBase.GetLabel), empty if it has none
+	string GetLabelText()
+	{
+		if (!m_Changeable)
+			return string.Empty;
+
+		TextWidget label = m_Changeable.GetLabel();
+		if (!label)
+			return string.Empty;
+
+		return label.GetText();
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] settingInfo
 	void CSI_SettingInfoHandler(string setting, CSI_SettingInfo settingInfo)
@@ -95,11 +109,14 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	protected TextWidget m_wDescription;
 
 	protected ref array<ref CSI_SettingInfoHandler> m_aHandlers = {};
+	protected ref map<string, string> m_mSettingLabels = new map<string, string>();	//!< setting name -> its row's label, the title ShowSetting shows
 
 	// Example components, owned by their widgets
 	protected CSI_SettingInfoHudExamples m_HudExamples;
 	protected CSI_SettingInfoIconExamples m_IconExamples;
 	protected CSI_SettingInfoNametagExamples m_NametagExamples;
+
+	protected static string s_sProfileName;	//!< cached by GetProfileName
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -128,6 +145,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			handler.Detach();
 
 		m_aHandlers.Clear();
+		m_mSettingLabels.Clear();
 
 		super.HandlerDeattached(w);
 	}
@@ -163,6 +181,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			CSI_SettingInfoHandler handler = new CSI_SettingInfoHandler(setting, this);
 			handler.Attach(settingWidget);
 			m_aHandlers.Insert(handler);
+
+			string label = handler.GetLabelText();
+			if (!label.IsEmpty())
+				m_mSettingLabels.Set(setting, label);
 		}
 	}
 
@@ -178,7 +200,12 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		if (!m_wName)
 			return;
 
-		m_wName.SetText(SCR_StringHelper.FormatValueNameToUserFriendly(setting));
+		// The row's label, like the tab shows it; the variable name made readable for a row without one
+		string name;
+		if (!m_mSettingLabels.Find(setting, name))
+			name = SCR_StringHelper.FormatValueNameToUserFriendly(setting);
+
+		m_wName.SetText(name);
 		m_wDescription.SetText(GetAttributeDescription(CSI_GameSettings, setting));
 
 		HideExamples();
@@ -461,6 +488,18 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
 		if (memberIDs.IsEmpty() && localPlayerID > 0)
 			memberIDs.Insert(localPlayerID);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Vanilla SCR_Global.GetProfileName, looked up once: without a profile name (e.g. in Workbench) it logs
+	//! "Profile - Using MachineName!" on every call, and the examples redraw on every hovered setting.
+	//! \return
+	static string GetProfileName()
+	{
+		if (s_sProfileName.IsEmpty())
+			s_sProfileName = SCR_Global.GetProfileName();
+
+		return s_sProfileName;
 	}
 
 	//------------------------------------------------------------------------------------------------

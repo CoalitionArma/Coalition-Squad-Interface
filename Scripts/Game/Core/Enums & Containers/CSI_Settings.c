@@ -46,7 +46,7 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
 
 	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, same as the m_iNametagFieldOfView slider
-	const static int NAMETAG_FIELD_OF_VIEW_MAX = 125;	//!< degrees, same as the m_iNametagFieldOfView slider
+	const static int NAMETAG_FIELD_OF_VIEW_MAX = 145;	//!< degrees, same as the m_iNametagFieldOfView slider
 	const static int NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX = 95;	//!< percent, same as the m_iNametagFieldOfViewSimplifiedPercentage slider
 	const static int RADAR_FIELD_OF_VIEW_MIN = 5;		//!< degrees, same as the m_iRadarFieldOfView slider
 	const static int RADAR_FIELD_OF_VIEW_MAX = 360;		//!< degrees, same as the m_iRadarFieldOfView slider; nobody fades at this value
@@ -134,99 +134,99 @@ class CSI_GameSettings : ModuleGameSettings
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	// General
-	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Shows each player's short rank before their name on the HUD, nametags and group menu.")]
+	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Shows each player's short rank before their name in the group display, nametags and group menu.")]
 	int m_bRankVisible;
 
-	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Hides the whole CSI HUD (compass, group display and stamina bar) until you hold the Reveal UI key.")]
+	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Hides the CSI HUD (compass, radar, group display and stamina bar) until you press the Reveal CSI HUD key, Insert by default.")]
 	int m_bAutoHideHUD;
 
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ERevealUIMode.HOLD), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ERevealUIMode), desc: "How the Reveal CSI HUD key brings back the hidden HUD. Hold: shown while you hold the key. Toggle: one press shows it, the next hides it.")]
 	int m_iRevealUIMode;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows a stamina bar in the bottom left corner whenever you're not at full stamina.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows a stamina bar in the bottom left corner while you're below full stamina. It turns from green to amber to red as you tire.")]
 	int m_bStaminaVisible;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Lists your group's members with their role icons beside the compass, coloured by fire team (groups of 2+).")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Lists your group's members beside the compass with their role icons, coloured by fire team, squad leader first. Shows in groups of 2 or more.")]
 	int m_bGroupVisible;
 
 	// Icons
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconTheme), desc: "Art style of the role icons (medic, MG, AT and more) on your HUD, radar, group menu and nametags.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconTheme), desc: "Art style of the role icons (medic, MG, AT and more) in the group display, radar, group menu and nametags.")]
 	int m_iIconTheme;
 
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconType.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconType), desc: "Regular shows the full themed icons; Inverted shows simpler inverted icons with an outline.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EIconType.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EIconType), desc: "Regular cuts each role symbol out of a solid circle; Inverted shows the symbol inside a ring. Used in the group display and on the radar.")]
 	int m_iIconType;
 
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EArrowTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EArrowTheme), desc: "Shape of the arrow around HUD and radar icons that shows where a player is facing.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EArrowTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EArrowTheme), desc: "Shape of the arrow around group display and radar icons. On the radar it points where each squadmate is facing.")]
 	int m_iArrowTheme;
 
 	// Nametags
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nametags above friendly players.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nametags on friendly players. Your own group's members are coloured by fire team.")]
 	int m_bNametagVisible;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the group name under other groups' nametags. Your own group's tags never show it.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows each player's group under their name: the group's custom name, or its callsign if it has none.")]
 	int m_bGroupInNametagVisible;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Hides nametags of players behind walls, terrain or vehicles.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Hides the nametags of players you can't see, such as behind terrain, walls or vehicles. Off shows them through everything.")]
 	int m_bNametagLOSVisible;
 
-	[Attribute(defvalue: SCR_Enum.GetDefault(ENameTagPosition.BODY), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(ENameTagPosition), desc: "Places nametags above the head or on the body.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(ENameTagPosition.BODY), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(ENameTagPosition), desc: "Puts nametags above each player's head or on their torso. Nametag height fine-tunes it.")]
 	int m_iNametagPosition;
 
-	[Attribute(defvalue: "3", uiwidget: UIWidgets.Slider, params: "0 5 1", desc: "Raises or lowers the nametag from that position.")]
+	[Attribute(defvalue: "3", uiwidget: UIWidgets.Slider, params: "0 5 1", desc: "Moves the nametag in 10 cm steps: higher values put it farther above the head, or higher up the torso.")]
 	int m_iNametagPositionOffset;
 
-	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "How far away friendly nametags appear.")]
+	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "How far away, in metres, friendly nametags show.")]
 	int m_iNametagRange;
 
-	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "The farthest part of the range shows only the role icon, not the name.")]
+	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Distant tags show only the role icon, not the name. Higher values start this closer to you; 0% turns it off. Only works with Role icons shown.")]
 	int m_iNametagRangeSimplifiedPercentage;
 
-	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while looking through scopes or binoculars.")]
+	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while you look through a scope or binoculars. 100% keeps the normal range.")]
 	int m_iNametagMagnificationMultiplication;
 
-	[Attribute(defvalue: "125", uiwidget: UIWidgets.Slider, params: "5 125 5", desc: "How far from where you're looking a teammate can be and still show a nametag. The angle narrows with distance.")]
+	[Attribute(defvalue: "125", uiwidget: UIWidgets.Slider, params: "5 145 5", desc: "Nametags show only within this angle around where you're looking. It's full width up close and narrows to nothing at the edge of the range.")]
 	int m_iNametagFieldOfView;
 
-	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "0 95 1", desc: "The outer part of the field of view shows only the role icon, not the name.")]
+	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "0 95 1", desc: "Tags in this outer part of the field of view show only the role icon, not the name. Only works with Role icons shown.")]
 	int m_iNametagFieldOfViewSimplifiedPercentage;
 
 	[Attribute(defvalue: "40", uiwidget: UIWidgets.Slider, params: "0 100 20", desc: "Size of nametag text and icons.")]
 	int m_iNametagScale;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the player's role icon on their nametag.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows each player's role icon on their nametag, plus unconscious, dead and talking icons. The icon-only settings need it.")]
 	int m_bRoleIconInNametagVisible;
 
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ENametagIconPosition.LEFT), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ENametagIconPosition), desc: "Puts the role icon left of, above, or right of the name.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ENametagIconPosition.LEFT), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ENametagIconPosition), desc: "Puts the role icon left of the name, above it or right of it.")]
 	int m_iNametagRoleIconPosition;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Fades nametags in dark scenes such as night, and brightens them under NVGs.")]
 	int m_bNametagBrightnessDimming;
 
-	// Compass & Radar
+	// Compass & radar
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ECompassTheme.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ECompassTheme), desc: "Style of the compass. Only Regular exists so far.")]
 	int m_iCompassTheme;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the compass at the bottom of the screen.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the compass at the bottom of the screen, turning as you look around.")]
 	int m_bCompassVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows your heading in degrees above the compass.")]
 	int m_bBearingVisible;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nearby group members inside the compass, within the radar ranges below.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nearby squadmates inside the compass, with you in the middle and where you're looking at the top. Shows in groups of 2 or more.")]
 	int m_bRadarVisible;
 
-	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away squadmates show on the radar while you're on foot.")]
+	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away, in metres, squadmates show on the radar while you're on foot. Icons fade out near the edge.")]
 	int m_iRadarRangeOnFoot;
 
-	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away squadmates show on the radar while you're in a vehicle.")]
+	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in metres, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
 	int m_iRadarRangeInVehicle;
 
-	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Size of squadmate icons on the radar.")]
+	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Size of squadmate icons on the radar. 100% is the normal size.")]
 	int m_iRadarIconSize;
 
-	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking slowly fade from the radar. 360° shows everyone.")]
+	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking fade from the radar over 2 seconds. 360° shows everyone.")]
 	int m_iRadarFieldOfView;
 
-	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Only the arrow turns to show where squadmates face; the icon stays upright.")]
+	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright. Off: the whole icon turns.")]
 	int m_bRadarIconArrowsRotate;
 }

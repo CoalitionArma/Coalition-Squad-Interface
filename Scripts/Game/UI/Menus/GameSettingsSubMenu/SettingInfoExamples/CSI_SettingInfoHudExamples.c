@@ -1,29 +1,111 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-13
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General and Compass & Radar settings. The layout holds
+//!	\Description: 	A FrameSlot's anchors, position and size, saved so a widget the settings examples move around can be put
+//! 				back where its layout has it.
+//!
+//------------------------------------------------------------------------------------------------
+class CSI_FrameSlotSnapshot
+{
+	protected vector m_vAnchorMin;
+	protected vector m_vAnchorMax;
+	protected vector m_vPos;
+	protected vector m_vSize;
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] widget a widget in a FrameWidget
+	void Save(notnull Widget widget)
+	{
+		m_vAnchorMin = FrameSlot.GetAnchorMin(widget);
+		m_vAnchorMax = FrameSlot.GetAnchorMax(widget);
+		m_vPos = FrameSlot.GetPos(widget);
+		m_vSize = FrameSlot.GetSize(widget);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] widget the widget it was saved from
+	void Restore(notnull Widget widget)
+	{
+		FrameSlot.SetAnchorMin(widget, m_vAnchorMin[0], m_vAnchorMin[1]);
+		FrameSlot.SetAnchorMax(widget, m_vAnchorMax[0], m_vAnchorMax[1]);
+		FrameSlot.SetPos(widget, m_vPos[0], m_vPos[1]);
+		FrameSlot.SetSize(widget, m_vSize[0], m_vSize[1]);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	vector GetPos()
+	{
+		return m_vPos;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	vector GetSize()
+	{
+		return m_vSize;
+	}
+}
+
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-14
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General and Compass & radar settings. The layout holds
 //! 				the real CSI_HUD.layout, whose components are never updated; this sets its widgets the way CSI_Compass,
-//! 				CSI_Group, CSI_Stamina and CSI_Radar would, with the values selected in the settings tab, and adds the
-//! 				radar's field of view edges.
+//! 				CSI_Group, CSI_Stamina and CSI_Radar would, with the values selected in the settings tab. It creates its own
+//! 				group rows and radar icons (as CSI_Group and CSI_Radar do), adds the radar's field of view edges, shows a
+//! 				20 player squad for Group display, and enlarges the compass for the Compass & radar examples.
+//! 				Missing HUD widgets are logged as warnings when it's created.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 {
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 CONSTANTS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	// General. Pixel values below are 1.4x the real HUD's, as CSI_SettingInfoHud.layout draws the HUD 1.4x.
 	protected static const int PREVIEW_HEADING = 45;			//!< compass heading the examples show
 	protected static const float PREVIEW_STAMINA = 0.75;
 	protected static const float AUTO_HIDDEN_OPACITY = 0.2;
-	protected static const int GROUP_ROWS = 3;					//!< group display rows the examples fill
-	protected static const float RADAR_ICON_SIZE = 16;			//!< px at 100% RADAR_ICON_SIZE, same as CSI_Radar.ICON_WIDTH_AND_HEIGHT
+
+	// Group display
+	protected static const int GROUP_ROWS = 3;					//!< group display rows the Auto-hide HUD example fills
+	protected static const int GROUP_GRID_ROWS = 5;				//!< rows per column of CSI_Group.layout's grid, filled top to bottom like CSI_Group
+	protected static const int GROUP_GRID_COLUMNS = 5;			//!< columns of CSI_Group.layout's grid
+	protected static const int GROUP_NAME_FONT_SIZE = 14;		//!< CSI_Player.layout's name size (10) x 1.4
+	protected static const float SQUAD_VIEW_MARGIN = 0.03;		//!< squad view: part of the box's width left free at the far end of the squad
+
+	// Group display example: a 20 player squad led by the local player, sorted the way CSI_HUDSystem sorts a
+	// group (SL, then the SL's colour team, then the other teams, each team leader first) and filled a column per team
+	protected static const ref array<CSI_EIcon> DEMO_SQUAD_ROLES = {
+		CSI_EIcon.SL, CSI_EIcon.TL, CSI_EIcon.RTO, CSI_EIcon.MG, CSI_EIcon.MEDIC,
+		CSI_EIcon.TL, CSI_EIcon.MG, CSI_EIcon.GREN, CSI_EIcon.AT, CSI_EIcon.MAN,
+		CSI_EIcon.TL, CSI_EIcon.MG, CSI_EIcon.GREN, CSI_EIcon.ENG, CSI_EIcon.MEDIC,
+		CSI_EIcon.TL, CSI_EIcon.SNIPER, CSI_EIcon.GREN, CSI_EIcon.DEMO, CSI_EIcon.AT};
+	protected static const ref array<CSI_EColorTeam> DEMO_SQUAD_TEAMS = {
+		CSI_EColorTeam.NONE, CSI_EColorTeam.RED, CSI_EColorTeam.RED, CSI_EColorTeam.RED, CSI_EColorTeam.RED,
+		CSI_EColorTeam.BLUE, CSI_EColorTeam.BLUE, CSI_EColorTeam.BLUE, CSI_EColorTeam.BLUE, CSI_EColorTeam.BLUE,
+		CSI_EColorTeam.YELLOW, CSI_EColorTeam.YELLOW, CSI_EColorTeam.YELLOW, CSI_EColorTeam.YELLOW, CSI_EColorTeam.YELLOW,
+		CSI_EColorTeam.GREEN, CSI_EColorTeam.GREEN, CSI_EColorTeam.GREEN, CSI_EColorTeam.GREEN, CSI_EColorTeam.GREEN};
+	//! Names for placeholder squadmates (everyone after the local player), shuffled when the tab opens
+	protected static const ref array<string> DEMO_SQUAD_NAMES = {
+		"Salami", "RandAlThor", "Shimavitz", "Tanaka", "Mike", "Klub", "Dagger", "Kaltag", "Lazz", "Embrodak",
+		"Reckless", "Jlaw", "SkurtBird", "Brooks", "RebelCid", "Arkangel", "The Canadian", "Fontaine", "Trist", "Svir"};
+
+	// Compass and radar
+	protected static const float COMPASS_FOCUS_ZOOM = 1.25;		//!< Compass & radar examples: compass this much larger than its layout slot, centred in the box
+	protected static const float RADAR_ICON_SIZE = 22.4;		//!< px at 100% RADAR_ICON_SIZE: CSI_Radar.ICON_WIDTH_AND_HEIGHT (16) x 1.4
 	protected static const int RADAR_ICON_COUNT = 4;			//!< radar icons the examples can show at once
-	protected static const float ARROW_DEMO_ICON_SIZE = 40;
+	protected static const float RADAR_RANGE_PX = 67.82;		//!< px from the centre CSI_Radar puts the edge of its range (132 / 2.725) x 1.4
+	protected static const float ARROW_DEMO_ICON_SIZE = 56;
 	protected static const float ARROW_DEMO_HEADING = 60;
 
-	// Squadmates in the radar range and field of view examples: facings and placeholder colour teams
+	// Squadmates in the radar examples: facings and placeholder colour teams
 	protected static const ref array<float> DEMO_MATE_FACINGS = {10, -30, 120, 200};
 	protected static const ref array<CSI_EColorTeam> DEMO_MATE_TEAMS = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.GREEN, CSI_EColorTeam.YELLOW};
-	protected static const float RADAR_RANGE_PX = 48.44;		//!< px from the centre CSI_Radar puts the edge of its range (132 / 2.725)
 
 	// Radar range examples: squadmates at these bearings (degrees from straight ahead, + to the right) and real distances
 	// (metres), placed like CSI_Radar for the selected range; those beyond it aren't on the radar
@@ -31,28 +113,40 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	protected static const ref array<float> RANGE_MATE_DISTANCES_ON_FOOT = {8, 18, 35, 70};
 	protected static const ref array<float> RANGE_MATE_DISTANCES_IN_VEHICLE = {1, 2.5, 5, 8};
 
-	// Radar field of view example: squadmates at these bearings and distances (px from the centre)
+	// Radar field of view example: squadmates at these bearings and distances (px from the centre), and the dotted edges
 	protected static const ref array<float> FOV_MATE_BEARINGS = {0, -40, 95, 165};
-	protected static const ref array<float> FOV_MATE_DISTANCES = {34, 26, 30, 36};
+	protected static const ref array<float> FOV_MATE_DISTANCES = {47.6, 36.4, 42, 50.4};
 	protected static const float FOV_FADED_OPACITY = 0.15;		//!< squadmates outside the field of view, shown fading out
-	protected static const float FOV_EDGE_START = 8;			//!< px from the centre to the first dot of each edge
-	protected static const float FOV_EDGE_LENGTH = 46;			//!< px from the centre to the last dot, just inside the radar's range (CSI_Radar puts the range ~48 px out)
+	protected static const float FOV_EDGE_START = 11.2;			//!< px from the centre to the first dot of each edge
+	protected static const float FOV_EDGE_LENGTH = 64.4;		//!< px from the centre to the last dot, just inside the radar's range (RADAR_RANGE_PX)
 	protected static const int FOV_EDGE_DOTS = 8;				//!< dots per edge
-	protected static const float FOV_EDGE_DOT_SIZE = 3;			//!< px
+	protected static const float FOV_EDGE_DOT_SIZE = 4.2;		//!< px
 	protected static const ResourceName FOV_EDGE_DOT_TEXTURE = "{73B3D8BBB785B5B9}UI/Textures/Common/circleFull.edds";	//!< vanilla filled circle
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RUNTIME VARIABLES
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected Widget m_wSettingsRoot;	//!< CSI settings tab root, for the selected values
 
+	// The HUD's widgets, found like CSI_HUD and its elements find them
 	protected Widget m_wHud;
 	protected Widget m_wCompass;
 	protected ImageWidget m_wCompassImage;
 	protected TextWidget m_wBearing;
+	protected Widget m_wRadarFrame;
 	protected Widget m_wGroup;
 	protected Widget m_wStamina;
 	protected ProgressBarWidget m_wStaminaBar;
 	protected CSI_Stamina m_Stamina;
-	protected Widget m_wRadarFrame;
-	protected ref array<Widget> m_aGroupRows = {};
+
+	// Where CSI_SettingInfoHud.layout places the compass and group display, restored after an example moves them
+	protected ref CSI_FrameSlotSnapshot m_CompassLayoutSlot = new CSI_FrameSlotSnapshot();
+	protected ref CSI_FrameSlotSnapshot m_GroupLayoutSlot = new CSI_FrameSlotSnapshot();
+	protected float m_fCompassZoom = 1;		//!< COMPASS_FOCUS_ZOOM while the compass is focused, else 1; scales the radar's px values
+
+	protected ref array<Widget> m_aGroupRows = {};				//!< created in the HUD's group grid, like CSI_Group does
+	protected ref array<string> m_aDemoSquadNames = {};			//!< DEMO_SQUAD_NAMES shuffled when the tab opens
 	protected ref array<Widget> m_aRadarIcons = {};				//!< created in the HUD's radar frame, like CSI_Radar does
 	protected ref array<Widget> m_aRadarFieldOfViewDots = {};	//!< both field of view edges' dots, created on first show
 
@@ -65,16 +159,59 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	{
 		super.HandlerAttached(w);
 
-		// Same lookups as CSI_HUD and its elements
+		if (!FindHudWidgets(w))
+			return;
+
+		ShuffleDemoSquadNames();
+
+		WorkspaceWidget workspace = GetGame().GetWorkspace();
+		if (!workspace)
+			return;
+
+		CreateGroupRows(workspace);
+		CreateRadarIcons(workspace);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void HandlerDeattached(Widget w)
+	{
+		// A pending retry of PlaceSquadView
+		if (GetGame())
+			GetGame().GetCallqueue().Remove(PlaceSquadView);
+
+		super.HandlerDeattached(w);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] settingsRoot CSI settings tab root
+	void SetSettingsRoot(Widget settingsRoot)
+	{
+		m_wSettingsRoot = settingsRoot;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Finds the HUD's widgets with the same lookups as CSI_HUD and its elements, and saves where the layout places the
+	//! compass and group display.
+	//! \param[in] w this component's root
+	//! \return false if the layout has no HUD
+	protected bool FindHudWidgets(notnull Widget w)
+	{
 		m_wHud = w.FindAnyWidget("Hud");
 		if (!m_wHud)
-			return;
+		{
+			Print("CSI_SettingInfoHudExamples: 'Hud' (CSI_HUD.layout) not found, the HUD examples won't show", LogLevel.WARNING);
+			return false;
+		}
 
 		m_wStamina = m_wHud.FindAnyWidget("Stamina");
 		if (m_wStamina)
 		{
 			m_wStaminaBar = ProgressBarWidget.Cast(m_wStamina.FindAnyWidget("StamBar"));
 			m_Stamina = CSI_Stamina.Cast(m_wStamina.FindHandler(CSI_Stamina));
+		}
+		else
+		{
+			Print("CSI_SettingInfoHudExamples: HUD 'Stamina' not found", LogLevel.WARNING);
 		}
 
 		m_wCompass = m_wHud.FindAnyWidget("Compass");
@@ -83,22 +220,61 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			m_wCompassImage = ImageWidget.Cast(m_wCompass.FindAnyWidget("Compass"));
 			m_wBearing = TextWidget.Cast(m_wCompass.FindAnyWidget("Bearing"));
 			m_wRadarFrame = m_wCompass.FindAnyWidget("RadarFrame");
+			m_CompassLayoutSlot.Save(m_wCompass);
+		}
+		else
+		{
+			Print("CSI_SettingInfoHudExamples: HUD 'Compass' not found", LogLevel.WARNING);
 		}
 
 		m_wGroup = m_wHud.FindAnyWidget("Group");
 		if (m_wGroup)
+			m_GroupLayoutSlot.Save(m_wGroup);
+		else
+			Print("CSI_SettingInfoHudExamples: HUD 'Group' not found", LogLevel.WARNING);
+
+		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Creates the group rows from CSI_Player.layout in the group grid, a column at a time like CSI_Group: enough for the
+	//! Auto-hide HUD example and the Group display squad.
+	//! \param[in] workspace
+	protected void CreateGroupRows(notnull WorkspaceWidget workspace)
+	{
+		Widget groupGrid;
+		if (m_wGroup)
+			groupGrid = m_wGroup.FindAnyWidget("GroupGridLayout");
+
+		if (!groupGrid)
 		{
-			for (int rowIndex = 0; rowIndex < GROUP_ROWS; rowIndex++)
-			{
-				Widget row = m_wGroup.FindAnyWidget("Player" + rowIndex);
-				if (row)
-					m_aGroupRows.Insert(row);
-			}
+			Print("CSI_SettingInfoHudExamples: group grid 'GroupGridLayout' not found, the group examples won't show", LogLevel.WARNING);
+			return;
 		}
 
-		WorkspaceWidget workspace = GetGame().GetWorkspace();
-		if (!m_wRadarFrame || !workspace)
+		int rowCount = Math.Max(GROUP_ROWS, DEMO_SQUAD_ROLES.Count());
+		for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+		{
+			Widget row = workspace.CreateWidgets(CSI_UIHelper.CSI_PLAYER_LAYOUT, groupGrid);
+			if (!row)
+				continue;
+
+			GridSlot.SetRow(row, rowIndex % GROUP_GRID_ROWS);
+			GridSlot.SetColumn(row, rowIndex / GROUP_GRID_ROWS);
+			m_aGroupRows.Insert(row);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Creates RADAR_ICON_COUNT hidden icons from CSI_Icon.layout in the radar frame, like CSI_Radar does.
+	//! \param[in] workspace
+	protected void CreateRadarIcons(notnull WorkspaceWidget workspace)
+	{
+		if (!m_wRadarFrame)
+		{
+			Print("CSI_SettingInfoHudExamples: compass 'RadarFrame' not found, the radar examples won't show icons", LogLevel.WARNING);
 			return;
+		}
 
 		for (int radarIndex = 0; radarIndex < RADAR_ICON_COUNT; radarIndex++)
 		{
@@ -112,14 +288,25 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] settingsRoot CSI settings tab root
-	void SetSettingsRoot(Widget settingsRoot)
+	//! Fisher-Yates shuffle of DEMO_SQUAD_NAMES, so the squad gets a different mix of names each time the tab opens.
+	protected void ShuffleDemoSquadNames()
 	{
-		m_wSettingsRoot = settingsRoot;
+		foreach (string demoName : DEMO_SQUAD_NAMES)
+		{
+			m_aDemoSquadNames.Insert(demoName);
+		}
+
+		for (int nameIndex = m_aDemoSquadNames.Count() - 1; nameIndex > 0; nameIndex--)
+		{
+			int swapIndex = Math.RandomInt(0, nameIndex + 1);
+			string swapName = m_aDemoSquadNames[nameIndex];
+			m_aDemoSquadNames[nameIndex] = m_aDemoSquadNames[swapIndex];
+			m_aDemoSquadNames[swapIndex] = swapName;
+		}
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 ELEMENT SPECIFIC METHODS
+//	 EXAMPLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
@@ -130,19 +317,61 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	bool ShowExample(string setting, out string caption)
 	{
 		int value = GetValue(setting);
+		if (ShowGeneralExample(setting, value, caption))
+			return true;
 
-		// General
+		return ShowCompassAndRadarExample(setting, value, caption);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	void HideExample()
+	{
+		if (GetGame())
+			GetGame().GetCallqueue().Remove(PlaceSquadView);
+
+		if (m_wRoot)
+			m_wRoot.SetVisible(false);
+
+		foreach (Widget radarIcon : m_aRadarIcons)
+		{
+			radarIcon.SetVisible(false);
+		}
+
+		foreach (Widget dot : m_aRadarFieldOfViewDots)
+		{
+			dot.SetVisible(false);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value the setting's value in the tab
+	//! \param[out] caption
+	//! \return false if the setting isn't one of the General settings shown here
+	protected bool ShowGeneralExample(string setting, int value, out string caption)
+	{
 		if (setting == CSI_GameSettings.AUTO_HIDE_HUD)
 		{
 			if (value)
 			{
 				ShowConfiguredHud(AUTO_HIDDEN_OPACITY);
-				caption = "Hidden until you hold Reveal UI";
+				caption = GetRevealCaption();
 				return true;
 			}
 
 			ShowConfiguredHud(1);
 			caption = "Always shown";
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.REVEAL_UI_MODE)
+		{
+			ShowConfiguredHud(AUTO_HIDDEN_OPACITY);
+			if (!GetValue(CSI_GameSettings.AUTO_HIDE_HUD))
+				caption = "Auto-hide HUD is off";
+			else
+				caption = GetRevealCaption();
+
 			return true;
 		}
 
@@ -161,17 +390,31 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.GROUP_VISIBLE)
 		{
-			ShowHud(true, value, false, 1);
 			if (!value)
+			{
+				ShowHud(true, false, false, 1);
 				caption = "Hidden";
+				return true;
+			}
 
+			ShowDemoSquad();
 			return true;
 		}
 
-		// Compass & Radar
+		return false;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! The Compass & radar examples show the compass enlarged and centred (ShowHud's focusCompass).
+	//! \param[in] setting CSI_GameSettings name
+	//! \param[in] value the setting's value in the tab
+	//! \param[out] caption
+	//! \return false if the setting isn't one of the Compass & radar settings
+	protected bool ShowCompassAndRadarExample(string setting, int value, out string caption)
+	{
 		if (setting == CSI_GameSettings.COMPASS_THEME || setting == CSI_GameSettings.COMPASS_VISIBLE || setting == CSI_GameSettings.BEARING_VISIBLE)
 		{
-			ShowHud(true, false, false, 1);
+			ShowHud(true, false, false, 1, true);
 			if (setting != CSI_GameSettings.COMPASS_THEME && !value)
 				caption = "Hidden";
 
@@ -180,7 +423,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.RADAR_VISIBLE || setting == CSI_GameSettings.RADAR_ICON_SIZE)
 		{
-			ShowHud(true, false, false, 1);
+			ShowHud(true, false, false, 1, true);
 			if (setting == CSI_GameSettings.RADAR_VISIBLE && !value)
 			{
 				caption = "Hidden";
@@ -193,10 +436,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.RADAR_RANGE_ON_FOOT || setting == CSI_GameSettings.RADAR_RANGE_IN_VEHICLE)
 		{
-			ShowHud(true, false, false, 1);
+			ShowHud(true, false, false, 1, true);
 			if (!GetValue(CSI_GameSettings.RADAR_VISIBLE))
 			{
-				caption = "Needs Radar Visible";
+				caption = "Radar is hidden";
 				return true;
 			}
 
@@ -218,10 +461,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.RADAR_FIELD_OF_VIEW)
 		{
-			ShowHud(true, false, false, 1);
+			ShowHud(true, false, false, 1, true);
 			if (!GetValue(CSI_GameSettings.RADAR_VISIBLE))
 			{
-				caption = "Needs Radar Visible";
+				caption = "Radar is hidden";
 				return true;
 			}
 
@@ -237,7 +480,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE)
 		{
-			ShowHud(true, false, false, 1);
+			ShowHud(true, false, false, 1, true);
 			ShowArrowsRotateDemo(value);
 			if (value)
 				caption = "Only the arrow turns; the icon stays upright";
@@ -250,18 +493,9 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		return false;
 	}
 
-	//------------------------------------------------------------------------------------------------
-	void HideExample()
-	{
-		if (m_wRoot)
-			m_wRoot.SetVisible(false);
-
-		foreach (Widget radarIcon : m_aRadarIcons)
-			radarIcon.SetVisible(false);
-
-		foreach (Widget dot : m_aRadarFieldOfViewDots)
-			dot.SetVisible(false);
-	}
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 HUD
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	//! The HUD as the tab sets it up: compass, plus group display and stamina bar if they're enabled.
@@ -272,12 +506,14 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows HUD elements filled in with the tab's settings.
+	//! Shows HUD elements filled in with the tab's settings, the compass and group display where the layout places them
+	//! unless focusCompass.
 	//! \param[in] showCompass compass element (compass and bearing follow their own settings)
 	//! \param[in] showGroup
 	//! \param[in] showStamina
 	//! \param[in] opacity
-	protected void ShowHud(bool showCompass, bool showGroup, bool showStamina, float opacity)
+	//! \param[in] focusCompass enlarge the compass and centre it in the box (Compass & radar examples)
+	protected void ShowHud(bool showCompass, bool showGroup, bool showStamina, float opacity, bool focusCompass = false)
 	{
 		if (!m_wHud)
 			return;
@@ -287,6 +523,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (m_wCompass)
 		{
+			FocusCompass(showCompass && focusCompass);
 			m_wCompass.SetVisible(showCompass);
 			if (showCompass)
 				UpdateCompass();
@@ -294,6 +531,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		if (m_wGroup)
 		{
+			m_GroupLayoutSlot.Restore(m_wGroup);
 			m_wGroup.SetVisible(showGroup);
 			if (showGroup)
 				UpdateGroup();
@@ -305,6 +543,29 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			if (showStamina)
 				UpdateStamina();
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Compass & radar examples show the compass COMPASS_FOCUS_ZOOM larger, centred in the box; the others keep its place
+	//! in CSI_SettingInfoHud.layout, at the bottom beside the group display.
+	//! \param[in] focus
+	protected void FocusCompass(bool focus)
+	{
+		if (!focus)
+		{
+			m_fCompassZoom = 1;
+			m_CompassLayoutSlot.Restore(m_wCompass);
+			return;
+		}
+
+		m_fCompassZoom = COMPASS_FOCUS_ZOOM;
+		vector layoutSize = m_CompassLayoutSlot.GetSize();
+		float width = layoutSize[0] * COMPASS_FOCUS_ZOOM;
+		float height = layoutSize[1] * COMPASS_FOCUS_ZOOM;
+		FrameSlot.SetAnchorMin(m_wCompass, 0.5, 0.5);
+		FrameSlot.SetAnchorMax(m_wCompass, 0.5, 0.5);
+		FrameSlot.SetPos(m_wCompass, -width * 0.5, -height * 0.5);
+		FrameSlot.SetSize(m_wCompass, width, height);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -329,42 +590,6 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills the first group display rows like CSI_Player and CSI_Icon do: the local group's members (or the local
-	//! player and placeholders outside a group), each with their icon and colour team.
-	protected void UpdateGroup()
-	{
-		array<int> memberIDs = {};
-		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, GROUP_ROWS);
-
-		// Placeholder colour teams show how teams are coloured when there's no real group
-		array<CSI_EColorTeam> placeholderTeams = {CSI_EColorTeam.RED, CSI_EColorTeam.RED, CSI_EColorTeam.BLUE};
-
-		foreach (int i, Widget row : m_aGroupRows)
-		{
-			int playerID = 0;
-			if (memberIDs.IsIndexValid(i))
-				playerID = memberIDs[i];
-
-			string fallbackName = "Squadmate";
-			if (i == 0)
-				fallbackName = SCR_Global.GetProfileName();
-
-			CSI_EColorTeam colorTeam = CSI_SettingInfo.GetPlayerColorTeam(playerID, placeholderTeams[i]);
-
-			TextWidget name = TextWidget.Cast(row.FindAnyWidget("PlayerName"));
-			if (name)
-			{
-				name.SetText(CSI_SettingInfo.GetPreviewName(m_wSettingsRoot, playerID, fallbackName));
-				name.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-			}
-
-			// Keep the row's own icon size (0)
-			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, row.FindAnyWidget("Icon"), 0, CSI_SettingInfo.GetPlayerIcon(playerID), colorTeam, 0, 0, 1);
-			row.SetVisible(true);
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------
 	//! Sets the stamina bar like CSI_Stamina does at PREVIEW_STAMINA, fully faded in.
 	protected void UpdateStamina()
 	{
@@ -376,6 +601,174 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return how the tab's REVEAL_UI_MODE brings the auto-hidden HUD back
+	protected string GetRevealCaption()
+	{
+		if (GetValue(CSI_GameSettings.REVEAL_UI_MODE) == CSI_ERevealUIMode.TOGGLE)
+			return "Hidden until you press Reveal UI; press it again to hide";
+
+		return "Hidden until you hold Reveal UI";
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 GROUP DISPLAY
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
+	//! Fills the first GROUP_ROWS rows: the local group's members (or the local player and placeholders outside a group),
+	//! each with their icon and colour team.
+	protected void UpdateGroup()
+	{
+		array<int> memberIDs = {};
+		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, GROUP_ROWS);
+
+		// Placeholder colour teams show how teams are coloured when there's no real group
+		array<CSI_EColorTeam> placeholderTeams = {CSI_EColorTeam.RED, CSI_EColorTeam.RED, CSI_EColorTeam.BLUE};
+
+		foreach (int i, Widget row : m_aGroupRows)
+		{
+			// The rest of the rows are for the Group display example's squad
+			if (i >= GROUP_ROWS)
+			{
+				row.SetVisible(false);
+				continue;
+			}
+
+			int playerID = 0;
+			if (memberIDs.IsIndexValid(i))
+				playerID = memberIDs[i];
+
+			CSI_EColorTeam colorTeam = CSI_SettingInfo.GetPlayerColorTeam(playerID, placeholderTeams[i]);
+			FillGroupRow(row, playerID, GetPlaceholderName(i), CSI_SettingInfo.GetPlayerIcon(playerID), colorTeam);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Group display: a full squad (DEMO_SQUAD_ROLES, DEMO_SQUAD_TEAMS) led by the local player beside half the
+	//! compass (PlaceSquadView).
+	protected void ShowDemoSquad()
+	{
+		ShowHud(true, true, false, 1);
+
+		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
+		foreach (int i, Widget row : m_aGroupRows)
+		{
+			if (!DEMO_SQUAD_ROLES.IsIndexValid(i) || !DEMO_SQUAD_TEAMS.IsIndexValid(i))
+			{
+				row.SetVisible(false);
+				continue;
+			}
+
+			// The local player leads the squad
+			int playerID;
+			if (i == 0)
+				playerID = localPlayerID;
+
+			FillGroupRow(row, playerID, GetPlaceholderName(i), DEMO_SQUAD_ROLES[i], DEMO_SQUAD_TEAMS[i]);
+		}
+
+		PlaceSquadView();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Fills a group row like CSI_Player and CSI_Icon do and shows it.
+	//! \param[in] row CSI_Player.layout row
+	//! \param[in] playerID 0 for a placeholder
+	//! \param[in] fallbackName shown without a player name
+	//! \param[in] role
+	//! \param[in] colorTeam
+	protected void FillGroupRow(notnull Widget row, int playerID, string fallbackName, CSI_EIcon role, CSI_EColorTeam colorTeam)
+	{
+		TextWidget name = TextWidget.Cast(row.FindAnyWidget("PlayerName"));
+		if (name)
+		{
+			name.SetText(CSI_SettingInfo.GetPreviewName(m_wSettingsRoot, playerID, fallbackName));
+			name.SetExactFontSize(GROUP_NAME_FONT_SIZE);
+			name.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+		}
+
+		// Keep the row's own icon size (0)
+		CSI_SettingInfo.ShowIcon(m_wSettingsRoot, row.FindAnyWidget("Icon"), 0, role, colorTeam, 0, 0, 1);
+		row.SetVisible(true);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] rowIndex
+	//! \return the local player's profile name for the first row, else the next of the shuffled DEMO_SQUAD_NAMES
+	protected string GetPlaceholderName(int rowIndex)
+	{
+		if (rowIndex == 0)
+			return CSI_SettingInfo.GetProfileName();
+
+		if (m_aDemoSquadNames.IsEmpty())
+			return "Squadmate";
+
+		return m_aDemoSquadNames[(rowIndex - 1) % m_aDemoSquadNames.Count()];
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Squad view: the compass and group display as the layout places them relative to each other, scaled down to fit
+	//! the squad's columns in the box and centred in its height, with the compass cut in half at the box's left edge.
+	//! Needs the box's width, so it waits for the layout like CSI_SettingInfoNametagExamples.DrawFieldOfViewCanvas.
+	protected void PlaceSquadView()
+	{
+		GetGame().GetCallqueue().Remove(PlaceSquadView);
+
+		if (!m_wRoot || !m_wRoot.IsVisible() || !m_wCompass || !m_wGroup)
+			return;
+
+		WorkspaceWidget workspace = GetGame().GetWorkspace();
+		if (!workspace)
+			return;
+
+		float rootWidth, rootHeight;
+		m_wRoot.GetScreenSize(rootWidth, rootHeight);
+		float pixelsPerUnit = workspace.DPIScale(1);
+		if (rootWidth <= 0 || pixelsPerUnit <= 0)
+		{
+			GetGame().GetCallqueue().CallLater(PlaceSquadView, 10);
+			return;
+		}
+
+		vector compassPos = m_CompassLayoutSlot.GetPos();
+		vector compassSize = m_CompassLayoutSlot.GetSize();
+		vector groupPos = m_GroupLayoutSlot.GetPos();
+		vector groupSize = m_GroupLayoutSlot.GetSize();
+
+		// The layout centres the compass on the group display's anchor and puts the group groupPos[0] to its right
+		int columns = Math.Ceil(DEMO_SQUAD_ROLES.Count() / (float)GROUP_GRID_ROWS);
+		float squadWidth = groupPos[0] + groupSize[0] * columns / GROUP_GRID_COLUMNS;
+		float scale = Math.Min(1, rootWidth / pixelsPerUnit * (1 - SQUAD_VIEW_MARGIN) / squadWidth);
+
+		// Their heights keep the layout's relation, centred together in the box
+		float top = Math.Min(compassPos[1], groupPos[1]);
+		float bottom = Math.Max(compassPos[1] + compassSize[1], groupPos[1] + groupSize[1]);
+		float centre = (top + bottom) * 0.5;
+
+		FrameSlot.SetAnchorMin(m_wCompass, 0, 0.5);
+		FrameSlot.SetAnchorMax(m_wCompass, 0, 0.5);
+		FrameSlot.SetSize(m_wCompass, compassSize[0] * scale, compassSize[1] * scale);
+		FrameSlot.SetPos(m_wCompass, -compassSize[0] * scale * 0.5, (compassPos[1] - centre) * scale);
+
+		FrameSlot.SetAnchorMin(m_wGroup, 0, 0.5);
+		FrameSlot.SetAnchorMax(m_wGroup, 0, 0.5);
+		FrameSlot.SetSize(m_wGroup, groupSize[0] * scale, groupSize[1] * scale);
+		FrameSlot.SetPos(m_wGroup, groupPos[0] * scale, (groupPos[1] - centre) * scale);
+
+		int fontSize = Math.Round(GROUP_NAME_FONT_SIZE * scale);
+		foreach (Widget row : m_aGroupRows)
+		{
+			TextWidget name = TextWidget.Cast(row.FindAnyWidget("PlayerName"));
+			if (name)
+				name.SetExactFontSize(fontSize);
+		}
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 RADAR
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
 	//! Two group members on the radar, placed and sized like CSI_Radar with the tab's radar icon size.
 	protected void ShowRadarIcons()
 	{
@@ -385,10 +778,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		// Leave the local player out, they're the centre of the radar
 		memberIDs.RemoveItem(SCR_PlayerController.GetLocalPlayerId());
 
-		float iconSize = RADAR_ICON_SIZE * GetValue(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01;
+		float iconSize = GetRadarIconSize();
 		bool onlyArrowsRotate = GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
-		array<float> positionsX = {-22, 19};
-		array<float> positionsY = {-17, 14};
+		array<float> positionsX = {-30.8, 26.6};
+		array<float> positionsY = {-23.8, 19.6};
 		array<float> rotations = {30, -60};
 		array<CSI_EColorTeam> placeholderTeams = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE};
 
@@ -403,7 +796,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				iconRotation = 0;
 
 			Widget icon = GetRadarIcon(i);
-			PlaceInRadar(icon, positionsX[i], positionsY[i]);
+			PlaceInRadar(icon, positionsX[i] * m_fCompassZoom, positionsY[i] * m_fCompassZoom);
 			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, CSI_SettingInfo.GetPlayerIcon(playerID), CSI_SettingInfo.GetPlayerColorTeam(playerID, placeholderTeams[i]), iconRotation, rotations[i], 1);
 		}
 	}
@@ -425,7 +818,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		if (inVehicle)
 			distances = RANGE_MATE_DISTANCES_IN_VEHICLE;
 
-		float iconSize = RADAR_ICON_SIZE * GetValue(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01;
+		float iconSize = GetRadarIconSize();
 		bool onlyArrowsRotate = GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
 
 		// Same distance fade as CSI_Radar: over the last 20% of the range
@@ -454,7 +847,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 			float opacity = Math.Clamp(Math.Map(distance, fadeStart, range, 0.6, 0), 0, 1);
 
-			vector position = GetRadarPoint(bearing, distance * RADAR_RANGE_PX / range);
+			vector position = GetRadarPoint(bearing, distance * RADAR_RANGE_PX * m_fCompassZoom / range);
 			PlaceInRadar(icon, position[0], position[1]);
 			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, CSI_SettingInfo.GetPlayerIcon(playerID), CSI_SettingInfo.GetPlayerColorTeam(playerID, DEMO_MATE_TEAMS[mateIndex]), iconRotation, DEMO_MATE_FACINGS[mateIndex], opacity);
 		}
@@ -474,7 +867,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		float halfFieldOfView = fieldOfView * 0.5;
 		bool everyoneShown = fieldOfView >= CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX;
-		float iconSize = RADAR_ICON_SIZE * GetValue(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01;
+		float iconSize = GetRadarIconSize();
 		bool onlyArrowsRotate = GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
 
 		foreach (int mateIndex, float bearing : FOV_MATE_BEARINGS)
@@ -491,7 +884,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			if (!everyoneShown && Math.AbsFloat(bearing) > halfFieldOfView)
 				opacity = FOV_FADED_OPACITY;
 
-			vector position = GetRadarPoint(bearing, FOV_MATE_DISTANCES[mateIndex]);
+			vector position = GetRadarPoint(bearing, FOV_MATE_DISTANCES[mateIndex] * m_fCompassZoom);
 			Widget icon = GetRadarIcon(mateIndex);
 			PlaceInRadar(icon, position[0], position[1]);
 			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, CSI_SettingInfo.GetPlayerIcon(playerID), CSI_SettingInfo.GetPlayerColorTeam(playerID, DEMO_MATE_TEAMS[mateIndex]), iconRotation, DEMO_MATE_FACINGS[mateIndex], opacity);
@@ -514,9 +907,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				indexOnEdge = dotIndex - FOV_EDGE_DOTS;
 			}
 
-			float distance = Math.Lerp(FOV_EDGE_START, FOV_EDGE_LENGTH, indexOnEdge / (FOV_EDGE_DOTS - 1.0));
+			float distance = Math.Lerp(FOV_EDGE_START, FOV_EDGE_LENGTH, indexOnEdge / (FOV_EDGE_DOTS - 1.0)) * m_fCompassZoom;
 			vector dotPos = GetRadarPoint(side * halfFieldOfView, distance);
 			FrameSlot.SetPos(dot, dotPos[0], dotPos[1]);
+			FrameSlot.SetSize(dot, FOV_EDGE_DOT_SIZE * m_fCompassZoom, FOV_EDGE_DOT_SIZE * m_fCompassZoom);
 		}
 	}
 
@@ -532,12 +926,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		if (!workspace)
 			return;
 
-		// Same orange as the nametag field of view example's edges
-		Color edgeColor = new Color(0.7605, 0.3916, 0.0782, 1);
-
 		for (int i = 0; i < FOV_EDGE_DOTS * 2; i++)
 		{
-			ImageWidget dot = ImageWidget.Cast(workspace.CreateWidget(WidgetType.ImageWidgetTypeID, WidgetFlags.BLEND | WidgetFlags.VISIBLE | WidgetFlags.STRETCH | WidgetFlags.INHERIT_CLIPPING, edgeColor, 0, m_wRadarFrame));
+			// Vanilla's Reforger orange, as the nametag field of view example's edges
+			ImageWidget dot = ImageWidget.Cast(workspace.CreateWidget(WidgetType.ImageWidgetTypeID, WidgetFlags.BLEND | WidgetFlags.VISIBLE | WidgetFlags.STRETCH | WidgetFlags.INHERIT_CLIPPING, UIColors.CONTRAST_COLOR, 0, m_wRadarFrame));
 			if (!dot)
 				continue;
 
@@ -548,16 +940,6 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			FrameSlot.SetSize(dot, FOV_EDGE_DOT_SIZE, FOV_EDGE_DOT_SIZE);
 			m_aRadarFieldOfViewDots.Insert(dot);
 		}
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] bearing degrees from straight ahead (the top of the radar), positive to the right
-	//! \param[in] distance px from the radar's centre
-	//! \return the point (x, y) from the radar's centre
-	protected vector GetRadarPoint(float bearing, float distance)
-	{
-		float radians = bearing * Math.DEG2RAD;
-		return Vector(Math.Sin(radians) * distance, -Math.Cos(radians) * distance, 0);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -573,7 +955,14 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		Widget icon = GetRadarIcon(0);
 		PlaceInRadar(icon, 0, 0);
 		CSI_EColorTeam colorTeam = CSI_SettingInfo.GetPlayerColorTeam(SCR_PlayerController.GetLocalPlayerId(), CSI_EColorTeam.NONE);
-		CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, ARROW_DEMO_ICON_SIZE, CSI_EIcon.AT, colorTeam, iconRotation, ARROW_DEMO_HEADING, 1);
+		CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, ARROW_DEMO_ICON_SIZE * m_fCompassZoom, CSI_EIcon.AT, colorTeam, iconRotation, ARROW_DEMO_HEADING, 1);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return radar icon size in px for the tab's RADAR_ICON_SIZE, at the current compass zoom
+	protected float GetRadarIconSize()
+	{
+		return RADAR_ICON_SIZE * GetValue(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01 * m_fCompassZoom;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -591,6 +980,16 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] bearing degrees from straight ahead (the top of the radar), positive to the right
+	//! \param[in] distance px from the radar's centre
+	//! \return the point (x, y) from the radar's centre
+	protected vector GetRadarPoint(float bearing, float distance)
+	{
+		float radians = bearing * Math.DEG2RAD;
+		return Vector(Math.Sin(radians) * distance, -Math.Cos(radians) * distance, 0);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \param[in] index
 	//! \return the radar icon widget, null if it couldn't be created
 	protected Widget GetRadarIcon(int index)
@@ -600,6 +999,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		return m_aRadarIcons[index];
 	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 HELPERS
+//=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting
