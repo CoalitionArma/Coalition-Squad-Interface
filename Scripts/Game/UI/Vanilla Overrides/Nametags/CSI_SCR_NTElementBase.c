@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: helpers for CSI's nametag elements: text clearing by distance and field of view,
-//! 				color team colors, and text and icon sizes from NAMTEAG_SCALE.
+//! 				shared color team colors set only when they change, and text and icon sizes from NAMTEAG_SCALE.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
@@ -12,6 +12,8 @@ modded class SCR_NTElementBase
 {
 	protected CSI_HUDSystem m_HUDSystem;
 	protected CSI_SettingsManager m_SettingsManager;
+
+	protected static ref map<CSI_EColorTeam, ref Color> s_mColorTeamColors = new map<CSI_EColorTeam, ref Color>();	//!< see GetColorTeamColor
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] data
@@ -48,7 +50,7 @@ modded class SCR_NTElementBase
 
 		//-----------------------------------------------------------------------
 		// The outer N% of the field of view shows icons only too
-		int fieldOfViewPercentage = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED, m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED));
+		int fieldOfViewPercentage = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED);
 		float fieldOfViewScale = fieldOfViewPercentage * 0.01;
 		if (fieldOfViewScale != 0 && data.m_fFieldOfViewFraction > 1 - fieldOfViewScale)
 			return true;
@@ -62,16 +64,45 @@ modded class SCR_NTElementBase
 	//! \param[in] index
 	protected void SetWidgetCSIColor(SCR_NameTagData data, int index)
 	{
+		Color color;
+		if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
+			color = CSI_UIHelper.VANILLA_VON_COLOR;
+		else if (data.m_PlayerData && m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			color = GetColorTeamColor(data.m_PlayerData.GetColorTeam());
+		else
+			color = GetColorTeamColor(CSI_EColorTeam.NONE);
+
+		SetElementColor(data, index, color);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets the element's color unless it's the color last set here.
+	//! \param[in] data
+	//! \param[in] index
+	//! \param[in] color a shared color, compared by reference
+	protected void SetElementColor(SCR_NameTagData data, int index, notnull Color color)
+	{
 		Widget widget = data.m_aNametagElements[index];
-		if (!widget)
+		if (!widget || color == data.m_aElementColors[index])
 			return;
 
-		if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
-			widget.SetColor(CSI_UIHelper.VANILLA_VON_COLOR);
-		else if (data.m_PlayerData && m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
-			widget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(data.m_PlayerData.GetColorTeam()));
-		else
-			widget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+		widget.SetColor(color);
+		data.m_aElementColors[index] = color;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] colorTeam
+	//! \return the color team's color, one shared instance per color team
+	protected static Color GetColorTeamColor(CSI_EColorTeam colorTeam)
+	{
+		Color color = s_mColorTeamColors.Get(colorTeam);
+		if (!color)
+		{
+			color = CSI_UIHelper.ConvertColorTeamToColor(colorTeam);
+			s_mColorTeamColors.Insert(colorTeam, color);
+		}
+
+		return color;
 	}
 
 	//------------------------------------------------------------------------------------------------

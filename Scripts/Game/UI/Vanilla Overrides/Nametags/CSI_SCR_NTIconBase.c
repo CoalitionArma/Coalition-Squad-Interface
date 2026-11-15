@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
 //! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored by color team.
@@ -33,6 +33,7 @@ modded class SCR_NTIconBase
 		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 		{
 			data.SetVisibility(iWidget, false, 0, false);
+			iWidget.SetVisible(false);	// UpdateElement skips hidden icons
 			return;
 		};
 
@@ -55,44 +56,68 @@ modded class SCR_NTIconBase
 		if (!iWidget || !iWidget.IsVisible())
 			return;
 
-		//-----------------------------------------------------------------------
-		// Update Widget Opacity
-		data.UpdateOpacity(iWidget);
+		// The image is only loaded when what the icon shows changes
+		int iconKey = GetIconKey(data);
+		bool loadIcon = iconKey != data.m_aElementIconKeys[index];
+		data.m_aElementIconKeys[index] = iconKey;
 
 		if (data.m_PlayerData)
 		{
 			//-----------------------------------------------------------------------
 			// State icons first, then the CSI display icon (MAN uses the pointer)
-			switch (true)
+			if (loadIcon)
 			{
-				case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
-				case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
-				case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
-				default : {
-					bool setAlt = false;
-					CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
+				switch (true)
+				{
+					case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
+					case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
+					case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
+					default : {
+						bool setAlt = false;
+						CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
 
-					if (displayIcon == CSI_EIcon.DRIVER)
-						setAlt = true;
+						if (displayIcon == CSI_EIcon.DRIVER)
+							setAlt = true;
 
-					if (displayIcon == CSI_EIcon.MAN)
-						iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
-					else
-						iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(displayIcon, true, setAlt));
-				}
-			};
+						if (displayIcon == CSI_EIcon.MAN)
+							iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
+						else
+							iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(displayIcon, true, setAlt));
+					}
+				};
+			}
 
 			//-----------------------------------------------------------------------
 			// Color Updates For VON/Color Teams
 			SetWidgetCSIColor(data, index);
 		} else {
 			// No CSI data: AI icon for AI, else empty
-			iWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+			SetElementColor(data, index, GetColorTeamColor(CSI_EColorTeam.NONE));
 
-			if (data.m_eType == ENameTagEntityType.AI)
-				iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "ai");
-			else
-				iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+			if (loadIcon)
+			{
+				if (data.m_eType == ENameTagEntityType.AI)
+					iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "ai");
+				else
+					iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+			}
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] data
+	//! \return what the icon shows: state, icon theme and display icon with CSI data, else -2 for AI and -1
+	protected int GetIconKey(SCR_NameTagData data)
+	{
+		if (!data.m_PlayerData)
+		{
+			if (data.m_eType == ENameTagEntityType.AI)
+				return -2;
+
+			return -1;
+		}
+
+		int iconTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_THEME);
+		return (data.m_ePriorityEntityState << 16) | (iconTheme << 8) | data.m_PlayerData.GetDisplayIcon();
 	}
 }

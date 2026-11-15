@@ -1,26 +1,38 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed;
-//! 				nametags are hidden when NAMETAG_VISIBLE is off.
+//!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed; hidden and
+//! 				not updated while NAMETAG_VISIBLE is off; NAMETAG_BRIGHTNESS_DIMMING sets the opacity instead of
+//! 				the HUD's adaptive opacity.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
+	protected static const float UNDIMMED_OPACITY = 0.85;				//!< opacity with NAMETAG_BRIGHTNESS_DIMMING off
+	protected static const float BRIGHTNESS_OPACITY_THROTTLE = 0.01;	//!< smallest opacity change applied
+
 	protected CSI_SettingsManager m_SettingsManager;
 	protected SCR_NameTagZone m_CachedNearZone;
 	protected int m_iLastNametagsRange = -1;	//!< last range applied
 	protected bool m_b2DSightsActive = false;
+	protected bool m_bNametagsVisible = true;	//!< NAMETAG_VISIBLE
+	protected float m_fBrightnessOpacity = 1;	//!< last opacity applied by UpdateBrightnessOpacity
 
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
+		// Nothing to update while hidden
+		if (!m_bNametagsVisible)
+			return;
+
 		super.DisplayUpdate(owner, timeSlice);
 
 		if (!m_SettingsManager)
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
+
+		UpdateBrightnessOpacity();
 
 		if (!m_SettingsManager || !m_CurrentPlayerTag || !m_CurrentPlayerTag.m_CharController || !SCR_PlayerController.s_pLocalPlayerController)
 			return;
@@ -33,12 +45,12 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		else
 			nametagsRange = baseRange;
 
-		// Disabled: shrink the zone to 1 m
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE))
-			nametagsRange = 1;
-
 		if (nametagsRange != m_iLastNametagsRange)
 		{
+			// A larger range gathers entities on the next update, not on the collector's next timed gather
+			if (nametagsRange > m_iLastNametagsRange && s_NametagCfg.m_aSourceEntities)
+				s_NametagCfg.m_aSourceEntities.RequestGather();
+
 			m_iLastNametagsRange = nametagsRange;
 
 			if (!m_CachedNearZone)
@@ -64,6 +76,101 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			m_b2DSightsActive = true;
 		else
 			m_b2DSightsActive = false;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void DisplayStartDraw(IEntity owner)
+	{
+		super.DisplayStartDraw(owner);
+
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+
+		OnSettingsUpdate();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void DisplayStopDraw(IEntity owner)
+	{
+		super.DisplayStopDraw(owner);
+
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Remove(OnSettingsUpdate);
+
+		// The zone belonged to the config super just dropped
+		m_CachedNearZone = null;
+		m_iLastNametagsRange = -1;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows or hides the display for NAMETAG_VISIBLE.
+	protected void OnSettingsUpdate()
+	{
+		bool nametagsVisible = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_VISIBLE);
+		if (nametagsVisible == m_bNametagsVisible)
+			return;
+
+		m_bNametagsVisible = nametagsVisible;
+		Show(m_bShown);
+
+		// Entities that came in range while hidden are gathered at once
+		if (nametagsVisible && s_NametagCfg && s_NametagCfg.m_aSourceEntities)
+			s_NametagCfg.m_aSourceEntities.RequestGather();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void Show(bool show, float speed = UIConstants.FADE_RATE_INSTANT, EAnimationCurve curve = EAnimationCurve.LINEAR)
+	{
+		// Also hidden while NAMETAG_VISIBLE is off; m_bShown keeps the requested state
+		super.Show(show && m_bNametagsVisible, speed, curve);
+
+		m_bShown = show;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Applies CSI's brightness opacity instead of the HUD manager's adaptive opacity.
+	//! \param[in] opacity unused
+	//! \param[in] sceneBrightness
+	//! \param[in] init
+	override protected void AdaptiveOpacity_Update(float opacity, float sceneBrightness, bool init = false)
+	{
+		super.AdaptiveOpacity_Update(m_fBrightnessOpacity, sceneBrightness, init);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets the display's opacity from scene brightness, or to UNDIMMED_OPACITY with NAMETAG_BRIGHTNESS_DIMMING off.
+	protected void UpdateBrightnessOpacity()
+	{
+		float opacity = UNDIMMED_OPACITY;
+
+		BaseWorld world = GetGame().GetWorld();
+		CameraManager cameraManager = GetGame().GetCameraManager();
+
+		bool dimWithBrightness = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING);
+
+		if (world && cameraManager && dimWithBrightness)
+		{
+			CameraBase camera = cameraManager.CurrentCamera();
+			if (camera)
+			{
+				int cameraIndex = camera.GetCameraIndex();
+
+				float brightness = Math.Clamp(world.GetCameraSceneMiddleBrightness(cameraIndex), 0.1, 10);
+
+				float hdrBrightnessFactor = world.GetCameraHDRBrightness(cameraIndex);
+				if (hdrBrightnessFactor > 1) // Only let HDR raise brightness (NVGs)
+					brightness = brightness * hdrBrightnessFactor;
+
+				opacity = Math.Clamp(brightness, 0.1, 1);
+			}
+		}
+
+		if (Math.AbsFloat(opacity - m_fBrightnessOpacity) < BRIGHTNESS_OPACITY_THROTTLE)
+			return;
+
+		m_fBrightnessOpacity = opacity;
+		super.AdaptiveOpacity_Update(opacity, 0);
 	}
 }
 
@@ -119,5 +226,24 @@ modded class SCR_NameTagConfig
 				m_fFarthestZoneRangePow2 = zoneEnd * zoneEnd;
 			}
 		}
+	}
+}
+
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: adds RequestGather so a larger nametag range gathers entities at once.
+//! 
+//------------------------------------------------------------------------------------------------
+[BaseContainerProps()]
+modded class SCR_NameTagCollectorBase
+{
+	//------------------------------------------------------------------------------------------------
+	//! Gathers entities on the next UpdatePerformed instead of after m_fGatherEntitiesTimer.
+	void RequestGather()
+	{
+		m_fQueryCooldown = m_fGatherEntitiesTimer;
 	}
 }

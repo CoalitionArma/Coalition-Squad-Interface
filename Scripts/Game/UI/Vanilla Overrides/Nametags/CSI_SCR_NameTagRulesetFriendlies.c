@@ -24,7 +24,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		{
 			int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW);
 			if (fieldOfView > 0)
-				m_iMaxAngle = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW, fieldOfView);
+				m_iMaxAngle = fieldOfView;
 		}
 
 		super.DetermineVisibility(timeSlice);

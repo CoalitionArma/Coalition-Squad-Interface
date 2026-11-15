@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: names with rank; adds player data, group name and field of view place for CSI's elements;
-//! 				tag position and height from settings; opacity follows scene brightness.
+//!	\Description: 	CSI changes: names with rank; adds player data, group name, field of view place and what CSI's
+//! 				elements last set; tag position and height from settings.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagData : Managed
@@ -14,6 +14,11 @@ modded class SCR_NameTagData : Managed
 	CSI_PlayerData m_PlayerData;	//!< null for AI and players without CSI data
 	string m_sGroupName;			//!< set by GetGroupName
 	float m_fFieldOfViewFraction;	//!< place in the tag's visible angle: 0 centre, 1 edge
+
+	// What CSI's elements last set, by m_aNametagElements index; a widget is only changed when its value differs
+	string m_aElementTexts[10];		//!< text
+	int m_aElementIconKeys[10];		//!< role icon, see SCR_NTIconBase.GetIconKey; 0 until set
+	Color m_aElementColors[10];		//!< shared color; null until set
 
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()
@@ -25,33 +30,18 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override protected void InitDefaults()
 	{
-		// CSI: cache managers
+		super.InitDefaults();
+
+		// Cache managers
 		if (!m_SettingsManager || !m_PlayerDataManager)
 		{
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		};
 
-		m_eEntityStateFlags = ENameTagEntityState.HIDDEN | ENameTagEntityState.DEFAULT;
-	 	m_ePriorityEntityState = ENameTagEntityState.HIDDEN;
-
-		UpdateAttatchedTo();	// CSI: position from NAMETAG_POSITION
-
-		m_iZoneID = -1;
-		m_iGroupID = -1;
-		m_iPlayerID = -1;
-		m_PlayerData = null;	// CSI
-		m_fTimeSliceUpdate = 1.0;
-		m_fTimeSliceVON = 0;
-		m_fTimeSlicePosChange = 0;
-		m_fTimeSliceCleanup = 0;
-		m_fTimeSliceFade = 0;
-		m_fTimeSliceVisibility = 0;
-		m_fDistance = 0;
-		m_fOpacityFade = 1;
-		m_sName = string.Empty;
-		m_sGroupName = string.Empty;	// CSI
-		m_aNameParams = {};
+		UpdateAttatchedTo();	// Position from NAMETAG_POSITION instead of HEAD
+		m_PlayerData = null;
+		m_sGroupName = string.Empty;
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -86,82 +76,14 @@ modded class SCR_NameTagData : Managed
 	//! \param[in] widget
 	//! \param[in] visible
 	//! \param[in] visibleOpacity
-	//! \param[in] animate unused, UpdateOpacity handles fading
+	//! \param[in] animate unused, it always fades when the ruleset has a fade time
 	override void SetVisibility(Widget widget, bool visible, float visibleOpacity, bool animate = true)
 	{
-		if (!widget)
-			return;
-
-		float targetVal;
-		if (visible)
-		{
-			m_NameTagWidget.SetVisible(true);
-			if (widget == m_NameTagWidget)
-				m_fVisibleOpacity = visibleOpacity;
-
-			m_Flags |= ENameTagFlags.VISIBLE;
-			m_Flags &= ~ENameTagFlags.UPDATE_DISABLE;
-			m_Flags &= ~ENameTagFlags.DISABLED;
-			targetVal = visibleOpacity;
-		}
-		else
-			targetVal = 0;
-
-		// CSI: opacity set by UpdateOpacity
-		if (targetVal >= 0.1)
+		// Super only makes the widget visible when it doesn't fade
+		if (widget && visible && visibleOpacity >= 0.1)
 			widget.SetVisible(true);
 
-		UpdateOpacity(widget, targetVal);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Sets an element's opacity from scene brightness, or to targetOpacity with dimming off.
-	//! \param[in] widget null to use data.m_aNametagElements[index]
-	//! \param[in] targetOpacity 0 hides it
-	//! \param[in] data
-	//! \param[in] index
-	void UpdateOpacity(Widget widget, float targetOpacity = 0.85, SCR_NameTagData data = null, int index = 0)
-	{
-		if (!widget)
-		{
-			widget = data.m_aNametagElements[index];
-			if (!widget)
-				return;
-		};
-
-		if (m_Entity && targetOpacity != 0)
-		{
-			BaseWorld world = GetGame().GetWorld();
-			CameraManager cameraManager = GetGame().GetCameraManager();
-
-			bool dimWithBrightness = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING);
-
-			if (world && cameraManager && dimWithBrightness)
-			{
-				CameraBase camera = cameraManager.CurrentCamera();
-				if (camera)
-				{
-					int cameraIndex = camera.GetCameraIndex();
-
-					float brightness = Math.Clamp(world.GetCameraSceneMiddleBrightness(cameraIndex), 0.1, 10);
-
-					float hdrBrightnessFactor = world.GetCameraHDRBrightness(cameraIndex);
-					if (hdrBrightnessFactor > 1) // Only let HDR raise brightness (NVGs)
-						brightness = brightness * hdrBrightnessFactor;
-
-					targetOpacity = Math.Clamp(brightness, 0.1, 1);
-				 }
-			}
-		} else
-			targetOpacity = 0;
-
-		if (m_fTagFadeSpeed != 0)
-			AnimateWidget.Opacity(widget, targetOpacity, m_fTagFadeSpeed);
-		else
-		{
-			AnimateWidget.StopAnimation(widget, WidgetAnimationOpacity);
-			widget.SetOpacity(targetOpacity);
-		}
+		super.SetVisibility(widget, visible, visibleOpacity, true);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -192,16 +114,10 @@ modded class SCR_NameTagData : Managed
 	//! Update tag position
 	override void UpdateTagPos()
 	{
-		UpdateAttatchedTo();	// CSI: pick up NAMETAG_POSITION changes
+		UpdateAttatchedTo();	// Pick up NAMETAG_POSITION changes
+		super.UpdateTagPos();
 
-		vector matPos[4];
-		Animation anim = m_Entity.GetAnimation();
-		anim.GetBoneMatrix(m_iSpineBone, matPos);
-		m_vEntWorldPos = m_Entity.CoordToParent(matPos[3]);
-		anim.GetBoneMatrix(m_iHeadBone, matPos);
-		m_vEntHeadPos = m_Entity.CoordToParent(matPos[3]);
-
-		// CSI: height offset from NAMETAG_POSITION_OFFSET (0.1 m steps)
+		// Tag position again, with the height offset from NAMETAG_POSITION_OFFSET (0.1 m steps)
 		vector nametagOffsetVector = "0 0 0";
 		int nametagOffset = 0;
 
@@ -218,20 +134,16 @@ modded class SCR_NameTagData : Managed
 			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
 			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
 		}
-
-		if (m_eType != ENameTagEntityType.PLAYER && GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(m_Entity) > 0)
-		{
-			m_Flags |= ENameTagFlags.ENT_TYPE_UPDATE;
-			m_Flags |= ENameTagFlags.NAME_UPDATE;
-		}
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerData()
 	{
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		m_PlayerData = null;
 
-		if (m_PlayerDataManager && m_iPlayerID > 0)
+		// A possessed AI stays AI but has the possessing player's ID
+		if (m_PlayerDataManager && m_eType != ENameTagEntityType.AI && m_iPlayerID > 0)
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 	}
 

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the name text uses CSI's size and colors and is cleared when the tag is simplified.
 //! 
@@ -34,53 +34,28 @@ modded class SCR_NTName : SCR_NTTextBase
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
-		//-----------------------------------------------------------------------
-		// CSI: brightness-based opacity
-		data.UpdateOpacity(null, data: data, index: index);
+		// A name update in super sets the text, so it's set again below
+		bool nameUpdate = data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE;
 
-		//-----------------------------------------------------------------------
-		// Base element setup, done here since super also sets the text
-		if ( !data.m_aNametagElements[index] )
-		{
-			InitElementWidget(data, index);
+		super.UpdateElement(data, index);
+
+		if (!data.m_aNametagElements[index])
 			return;
-		}
-
-		// scale
-		if (m_bScaleElement)
-		{
-			data.m_fTimeSliceUpdate = 1.0;
-			ScaleElement(data, index);
-		}
 
 		//-----------------------------------------------------------------------
-		// Name update (text is set below)
-		if (data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE)
-		{
-			string name;
-			array<string> nameParams = {};
-
-			GetText(data, name, nameParams);
-
-			// Keep the flags until a name is found, so it's retried
-			if (name.IsEmpty())
-				SetText(data, "GETNAME_ERROR", nameParams, index);
-			else
-			{
-				data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
-				data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
-			}
-		}
-
-		//-----------------------------------------------------------------------
-		// CSI: clear text when simplified
+		// Name, cleared when simplified; set only when it changes
+		string text = data.m_sName;
 		if (ShouldWeClearText(data))
-			SetText(data, string.Empty, data.m_aNameParams, index);
-		else
-			SetText(data, data.m_sName, data.m_aNameParams, index);
+			text = string.Empty;
+
+		if (nameUpdate || text != data.m_aElementTexts[index])
+		{
+			SetText(data, text, data.m_aNameParams, index);
+			data.m_aElementTexts[index] = text;
+		}
 
 		//-----------------------------------------------------------------------
-		// CSI: color updates for VON/color teams
+		// Color updates for VON/color teams
 		SetWidgetCSIColor(data, index);
 	}
 };

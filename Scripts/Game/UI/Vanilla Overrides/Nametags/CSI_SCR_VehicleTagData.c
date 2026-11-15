@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the vehicle tag shows the pilot in aircraft and prefers a turret gunner in other vehicles, and
 //! 				copies the main tag's player data and group name.
@@ -14,7 +14,7 @@ modded class SCR_VehicleTagData
 	override protected void UpdateMainTag()
 	{
 		m_MainTag = null;
-		SCR_NameTagData localMainTag;
+		SCR_NameTagData localMainTag;	// CSI: chosen here, then set as m_MainTag
 
 		if (!m_Entity)
 			return;
@@ -42,22 +42,13 @@ modded class SCR_VehicleTagData
 			foreach (SCR_NameTagData tagData : m_aPassengers)
 			{
 				if (localMainTag) break;
-				CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(tagData.m_Entity.FindComponent(CompartmentAccessComponent));
-				if (compartmentAccess)
-				{
-					BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
-					if (compartment)
-					{
-						ECompartmentType compartmentType = compartment.GetType();
-
-						if (compartmentType == ECompartmentType.TURRET)
-							localMainTag = tagData;
-					};
-				};
+				BaseCompartmentSlot compartment = tagData.GetVehicleCompartment();
+				if (compartment && compartment.GetType() == ECompartmentType.TURRET)
+					localMainTag = tagData;
 			}
 		};
 
-		// Then the driver
+		// Then the driver (CSI: no break, only one passenger is the pilot)
 		if (pilot && !localMainTag)
 		{
 			foreach (SCR_NameTagData tagData : m_aPassengers)

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag element showing the player's group name under their name; used in NametagFriendlies.conf.
 //!
@@ -36,17 +36,24 @@ class SCR_NTGroupName : SCR_NTTextBase
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
+		// A name update in super sets the player's name here, so the group name is set again below
+		bool nameUpdate = data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE;
+
 		super.UpdateElement(data, index);
 
-		//-----------------------------------------------------------------------
-		// Update Widget Opacity
-		data.UpdateOpacity(null, data: data, index: index);
+		if (!data.m_aNametagElements[index])
+			return;
 
 		//-----------------------------------------------------------------------
-		// Set The Text Of The Widget Based On Our Current Distance
+		// Set The Text Of The Widget Based On Our Current Distance, only when it changes
+		string text = data.m_sGroupName;
 		if (ShouldWeClearText(data))
-			SetText(data, string.Empty, data.m_aNameParams, index);
-		else
-			SetText(data, data.m_sGroupName, data.m_aNameParams, index);
+			text = string.Empty;
+
+		if (nameUpdate || text != data.m_aElementTexts[index])
+		{
+			SetText(data, text, data.m_aNameParams, index);
+			data.m_aElementTexts[index] = text;
+		}
 	}
 };
