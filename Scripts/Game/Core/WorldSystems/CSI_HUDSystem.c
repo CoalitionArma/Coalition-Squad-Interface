@@ -225,7 +225,7 @@ class CSI_HUDSystem : GameSystem
 		SCR_SortedArray<int> sortedPlayerIDs = new SCR_SortedArray<int>();	// lowest key first; equal keys keep group order
 		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
 
-		foreach (int playerID : playerIDs)
+		foreach (PlayerId playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
@@ -241,7 +241,7 @@ class CSI_HUDSystem : GameSystem
 		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
 		playersCTArray.InsertAt(currentSLColorTeam, 0);
 
-		foreach (int playerID : playerIDs)
+		foreach (PlayerId playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 

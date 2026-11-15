@@ -14,7 +14,7 @@ class CSI_PlayerDataManager : ScriptComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;	//!< keyed by player ID
+	protected ref map<PlayerId, ref CSI_PlayerData> m_mPlayerDataMap = new map<PlayerId, ref CSI_PlayerData>;	//!< keyed by player ID
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 
@@ -36,13 +36,13 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \return null until the client registers it (needs a character and a group)
-	CSI_PlayerData GetPlayerData(int playerID)
+	CSI_PlayerData GetPlayerData(PlayerId playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	map<int, ref CSI_PlayerData> GetPlayerDataMap()
+	map<PlayerId, ref CSI_PlayerData> GetPlayerDataMap()
 	{
 		return m_mPlayerDataMap;
 	}
@@ -52,21 +52,21 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	void RegisterPlayerData(int playerID)
+	void RegisterPlayerData(PlayerId playerID)
 	{
 		if (!GetPlayerData(playerID))
 			CreatePlayerData(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void RemovePlayerData(int playerID)
+	void RemovePlayerData(PlayerId playerID)
 	{
 		if (GetPlayerData(playerID))
 			m_mPlayerDataMap.Remove(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected CSI_PlayerData CreatePlayerData(int playerID)
+	protected CSI_PlayerData CreatePlayerData(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = new CSI_PlayerData;
 		playerData.SetPlayerID(playerID);
@@ -79,7 +79,7 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerDisplayIcon(int playerID, CSI_EIcon icon)
+	void UpdatePlayerDisplayIcon(PlayerId playerID, CSI_EIcon icon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -88,7 +88,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
+	void UpdatePlayerColorTeam(PlayerId playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -99,7 +99,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \param[in] overrideIcon AUTO removes the override
-	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
+	void UpdatePlayerOverrideIcon(PlayerId playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -108,7 +108,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	void UpdatePlayerRank(PlayerId playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -117,7 +117,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerTeamLeader(int playerID, bool isTL)
+	void UpdatePlayerTeamLeader(PlayerId playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -126,7 +126,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerSquadLeader(int playerID, bool isSL)
+	void UpdatePlayerSquadLeader(PlayerId playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -137,7 +137,7 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	//! Server: resets the player's color team, override icon and team leader flag.
 	//! \param[in] playerID
-	void ClearGroupSpecificData(int playerID)
+	void ClearGroupSpecificData(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
@@ -177,7 +177,7 @@ class CSI_PlayerDataManager : ScriptComponent
 			CSI_PlayerData playerData = new CSI_PlayerData();
 			playerData.Load(reader);
 
-			int playerID = playerData.GetPlayerID();
+			PlayerId playerID = playerData.GetPlayerID();
 
 			// Read every entry to keep the stream aligned, but only keep valid IDs
 			if (playerID > 0)

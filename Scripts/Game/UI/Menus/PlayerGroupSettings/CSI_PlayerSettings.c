@@ -15,7 +15,7 @@
 	protected XComboBoxWidget m_wIconOveride;
 	protected TextWidget m_wPlayerName;
 	protected ImageWidget m_wIcon;
-	protected int m_iPlayerID = -1;		//!< player the panel shows
+	protected PlayerId m_iPlayerID = -1;		//!< player the panel shows
 	protected ScriptInvoker m_PlayerUpdate;	//!< that player's GetOnDataUpdate(), while subscribed
 
 	//------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@
 	//------------------------------------------------------------------------------------------------
 	//! Shows a player in the panel.
 	//! \param[in] playerID
-	void UpdatePlayerSettingsPlayerID(int playerID)
+	void UpdatePlayerSettingsPlayerID(PlayerId playerID)
 	{
 		m_iPlayerID = playerID;
 

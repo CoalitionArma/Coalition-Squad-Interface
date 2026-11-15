@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar inside the compass: an icon per group member in range, placed and rotated relative to the
 //! 				local player. Members outside the radar's field of view fade out.
@@ -79,9 +79,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		// Radar range in metres
 		float searchRadius;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
-			searchRadius = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE), CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MIN, CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MAX);
+			searchRadius = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE, m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE));
 		else
-			searchRadius = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT), CSI_GameSettings.RADAR_RANGE_ON_FOOT_MIN, CSI_GameSettings.RADAR_RANGE_ON_FOOT_MAX);
+			searchRadius = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_ON_FOOT, m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT));
 
 		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade out over the last 20% of the range
 		float radarScale = 132.0 / (searchRadius * 2.725);			// metres to radar px
@@ -89,14 +89,16 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		float searchRadiusSq = searchRadius * searchRadius;
 
-		// Members outside this angle around straight ahead fade out
-		int fieldOfView = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW), CSI_GameSettings.RADAR_FIELD_OF_VIEW_MIN, CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX);
+		// Members outside this angle around straight ahead fade out; none at the max
+		int fieldOfViewMin, fieldOfViewMax;
+		CSI_GameSettings.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
+		int fieldOfView = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW), fieldOfViewMin, fieldOfViewMax);
 		float halfFieldOfView = fieldOfView * 0.5;
 
 		array<int> groupPlayerIDs = m_HUDSystem.GetLocalGroupPlayerIds();
 		PlayerManager playerManager = GetGame().GetPlayerManager();
 
-		foreach (int playerID : groupPlayerIDs)
+		foreach (PlayerId playerID : groupPlayerIDs)
 		{
 			SCR_ChimeraCharacter playerCharacter = SCR_ChimeraCharacter.Cast(playerManager.GetPlayerControlledEntity(playerID));
 			if (!playerCharacter)
@@ -134,7 +136,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				x = Math.Sin(relDir) * disT;
 				y = Math.Cos(relDir) * disT;
 
-				bool inFieldOfView = fieldOfView >= CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX || SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= halfFieldOfView;
+				bool inFieldOfView = fieldOfView >= fieldOfViewMax ||SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= halfFieldOfView;
 				fieldOfViewFade = UpdateFieldOfViewFade(playerID, inFieldOfView, timeSlice);
 			};
 
@@ -158,13 +160,13 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		// Delete icons of players who left the group or whose widget is gone
 		m_aRadarIconsToRemove.Clear();
-		foreach (int playerID, CSI_Icon icon : m_mRadarIcons)
+		foreach (PlayerId playerID, CSI_Icon icon : m_mRadarIcons)
 		{
 			if (!icon || !groupPlayerIDs.Contains(playerID))
 				m_aRadarIconsToRemove.Insert(playerID);
 		};
 
-		foreach (int playerID : m_aRadarIconsToRemove)
+		foreach (PlayerId playerID : m_aRadarIconsToRemove)
 			RemoveRadarIcon(playerID);
 	}
 
@@ -175,7 +177,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \return the icon, or null if it couldn't be created
-	protected CSI_Icon GetOrCreateRadarIcon(int playerID)
+	protected CSI_Icon GetOrCreateRadarIcon(PlayerId playerID)
 	{
 		CSI_Icon icon = m_mRadarIcons.Get(playerID);
 		if (icon)
@@ -207,7 +209,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//! \param[in] inFieldOfView
 	//! \param[in] timeSlice
 	//! \return 1 shown to 0 faded out
-	protected float UpdateFieldOfViewFade(int playerID, bool inFieldOfView, float timeSlice)
+	protected float UpdateFieldOfViewFade(PlayerId playerID, bool inFieldOfView, float timeSlice)
 	{
 		float fade;
 		if (!m_mFieldOfViewFades.Find(playerID, fade))
@@ -230,7 +232,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected void RemoveRadarIcon(int playerID)
+	protected void RemoveRadarIcon(PlayerId playerID)
 	{
 		m_mFieldOfViewFades.Remove(playerID);
 
@@ -252,7 +254,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		if (m_mRadarIcons.IsEmpty())
 			return;
 
-		foreach (int playerID, CSI_Icon icon : m_mRadarIcons)
+		foreach (PlayerId playerID, CSI_Icon icon : m_mRadarIcons)
 		{
 			if (icon && icon.GetRootWidget())
 				icon.GetRootWidget().RemoveFromHierarchy();

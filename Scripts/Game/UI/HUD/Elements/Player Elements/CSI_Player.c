@@ -51,7 +51,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Points the row at a player and subscribes to their data.
 	//! \param[in] playerID <= 0 hides the row
-	void PlayerUpdate(int playerID)
+	void PlayerUpdate(PlayerId playerID)
 	{
 		if (m_iPlayerId != playerID)
 		{

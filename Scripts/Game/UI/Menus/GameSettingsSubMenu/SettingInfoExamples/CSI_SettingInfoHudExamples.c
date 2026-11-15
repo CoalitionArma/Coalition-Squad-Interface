@@ -49,7 +49,7 @@ class CSI_FrameSlotSnapshot
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General and Compass & radar settings: sets the
 //! 				embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows and radar icons.
@@ -438,11 +438,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			}
 
 			bool inVehicle = setting == CSI_GameSettings.RADAR_RANGE_IN_VEHICLE;
-			int range;
-			if (inVehicle)
-				range = Math.ClampInt(value, CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MIN, CSI_GameSettings.RADAR_RANGE_IN_VEHICLE_MAX);
-			else
-				range = Math.ClampInt(value, CSI_GameSettings.RADAR_RANGE_ON_FOOT_MIN, CSI_GameSettings.RADAR_RANGE_ON_FOOT_MAX);
+			int range = CSI_GameSettings.ClampToLimits(setting, value);
 
 			ShowRadarRange(range, inVehicle);
 			if (inVehicle)
@@ -462,9 +458,11 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				return true;
 			}
 
-			int fieldOfView = Math.ClampInt(value, CSI_GameSettings.RADAR_FIELD_OF_VIEW_MIN, CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX);
+			int fieldOfViewMin, fieldOfViewMax;
+			CSI_GameSettings.GetSettingLimits(setting, fieldOfViewMin, fieldOfViewMax);
+			int fieldOfView = Math.ClampInt(value, fieldOfViewMin, fieldOfViewMax);
 			ShowRadarFieldOfView(fieldOfView);
-			if (fieldOfView >= CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX)
+			if (fieldOfView >= fieldOfViewMax)
 				caption = "Every squadmate on the radar is shown";
 			else
 				caption = string.Format("Squadmates outside the %1° ahead slowly fade out", fieldOfView);
@@ -626,7 +624,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				continue;
 			}
 
-			int playerID = 0;
+			PlayerId playerID = 0;
 			if (memberIDs.IsIndexValid(i))
 				playerID = memberIDs[i];
 
@@ -651,7 +649,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			}
 
 			// The local player leads the squad
-			int playerID;
+			PlayerId playerID;
 			if (i == 0)
 				playerID = localPlayerID;
 
@@ -667,7 +665,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] fallbackName shown without a player name
 	//! \param[in] role
 	//! \param[in] colorTeam
-	protected void FillGroupRow(notnull Widget row, int playerID, string fallbackName, CSI_EIcon role, CSI_EColorTeam colorTeam)
+	protected void FillGroupRow(notnull Widget row, PlayerId playerID, string fallbackName, CSI_EIcon role, CSI_EColorTeam colorTeam)
 	{
 		TextWidget name = TextWidget.Cast(row.FindAnyWidget("PlayerName"));
 		if (name)
@@ -776,7 +774,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 		for (int i = 0; i < 2; i++)
 		{
-			int playerID = 0;
+			PlayerId playerID = 0;
 			if (memberIDs.IsIndexValid(i))
 				playerID = memberIDs[i];
 
@@ -825,7 +823,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				continue;
 			}
 
-			int playerID = 0;
+			PlayerId playerID = 0;
 			if (memberIDs.IsIndexValid(mateIndex))
 				playerID = memberIDs[mateIndex];
 
@@ -852,14 +850,17 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		// Leave the local player out, they're the centre of the radar
 		memberIDs.RemoveItem(SCR_PlayerController.GetLocalPlayerId());
 
+		int fieldOfViewMin, fieldOfViewMax;
+		CSI_GameSettings.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
+
 		float halfFieldOfView = fieldOfView * 0.5;
-		bool everyoneShown = fieldOfView >= CSI_GameSettings.RADAR_FIELD_OF_VIEW_MAX;
+		bool everyoneShown = fieldOfView >= fieldOfViewMax;
 		float iconSize = GetRadarIconSize();
 		bool onlyArrowsRotate = GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
 
 		foreach (int mateIndex, float bearing : FOV_MATE_BEARINGS)
 		{
-			int playerID = 0;
+			PlayerId playerID = 0;
 			if (memberIDs.IsIndexValid(mateIndex))
 				playerID = memberIDs[mateIndex];
 

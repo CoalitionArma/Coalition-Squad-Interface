@@ -83,7 +83,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 	//! \param[in] playerID
 	//! \param[in] cause
 	//! \param[in] timeout
-	protected void OnPlayerDisconnected(int playerID, KickCauseCode cause, int timeout)
+	protected void OnPlayerDisconnected(PlayerId playerID, KickCauseCode cause, int timeout)
 	{
 		m_mDataExpiries.Set(playerID, GetGame().GetWorld().GetTimestamp().PlusSeconds(DATA_RETENTION_TIME));
 	}
@@ -99,7 +99,7 @@ class CSI_PlayerDisconnectSystem : GameSystem
 		WorldTimestamp now = GetGame().GetWorld().GetTimestamp();
 
 		// Give a window to players who left before the listener was added
-		foreach (int playerID, CSI_PlayerData playerData : m_PlayerDataManager.GetPlayerDataMap())
+		foreach (PlayerId playerID, CSI_PlayerData playerData : m_PlayerDataManager.GetPlayerDataMap())
 		{
 			if (!m_mDataExpiries.Contains(playerID) && !playerManager.IsPlayerConnected(playerID))
 				m_mDataExpiries.Set(playerID, now.PlusSeconds(DATA_RETENTION_TIME));

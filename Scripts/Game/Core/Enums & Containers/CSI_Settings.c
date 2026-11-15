@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
 //! 				which applies server overrides on top of these.
@@ -45,16 +45,6 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string RADAR_RANGE_IN_VEHICLE = "m_iRadarRangeInVehicle";
 	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
 	const static string COMPASS_COLOR = "m_iCompassColor";
-
-	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, matches the slider
-	const static int NAMETAG_FIELD_OF_VIEW_MAX = 145;	//!< degrees, matches the slider
-	const static int NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX = 95;	//!< percent, matches the slider
-	const static int RADAR_FIELD_OF_VIEW_MIN = 5;		//!< degrees, matches the slider
-	const static int RADAR_FIELD_OF_VIEW_MAX = 360;		//!< degrees, matches the slider; no fading at this value
-	const static int RADAR_RANGE_ON_FOOT_MIN = 5;		//!< metres, matches the slider
-	const static int RADAR_RANGE_ON_FOOT_MAX = 100;		//!< metres, matches the slider
-	const static int RADAR_RANGE_IN_VEHICLE_MIN = 1;	//!< metres, matches the slider
-	const static int RADAR_RANGE_IN_VEHICLE_MAX = 10;	//!< metres, matches the slider
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTINGS ARRAY (USED FOR AUTHORITY OVERRIDE OF SETTINGS)
@@ -136,6 +126,44 @@ class CSI_GameSettings : ModuleGameSettings
 	static TStringArray GetSettingsArray()
 	{
 		return m_aSettingsArray;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Reads the min and max in a setting's attribute params, the range of its slider.
+	//! \param[in] setting
+	//! \param[out] min
+	//! \param[out] max
+	//! \return false if the setting has no min and max
+	static bool GetSettingLimits(string setting, out int min, out int max)
+	{
+		BaseContainer settings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
+		if (!settings)
+			return false;
+
+		int varIndex = settings.GetVarIndex(setting);
+		if (varIndex < 0)
+			return false;
+
+		float minValue, maxValue, step;
+		if (settings.GetLimits(varIndex, minValue, maxValue, step) < 2)
+			return false;
+
+		min = minValue;
+		max = maxValue;
+		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting
+	//! \param[in] value
+	//! \return value clamped to the setting's min and max, unchanged if it has none
+	static int ClampToLimits(string setting, int value)
+	{
+		int min, max;
+		if (!GetSettingLimits(setting, min, max))
+			return value;
+
+		return Math.ClampInt(value, min, max);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

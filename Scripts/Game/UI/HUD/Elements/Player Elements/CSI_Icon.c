@@ -89,7 +89,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Points the icon at a player and subscribes to their data.
 	//! \param[in] playerID <= 0 hides the icon
-	void IconUpdate(int playerID)
+	void IconUpdate(PlayerId playerID)
 	{
 		if (m_iPlayerId != playerID)
 		{

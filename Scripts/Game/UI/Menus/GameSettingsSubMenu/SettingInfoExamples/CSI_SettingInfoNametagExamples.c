@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible: shows the
 //! 				setting's panel with the local player's nametag, laid out for the tab's values.
@@ -198,7 +198,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		if (setting == CSI_GameSettings.NAMETAG_FIELD_OF_VIEW || setting == CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED)
 		{
-			int fieldOfView = Math.ClampInt(GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW), CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MIN, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MAX);
+			int fieldOfView = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW, GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW));
 
 			// No shaded zones or squadmates: those show the simplified percentage
 			if (setting == CSI_GameSettings.NAMETAG_FIELD_OF_VIEW)
@@ -209,7 +209,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			}
 
 			// Nothing is simplified without role icons
-			int simplifiedPercentage = Math.ClampInt(GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), 0, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX);
+			int simplifiedPercentage = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED, GetValue(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED));
 			if (!GetValue(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 				simplifiedPercentage = 0;
 

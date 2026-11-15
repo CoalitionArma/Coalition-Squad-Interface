@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: helpers for CSI's nametag elements: text clearing by distance and field of view,
 //! 				color team colors, and text and icon sizes from NAMTEAG_SCALE.
@@ -48,7 +48,7 @@ modded class SCR_NTElementBase
 
 		//-----------------------------------------------------------------------
 		// The outer N% of the field of view shows icons only too
-		int fieldOfViewPercentage = Math.ClampInt(m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED), 0, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED_MAX);
+		int fieldOfViewPercentage = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED, m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED));
 		float fieldOfViewScale = fieldOfViewPercentage * 0.01;
 		if (fieldOfViewScale != 0 && data.m_fFieldOfViewFraction > 1 - fieldOfViewScale)
 			return true;

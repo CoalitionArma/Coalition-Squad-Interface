@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: tag field of view from NAMETAG_FIELD_OF_VIEW, with each tag's place in it recorded;
 //! 				the line of sight check can be turned off and traces to the body when tags are on the body.
@@ -24,7 +24,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		{
 			int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW);
 			if (fieldOfView > 0)
-				m_iMaxAngle = Math.ClampInt(fieldOfView, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MIN, CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_MAX);
+				m_iMaxAngle = CSI_GameSettings.ClampToLimits(CSI_GameSettings.NAMETAG_FIELD_OF_VIEW, fieldOfView);
 		}
 
 		super.DetermineVisibility(timeSlice);

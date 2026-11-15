@@ -114,7 +114,7 @@ class CSI_UIHelper
 	//! Player's display name, prefixed with their short rank when RANK_VISIBLE is on.
 	//! \param[in] playerID
 	//! \return
-	static string GetPlayersName(int playerID)
+	static string GetPlayersName(PlayerId playerID)
 	{
 		// Filtered name: respects blocked users and platform UGC restrictions
 		string name = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);

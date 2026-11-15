@@ -117,7 +117,7 @@ class CSI_ClientSystem : GameSystem
 	//! Icon priority: vehicle seat > officer > SL > TL > override > specialty > MAN.
 	protected void UpdateAllLocalPlayerValues()
 	{
-		int playerID = SCR_PlayerController.GetLocalPlayerId();
+		PlayerId playerID = SCR_PlayerController.GetLocalPlayerId();
 
 		// The player's own character, also while possessing another one
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();

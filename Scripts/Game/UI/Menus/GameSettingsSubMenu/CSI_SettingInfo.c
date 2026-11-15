@@ -592,7 +592,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		CSI_HUDSystem hudSystem = CSI_HUDSystem.GetInstance();
 		if (hudSystem)
 		{
-			foreach (int playerID : hudSystem.GetLocalGroupPlayerIds())
+			foreach (PlayerId playerID : hudSystem.GetLocalGroupPlayerIds())
 			{
 				if (memberIDs.Count() >= maxCount)
 					break;
@@ -623,7 +623,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] playerID 0 outside a session or for placeholders
 	//! \param[in] fallbackName used without a player or name
 	//! \return
-	static string GetPreviewName(Widget root, int playerID, string fallbackName)
+	static string GetPreviewName(Widget root, PlayerId playerID, string fallbackName)
 	{
 		string name;
 		if (playerID > 0)
@@ -648,7 +648,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \return "Pvt." if unknown
-	static string GetRankShortName(int playerID)
+	static string GetRankShortName(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		if (!playerData)
@@ -668,7 +668,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \return MAN without CSI data
-	static CSI_EIcon GetPlayerIcon(int playerID)
+	static CSI_EIcon GetPlayerIcon(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		if (!playerData)
@@ -681,7 +681,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] playerID
 	//! \param[in] fallback used without CSI data
 	//! \return
-	static CSI_EColorTeam GetPlayerColorTeam(int playerID, CSI_EColorTeam fallback)
+	static CSI_EColorTeam GetPlayerColorTeam(PlayerId playerID, CSI_EColorTeam fallback)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 		if (!playerData)
@@ -693,7 +693,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
 	//! \return null outside a session or without CSI data
-	static CSI_PlayerData GetPlayerData(int playerID)
+	static CSI_PlayerData GetPlayerData(PlayerId playerID)
 	{
 		if (playerID <= 0)
 			return null;
