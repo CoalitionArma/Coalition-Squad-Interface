@@ -281,6 +281,45 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Shows a value in the setting's widget (the counterpart of GetWidgetValue), e.g. a server-forced value.
+	//! \param[in] root CSI settings tab root
+	//! \param[in] setting CSI_GameSettings name, also the name of its widget in the tab
+	//! \param[in] value
+	//! \return false if the setting has no slider, combo box or spin box
+	static bool SetWidgetValue(Widget root, string setting, int value)
+	{
+		if (!root)
+			return false;
+
+		Widget widget = root.FindAnyWidget(setting);
+		if (!widget)
+			return false;
+
+		SCR_SliderComponent sliderComp = SCR_SliderComponent.Cast(widget.FindHandler(SCR_SliderComponent));
+		if (sliderComp)
+		{
+			sliderComp.SetValue(value);
+			return true;
+		}
+
+		SCR_ComboBoxComponent comboComp = SCR_ComboBoxComponent.Cast(widget.FindHandler(SCR_ComboBoxComponent));
+		if (comboComp)
+		{
+			comboComp.SetCurrentItem(value, false, true);
+			return true;
+		}
+
+		SCR_SpinBoxComponent spinComp = SCR_SpinBoxComponent.Cast(widget.FindHandler(SCR_SpinBoxComponent));
+		if (spinComp)
+		{
+			spinComp.SetCurrentItem(value, false, true);
+			return true;
+		}
+
+		return false;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting
 	//! \return the value selected in the tab, 0 if the setting has no widget

@@ -19,7 +19,7 @@ FrameWidgetClass {
              m_aElements {
               SCR_TabViewContent "{6AD51CF260716952}" {
                m_ElementLayout "{2AA1FFAC7A556059}UI/Layouts/Menus/SettingsSubMenus/CSI_SettingsSubMenu.layout"
-               m_sTabButtonContent "CSI"
+               m_sTabButtonContent "Coalition Squad Interface"
                m_sTabIdentifier "CSI"
               }
              }
