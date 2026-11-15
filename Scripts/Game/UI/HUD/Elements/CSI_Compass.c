@@ -14,6 +14,7 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 
 	protected string m_sStoredCompass;	//!< currently loaded texture, to avoid reloading it every frame
 	protected float m_fStoredYaw;
+	protected int m_iStoredBearing = -2;	//!< bearing text shown (-1 hidden, -2 not set yet), to avoid setting it every frame
 
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_HUDSystem;
@@ -45,6 +46,9 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 	//! Called every frame by CSI_HUD.
 	void Update()
 	{
+		if (!m_wCompass || !m_wBearing)
+			return;
+
 		int yawInt;
         float yaw = m_HUDSystem.GetLocalYaw();
 		yawInt = -yaw;
@@ -81,8 +85,15 @@ class CSI_Compass : SCR_ScriptedWidgetComponent
 			if (yawInt < 0)
 				yawInt += 360;
 
-			m_wBearing.SetText(yawInt.ToString(3));
-		} else
+			if (m_iStoredBearing != yawInt)
+			{
+				m_wBearing.SetText(yawInt.ToString(3));
+				m_iStoredBearing = yawInt;
+			}
+		} else if (m_iStoredBearing != -1)
+		{
 			m_wBearing.SetText("");
+			m_iStoredBearing = -1;
+		}
 	}
 }

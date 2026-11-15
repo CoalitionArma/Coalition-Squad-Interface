@@ -3,7 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD stamina bar: fades in while stamina is below full and out when full; the color shows the stamina band.
+//!	\Description: 	HUD stamina bar: fades in while stamina is below full and out when full (time based, FADE_SPEED); the color
+//! 				shows the stamina band.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Stamina : SCR_ScriptedWidgetComponent
@@ -16,6 +17,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	protected CSI_HUDSystem m_HUDSystem;
 
 	protected ProgressBarWidget m_wStamBar;
+
+	protected static const float FADE_SPEED = 0.3;	//!< opacity per second while fading, about 3 s for a full fade
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -42,11 +45,15 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Called every frame by CSI_HUD.
-	void Update()
+	//! \param[in] timeSlice seconds since the last frame, for the fade
+	void Update(float timeSlice)
 	{
+		if (!m_wStamBar)
+			return;
+
 		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
 		{
-			HideBar(0);
+			m_wStamBar.SetOpacity(0);
 			return;
 		}
 
@@ -55,12 +62,20 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		if (!character)
 			return;
 
-		SCR_CharacterControllerComponent characterController = SCR_CharacterControllerComponent.Cast(character.FindComponent(SCR_CharacterControllerComponent));
+		SCR_CharacterControllerComponent characterController = SCR_CharacterControllerComponent.Cast(character.GetCharacterController());
 
 		if (!characterController)
 			return;
 
-		OnStaminaChange(characterController.GetStamina());
+		float stamina = characterController.GetStamina();
+		OnStaminaChange(stamina);
+
+		// Fade in while below full, out once full. Time based, so the fade takes as long at any frame rate
+		float fadeStep = FADE_SPEED * timeSlice;
+		if (stamina < 1)
+			m_wStamBar.SetOpacity(Math.Min(m_wStamBar.GetOpacity() + fadeStep, 1));
+		else
+			m_wStamBar.SetOpacity(Math.Max(m_wStamBar.GetOpacity() - fadeStep, 0));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -68,28 +83,13 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Raises the bar's opacity one step (0.005 per frame).
-	//! \param[in] currentOpacity
-	void RevealBar(float currentOpacity)
-	{
-		float setOpacity = Math.Clamp(currentOpacity + 0.005, 0.0, 1.0);
-		m_wStamBar.SetOpacity(setOpacity);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Lowers the bar's opacity one step (0.005 per frame).
-	//! \param[in] currentOpacity
-	protected void HideBar(float currentOpacity)
-	{
-		float setOpacity = Math.Clamp(currentOpacity - 0.005, 0.0, 1.0);
-		m_wStamBar.SetOpacity(setOpacity);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Sets the bar's value, color and fade direction.
+	//! Sets the bar's value and color. Update fades it; the Setting Info preview calls this directly.
 	//! \param[in] stamina 0 - 1
 	void OnStaminaChange(float stamina)
 	{
+		if (!m_wStamBar)
+			return;
+
 		m_wStamBar.SetCurrent(stamina);
 
 		// Color: green above 70%, amber 30-70%, red below 30%
@@ -98,15 +98,6 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 			case (stamina < 0.7 && stamina > 0.3) : { m_wStamBar.SetColor(new Color(0.091997, 0.083009, 0.035996, 1.000000)); break;};
 			case (stamina < 0.3)                  : { m_wStamBar.SetColor(new Color(0.188724, 0.046860, 0.037476, 1.000000)); break;};
 			default                               : { m_wStamBar.SetColor(new Color(0.035996, 0.091997, 0.050004, 1.000000)); break;};
-		};
-
-		float currentOpacity = m_wStamBar.GetOpacity();
-
-		// Opacity: fade in while below full, fade out once full
-		switch (true)
-		{
-			case (stamina < 1 && currentOpacity < 1)  : { RevealBar(currentOpacity); break;};
-			case (stamina == 1 && currentOpacity > 0) : { HideBar(currentOpacity); break;};
 		};
 	}
 }

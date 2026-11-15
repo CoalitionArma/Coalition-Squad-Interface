@@ -43,6 +43,7 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string RADAR_FIELD_OF_VIEW = "m_iRadarFieldOfView";
 	const static string RADAR_RANGE_ON_FOOT = "m_iRadarRangeOnFoot";
 	const static string RADAR_RANGE_IN_VEHICLE = "m_iRadarRangeInVehicle";
+	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
 
 	const static int NAMETAG_FIELD_OF_VIEW_MIN = 5;	//!< degrees, same as the m_iNametagFieldOfView slider
 	const static int NAMETAG_FIELD_OF_VIEW_MAX = 125;	//!< degrees, same as the m_iNametagFieldOfView slider
@@ -91,7 +92,8 @@ class CSI_GameSettings : ModuleGameSettings
 		NAMETAG_FIELD_OF_VIEW_SIMPLIFIED,
 		RADAR_FIELD_OF_VIEW,
 		RADAR_RANGE_ON_FOOT,
-		RADAR_RANGE_IN_VEHICLE
+		RADAR_RANGE_IN_VEHICLE,
+		REVEAL_UI_MODE
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -114,6 +116,13 @@ class CSI_GameSettings : ModuleGameSettings
 	};
 
 	//------------------------------------------------------------------------------------------------
+	// Personal preferences the server can't override: no override checkbox in the CSI tab, and any override is ignored
+	const static ref TStringArray SETTINGS_WITHOUT_SERVER_OVERRIDE =
+	{
+		REVEAL_UI_MODE
+	};
+
+	//------------------------------------------------------------------------------------------------
 	//! \return setting names in replication (index) order
 	static TStringArray GetSettingsArray()
 	{
@@ -130,6 +139,9 @@ class CSI_GameSettings : ModuleGameSettings
 
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "Hides the whole CSI HUD (compass, group display and stamina bar) until you hold the Reveal UI key.")]
 	int m_bAutoHideHUD;
+
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ERevealUIMode.HOLD), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ERevealUIMode), desc: "How the Reveal CSI HUD key brings back the hidden HUD. Hold: shown while you hold the key. Toggle: one press shows it, the next hides it.")]
+	int m_iRevealUIMode;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows a stamina bar in the bottom left corner whenever you're not at full stamina.")]
 	int m_bStaminaVisible;

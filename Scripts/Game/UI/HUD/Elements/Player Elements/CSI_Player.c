@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-11
+//! \Last Updated: 	2026-11-12
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One row of the HUD group list: the player's name in their color team plus a CSI_Icon.
 //! 
@@ -35,6 +35,17 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 		m_wIcon = w.FindAnyWidget("Icon");
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Unsubscribes from the player's data, as CSI_Icon does; the rows go whenever the HUD stops drawing
+	//! \param[in] w
+	override void HandlerDeattached(Widget w)
+	{
+		if (m_PlayerData)
+			m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
+
+		super.HandlerDeattached(w);
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -47,18 +58,27 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 		if (m_iPlayerId != playerID)
 		{
 			m_iPlayerId = playerID;
-			CSI_Icon icon = CSI_Icon.Cast(m_wIcon.FindHandler(CSI_Icon));
 
-			icon.IconUpdate(playerID);
+			CSI_Icon icon;
+			if (m_wIcon)
+				icon = CSI_Icon.Cast(m_wIcon.FindHandler(CSI_Icon));
+
+			if (icon)
+				icon.IconUpdate(playerID);
 
 			// Stop listening to the previous player's data
 			if (m_PlayerData)
 				m_PlayerData.GetOnDataUpdate().Remove(DataUpdate);
 
+			m_PlayerData = null;
+
 			if (playerID <= 0)
 			{
 				m_wRoot.SetVisible(false);
-				m_wPlayerName.SetText("");
+
+				if (m_wPlayerName)
+					m_wPlayerName.SetText("");
+
 				return;
 			};
 
@@ -77,7 +97,7 @@ class CSI_Player : SCR_ScriptedWidgetComponent
 	//! Applies the player's name (with rank, if enabled) and color team.
 	protected void DataUpdate()
 	{
-		if (!m_PlayerData)
+		if (!m_PlayerData || !m_wPlayerName)
 			return;
 
 		Color colorTeam = CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam());

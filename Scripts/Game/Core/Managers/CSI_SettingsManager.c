@@ -3,7 +3,7 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-12
+//! \Last Updated: 	2026-11-13
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Effective CSI settings for the local player: their own CSI_GameSettings values with server overrides applied.
 //! 				The server replicates one value per setting in m_aSettingsAuthorityValues: >= 0 means "use the client's value",
@@ -223,6 +223,10 @@ class CSI_SettingsManager : ScriptComponent
 		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
 		if (index != -1)
 		{
+			// Never stored as an override, so one set before the setting became personal is cleared on the next change
+			if (CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE.Contains(setting))
+				serverOverrideEnabled = false;
+
 			if(serverOverrideEnabled)
 			{
 				// Encode as negative, see SERVER_OVERRIDE_* constants
@@ -391,7 +395,11 @@ class CSI_SettingsManager : ScriptComponent
 		{
 			int settingValue;
 			bool IsBool = CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting);
-			int serverSetting = m_aSettingsAuthorityValues.Get(i);
+			// No override (0) for settings the server can't override, and for settings an older server version doesn't
+			// know yet (its array is shorter, settings are only ever appended)
+			int serverSetting = 0;
+			if (m_aSettingsAuthorityValues.IsIndexValid(i) && !CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE.Contains(setting))
+				serverSetting = m_aSettingsAuthorityValues[i];
 
 			// Decode the server value; >= 0 means no override, so use the server default or the client's own setting
 			switch (true)

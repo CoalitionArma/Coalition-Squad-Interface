@@ -22,6 +22,7 @@ class CSI_UIHelper
 	const static ResourceName CSI_ICONS = "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset";
 
 	const static ResourceName CSI_ICON_LAYOUT = "{4E4F52A9958E840C}UI/Layouts/HUD/Elements/Player Elements/CSI_Icon.layout";
+	const static ResourceName CSI_PLAYER_LAYOUT = "{8904AB7E4A74F558}UI/Layouts/HUD/Elements/Player Elements/CSI_Player.layout";	//!< one group list row
 
 	// Icons with a single image regardless of CSI_EIconTheme
 	static ref array<CSI_EIcon> m_aNonThemedRegularIcons =

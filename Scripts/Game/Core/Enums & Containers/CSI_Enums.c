@@ -29,6 +29,14 @@ enum CSI_ENametagIconPosition
 }
 
 //------------------------------------------------------------------------------------
+//! How the Reveal UI key shows the HUD while AUTO_HIDE_HUD is on (REVEAL_UI_MODE)
+enum CSI_ERevealUIMode
+{
+	HOLD,	//!< shown while the key is held
+	TOGGLE,	//!< one press shows it, the next hides it
+}
+
+//------------------------------------------------------------------------------------
 enum CSI_ECompassTheme
 {
 	REGULAR,
