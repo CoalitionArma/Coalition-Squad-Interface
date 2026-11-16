@@ -1,31 +1,65 @@
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: player tiles show CSI names, role icons (vanilla's without CSI data) and color teams;
+//! 				members are listed in CSI's sorted order; clicking a group hides the CSI player settings panel.
+//! 
+//------------------------------------------------------------------------------------------------
 modded class SCR_GroupTileButton
-{	
+{
+	protected ref array<CSI_PlayerData> m_aSubscribedPlayerData = {};	//!< squadmates' data whose changes refresh the group's details
+
 	//------------------------------------------------------------------------------------------------
+	override void HandlerDeattached(Widget w)
+	{
+		super.HandlerDeattached(w);
+
+		foreach (CSI_PlayerData playerData : m_aSubscribedPlayerData)
+		{
+			if (playerData)
+				playerData.GetOnDataUpdate().Remove(OnPlayerDataUpdate);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Also hides the CSI player settings panel.
+	//! \param[in] w
+	//! \param[in] x
+	//! \param[in] y
+	//! \param[in] button
+	//! \return
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
 		super.OnClick(w, x, y, button);
 
-		Widget playerSettings = GetRootFrame(m_wRoot).FindAnyWidget("PlayersSettings");
-		
+		Widget rootFrame = GetRootFrame(m_wRoot);
+		Widget playerSettings;
+		if (rootFrame)
+			playerSettings = rootFrame.FindAnyWidget("PlayersSettings");
+
 		if (playerSettings)
 			playerSettings.SetVisible(false);
-		
+
 		return true;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
+	//! Walks up from w (at most 50 levels) to the group menu's "rootFrame" widget.
+	//! \param[in] w
+	//! \return "rootFrame", or null if the top of the hierarchy is reached first
 	Widget GetRootFrame(Widget w)
 	{
 		Widget currentWidget = w;
-		
+
 		for (int e; e <= 50; e++)
 		{
-			if (currentWidget.GetName() == "rootFrame")
+			if (!currentWidget || currentWidget.GetName() == "rootFrame")
 				break;
 			currentWidget = currentWidget.GetParent();
 		}
-		
+
 		return currentWidget;
 	}
 
@@ -40,7 +74,8 @@ modded class SCR_GroupTileButton
 		SCR_AIGroup group = m_GroupManager.FindGroup(m_iGroupID);
 		if (!group)
 			return;
-		
+
+		// CSI: color teams are only shown to members of this group
 		bool isLocalPlayerInGroup = group.GetPlayerIDs().Contains(SCR_PlayerController.GetLocalPlayerId());
 		CSI_PlayerData playerData = CSI_PlayerDataManager.GetInstance().GetPlayerData(playerID);
 
@@ -57,7 +92,7 @@ modded class SCR_GroupTileButton
 		BaseContainer container;
 		SCR_EditableEntityUIInfo info;
 		set<int> frequencies = new set<int>();
-		
+
 		playerName = TextWidget.Cast(playerTile.FindAnyWidget("PlayerName"));
 		playerFrequency = TextWidget.Cast(playerTile.FindAnyWidget("Frequency"));
 		m_wTaskLayout = SizeLayoutWidget.Cast(playerTile.FindAnyWidget("TaskLayout"));
@@ -67,27 +102,23 @@ modded class SCR_GroupTileButton
 		muteIcon = ImageWidget.Cast(playerTile.FindAnyWidget("MuteIcon"));
 		background = ImageWidget.Cast(playerTile.FindAnyWidget("Background"));
 		loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget("LoadoutIcon"));
-		ImageWidget m_wIconSymbol = ImageWidget.Cast(playerTile.FindAnyWidget("TaskIconSymbol")); 
+		ImageWidget m_wIconSymbol = ImageWidget.Cast(playerTile.FindAnyWidget("TaskIconSymbol"));
 		ImageWidget platformIcon = ImageWidget.Cast(playerTile.FindAnyWidget("PlatformIcon"));
-		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));
+		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));	// CSI: tinted by color team
 
 		playerButton = ButtonWidget.Cast(playerTile.FindAnyWidget("PlayerButton"));
 		if (!playerButton)
 			return;
 
 		m_PlayerTileComponent = SCR_PlayerTileButtonComponent.Cast(playerButton.FindHandler(SCR_PlayerTileButtonComponent));
-		m_PlayerTileComponent.SetGroupTileButton(this);
+		m_PlayerTileComponent.SetGroupTileButton(this);	// CSI: lets the tile find the CSI player settings panel
 		m_PlayerTileComponent.SetTilePlayerID(playerID);
 
 		SetupOptionsCombo(playerTile);
 
-        string playerText = CSI_UIHelper.GetPlayersName(playerID);
+		// CSI: display name with rank
+		playerName.SetText(CSI_UIHelper.GetPlayersName(playerID));
 
-        if (playerText.IsEmpty())
-            playerText = SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(playerID);
-
-		playerName.SetText(playerText);
-		
 		SCR_PlayerController playerCtrl = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 		if (playerCtrl)
 			playerCtrl.SetPlatformImageTo(playerID, platformIcon);
@@ -103,7 +134,9 @@ modded class SCR_GroupTileButton
 				background.SetOpacity(0.85);
 			}
 		}
-		
+
+		// CSI: no own-name color, names use the color team
+
 		//set the state of mute
 		PlayerController pc = GetGame().GetPlayerController();
 		// Using another PlayerController variable to not alter rest of code
@@ -116,45 +149,89 @@ modded class SCR_GroupTileButton
 				muteIcon.LoadImageFromSet(0, UIConstants.ICONS_IMAGE_SET, "sound-off");
 			};
 		};
-		
+
+		// CSI: role icon and color team replace loadout/leader icons and badge color
 		if (playerData && loadoutIcon && playerName && lineBackground)
 		{
-			playerData.GetOnDataUpdate().Remove(RefreshPlayers);
-			
+			// Remove first so repeated setups don't stack subscriptions
+			playerData.GetOnDataUpdate().Remove(OnPlayerDataUpdate);
+
 			CSI_EIcon displayIcon = playerData.GetDisplayIcon();
-			
+
 			bool setAlt = false;
 			if (displayIcon == CSI_EIcon.DRIVER)
 				setAlt = true;
-			
+
             string iconString = CSI_UIHelper.GetIconString(displayIcon, true, setAlt);
-			
+
+			// MAN uses the pointer icon
 			if (iconString == "MAN_ICON")
 				loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 			else
             	loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
-			
+
 			if (isLocalPlayerInGroup)
 			{
-				playerData.GetOnDataUpdate().Insert(RefreshPlayers);
-				
+				playerData.GetOnDataUpdate().Insert(OnPlayerDataUpdate);
+
+				// Removed in HandlerDeattached
+				if (!m_aSubscribedPlayerData.Contains(playerData))
+					m_aSubscribedPlayerData.Insert(playerData);
+
 				CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 				playerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 				loadoutIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-			
+
 				if (colorTeam != CSI_EColorTeam.NONE)
 				{
 					lineBackground.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam, 8));
 				};
 			};
-		};
+		}
+		//look for loadout and set the appropriate icon
+		else if (loadoutIcon)	// CSI: only where the CSI icon isn't set (no CSI data)
+		{
+			SCR_LoadoutManager loadoutManager = GetGame().GetLoadoutManager();
+			if (loadoutManager)
+				playerLoadout = loadoutManager.GetPlayerLoadout(playerID);
+
+			if (playerLoadout)
+			{
+				res = Resource.Load(playerLoadout.GetLoadoutResource());
+				source = SCR_BaseContainerTools.FindComponentSource(res, "SCR_EditableCharacterComponent");
+				if (source)
+				{
+					container = source.GetObject("m_UIInfo");
+					info = SCR_EditableEntityUIInfo.Cast(BaseContainerTools.CreateInstanceFromContainer(container));
+					info.SetIconTo(loadoutIcon);
+				}
+			}
+
+			//set leader icon if given player is a leader
+			if (group.IsPlayerLeader(playerID))
+			{
+				m_LeaderInfo.SetIconTo(loadoutIcon);
+				loadoutIcon.SetColor(m_PlayerNameSelfColor);
+			}
+
+			// CSI: badge keeps its layout color, as for members with CSI data
+		}
 
 		m_PlayerTileComponent.GetOnTileFocus().Insert(OnPlayerTileFocus);
 		m_PlayerTileComponent.GetOnTileFocusLost().Insert(OnPlayerTileFocusLost);
 
 		m_aPlayerComponentsList.Insert(m_PlayerTileComponent);
 	}
-	
+
+	//------------------------------------------------------------------------------------------------
+	//! Refreshes the group's details for a squadmate's CSI change, only while this group is selected.
+	protected void OnPlayerDataUpdate()
+	{
+		if (!m_GroupComponent || m_GroupComponent.GetSelectedGroupID() != m_iGroupID)
+			return;
+
+		RefreshPlayers();
+	}
 
 	//------------------------------------------------------------------------------------------------
 	override void RefreshPlayers()
@@ -175,6 +252,8 @@ modded class SCR_GroupTileButton
 
 		if (m_ParentSubMenu == null)
 			FindParentMenu();
+
+		SetSelectedGroupTaskInfo(group);
 
 		m_aPlayerComponentsList.Clear();
 
@@ -201,7 +280,7 @@ modded class SCR_GroupTileButton
 		RichTextWidget frequency = RichTextWidget.Cast(m_ParentSubMenu.GetRootWidget().FindAnyWidget("GroupDetailFrequency"));
 		if (!frequency)
 			return;
-		
+
 		RichTextWidget groupDetailType = RichTextWidget.Cast(m_ParentSubMenu.GetRootWidget().FindAnyWidget("GroupDetailType"));
 		if (!groupDetailType)
 			return;
@@ -209,16 +288,16 @@ modded class SCR_GroupTileButton
 		SCR_PlayerControllerGroupComponent s_PlayerGroupController = SCR_PlayerControllerGroupComponent.GetLocalPlayerControllerGroupComponent();
 		if (!s_PlayerGroupController)
 			return;
-		
+
 		SocialComponent socialComp = SocialComponent.Cast(playerController.FindComponent(SocialComponent));
 		if (!socialComp)
 			return;
-		
+
 		if (!s_PlayerGroupController.CanPlayerJoinGroup(playerController.GetPlayerId(), m_GroupManager.FindGroup(m_iGroupID)))
-			m_JoinGroupButton.SetEnabled(false);
+			SetJoinButtonVisible(false);
 		else
-			m_JoinGroupButton.SetEnabled(true);
-		
+			SetJoinButtonVisible(true);
+
 		// This function can only be used in UI menu, where to change the language you need to close and open the shown menu, so it will be renewed.
 		squadName.SetText(SCR_GroupHelperUI.GetTranslatedGroupName(group));
 
@@ -237,7 +316,7 @@ modded class SCR_GroupTileButton
 
 		CheckLeaderOptions();
 
-		frequency.SetText(""+group.GetRadioFrequency() * 0.001 + " #AR-VON_FrequencyUnits_MHz");
+		frequency.SetTextFormat("%1 #AR-VON_FrequencyUnits_MHz", group.GetRadioFrequency() * 0.001);
 
 		Widget children = playerList.GetChildren();
 		while (children)
@@ -252,8 +331,18 @@ modded class SCR_GroupTileButton
 			leaderList.RemoveChild(children);
 			children = leaderList.GetChildren();
 		}
-		
-		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(group.GetPlayerIDs());
+
+		// CSI: list members in CSI's sorted order (SL, color teams, unassigned)
+		array<int> groupPlayerIDs = group.GetPlayerIDs();
+		array<int> playerIDs = CSI_HUDSystem.GetInstance().GetSortedGroupArray(groupPlayerIDs);
+
+		// CSI: also list members without CSI data (GetSortedGroupArray skips them)
+		foreach (int groupPlayerID : groupPlayerIDs)
+		{
+			if (!playerIDs.Contains(groupPlayerID))
+				playerIDs.Insert(groupPlayerID);
+		}
+
 		Widget playerTile;
 
 		int leaderID = group.GetLeaderID();

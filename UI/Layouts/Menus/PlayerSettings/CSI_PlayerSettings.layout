@@ -60,19 +60,40 @@ ScaleWidgetClass {
           VerticalAlign 3
          }
          {
-          ImageWidgetClass "{5EC77B609A838867}" {
-           Name "Icon"
+          OverlayWidgetClass "{FACA4BD65A64DE21}" {
+           Name "IconOverlay"
            Slot LayoutSlot "{66C774419BEC5B4C}" {
             HorizontalAlign 1
             VerticalAlign 1
             Padding 40 5 40 0
             FillWeight 5.8
            }
-           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-           Image "TL_ICON"
-           Size 64 64
-           "Shadow Offset" 0.5 0.5
-           "Shadow Size Increase" 1 1
+           {
+            ImageWidgetClass "{5EC77B609A838867}" {
+             Name "Icon"
+             Slot OverlayWidgetSlot "{34E5D8BB54FE9B42}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+             Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+             Image "TL_ICON"
+             Size 64 64
+             "Shadow Offset" 0.5 0.5
+             "Shadow Size Increase" 1 1
+            }
+            ImageWidgetClass "{41A78C0C3374DA4E}" {
+             Name "PointerIcon"
+             Slot OverlayWidgetSlot "{56808847F66D2355}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+             Texture "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset"
+             Image "pointer-small"
+             Size 64 64
+             "Shadow Offset" 0.5 0.5
+             "Shadow Size Increase" 1 1
+            }
+           }
           }
           TextWidgetClass "{5EC77AE9FA911A1F}" {
            Name "PlayerName"
@@ -118,8 +139,6 @@ ScaleWidgetClass {
              }
              Color 0.305 0.305 0.305 1
              components {
-              SCR_ComboBoxComponent "{6093726C5F548801}" {
-              }
               ButtonComponent "{60B40B7B41F8F1C5}" {
                m_ColorButtonDefault 1 1 1 0.608
                m_ColorButtonFocused 1 1 1 1
@@ -213,6 +232,19 @@ ScaleWidgetClass {
                }
                Color 0.305 0.305 0.305 1
               }
+              ButtonWidgetClass "{5EC77B782C0E76A0}" {
+               Name "None"
+               Slot OverlayWidgetSlot "{66C774419BEC58C4}" {
+                HorizontalAlign 3
+                VerticalAlign 3
+                Padding 1 1 1 1
+               }
+               Color 0.159 0.159 0.159 0.119
+               components {
+                SCR_ModularButtonComponent "{6093726F6CB0CD80}" {
+                }
+               }
+              }
               ImageWidgetClass "{5EC77B6C5671FF7D}" {
                Name "NoneImage"
                Slot OverlayWidgetSlot "{66C774419BEC58D1}" {
@@ -220,22 +252,11 @@ ScaleWidgetClass {
                 VerticalAlign 3
                 Padding 10 0 10 0
                }
+               "Ignore Cursor" 1
                Texture "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
                Image "disable"
                Size 64 64
                "Shadow Offset" 0.5 0.5
-              }
-              ButtonWidgetClass "{5EC77B782C0E76A0}" {
-               Name "None"
-               Slot OverlayWidgetSlot "{66C774419BEC58C4}" {
-                HorizontalAlign 3
-                VerticalAlign 3
-               }
-               Color 0.159 0.159 0.159 0.119
-               components {
-                SCR_ModularButtonComponent "{6093726F6CB0CD80}" {
-                }
-               }
               }
              }
             }
@@ -271,6 +292,7 @@ ScaleWidgetClass {
                  Slot OverlayWidgetSlot "{66C774419BEC5918}" {
                   HorizontalAlign 3
                   VerticalAlign 3
+                  Padding 1 1 1 1
                  }
                  Color 0.791 0 0 0.256
                  components {
@@ -299,6 +321,7 @@ ScaleWidgetClass {
                  Slot OverlayWidgetSlot "{66C774419BEC5961}" {
                   HorizontalAlign 3
                   VerticalAlign 3
+                  Padding 1 1 1 1
                  }
                  Color 0 0.107 1 0.256
                  components {
@@ -327,6 +350,7 @@ ScaleWidgetClass {
                  Slot OverlayWidgetSlot "{66C774419BEC5942}" {
                   HorizontalAlign 3
                   VerticalAlign 3
+                  Padding 1 1 1 1
                  }
                  Color 0.791 0.791 0 0.256
                  components {
@@ -356,6 +380,7 @@ ScaleWidgetClass {
                  Slot OverlayWidgetSlot "{66C774419BEC59A5}" {
                   HorizontalAlign 3
                   VerticalAlign 3
+                  Padding 1 1 1 1
                  }
                  Color 0 0.791 0 0.256
                  components {

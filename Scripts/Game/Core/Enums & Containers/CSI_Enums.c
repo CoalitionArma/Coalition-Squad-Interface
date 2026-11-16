@@ -29,6 +29,14 @@ enum CSI_ENametagIconPosition
 }
 
 //------------------------------------------------------------------------------------
+//! How the Reveal UI key shows the auto-hidden HUD
+enum CSI_ERevealUIMode
+{
+	HOLD,	//!< shown while the key is held
+	TOGGLE,	//!< one press shows it, the next hides it
+}
+
+//------------------------------------------------------------------------------------
 enum CSI_ECompassTheme
 {
 	REGULAR,
@@ -40,7 +48,7 @@ enum CSI_ECompassTheme
 enum CSI_EIconType
 {
 	REGULAR,
-	OUTLINE
+	INVERTED
 }
 
 //------------------------------------------------------------------------------------
@@ -53,6 +61,44 @@ enum CSI_EIconTheme
 	SCI_FI,
 	WW2,
 	MEDIEVAL,
+}
+
+//------------------------------------------------------------------------------------
+//! Color setting values (CSI_ColorPresets). Saved by number: only ever append.
+enum CSI_EColorPreset
+{
+	WHITE,
+	AMBER,
+	ORANGE,
+	RED,
+	GREEN,
+	BLUE,
+	CYAN,
+	PINK,
+	PURPLE,
+	GRAY,	//!< nametag gray, the default without a fire team
+
+	// Second row of the color boxes
+	YELLOW,
+	LIGHT_YELLOW,
+	LIME,
+	LIGHT_GREEN,
+	TEAL,
+	LIGHT_BLUE,
+	LAVENDER,
+	LIGHT_RED,
+	LIGHT_PINK,
+	BROWN,
+}
+
+//------------------------------------------------------------------------------------
+//! Fire team color sets (CSI_ColorPresets.GetColorTeamColor). Saved by number: only ever append.
+enum CSI_EColorTeamSet
+{
+	CLASSIC,
+	BRIGHT,
+	PASTEL,
+	COLORBLIND,	//!< Okabe-Ito colors, told apart with most color vision deficiencies
 }
 
 //=============================================================================================================================================================================================================================================================================================================================================================

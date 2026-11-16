@@ -1,20 +1,28 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-14
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Static helpers for a character's facing and vehicle seat.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_EntityHelper
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC HELPER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Get characters yaw axis value
-	//! \param[in] playerCharacter: The inputed players character entity
-	//! \return The yaw of the character entity
+	//! Head aim on foot, turret aim in a turret, vehicle yaw in other seats.
+	//! \param[in] playerCharacter
+	//! \return negated world yaw in degrees, 0 if it can't be read
 	static float GetCharacterYaw(SCR_ChimeraCharacter playerCharacter)
 	{
 		if (!playerCharacter)
 			return 0;
-		
+
 		AimingComponent playerAimingComponent = playerCharacter.GetHeadAimingComponent();
-		if (!playerAimingComponent) 
+		if (!playerAimingComponent)
 			return 0;
 
 		float yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
@@ -25,27 +33,30 @@ class CSI_EntityHelper
 			TurretControllerComponent turretControllerComp = TurretControllerComponent.Cast(compartment.GetController());
 			if (!turretControllerComp)
 				turretControllerComp = compartment.GetAttachedTurret();
-			
+
 			if (turretControllerComp)
 				yaw = -turretControllerComp.GetTurretComponent().GetAimingDirectionWorld().ToYaw();
 			else
 				yaw = -playerCharacter.GetYawPitchRoll()[0];
 		};
-		
+
 		return yaw;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Get characters current vehicle slot
-	//! \param[in] playerCharacter: The inputed players character entity
-	//! \return The compartment the entity is in (will return null if they aren't in a vehicle)
 	static BaseCompartmentSlot GetCharacterVehicleCompartment(IEntity playerCharacter)
 	{
 		if (!playerCharacter)
 			return null;
-		
-		CompartmentAccessComponent compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
-		if (compartmentAccess) 
+
+		CompartmentAccessComponent compartmentAccess;
+		ChimeraCharacter character = ChimeraCharacter.Cast(playerCharacter);
+		if (character)
+			compartmentAccess = character.GetCompartmentAccessComponent();
+		else
+			compartmentAccess = CompartmentAccessComponent.Cast(playerCharacter.FindComponent(CompartmentAccessComponent));
+
+		if (compartmentAccess)
 		{
 			BaseCompartmentSlot compartment = compartmentAccess.GetCompartment();
 			return compartment;

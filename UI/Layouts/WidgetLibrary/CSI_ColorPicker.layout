@@ -1,0 +1,84 @@
+ButtonWidgetClass {
+ Name "ColorPicker"
+ Slot AlignableSlot "{5536C935787A6814}" {
+  HorizontalAlign 3
+  Padding 4 4 4 4
+ }
+ Clipping False
+ Color 0 0 0 0
+ components {
+  CSI_ColorPickerComponent "{6A9C2E41B7E70001}" {
+   m_sSoundClicked "SOUND_FE_BUTTON_SELECT"
+   m_sLabel "Color"
+   m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+   m_bMouseOverToFocus 1
+   m_bCycleMode 1
+   m_bForceSize 1
+   m_fSizeWithLabel 88
+   m_ElementLayout "{8A5D43FC8AC6C171}UI/layouts/Map/MapColorSelectorEntry.layout"
+   m_iMaxItemsInRow 10
+   m_fElementHeight 30
+  }
+  SCR_ModularButtonComponent "{6A9C2E41B7E70002}" {
+   m_aEffects {
+    SCR_ButtonEffectColor "{6A9C2E41B7E70003}" {
+     m_eEvents 6144
+     m_sWidgetName "LineHighlight"
+     m_fAnimationTime 0.1
+     m_cDefault 0 0 0 0
+     m_cHovered 0 0 0 0
+     m_cActivated 0 0 0 0
+     m_cActivatedHovered 0 0 0 0
+     m_cDisabled 0 0 0 0
+     m_cDisabledActivated 0 0 0 0
+     m_cClicked 0 0 0 0
+     m_cFocusGained 1 0.597 0.198 0.3
+     m_cFocusLost 0 0 0 0
+     m_cToggledOn 0 0 0 0
+     m_cToggledOff 0 0 0 0
+    }
+   }
+   m_bCanBeToggled 1
+   m_bToggledOnlyThroughApi 1
+   m_eEventReturnValue 2147483644
+  }
+ }
+ "Left rule" Stop
+ "Right rule" Stop
+ style blank
+ {
+  SizeLayoutWidgetClass "{6A9C2E41B7E70004}" : "{37F2B4CB4DDDD310}UI/layouts/WidgetLibrary/BaseElements/WLib_Base.layout" {
+   Name "SizeLayout"
+   Slot ButtonWidgetSlot "{6A9C2E41B7E70005}" {
+    HorizontalAlign 3
+   }
+   {
+    OverlayWidgetClass "{55367D8E531FD623}" {
+     Prefab "{55367D8E531FD623}"
+     {
+      ImageWidgetClass "{6A9C2E41B7E70006}" : "{E679D416053194D7}UI/layouts/WidgetLibrary/BaseElements/WLib_LineHighlight.layout" {
+       Name "LineHighlight"
+       Slot OverlayWidgetSlot "{5DB8C57A14F7A8AF}" {
+       }
+       Progress 0.4
+      }
+      HorizontalLayoutWidgetClass "{55367D8E4592BC6E}" {
+       Prefab "{55367D8E4592BC6E}"
+       {
+        UniformGridLayoutWidgetClass "{6A9C2E41B7E70007}" {
+         Name "ButtonRow"
+         Slot LayoutSlot "{6A9C2E41B7E70008}" {
+          VerticalAlign 3
+          Padding -4 -4 -4 -4
+          SizeMode Fill
+         }
+         "Cell Padding" 2 2 2 2
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

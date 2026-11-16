@@ -1,0 +1,71 @@
+FrameWidgetClass {
+ Name "HudExamples"
+ Slot FrameWidgetSlot "{6A9C2E41B8000004}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 672
+  OffsetRight -672
+  SizeY 280
+  OffsetBottom -280
+ }
+ components {
+  CSI_SettingInfoHudExamples "{6A9C2E41B8F00010}" {
+  }
+ }
+ {
+  FrameWidgetClass "{6A9C2E41B8000006}" : "{24C145EEC397BAE7}UI/Layouts/HUD/CSI_HUD.layout" {
+   Name "Hud"
+   Slot FrameWidgetSlot "{6A9C2E41B8000005}" {
+    Anchor 0 0 1 1
+    OffsetLeft 0
+    OffsetTop 0
+    OffsetRight 0
+    OffsetBottom 0
+   }
+   {
+    ScaleWidgetClass "{66B8C3E3798DA427}" {
+     Prefab "{66B8C3E3798DA427}"
+     Slot FrameWidgetSlot "{66B8C3DE186DE6AB}" {
+      Anchor 0 1 0 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY -8.4
+      OffsetTop -8.4
+      SizeX 350
+      OffsetRight -350
+      SizeY 8.4
+      OffsetBottom 0
+     }
+    }
+    ScaleWidgetClass "{66A83186D1577FB0}" {
+     Prefab "{66A83186D1577FB0}"
+     Slot FrameWidgetSlot "{66A83196E3AE5829}" {
+      Anchor 0.5 1 0.5 1
+      PositionX 96.642
+      OffsetLeft 96.6
+      PositionY -175.802
+      OffsetTop -175.8
+      SizeX 725
+      OffsetRight -821.6
+      SizeY 140
+      OffsetBottom 35.8
+     }
+    }
+    ScaleWidgetClass "{66A83186D06A7C63}" {
+     Prefab "{66A83186D06A7C63}"
+     Slot FrameWidgetSlot "{66A8318AD64681BA}" {
+      Anchor 0.5 1 0.5 1
+      PositionX -92.4
+      OffsetLeft -92.4
+      PositionY -224
+      OffsetTop -224
+      SizeX 184.793
+      OffsetRight -92.393
+      SizeY 210.001
+      OffsetBottom 13.999
+     }
+    }
+   }
+  }
+ }
+}

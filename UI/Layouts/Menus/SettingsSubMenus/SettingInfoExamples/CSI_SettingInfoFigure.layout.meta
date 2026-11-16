@@ -1,0 +1,17 @@
+MetaFileClass {
+ Name "{BDE6DDFEC5F66E3B}UI/Layouts/Menus/SettingsSubMenus/SettingInfoExamples/CSI_SettingInfoFigure.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass PS5 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}

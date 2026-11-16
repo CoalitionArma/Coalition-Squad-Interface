@@ -1,73 +1,96 @@
-class CSI_PlayerDataManagerClass : ScriptComponentClass {};
+class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
 
-class CSI_PlayerDataManager : ScriptComponent
-{	
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
+//! 				The server registers a player's data when they connect, and clears their group-specific data
+//! 				when they join a different group.
+//!
+//------------------------------------------------------------------------------------------------
+class CSI_PlayerDataManager : SCR_BaseGameModeComponent
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	// Primary Data Map
-	protected ref map<int, ref CSI_PlayerData> m_mPlayerDataMap = new map<int, ref CSI_PlayerData>;
+	protected ref map<PlayerId, ref CSI_PlayerData> m_mPlayerDataMap = new map<PlayerId, ref CSI_PlayerData>;	//!< keyed by player ID
+	protected ref map<PlayerId, int> m_mLastGroupIDs = new map<PlayerId, int>;	//!< server only: player ID to the last group they joined
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 MANAGER INITILIZATION
+//	 MANAGER INITIALIZATION
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void OnPostInit(IEntity owner)
 	{
 		super.OnPostInit(owner);
 		m_RplBroadcastManager = CSI_RplBroadcastManager.GetInstance();
+		SCR_AIGroup.GetOnPlayerAdded().Insert(OnGroupPlayerAdded);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void OnDelete(IEntity owner)
+	{
+		super.OnDelete(owner);
+		SCR_AIGroup.GetOnPlayerAdded().Remove(OnGroupPlayerAdded);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Registers the player's data on every machine; a reconnecting player keeps theirs.
+	//! \param[in] playerId
+	override void OnPlayerConnected(int playerId)
+	{
+		super.OnPlayerConnected(playerId);
+
+		if (m_RplBroadcastManager && !GetPlayerData(playerId))
+			m_RplBroadcastManager.RegisterPlayerData(playerId);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Retrieves player data instance for a given player ID
-	//! \param[in] playerID: The ID of player to get data for
-	//! \return CSI_PlayerData instance
-	CSI_PlayerData GetPlayerData(int playerID)
+	//! \param[in] playerID
+	//! \return null for a player who hasn't connected, or whose data expired after a disconnect
+	CSI_PlayerData GetPlayerData(PlayerId playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	map<int, ref CSI_PlayerData> GetPlayerDataMap()
+	map<PlayerId, ref CSI_PlayerData> GetPlayerDataMap()
 	{
 		return m_mPlayerDataMap;
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 REGISER/DE-REGISTER METHODS
+//	 REGISTER/DE-REGISTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Create the players data class.
-	//! \param[in] playerID: ID of the player to register.
-	void RegisterPlayerData(int playerID)
+	void RegisterPlayerData(PlayerId playerID)
 	{
 		if (!GetPlayerData(playerID))
 			CreatePlayerData(playerID);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Removes a players data from the data map, primarily used to clean out disconnects
-	//! \param[in] playerID: ID of the player to remove.
-	void RemovePlayerData(int playerID)
+	void RemovePlayerData(PlayerId playerID)
 	{
 		if (GetPlayerData(playerID))
 			m_mPlayerDataMap.Remove(playerID);
+
+		m_mLastGroupIDs.Remove(playerID);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates a new player data instance for the given player ID.
-	//! \param[in] playerID: The ID of player to create data for
-	//! \return CSI_PlayerData instance
-	protected CSI_PlayerData CreatePlayerData(int playerID)
+	protected CSI_PlayerData CreatePlayerData(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = new CSI_PlayerData;
 		playerData.SetPlayerID(playerID);
@@ -78,88 +101,71 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Sets the player's display icon.
-	//! \param[in] playerID: ID of the player to update.
-	//! \param[in] icon: CSI_EIcon value to apply as the player's current icon.
-	void UpdatePlayerDisplayIcon(int playerID, CSI_EIcon icon)
+	void UpdatePlayerDisplayIcon(PlayerId playerID, CSI_EIcon icon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetDisplayIcon(icon);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's CSI_EColorTeam value in the players data
-	//! \param[in] playerID: ID of the player whose color team will be updated.
-	//! \param[in] colorTeam: New color team value to assign.
-	void UpdatePlayerColorTeam(int playerID, CSI_EColorTeam colorTeam)
+	void UpdatePlayerColorTeam(PlayerId playerID, CSI_EColorTeam colorTeam)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetColorTeam(colorTeam);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Update the temporary override icon for a player.
-	//! Sets the specified player's CSI_EOverrideIcon value in the players data
-	//! \param[in] playerID: ID of the player whose override icon is being changed.
-	//! \param[in] overrideIcon: CSI_EOverrideIcon value indicating which override icon to set (use the enum's "AUTO" value to remove the override).
-	void UpdatePlayerOverrideIcon(int playerID, CSI_EOverrideIcon overrideIcon)
+	//! \param[in] playerID
+	//! \param[in] overrideIcon AUTO removes the override
+	void UpdatePlayerOverrideIcon(PlayerId playerID, CSI_EOverrideIcon overrideIcon)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetOverrideIcon(overrideIcon);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's rank value in their data
-	//! \param[in] playerID: ID of the player whose color team will be updated.
-	//! \param[in] rank: New rank value to assign.
-	void UpdatePlayerRank(int playerID, SCR_ECharacterRank rank)
+	void UpdatePlayerRank(PlayerId playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetRank(rank);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's team leader value in the players data
-	//! \param[in] playerID: ID of the player whose leader status is being changed.
-	//! \param[in] isTL: True to mark the player as team leader; false to revoke leader status.
-	void UpdatePlayerTeamLeader(int playerID, bool isTL)
+	void UpdatePlayerTeamLeader(PlayerId playerID, bool isTL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetIsTeamLeader(isTL);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Sets the specified player's squad leader value in the players data
-	//! \param[in] playerID: ID of the player whose leader status is being changed.
-	//! \param[in] isSL: True to mark the player as squad leader; false to revoke leader status.
-	void UpdatePlayerSquadLeader(int playerID, bool isSL)
+	void UpdatePlayerSquadLeader(PlayerId playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
-		
+
 		if (playerData)
 			playerData.SetIsSquadLeader(isSL);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates player data to clear any group-specific values
-	//! \param[in] playerID: ID of player to clear
-	void ClearGroupSpecificData(int playerID)
+	//! Server: resets the player's color team, override icon and team leader flag.
+	//! \param[in] playerID
+	void ClearGroupSpecificData(PlayerId playerID)
 	{
 		CSI_PlayerData playerData = GetPlayerData(playerID);
 
-		if (playerData)
+		if (playerData && m_RplBroadcastManager)
 		{
 			m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
 			m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
@@ -167,14 +173,31 @@ class CSI_PlayerDataManager : ScriptComponent
 		}
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Server: clears the player's group-specific data when they join a different group than their last one.
+	//! \param[in] group
+	//! \param[in] playerID
+	protected void OnGroupPlayerAdded(SCR_AIGroup group, PlayerId playerID)
+	{
+		if (!Replication.IsServer())
+			return;
+
+		// Rejoining the same group (e.g. after a reconnect) keeps the data
+		int lastGroupID;
+		if (m_mLastGroupIDs.Find(playerID, lastGroupID) && lastGroupID != group.GetGroupID())
+			ClearGroupSpecificData(playerID);
+
+		m_mLastGroupIDs.Set(playerID, group.GetGroupID());
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 REPLICATION METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override protected bool RplSave(ScriptBitWriter writer)
 	{
-		// Save playerData
+		// Count first so RplLoad knows how many entries follow
 		int playablesCount = m_mPlayerDataMap.Count();
 		writer.WriteInt(playablesCount);
 		foreach (int PlayerID, CSI_PlayerData playerData : m_mPlayerDataMap)
@@ -188,16 +211,16 @@ class CSI_PlayerDataManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	override protected bool RplLoad(ScriptBitReader reader)
 	{
-		// Load playerData
 		int playablesCount;
 		reader.ReadInt(playablesCount);
 		for (int i = 0; i < playablesCount; i++)
 		{
 			CSI_PlayerData playerData = new CSI_PlayerData();
 			playerData.Load(reader);
-			
-			int playerID = playerData.GetPlayerID();
-			
+
+			PlayerId playerID = playerData.GetPlayerID();
+
+			// Read every entry to keep the stream aligned, but only keep valid IDs
 			if (playerID > 0)
 				m_mPlayerDataMap.Set(playerID, playerData);
 		}
@@ -208,7 +231,7 @@ class CSI_PlayerDataManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC ACCESSOR
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	protected static CSI_PlayerDataManager m_sInstance;
 	static CSI_PlayerDataManager GetInstance()

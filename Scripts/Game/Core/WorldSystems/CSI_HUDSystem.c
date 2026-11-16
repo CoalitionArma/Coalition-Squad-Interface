@@ -1,22 +1,35 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
+//! 				vehicle/mortar state and the sorted group member list.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_HUDSystem : GameSystem
-{	
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected SCR_GroupsManagerComponent m_GroupsManagerComponent;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
-	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;
-	protected ref array<int> m_aLocalGroupPlayerIds = {};
+	protected SCR_PlayerController m_PlayerController;		//!< local, listened to for controlled entity changes
+	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;	//!< locally controlled character
+	protected SCR_CompartmentAccessComponent m_LocalCompartmentAccess;	//!< local character's, listened to for vehicle and mortar state
+	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< new array each refresh; readers compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
+	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between group refreshes
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override static void InitInfo(WorldSystemInfo outInfo)
 	{
@@ -25,49 +38,69 @@ class CSI_HUDSystem : GameSystem
 			.SetLocation(WorldSystemLocation.Client)
 			.AddPoint(WorldSystemPoint.Frame);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	//! Should be paused when simulation is paused
+	//! \return
 	override bool ShouldBePaused()
 	{
 		return true;
 	}
-	
+
+	//------------------------------------------------------------------------------------------------
+	override protected void OnStopped()
+	{
+		if (m_PlayerController)
+			m_PlayerController.m_OnControlledEntityChanged.Remove(OnControlledEntityChanged);
+
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Remove(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Remove(OnCompartmentLeft);
+		}
+
+		m_PlayerController = null;
+		m_LocalCompartmentAccess = null;
+		super.OnStopped();
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	SCR_ChimeraCharacter GetLocalPlayerCharacter()
 	{
 		return m_LocalPlayerCharacter;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
+	//! \return IDs in display order, a new array each refresh
 	array<int> GetLocalGroupPlayerIds()
 	{
 		return m_aLocalGroupPlayerIds;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsLocalPlayerInVehicle()
 	{
 		return m_bIsLocalPlayerInVehicle;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	bool GetIsLocalPlayerInMortar()
 	{
 		return m_bIsLocalPlayerInMortar;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
 	int GetLocalGroupCount()
 	{
 		return m_iLocalGroupCount;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
+	//! \return negated yaw for the compass and radar
 	float GetLocalYaw()
 	{
 		return m_fLocalYaw;
@@ -76,8 +109,8 @@ class CSI_HUDSystem : GameSystem
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
-	protected int m_iUpdate;
+
+	protected float m_fTimeSinceRefresh;	//!< seconds since the last refresh
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
@@ -87,150 +120,182 @@ class CSI_HUDSystem : GameSystem
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 			return;
 		}
-		
-		m_iUpdate++;
-		UpdateLocalAimingYaw();
-		
-		if (!(m_iUpdate >= 60))
-			return;
-		else
-			m_iUpdate = 0;
-		
-		if (!m_GroupsManagerComponent)
-			m_GroupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
-		
-		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(SCR_PlayerController.GetLocalMainEntity());
-		
-		if (!m_LocalPlayerCharacter) 
-			return;
-		
-		BaseCompartmentSlot vehicleCompartment = CSI_EntityHelper.GetCharacterVehicleCompartment(m_LocalPlayerCharacter);
-		
-		if (vehicleCompartment)
-		{ 
-			IEntity vehicle = vehicleCompartment.GetVehicle();
-			if (vehicle)
-			{
-				m_bIsLocalPlayerInVehicle = true;
-				
-				if (SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)))
-					m_bIsLocalPlayerInMortar = true;
-			};
-		} else {
-			m_bIsLocalPlayerInVehicle = false;
-			m_bIsLocalPlayerInMortar = false;
-		};
-		
-		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
-		
-		if (playersGroup)
+
+		// Follow controlled entity changes and catch up with the current one
+		if (!m_PlayerController)
 		{
-			m_aLocalGroupPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
-			m_iLocalGroupCount = m_aLocalGroupPlayerIds.Count();
-		} else
-			m_iLocalGroupCount = 0;
+			m_PlayerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
+			if (!m_PlayerController)
+				return;
+
+			m_PlayerController.m_OnControlledEntityChanged.Insert(OnControlledEntityChanged);
+			OnControlledEntityChanged(null, m_PlayerController.GetControlledEntity());
+		}
+
+		// Every frame: yaw
+		UpdateLocalAimingYaw();
+
+		// Every REFRESH_INTERVAL: group list
+		m_fTimeSinceRefresh += args.GetTimeSliceSeconds();
+		if (m_fTimeSinceRefresh < REFRESH_INTERVAL)
+			return;
+
+		m_fTimeSinceRefresh = 0;
+		UpdateLocalGroup();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Updates the local player's aiming yaw angle.
+	//! Switches character, moves the compartment listeners to it and forces a group refresh on the next update.
+	//! \param[in] from
+	//! \param[in] to
+	protected void OnControlledEntityChanged(IEntity from, IEntity to)
+	{
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Remove(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Remove(OnCompartmentLeft);
+		}
+
+		m_LocalPlayerCharacter = SCR_ChimeraCharacter.Cast(to);
+
+		m_LocalCompartmentAccess = null;
+		if (m_LocalPlayerCharacter)
+			m_LocalCompartmentAccess = SCR_CompartmentAccessComponent.Cast(m_LocalPlayerCharacter.GetCompartmentAccessComponent());
+
+		// Catch up with the seat the character is already in
+		BaseCompartmentSlot compartment;
+		if (m_LocalCompartmentAccess)
+		{
+			m_LocalCompartmentAccess.GetOnCompartmentEntered().Insert(OnCompartmentEntered);
+			m_LocalCompartmentAccess.GetOnCompartmentLeft().Insert(OnCompartmentLeft);
+			compartment = m_LocalCompartmentAccess.GetCompartment();
+		}
+
+		UpdateLocalVehicleState(compartment);
+		m_fTimeSinceRefresh = REFRESH_INTERVAL;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void OnCompartmentEntered(IEntity targetEntity, BaseCompartmentManagerComponent manager, int mgrID, int slotID, bool move)
+	{
+		if (manager)
+			UpdateLocalVehicleState(manager.FindCompartment(slotID, mgrID));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void OnCompartmentLeft(IEntity targetEntity, BaseCompartmentManagerComponent manager, int mgrID, int slotID, bool move)
+	{
+		// Seat switches also enter the new seat
+		if (move)
+			return;
+
+		UpdateLocalVehicleState(null);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] compartment the local character's seat, null if it isn't in one
+	protected void UpdateLocalVehicleState(BaseCompartmentSlot compartment)
+	{
+		m_bIsLocalPlayerInVehicle = false;
+		m_bIsLocalPlayerInMortar = false;
+
+		if (!compartment)
+			return;
+
+		IEntity vehicle = compartment.GetVehicle();
+		if (!vehicle)
+			return;
+
+		m_bIsLocalPlayerInVehicle = true;
+		m_bIsLocalPlayerInMortar = SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)) != null;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Also runs without a character, as the group belongs to the player.
+	protected void UpdateLocalGroup()
+	{
+		SCR_AIGroup playersGroup = m_GroupsManagerComponent.GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId());
+		if (!playersGroup)
+		{
+			// Replace rather than clear, so readers comparing references notice
+			if (!m_aLocalGroupPlayerIds.IsEmpty())
+				m_aLocalGroupPlayerIds = {};
+
+			m_iLocalGroupCount = 0;
+			return;
+		}
+
+		m_aLocalGroupPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
+		m_iLocalGroupCount = m_aLocalGroupPlayerIds.Count();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Stores the current camera's yaw, negated.
 	void UpdateLocalAimingYaw()
 	{
-		if (!m_LocalPlayerCharacter)
-			return;
-		float yaw;
+		vector transform[4];
+		GetGame().GetWorld().GetCurrentCamera(transform);
 
-		AimingComponent playerAimingComponent = m_LocalPlayerCharacter.GetHeadAimingComponent();
-		if (!playerAimingComponent) 
-			return;
-
-		if (m_bIsLocalPlayerInVehicle || playerAimingComponent.GetAimingDirection().ToYaw() > 0)
-		{
-			vector transform[4];
-			GetGame().GetWorld().GetCurrentCamera(transform);
-
-			yaw = -Math3D.MatrixToAngles(transform)[0];
-		} else
-			yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
-		
-		m_fLocalYaw = yaw;
+		m_fLocalYaw = -Math3D.MatrixToAngles(transform)[0];
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Returns a sorted array of player IDs based on their group assignments
-	//! \param[in] playerIDs: Array of player IDs to sort
-	//! \return Sorted array of player IDs
+	//! Display order: SL, the SL's team, other teams, unassigned; each team's TL first.
+	//! Players without CSI data are left out.
+	//! \param[in] playerIDs
+	//! \return sorted player IDs
 	array<int> GetSortedGroupArray(array<int> playerIDs)
 	{
 		if (!m_PlayerDataManager)
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		
-		array<int> playersGroupArray = {};
-		array<string> tempLocalGroupArray = {};
+
+		SCR_SortedArray<int> sortedPlayerIDs = new SCR_SortedArray<int>();	// lowest key first; equal keys keep group order
 		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
-		
-		foreach (int playerID : playerIDs)
+
+		foreach (PlayerId playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-			
+
 			if (!playerData)
 				continue;
-		
+
 			if (playerData.GetIsSquadLeader())
 				currentSLColorTeam = playerData.GetColorTeam();
 		};
-		
+
+		// Team order, with the SL's own team moved to the front
 		array<CSI_EColorTeam> playersCTArray = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.YELLOW, CSI_EColorTeam.GREEN, CSI_EColorTeam.NONE};
 		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
 		playersCTArray.InsertAt(currentSLColorTeam, 0);
-		
-		// Parse through current group array.
-		foreach (int playerID : playerIDs)
+
+		foreach (PlayerId playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-			
+
 			if (!playerData)
 				continue;
-			
-			int playerValue = 0;
-	
-			// Sort player by their color so we can group color teams together (a lil bit racist).
-			switch (playerData.GetColorTeam())
+
+			// Sort key: SL 1, then two per team in playersCTArray order, TL first
+			int sortKey = 1;
+			if (!playerData.GetIsSquadLeader())
 			{
-				case playersCTArray[0]	: playerValue = -3; break;
-				case playersCTArray[1]	: playerValue = -5; break;
-				case playersCTArray[2]	: playerValue = -7; break;
-				case playersCTArray[3]	: playerValue = -9; break;
-				case playersCTArray[4]	: playerValue = 2; break;
-				default : {playerValue = 2;  break;};
-			};
-			
-			switch (true)
-			{
-				case (playerData.GetIsSquadLeader()) : playerValue = -1; break;
-				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() == CSI_EColorTeam.NONE) : playerValue--; break;
-				case (playerData.GetIsTeamLeader() && playerData.GetColorTeam() != CSI_EColorTeam.NONE) : playerValue++; break;
-			};
-			
-			// Format a string with what we need for displaying/sorting a player.
-			string playerStr = string.Format("%1;%2", playerValue, playerID);
-			
-			tempLocalGroupArray.Insert(playerStr);
+				int teamIndex = playersCTArray.Find(playerData.GetColorTeam());
+				if (teamIndex < 0)
+					teamIndex = playersCTArray.Count() - 1;
+
+				sortKey = teamIndex * 2 + 3;
+				if (playerData.GetIsTeamLeader())
+					sortKey--;
+			}
+
+			sortedPlayerIDs.Insert(sortKey, playerID);
 		};
 
-		tempLocalGroupArray.Sort(false);
-
-		array<string> outPlayerStrArray = {};
-		foreach (string playerStr : tempLocalGroupArray) 
-		{
-			outPlayerStrArray.Clear();
-			playerStr.Split(";", outPlayerStrArray, false);
-			
-			playersGroupArray.Insert(outPlayerStrArray[1].ToInt());
-		}
-		
+		array<int> playersGroupArray = {};
+		sortedPlayerIDs.ToArray(playersGroupArray);
 		return playersGroupArray;
 	};
-	
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 STATIC ACCESSOR
 //=============================================================================================================================================================================================================================================================================================================================================================

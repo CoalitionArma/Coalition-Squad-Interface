@@ -1,0 +1,32 @@
+FrameWidgetClass {
+ Name "Figure"
+ Slot FrameWidgetSlot "{6A9C2E41B8000001}" {
+  PositionX 0
+  OffsetLeft 0
+  PositionY 0
+  OffsetTop 0
+  SizeX 50
+  OffsetRight -50
+  SizeY 50
+  OffsetBottom -50
+ }
+ Color 0.8 0.8 0.8 1
+ {
+  ImageWidgetClass "{6A9C2E41B8000003}" {
+   Name "Image"
+   Slot FrameWidgetSlot "{6A9C2E41B8000002}" {
+    Anchor 0 0 1 1
+    PositionX -16.891
+    PositionY 0
+    OffsetTop 0
+    SizeX 33.782
+    OffsetRight 0
+    SizeY 0
+    OffsetBottom 0
+    SizeToContent 1
+   }
+   "Inherit Color" 1
+   Texture "{E213A06772C5CEA9}UI/Textures/Tasks/task-man.edds"
+  }
+ }
+}

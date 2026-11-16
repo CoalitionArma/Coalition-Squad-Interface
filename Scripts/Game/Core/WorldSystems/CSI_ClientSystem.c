@@ -1,5 +1,14 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Client world system: reports the local player's display icon, rank and squad leader status to
+//! 				the server, scanning the inventory for specialty icons when it changes.
+//! 
+//------------------------------------------------------------------------------------------------
 class CSI_ClientSystem : GameSystem
-{		
+{
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -7,16 +16,14 @@ class CSI_ClientSystem : GameSystem
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 
-	protected int m_iCurrentUpdateCycle = 12;
-	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;
-	protected int m_iLocallyStoredGroupID = -1;
-	
-	protected ref CSI_SettingsJson m_SettingsJson;
-	
+	protected SCR_InventoryStorageManagerComponent m_StorageManager;	//!< local character's inventory, listened to for changes
+	protected bool m_bInventoryChanged = true;							//!< rescan on the next update cycle
+	protected CSI_EIcon m_iLocallyStoredSpecialtyIcon;					//!< result of the last inventory scan
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
+
 	//------------------------------------------------------------------------------------------------
 	override static void InitInfo(WorldSystemInfo outInfo)
 	{
@@ -26,66 +33,114 @@ class CSI_ClientSystem : GameSystem
 			.AddPoint(WorldSystemPoint.FixedFrame);
 	}
 
+	//------------------------------------------------------------------------------------------------
+	override protected void OnStopped()
+	{
+		RemoveInventoryListeners();
+		super.OnStopped();
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 INVENTORY EVENTS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
+	//! Moves the inventory listeners to this character's storage manager.
+	//! \param[in] localPlayer
+	protected void UpdateInventoryListeners(notnull IEntity localPlayer)
+	{
+		SCR_InventoryStorageManagerComponent storageManager = SCR_InventoryStorageManagerComponent.Cast(localPlayer.FindComponent(SCR_InventoryStorageManagerComponent));
+		if (storageManager == m_StorageManager)
+			return;
+
+		RemoveInventoryListeners();
+
+		// Scan what the new character already carries
+		m_StorageManager = storageManager;
+		m_bInventoryChanged = true;
+
+		if (!m_StorageManager)
+			return;
+
+		m_StorageManager.m_OnItemAddedInvoker.Insert(OnInventoryChanged);
+		m_StorageManager.m_OnItemRemovedInvoker.Insert(OnInventoryChanged);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void RemoveInventoryListeners()
+	{
+		if (!m_StorageManager)
+			return;
+
+		m_StorageManager.m_OnItemAddedInvoker.Remove(OnInventoryChanged);
+		m_StorageManager.m_OnItemRemovedInvoker.Remove(OnInventoryChanged);
+		m_StorageManager = null;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Fires per item moved, so only flags a rescan for the next update.
+	//! \param[in] item
+	//! \param[in] storageOwner
+	protected void OnInventoryChanged(IEntity item, BaseInventoryStorageComponent storageOwner)
+	{
+		m_bInventoryChanged = true;
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 UPDATE METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
-	
-	protected int m_iUpdate;
+
+	protected static const float UPDATE_INTERVAL = 0.5;	//!< seconds between update cycles
+	protected float m_fTimeSinceUpdate;					//!< seconds since the last update cycle
 	//------------------------------------------------------------------------------------------------
 	override void OnUpdatePoint(WorldUpdatePointArgs args)
 	{
+		// Managers live on the game mode, which may not exist yet
 		if (!m_RplToAuthorityManager || !m_PlayerDataManager)
 		{
 			m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 			return;
 		}
-		
-		m_iUpdate++;
-		
-		// only update every 35 frames
-		if (!(m_iUpdate >= 35))
+
+		m_fTimeSinceUpdate += args.GetTimeSliceSeconds();
+		if (m_fTimeSinceUpdate < UPDATE_INTERVAL)
 			return;
-		else
-			m_iUpdate = 0;
-		
+
+		m_fTimeSinceUpdate = 0;
 		UpdateAllLocalPlayerValues();
 	}
-	
+
 	//------------------------------------------------------------------------------------------------
-	//! Updates all local player values to their current state within the CSI system.
+	//! Reports the local player's display icon, rank and squad leader status to the server.
+	//! Icon priority: vehicle seat > officer > SL > TL > override > specialty > MAN.
 	protected void UpdateAllLocalPlayerValues()
 	{
-		int playerID = SCR_PlayerController.GetLocalPlayerId();
-		
-		// Get local player entity.
+		PlayerId playerID = SCR_PlayerController.GetLocalPlayerId();
+
+		// The player's own character, also while possessing another one
 		IEntity localplayer = SCR_PlayerController.GetLocalMainEntity();
 
 		if (!localplayer)
 			return;
-		
-		// Get base group manager component
+
+		// Listen server: the cached instance may be another player's
+		CSI_RplToAuthorityManager localRplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
+		if (localRplToAuthorityManager)
+			m_RplToAuthorityManager = localRplToAuthorityManager;
+
 		SCR_GroupsManagerComponent groupsManagerComponent = SCR_GroupsManagerComponent.GetInstance();
 
-		if (!groupsManagerComponent) 
+		if (!groupsManagerComponent)
 			return;
-		
-		// Get players current group.
+
+		// Only reported once the player is in a group
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		if (!playersGroup)
 			return;
-		
-		int playersGroupID = playersGroup.GetGroupID();
-		if (m_iLocallyStoredGroupID != playersGroupID) 
-		{
-			m_iLocallyStoredGroupID = playersGroupID;
-			m_RplToAuthorityManager.Owner_ClearGroupSpecificData(playerID);
-			return;
-		};
-		
-		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
-		m_iCurrentUpdateCycle = m_iCurrentUpdateCycle + 1;
+
+		UpdateInventoryListeners(localplayer);
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 
 		//------------------------------------------------------------------------------------------------
@@ -95,17 +150,17 @@ class CSI_ClientSystem : GameSystem
 		{
 			VehicleHelicopterSimulation heloSim = VehicleHelicopterSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleHelicopterSimulation));
 			VehicleFixedWingSimulation planeSim = VehicleFixedWingSimulation.Cast(compartment.GetVehicle().FindComponent(VehicleFixedWingSimulation));
-			
-			// Check players current compartment type, then assign his Icon.
+
 			ECompartmentType compartmentType = compartment.GetType();
 			string comartmentName = compartment.GetCompartmentName();
-			
+
 			UIInfo uiInfo = compartment.GetUIInfo();
-			
+
 			string name;
 			if (uiInfo)
 				name = uiInfo.GetName();
-			
+
+			// Commander and copilot seats by name, others by compartment type
 			if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
 				displayIcon = CSI_EIcon.COMMANDER;
 			else {
@@ -125,28 +180,28 @@ class CSI_ClientSystem : GameSystem
 				};
 			};
 		};
-		
-		// Get player data
+
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		
+
 		//------------------------------------------------------------------------------------------------
 		//	OFFICER Icon
 		if (displayIcon == CSI_EIcon.MAN && SCR_FactionCommanderPlayerComponent.IsLocalPlayerCommander())
 			displayIcon = CSI_EIcon.OFFICER;
 
+		// Leader icons only in groups with more than one player
 		if (playersGroup.GetPlayerCount() > 1)
 		{
 			//------------------------------------------------------------------------------------------------
 			//	SL Icon
 			if (displayIcon == CSI_EIcon.MAN && playersGroup.IsPlayerLeader(playerID))
 				displayIcon = CSI_EIcon.SL;
-	
+
 			//------------------------------------------------------------------------------------------------
 			//	TL Icon
 			if (displayIcon == CSI_EIcon.MAN && playerData && playerData.GetIsTeamLeader())
 				displayIcon = CSI_EIcon.TL;
 		};
-		
+
 		//------------------------------------------------------------------------------------------------
 		//	Override Icon
 		if (playerData)
@@ -158,20 +213,19 @@ class CSI_ClientSystem : GameSystem
 
 		//------------------------------------------------------------------------------------------------
 		//	Specialty Icons
-		if (displayIcon == CSI_EIcon.MAN && m_iCurrentUpdateCycle >= 12) 
+		if (displayIcon == CSI_EIcon.MAN && m_bInventoryChanged)
 		{
 			array<CSI_EIcon> validDisplayIcons = {};
-			
-			// Get players inventory component
-			SCR_InventoryStorageManagerComponent characterInventory = SCR_InventoryStorageManagerComponent.Cast(localplayer.FindComponent(SCR_InventoryStorageManagerComponent));
-			
+
 			array<IEntity> allPlayerItems = {};
-			characterInventory.GetItems(allPlayerItems);
+			if (m_StorageManager)
+				m_StorageManager.GetItems(allPlayerItems);
+
 			array<BaseMuzzleComponent> muzzles = {};
-			// Parse through all items.
+			// Only RTO (top priority) ends the scan early
 			foreach (IEntity item : allPlayerItems)
-			{	
-				// Check if item is RTO related
+			{
+				// RTO: backpack radio or deployable spawn point
 				SCR_RadioComponent radioComp = SCR_RadioComponent.Cast(item.FindComponent(SCR_RadioComponent));
 				SCR_RestrictedDeployableSpawnPointComponent spawnPoint = SCR_RestrictedDeployableSpawnPointComponent.Cast(item.FindComponent(SCR_RestrictedDeployableSpawnPointComponent));
 				if(spawnPoint || (radioComp && radioComp.GetType() == EGadgetType.RADIO_BACKPACK))
@@ -179,80 +233,78 @@ class CSI_ClientSystem : GameSystem
 					validDisplayIcons.Insert(CSI_EIcon.RTO);
 					break;
 				};
-				
-				// Check if item is medical related
+
+				// Medic: healing support station (medical kit)
 				SCR_HealSupportStationComponent medTool = SCR_HealSupportStationComponent.Cast(item.FindComponent(SCR_HealSupportStationComponent));
 				if(medTool)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.MEDIC);
-					break;
+					continue;
 				};
-				
-				// Check if item is enginner related
+
+				// Engineer: repair support station (repair kit)
 				SCR_RepairSupportStationComponent engTool = SCR_RepairSupportStationComponent.Cast(item.FindComponent(SCR_RepairSupportStationComponent));
 				if(engTool)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.ENG);
-					break;
+					continue;
 				};
-				
-				// Check if item is explosives related
+
+				// Demo: detonator, explosive charge or mine
 				SCR_DetonatorGadgetComponent detonator = SCR_DetonatorGadgetComponent.Cast(item.FindComponent(SCR_DetonatorGadgetComponent));
 				SCR_ExplosiveChargeComponent explosives = SCR_ExplosiveChargeComponent.Cast(item.FindComponent(SCR_ExplosiveChargeComponent));
 				SCR_MineWeaponComponent mine = SCR_MineWeaponComponent.Cast(item.FindComponent(SCR_MineWeaponComponent));
 				if(detonator || explosives || mine)
 				{
 					validDisplayIcons.Insert(CSI_EIcon.DEMO);
-					break;
+					continue;
 				};
-					
-				// Check if item is a weapon.
+
+				// Weapons: MG, sniper, launcher, or an underslung grenade launcher muzzle
 				WeaponComponent weaponComp = WeaponComponent.Cast(item.FindComponent(WeaponComponent));
-				if (weaponComp) 
+				if (weaponComp)
 				{
-					// Get weapon type
 					EWeaponType weaponType = weaponComp.GetWeaponType();
 					if (weaponType == EWeaponType.WT_NONE)
 						continue;
-					
+
 					switch (weaponType)
 					{
-						case EWeaponType.WT_MACHINEGUN : 
+						case EWeaponType.WT_MACHINEGUN :
 							validDisplayIcons.Insert(CSI_EIcon.MG);
 							break;
-						case EWeaponType.WT_SNIPERRIFLE : 
+						case EWeaponType.WT_SNIPERRIFLE :
 							validDisplayIcons.Insert(CSI_EIcon.SNIPER);
 							break;
-						case EWeaponType.WT_ROCKETLAUNCHER : 
+						case EWeaponType.WT_ROCKETLAUNCHER :
 							validDisplayIcons.Insert(CSI_EIcon.AT);
 							break;
 					};
-					
-					// MG is the highest-priority weapon icon; no need to scan remaining items
-					if (validDisplayIcons.Contains(CSI_EIcon.MG))
-						break;
+
+					// MG outranks GREN, so skip its muzzles
+					if (weaponType == EWeaponType.WT_MACHINEGUN)
+						continue;
 
 					muzzles.Clear();
-					// Get muzzle types (e.g., underslung grenade launcher)
 					for (int m = 0, mCount = weaponComp .GetMuzzlesList(muzzles); m < mCount; m++)
 					{
-						// Convert muzzle types to weapon types (ToDo: Not hardcoded?)
+						// TODO: map muzzle types without hardcoding
 						EWeaponType muzzleWeaponType = -1;
 						switch (muzzles[m].GetMuzzleType())
 						{
-							case EMuzzleType.MT_UGLMuzzle: 
+							case EMuzzleType.MT_UGLMuzzle:
 								validDisplayIcons.Insert(CSI_EIcon.GREN);
 								break;
 						}
 					}
 				};
 			}
-			
-			// We use an array and switch to set priority on what to show other players
+
+			// Priority order of specialty icons, independent of inventory order
 			switch (true)
 			{
 				case (validDisplayIcons.Contains(CSI_EIcon.RTO)) 		: displayIcon = CSI_EIcon.RTO; 		break;
-				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 		break; 
+				case (validDisplayIcons.Contains(CSI_EIcon.MEDIC)) 	: displayIcon = CSI_EIcon.MEDIC; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.ENG)) 		: displayIcon = CSI_EIcon.ENG; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.DEMO)) 		: displayIcon = CSI_EIcon.DEMO; 		break;
 				case (validDisplayIcons.Contains(CSI_EIcon.MG)) 		: displayIcon = CSI_EIcon.MG; 		break;
@@ -261,14 +313,16 @@ class CSI_ClientSystem : GameSystem
 				case (validDisplayIcons.Contains(CSI_EIcon.GREN)) 		: displayIcon = CSI_EIcon.GREN; 		break;
 				default : displayIcon = CSI_EIcon.MAN;
 			}
-			
-			m_iCurrentUpdateCycle = 0;
+
+			m_bInventoryChanged = false;
 			m_iLocallyStoredSpecialtyIcon = displayIcon;
 		}
-		
+
+		// No scan this cycle: reuse the last scan's result
 		if (displayIcon == CSI_EIcon.MAN)
 			displayIcon = m_iLocallyStoredSpecialtyIcon;
-		
+
+		// Each Owner_* call only sends an RPC when its value changed
 		m_RplToAuthorityManager.Owner_UpdatePlayerSquadLeader(playerID, playersGroup.IsPlayerLeader(playerID));
 		m_RplToAuthorityManager.Owner_UpdatePlayerDisplayIcon(playerID, displayIcon);
 		m_RplToAuthorityManager.Owner_UpdatePlayerRank(playerID, SCR_CharacterRankComponent.GetCharacterRank(localplayer));

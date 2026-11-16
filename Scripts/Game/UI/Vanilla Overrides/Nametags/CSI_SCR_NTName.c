@@ -1,77 +1,61 @@
 //------------------------------------------------------------------------------------------------
-//! Nametag element for name text
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Arma Reforger
+//!	\Description: 	CSI changes: the name text uses CSI's size and colors and is cleared when the tag is simplified.
+//! 
+//------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTName : SCR_NTTextBase
-{		
-	//------------------------------------------------------------------------------------------------	
+{
+	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
 		m_HUDSystem = CSI_HUDSystem.GetInstance();
 		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		
+
 		SCR_NTStateText stateConf = SCR_NTStateText.Cast( GetEntityStateConfig(data) );
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!stateConf || !tWidget)
 			return;
-		
+
 		//-----------------------------------------------------------------------
-		// Initial Appearence And Settings Of The Text Widget
+		// Font, size from NAMTEAG_SCALE and color team color
 		tWidget.SetFont(m_FontResource);
 		tWidget.SetExactFontSize(GetNametagTextScale());
 		SetWidgetCSIColor(data, index);
-		
+
 		//-----------------------------------------------------------------------
 		// Actually Make The Widget Visible
-		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions		
+		data.SetVisibility(tWidget, stateConf.m_fOpacityDefault != 0, stateConf.m_fOpacityDefault, stateConf.m_bAnimateTransition); // transitions
 	};
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
-		//-----------------------------------------------------------------------
-		// Update Widget Opacity
-		data.UpdateOpacity(null, data: data, index: index);
-		
-		//-----------------------------------------------------------------------
-		// Initial setup (can't call super due to the vanilla implimetation, so we just manually do it) - TODO: make less fucky
-		if ( !data.m_aNametagElements[index] )
-		{
-			InitElementWidget(data, index);
+		// A name update in super sets the text, so it's set again below
+		bool nameUpdate = data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE;
+
+		super.UpdateElement(data, index);
+
+		if (!data.m_aNametagElements[index])
 			return;
-		}
-		
-		// scale
-		if (m_bScaleElement)
-		{
-			data.m_fTimeSliceUpdate = 1.0;
-			ScaleElement(data, index);
-		}
-		
+
 		//-----------------------------------------------------------------------
-		// Vanilla Implimentation
-		if (data.m_Flags & ENameTagFlags.NAME_UPDATE || data.m_Flags & ENameTagFlags.ENT_TYPE_UPDATE)
+		// Name, cleared when simplified; set only when it changes
+		string text = data.m_sName;
+		if (ShouldWeClearText(data))
+			text = string.Empty;
+
+		if (nameUpdate || text != data.m_aElementTexts[index])
 		{
-			string name;
-			array<string> nameParams = {};
-			
-			GetText(data, name, nameParams);
-			
-			data.m_Flags &= ~ENameTagFlags.NAME_UPDATE;
-			data.m_Flags &= ~ENameTagFlags.ENT_TYPE_UPDATE;
-			
-			if (name.IsEmpty())
-				SetText(data, "GETNAME_ERROR", nameParams, index);
+			SetText(data, text, data.m_aNameParams, index);
+			data.m_aElementTexts[index] = text;
 		}
 
 		//-----------------------------------------------------------------------
-		// Set The Text Of The Widget Based On Our Current Distance
-		if (ShouldWeClearText(data))
-			SetText(data, string.Empty, data.m_aNameParams, index);
-		else
-			SetText(data, data.m_sName, data.m_aNameParams, index);
-		
-		//-----------------------------------------------------------------------
-		// Color Updates For VON/Color Teams
+		// Color updates for VON/color teams
 		SetWidgetCSIColor(data, index);
 	}
 };

@@ -1,105 +1,343 @@
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-15
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	Player settings panel (group menu or CSI_PlayerSettingsMenu): shows a player's name and icon and sends
+//! 				color team, icon override, promote and kick requests to the server; hidden while it shows no player.
+//! 				Group leaders and team leaders set color teams and icons; only the leader promotes and kicks others.
+//! 				The color team buttons show the chosen fire team color set, the no fire team icon Standard squad color.
+//!
+//------------------------------------------------------------------------------------------------
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
+	protected static const float COLOR_TEAM_BUTTON_OPACITY = 0.6;	//!< full colors glare in the dark menu
+
+	protected static const string NO_TEAM_ICON_WIDGET_NAME = "NoneImage";	//!< no fire team box's icon (TintNoTeamIcon)
+
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 
 	protected XComboBoxWidget m_wIconOveride;
 	protected TextWidget m_wPlayerName;
-	protected ImageWidget m_wIcon;
-	protected int m_iPlayerID = -1;
-	protected ScriptInvoker m_PlayerUpdate;
-	
+	protected ImageWidget m_wIcon;			//!< CSI_ICONS only
+	protected ImageWidget m_wPointerIcon;	//!< vanilla pointer, for MAN
+	protected Widget m_wAdvancedSettings;	//!< promote to SL, promote to TL and kick
+	protected Widget m_wKickOverlay;
+	protected PlayerId m_iPlayerID = -1;		//!< player the panel shows
+	protected ScriptInvokerVoid m_PlayerUpdate;	//!< that player's GetOnDataUpdate(), while subscribed
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
-		
+
+		// Hidden until it shows a player; visible in the layout editor
+		if (!SCR_Global.IsEditMode())
+			w.SetVisible(false);
+
 		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_RplToAuthorityManager = CSI_RplToAuthorityManager.GetInstance();
-		
+
 		m_wIconOveride = XComboBoxWidget.Cast(w.FindAnyWidget("IconOveride"));
 		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
+		m_wPointerIcon = ImageWidget.Cast(w.FindAnyWidget("PointerIcon"));
+		m_wAdvancedSettings = w.FindAnyWidget("AdvancedSettingsOverlay");
+		m_wKickOverlay = w.FindAnyWidget("KickOverlay");
 
-		SCR_ModularButtonComponent confirmIOButton = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("ConfirmOverrideButton").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent red = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Red").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent blue = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Blue").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent yellow = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Yellow").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent green = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Green").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent none = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("None").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent promoteToSLComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("PromoteToSL").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent promoteToTLComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("PromoteToTL").FindHandler(SCR_ModularButtonComponent));
-		SCR_ModularButtonComponent kickComp = SCR_ModularButtonComponent.Cast(w.FindAnyWidget("Kick").FindHandler(SCR_ModularButtonComponent));
+		if (!m_wIconOveride)
+			Print("CSI_PlayerSettings: combo box 'IconOveride' not found, the panel won't show player details", LogLevel.WARNING);
 
-		promoteToSLComp.m_OnClicked.Insert(OnPromoteToSLClicked);
-		promoteToTLComp.m_OnClicked.Insert(OnPromoteToTLClicked);
-		kickComp.m_OnClicked.Insert(OnKickClicked);
-		confirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
-		red.m_OnClicked.Insert(OnColorTeamClicked);
-		blue.m_OnClicked.Insert(OnColorTeamClicked);
-		yellow.m_OnClicked.Insert(OnColorTeamClicked);
-		green.m_OnClicked.Insert(OnColorTeamClicked);
-		none.m_OnClicked.Insert(OnColorTeamClicked);
+		if (!m_wPlayerName)
+			Print("CSI_PlayerSettings: text 'PlayerName' not found, the panel won't show player details", LogLevel.WARNING);
+
+		if (!m_wIcon)
+			Print("CSI_PlayerSettings: image 'Icon' not found, the panel won't show player details", LogLevel.WARNING);
+
+		if (!m_wPointerIcon)
+			Print("CSI_PlayerSettings: image 'PointerIcon' not found, players without a role icon show the CSI MAN icon", LogLevel.WARNING);
+
+		if (!m_wAdvancedSettings)
+			Print("CSI_PlayerSettings: 'AdvancedSettingsOverlay' not found, promote and kick won't hide for team leaders or on the leader's own tile", LogLevel.WARNING);
+
+		if (!m_wKickOverlay)
+			Print("CSI_PlayerSettings: 'KickOverlay' not found, kick won't hide in reserves", LogLevel.WARNING);
+
+		SCR_ModularButtonComponent confirmIOButton = FindButton("ConfirmOverrideButton", w);
+		SCR_ModularButtonComponent red = FindButton("Red", w);
+		SCR_ModularButtonComponent blue = FindButton("Blue", w);
+		SCR_ModularButtonComponent yellow = FindButton("Yellow", w);
+		SCR_ModularButtonComponent green = FindButton("Green", w);
+		SCR_ModularButtonComponent none = FindButton("None", w);
+		SCR_ModularButtonComponent promoteToSLComp = FindButton("PromoteToSL", w);
+		SCR_ModularButtonComponent promoteToTLComp = FindButton("PromoteToTL", w);
+		SCR_ModularButtonComponent kickComp = FindButton("Kick", w);
+
+		if (promoteToSLComp)
+			promoteToSLComp.m_OnClicked.Insert(OnPromoteToSLClicked);
+
+		if (promoteToTLComp)
+			promoteToTLComp.m_OnClicked.Insert(OnPromoteToTLClicked);
+
+		if (kickComp)
+			kickComp.m_OnClicked.Insert(OnKickClicked);
+
+		if (confirmIOButton)
+			confirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
+
+		if (red)
+		{
+			red.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(red, CSI_EColorTeam.RED);
+		}
+
+		if (blue)
+		{
+			blue.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(blue, CSI_EColorTeam.BLUE);
+		}
+
+		if (yellow)
+		{
+			yellow.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(yellow, CSI_EColorTeam.YELLOW);
+		}
+
+		if (green)
+		{
+			green.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(green, CSI_EColorTeam.GREEN);
+		}
+
+		if (none)
+		{
+			none.m_OnClicked.Insert(OnColorTeamClicked);
+			TintNoTeamIcon(w);
+		}
 	}
-	
-	//------------------------------------------------------------------------------------------------
-	void UpdatePlayerSettingsPlayerID(int playerID)
-	{
-		m_iPlayerID = playerID;
 
-		if (playerID <= 0)
-			return;
-		else
-			UpdatePlayerSettingsInformation();
+	//------------------------------------------------------------------------------------------------
+	//! Colors the no fire team box's icon in the Standard squad color; the box keeps the layout's dark tile, as
+	//! the default (Gray) is nearly white.
+	//! \param[in] root
+	protected void TintNoTeamIcon(notnull Widget root)
+	{
+		Widget icon = root.FindAnyWidget(NO_TEAM_ICON_WIDGET_NAME);
+		if (icon)
+			icon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected void UpdatePlayerSettingsInformation()
+	//! Colors a color team button in the chosen set, at COLOR_TEAM_BUTTON_OPACITY over its gray tile.
+	//! \param[in] button
+	//! \param[in] colorTeam
+	protected void TintColorTeamButton(notnull SCR_ModularButtonComponent button, CSI_EColorTeam colorTeam)
 	{
-		if (m_iPlayerID <= 0)
+		Widget buttonWidget = button.GetRootWidget();
+		if (!buttonWidget)
 			return;
-		
+
+		Color color = CSI_UIHelper.ConvertColorTeamToColor(colorTeam);
+		color.SetA(COLOR_TEAM_BUTTON_OPACITY);
+		buttonWidget.SetColor(color);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Finds a button's SCR_ModularButtonComponent and warns if it's missing.
+	//! \param[in] buttonName
+	//! \param[in] parent
+	//! \return null if not found
+	protected SCR_ModularButtonComponent FindButton(string buttonName, Widget parent)
+	{
+		Widget button = parent.FindAnyWidget(buttonName);
+		SCR_ModularButtonComponent buttonComponent;
+		if (button)
+			buttonComponent = SCR_ModularButtonComponent.FindComponent(button);
+
+		if (!buttonComponent)
+			PrintFormat("CSI_PlayerSettings: button '%1' with SCR_ModularButtonComponent not found, it won't do anything", buttonName, level: LogLevel.WARNING);
+
+		return buttonComponent;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows a player in the panel and subscribes to their data.
+	//! \param[in] playerID <= 0 hides the panel
+	void UpdatePlayerSettingsPlayerID(PlayerId playerID)
+	{
+		// Stop listening to the previous player's data
 		if (m_PlayerUpdate)
 		{
 			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);
 			m_PlayerUpdate = null;
-		};
-		
-		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
-		
-		m_PlayerUpdate = playerData.GetOnDataUpdate();
+		}
 
-		if (m_PlayerUpdate)
-			m_PlayerUpdate.Insert(UpdatePlayerSettingsInformation);
-		
+		m_iPlayerID = playerID;
+		GetRootWidget().SetVisible(playerID > 0);
+
+		if (playerID <= 0)
+			return;
+
+		CSI_PlayerData playerData;
+		if (m_PlayerDataManager)
+			playerData = m_PlayerDataManager.GetPlayerData(playerID);
+
+		if (playerData)
+		{
+			m_PlayerUpdate = playerData.GetOnDataUpdate();
+
+			if (m_PlayerUpdate)
+				m_PlayerUpdate.Insert(UpdatePlayerSettingsInformation);
+		}
+
+		UpdateLeaderActions();
+		UpdatePlayerSettingsInformation();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Refreshes the panel from the player's data.
+	protected void UpdatePlayerSettingsInformation()
+	{
+		if (m_iPlayerID <= 0 || !m_wIconOveride || !m_wPlayerName || !m_wIcon)
+			return;
+
+		CSI_PlayerData playerData;
+		if (m_PlayerDataManager)
+			playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+
+		// No CSI data (not received yet): no override, color team or role icon
+		if (!playerData)
+		{
+			m_wIconOveride.SetCurrentItem(0);
+			ShowPlayerIcon(string.Empty, CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+			m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+			m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
+			return;
+		}
+
 		CSI_EOverrideIcon iconOverride = playerData.GetOverrideIcon();
 		CSI_EColorTeam colorTeam = playerData.GetColorTeam();
 		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
 		string displayIconStr = CSI_UIHelper.GetIconString(displayIcon, true);
 
-		if (iconOverride != CSI_EOverrideIcon.AUTO) 
+		// Combo item 0 = AUTO, other items = value - 3 (RTO = 4)
+		if (iconOverride != CSI_EOverrideIcon.AUTO)
 			m_wIconOveride.SetCurrentItem(iconOverride - 3);
-
-		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-		
-		if (displayIconStr == "MAN_ICON")
-			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 		else
-           	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, displayIconStr);
+			m_wIconOveride.SetCurrentItem(0);
+
+		// MAN uses the pointer icon
+		if (displayIconStr == "MAN_ICON")
+			displayIconStr = string.Empty;
+
+		ShowPlayerIcon(displayIconStr, CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 
 		m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Shows a CSI icon in m_wIcon, or the vanilla pointer in m_wPointerIcon. Each widget keeps its own imageset:
+	//! loading another set's image into the same widget drew the wrong part of the texture or a white box.
+	//! \param[in] csiIcon CSI_ICONS image name, empty for the pointer
+	//! \param[in] color
+	protected void ShowPlayerIcon(string csiIcon, Color color)
+	{
+		bool showPointer = csiIcon.IsEmpty() && m_wPointerIcon;
+
+		m_wIcon.SetVisible(!showPointer);
+		if (!showPointer)
+		{
+			// Without the pointer widget, CSI's own MAN icon
+			if (csiIcon.IsEmpty())
+				csiIcon = "MAN_ICON";
+
+			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, csiIcon);
+			m_wIcon.SetColor(color);
+		}
+
+		if (!m_wPointerIcon)
+			return;
+
+		m_wPointerIcon.SetVisible(showPointer);
+		if (showPointer)
+			m_wPointerIcon.SetColor(color);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows promote and kick only to the group leader, not on their own tile, and kick not in a reserves group.
+	protected void UpdateLeaderActions()
+	{
+		bool canUseLeaderActions = CanUseLeaderActions();
+
+		// Only its contents hide, so the settings above keep their size
+		if (m_wAdvancedSettings)
+		{
+			Widget child = m_wAdvancedSettings.GetChildren();
+			while (child)
+			{
+				child.SetVisible(canUseLeaderActions);
+				child = child.GetSibling();
+			}
+		}
+
+		// Kicking sends players to the reserves group
+		if (m_wKickOverlay)
+			m_wKickOverlay.SetVisible(canUseLeaderActions && GetShownPlayerGroup().GetGroupRole() != SCR_EGroupRole.RESERVES);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return true if the local player leads the shown player's group and isn't the shown player
+	protected bool CanUseLeaderActions()
+	{
+		SCR_AIGroup group = GetShownPlayerGroup();
+		PlayerId localPlayerID = SCR_PlayerController.GetLocalPlayerId();
+		return group && group.IsPlayerLeader(localPlayerID) && m_iPlayerID != localPlayerID;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return null if the shown player has no group
+	protected SCR_AIGroup GetShownPlayerGroup()
+	{
+		SCR_GroupsManagerComponent groupsManager = SCR_GroupsManagerComponent.GetInstance();
+		if (!groupsManager)
+			return null;
+
+		return groupsManager.GetPlayerGroup(m_iPlayerID);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] group
+	//! \return true if the local player leads the group or is a team leader in it, so can set its members' color teams and icons
+	static bool CanLocalPlayerEditMembers(SCR_AIGroup group)
+	{
+		if (!group)
+			return false;
+
+		PlayerId localPlayerID = SCR_PlayerController.GetLocalPlayerId();
+		if (group.IsPlayerLeader(localPlayerID))
+			return true;
+
+		CSI_PlayerDataManager playerDataManager = CSI_PlayerDataManager.GetInstance();
+		if (!playerDataManager || !group.IsPlayerInGroup(localPlayerID))
+			return false;
+
+		CSI_PlayerData localPlayerData = playerDataManager.GetPlayerData(localPlayerID);
+		return localPlayerData && localPlayerData.GetIsTeamLeader();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets the color team named by the clicked button.
+	//! \param[in] CTcomponent
 	protected void OnColorTeamClicked(SCR_ModularButtonComponent CTcomponent)
 	{
-		if (m_iPlayerID <= 0)
+		if (m_iPlayerID <= 0 || !m_RplToAuthorityManager)
 			return;
 
 		CSI_EColorTeam colorTeam;
 		string colorTeamButtonName = CTcomponent.GetRootWidget().GetName();
-		
+
 		switch (colorTeamButtonName)
 		{
 			case "Red" : colorTeam = CSI_EColorTeam.RED; break;
@@ -113,53 +351,64 @@
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Applies the icon override selected in the combo.
 	protected void OnOverrideIconClicked()
 	{
-		if (m_iPlayerID <= 0)
+		if (m_iPlayerID <= 0 || !m_wIconOveride || !m_RplToAuthorityManager)
 			return;
 
 		CSI_EOverrideIcon iconToOverride = m_wIconOveride.GetCurrentItem();
 
+		// Combo item to enum value (item 1 = RTO = 4); item 0 stays AUTO
 		if (iconToOverride > 0)
 			iconToOverride = iconToOverride + 3;
-		
+
 		m_RplToAuthorityManager.Owner_UpdatePlayerOverrideIcon(m_iPlayerID, iconToOverride);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Makes the player squad leader, then closes the menu the panel is in.
 	protected void OnPromoteToSLClicked()
 	{
-		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0 || !m_RplToAuthorityManager || !CanUseLeaderActions())
 			return;
 
 		m_RplToAuthorityManager.Owner_PromotePlayerToSL(m_iPlayerID);
-		GetGame().GetMenuManager().CloseAllMenus();
+
+		ChimeraMenuBase menu = ChimeraMenuBase.GetOwnerMenu(GetRootWidget());
+		if (menu)
+			menu.Close();
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Toggles the player's team leader flag.
 	protected void OnPromoteToTLClicked()
 	{
-		if (m_iPlayerID <= 0)
+		if (m_iPlayerID <= 0 || !m_PlayerDataManager || !m_RplToAuthorityManager || !CanUseLeaderActions())
 			return;
 
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+		if (!playerData)
+			return;
+
 		m_RplToAuthorityManager.Owner_UpdatePlayerTeamLeader(m_iPlayerID, !playerData.GetIsTeamLeader());
 	};
 
 	//------------------------------------------------------------------------------------------------
+	//! Kicks the player from the group.
 	protected void OnKickClicked()
 	{
-		if (m_iPlayerID <= 0 || SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(SCR_PlayerController.GetLocalPlayerId()).IsPlayerLeader(m_iPlayerID))
+		if (m_iPlayerID <= 0 || !m_RplToAuthorityManager || !CanUseLeaderActions())
 			return;
 
 		m_RplToAuthorityManager.Owner_RemovePlayerFromGroup(m_iPlayerID);
 	};
-	
+
 	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
 		super.HandlerDeattached(w);
-		
+
 		if (m_PlayerUpdate)
 		{
 			m_PlayerUpdate.Remove(UpdatePlayerSettingsInformation);
