@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-16
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: the vehicle tag shows the pilot in aircraft and prefers a turret gunner in other vehicles, and
-//! 				copies the main tag's player data and group name.
+//!	\Description: 	CSI changes: the vehicle tag shows the pilot in aircraft and prefers a turret gunner in other vehicles,
+//! 				with the main tag's player data and group name; it shows talking while any passenger talks
+//! 				(SCR_NameTagData.ActivateEntityState).
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_VehicleTagData
@@ -61,9 +62,10 @@ modded class SCR_VehicleTagData
 
 		m_MainTag = localMainTag;
 
-		// CSI: main tag's player for CSI's elements
+		// CSI: main tag's player for CSI's elements. Their data comes from the manager: the main tag's own copy is only
+		// refreshed when that tag is drawn, which it isn't while they ride, so it can be missing or old
 		m_iPlayerID = m_MainTag.m_iPlayerID;
-		m_PlayerData = m_MainTag.m_PlayerData;
+		UpdatePlayerData();
 
 		if (m_MainTag.m_eEntityStateFlags & ENameTagEntityState.GROUP_MEMBER)
 			ActivateEntityState(ENameTagEntityState.GROUP_MEMBER);

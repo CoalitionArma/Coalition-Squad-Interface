@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-16
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: names with rank; adds player data, group name, field of view place and what CSI's
-//! 				elements last set; tag position and height from settings.
+//! 				elements last set; tag position and height from settings; a passenger talking marks their
+//! 				vehicle's tag too.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagData : Managed
@@ -19,6 +20,17 @@ modded class SCR_NameTagData : Managed
 	string m_aElementTexts[10];		//!< text
 	int m_aElementIconKeys[10];		//!< role icon, see SCR_NTIconBase.GetIconKey; 0 until set
 	Color m_aElementColors[10];		//!< shared color; null until set
+
+	//------------------------------------------------------------------------------------------------
+	override void ActivateEntityState(ENameTagEntityState state)
+	{
+		super.ActivateEntityState(state);
+
+		// A passenger's own tag is hidden, so their vehicle's tag shows them talking (vanilla VoN and Coalition VON
+		// both mark the passenger); vanilla's ruleset ends it VON_STOP_TIME after the last mark
+		if (state == ENameTagEntityState.VON && m_VehicleParent)
+			m_VehicleParent.ActivateEntityState(state);
+	}
 
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()

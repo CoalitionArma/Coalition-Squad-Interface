@@ -131,6 +131,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 		// Before super saves the user settings, so it saves the player's own values
 		FindManagers();
+		KeepOwnValuesOfNewOverrides();
 		SaveLocalSettings();
 
 		super.OnTabHide();
@@ -565,6 +566,32 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 			m_mSentServerOverrides.Set(setting, overridden);
 			m_mSentServerOverrideValues.Set(setting, value);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! A row an admin sets as a server override here keeps the player's own value: the row's value goes to the
+	//! server (SendServerOverrides), not into their settings. Rows not overridden when the tab opened are bound to
+	//! the user settings, so their changes were already written there and are put back to the values on open.
+	protected void KeepOwnValuesOfNewOverrides()
+	{
+		if (!m_aValuesOnOpen || !SCR_Global.IsAdmin())
+			return;
+
+		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
+		UserSettings userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
+		if (!serverOverrides || !userSettings)
+			return;
+
+		foreach (int i, string setting : CSI_GameSettings.GetSettingsArray())
+		{
+			// Rows overridden on open aren't bound, so they never changed the player's value
+			if (m_aServerForcedSettings.Contains(setting) || !m_aValuesOnOpen.IsIndexValid(i))
+				continue;
+
+			CheckBoxWidget checkBox = GetServerOverrideCheckBox(serverOverrides, setting);
+			if (checkBox && checkBox.IsChecked())
+				userSettings.Set(setting, m_aValuesOnOpen[i]);
 		}
 	}
 

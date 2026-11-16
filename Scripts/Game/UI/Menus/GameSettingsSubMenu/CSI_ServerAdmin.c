@@ -104,16 +104,22 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sends the tab's shown values as the server defaults.
+	//! Sends the admin's own settings as the server defaults. Read from the user settings, which the tab's rows
+	//! write as they change: color rows show the color drawn (Gray for a fire team clash, the talking color's
+	//! fallback) and override rows the override, neither of which is the admin's own pick.
 	protected void OnSaveServerDefaultsClicked()
 	{
-		if (!m_RplToAuthorityManager || !m_wSettingsRoot)
+		if (!m_RplToAuthorityManager)
+			return;
+
+		UserSettings userSettings = GetGame().GetGameUserSettings().GetModule("CSI_GameSettings");
+		if (!userSettings)
 			return;
 
 		foreach (string settingStr : CSI_GameSettings.GetSettingsArray())
 		{
 			int value;
-			if (CSI_SettingInfo.GetWidgetValue(m_wSettingsRoot, settingStr, value))
+			if (userSettings.Get(settingStr, value))
 				m_RplToAuthorityManager.Owner_SetServerDefault(settingStr, value);
 		}
 
