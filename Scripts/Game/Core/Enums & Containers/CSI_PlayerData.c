@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One player's CSI state: color team, override and display icons, rank and leader flags.
 //! 
@@ -20,7 +20,7 @@ class CSI_PlayerData
 	protected bool m_bIsTeamLeader;
 	protected bool m_bIsSquadLeader;
 
-	protected ref ScriptInvoker m_OnDataUpdate;
+	protected ref ScriptInvokerVoid m_OnDataUpdate;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTER METHODS
@@ -141,10 +141,10 @@ class CSI_PlayerData
 
 	//------------------------------------------------------------------------------------------------
 	//! \return fired when the color team, display icon or rank changes
-	ScriptInvoker GetOnDataUpdate()
+	ScriptInvokerVoid GetOnDataUpdate()
 	{
 		if (!m_OnDataUpdate)
-			m_OnDataUpdate = new ScriptInvoker();
+			m_OnDataUpdate = new ScriptInvokerVoid();
 
 		return m_OnDataUpdate;
 	}
@@ -179,80 +179,5 @@ class CSI_PlayerData
 		reader.ReadInt(m_iRank);
 		reader.ReadBool(m_bIsTeamLeader);
 		reader.ReadBool(m_bIsSquadLeader);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static bool Extract(CSI_PlayerData instance, ScriptCtx ctx, SSnapSerializerBase snapshot)
-	{
-		snapshot.SerializeBytes(instance.m_iPlayerID, 4);
-		snapshot.SerializeBytes(instance.m_iColorTeam, 4);
-		snapshot.SerializeBytes(instance.m_iOverrideIcon, 4);
-		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
-		snapshot.SerializeBytes(instance.m_iRank, 4);
-		snapshot.SerializeBytes(instance.m_bIsTeamLeader, 4);
-		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
-		return true;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static bool Inject(SSnapSerializerBase snapshot, ScriptCtx ctx, CSI_PlayerData instance)
-	{
-		snapshot.SerializeBytes(instance.m_iPlayerID, 4);
-		snapshot.SerializeBytes(instance.m_iColorTeam, 4);
-		snapshot.SerializeBytes(instance.m_iOverrideIcon, 4);
-		snapshot.SerializeBytes(instance.m_iDisplayIcon, 4);
-		snapshot.SerializeBytes(instance.m_iRank, 4);
-		snapshot.SerializeBytes(instance.m_bIsTeamLeader, 4);
-		snapshot.SerializeBytes(instance.m_bIsSquadLeader, 4);
-		return true;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static void Encode(SSnapSerializerBase snapshot, ScriptCtx ctx, ScriptBitSerializer packet)
-	{
-		snapshot.EncodeInt(packet);
-		snapshot.EncodeInt(packet);
-		snapshot.EncodeInt(packet);
-		snapshot.EncodeInt(packet);
-		snapshot.EncodeInt(packet);
-		snapshot.EncodeBool(packet);
-		snapshot.EncodeBool(packet);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static bool Decode(ScriptBitSerializer packet, ScriptCtx ctx, SSnapSerializerBase snapshot)
-	{
-		snapshot.DecodeInt(packet);
-		snapshot.DecodeInt(packet);
-		snapshot.DecodeInt(packet);
-		snapshot.DecodeInt(packet);
-		snapshot.DecodeInt(packet);
-		snapshot.DecodeBool(packet);
-		snapshot.DecodeBool(packet);
-		return true;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static bool SnapCompare(SSnapSerializerBase lhs, SSnapSerializerBase rhs, ScriptCtx ctx)
-	{
-		return lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4)
-			&& lhs.CompareSnapshots(rhs, 4);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	static bool PropCompare(CSI_PlayerData instance, SSnapSerializerBase snapshot, ScriptCtx ctx)
-	{
-		return snapshot.Compare(instance.m_iPlayerID, 4)
-		    && snapshot.Compare(instance.m_iColorTeam, 4)
-			&& snapshot.Compare(instance.m_iOverrideIcon, 4)
-			&& snapshot.Compare(instance.m_iDisplayIcon, 4)
-			&& snapshot.Compare(instance.m_iRank, 4)
-			&& snapshot.Compare(instance.m_bIsTeamLeader, 4)
-			&& snapshot.Compare(instance.m_bIsSquadLeader, 4);
 	}
 }

@@ -160,22 +160,40 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C340D0A5B6C268}" : "{FEEEB639F2735BA1}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsTitle.layout" {
-           Name "TitleIcons"
-           Slot LayoutSlot "{58B32278C99818F2}" {
+          ImageWidgetClass "{6A9C2E41B7E50004}" {
+           Name "SeparatorIcons"
+           Slot LayoutSlot "{6A9C2E41B7E50005}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
+          }
+          ButtonWidgetClass "{6A9C2E41B7E30001}" : "{4C9E2B7A1D3F5068}UI/Layouts/WidgetLibrary/CSI_ColorPicker.layout" {
+           Name "m_iNametagSquadmateColor"
+           Slot LayoutSlot "{5536C935787A6814}" {
+            Padding 4 4 4 4
            }
            components {
-            SCR_LabelComponent "{58B30C1A8E56F0FF}" {
-             m_sLabel "Icons"
-             m_fPaddingTop 12
+            CSI_ColorPickerComponent "{6A9C2E41B7E70001}" {
+             m_sLabel "Standard squad color"
             }
            }
-           {
-            TextWidgetClass "{58B30C1F77EC7B4E}" {
-             Prefab "{58B30C1F77EC7B4E}"
-             Slot LayoutSlot "{58B30C1F77EC7B76}" {
-              Padding 39 4 39 20
+          }
+          ButtonWidgetClass "{6A9C2E41B7E50016}" : "{4B5AE6E64037FFB4}UI/layouts/WidgetLibrary/ComboBox/WLib_ComboBox.layout" {
+           Name "m_iColorTeamSet"
+           Slot LayoutSlot "{58A4F540041D9FC5}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_ComboBoxComponent "{546B1D464BC32853}" {
+             m_sLabel "Fire team colors"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_aElementNames {
+              "Classic" "Bright" "Pastel" "Color-blind"
              }
+            }
+            SCR_ModularButtonComponent "{5E4C99F9B2FB5D32}" {
             }
            }
           }
@@ -230,24 +248,14 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C340D0A8C49429}" : "{FEEEB639F2735BA1}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsTitle.layout" {
-           Name "TitleNametags"
-           Slot LayoutSlot "{58B32278C99818F2}" {
+          ImageWidgetClass "{6A9C2E41B7E50006}" {
+           Name "SeparatorNametags"
+           Slot LayoutSlot "{6A9C2E41B7E50007}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
            }
-           components {
-            SCR_LabelComponent "{58B30C1A8E56F0FF}" {
-             m_sLabel "Nametags"
-             m_fPaddingTop 12
-            }
-           }
-           {
-            TextWidgetClass "{58B30C1F77EC7B4E}" {
-             Prefab "{58B30C1F77EC7B4E}"
-             Slot LayoutSlot "{58B30C1F77EC7B76}" {
-              Padding 39 4 39 20
-             }
-            }
-           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           ButtonWidgetClass "{66C340D156DFD799}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bNametagVisible"
@@ -283,6 +291,23 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          ButtonWidgetClass "{6A9C2E41B7E20001}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+           Name "m_bSquadmateGroupInNametagVisible"
+           Slot LayoutSlot "{54890CCD61050681}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SpinBoxComponent "{5472C6CBC0640458}" {
+             m_sLabel "Squadmate group names"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_aElementNames {
+              "#AR-Settings_Hide" "#AR-Settings_Show"
+             }
+             m_bUseLightArrows 1
+             m_bCycleMode 1
+            }
+           }
+          }
           ButtonWidgetClass "{66C340D15122560D}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bNametagLOSVisible"
            Slot LayoutSlot "{54890CCD61050681}" {
@@ -300,41 +325,6 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          ButtonWidgetClass "{66C340D0D1B2ED0C}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
-           Name "m_iNametagPosition"
-           Slot LayoutSlot "{54890CCD61050681}" {
-            Padding 4 4 4 4
-           }
-           components {
-            SCR_SpinBoxComponent "{5472C6CBC0640458}" {
-             m_sLabel "Nametag position"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_aElementNames {
-              "Head" "Body"
-             }
-             m_bUseLightArrows 1
-             m_bCycleMode 1
-            }
-           }
-          }
-          ButtonWidgetClass "{66C340BE23FDD68C}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
-           Name "m_iNametagPositionOffset"
-           Slot LayoutSlot "{54890CCC1E6DF11D}" {
-            Padding 4 4 4 4
-           }
-           components {
-            SCR_SliderComponent "{548294960C7399D9}" {
-             m_sLabel "Nametag height"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_fValue 3
-             m_fMaxValue 5
-             m_fStep 1
-             m_sFormatText "%1"
-             m_bRoundValue 1
-             m_iDecimalPrecision 2
-            }
-           }
-          }
           ButtonWidgetClass "{66C340D0F5F11E94}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
            Name "m_iNametagRange"
            Slot LayoutSlot "{54890CCC1E6DF11D}" {
@@ -349,24 +339,6 @@ HorizontalLayoutWidgetClass {
              m_fMaxValue 2500
              m_fStep 5
              m_sFormatText "%1"
-             m_bRoundValue 1
-             m_iDecimalPrecision 2
-            }
-           }
-          }
-          ButtonWidgetClass "{68D8151C785D6688}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
-           Name "m_iNametagRangeSimplifiedPercentage"
-           Slot LayoutSlot "{54890CCC1E6DF11D}" {
-            Padding 4 4 4 4
-           }
-           components {
-            SCR_SliderComponent "{548294960C7399D9}" {
-             m_sLabel "Icon-only range"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_fValue 50
-             m_fMaxValue 100
-             m_fStep 1
-             m_sFormatText "%1%"
              m_bRoundValue 1
              m_iDecimalPrecision 2
             }
@@ -409,42 +381,6 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          ButtonWidgetClass "{6A9C2E41B7D60010}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
-           Name "m_iNametagFieldOfViewSimplifiedPercentage"
-           Slot LayoutSlot "{54890CCC1E6DF11D}" {
-            Padding 4 4 4 4
-           }
-           components {
-            SCR_SliderComponent "{548294960C7399D9}" {
-             m_sLabel "Icon-only field of view"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_fValue 50
-             m_fMaxValue 95
-             m_fStep 1
-             m_sFormatText "%1%"
-             m_bRoundValue 1
-             m_iDecimalPrecision 2
-            }
-           }
-          }
-          ButtonWidgetClass "{68D8151FF2C2AB66}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
-           Name "m_iNametagScale"
-           Slot LayoutSlot "{54890CCC1E6DF11D}" {
-            Padding 4 4 4 4
-           }
-           components {
-            SCR_SliderComponent "{548294960C7399D9}" {
-             m_sLabel "Nametag size"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_fValue 60
-             m_fMaxValue 100
-             m_fStep 20
-             m_sFormatText "%1%"
-             m_bRoundValue 1
-             m_iDecimalPrecision 2
-            }
-           }
-          }
           ButtonWidgetClass "{66C340D0D33B85A2}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bRoleIconInNametagVisible"
            Slot LayoutSlot "{54890CCD61050681}" {
@@ -479,6 +415,126 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          ButtonWidgetClass "{68D8151C785D6688}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
+           Name "m_iNametagRangeSimplifiedPercentage"
+           Slot LayoutSlot "{54890CCC1E6DF11D}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SliderComponent "{548294960C7399D9}" {
+             m_sLabel "Icon-only range"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_fValue 50
+             m_fMaxValue 100
+             m_fStep 1
+             m_sFormatText "%1%"
+             m_bRoundValue 1
+             m_iDecimalPrecision 2
+            }
+           }
+          }
+          ButtonWidgetClass "{6A9C2E41B7D60010}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
+           Name "m_iNametagFieldOfViewSimplifiedPercentage"
+           Slot LayoutSlot "{54890CCC1E6DF11D}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SliderComponent "{548294960C7399D9}" {
+             m_sLabel "Icon-only field of view"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_fValue 50
+             m_fMaxValue 95
+             m_fStep 1
+             m_sFormatText "%1%"
+             m_bRoundValue 1
+             m_iDecimalPrecision 2
+            }
+           }
+          }
+          ImageWidgetClass "{6A9C2E41B7E50014}" {
+           Name "SeparatorNametagLook"
+           Slot LayoutSlot "{6A9C2E41B7E50015}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
+          }
+          ButtonWidgetClass "{6A9C2E41B7E40001}" : "{4C9E2B7A1D3F5068}UI/Layouts/WidgetLibrary/CSI_ColorPicker.layout" {
+           Name "m_iNametagOtherColor"
+           Slot LayoutSlot "{5536C935787A6814}" {
+            Padding 4 4 4 4
+           }
+           components {
+            CSI_ColorPickerComponent "{6A9C2E41B7E70001}" {
+             m_sLabel "Nametag color"
+            }
+           }
+          }
+          ButtonWidgetClass "{6A9C2E41B7E80001}" : "{4C9E2B7A1D3F5068}UI/Layouts/WidgetLibrary/CSI_ColorPicker.layout" {
+           Name "m_iNametagVONColor"
+           Slot LayoutSlot "{5536C935787A6814}" {
+            Padding 4 4 4 4
+           }
+           components {
+            CSI_ColorPickerComponent "{6A9C2E41B7E70001}" {
+             m_sLabel "Nametag VON color"
+            }
+           }
+          }
+          ButtonWidgetClass "{68D8151FF2C2AB66}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
+           Name "m_iNametagScale"
+           Slot LayoutSlot "{54890CCC1E6DF11D}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SliderComponent "{548294960C7399D9}" {
+             m_sLabel "Nametag size"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_fValue 60
+             m_fMaxValue 100
+             m_fStep 20
+             m_sFormatText "%1%"
+             m_bRoundValue 1
+             m_iDecimalPrecision 2
+            }
+           }
+          }
+          ButtonWidgetClass "{66C340D0D1B2ED0C}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+           Name "m_iNametagPosition"
+           Slot LayoutSlot "{54890CCD61050681}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SpinBoxComponent "{5472C6CBC0640458}" {
+             m_sLabel "Nametag position"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_aElementNames {
+              "Head" "Body"
+             }
+             m_bUseLightArrows 1
+             m_bCycleMode 1
+            }
+           }
+          }
+          ButtonWidgetClass "{66C340BE23FDD68C}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
+           Name "m_iNametagPositionOffset"
+           Slot LayoutSlot "{54890CCC1E6DF11D}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SliderComponent "{548294960C7399D9}" {
+             m_sLabel "Nametag height"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_fValue 3
+             m_fMaxValue 5
+             m_fStep 1
+             m_sFormatText "%1"
+             m_bRoundValue 1
+             m_iDecimalPrecision 2
+            }
+           }
+          }
           ButtonWidgetClass "{6A9C2E41B7D50001}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bNametagBrightnessDimming"
            Slot LayoutSlot "{54890CCD61050681}" {
@@ -496,24 +552,14 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C340D0E858B844}" : "{FEEEB639F2735BA1}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsTitle.layout" {
-           Name "TitleCompass&Radar"
-           Slot LayoutSlot "{58B32278C99818F2}" {
+          ImageWidgetClass "{6A9C2E41B7E50008}" {
+           Name "SeparatorCompass"
+           Slot LayoutSlot "{6A9C2E41B7E50009}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
            }
-           components {
-            SCR_LabelComponent "{58B30C1A8E56F0FF}" {
-             m_sLabel "Compass & radar"
-             m_fPaddingTop 12
-            }
-           }
-           {
-            TextWidgetClass "{58B30C1F77EC7B4E}" {
-             Prefab "{58B30C1F77EC7B4E}"
-             Slot LayoutSlot "{58B30C1F77EC7B76}" {
-              Padding 39 4 39 20
-             }
-            }
-           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           ButtonWidgetClass "{66C340D0DF6A6ACD}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bCompassVisible"
@@ -549,19 +595,14 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          ButtonWidgetClass "{6A9C2E41B7E10001}" : "{DE4FF98B6BB98B14}UI/layouts/WidgetLibrary/ToolBoxes/WLib_Toolbox.layout" {
+          ButtonWidgetClass "{6A9C2E41B7E10001}" : "{4C9E2B7A1D3F5068}UI/Layouts/WidgetLibrary/CSI_ColorPicker.layout" {
            Name "m_iCompassColor"
            Slot LayoutSlot "{5536C935787A6814}" {
             Padding 4 4 4 4
            }
            components {
-            SCR_ToolboxComponent "{5478CE8F8EE55D9D}" {
-             m_sLabel "Compass colour"
-             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
-             m_aElementNames {
-              "White" "Amber" "Orange" "Red" "Green" "Blue" "Cyan" "Pink" "Purple"
-             }
-             m_ElementLayout "{8A5D43FC8AC6C171}UI/layouts/Map/MapColorSelectorEntry.layout"
+            CSI_ColorPickerComponent "{6A9C2E41B7E70001}" {
+             m_sLabel "Compass color"
             }
            }
           }
@@ -581,6 +622,15 @@ HorizontalLayoutWidgetClass {
              m_bCycleMode 1
             }
            }
+          }
+          ImageWidgetClass "{6A9C2E41B7E5000A}" {
+           Name "SeparatorRadar"
+           Slot LayoutSlot "{6A9C2E41B7E5000B}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           ButtonWidgetClass "{66C340D00CE8635E}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
            Name "m_bRadarVisible"
@@ -859,29 +909,67 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C6723FE2E1C5AC}" {
-           Name "ServerOverrideText0"
-           Slot LayoutSlot "{66C6723F80122165}" {
-            VerticalAlign 2
+          ImageWidgetClass "{6A9C2E41B7E5000C}" {
+           Name "SeparatorIcons"
+           Slot LayoutSlot "{6A9C2E41B7E5000D}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7E30002}" {
+           Name "m_iNametagSquadmateColor"
+           Slot LayoutSlot "{6A9C2E41B7E30003}" {
             SizeMode Fill
-            FillWeight 0.975
+            FillWeight 1.5
            }
            {
-            TextWidgetClass "{66C6723FE2E1C5AA}" {
-             Name "ServerOverrideText"
-             Slot LayoutSlot "{66C6724522E454B0}" {
-              HorizontalAlign 2
+            CheckBoxWidgetClass "{6A9C2E41B7E30004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E30005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+              Padding 0 16 0 16
              }
-             Color 0.7605 0.3916 0.0782 1
-             Text "Server "\
-             "override"
-             "Font Size" 14
-             "Min Font Size" 14
-             "Horizontal Alignment" Center
-             "Vertical Alignment" Center
-             Wrap 1
-             FontProperties FontProperties "{66C67246A31C9941}" {
-              Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+             components {
+              ButtonComponent "{6A9C2E41B7E30006}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7E5001C}" {
+           Name "m_iColorTeamSet"
+           Slot LayoutSlot "{6A9C2E41B7E5001D}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7E5001E}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E5001F}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7E50020}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
              }
             }
            }
@@ -967,32 +1055,14 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C6723F100DAC66}" {
-           Name "ServerOverrideText1"
-           Slot LayoutSlot "{66C6723F80122165}" {
-            VerticalAlign 2
-            SizeMode Fill
-            FillWeight 0.975
+          ImageWidgetClass "{6A9C2E41B7E5000E}" {
+           Name "SeparatorNametags"
+           Slot LayoutSlot "{6A9C2E41B7E5000F}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
            }
-           {
-            TextWidgetClass "{66C6723F100DAC60}" {
-             Name "ServerOverrideText"
-             Slot LayoutSlot "{66C6724522E454B0}" {
-              HorizontalAlign 2
-             }
-             Color 0.7605 0.3916 0.0782 1
-             Text "Server "\
-             "override"
-             "Font Size" 14
-             "Min Font Size" 14
-             "Horizontal Alignment" Center
-             "Vertical Alignment" Center
-             Wrap 1
-             FontProperties FontProperties "{66C67246A31C9941}" {
-              Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
-             }
-            }
-           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           SizeLayoutWidgetClass "{66C6723FED79CE37}" {
            Name "m_bNametagVisible"
@@ -1043,6 +1113,33 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          SizeLayoutWidgetClass "{6A9C2E41B7E20002}" {
+           Name "m_bSquadmateGroupInNametagVisible"
+           Slot LayoutSlot "{6A9C2E41B7E20003}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7E20004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E20005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7E20006}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
           SizeLayoutWidgetClass "{66C6723FEAF1B9BA}" {
            Name "m_bNametagLOSVisible"
            Slot LayoutSlot "{66C6723FB3CA4F68}" {
@@ -1070,60 +1167,6 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          SizeLayoutWidgetClass "{66C6723FEAF3D476}" {
-           Name "m_iNametagPosition"
-           Slot LayoutSlot "{66C6723FBFD45B50}" {
-            SizeMode Fill
-           }
-           {
-            CheckBoxWidgetClass "{66C6723FEAF3D477}" {
-             Name "ServerOverride"
-             Slot AlignableSlot "{66C6723FB9122D2F}" {
-              HorizontalAlign 3
-              VerticalAlign 3
-             }
-             components {
-              ButtonComponent "{66C6723C5F4627CE}" {
-               m_ColorButtonDefault 1 1 1 0.7
-               m_ColorButtonFocused 0.761 0.392 0.078 1
-               m_ColorButtonPressed 0.761 0.392 0.078 1
-               m_ColorChildFocused 0.761 0.392 0.078 1
-               m_ColorChildPressed 0.761 0.392 0.078 1
-               m_ColorChildDisabled 0.8 0.8 0.8 0.1
-               m_ColorButtonHovered 0.761 0.392 0.078 1
-               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
-              }
-             }
-            }
-           }
-          }
-          SizeLayoutWidgetClass "{66C6723FEAF50B1D}" {
-           Name "m_iNametagPositionOffset"
-           Slot LayoutSlot "{66C6723FBFD45B50}" {
-            SizeMode Fill
-           }
-           {
-            CheckBoxWidgetClass "{66C6723FEAF50B1E}" {
-             Name "ServerOverride"
-             Slot AlignableSlot "{66C6723FB9122D2F}" {
-              HorizontalAlign 3
-              VerticalAlign 3
-             }
-             components {
-              ButtonComponent "{66C6723C5F4627CE}" {
-               m_ColorButtonDefault 1 1 1 0.7
-               m_ColorButtonFocused 0.761 0.392 0.078 1
-               m_ColorButtonPressed 0.761 0.392 0.078 1
-               m_ColorChildFocused 0.761 0.392 0.078 1
-               m_ColorChildPressed 0.761 0.392 0.078 1
-               m_ColorChildDisabled 0.8 0.8 0.8 0.1
-               m_ColorButtonHovered 0.761 0.392 0.078 1
-               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
-              }
-             }
-            }
-           }
-          }
           SizeLayoutWidgetClass "{66C6723F161AA124}" {
            Name "m_iNametagRange"
            Slot LayoutSlot "{66C6723FB3CA4F68}" {
@@ -1131,33 +1174,6 @@ HorizontalLayoutWidgetClass {
            }
            {
             CheckBoxWidgetClass "{66C6723F161AA125}" {
-             Name "ServerOverride"
-             Slot AlignableSlot "{66C6723FBD844CF1}" {
-              HorizontalAlign 3
-              VerticalAlign 3
-             }
-             components {
-              ButtonComponent "{66C6723C5F4627CE}" {
-               m_ColorButtonDefault 1 1 1 0.7
-               m_ColorButtonFocused 0.761 0.392 0.078 1
-               m_ColorButtonPressed 0.761 0.392 0.078 1
-               m_ColorChildFocused 0.761 0.392 0.078 1
-               m_ColorChildPressed 0.761 0.392 0.078 1
-               m_ColorChildDisabled 0.8 0.8 0.8 0.1
-               m_ColorButtonHovered 0.761 0.392 0.078 1
-               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
-              }
-             }
-            }
-           }
-          }
-          SizeLayoutWidgetClass "{68D8151F23049520}" {
-           Name "m_iNametagRangeSimplifiedPercentage"
-           Slot LayoutSlot "{66C6723FB3CA4F68}" {
-            SizeMode Fill
-           }
-           {
-            CheckBoxWidgetClass "{68D8151F2304952E}" {
              Name "ServerOverride"
              Slot AlignableSlot "{66C6723FBD844CF1}" {
               HorizontalAlign 3
@@ -1232,60 +1248,6 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          SizeLayoutWidgetClass "{6A9C2E41B7D60011}" {
-           Name "m_iNametagFieldOfViewSimplifiedPercentage"
-           Slot LayoutSlot "{6A9C2E41B7D60012}" {
-            SizeMode Fill
-           }
-           {
-            CheckBoxWidgetClass "{6A9C2E41B7D60013}" {
-             Name "ServerOverride"
-             Slot AlignableSlot "{6A9C2E41B7D60014}" {
-              HorizontalAlign 3
-              VerticalAlign 3
-             }
-             components {
-              ButtonComponent "{6A9C2E41B7D60015}" {
-               m_ColorButtonDefault 1 1 1 0.7
-               m_ColorButtonFocused 0.761 0.392 0.078 1
-               m_ColorButtonPressed 0.761 0.392 0.078 1
-               m_ColorChildFocused 0.761 0.392 0.078 1
-               m_ColorChildPressed 0.761 0.392 0.078 1
-               m_ColorChildDisabled 0.8 0.8 0.8 0.1
-               m_ColorButtonHovered 0.761 0.392 0.078 1
-               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
-              }
-             }
-            }
-           }
-          }
-          SizeLayoutWidgetClass "{68D8151F2E3CE2E3}" {
-           Name "m_iNametagScale"
-           Slot LayoutSlot "{66C6723FB3CA4F68}" {
-            SizeMode Fill
-           }
-           {
-            CheckBoxWidgetClass "{68D8151F2E3CE2E2}" {
-             Name "ServerOverride"
-             Slot AlignableSlot "{66C6723FBD844CF1}" {
-              HorizontalAlign 3
-              VerticalAlign 3
-             }
-             components {
-              ButtonComponent "{66C6723C5F4627CE}" {
-               m_ColorButtonDefault 1 1 1 0.7
-               m_ColorButtonFocused 0.761 0.392 0.078 1
-               m_ColorButtonPressed 0.761 0.392 0.078 1
-               m_ColorChildFocused 0.761 0.392 0.078 1
-               m_ColorChildPressed 0.761 0.392 0.078 1
-               m_ColorChildDisabled 0.8 0.8 0.8 0.1
-               m_ColorButtonHovered 0.761 0.392 0.078 1
-               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
-              }
-             }
-            }
-           }
-          }
           SizeLayoutWidgetClass "{66C6723F0D3106A5}" {
            Name "m_bRoleIconInNametagVisible"
            Slot LayoutSlot "{66C6723FBFD45B50}" {
@@ -1340,6 +1302,208 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          SizeLayoutWidgetClass "{68D8151F23049520}" {
+           Name "m_iNametagRangeSimplifiedPercentage"
+           Slot LayoutSlot "{66C6723FB3CA4F68}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{68D8151F2304952E}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{66C6723FBD844CF1}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{66C6723C5F4627CE}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7D60011}" {
+           Name "m_iNametagFieldOfViewSimplifiedPercentage"
+           Slot LayoutSlot "{6A9C2E41B7D60012}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7D60013}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7D60014}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7D60015}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          ImageWidgetClass "{6A9C2E41B7E5001A}" {
+           Name "SeparatorNametagLook"
+           Slot LayoutSlot "{6A9C2E41B7E5001B}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7E40002}" {
+           Name "m_iNametagOtherColor"
+           Slot LayoutSlot "{6A9C2E41B7E40003}" {
+            SizeMode Fill
+            FillWeight 1.5
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7E40004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E40005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+              Padding 0 16 0 16
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7E40006}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7E80002}" {
+           Name "m_iNametagVONColor"
+           Slot LayoutSlot "{6A9C2E41B7E80003}" {
+            SizeMode Fill
+            FillWeight 1.5
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7E80004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7E80005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+              Padding 0 16 0 16
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7E80006}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{68D8151F2E3CE2E3}" {
+           Name "m_iNametagScale"
+           Slot LayoutSlot "{66C6723FB3CA4F68}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{68D8151F2E3CE2E2}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{66C6723FBD844CF1}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{66C6723C5F4627CE}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{66C6723FEAF3D476}" {
+           Name "m_iNametagPosition"
+           Slot LayoutSlot "{66C6723FBFD45B50}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{66C6723FEAF3D477}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{66C6723FB9122D2F}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{66C6723C5F4627CE}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{66C6723FEAF50B1D}" {
+           Name "m_iNametagPositionOffset"
+           Slot LayoutSlot "{66C6723FBFD45B50}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{66C6723FEAF50B1E}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{66C6723FB9122D2F}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{66C6723C5F4627CE}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
           SizeLayoutWidgetClass "{6A9C2E41B7D50002}" {
            Name "m_bNametagBrightnessDimming"
            Slot LayoutSlot "{6A9C2E41B7D50003}" {
@@ -1367,32 +1531,14 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
-          VerticalLayoutWidgetClass "{66C6723F0F8F404E}" {
-           Name "ServerOverrideText2"
-           Slot LayoutSlot "{66C6723F80122165}" {
-            VerticalAlign 2
-            SizeMode Fill
-            FillWeight 0.975
+          ImageWidgetClass "{6A9C2E41B7E50010}" {
+           Name "SeparatorCompass"
+           Slot LayoutSlot "{6A9C2E41B7E50011}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
            }
-           {
-            TextWidgetClass "{66C6723F0F8F4049}" {
-             Name "ServerOverrideText"
-             Slot LayoutSlot "{66C6724522E454B0}" {
-              HorizontalAlign 2
-             }
-             Color 0.7605 0.3916 0.0782 1
-             Text "Server "\
-             "override"
-             "Font Size" 14
-             "Min Font Size" 14
-             "Horizontal Alignment" Center
-             "Vertical Alignment" Center
-             Wrap 1
-             FontProperties FontProperties "{66C67246A31C9941}" {
-              Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
-             }
-            }
-           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           SizeLayoutWidgetClass "{66C6723F0AB215A2}" {
            Name "m_bCompassVisible"
@@ -1452,6 +1598,7 @@ HorizontalLayoutWidgetClass {
            Name "m_iCompassColor"
            Slot LayoutSlot "{6A9C2E41B7E10003}" {
             SizeMode Fill
+            FillWeight 1.5
            }
            {
             CheckBoxWidgetClass "{6A9C2E41B7E10004}" {
@@ -1459,6 +1606,7 @@ HorizontalLayoutWidgetClass {
              Slot AlignableSlot "{6A9C2E41B7E10005}" {
               HorizontalAlign 3
               VerticalAlign 3
+              Padding 0 16 0 16
              }
              components {
               ButtonComponent "{6A9C2E41B7E10006}" {
@@ -1501,6 +1649,15 @@ HorizontalLayoutWidgetClass {
              }
             }
            }
+          }
+          ImageWidgetClass "{6A9C2E41B7E50012}" {
+           Name "SeparatorRadar"
+           Slot LayoutSlot "{6A9C2E41B7E50013}" {
+            HorizontalAlign 3
+            Padding 4 10 4 10
+           }
+           Color 0.761 0.392 0.078 1
+           Size 1 4
           }
           SizeLayoutWidgetClass "{66C6723F0AB6A31D}" {
            Name "m_bRadarVisible"

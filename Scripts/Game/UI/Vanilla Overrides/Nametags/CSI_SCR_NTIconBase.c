@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
-//! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored by color team.
+//! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
@@ -92,7 +92,7 @@ modded class SCR_NTIconBase
 			SetWidgetCSIColor(data, index);
 		} else {
 			// No CSI data: AI icon for AI, else empty
-			SetElementColor(data, index, GetColorTeamColor(CSI_EColorTeam.NONE));
+			SetElementColor(data, index, GetNametagColor(CSI_GameSettings.NAMETAG_COLOR));
 
 			if (loadIcon)
 			{

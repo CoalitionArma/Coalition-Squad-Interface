@@ -3,8 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Client world system: registers the local player's CSI data and reports their display icon, rank
-//! 				and squad leader status to the server, scanning the inventory for specialty icons when it changes.
+//!	\Description: 	Client world system: reports the local player's display icon, rank and squad leader status to
+//! 				the server, scanning the inventory for specialty icons when it changes.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_ClientSystem : GameSystem
@@ -134,13 +134,12 @@ class CSI_ClientSystem : GameSystem
 		if (!groupsManagerComponent)
 			return;
 
-		// CSI data is only registered once the player is in a group
+		// Only reported once the player is in a group
 		SCR_AIGroup playersGroup = groupsManagerComponent.GetPlayerGroup(playerID);
 
 		if (!playersGroup)
 			return;
 
-		m_RplToAuthorityManager.Owner_RegisterPlayerData(playerID);
 		UpdateInventoryListeners(localplayer);
 		CSI_EIcon displayIcon = CSI_EIcon.MAN;
 

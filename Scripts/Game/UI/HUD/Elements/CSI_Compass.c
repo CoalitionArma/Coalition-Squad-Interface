@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD compass: themed texture rotated to the local yaw, with the bearing above it.
-//! 				Both use the Compass colour setting.
+//! 				Both use the Compass color setting.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Compass : SCR_ScriptedWidgetComponent

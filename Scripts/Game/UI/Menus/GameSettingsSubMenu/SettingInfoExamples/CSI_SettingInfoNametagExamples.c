@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible: shows the
-//! 				setting's panel with the local player's nametag, laid out for the tab's values.
+//! 				setting's panel with the local player's nametag, laid out and colored for the tab's values.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
@@ -35,10 +35,10 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	protected static const float MATE_SPACING = 0.08;			//!< closest a mate stands to the figure before them
 	protected static const float FIGURE_HALF_WIDTH = 0.02;
 
-	// BodyPosition: figure (task-man.edds) and bone heights when standing, in metres
+	// BodyPosition: figure (task-man.edds) and bone heights when standing, in meters
 	protected static const float FIGURE_HEIGHT = 1.8;			//!< the character in the figure image, head to feet
 	protected static const float FIGURE_FEET = 0.986;			//!< feet, as a fraction of the image height from the top
-	protected static const float TORSO_CENTRE_HEIGHT = 1.07;	//!< between shoulders (1.44 m) and hips (0.69 m)
+	protected static const float TORSO_CENTER_HEIGHT = 1.07;	//!< between shoulders (1.44 m) and hips (0.69 m)
 	protected static const float NECK_BONE_HEIGHT = 1.5;		//!< approximately, the Neck1 bone BODY tags attach to
 	protected static const float HEAD_BONE_HEIGHT = 1.62;		//!< approximately, the head bone HEAD tags attach to
 	protected static const float BODY_TAG_TOP_MARGIN = 6;		//!< px: closest the tag's top gets to the panel's top
@@ -53,7 +53,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	protected static const float FOV_ZONE_OPACITY = 0.3;
 	protected static const float FOV_FULL_MATE_DISTANCE = 157;	//!< to the squadmate with a full nametag
 	protected static const float FOV_ICON_MATE_DISTANCE = 83.5;	//!< to the icon-only squadmate (tag stays below the other dot)
-	protected static const float FOV_TAG_GAP = 9.8;				//!< from a squadmate's dot centre up to their nametag
+	protected static const float FOV_TAG_GAP = 9.8;				//!< from a squadmate's dot center up to their nametag
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -142,6 +142,31 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			else
 				caption = "No group names";
 
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.SQUADMATE_GROUP_IN_NAMETAG_VISIBLE)
+		{
+			ShowSingle(true);
+			if (value)
+				caption = "A squadmate's nametag, with their group";
+			else
+				caption = "A squadmate's nametag, without their group";
+
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.NAMETAG_COLOR)
+		{
+			ShowSingle();
+			caption = string.Format("Players outside your group and AI: %1", CSI_ColorPresets.GetName(GetNonClashingPreset(setting)));
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.NAMETAG_VON_COLOR)
+		{
+			ShowSingle(false, true);
+			caption = string.Format("While talking: %1", CSI_ColorPresets.GetName(GetNonClashingPreset(setting)));
 			return true;
 		}
 
@@ -235,11 +260,12 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Single panel: the local player's nametag on its own.
-	protected void ShowSingle()
+	//! \param[in] squadmate shown as a squadmate's nametag, else as another player's
+	protected void ShowSingle(bool squadmate = false, bool talking = false)
 	{
 		Widget panel = ShowPanel(SINGLE_PANEL);
 		if (panel)
-			ShowSampleNametag(panel.FindAnyWidget("Tag"), NAMETAG_PREVIEW_SCALE, 1, true);
+			ShowSampleNametag(panel.FindAnyWidget("Tag"), NAMETAG_PREVIEW_SCALE, 1, true, squadmate, talking);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -261,7 +287,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Range panel: a teammate inside the range has a nametag, one beyond it doesn't.
-	//! \param[in] range metres
+	//! \param[in] range meters
 	protected void ShowRange(int range)
 	{
 		Widget panel = ShowPanel(RANGE_PANEL);
@@ -403,8 +429,8 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Distance where nametags drop to icon only.
 	//! \param[in] percentage NAMTEAG_RANGE_SIMPLIFIED value
-	//! \param[in] range metres
-	//! \return metres; range or more means never within range
+	//! \param[in] range meters
+	//! \return meters; range or more means never within range
 	protected float GetSimplifiedDistance(int percentage, float range)
 	{
 		float cutoff = range * (1 - percentage * 0.01);
@@ -432,7 +458,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Centres the tag at GetTagHeight on the figure, measured on screen from its Image.
+	//! Centers the tag at GetTagHeight on the figure, measured on screen from its Image.
 	//! Retries until the panel is laid out.
 	protected void PlaceBodyPositionTag()
 	{
@@ -490,7 +516,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Tag height on a standing character: HEAD = head bone + 0.1-0.6 m, BODY = Neck1 bone - 0.5-0 m.
-	//! \return metres above the feet
+	//! \return meters above the feet
 	protected float GetTagHeight()
 	{
 		int offset = GetValue(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
@@ -510,7 +536,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			return string.Format("%1 cm above the head", (offset + 1) * 10);
 		}
 
-		int fromTorso = Math.Round((GetTagHeight() - TORSO_CENTRE_HEIGHT) * 20) * 5;
+		int fromTorso = Math.Round((GetTagHeight() - TORSO_CENTER_HEIGHT) * 20) * 5;
 		if (fromTorso == 0)
 			return "At the middle of the torso";
 
@@ -582,11 +608,11 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! FieldOfView: a squadmate's dot at a point, with their nametag centred above it.
+	//! FieldOfView: a squadmate's dot at a point, with their nametag centered above it.
 	//! \param[in] panel FieldOfView panel
 	//! \param[in] mateName dot widget
 	//! \param[in] tagName nametag widget
-	//! \param[in] position offset from the panel's bottom centre
+	//! \param[in] position offset from the panel's bottom center
 	//! \param[in] showName false for an icon-only tag
 	//! \param[in] visible
 	protected void ShowFieldOfViewMate(notnull Widget panel, string mateName, string tagName, vector position, bool showName, bool visible)
@@ -606,7 +632,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		if (!visible)
 			return;
 
-		// Centred over the dot (the tag's alignment is its bottom centre)
+		// Centered over the dot (the tag's alignment is its bottom center)
 		FrameSlot.SetPos(tag, position[0], position[1] - FOV_TAG_GAP);
 		ShowSampleNametag(tag, NAMETAG_DIAGRAM_SCALE, 1, showName);
 	}
@@ -643,7 +669,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		viewLine.SetVisible(false);
 
-		// ViewLine starts at "You"; its position is offset from the panel's bottom centre
+		// ViewLine starts at "You"; its position is offset from the panel's bottom center
 		vector linePos = FrameSlot.GetPos(viewLine);
 		vector lineSize = FrameSlot.GetSize(viewLine);
 		float centerX = width * 0.5 + workspace.DPIScale(linePos[0]);
@@ -692,7 +718,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Creates the edge dots once, anchored at the panel's bottom centre.
+	//! Creates the edge dots once, anchored at the panel's bottom center.
 	//! \param[in] panel FieldOfView panel
 	protected void CreateFieldOfViewEdgeDots(notnull Widget panel)
 	{
@@ -737,7 +763,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] centerX
 	//! \param[in] centerY
 	//! \param[in] angle degrees from straight up, positive to the right
-	//! \param[in] distance px from the centre
+	//! \param[in] distance px from the center
 	//! \return the point (x, y)
 	protected vector GetPointAround(float centerX, float centerY, float angle, float distance)
 	{
@@ -755,7 +781,9 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] previewScale size multiplier over the in-game size
 	//! \param[in] opacity
 	//! \param[in] showName false for an icon-only (simplified) tag
-	protected void ShowSampleNametag(Widget nametag, float previewScale, float opacity, bool showName)
+	//! \param[in] squadmate shown as a squadmate's nametag (without a fire team), else as another player's
+	//! \param[in] talking colored as while talking, with the talking icon
+	protected void ShowSampleNametag(Widget nametag, float previewScale, float opacity, bool showName, bool squadmate = false, bool talking = false)
 	{
 		if (!nametag)
 			return;
@@ -767,7 +795,14 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		int textSize = (8 + scaleStep) * previewScale;
 		int groupTextSize = (6 + scaleStep) * previewScale;
 		int iconSize = (12 + scaleStep * 2) * previewScale;
-		Color textColor = CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE);
+		Color groupColor = CSI_ColorPresets.GetColor(CSI_EColorPreset.GRAY);
+		Color textColor;
+		if (talking)
+			textColor = CSI_ColorPresets.GetColor(GetNonClashingPreset(CSI_GameSettings.NAMETAG_VON_COLOR));
+		else if (squadmate)
+			textColor = CSI_ColorPresets.GetColor(GetNonClashingPreset(CSI_GameSettings.STANDARD_SQUAD_COLOR));
+		else
+			textColor = CSI_ColorPresets.GetColor(GetNonClashingPreset(CSI_GameSettings.NAMETAG_COLOR));
 
 		TextWidget nameWidget = TextWidget.Cast(nametag.FindAnyWidget("PlayerName"));
 		if (nameWidget)
@@ -782,10 +817,11 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		TextWidget groupWidget = TextWidget.Cast(nametag.FindAnyWidget("PlayerGroupName"));
 		if (groupWidget)
 		{
-			groupWidget.SetVisible(showName && GetValue(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE));
+			bool showGroup = GetValue(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE) && (!squadmate || GetValue(CSI_GameSettings.SQUADMATE_GROUP_IN_NAMETAG_VISIBLE));
+			groupWidget.SetVisible(showName && showGroup);
 			groupWidget.SetText("Alpha 1-1");
 			groupWidget.SetExactFontSize(groupTextSize);
-			groupWidget.SetColor(textColor);
+			groupWidget.SetColor(groupColor);
 			groupWidget.SetOpacity(opacity);
 		}
 
@@ -809,7 +845,12 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 			if (!visible)
 				continue;
 
-			if (role == CSI_EIcon.MAN)
+			// The talking icon takes the role icon's place, as in game
+			if (talking)
+			{
+				iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON");
+			}
+			else if (role == CSI_EIcon.MAN)
 			{
 				iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
 			}
@@ -890,5 +931,13 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	protected int GetValue(string setting)
 	{
 		return CSI_SettingInfo.GetValue(m_wSettingsRoot, setting);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS name
+	//! \return the color nametags get with the tab's values: Gray if it matches a fire team color
+	protected int GetNonClashingPreset(string setting)
+	{
+		return CSI_ColorPresets.GetNonClashingPreset(GetValue(setting), GetValue(CSI_GameSettings.COLOR_TEAM_SET));
 	}
 }

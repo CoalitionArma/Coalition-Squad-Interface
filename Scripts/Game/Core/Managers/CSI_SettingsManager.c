@@ -30,7 +30,7 @@ class CSI_SettingsManager : ScriptComponent
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	protected ref ScriptInvoker m_OnSettingsUpdate;
+	protected ref ScriptInvokerVoid m_OnSettingsUpdate;
 
 	[RplProp(onRplName: "SettingsUpdate")]
 	protected ref TIntArray m_aSettingsAuthorityValues = {};	//!< encoded server values by settings index
@@ -254,10 +254,10 @@ class CSI_SettingsManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	ScriptInvoker GetOnSettingsUpdate()
+	ScriptInvokerVoid GetOnSettingsUpdate()
 	{
 		if (!m_OnSettingsUpdate)
-			m_OnSettingsUpdate = new ScriptInvoker();
+			m_OnSettingsUpdate = new ScriptInvokerVoid();
 
 		return m_OnSettingsUpdate;
 	}

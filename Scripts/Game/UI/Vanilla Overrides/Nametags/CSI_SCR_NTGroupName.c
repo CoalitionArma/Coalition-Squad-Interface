@@ -4,6 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag element showing the player's group name under their name; used in NametagFriendlies.conf.
+//! 				Left empty for squadmates with Squadmate group names hidden.
 //!
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
@@ -24,7 +25,7 @@ class SCR_NTGroupName : SCR_NTTextBase
 		// Font, size (two smaller than the name) and neutral color
 		tWidget.SetFont(m_FontResource);
 		tWidget.SetExactFontSize(GetNametagTextScale() - 2);
-		tWidget.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+		tWidget.SetColor(CSI_ColorPresets.GetColor(CSI_EColorPreset.GRAY));
 
 		data.GetGroupName();
 
@@ -47,7 +48,7 @@ class SCR_NTGroupName : SCR_NTTextBase
 		//-----------------------------------------------------------------------
 		// Set The Text Of The Widget Based On Our Current Distance, only when it changes
 		string text = data.m_sGroupName;
-		if (ShouldWeClearText(data))
+		if (ShouldWeClearText(data) || (!m_SettingsManager.GetSettingBool(CSI_GameSettings.SQUADMATE_GROUP_IN_NAMETAG_VISIBLE) && IsLocalGroupMember(data)))
 			text = string.Empty;
 
 		if (nameUpdate || text != data.m_aElementTexts[index])

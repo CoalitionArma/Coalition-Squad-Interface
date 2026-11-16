@@ -1,38 +1,56 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	The colours a colour setting can pick (CSI_EColorPreset), and the settings tab's colour box rows
-//! 				for CSI_GameSettings.COLOR_SETTINGS. Read a setting's colour with GetSettingColor.
+//!	\Description: 	The colors a color setting can pick (CSI_EColorPreset; CSI_ColorPickerComponent shows them) and
+//! 				the fire team color sets (CSI_EColorTeamSet). Read a setting's color with GetSettingColor, a
+//! 				fire team's with CSI_UIHelper.ConvertColorTeamToColor.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_ColorPresets
 {
-	// Solid white image, tinted per box
-	protected static const ResourceName SOLID_IMAGESET = "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset";
-	protected static const string SOLID_IMAGE = "Pixel_White_100";
-
-	protected static const float BOX_INSET = 4;	//!< px between a box's colour and its tile
-
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] preset CSI_EColorPreset value
-	//! \return a new colour, white for an unknown value
+	//! \return a new color, white for an unknown value
 	static Color GetColor(int preset)
 	{
 		switch (preset)
 		{
-			case CSI_EColorPreset.AMBER :	return new Color(0.947, 0.651, 0.136, 1);
-			case CSI_EColorPreset.ORANGE :	return new Color(0.761, 0.392, 0.078, 1);	// the UI orange
-			case CSI_EColorPreset.RED :		return new Color(0.855, 0.027, 0.028, 1);
-			case CSI_EColorPreset.GREEN :	return new Color(0.014, 0.445, 0.08, 1);
-			case CSI_EColorPreset.BLUE :	return new Color(0.002, 0.198, 0.847, 1);
-			case CSI_EColorPreset.CYAN :	return new Color(0.014, 0.546, 0.896, 1);
-			case CSI_EColorPreset.PINK :	return new Color(0.871, 0.039, 0.705, 1);
-			case CSI_EColorPreset.PURPLE :	return new Color(0.45, 0.08, 0.86, 1);
+			// First row: the bright vanilla map marker colors
+			case CSI_EColorPreset.AMBER :			return new Color(0.947, 0.651, 0.136, 1);
+			case CSI_EColorPreset.ORANGE :			return new Color(0.761, 0.392, 0.078, 1);	// the UI orange
+			case CSI_EColorPreset.RED :				return new Color(0.855, 0.027, 0.028, 1);
+			case CSI_EColorPreset.GREEN :			return new Color(0.014, 0.445, 0.08, 1);
+			case CSI_EColorPreset.BLUE :			return new Color(0.002, 0.198, 0.847, 1);
+			case CSI_EColorPreset.CYAN :			return new Color(0.014, 0.546, 0.896, 1);
+			case CSI_EColorPreset.PINK :			return new Color(0.871, 0.039, 0.705, 1);
+			case CSI_EColorPreset.PURPLE :			return new Color(0.45, 0.08, 0.86, 1);
+			case CSI_EColorPreset.GRAY :			return FromRGB(0xE1E1E1);
+
+			// Second row; some are fire team colors in a set (GetColorTeamColor)
+			case CSI_EColorPreset.YELLOW :			return FromRGB(0xFFEB00);
+			case CSI_EColorPreset.LIGHT_YELLOW :	return FromRGB(0xFFF08C);
+			case CSI_EColorPreset.LIME :			return FromRGB(0x96E600);
+			case CSI_EColorPreset.LIGHT_GREEN :		return FromRGB(0x82E696);
+			case CSI_EColorPreset.TEAL :			return FromRGB(0x009E73);
+			case CSI_EColorPreset.LIGHT_BLUE :		return FromRGB(0x82AAFF);
+			case CSI_EColorPreset.LAVENDER :		return FromRGB(0xB496FF);
+			case CSI_EColorPreset.LIGHT_RED :		return FromRGB(0xFF8282);
+			case CSI_EColorPreset.LIGHT_PINK :		return FromRGB(0xFFAADC);
+			case CSI_EColorPreset.BROWN :			return FromRGB(0xA06432);
 		}
 
 		return new Color(1, 1, 1, 1);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] rgb 0xRRGGBB
+	//! \param[in] opacity 0-255
+	//! \return a new color
+	protected static Color FromRGB(int rgb, int opacity = 255)
+	{
+		return Color.FromInt(ARGB(opacity, (rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF));
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -51,13 +69,24 @@ class CSI_ColorPresets
 			case CSI_EColorPreset.CYAN :	return "Cyan";
 			case CSI_EColorPreset.PINK :	return "Pink";
 			case CSI_EColorPreset.PURPLE :	return "Purple";
+			case CSI_EColorPreset.GRAY :	return "Gray";
+			case CSI_EColorPreset.YELLOW :			return "Yellow";
+			case CSI_EColorPreset.LIGHT_YELLOW :	return "Light yellow";
+			case CSI_EColorPreset.LIME :			return "Lime";
+			case CSI_EColorPreset.LIGHT_GREEN :		return "Light green";
+			case CSI_EColorPreset.TEAL :			return "Teal";
+			case CSI_EColorPreset.LIGHT_BLUE :		return "Light blue";
+			case CSI_EColorPreset.LAVENDER :		return "Lavender";
+			case CSI_EColorPreset.LIGHT_RED :		return "Light red";
+			case CSI_EColorPreset.LIGHT_PINK :		return "Light pink";
+			case CSI_EColorPreset.BROWN :			return "Brown";
 		}
 
 		return string.Empty;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return number of colours (values 0 to Count() - 1)
+	//! \return number of colors (values 0 to Count() - 1)
 	static int Count()
 	{
 		array<int> presets = {};
@@ -66,7 +95,7 @@ class CSI_ColorPresets
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting a CSI_GameSettings.COLOR_SETTINGS name
-	//! \return the setting's colour, white without a settings manager
+	//! \return the setting's color, white without a settings manager
 	static Color GetSettingColor(string setting)
 	{
 		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
@@ -77,65 +106,104 @@ class CSI_ColorPresets
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills the toolbox with one box per colour, so its selected index is the colour.
-	//! Call before its value is loaded.
-	//! \param[in] toolbox with MapColorSelectorEntry.layout elements
-	//! \return false if its elements aren't image buttons
-	static bool FillToolbox(notnull SCR_ToolboxComponent toolbox)
+	//! \param[in] colorTeam
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \param[in] noTeamPreset STANDARD_SQUAD_COLOR value (CSI_EColorPreset), NONE's color
+	//! \param[in] opacity 0-255
+	//! \return a new color
+	static Color GetColorTeamColor(CSI_EColorTeam colorTeam, int teamSet, int noTeamPreset, int opacity = 255)
 	{
-		toolbox.ClearAll();
-		for (int i, count = Count(); i < count; i++)
+		// 0xRRGGBB per set: Classic, Bright, Pastel, Color-blind
+		int rgb;
+		switch (colorTeam)
 		{
-			// AddItem rebuilds every element, so style them afterwards
-			toolbox.AddItem(GetName(i));
+			case CSI_EColorTeam.BLUE :		rgb = PickForSet(teamSet, 0x005CFF, 0x196EFF, 0x82AAFF, 0x0072B2); break;
+			case CSI_EColorTeam.RED :		rgb = PickForSet(teamSet, 0xC84141, 0xFF2D2D, 0xFF8282, 0xD55E00); break;
+			case CSI_EColorTeam.GREEN :		rgb = PickForSet(teamSet, 0x00BE55, 0x28EB46, 0x82E696, 0x009E73); break;
+			case CSI_EColorTeam.YELLOW :	rgb = PickForSet(teamSet, 0xE6E600, 0xFFF000, 0xFFF08C, 0xF0E442); break;
+			default :
+			{
+				Color noTeamColor = GetColor(GetNonClashingPreset(noTeamPreset, teamSet));
+				noTeamColor.SetA(opacity / 255.0);
+				return noTeamColor;
+			}
 		}
 
-		array<SCR_ButtonBaseComponent> boxes = {};
-		toolbox.GetItems(boxes);
-		bool allImages = true;
-		foreach (int preset, SCR_ButtonBaseComponent box : boxes)
-		{
-			if (!StyleBox(box, GetColor(preset)))
-				allImages = false;
-		}
-
-		return allImages;
+		return FromRGB(rgb, opacity);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] box one toolbox element
-	//! \param[in] color
-	//! \return false if it isn't an image button
-	protected static bool StyleBox(notnull SCR_ButtonBaseComponent box, notnull Color color)
+	//! \param[in] colorTeam
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \return the palette color (CSI_EColorPreset) the fire team's color matches, -1 for NONE
+	static int GetColorTeamPreset(CSI_EColorTeam colorTeam, int teamSet)
 	{
-		// Without this the toolbox neither shows nor reports a selection
-		box.SetToggleable(true);
-
-		// Small boxes side by side, not stretched across the row
-		Widget boxRoot = box.GetRootWidget();
-		if (boxRoot)
+		switch (colorTeam)
 		{
-			LayoutSlot.SetSizeMode(boxRoot, LayoutSizeMode.Auto);
-			LayoutSlot.SetHorizontalAlign(boxRoot, LayoutHorizontalAlign.Left);
-			LayoutSlot.SetVerticalAlign(boxRoot, LayoutVerticalAlign.Center);
+			case CSI_EColorTeam.BLUE :		return PickForSet(teamSet, CSI_EColorPreset.BLUE, CSI_EColorPreset.BLUE, CSI_EColorPreset.LIGHT_BLUE, CSI_EColorPreset.BLUE);
+			case CSI_EColorTeam.RED :		return PickForSet(teamSet, CSI_EColorPreset.RED, CSI_EColorPreset.RED, CSI_EColorPreset.LIGHT_RED, CSI_EColorPreset.ORANGE);
+			case CSI_EColorTeam.GREEN :		return PickForSet(teamSet, CSI_EColorPreset.GREEN, CSI_EColorPreset.GREEN, CSI_EColorPreset.LIGHT_GREEN, CSI_EColorPreset.TEAL);
+			case CSI_EColorTeam.YELLOW :	return PickForSet(teamSet, CSI_EColorPreset.YELLOW, CSI_EColorPreset.YELLOW, CSI_EColorPreset.LIGHT_YELLOW, CSI_EColorPreset.YELLOW);
 		}
 
-		SCR_ButtonImageComponent imageBox = SCR_ButtonImageComponent.Cast(box);
-		if (!imageBox)
-			return false;
+		return -1;
+	}
 
-		imageBox.SetImage(SOLID_IMAGESET, SOLID_IMAGE);
-		ImageWidget image = imageBox.GetImageWidget();
-		if (!image)
-			return false;
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] preset CSI_EColorPreset value
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \return true if one of the set's fire team colors matches it
+	static bool ClashesWithColorTeams(int preset, int teamSet)
+	{
+		return preset == GetColorTeamPreset(CSI_EColorTeam.BLUE, teamSet)
+			|| preset == GetColorTeamPreset(CSI_EColorTeam.RED, teamSet)
+			|| preset == GetColorTeamPreset(CSI_EColorTeam.GREEN, teamSet)
+			|| preset == GetColorTeamPreset(CSI_EColorTeam.YELLOW, teamSet);
+	}
 
-		image.SetColor(color);
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] preset a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS value (CSI_EColorPreset)
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \return the preset, or GRAY if it matches a fire team color
+	static int GetNonClashingPreset(int preset, int teamSet)
+	{
+		if (ClashesWithColorTeams(preset, teamSet))
+			return CSI_EColorPreset.GRAY;
 
-		// Inset so the tile shows round it: dark, or orange when selected
-		Widget imageFrame = image.GetParent();
-		if (imageFrame)
-			AlignableSlot.SetPadding(imageFrame, BOX_INSET, BOX_INSET, BOX_INSET, BOX_INSET);
+		return preset;
+	}
 
-		return true;
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \return name shown to players
+	static string GetColorTeamSetName(int teamSet)
+	{
+		switch (teamSet)
+		{
+			case CSI_EColorTeamSet.BRIGHT :		return "Bright";
+			case CSI_EColorTeamSet.PASTEL :		return "Pastel";
+			case CSI_EColorTeamSet.COLORBLIND :	return "Color-blind";
+		}
+
+		return "Classic";
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] teamSet CSI_EColorTeamSet value, CLASSIC if unknown
+	//! \param[in] classic
+	//! \param[in] bright
+	//! \param[in] pastel
+	//! \param[in] colorblind
+	//! \return the value for the set
+	protected static int PickForSet(int teamSet, int classic, int bright, int pastel, int colorblind)
+	{
+		switch (teamSet)
+		{
+			case CSI_EColorTeamSet.BRIGHT :		return bright;
+			case CSI_EColorTeamSet.PASTEL :		return pastel;
+			case CSI_EColorTeamSet.COLORBLIND :	return colorblind;
+		}
+
+		return classic;
 	}
 }

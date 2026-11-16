@@ -20,6 +20,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	protected const string SERVER_OVERRIDE_CHECKBOX_NAME = "ServerOverride";	//!< checkbox in each server override row
 	protected const string SETTING_INFO_WIDGET_NAME = "SettingInfo";
 	protected const string SERVER_ADMIN_WIDGET_NAME = "ServerAdmin";
+	protected const string NAMETAG_LOOK_SEPARATOR_NAME = "SeparatorNametagLook";	//!< line above the nametag look block, in both columns
 
 	// Inside each setting row's label (WLib_Label.layout)
 	protected const string LABEL_ROOT_WIDGET_NAME = "LabelRoot";
@@ -52,6 +53,11 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	// Server override rows as loaded or last sent, so only changes are sent (SendServerOverrides)
 	protected ref map<string, bool> m_mSentServerOverrides = new map<string, bool>();	//!< setting -> checkbox checked
 	protected ref map<string, int> m_mSentServerOverrideValues = new map<string, int>();	//!< setting -> row value
+	protected ref array<string> m_aServerForcedSettings = {};	//!< rows showing a server override, not the player's own value
+
+	// Rows whose changes cross out clashing colors (UpdateBlockedColors)
+	protected SCR_ComboBoxComponent m_ColorTeamSetComboBox;
+	protected CSI_ColorPickerComponent m_VONColorPicker;
 
 	// Right side panels, owned by their widgets
 	protected CSI_SettingInfo m_SettingInfo;
@@ -59,12 +65,15 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 	// Nested settings (RegisterDependentSettings)
 	protected ref map<string, string> m_mSettingParents;				//!< setting -> its switch
+	protected ref map<string, string> m_mSeparatorParents;				//!< line between nested blocks -> the switch it hides with
 	protected ref array<SCR_SpinBoxComponent> m_aParentSpinBoxes = {};	//!< the switches' spin boxes
 
 	// Tree lines from each switch to its nested settings (DrawSettingsTree)
 	protected CanvasWidget m_wSettingsTree;
 	protected ref array<ref CanvasWidgetCommand> m_aSettingsTreeCommands = {};	//!< kept while the canvas draws them
 	protected int m_iSettingsTreeRedraws;										//!< frames left to redraw the tree
+	protected float m_fSettingsTreeWidth;										//!< canvas screen size at the last draw
+	protected float m_fSettingsTreeHeight;
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 TAB LIFECYCLE
@@ -87,13 +96,13 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			m_bShowingServerDefaults = true;
 		}
 
-		SetupColorSettings();
 		SetupSettingBindings();
 		LoadSettings();
 		SnapshotServerOverrides();
 
 		SetupSidePanels();
 		SetupNestedSettings();
+		SetupBlockedColors();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -150,6 +159,12 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 
 		m_aParentSpinBoxes.Clear();
 
+		if (m_ColorTeamSetComboBox)
+			m_ColorTeamSetComboBox.m_OnChanged.Remove(OnColorTeamSetChanged);
+
+		if (m_VONColorPicker)
+			m_VONColorPicker.m_OnChanged.Remove(OnVONColorPicked);
+
 		super.OnTabRemove();
 	}
 
@@ -157,6 +172,10 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	override void OnMenuUpdate(float tDelta)
 	{
 		super.OnMenuUpdate(tDelta);
+
+		// The rows move when the screen size or aspect ratio changes
+		if (HasSettingsTreeResized())
+			m_iSettingsTreeRedraws = TREE_REDRAW_FRAMES;
 
 		// Redraw for a few frames: rows only move once the layout updates
 		if (m_iSettingsTreeRedraws > 0 && DrawSettingsTree())
@@ -202,20 +221,128 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills each colour setting's toolbox with colour boxes, before the values load.
-	protected void SetupColorSettings()
+	//! Crosses out colors that clash, now and whenever the fire team set or the Nametag VON color changes.
+	protected void SetupBlockedColors()
 	{
-		foreach (string setting : CSI_GameSettings.COLOR_SETTINGS)
+		m_ColorTeamSetComboBox = SCR_ComboBoxComponent.GetComboBoxComponent(CSI_GameSettings.COLOR_TEAM_SET, m_wRoot);
+		if (m_ColorTeamSetComboBox)
+			m_ColorTeamSetComboBox.m_OnChanged.Insert(OnColorTeamSetChanged);
+		else
+			PrintFormat("CSI_SettingsSubMenu: '%1' has no combo box, colors that match a fire team color won't be crossed out", CSI_GameSettings.COLOR_TEAM_SET, level: LogLevel.WARNING);
+
+		m_VONColorPicker = CSI_ColorPickerComponent.GetColorPicker(CSI_GameSettings.NAMETAG_VON_COLOR, m_wRoot);
+		if (m_VONColorPicker)
+			m_VONColorPicker.m_OnChanged.Insert(OnVONColorPicked);
+		else
+			PrintFormat("CSI_SettingsSubMenu: '%1' has no color picker, other nametag colors won't avoid the talking color", CSI_GameSettings.NAMETAG_VON_COLOR, level: LogLevel.WARNING);
+
+		UpdateBlockedColors(GetShownColorTeamSet(), GetShownVONColor());
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected void OnColorTeamSetChanged(SCR_ComboBoxComponent comboBox, int teamSet)
+	{
+		UpdateBlockedColors(teamSet, GetShownVONColor());
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Resets the colors (VON_EXCLUSIVE_COLOR_SETTINGS) that use the new talking color to their defaults.
+	//! \param[in] colorPicker
+	//! \param[in] vonColor the picked CSI_EColorPreset; the picker reports it before selecting it
+	protected void OnVONColorPicked(SCR_ToolboxComponent colorPicker, int vonColor)
+	{
+		int teamSet = GetShownColorTeamSet();
+		BaseContainer userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
+		foreach (string setting : CSI_GameSettings.VON_EXCLUSIVE_COLOR_SETTINGS)
 		{
-			SCR_ToolboxComponent toolbox = SCR_ToolboxComponent.GetToolboxComponent(setting, m_wRoot);
-			if (!toolbox)
-			{
-				PrintFormat("CSI_SettingsSubMenu: colour setting '%1' has no toolbox row, it can't be changed here", setting, level: LogLevel.WARNING);
+			CSI_ColorPickerComponent otherPicker = CSI_ColorPickerComponent.GetColorPicker(setting, m_wRoot);
+			if (!otherPicker || !otherPicker.IsEnabled() || m_aServerForcedSettings.Contains(setting) || otherPicker.GetCurrentIndex() != vonColor)
 				continue;
+
+			int resetColor = GetDefaultColor(setting, teamSet, vonColor);
+
+			// Written directly, so Setting Info stays on the VON row
+			if (userSettings)
+				userSettings.Set(setting, resetColor);
+
+			otherPicker.SetCurrentItem(resetColor);
+		}
+
+		UpdateBlockedColors(teamSet, vonColor);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting a CSI_GameSettings.VON_EXCLUSIVE_COLOR_SETTINGS name
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \param[in] vonColor CSI_EColorPreset value
+	//! \return the setting's default color, or the first color that clashes with neither if the default does
+	protected int GetDefaultColor(string setting, int teamSet, int vonColor)
+	{
+		int defaultColor = -1;
+		string defaultValue;
+		BaseContainer userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
+		if (userSettings && userSettings.GetDefaultAsString(setting, defaultValue))
+			defaultColor = defaultValue.ToInt();
+
+		if (defaultColor >= 0 && defaultColor != vonColor && !CSI_ColorPresets.ClashesWithColorTeams(defaultColor, teamSet))
+			return defaultColor;
+
+		for (int preset, count = CSI_ColorPresets.Count(); preset < count; preset++)
+		{
+			if (preset != vonColor && !CSI_ColorPresets.ClashesWithColorTeams(preset, teamSet))
+				return preset;
+		}
+
+		return CSI_EColorPreset.GRAY;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return the fire team set shown in the tab, CLASSIC without its row
+	protected int GetShownColorTeamSet()
+	{
+		if (!m_ColorTeamSetComboBox)
+			return CSI_EColorTeamSet.CLASSIC;
+
+		return m_ColorTeamSetComboBox.GetCurrentIndex();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return the Nametag VON color shown in the tab, -1 without its row
+	protected int GetShownVONColor()
+	{
+		if (!m_VONColorPicker)
+			return -1;
+
+		return m_VONColorPicker.GetCurrentIndex();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Crosses out the color boxes (NON_TEAM_COLOR_SETTINGS) that match the set's fire team colors, and in
+	//! VON_EXCLUSIVE_COLOR_SETTINGS the talking color. A row whose color matches a fire team shows Gray, the color
+	//! it's drawn in; the player's own pick is kept for sets it doesn't match.
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \param[in] vonColor CSI_EColorPreset value, -1 for none
+	protected void UpdateBlockedColors(int teamSet, int vonColor)
+	{
+		BaseContainer userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
+		foreach (string setting : CSI_GameSettings.NON_TEAM_COLOR_SETTINGS)
+		{
+			// Disabled when the server forces it (non-admins)
+			CSI_ColorPickerComponent colorPicker = CSI_ColorPickerComponent.GetColorPicker(setting, m_wRoot);
+			if (!colorPicker || !colorPicker.IsEnabled())
+				continue;
+
+			bool avoidsVON = CSI_GameSettings.VON_EXCLUSIVE_COLOR_SETTINGS.Contains(setting);
+			for (int preset, count = CSI_ColorPresets.Count(); preset < count; preset++)
+			{
+				bool blocked = CSI_ColorPresets.ClashesWithColorTeams(preset, teamSet) || (avoidsVON && preset == vonColor);
+				colorPicker.SetColorBlocked(preset, blocked);
 			}
 
-			if (!CSI_ColorPresets.FillToolbox(toolbox))
-				PrintFormat("CSI_SettingsSubMenu: colour setting '%1' row's boxes aren't image buttons, they won't show their colours", setting, level: LogLevel.WARNING);
+			// An override row keeps showing the forced value
+			int value;
+			if (!m_aServerForcedSettings.Contains(setting) && userSettings && userSettings.Get(setting, value))
+				colorPicker.SetCurrentItem(CSI_ColorPresets.GetNonClashingPreset(value, teamSet));
 		}
 	}
 
@@ -224,6 +351,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	protected void SetupSettingBindings()
 	{
 		m_aSettingsBindings.Clear();
+		m_aServerForcedSettings.Clear();
 
 		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
 		if (!serverOverrides)
@@ -245,10 +373,12 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			bool overridden = serverSettings && serverSettings.IsIndexValid(i) && serverSettings[i] < 0;
 			if (!overridden || CSI_GameSettings.SETTINGS_WITHOUT_SERVER_OVERRIDE.Contains(setting))
 			{
-				// Also binds the colour rows' toolboxes
+				// Also binds the color rows' toolboxes
 				m_aSettingsBindings.Insert(new CSI_SettingBinding(SETTINGS_MODULE_NAME, setting, setting));
 				continue;
 			}
+
+			m_aServerForcedSettings.Insert(setting);
 
 			if (row)
 			{
@@ -355,6 +485,12 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			PrintFormat("CSI_SettingsSubMenu: tree canvas '%1' not found, nested settings won't have tree lines", SETTINGS_TREE_WIDGET_NAME, level: LogLevel.WARNING);
 
 		RegisterDependentSettings();
+		foreach (string separator, string separatorParent : m_mSeparatorParents)
+		{
+			if (!m_wRoot.FindAnyWidget(separator))
+				PrintFormat("CSI_SettingsSubMenu: separator '%1' not found, it won't hide with '%2'", separator, separatorParent, level: LogLevel.WARNING);
+		}
+
 		foreach (string dependentSetting, string parentSetting : m_mSettingParents)
 		{
 			IndentSettingLabel(dependentSetting, GetNestingDepth(dependentSetting));
@@ -377,30 +513,40 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills m_mSettingParents (setting -> its switch). Add new nested settings here.
+	//! Fills m_mSettingParents (setting -> its switch) and m_mSeparatorParents. Add new nested settings here.
 	protected void RegisterDependentSettings()
 	{
 		m_mSettingParents = new map<string, string>();
+		m_mSeparatorParents = new map<string, string>();
 
 		TStringArray autoHideHud = {CSI_GameSettings.REVEAL_UI_MODE};
 		NestSettings(CSI_GameSettings.AUTO_HIDE_HUD, autoHideHud);
 
+		// Then the look block, below its own line
 		TStringArray nametags = {
 			CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE,
 			CSI_GameSettings.NAMETAG_LOS_VISIBLE,
-			CSI_GameSettings.NAMETAG_POSITION,
-			CSI_GameSettings.NAMETAG_POSITION_OFFSET,
 			CSI_GameSettings.NAMETAG_RANGE,
-			CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED,
 			CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION,
 			CSI_GameSettings.NAMETAG_FIELD_OF_VIEW,
-			CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED,
-			CSI_GameSettings.NAMTEAG_SCALE,
 			CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE,
+			CSI_GameSettings.NAMETAG_COLOR,
+			CSI_GameSettings.NAMETAG_VON_COLOR,
+			CSI_GameSettings.NAMTEAG_SCALE,
+			CSI_GameSettings.NAMETAG_POSITION,
+			CSI_GameSettings.NAMETAG_POSITION_OFFSET,
 			CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING};
 		NestSettings(CSI_GameSettings.NAMETAG_VISIBLE, nametags);
+		m_mSeparatorParents.Set(NAMETAG_LOOK_SEPARATOR_NAME, CSI_GameSettings.NAMETAG_VISIBLE);
 
-		TStringArray roleIcon = {CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION};
+		TStringArray groupNames = {CSI_GameSettings.SQUADMATE_GROUP_IN_NAMETAG_VISIBLE};
+		NestSettings(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE, groupNames);
+
+		// The icon-only settings only work with role icons shown
+		TStringArray roleIcon = {
+			CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION,
+			CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED,
+			CSI_GameSettings.NAMETAG_FIELD_OF_VIEW_SIMPLIFIED};
 		NestSettings(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE, roleIcon);
 
 		TStringArray compass = {CSI_GameSettings.COMPASS_THEME, CSI_GameSettings.COMPASS_COLOR};
@@ -427,31 +573,43 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows nested rows and their override rows only while every switch above them is on.
+	//! Shows nested rows, separators and their override rows only while every switch above them is on.
 	protected void UpdateDependentSettingsVisibility()
 	{
-		if (!m_mSettingParents)
+		if (!m_mSettingParents || !m_mSeparatorParents)
 			return;
 
 		Widget serverOverrides = m_wRoot.FindAnyWidget(SERVER_OVERRIDES_WIDGET_NAME);
 		foreach (string dependentSetting, string parentSetting : m_mSettingParents)
 		{
-			bool shown = IsSettingShown(dependentSetting);
+			SetRowVisible(dependentSetting, IsSettingShown(dependentSetting), serverOverrides);
+		}
 
-			// Finds the setting row, not its override row (the list comes first)
-			Widget row = m_wRoot.FindAnyWidget(dependentSetting);
-			if (row)
-				row.SetVisible(shown);
-
-			if (!serverOverrides)
-				continue;
-
-			Widget overrideRow = serverOverrides.FindAnyWidget(dependentSetting);
-			if (overrideRow)
-				overrideRow.SetVisible(shown);
+		foreach (string separator, string separatorParent : m_mSeparatorParents)
+		{
+			SetRowVisible(separator, IsSettingShown(separatorParent) && IsSettingRowOn(separatorParent), serverOverrides);
 		}
 
 		m_iSettingsTreeRedraws = TREE_REDRAW_FRAMES;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] name setting or separator, the name of both its row and its override row
+	//! \param[in] visible
+	//! \param[in] serverOverrides server override column
+	protected void SetRowVisible(string name, bool visible, Widget serverOverrides)
+	{
+		// Finds the setting row, not its override row (the list comes first)
+		Widget row = m_wRoot.FindAnyWidget(name);
+		if (row)
+			row.SetVisible(visible);
+
+		if (!serverOverrides)
+			return;
+
+		Widget overrideRow = serverOverrides.FindAnyWidget(name);
+		if (overrideRow)
+			overrideRow.SetVisible(visible);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -586,7 +744,21 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		}
 
 		m_wSettingsTree.SetDrawCommands(m_aSettingsTreeCommands);
+		m_fSettingsTreeWidth = canvasWidth;
+		m_fSettingsTreeHeight = canvasHeight;
 		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return true if the tree canvas's screen size changed since the tree was drawn
+	protected bool HasSettingsTreeResized()
+	{
+		if (!m_wSettingsTree)
+			return false;
+
+		float width, height;
+		m_wSettingsTree.GetScreenSize(width, height);
+		return width != m_fSettingsTreeWidth || height != m_fSettingsTreeHeight;
 	}
 
 	//------------------------------------------------------------------------------------------------

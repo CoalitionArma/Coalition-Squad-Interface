@@ -3,7 +3,7 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-14
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Binds a CSI settings tab row to its CSI_GameSettings value, including toolboxes (the colour rows).
+//!	\Description: 	Binds a CSI settings tab row to its CSI_GameSettings value, including toolboxes (the color rows).
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingBinding : SCR_SettingBindingGameplay

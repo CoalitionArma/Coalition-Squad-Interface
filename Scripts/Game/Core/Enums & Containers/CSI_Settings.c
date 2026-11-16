@@ -45,6 +45,11 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string RADAR_RANGE_IN_VEHICLE = "m_iRadarRangeInVehicle";
 	const static string REVEAL_UI_MODE = "m_iRevealUIMode";
 	const static string COMPASS_COLOR = "m_iCompassColor";
+	const static string SQUADMATE_GROUP_IN_NAMETAG_VISIBLE = "m_bSquadmateGroupInNametagVisible";
+	const static string STANDARD_SQUAD_COLOR = "m_iNametagSquadmateColor";	// once nametags only; the name keeps saved settings
+	const static string NAMETAG_COLOR = "m_iNametagOtherColor";	// once Other nametag color; the field name keeps saved settings
+	const static string COLOR_TEAM_SET = "m_iColorTeamSet";
+	const static string NAMETAG_VON_COLOR = "m_iNametagVONColor";
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTINGS ARRAY (USED FOR AUTHORITY OVERRIDE OF SETTINGS)
@@ -85,7 +90,12 @@ class CSI_GameSettings : ModuleGameSettings
 		RADAR_RANGE_ON_FOOT,
 		RADAR_RANGE_IN_VEHICLE,
 		REVEAL_UI_MODE,
-		COMPASS_COLOR
+		COMPASS_COLOR,
+		SQUADMATE_GROUP_IN_NAMETAG_VISIBLE,
+		STANDARD_SQUAD_COLOR,
+		NAMETAG_COLOR,
+		COLOR_TEAM_SET,
+		NAMETAG_VON_COLOR
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -104,7 +114,8 @@ class CSI_GameSettings : ModuleGameSettings
 		GROUP_IN_NAMETAG_VISIBLE,
 		NAMETAG_LOS_VISIBLE,
 		AUTO_HIDE_HUD,
-		NAMETAG_BRIGHTNESS_DIMMING
+		NAMETAG_BRIGHTNESS_DIMMING,
+		SQUADMATE_GROUP_IN_NAMETAG_VISIBLE
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -115,10 +126,30 @@ class CSI_GameSettings : ModuleGameSettings
 	};
 
 	//------------------------------------------------------------------------------------------------
-	// CSI_EColorPreset values, shown as a row of colour boxes
+	// CSI_EColorPreset values, shown as a row of color boxes
 	const static ref TStringArray COLOR_SETTINGS =
 	{
-		COMPASS_COLOR
+		COMPASS_COLOR,
+		STANDARD_SQUAD_COLOR,
+		NAMETAG_COLOR,
+		NAMETAG_VON_COLOR
+	};
+
+	//------------------------------------------------------------------------------------------------
+	// Color settings that can't match a fire team color (CSI_ColorPresets.GetNonClashingPreset)
+	const static ref TStringArray NON_TEAM_COLOR_SETTINGS =
+	{
+		STANDARD_SQUAD_COLOR,
+		NAMETAG_COLOR,
+		NAMETAG_VON_COLOR
+	};
+
+	//------------------------------------------------------------------------------------------------
+	// Color settings that can't match the Nametag VON color, so a talking player stands out
+	const static ref TStringArray VON_EXCLUSIVE_COLOR_SETTINGS =
+	{
+		STANDARD_SQUAD_COLOR,
+		NAMETAG_COLOR
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -183,7 +214,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows a stamina bar in the bottom left corner while you're below full stamina. It turns from green to amber to red as you tire.")]
 	int m_bStaminaVisible;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Lists your group's members beside the compass with their role icons, coloured by fire team, squad leader first. Shows in groups of 2 or more.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Lists your group's members beside the compass with their role icons, colored by fire team, squad leader first. Shows in groups of 2 or more.")]
 	int m_bGroupVisible;
 
 	// Icons
@@ -196,12 +227,21 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EArrowTheme.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EArrowTheme), desc: "Shape of the arrow around group display and radar icons. On the radar it points where each squadmate is facing.")]
 	int m_iArrowTheme;
 
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorTeamSet.CLASSIC), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorTeamSet), desc: "Colors of the Red, Blue, Yellow and Green fire teams in the group display, radar, nametags and group menu. Color-blind keeps the four teams apart for most color vision deficiencies.")]
+	int m_iColorTeamSet;
+
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.GRAY), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Color of your group members who aren't in a fire team: their name and icon in the group display, radar, group menu and nametags. Colors that match a fire team color can't be picked.")]
+	int m_iNametagSquadmateColor;
+
 	// Nametags
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nametags on friendly players. Your own group's members are coloured by fire team.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nametags on friendly players. Your own group's members are colored by fire team.")]
 	int m_bNametagVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows each player's group under their name: the group's custom name, or its callsign if it has none.")]
 	int m_bGroupInNametagVisible;
+
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the group name on your own group members' nametags too. Hide shows it only for players in other groups.")]
+	int m_bSquadmateGroupInNametagVisible;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Hides the nametags of players you can't see, such as behind terrain, walls or vehicles. Off shows them through everything.")]
 	int m_bNametagLOSVisible;
@@ -212,7 +252,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "3", uiwidget: UIWidgets.Slider, params: "0 5 1", desc: "Moves the nametag in 10 cm steps: higher values put it farther above the head, or higher up the torso.")]
 	int m_iNametagPositionOffset;
 
-	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "How far away, in metres, friendly nametags show.")]
+	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "5 2500 5", desc: "How far away, in meters, friendly nametags show.")]
 	int m_iNametagRange;
 
 	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Distant tags show only the role icon, not the name. Higher values start this closer to you; 0% turns it off. Only works with Role icons shown.")]
@@ -236,14 +276,21 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ENametagIconPosition.LEFT), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ENametagIconPosition), desc: "Puts the role icon left of the name, above it or right of it.")]
 	int m_iNametagRoleIconPosition;
 
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Fades nametags in dark scenes such as night, and brightens them under NVGs.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Fades nametags at night and in dark places, and shows them clearly again while night vision is on. Off keeps them at a fixed opacity.")]
 	int m_bNametagBrightnessDimming;
 
-	// Compass & radar
+
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.GRAY), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Color of the nametags of everyone outside your group, AI included. Colors that match a fire team color can't be picked.")]
+	int m_iNametagOtherColor;
+
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.AMBER), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Color of a nametag while that player is talking on the radio or voice. Colors that match a fire team color can't be picked.")]
+	int m_iNametagVONColor;
+
+	// Compass
 	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_ECompassTheme.REGULAR), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_ECompassTheme), desc: "Style of the compass: Classic, Sci-fi or WW2. Sci-fi's two faint rings mark a third and two thirds of the radar range.")]
 	int m_iCompassTheme;
 
-	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.WHITE), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Colour of the compass: its ring, marks and letters, and the bearing above it.")]
+	[Attribute(defvalue: SCR_Enum.GetDefault(CSI_EColorPreset.WHITE), uiwidget: UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(CSI_EColorPreset), desc: "Color of the compass: its ring, marks and letters, and the bearing above it.")]
 	int m_iCompassColor;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows the compass at the bottom of the screen, turning as you look around.")]
@@ -252,13 +299,14 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows your heading in degrees above the compass.")]
 	int m_bBearingVisible;
 
+	// Radar
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nearby squadmates inside the compass, with you in the middle and where you're looking at the top. Shows in groups of 2 or more.")]
 	int m_bRadarVisible;
 
-	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away, in metres, squadmates show on the radar while you're on foot. Icons fade out near the edge.")]
+	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away, in meters, squadmates show on the radar while you're on foot. Icons fade out near the edge.")]
 	int m_iRadarRangeOnFoot;
 
-	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in metres, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
+	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in meters, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
 	int m_iRadarRangeInVehicle;
 
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Size of squadmate icons on the radar. 100% is the normal size.")]

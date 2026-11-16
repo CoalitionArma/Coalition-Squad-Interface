@@ -3,7 +3,8 @@
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Static UI helpers: resource paths, color team colors, compass textures, icon names and player names.
+//!	\Description: 	Static UI helpers: resource paths, color team colors (in the chosen set), compass textures, icon names
+//! 				and player names.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_UIHelper
@@ -14,7 +15,6 @@ class CSI_UIHelper
 
 	// Vanilla Images/Imagesets/Colors
 	const static ResourceName VANILLA_NAMETAG_ICONS = "{70E828A2F6EBE7D0}UI/Textures/Nametags/nametagicons.imageset";
-	const static ref Color VANILLA_VON_COLOR = new Color(0.624, 0.506, 0.157, 1);
 
 	// Modded Images/Imagesets
 	const static ResourceName CSI_STANDARD_COMPASS = "{D19C93F5109F3E1D}UI/Textures/HUD/Compasses/Standard_Compass.edds";
@@ -54,21 +54,19 @@ class CSI_UIHelper
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] colorEnum
 	//! \param[in] opacity alpha (0-255)
-	//! \return the color team's color, light grey for NONE
+	//! \return the color team's color in the COLOR_TEAM_SET setting's set; NONE is STANDARD_SQUAD_COLOR
 	static Color ConvertColorTeamToColor(CSI_EColorTeam colorEnum, int opacity = 255)
 	{
-		Color colorFromInt;
-
-		switch(colorEnum)
+		int teamSet = CSI_EColorTeamSet.CLASSIC;
+		int noTeamPreset = CSI_EColorPreset.GRAY;
+		CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+		if (settingsManager)
 		{
-			case CSI_EColorTeam.BLUE : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 92, 255)); 	break;
-			case CSI_EColorTeam.RED : 		colorFromInt = Color.FromInt(ARGB(opacity, 200, 65, 65)); 	break;
-			case CSI_EColorTeam.GREEN : 		colorFromInt = Color.FromInt(ARGB(opacity, 0, 190, 85)); 	break;
-			case CSI_EColorTeam.YELLOW : 		colorFromInt = Color.FromInt(ARGB(opacity, 230, 230, 0)); 	break;
-			default : 					 	colorFromInt = Color.FromInt(ARGB(opacity, 225, 225, 225)); // NONE
+			teamSet = settingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
+			noTeamPreset = settingsManager.GetSettingInt(CSI_GameSettings.STANDARD_SQUAD_COLOR);
 		}
 
-		return colorFromInt;
+		return CSI_ColorPresets.GetColorTeamColor(colorEnum, teamSet, noTeamPreset, opacity);
 	}
 
 	//------------------------------------------------------------------------------------------------

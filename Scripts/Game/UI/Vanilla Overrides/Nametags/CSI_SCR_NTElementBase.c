@@ -4,7 +4,8 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: helpers for CSI's nametag elements: text clearing by distance and field of view,
-//! 				shared color team colors set only when they change, and text and icon sizes from NAMTEAG_SCALE.
+//! 				shared fire team and nametag color setting colors set only when they change (a nametag color
+//! 				that matches a fire team color shows Gray), and text and icon sizes from NAMTEAG_SCALE.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps()]
@@ -13,7 +14,8 @@ modded class SCR_NTElementBase
 	protected CSI_HUDSystem m_HUDSystem;
 	protected CSI_SettingsManager m_SettingsManager;
 
-	protected static ref map<CSI_EColorTeam, ref Color> s_mColorTeamColors = new map<CSI_EColorTeam, ref Color>();	//!< see GetColorTeamColor
+	protected static ref map<int, ref Color> s_mColorTeamColors = new map<int, ref Color>();	//!< see GetColorTeamColor
+	protected static ref map<int, ref Color> s_mPresetColors = new map<int, ref Color>();	//!< see GetNametagColor
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] data
@@ -59,20 +61,51 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! VON color while talking, color team for local group members, else NONE.
+	//! Nametag VON color while talking; local group members get their fire team's color, or the Standard squad
+	//! color without one; everyone else the Nametag color.
 	//! \param[in] data
 	//! \param[in] index
 	protected void SetWidgetCSIColor(SCR_NameTagData data, int index)
 	{
 		Color color;
 		if (data.m_ePriorityEntityState == ENameTagEntityState.VON)
-			color = CSI_UIHelper.VANILLA_VON_COLOR;
-		else if (data.m_PlayerData && m_HUDSystem.GetLocalGroupPlayerIds().Contains(data.m_iPlayerID))
+			color = GetNametagColor(CSI_GameSettings.NAMETAG_VON_COLOR);
+		else if (!data.m_PlayerData || !IsLocalGroupMember(data))
+			color = GetNametagColor(CSI_GameSettings.NAMETAG_COLOR);
+		else if (data.m_PlayerData.GetColorTeam() != CSI_EColorTeam.NONE)
 			color = GetColorTeamColor(data.m_PlayerData.GetColorTeam());
 		else
-			color = GetColorTeamColor(CSI_EColorTeam.NONE);
+			color = GetNametagColor(CSI_GameSettings.STANDARD_SQUAD_COLOR);
 
 		SetElementColor(data, index, color);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] data
+	//! \return true if the tag's player is in the local player's group
+	protected bool IsLocalGroupMember(SCR_NameTagData data)
+	{
+		if (!m_HUDSystem)
+			return false;
+
+		array<int> groupPlayerIds = m_HUDSystem.GetLocalGroupPlayerIds();
+		return groupPlayerIds && groupPlayerIds.Contains(data.m_iPlayerID);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] setting a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS name
+	//! \return the setting's color, Gray if it matches a fire team color; one shared instance per CSI_EColorPreset
+	protected Color GetNametagColor(string setting)
+	{
+		int preset = CSI_ColorPresets.GetNonClashingPreset(m_SettingsManager.GetSettingInt(setting), m_SettingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET));
+		Color color = s_mPresetColors.Get(preset);
+		if (!color)
+		{
+			color = CSI_ColorPresets.GetColor(preset);
+			s_mPresetColors.Insert(preset, color);
+		}
+
+		return color;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -91,15 +124,17 @@ modded class SCR_NTElementBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] colorTeam
-	//! \return the color team's color, one shared instance per color team
-	protected static Color GetColorTeamColor(CSI_EColorTeam colorTeam)
+	//! \param[in] colorTeam a fire team, not NONE (GetNametagColor(STANDARD_SQUAD_COLOR))
+	//! \return the color team's color in the chosen set, one shared instance per color team and set
+	protected Color GetColorTeamColor(CSI_EColorTeam colorTeam)
 	{
-		Color color = s_mColorTeamColors.Get(colorTeam);
+		int teamSet = m_SettingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
+		int key = teamSet * 100 + colorTeam;
+		Color color = s_mColorTeamColors.Get(key);
 		if (!color)
 		{
-			color = CSI_UIHelper.ConvertColorTeamToColor(colorTeam);
-			s_mColorTeamColors.Insert(colorTeam, color);
+			color = CSI_ColorPresets.GetColorTeamColor(colorTeam, teamSet, CSI_EColorPreset.GRAY);
+			s_mColorTeamColors.Insert(key, color);
 		}
 
 		return color;

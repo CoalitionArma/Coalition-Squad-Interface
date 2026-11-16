@@ -64,7 +64,7 @@ enum CSI_EIconTheme
 }
 
 //------------------------------------------------------------------------------------
-//! Colour setting values (CSI_ColorPresets). Saved by number: only ever append.
+//! Color setting values (CSI_ColorPresets). Saved by number: only ever append.
 enum CSI_EColorPreset
 {
 	WHITE,
@@ -76,6 +76,29 @@ enum CSI_EColorPreset
 	CYAN,
 	PINK,
 	PURPLE,
+	GRAY,	//!< nametag gray, the default without a fire team
+
+	// Second row of the color boxes
+	YELLOW,
+	LIGHT_YELLOW,
+	LIME,
+	LIGHT_GREEN,
+	TEAL,
+	LIGHT_BLUE,
+	LAVENDER,
+	LIGHT_RED,
+	LIGHT_PINK,
+	BROWN,
+}
+
+//------------------------------------------------------------------------------------
+//! Fire team color sets (CSI_ColorPresets.GetColorTeamColor). Saved by number: only ever append.
+enum CSI_EColorTeamSet
+{
+	CLASSIC,
+	BRIGHT,
+	PASTEL,
+	COLORBLIND,	//!< Okabe-Ito colors, told apart with most color vision deficiencies
 }
 
 //=============================================================================================================================================================================================================================================================================================================================================================

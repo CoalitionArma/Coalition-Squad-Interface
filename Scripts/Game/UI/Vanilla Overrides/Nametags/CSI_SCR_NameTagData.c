@@ -13,7 +13,7 @@ modded class SCR_NameTagData : Managed
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;	//!< null for AI and players without CSI data
 	string m_sGroupName;			//!< set by GetGroupName
-	float m_fFieldOfViewFraction;	//!< place in the tag's visible angle: 0 centre, 1 edge
+	float m_fFieldOfViewFraction;	//!< place in the tag's visible angle: 0 center, 1 edge
 
 	// What CSI's elements last set, by m_aNametagElements index; a widget is only changed when its value differs
 	string m_aElementTexts[10];		//!< text

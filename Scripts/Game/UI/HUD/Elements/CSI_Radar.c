@@ -76,7 +76,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		vector localOrigin = localCharacter.GetOrigin();
 		int localPlayerId = SCR_PlayerController.GetLocalPlayerId();
 
-		// Radar range in metres
+		// Radar range in meters
 		float searchRadius;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
 			searchRadius = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE);
@@ -91,7 +91,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		}
 
 		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade out over the last 20% of the range
-		float radarScale = 132.0 / (searchRadius * 2.725);			// metres to radar px
+		float radarScale = 132.0 / (searchRadius * 2.725);			// meters to radar px
 		float iconSize = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 
 		float searchRadiusSq = searchRadius * searchRadius;
@@ -127,7 +127,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			float dis = Math.Sqrt(disSq);
 
-			// Defaults for the local player: centre, fully shown
+			// Defaults for the local player: center, fully shown
 			float x = 0;
 			float y = 0;
 			float fieldOfViewFade = 1;
@@ -157,7 +157,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			Widget radarIcon = icon.GetRootWidget();
 
-			// Centre the icon on its position
+			// Center the icon on its position
 			FrameSlot.SetPos(radarIcon, (x - iconSize/2), (y - iconSize/2));
 			FrameSlot.SetSize(radarIcon, iconSize, iconSize);
 
@@ -201,7 +201,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			return null;
 		};
 
-		// Anchor to the radar's centre; radar icons show arrows on turreted seats
+		// Anchor to the radar's center; radar icons show arrows on turreted seats
 		FrameSlot.SetAnchor(radarIcon, 0.5, 0.5);
 		icon.SetIsRadarWidget(true);
 		icon.IconUpdate(playerID);

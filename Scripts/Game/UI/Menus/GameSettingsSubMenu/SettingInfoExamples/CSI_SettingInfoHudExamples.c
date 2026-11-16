@@ -51,8 +51,9 @@ class CSI_FrameSlotSnapshot
 //! \Author: 		Njpatman
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General and Compass & radar settings: sets the
-//! 				embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows and radar icons.
+//!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General, Compass and Radar settings and the fire team
+//! 				colors: sets the embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows
+//! 				and radar icons.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
@@ -90,14 +91,14 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		"Reckless", "Jlaw", "SkurtBird", "Brooks", "RebelCid", "Arkangel", "The Canadian", "Fontaine", "Trist", "Svir"};
 
 	// Compass and radar
-	protected static const float COMPASS_FOCUS_ZOOM = 1.25;		//!< compass zoom in the Compass & radar examples
+	protected static const float COMPASS_FOCUS_ZOOM = 1.25;		//!< compass zoom in the Compass and Radar examples
 	protected static const float RADAR_ICON_SIZE = 22.4;		//!< px at 100% RADAR_ICON_SIZE: CSI_Radar.ICON_WIDTH_AND_HEIGHT (16) x 1.4
 	protected static const int RADAR_ICON_COUNT = 4;			//!< radar icons the examples can show at once
-	protected static const float RADAR_RANGE_PX = 67.82;		//!< px from the centre to the range edge: (132 / 2.725) x 1.4
+	protected static const float RADAR_RANGE_PX = 67.82;		//!< px from the center to the range edge: (132 / 2.725) x 1.4
 	protected static const float ARROW_DEMO_ICON_SIZE = 56;
 	protected static const float ARROW_DEMO_HEADING = 60;
 
-	// Squadmates in the radar examples: facings and placeholder colour teams
+	// Squadmates in the radar examples: facings and placeholder color teams
 	protected static const ref array<float> DEMO_MATE_FACINGS = {10, -30, 120, 200};
 	protected static const ref array<CSI_EColorTeam> DEMO_MATE_TEAMS = {CSI_EColorTeam.RED, CSI_EColorTeam.BLUE, CSI_EColorTeam.GREEN, CSI_EColorTeam.YELLOW};
 
@@ -110,8 +111,8 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	protected static const ref array<float> FOV_MATE_BEARINGS = {0, -40, 95, 165};
 	protected static const ref array<float> FOV_MATE_DISTANCES = {47.6, 36.4, 42, 50.4};
 	protected static const float FOV_FADED_OPACITY = 0.15;		//!< squadmates outside the field of view
-	protected static const float FOV_EDGE_START = 11.2;			//!< px from the centre to the first dot of each edge
-	protected static const float FOV_EDGE_LENGTH = 64.4;		//!< px from the centre to the last dot, inside RADAR_RANGE_PX
+	protected static const float FOV_EDGE_START = 11.2;			//!< px from the center to the first dot of each edge
+	protected static const float FOV_EDGE_LENGTH = 64.4;		//!< px from the center to the last dot, inside RADAR_RANGE_PX
 	protected static const int FOV_EDGE_DOTS = 8;				//!< dots per edge
 	protected static const float FOV_EDGE_DOT_SIZE = 4.2;		//!< px
 	protected static const ResourceName FOV_EDGE_DOT_TEXTURE = "{73B3D8BBB785B5B9}UI/Textures/Common/circleFull.edds";
@@ -379,6 +380,21 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			return true;
 		}
 
+		if (setting == CSI_GameSettings.COLOR_TEAM_SET)
+		{
+			ShowDemoSquad();
+			caption = CSI_ColorPresets.GetColorTeamSetName(value);
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.STANDARD_SQUAD_COLOR)
+		{
+			ShowDemoSquad();
+			int preset = CSI_ColorPresets.GetNonClashingPreset(value, GetValue(CSI_GameSettings.COLOR_TEAM_SET));
+			caption = string.Format("Squadmates without a fire team: %1", CSI_ColorPresets.GetName(preset));
+			return true;
+		}
+
 		return false;
 	}
 
@@ -386,7 +402,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] value the setting's value in the tab
 	//! \param[out] caption
-	//! \return false if the setting isn't one of the Compass & radar settings
+	//! \return false if the setting isn't one of the Compass or Radar settings
 	protected bool ShowCompassAndRadarExample(string setting, int value, out string caption)
 	{
 		if (setting == CSI_GameSettings.COMPASS_THEME || setting == CSI_GameSettings.COMPASS_VISIBLE || setting == CSI_GameSettings.BEARING_VISIBLE)
@@ -493,7 +509,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] showGroup
 	//! \param[in] showStamina
 	//! \param[in] opacity
-	//! \param[in] focusCompass enlarge the compass and centre it in the box
+	//! \param[in] focusCompass enlarge the compass and center it in the box
 	protected void ShowHud(bool showCompass, bool showGroup, bool showStamina, float opacity, bool focusCompass = false)
 	{
 		if (!m_wHud)
@@ -527,7 +543,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] focus enlarge and centre the compass, else restore its layout slot
+	//! \param[in] focus enlarge and center the compass, else restore its layout slot
 	protected void FocusCompass(bool focus)
 	{
 		if (!focus)
@@ -662,7 +678,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		{
 			name.SetText(CSI_SettingInfo.GetPreviewName(m_wSettingsRoot, playerID, fallbackName));
 			name.SetExactFontSize(GROUP_NAME_FONT_SIZE);
-			name.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+			name.SetColor(CSI_ColorPresets.GetColorTeamColor(colorTeam, GetValue(CSI_GameSettings.COLOR_TEAM_SET), GetValue(CSI_GameSettings.STANDARD_SQUAD_COLOR)));
 		}
 
 		// Keep the row's own icon size (0)
@@ -712,25 +728,25 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		vector groupPos = m_GroupLayoutSlot.GetPos();
 		vector groupSize = m_GroupLayoutSlot.GetSize();
 
-		// The compass is centred on the group's anchor; the group starts groupPos[0] to its right
+		// The compass is centered on the group's anchor; the group starts groupPos[0] to its right
 		int columns = Math.Ceil(DEMO_SQUAD_ROLES.Count() / (float)GROUP_GRID_ROWS);
 		float squadWidth = groupPos[0] + groupSize[0] * columns / GROUP_GRID_COLUMNS;
 		float scale = Math.Min(1, rootWidth / pixelsPerUnit * (1 - SQUAD_VIEW_MARGIN) / squadWidth);
 
-		// Centre both vertically, keeping their layout offsets
+		// Center both vertically, keeping their layout offsets
 		float top = Math.Min(compassPos[1], groupPos[1]);
 		float bottom = Math.Max(compassPos[1] + compassSize[1], groupPos[1] + groupSize[1]);
-		float centre = (top + bottom) * 0.5;
+		float center = (top + bottom) * 0.5;
 
 		FrameSlot.SetAnchorMin(m_wCompass, 0, 0.5);
 		FrameSlot.SetAnchorMax(m_wCompass, 0, 0.5);
 		FrameSlot.SetSize(m_wCompass, compassSize[0] * scale, compassSize[1] * scale);
-		FrameSlot.SetPos(m_wCompass, -compassSize[0] * scale * 0.5, (compassPos[1] - centre) * scale);
+		FrameSlot.SetPos(m_wCompass, -compassSize[0] * scale * 0.5, (compassPos[1] - center) * scale);
 
 		FrameSlot.SetAnchorMin(m_wGroup, 0, 0.5);
 		FrameSlot.SetAnchorMax(m_wGroup, 0, 0.5);
 		FrameSlot.SetSize(m_wGroup, groupSize[0] * scale, groupSize[1] * scale);
-		FrameSlot.SetPos(m_wGroup, groupPos[0] * scale, (groupPos[1] - centre) * scale);
+		FrameSlot.SetPos(m_wGroup, groupPos[0] * scale, (groupPos[1] - center) * scale);
 
 		int fontSize = Math.Round(GROUP_NAME_FONT_SIZE * scale);
 		foreach (Widget row : m_aGroupRows)
@@ -752,7 +768,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		array<int> memberIDs = {};
 		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, GROUP_ROWS);
 
-		// Leave the local player out, they're the centre of the radar
+		// Leave the local player out, they're the center of the radar
 		memberIDs.RemoveItem(SCR_PlayerController.GetLocalPlayerId());
 
 		float iconSize = GetRadarIconSize();
@@ -780,14 +796,14 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Squadmates at set distances, scaled so the range reaches the radar's edge.
-	//! \param[in] range metres
+	//! \param[in] range meters
 	//! \param[in] inVehicle use the in-vehicle distances
 	protected void ShowRadarRange(int range, bool inVehicle)
 	{
 		array<int> memberIDs = {};
 		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, RADAR_ICON_COUNT + 1);
 
-		// Leave the local player out, they're the centre of the radar
+		// Leave the local player out, they're the center of the radar
 		memberIDs.RemoveItem(SCR_PlayerController.GetLocalPlayerId());
 
 		array<float> distances = RANGE_MATE_DISTANCES_ON_FOOT;
@@ -837,7 +853,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		array<int> memberIDs = {};
 		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, RADAR_ICON_COUNT + 1);
 
-		// Leave the local player out, they're the centre of the radar
+		// Leave the local player out, they're the center of the radar
 		memberIDs.RemoveItem(SCR_PlayerController.GetLocalPlayerId());
 
 		int fieldOfViewMin, fieldOfViewMax;
@@ -943,8 +959,8 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] icon radar icon
-	//! \param[in] x px from the radar's centre
-	//! \param[in] y px from the radar's centre
+	//! \param[in] x px from the radar's center
+	//! \param[in] y px from the radar's center
 	protected void PlaceInRadar(Widget icon, float x, float y)
 	{
 		if (!icon)
@@ -957,8 +973,8 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] bearing degrees from the top of the radar, positive to the right
-	//! \param[in] distance px from the radar's centre
-	//! \return the point (x, y) from the radar's centre
+	//! \param[in] distance px from the radar's center
+	//! \return the point (x, y) from the radar's center
 	protected vector GetRadarPoint(float bearing, float distance)
 	{
 		float radians = bearing * Math.DEG2RAD;

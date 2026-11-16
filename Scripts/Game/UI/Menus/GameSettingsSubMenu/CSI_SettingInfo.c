@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	On each CSI settings tab row: tells CSI_SettingInfo which setting is hovered, focused or changed,
-//! 				and previews a hovered colour box.
+//! 				and previews a hovered color box.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_SettingInfoHandler
@@ -14,7 +14,7 @@ class CSI_SettingInfoHandler
 	protected Widget m_wSetting;
 	protected SCR_ModularButtonComponent m_RowButton;
 	protected SCR_ChangeableComponentBase m_Changeable;
-	protected SCR_ToolboxComponent m_ColorRow;	//!< colour rows only
+	protected SCR_ToolboxComponent m_ColorRow;	//!< color rows only
 
 	//------------------------------------------------------------------------------------------------
 	protected void OnRowMouseEnter(SCR_ModularButtonComponent comp, bool mouseInput)
@@ -45,7 +45,7 @@ class CSI_SettingInfoHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Previews the hovered box's colour, unless the row is locked.
+	//! Previews the hovered box's color, unless the row is locked.
 	//! \param[in] w box root widget
 	protected void OnColorBoxEntered(Widget w)
 	{
@@ -109,7 +109,7 @@ class CSI_SettingInfoHandler
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Hooks the row's hover, focus and value changes, and each colour box's hover.
+	//! Hooks the row's hover, focus and value changes, and each color box's hover.
 	//! \param[in] settingWidget
 	void Attach(notnull Widget settingWidget)
 	{
@@ -203,7 +203,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	protected static string s_sProfileName;	//!< cached by GetProfileName
 
-	// Previewed value, e.g. a hovered colour box (PreviewSetting)
+	// Previewed value, e.g. a hovered color box (PreviewSetting)
 	protected static string s_sPreviewSetting;
 	protected static int s_iPreviewValue;
 
@@ -320,7 +320,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows a setting with a hovered value (e.g. a colour box) until EndPreview.
+	//! Shows a setting with a hovered value (e.g. a color box) until EndPreview.
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[in] value shown instead of the tab's value
 	void PreviewSetting(string setting, int value)
@@ -579,7 +579,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		}
 
 		if (iconFrame)
-			iconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
+			iconFrame.SetColor(CSI_ColorPresets.GetColorTeamColor(colorTeam, GetValue(root, CSI_GameSettings.COLOR_TEAM_SET), GetValue(root, CSI_GameSettings.STANDARD_SQUAD_COLOR)));
 
 		if (size > 0)
 			FrameSlot.SetSize(icon, size, size);

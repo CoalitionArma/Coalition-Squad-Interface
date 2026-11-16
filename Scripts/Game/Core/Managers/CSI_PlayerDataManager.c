@@ -1,4 +1,4 @@
-class CSI_PlayerDataManagerClass : ScriptComponentClass {};
+class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
 
 //------------------------------------------------------------------------------------------------
 //!
@@ -6,10 +6,11 @@ class CSI_PlayerDataManagerClass : ScriptComponentClass {};
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
-//! 				The server clears a player's group-specific data when they join a different group.
-//! 
+//! 				The server registers a player's data when they connect, and clears their group-specific data
+//! 				when they join a different group.
+//!
 //------------------------------------------------------------------------------------------------
-class CSI_PlayerDataManager : ScriptComponent
+class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 {
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -39,13 +40,24 @@ class CSI_PlayerDataManager : ScriptComponent
 		SCR_AIGroup.GetOnPlayerAdded().Remove(OnGroupPlayerAdded);
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Registers the player's data on every machine; a reconnecting player keeps theirs.
+	//! \param[in] playerId
+	override void OnPlayerConnected(int playerId)
+	{
+		super.OnPlayerConnected(playerId);
+
+		if (m_RplBroadcastManager && !GetPlayerData(playerId))
+			m_RplBroadcastManager.RegisterPlayerData(playerId);
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] playerID
-	//! \return null until the client registers it (needs a character and a group)
+	//! \return null for a player who hasn't connected, or whose data expired after a disconnect
 	CSI_PlayerData GetPlayerData(PlayerId playerID)
 	{
 		return m_mPlayerDataMap.Get(playerID);

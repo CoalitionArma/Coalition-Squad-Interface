@@ -1,0 +1,17 @@
+MetaFileClass {
+ Name "{4C9E2B7A1D3F5068}UI/Layouts/WidgetLibrary/CSI_ColorPicker.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass PS5 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}

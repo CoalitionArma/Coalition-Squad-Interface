@@ -6,6 +6,7 @@
 //!	\Description: 	Player settings panel (group menu or CSI_PlayerSettingsMenu): shows a player's name and icon and sends
 //! 				color team, icon override, promote and kick requests to the server; hidden while it shows no player.
 //! 				Group leaders and team leaders set color teams and icons; only the leader promotes and kicks others.
+//! 				The color team buttons are tinted in the chosen fire team color set.
 //! 
 //------------------------------------------------------------------------------------------------
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
@@ -19,7 +20,7 @@
 	protected Widget m_wAdvancedSettings;	//!< promote to SL, promote to TL and kick
 	protected Widget m_wKickOverlay;
 	protected PlayerId m_iPlayerID = -1;		//!< player the panel shows
-	protected ScriptInvoker m_PlayerUpdate;	//!< that player's GetOnDataUpdate(), while subscribed
+	protected ScriptInvokerVoid m_PlayerUpdate;	//!< that player's GetOnDataUpdate(), while subscribed
 
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
@@ -77,19 +78,46 @@
 			confirmIOButton.m_OnClicked.Insert(OnOverrideIconClicked);
 
 		if (red)
+		{
 			red.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(red, CSI_EColorTeam.RED);
+		}
 
 		if (blue)
+		{
 			blue.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(blue, CSI_EColorTeam.BLUE);
+		}
 
 		if (yellow)
+		{
 			yellow.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(yellow, CSI_EColorTeam.YELLOW);
+		}
 
 		if (green)
+		{
 			green.m_OnClicked.Insert(OnColorTeamClicked);
+			TintColorTeamButton(green, CSI_EColorTeam.GREEN);
+		}
 
 		if (none)
 			none.m_OnClicked.Insert(OnColorTeamClicked);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Colors a color team button in the chosen set, keeping the layout's opacity.
+	//! \param[in] button
+	//! \param[in] colorTeam
+	protected void TintColorTeamButton(notnull SCR_ModularButtonComponent button, CSI_EColorTeam colorTeam)
+	{
+		Widget buttonWidget = button.GetRootWidget();
+		if (!buttonWidget)
+			return;
+
+		Color color = CSI_UIHelper.ConvertColorTeamToColor(colorTeam);
+		color.SetA(buttonWidget.GetColor().A());
+		buttonWidget.SetColor(color);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -155,7 +183,7 @@
 		if (m_PlayerDataManager)
 			playerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
 
-		// No CSI data yet (not spawned since joining): no override, color team or role icon
+		// No CSI data (not received yet): no override, color team or role icon
 		if (!playerData)
 		{
 			m_wIconOveride.SetCurrentItem(0);
