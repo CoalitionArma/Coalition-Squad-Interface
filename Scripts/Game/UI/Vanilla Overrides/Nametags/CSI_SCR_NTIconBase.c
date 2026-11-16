@@ -4,12 +4,15 @@
 //! \Last Updated: 	2026-11-15
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
-//! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name.
+//! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name; talking shows
+//! 				animated bars (CSI_TalkingBarsComponent) in its place.
 //! 
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
+	protected static const int ICON_KEY_NONE = -3;	//!< no icon loaded; GetIconKey never returns it
+
 	protected CSI_HUDSystem m_HUDSystem;
 	protected CSI_SettingsManager m_SettingsManager;
 
@@ -34,6 +37,10 @@ modded class SCR_NTIconBase
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			iWidget.SetVisible(false);	// UpdateElement skips hidden icons
+			SetTalkingBars(iWidget, false);
+
+			// Loaded again when shown: the bars stopped, and the icon may be the empty one they cover
+			data.m_aElementIconKeys[index] = ICON_KEY_NONE;
 			return;
 		};
 
@@ -67,11 +74,15 @@ modded class SCR_NTIconBase
 			// State icons first, then the CSI display icon (MAN uses the pointer)
 			if (loadIcon)
 			{
+				// Talking: CSI_TalkingBars over an empty icon
+				bool talking = data.m_ePriorityEntityState == ENameTagEntityState.VON;
+				SetTalkingBars(iWidget, talking);
+
 				switch (true)
 				{
 					case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
 					case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
-					case (data.m_ePriorityEntityState == ENameTagEntityState.VON) 			: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON"); break;
+					case (talking) : break;
 					default : {
 						bool setAlt = false;
 						CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
@@ -96,12 +107,39 @@ modded class SCR_NTIconBase
 
 			if (loadIcon)
 			{
+				SetTalkingBars(iWidget, false);
+
 				if (data.m_eType == ENameTagEntityType.AI)
 					iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "ai");
 				else
 					iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
 			}
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows or hides the talking bars (CSI_TalkingBarsComponent) beside the icon, which shows nothing while they
+	//! play. Without its Overlay the icon shows vanilla's talking icon instead.
+	//! \param[in] icon
+	//! \param[in] talking
+	protected void SetTalkingBars(notnull ImageWidget icon, bool talking)
+	{
+		CSI_TalkingBarsComponent talkingBars;
+		if (talking)
+			talkingBars = CSI_TalkingBarsComponent.GetOrCreate(icon);
+		else
+			talkingBars = CSI_TalkingBarsComponent.Find(icon);
+
+		if (talkingBars)
+			talkingBars.SetActive(talking);
+
+		if (!talking)
+			return;
+
+		if (talkingBars)
+			icon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+		else
+			icon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON");
 	}
 
 	//------------------------------------------------------------------------------------------------

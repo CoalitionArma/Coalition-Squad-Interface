@@ -159,14 +159,12 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] setting CSI_GameSettings name
-	//! \return effective value; false if the setting isn't boolean
+	//! Read every frame by the HUD and nametags, so one map lookup.
+	//! \param[in] setting an on/off CSI_GameSettings name (SETTINGS_THAT_ARE_BOOLEAN)
+	//! \return effective value
 	bool GetSettingBool(string setting)
 	{
-		if (CSI_GameSettings.SETTINGS_THAT_ARE_BOOLEAN.Contains(setting))
-			return GetSettingInt(setting);
-
-		return false;
+		return m_mSettingsLocalValues.Get(setting) != 0;
 	};
 
 	//------------------------------------------------------------------------------------------------

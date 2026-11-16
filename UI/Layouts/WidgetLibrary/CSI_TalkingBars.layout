@@ -1,0 +1,69 @@
+HorizontalLayoutWidgetClass "{56233C76B4E445EB}" {
+ Name "TalkingBars"
+ Slot AlignableSlot "{35F62A7C6A6CD2DB}" {
+  HorizontalAlign 1
+  VerticalAlign 1
+ }
+ "Ignore Cursor" 1
+ components {
+  CSI_TalkingBarsComponent "{9F9BE4BA12270E38}" {
+  }
+ }
+ {
+  ImageWidgetClass "{5E66E107162CE5DF}" {
+   Name "Bar0"
+   Slot LayoutSlot "{7AC58F17734220D9}" {
+    VerticalAlign 1
+    Padding 0.5 0 0.5 0
+   }
+   "Inherit Color" 1
+   Texture "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset"
+   Image "Pixel_White_100"
+   Size 2 5
+  }
+  ImageWidgetClass "{A4ADCCAF3688FA76}" {
+   Name "Bar1"
+   Slot LayoutSlot "{0329E6D193B1B05A}" {
+    VerticalAlign 1
+    Padding 0.5 0 0.5 0
+   }
+   "Inherit Color" 1
+   Texture "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset"
+   Image "Pixel_White_100"
+   Size 2 7
+  }
+  ImageWidgetClass "{EA6266DD7B6F45F6}" {
+   Name "Bar2"
+   Slot LayoutSlot "{6285D0CAB8F181A1}" {
+    VerticalAlign 1
+    Padding 0.5 0 0.5 0
+   }
+   "Inherit Color" 1
+   Texture "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset"
+   Image "Pixel_White_100"
+   Size 2 9
+  }
+  ImageWidgetClass "{7D5AB82F4088E56D}" {
+   Name "Bar3"
+   Slot LayoutSlot "{1AD8DEB6E6D4B1A4}" {
+    VerticalAlign 1
+    Padding 0.5 0 0.5 0
+   }
+   "Inherit Color" 1
+   Texture "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset"
+   Image "Pixel_White_100"
+   Size 2 7
+  }
+  ImageWidgetClass "{343B89DF2C5AE310}" {
+   Name "Bar4"
+   Slot LayoutSlot "{C12E0508B9961385}" {
+    VerticalAlign 1
+    Padding 0.5 0 0.5 0
+   }
+   "Inherit Color" 1
+   Texture "{ACEFA05B746C8798}ui/imagesets/debugUI.imageset"
+   Image "Pixel_White_100"
+   Size 2 5
+  }
+ }
+}

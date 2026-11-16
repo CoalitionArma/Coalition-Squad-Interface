@@ -23,16 +23,25 @@ OverlayWidgetClass {
      Slot LayoutSlot "{68D267029C4504D1}" {
      }
      {
-      ImageWidgetClass "{68D26700C86D19EE}" {
-       Name "RoleIconCENTER"
+      OverlayWidgetClass "{C5F93C4A40349D38}" {
+       Name "RoleIconCENTEROverlay"
        Slot LayoutSlot "{68D267029C450525}" {
         HorizontalAlign 1
        }
-       "Is Visible" 0
-       Opacity 0
-       Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-       Image "SL_ICON"
-       Size 22 22
+       {
+        ImageWidgetClass "{68D26700C86D19EE}" {
+         Name "RoleIconCENTER"
+         Slot OverlayWidgetSlot "{2B29AAD7FA0C4B1C}" {
+          HorizontalAlign 1
+          VerticalAlign 1
+         }
+         "Is Visible" 0
+         Opacity 0
+         Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+         Image "SL_ICON"
+         Size 22 22
+        }
+       }
       }
       GridLayoutWidgetClass "{6A9C2E41B8E00001}" {
        Name "NameGrid"
@@ -46,15 +55,24 @@ OverlayWidgetClass {
          }
          Clipping False
          {
-          ImageWidgetClass "{68D26700C1A31C03}" {
-           Name "RoleIconLEFT"
+          OverlayWidgetClass "{0F7B21D90A466291}" {
+           Name "RoleIconLEFTOverlay"
            Slot LayoutSlot "{68D26702D54DB78D}" {
            }
-           "Is Visible" 0
-           Opacity 0
-           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-           Image "SL_ICON"
-           Size 22 22
+           {
+            ImageWidgetClass "{68D26700C1A31C03}" {
+             Name "RoleIconLEFT"
+             Slot OverlayWidgetSlot "{E2A39D84B3972E1A}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+             "Is Visible" 0
+             Opacity 0
+             Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+             Image "SL_ICON"
+             Size 22 22
+            }
+           }
           }
          }
         }
@@ -83,16 +101,25 @@ OverlayWidgetClass {
          }
          Clipping False
          {
-          ImageWidgetClass "{68D26700F119BA21}" {
-           Name "RoleIconRIGHT"
+          OverlayWidgetClass "{08806992DAA97A90}" {
+           Name "RoleIconRIGHTOverlay"
            Slot LayoutSlot "{68D26702AA3EFD9C}" {
            }
-           "Is Visible" 0
-           IsPixelPerfect 1
-           Opacity 0
-           Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
-           Image "SL_ICON"
-           Size 22 22
+           {
+            ImageWidgetClass "{68D26700F119BA21}" {
+             Name "RoleIconRIGHT"
+             Slot OverlayWidgetSlot "{674121F0F38EFA10}" {
+              HorizontalAlign 1
+              VerticalAlign 1
+             }
+             "Is Visible" 0
+             IsPixelPerfect 1
+             Opacity 0
+             Texture "{4FE53F33D8545E0D}UI/Textures/HUD/Icons/CSI_ICONS.imageset"
+             Image "SL_ICON"
+             Size 22 22
+            }
+           }
           }
          }
         }

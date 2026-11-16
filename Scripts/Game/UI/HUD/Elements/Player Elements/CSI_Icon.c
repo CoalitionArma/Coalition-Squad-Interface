@@ -25,6 +25,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected ImageWidget m_wOutlineLarge;
 	protected FrameWidget m_wIconFrame;
 	protected bool m_bHasAllParts;	//!< all widgets above were found
+	protected float m_fArrowRotation;	//!< degrees last set (SetRotation)
+	protected float m_fIconRotation;
 
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;	//!< radar icons show the arrow on turreted seats
@@ -138,18 +140,27 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Rotates the arrow, and the icon too unless RADAR_ICON_ARROWS_ROTATE is on.
+	//! Rotates the arrow, and the icon too unless upright. Called every frame by the radar, so only changes are set.
 	//! \param[in] yaw degrees
-	void SetRotation(float yaw)
+	//! \param[in] iconUpright RADAR_ICON_ARROWS_ROTATE: only the arrow turns
+	void SetRotation(float yaw, bool iconUpright)
 	{
 		if (!m_bHasAllParts)
 			return;
 
-		m_wArrow.SetRotation(yaw);
+		if (yaw != m_fArrowRotation)
+		{
+			m_fArrowRotation = yaw;
+			m_wArrow.SetRotation(yaw);
+		}
 
-		if (m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE))
+		if (iconUpright)
 			yaw = 0;
 
+		if (yaw == m_fIconRotation)
+			return;
+
+		m_fIconRotation = yaw;
 		m_wIcon.SetRotation(yaw);
 		m_wOutline.SetRotation(yaw);
 		m_wIconLarge.SetRotation(yaw);

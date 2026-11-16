@@ -782,7 +782,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//! \param[in] opacity
 	//! \param[in] showName false for an icon-only (simplified) tag
 	//! \param[in] squadmate shown as a squadmate's nametag (without a fire team), else as another player's
-	//! \param[in] talking colored as while talking, with the talking icon
+	//! \param[in] talking colored as while talking, with the talking bars
 	protected void ShowSampleNametag(Widget nametag, float previewScale, float opacity, bool showName, bool squadmate = false, bool talking = false)
 	{
 		if (!nametag)
@@ -842,13 +842,26 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 			bool visible = showIcon && position == iconPosition;
 			iconWidget.SetVisible(visible);
+
+			// The talking bars take the role icon's place, as in game
+			CSI_TalkingBarsComponent talkingBars;
+			if (visible && talking)
+				talkingBars = CSI_TalkingBarsComponent.GetOrCreate(iconWidget);
+			else
+				talkingBars = CSI_TalkingBarsComponent.Find(iconWidget);
+
+			if (talkingBars)
+				talkingBars.SetActive(visible && talking);
+
 			if (!visible)
 				continue;
 
-			// The talking icon takes the role icon's place, as in game
 			if (talking)
 			{
-				iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON");
+				if (talkingBars)
+					iconWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, "EMPTY");
+				else
+					iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON");
 			}
 			else if (role == CSI_EIcon.MAN)
 			{

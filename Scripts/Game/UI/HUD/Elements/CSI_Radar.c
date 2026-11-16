@@ -21,6 +21,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref map<int, CSI_Icon> m_mRadarIcons = new map<int, CSI_Icon>();		//!< radar icons by player ID
 	protected ref array<int> m_aRadarIconsToRemove = {};							//!< reused each update
 	protected ref map<int, float> m_mFieldOfViewFades = new map<int, float>();	//!< field of view fade by player ID, 1 shown to 0 faded out
+	protected float m_fIconSize;				//!< px the icons were last sized to
+	protected array<int> m_aCheckedGroupPlayerIDs;	//!< group list the icons were last checked against (CSI_HUDSystem's, replaced on change)
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;	//!< px at 100% RADAR_ICON_SIZE
 	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds
@@ -93,6 +95,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade from about 2/3 of the range: 0.6 opacity here, 0 at the edge
 		float radarScale = 132.0 / (searchRadius * 2.725);			// meters to radar px
 		float iconSize = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+		if (iconSize != m_fIconSize)
+			ResizeRadarIcons(iconSize);
+
+		bool iconsUpright = m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
 
 		float searchRadiusSq = searchRadius * searchRadius;
 
@@ -159,11 +165,16 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			// Center the icon on its position
 			FrameSlot.SetPos(radarIcon, (x - iconSize/2), (y - iconSize/2));
-			FrameSlot.SetSize(radarIcon, iconSize, iconSize);
 
-			icon.SetRotation(rotation);
+			icon.SetRotation(rotation, iconsUpright);
 			radarIcon.SetOpacity(opacity);
 		};
+
+		// The HUD system replaces the list when the group changes
+		if (groupPlayerIDs == m_aCheckedGroupPlayerIDs)
+			return;
+
+		m_aCheckedGroupPlayerIDs = groupPlayerIDs;
 
 		// Delete icons of players who left the group or whose widget is gone
 		m_aRadarIconsToRemove.Clear();
@@ -175,6 +186,19 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		foreach (PlayerId playerID : m_aRadarIconsToRemove)
 			RemoveRadarIcon(playerID);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sizes every icon for RADAR_ICON_SIZE; new icons get it when created.
+	//! \param[in] iconSize px
+	protected void ResizeRadarIcons(float iconSize)
+	{
+		m_fIconSize = iconSize;
+		foreach (CSI_Icon icon : m_mRadarIcons)
+		{
+			if (icon && icon.GetRootWidget())
+				FrameSlot.SetSize(icon.GetRootWidget(), iconSize, iconSize);
+		}
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -203,6 +227,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		// Anchor to the radar's center; radar icons show arrows on turreted seats
 		FrameSlot.SetAnchor(radarIcon, 0.5, 0.5);
+		FrameSlot.SetSize(radarIcon, m_fIconSize, m_fIconSize);
 		icon.SetIsRadarWidget(true);
 		icon.IconUpdate(playerID);
 
@@ -241,12 +266,12 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void RemoveRadarIcon(PlayerId playerID)
 	{
-		m_mFieldOfViewFades.Remove(playerID);
-
-		CSI_Icon icon = m_mRadarIcons.Get(playerID);
-		if (!icon && !m_mRadarIcons.Contains(playerID))
+		// Called every frame for members out of range; most have no icon
+		CSI_Icon icon;
+		if (!m_mRadarIcons.Find(playerID, icon))
 			return;
 
+		m_mFieldOfViewFades.Remove(playerID);
 		m_mRadarIcons.Remove(playerID);
 
 		if (icon && icon.GetRootWidget())
