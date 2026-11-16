@@ -44,11 +44,13 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected float m_fExposure = 1;			//!< camera's HDR exposure at the last update
 	protected float m_fAppliedOpacity = -1;		//!< opacity last applied
 
+/*
 #ifdef CVON_COALITION_VON
 	protected static const float CVON_TALKING_CHECK_INTERVAL = 0.25;	//!< s; how often Coalition VON reads its TeamSpeak plugin's talking list
 	protected float m_fCVONTalkingCheckTime;	//!< s until the next check
 	protected SCR_VONController m_CVONController;
 #endif
+*/
 
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
@@ -64,9 +66,11 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 
 		UpdateBrightnessOpacity();
 
+/*
 #ifdef CVON_COALITION_VON
 		UpdateCVONTalking(timeSlice);
 #endif
+*/
 
 		if (!m_SettingsManager || !m_CurrentPlayerTag || !m_CurrentPlayerTag.m_CharController || !SCR_PlayerController.s_pLocalPlayerController)
 			return;
@@ -299,6 +303,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		ApplyNametagOpacity();
 	}
 
+/*
 #ifdef CVON_COALITION_VON
 	//------------------------------------------------------------------------------------------------
 	//! Coalition VON replaces vanilla VoN, so vanilla's OnReceivedVON never marks a tag as talking. Marks the tags of
@@ -339,6 +344,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		}
 	}
 #endif
+*/
 }
 
 //------------------------------------------------------------------------------------------------
