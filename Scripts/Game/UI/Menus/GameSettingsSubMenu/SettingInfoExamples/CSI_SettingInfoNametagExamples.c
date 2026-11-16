@@ -935,9 +935,14 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS name
-	//! \return the color nametags get with the tab's values: Gray if it matches a fire team color
+	//! \return the color nametags get with the tab's values: Gray if it matches a fire team color (the VON color:
+	//! CSI_ColorPresets.GetVONPreset)
 	protected int GetNonClashingPreset(string setting)
 	{
-		return CSI_ColorPresets.GetNonClashingPreset(GetValue(setting), GetValue(CSI_GameSettings.COLOR_TEAM_SET));
+		int teamSet = GetValue(CSI_GameSettings.COLOR_TEAM_SET);
+		if (setting == CSI_GameSettings.NAMETAG_VON_COLOR)
+			return CSI_ColorPresets.GetVONPreset(GetValue(setting), teamSet, GetValue(CSI_GameSettings.STANDARD_SQUAD_COLOR), GetValue(CSI_GameSettings.NAMETAG_COLOR));
+
+		return CSI_ColorPresets.GetNonClashingPreset(GetValue(setting), teamSet);
 	}
 }

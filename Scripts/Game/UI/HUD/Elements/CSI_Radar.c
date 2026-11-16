@@ -90,7 +90,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			return;
 		}
 
-		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade out over the last 20% of the range
+		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade from about 2/3 of the range: 0.6 opacity here, 0 at the edge
 		float radarScale = 132.0 / (searchRadius * 2.725);			// meters to radar px
 		float iconSize = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
 

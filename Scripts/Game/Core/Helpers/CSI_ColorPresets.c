@@ -10,6 +10,8 @@
 //------------------------------------------------------------------------------------------------
 class CSI_ColorPresets
 {
+	protected static const int VON_FALLBACK_PRESET = CSI_EColorPreset.AMBER;	//!< talking color when the setting's can't be used (vanilla's talking color)
+
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] preset CSI_EColorPreset value
 	//! \return a new color, white for an unknown value
@@ -171,6 +173,46 @@ class CSI_ColorPresets
 			return CSI_EColorPreset.GRAY;
 
 		return preset;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Talking color, which must stand out from the colors players are otherwise drawn in. The settings tab keeps
+	//! a player's own colors apart, but a server can force Standard squad color or Nametag color, and a fire team
+	//! set can turn the VON color into one of them.
+	//! \param[in] vonPreset NAMETAG_VON_COLOR value (CSI_EColorPreset)
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \param[in] standardSquadPreset STANDARD_SQUAD_COLOR value
+	//! \param[in] nametagPreset NAMETAG_COLOR value
+	//! \return vonPreset, or if it matches a fire team color or the color either other setting is drawn in,
+	//! VON_FALLBACK_PRESET or else the first color that matches none of them
+	static int GetVONPreset(int vonPreset, int teamSet, int standardSquadPreset, int nametagPreset)
+	{
+		int standardSquad = GetNonClashingPreset(standardSquadPreset, teamSet);
+		int nametag = GetNonClashingPreset(nametagPreset, teamSet);
+		if (IsFreeForVON(vonPreset, teamSet, standardSquad, nametag))
+			return vonPreset;
+
+		if (IsFreeForVON(VON_FALLBACK_PRESET, teamSet, standardSquad, nametag))
+			return VON_FALLBACK_PRESET;
+
+		for (int preset, count = Count(); preset < count; preset++)
+		{
+			if (IsFreeForVON(preset, teamSet, standardSquad, nametag))
+				return preset;
+		}
+
+		return vonPreset;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] preset CSI_EColorPreset value
+	//! \param[in] teamSet CSI_EColorTeamSet value
+	//! \param[in] standardSquad color Standard squad color is drawn in
+	//! \param[in] nametag color Nametag color is drawn in
+	//! \return true if the talking color can be this preset
+	protected static bool IsFreeForVON(int preset, int teamSet, int standardSquad, int nametag)
+	{
+		return preset != standardSquad && preset != nametag && !ClashesWithColorTeams(preset, teamSet);
 	}
 
 	//------------------------------------------------------------------------------------------------

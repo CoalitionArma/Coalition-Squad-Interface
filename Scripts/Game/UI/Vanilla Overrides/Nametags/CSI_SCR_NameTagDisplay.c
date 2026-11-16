@@ -128,9 +128,17 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows or hides the display for NAMETAG_VISIBLE and reapplies the opacity for NAMETAG_BRIGHTNESS_DIMMING.
+	//! Shows or hides the display for NAMETAG_VISIBLE, reapplies the opacity for NAMETAG_BRIGHTNESS_DIMMING, and
+	//! reapplies element defaults (role icons, their position, size, group names) to tags already shown, which
+	//! vanilla otherwise does only on a zone or state change.
 	protected void OnSettingsUpdate()
 	{
+		foreach (SCR_NameTagData tag : m_aNameTags)
+		{
+			if (tag)
+				UpdateTagElements(tag);
+		}
+
 		bool dimInDark = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING);
 		if (dimInDark != m_bDimInDark)
 		{

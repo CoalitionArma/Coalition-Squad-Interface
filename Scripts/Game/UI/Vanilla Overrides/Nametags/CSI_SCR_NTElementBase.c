@@ -27,27 +27,17 @@ modded class SCR_NTElementBase
 			return true;
 
 		//-----------------------------------------------------------------------
-		// Basic Static Distance Calculations
-		int zoneEnd = zone.m_iZoneEnd;
-		int zoneStart = zone.GetZoneStart();
-		if (zoneStart < 1)
-			zoneStart = 1;
-
-		//-----------------------------------------------------------------------
 		// The farthest N% of the zone shows icons only
+		int zoneEnd = zone.m_iZoneEnd;
 		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
-		float cutoffDist = scale * zoneEnd;
-		cutoffDist = zoneEnd - cutoffDist;// flip it around
-
-		//-----------------------------------------------------------------------
-		// Dynamic Distance Calculation For Our Emulation Of Icon Nametags In Vanilla
-		float dist = Math.InverseLerp(zoneStart, zoneEnd, data.m_fDistance);
+		float cutoffDist = zoneEnd - scale * zoneEnd;	// m
 
 		// Only players get simplified, and only when role icons are shown
 		if (data.m_eType == ENameTagEntityType.VEHICLE || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
 			return false;
 
-		if (dist > cutoffDist && scale != 0)
+		// m_fDistance is squared
+		if (scale != 0 && data.m_fDistance > cutoffDist * cutoffDist)
 			return true;
 
 		//-----------------------------------------------------------------------
@@ -94,10 +84,17 @@ modded class SCR_NTElementBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] setting a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS name
-	//! \return the setting's color, Gray if it matches a fire team color; one shared instance per CSI_EColorPreset
+	//! \return the setting's color, Gray if it matches a fire team color (the VON color: CSI_ColorPresets.GetVONPreset);
+	//! one shared instance per CSI_EColorPreset
 	protected Color GetNametagColor(string setting)
 	{
-		int preset = CSI_ColorPresets.GetNonClashingPreset(m_SettingsManager.GetSettingInt(setting), m_SettingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET));
+		int teamSet = m_SettingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
+		int preset;
+		if (setting == CSI_GameSettings.NAMETAG_VON_COLOR)
+			preset = CSI_ColorPresets.GetVONPreset(m_SettingsManager.GetSettingInt(setting), teamSet, m_SettingsManager.GetSettingInt(CSI_GameSettings.STANDARD_SQUAD_COLOR), m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_COLOR));
+		else
+			preset = CSI_ColorPresets.GetNonClashingPreset(m_SettingsManager.GetSettingInt(setting), teamSet);
+
 		Color color = s_mPresetColors.Get(preset);
 		if (!color)
 		{

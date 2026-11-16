@@ -236,13 +236,13 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		else
 			PrintFormat("CSI_SettingsSubMenu: '%1' has no color picker, other nametag colors won't avoid the talking color", CSI_GameSettings.NAMETAG_VON_COLOR, level: LogLevel.WARNING);
 
-		UpdateBlockedColors(GetShownColorTeamSet(), GetShownVONColor());
+		UpdateBlockedColors(GetShownColorTeamSet(), GetColorSettingValue(CSI_GameSettings.NAMETAG_VON_COLOR));
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void OnColorTeamSetChanged(SCR_ComboBoxComponent comboBox, int teamSet)
 	{
-		UpdateBlockedColors(teamSet, GetShownVONColor());
+		UpdateBlockedColors(teamSet, GetColorSettingValue(CSI_GameSettings.NAMETAG_VON_COLOR));
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -307,23 +307,51 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return the Nametag VON color shown in the tab, -1 without its row
-	protected int GetShownVONColor()
+	//! \param[in] setting a CSI_GameSettings.NON_TEAM_COLOR_SETTINGS name
+	//! \return the forced value on an override row, else the player's saved value; -1 if unknown
+	protected int GetColorSettingValue(string setting)
 	{
-		if (!m_VONColorPicker)
-			return -1;
+		if (m_aServerForcedSettings.Contains(setting))
+		{
+			CSI_ColorPickerComponent colorPicker = CSI_ColorPickerComponent.GetColorPicker(setting, m_wRoot);
+			if (colorPicker)
+				return colorPicker.GetCurrentIndex();
+		}
 
-		return m_VONColorPicker.GetCurrentIndex();
+		int value = -1;
+		BaseContainer userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
+		if (userSettings)
+			userSettings.Get(setting, value);
+
+		return value;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Crosses out the color boxes (NON_TEAM_COLOR_SETTINGS) that match the set's fire team colors, and in
-	//! VON_EXCLUSIVE_COLOR_SETTINGS the talking color. A row whose color matches a fire team shows Gray, the color
-	//! it's drawn in; the player's own pick is kept for sets it doesn't match.
+	//! Crosses out the color boxes (NON_TEAM_COLOR_SETTINGS) that match the set's fire team colors; in
+	//! VON_EXCLUSIVE_COLOR_SETTINGS the talking color; and in the VON row the colors server-forced
+	//! VON_EXCLUSIVE_COLOR_SETTINGS are drawn in. Each row shows the color it's drawn in: Gray for a color that
+	//! matches a fire team, CSI_ColorPresets.GetVONPreset for the VON row. The player's own pick stays saved and
+	//! comes back once it can be used.
 	//! \param[in] teamSet CSI_EColorTeamSet value
-	//! \param[in] vonColor CSI_EColorPreset value, -1 for none
+	//! \param[in] vonColor the Nametag VON color setting's value (CSI_EColorPreset), -1 for none
 	protected void UpdateBlockedColors(int teamSet, int vonColor)
 	{
+		int standardSquadColor = CSI_ColorPresets.GetNonClashingPreset(GetColorSettingValue(CSI_GameSettings.STANDARD_SQUAD_COLOR), teamSet);
+		int nametagColor = CSI_ColorPresets.GetNonClashingPreset(GetColorSettingValue(CSI_GameSettings.NAMETAG_COLOR), teamSet);
+
+		int shownVONColor = -1;
+		if (vonColor >= 0)
+			shownVONColor = CSI_ColorPresets.GetVONPreset(vonColor, teamSet, standardSquadColor, nametagColor);
+
+		// The VON row can't take a forced row's color; a player's own row is reset instead (OnVONColorPicked)
+		int forcedStandardSquadColor = -1;
+		if (m_aServerForcedSettings.Contains(CSI_GameSettings.STANDARD_SQUAD_COLOR))
+			forcedStandardSquadColor = standardSquadColor;
+
+		int forcedNametagColor = -1;
+		if (m_aServerForcedSettings.Contains(CSI_GameSettings.NAMETAG_COLOR))
+			forcedNametagColor = nametagColor;
+
 		BaseContainer userSettings = GetGame().GetGameUserSettings().GetModule(SETTINGS_MODULE_NAME);
 		foreach (string setting : CSI_GameSettings.NON_TEAM_COLOR_SETTINGS)
 		{
@@ -332,17 +360,30 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 			if (!colorPicker || !colorPicker.IsEnabled())
 				continue;
 
+			bool isVON = setting == CSI_GameSettings.NAMETAG_VON_COLOR;
 			bool avoidsVON = CSI_GameSettings.VON_EXCLUSIVE_COLOR_SETTINGS.Contains(setting);
 			for (int preset, count = CSI_ColorPresets.Count(); preset < count; preset++)
 			{
-				bool blocked = CSI_ColorPresets.ClashesWithColorTeams(preset, teamSet) || (avoidsVON && preset == vonColor);
+				bool blocked = CSI_ColorPresets.ClashesWithColorTeams(preset, teamSet)
+					|| (avoidsVON && preset == shownVONColor)
+					|| (isVON && (preset == forcedStandardSquadColor || preset == forcedNametagColor));
 				colorPicker.SetColorBlocked(preset, blocked);
 			}
 
 			// An override row keeps showing the forced value
+			if (m_aServerForcedSettings.Contains(setting))
+				continue;
+
 			int value;
-			if (!m_aServerForcedSettings.Contains(setting) && userSettings && userSettings.Get(setting, value))
+			if (isVON)
+			{
+				if (shownVONColor >= 0)
+					colorPicker.SetCurrentItem(shownVONColor);
+			}
+			else if (userSettings && userSettings.Get(setting, value))
+			{
 				colorPicker.SetCurrentItem(CSI_ColorPresets.GetNonClashingPreset(value, teamSet));
+			}
 		}
 	}
 
