@@ -6,17 +6,22 @@
 //!	\Description: 	Player settings panel (group menu or CSI_PlayerSettingsMenu): shows a player's name and icon and sends
 //! 				color team, icon override, promote and kick requests to the server; hidden while it shows no player.
 //! 				Group leaders and team leaders set color teams and icons; only the leader promotes and kicks others.
-//! 				The color team buttons are tinted in the chosen fire team color set.
-//! 
+//! 				The color team buttons show the chosen fire team color set, the no fire team icon Standard squad color.
+//!
 //------------------------------------------------------------------------------------------------
  class CSI_PlayerSettings : SCR_ScriptedWidgetComponent
 {
+	protected static const float COLOR_TEAM_BUTTON_OPACITY = 0.6;	//!< full colors glare in the dark menu
+
+	protected static const string NO_TEAM_ICON_WIDGET_NAME = "NoneImage";	//!< no fire team box's icon (TintNoTeamIcon)
+
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_RplToAuthorityManager m_RplToAuthorityManager;
 
 	protected XComboBoxWidget m_wIconOveride;
 	protected TextWidget m_wPlayerName;
-	protected ImageWidget m_wIcon;
+	protected ImageWidget m_wIcon;			//!< CSI_ICONS only
+	protected ImageWidget m_wPointerIcon;	//!< vanilla pointer, for MAN
 	protected Widget m_wAdvancedSettings;	//!< promote to SL, promote to TL and kick
 	protected Widget m_wKickOverlay;
 	protected PlayerId m_iPlayerID = -1;		//!< player the panel shows
@@ -37,6 +42,7 @@
 		m_wIconOveride = XComboBoxWidget.Cast(w.FindAnyWidget("IconOveride"));
 		m_wPlayerName = TextWidget.Cast(w.FindAnyWidget("PlayerName"));
 		m_wIcon = ImageWidget.Cast(w.FindAnyWidget("Icon"));
+		m_wPointerIcon = ImageWidget.Cast(w.FindAnyWidget("PointerIcon"));
 		m_wAdvancedSettings = w.FindAnyWidget("AdvancedSettingsOverlay");
 		m_wKickOverlay = w.FindAnyWidget("KickOverlay");
 
@@ -48,6 +54,9 @@
 
 		if (!m_wIcon)
 			Print("CSI_PlayerSettings: image 'Icon' not found, the panel won't show player details", LogLevel.WARNING);
+
+		if (!m_wPointerIcon)
+			Print("CSI_PlayerSettings: image 'PointerIcon' not found, players without a role icon show the CSI MAN icon", LogLevel.WARNING);
 
 		if (!m_wAdvancedSettings)
 			Print("CSI_PlayerSettings: 'AdvancedSettingsOverlay' not found, promote and kick won't hide for team leaders or on the leader's own tile", LogLevel.WARNING);
@@ -102,11 +111,25 @@
 		}
 
 		if (none)
+		{
 			none.m_OnClicked.Insert(OnColorTeamClicked);
+			TintNoTeamIcon(w);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Colors a color team button in the chosen set, keeping the layout's opacity.
+	//! Colors the no fire team box's icon in the Standard squad color; the box keeps the layout's dark tile, as
+	//! the default (Gray) is nearly white.
+	//! \param[in] root
+	protected void TintNoTeamIcon(notnull Widget root)
+	{
+		Widget icon = root.FindAnyWidget(NO_TEAM_ICON_WIDGET_NAME);
+		if (icon)
+			icon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Colors a color team button in the chosen set, at COLOR_TEAM_BUTTON_OPACITY over its gray tile.
 	//! \param[in] button
 	//! \param[in] colorTeam
 	protected void TintColorTeamButton(notnull SCR_ModularButtonComponent button, CSI_EColorTeam colorTeam)
@@ -116,7 +139,7 @@
 			return;
 
 		Color color = CSI_UIHelper.ConvertColorTeamToColor(colorTeam);
-		color.SetA(buttonWidget.GetColor().A());
+		color.SetA(COLOR_TEAM_BUTTON_OPACITY);
 		buttonWidget.SetColor(color);
 	}
 
@@ -187,8 +210,7 @@
 		if (!playerData)
 		{
 			m_wIconOveride.SetCurrentItem(0);
-			m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
-			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
+			ShowPlayerIcon(string.Empty, CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 			m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(CSI_EColorTeam.NONE));
 			m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
 			return;
@@ -205,17 +227,43 @@
 		else
 			m_wIconOveride.SetCurrentItem(0);
 
-		m_wIcon.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
-
 		// MAN uses the pointer icon
 		if (displayIconStr == "MAN_ICON")
-			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
-		else
-           	m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, displayIconStr);
+			displayIconStr = string.Empty;
+
+		ShowPlayerIcon(displayIconStr, CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 
 		m_wPlayerName.SetColor(CSI_UIHelper.ConvertColorTeamToColor(colorTeam));
 		m_wPlayerName.SetText(CSI_UIHelper.GetPlayersName(m_iPlayerID));
 	};
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows a CSI icon in m_wIcon, or the vanilla pointer in m_wPointerIcon. Each widget keeps its own imageset:
+	//! loading another set's image into the same widget drew the wrong part of the texture or a white box.
+	//! \param[in] csiIcon CSI_ICONS image name, empty for the pointer
+	//! \param[in] color
+	protected void ShowPlayerIcon(string csiIcon, Color color)
+	{
+		bool showPointer = csiIcon.IsEmpty() && m_wPointerIcon;
+
+		m_wIcon.SetVisible(!showPointer);
+		if (!showPointer)
+		{
+			// Without the pointer widget, CSI's own MAN icon
+			if (csiIcon.IsEmpty())
+				csiIcon = "MAN_ICON";
+
+			m_wIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, csiIcon);
+			m_wIcon.SetColor(color);
+		}
+
+		if (!m_wPointerIcon)
+			return;
+
+		m_wPointerIcon.SetVisible(showPointer);
+		if (showPointer)
+			m_wPointerIcon.SetColor(color);
+	}
 
 	//------------------------------------------------------------------------------------------------
 	//! Shows promote and kick only to the group leader, not on their own tile, and kick not in a reserves group.
