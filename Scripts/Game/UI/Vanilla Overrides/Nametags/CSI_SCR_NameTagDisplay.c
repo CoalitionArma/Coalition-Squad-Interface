@@ -44,6 +44,12 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected float m_fExposure = 1;			//!< camera's HDR exposure at the last update
 	protected float m_fAppliedOpacity = -1;		//!< opacity last applied
 
+#ifdef CVON_COALITION_VON
+	protected static const float CVON_TALKING_CHECK_INTERVAL = 0.25;	//!< s; how often Coalition VON reads its TeamSpeak plugin's talking list
+	protected float m_fCVONTalkingCheckTime;	//!< s until the next check
+	protected SCR_VONController m_CVONController;
+#endif
+
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
@@ -57,6 +63,10 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		UpdateBrightnessOpacity();
+
+#ifdef CVON_COALITION_VON
+		UpdateCVONTalking(timeSlice);
+#endif
 
 		if (!m_SettingsManager || !m_CurrentPlayerTag || !m_CurrentPlayerTag.m_CharController || !SCR_PlayerController.s_pLocalPlayerController)
 			return;
@@ -288,6 +298,47 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 
 		ApplyNametagOpacity();
 	}
+
+#ifdef CVON_COALITION_VON
+	//------------------------------------------------------------------------------------------------
+	//! Coalition VON replaces vanilla VoN, so vanilla's OnReceivedVON never marks a tag as talking. Marks the tags of
+	//! players its TeamSpeak plugin reports talking instead; vanilla's ruleset ends the state VON_STOP_TIME after
+	//! the last mark, as it does after the last received VoN.
+	//! \param[in] timeSlice
+	protected void UpdateCVONTalking(float timeSlice)
+	{
+		m_fCVONTalkingCheckTime -= timeSlice;
+		if (m_fCVONTalkingCheckTime > 0)
+			return;
+
+		m_fCVONTalkingCheckTime = CVON_TALKING_CHECK_INTERVAL;
+
+		// Not a Coalition VON game mode (client IDs come from its component)
+		if (!CVON_VONGameModeComponent.GetInstance())
+			return;
+
+		SCR_PlayerController playerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
+		if (!playerController)
+			return;
+
+		if (!m_CVONController)
+			m_CVONController = SCR_VONController.Cast(playerController.FindComponent(SCR_VONController));
+
+		// Without the plugin's talking list Coalition VON counts everyone as talking
+		if (!m_CVONController || !m_CVONController.m_bPluginReportsTalking)
+			return;
+
+		foreach (SCR_NameTagData tag : m_aNameTags)
+		{
+			if (!tag || tag.m_iPlayerID <= 0)
+				continue;
+
+			int clientId = playerController.GetPlayersTeamspeakClientId(tag.m_iPlayerID);
+			if (clientId > 0 && m_CVONController.IsTalking(clientId))
+				tag.ActivateEntityState(ENameTagEntityState.VON);
+		}
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------------------------
