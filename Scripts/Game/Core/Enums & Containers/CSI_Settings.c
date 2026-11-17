@@ -264,7 +264,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "125", uiwidget: UIWidgets.Slider, params: "5 145 5", desc: "Nametags show only within this angle around where you're looking. It's full width up close and narrows to nothing at the edge of the range.")]
 	int m_iNametagFieldOfView;
 
-	[Attribute(defvalue: "50", uiwidget: UIWidgets.Slider, params: "0 95 1", desc: "Tags in this outer part of the field of view show only the role icon, not the name. Only works with Role icons shown.")]
+	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "0 95 1", desc: "Tags in this outer part of the field of view show only the role icon, not the name. Only works with Role icons shown.")]
 	int m_iNametagFieldOfViewSimplifiedPercentage;
 
 	[Attribute(defvalue: "40", uiwidget: UIWidgets.Slider, params: "0 100 20", desc: "Size of nametag text and icons.")]

@@ -28,7 +28,9 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	protected static const float NAMETAG_COMPARE_SCALE = 2.8;	//!< DayNight: two nametags side by side
 	protected static const float NAMETAG_DIAGRAM_SCALE = 1.4;	//!< for the Range, Simplified, LineOfSight and FieldOfView panels
 	protected static const float NAMETAG_BODY_SCALE = 2.24;		//!< BodyPosition: over the zoomed-in figure
-	protected static const float NIGHT_DIMMED_OPACITY = 0.35;	//!< DayNight: the night tag with brightness dimming on
+	// DayNight: as SCR_NameTagDisplay draws them (NIGHT_OPACITY, UNDIMMED_OPACITY); keep in step
+	protected static const float NIGHT_DIMMED_OPACITY = 0.2;	//!< night tag with brightness dimming on: highest opacity after sunset
+	protected static const float UNDIMMED_OPACITY = 0.85;		//!< both tags with brightness dimming off
 
 	// Simplified: positions along the range, as fractions of the panel's width
 	protected static const float ZONE_MARGIN = 0.06;			//!< left for the "You" figure at the start
@@ -277,11 +279,15 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		if (!panel)
 			return;
 
-		float nightOpacity = 1;
+		float dayOpacity = UNDIMMED_OPACITY;
+		float nightOpacity = UNDIMMED_OPACITY;
 		if (dimming)
+		{
+			dayOpacity = 1;
 			nightOpacity = NIGHT_DIMMED_OPACITY;
+		}
 
-		ShowSampleNametag(panel.FindAnyWidget("DayTag"), NAMETAG_COMPARE_SCALE, 1, true);
+		ShowSampleNametag(panel.FindAnyWidget("DayTag"), NAMETAG_COMPARE_SCALE, dayOpacity, true);
 		ShowSampleNametag(panel.FindAnyWidget("NightTag"), NAMETAG_COMPARE_SCALE, nightOpacity, true);
 	}
 

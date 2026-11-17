@@ -28,7 +28,7 @@ modded class SCR_NameTagData : Managed
 
 		// A passenger's own tag is hidden, so their vehicle's tag shows them talking (vanilla VoN and Coalition VON
 		// both mark the passenger); vanilla's ruleset ends it VON_STOP_TIME after the last mark
-		if (state == ENameTagEntityState.VON && m_VehicleParent)
+		if (state == ENameTagEntityState.VON && m_VehicleParent && !(m_VehicleParent.m_Flags & ENameTagFlags.DELETED))
 			m_VehicleParent.ActivateEntityState(state);
 	}
 
@@ -61,8 +61,11 @@ modded class SCR_NameTagData : Managed
 	{
 		if (m_eType == ENameTagEntityType.PLAYER)
 		{
-			// CSI: name with rank, refresh CSI data
-			m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
+			// CSI: name with rank, refresh CSI data. A player who has left has no name until their character goes;
+			// keep the last one (SCR_NameTagDisplay.RefreshNames asks every 2 s) instead of vanilla's GETNAME_ERROR
+			if (!SCR_PlayerNamesFilterCache.GetInstance().GetPlayerDisplayName(m_iPlayerID).IsEmpty() || m_sName.IsEmpty())
+				m_sName = CSI_UIHelper.GetPlayersName(m_iPlayerID);
+
 			UpdatePlayerData();
 		} else if (m_eType == ENameTagEntityType.AI)
 		{
@@ -103,7 +106,9 @@ modded class SCR_NameTagData : Managed
 	void GetGroupName()
 	{
 		// TODO: Better AI handling
-		SCR_AIGroup group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
+		SCR_AIGroup group;
+		if (m_GroupManager)
+			group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
 		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE))
 		{

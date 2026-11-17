@@ -44,6 +44,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected float m_fExposure = 1;			//!< camera's HDR exposure at the last update
 	protected float m_fAppliedOpacity = -1;		//!< opacity last applied
 
+	protected static const float NAME_REFRESH_INTERVAL = 2;	//!< s between RefreshNames
+	protected float m_fNameRefreshTime;			//!< s until the next RefreshNames
+
 /*
 #ifdef CVON_COALITION_VON
 	protected static const float CVON_TALKING_CHECK_INTERVAL = 0.25;	//!< s; how often Coalition VON reads its TeamSpeak plugin's talking list
@@ -65,6 +68,13 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			m_SettingsManager = CSI_SettingsManager.GetInstance();
 
 		UpdateBrightnessOpacity();
+
+		m_fNameRefreshTime -= timeSlice;
+		if (m_fNameRefreshTime <= 0)
+		{
+			m_fNameRefreshTime = NAME_REFRESH_INTERVAL;
+			RefreshNames();
+		}
 
 /*
 #ifdef CVON_COALITION_VON
@@ -153,6 +163,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 				UpdateTagElements(tag);
 		}
 
+		// Rank (RANK_VISIBLE) is part of the name, which vanilla rebuilds only on a name update
+		RefreshNames();
+
 		bool dimInDark = !m_SettingsManager || m_SettingsManager.GetSettingBool(CSI_GameSettings.NAMETAG_BRIGHTNESS_DIMMING);
 		if (dimInDark != m_bDimInDark)
 		{
@@ -170,6 +183,31 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		// Entities that came in range while hidden are gathered at once
 		if (nametagsVisible && s_NametagCfg && s_NametagCfg.m_aSourceEntities)
 			s_NametagCfg.m_aSourceEntities.RequestGather();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Also clears the tag's zone. Vanilla leaves it set, so a state change still reaching the pooled tag (talking,
+	//! death, a passenger talking to their vehicle's tag) ran UpdateTagElements, whose SetVisibility showed the
+	//! widget again: a tag no longer updated, stuck where it was on screen.
+	override void CleanupTag(notnull SCR_NameTagData data, bool removeFromArray = true)
+	{
+		super.CleanupTag(data, removeFromArray);
+		data.m_iZoneID = -1;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Rebuilds every tag's name (with rank) and group name. Vanilla does it only when a tag is hidden and shown
+	//! again, so tags in view would keep an old rank, rank setting or squad until they left view.
+	protected void RefreshNames()
+	{
+		foreach (SCR_NameTagData tag : m_aNameTags)
+		{
+			if (!tag)
+				continue;
+
+			tag.m_Flags |= ENameTagFlags.NAME_UPDATE;
+			tag.GetGroupName();
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------

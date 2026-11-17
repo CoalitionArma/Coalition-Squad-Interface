@@ -23,21 +23,36 @@ modded class SCR_NTElementBase
 	protected bool ShouldWeClearText(SCR_NameTagData data)
 	{
 		SCR_NameTagZone zone = SCR_NameTagDisplay.GetNametagZones().Get(data.m_iZoneID);
-		if (!zone || data.m_eType == ENameTagEntityType.AI)
+		if (!zone)
 			return true;
 
-		//-----------------------------------------------------------------------
-		// The farthest N% of the zone shows icons only
-		int zoneEnd = zone.m_iZoneEnd;
-		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
-		float cutoffDist = zoneEnd - scale * zoneEnd;	// m
+		// AI tags are always icon only (SCR_NTIconBase always shows their icon); players without CSI data have no
+		// icon, so they keep their name
+		if (data.m_eType == ENameTagEntityType.AI)
+			return true;
 
-		// Only players get simplified, and only when role icons are shown
-		if (data.m_eType == ENameTagEntityType.VEHICLE || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+		if (!data.m_PlayerData)
 			return false;
 
-		// m_fDistance is squared
-		if (scale != 0 && data.m_fDistance > cutoffDist * cutoffDist)
+		bool roleIcons = m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE);
+
+		//-----------------------------------------------------------------------
+		// Icon only beyond the NAMTEAG_RANGE_SIMPLIFIED cutoff. The percentage applies to the zone's squared distance
+		// (m_fDistance), so 85% of a 50 m range starts at about 19 m, as CSI has always worked and as Setting Info
+		// shows (CSI_SettingInfoNametagExamples.GetSimplifiedDistance); keep the two in step
+		int zoneEnd = zone.m_iZoneEnd;
+		int zoneStart = zone.GetZoneStart();
+		if (zoneStart < 1)
+			zoneStart = 1;
+		float scale = (m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMTEAG_RANGE_SIMPLIFIED) * 0.01);
+		float cutoff = zoneEnd - scale * zoneEnd;
+		float cutoffDistanceSq = zoneStart + cutoff * (zoneEnd - zoneStart);
+
+		// Only players get simplified, and only when role icons are shown
+		if (data.m_eType == ENameTagEntityType.VEHICLE || !roleIcons)
+			return false;
+
+		if (scale != 0 && data.m_fDistance > cutoffDistanceSq)
 			return true;
 
 		//-----------------------------------------------------------------------

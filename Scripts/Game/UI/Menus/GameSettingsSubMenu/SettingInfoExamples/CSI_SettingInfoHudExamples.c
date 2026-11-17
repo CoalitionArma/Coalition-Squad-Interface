@@ -603,9 +603,9 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	protected string GetRevealCaption()
 	{
 		if (GetValue(CSI_GameSettings.REVEAL_UI_MODE) == CSI_ERevealUIMode.TOGGLE)
-			return "Hidden until you press Reveal UI; press it again to hide";
+			return "Hidden until you press Reveal CSI HUD; press it again to hide";
 
-		return "Hidden until you hold Reveal UI";
+		return "Hidden until you hold Reveal CSI HUD";
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

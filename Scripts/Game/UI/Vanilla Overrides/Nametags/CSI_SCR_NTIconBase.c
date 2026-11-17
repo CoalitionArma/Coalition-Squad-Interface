@@ -33,7 +33,9 @@ modded class SCR_NTIconBase
 		//-----------------------------------------------------------------------
 		// Hide Unused Role Icon Widgets
 		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
-		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE))
+		// AI always show their icon (their tags are icon only); players' follow ROLE_IN_NAMETAG_VISIBLE
+		bool showIcon = data.m_eType == ENameTagEntityType.AI || m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE);
+		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !showIcon)
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			iWidget.SetVisible(false);	// UpdateElement skips hidden icons
