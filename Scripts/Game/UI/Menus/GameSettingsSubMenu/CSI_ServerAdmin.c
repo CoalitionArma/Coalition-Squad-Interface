@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Server Admin panel of the CSI settings tab (admins only): max group size and server defaults.
 //!
@@ -116,13 +116,18 @@ class CSI_ServerAdmin : SCR_ScriptedWidgetComponent
 		if (!userSettings)
 			return;
 
+		// One value per setting, in settings order; one that can't be read keeps its default as it is
+		array<int> values = {};
 		foreach (string settingStr : CSI_GameSettings.GetSettingsArray())
 		{
 			int value;
-			if (userSettings.Get(settingStr, value))
-				m_RplToAuthorityManager.Owner_SetServerDefault(settingStr, value);
+			if (!userSettings.Get(settingStr, value))
+				value = CSI_SettingsManager.NO_SERVER_DEFAULT;
+
+			values.Insert(value);
 		}
 
+		m_RplToAuthorityManager.Owner_SetServerDefaults(values);
 		SetServerDefaultsStatus(true);
 	}
 

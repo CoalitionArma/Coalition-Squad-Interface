@@ -258,7 +258,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Distant tags show only the role icon, not the name. Higher values start this closer to you; 0% turns it off. Only works with Role icons shown.")]
 	int m_iNametagRangeSimplifiedPercentage;
 
-	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while you look through a scope or binoculars. 100% keeps the normal range.")]
+	[Attribute(defvalue: "200", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while you look through a scope or binoculars. 100% keeps the normal range.")]
 	int m_iNametagMagnificationMultiplication;
 
 	[Attribute(defvalue: "125", uiwidget: UIWidgets.Slider, params: "5 145 5", desc: "Nametags show only within this angle around where you're looking. It's full width up close and narrows to nothing at the edge of the range.")]

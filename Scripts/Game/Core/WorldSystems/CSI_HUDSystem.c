@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
 //! 				vehicle/mortar state and the sorted group member list.
@@ -18,13 +18,14 @@ class CSI_HUDSystem : GameSystem
 	protected SCR_PlayerController m_PlayerController;		//!< local, listened to for controlled entity changes
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;	//!< locally controlled character
 	protected SCR_CompartmentAccessComponent m_LocalCompartmentAccess;	//!< local character's, listened to for vehicle and mortar state
-	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< new array each refresh; readers compare references
+	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< replaced when the group or its order changes; readers compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
 	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between group refreshes
+	protected static const int SORT_KEY_STEP = 1000;		//!< sort key multiplier, above any group's member count (GetSortedGroupArray)
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INIT METHODS
@@ -75,7 +76,7 @@ class CSI_HUDSystem : GameSystem
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return IDs in display order, a new array each refresh
+	//! \return IDs in display order; replaced by a new array, never changed, when the group or its order changes
 	array<int> GetLocalGroupPlayerIds()
 	{
 		return m_aLocalGroupPlayerIds;
@@ -225,7 +226,11 @@ class CSI_HUDSystem : GameSystem
 			return;
 		}
 
-		m_aLocalGroupPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
+		// Replaced only on a change, so readers comparing references have nothing to do meanwhile
+		array<int> sortedPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
+		if (!SCR_ArrayHelperT<int>.AreEqual(sortedPlayerIds, m_aLocalGroupPlayerIds))
+			m_aLocalGroupPlayerIds = sortedPlayerIds;
+
 		m_iLocalGroupCount = m_aLocalGroupPlayerIds.Count();
 	}
 
@@ -249,7 +254,6 @@ class CSI_HUDSystem : GameSystem
 		if (!m_PlayerDataManager)
 			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
 
-		SCR_SortedArray<int> sortedPlayerIDs = new SCR_SortedArray<int>();	// lowest key first; equal keys keep group order
 		CSI_EColorTeam currentSLColorTeam = CSI_EColorTeam.NONE;
 
 		foreach (PlayerId playerID : playerIDs)
@@ -268,7 +272,10 @@ class CSI_HUDSystem : GameSystem
 		playersCTArray.RemoveItemOrdered(currentSLColorTeam);
 		playersCTArray.InsertAt(currentSLColorTeam, 0);
 
-		foreach (PlayerId playerID : playerIDs)
+		// One number per member, sorted by the engine: the sort key, then their place in the group, so members with
+		// the same key keep the group's order
+		array<int> sortedKeys = {};
+		foreach (int groupIndex, PlayerId playerID : playerIDs)
 		{
 			CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
 
@@ -288,11 +295,18 @@ class CSI_HUDSystem : GameSystem
 					sortKey--;
 			}
 
-			sortedPlayerIDs.Insert(sortKey, playerID);
+			sortedKeys.Insert(sortKey * SORT_KEY_STEP + groupIndex);
 		};
 
+		sortedKeys.Sort();
+
 		array<int> playersGroupArray = {};
-		sortedPlayerIDs.ToArray(playersGroupArray);
+		foreach (int sortedKey : sortedKeys)
+		{
+			// The place in the group is what's left of the key
+			playersGroupArray.Insert(playerIDs[sortedKey - (sortedKey / SORT_KEY_STEP) * SORT_KEY_STEP]);
+		}
+
 		return playersGroupArray;
 	};
 

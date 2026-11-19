@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar inside the compass: an icon per group member in range, placed and rotated relative to the
-//! 				local player. Members outside the radar's field of view fade out.
+//! 				local player. Members outside the radar's field of view fade out. CSI_HUD has it read its
+//! 				settings (ApplySettings).
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_Radar : SCR_ScriptedWidgetComponent
@@ -23,6 +24,14 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref map<int, float> m_mFieldOfViewFades = new map<int, float>();	//!< field of view fade by player ID, 1 shown to 0 faded out
 	protected float m_fIconSize;				//!< px the icons were last sized to
 	protected array<int> m_aCheckedGroupPlayerIDs;	//!< group list the icons were last checked against (CSI_HUDSystem's, replaced on change)
+
+	// Settings, read in ApplySettings
+	protected bool m_bVisible;				//!< RADAR_VISIBLE
+	protected int m_iRangeOnFoot;			//!< RADAR_RANGE_ON_FOOT in meters; 0 until the settings arrive
+	protected int m_iRangeInVehicle;		//!< RADAR_RANGE_IN_VEHICLE in meters; 0 until the settings arrive
+	protected bool m_bIconsUpright;			//!< RADAR_ICON_ARROWS_ROTATE
+	protected bool m_bFieldOfViewLimited;	//!< RADAR_FIELD_OF_VIEW is below its max, so members outside it fade out
+	protected float m_fHalfFieldOfView;		//!< degrees either side of straight ahead
 
 	protected static int ICON_WIDTH_AND_HEIGHT = 16;	//!< px at 100% RADAR_ICON_SIZE
 	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds
@@ -61,13 +70,53 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Reads the radar settings and sizes the icons for RADAR_ICON_SIZE. Called by CSI_HUD on a settings update.
+	void ApplySettings()
+	{
+		if (!m_SettingsManager)
+			return;
+
+		m_bVisible = m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE);
+		m_iRangeOnFoot = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT);
+		m_iRangeInVehicle = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE);
+		m_bIconsUpright = m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
+
+		float iconSize = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+		if (iconSize != m_fIconSize)
+			ResizeRadarIcons(iconSize);
+
+		// Members outside this angle around straight ahead fade out; none at the max
+		int fieldOfViewMin, fieldOfViewMax;
+		m_SettingsManager.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
+		int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW);
+		m_fHalfFieldOfView = fieldOfView * 0.5;
+		bool fieldOfViewLimited = fieldOfView < fieldOfViewMax;
+
+		// No fades to keep without a limit. With a new limit, the members shown start fully shown, so those outside
+		// it fade out
+		if (!fieldOfViewLimited)
+		{
+			m_mFieldOfViewFades.Clear();
+		}
+		else if (!m_bFieldOfViewLimited)
+		{
+			foreach (PlayerId playerID, CSI_Icon icon : m_mRadarIcons)
+			{
+				m_mFieldOfViewFades.Set(playerID, 1);
+			}
+		}
+
+		m_bFieldOfViewLimited = fieldOfViewLimited;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Called every frame by CSI_HUD.
 	//! \param[in] timeSlice
 	void Update(float timeSlice)
 	{
 		SCR_ChimeraCharacter localCharacter = m_HUDSystem.GetLocalPlayerCharacter();
 
-		if (!localCharacter || m_HUDSystem.GetLocalGroupCount() <= 1 || !m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE))
+		if (!m_bVisible || !localCharacter || m_HUDSystem.GetLocalGroupCount() <= 1)
 		{
 			ClearRadarIcons();
 			return;
@@ -79,11 +128,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		int localPlayerId = SCR_PlayerController.GetLocalPlayerId();
 
 		// Radar range in meters
-		float searchRadius;
+		float searchRadius = m_iRangeOnFoot;
 		if (m_HUDSystem.GetIsLocalPlayerInVehicle())
-			searchRadius = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE);
-		else
-			searchRadius = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_ON_FOOT);
+			searchRadius = m_iRangeInVehicle;
 
 		// 0 until the settings arrive
 		if (searchRadius <= 0)
@@ -94,19 +141,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		float searchRadiusFadeStart = 0.8 * searchRadius;			// icons fade from about 2/3 of the range: 0.6 opacity here, 0 at the edge
 		float radarScale = 132.0 / (searchRadius * 2.725);			// meters to radar px
-		float iconSize = ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
-		if (iconSize != m_fIconSize)
-			ResizeRadarIcons(iconSize);
-
-		bool iconsUpright = m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE);
-
+		float halfIconSize = m_fIconSize * 0.5;
 		float searchRadiusSq = searchRadius * searchRadius;
-
-		// Members outside this angle around straight ahead fade out; none at the max
-		int fieldOfViewMin, fieldOfViewMax;
-		m_SettingsManager.GetSettingLimits(CSI_GameSettings.RADAR_FIELD_OF_VIEW, fieldOfViewMin, fieldOfViewMax);
-		int fieldOfView = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_FIELD_OF_VIEW);
-		float halfFieldOfView = fieldOfView * 0.5;
 
 		array<int> groupPlayerIDs = m_HUDSystem.GetLocalGroupPlayerIds();
 		PlayerManager playerManager = GetGame().GetPlayerManager();
@@ -149,8 +185,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				x = Math.Sin(relDir) * disT;
 				y = Math.Cos(relDir) * disT;
 
-				bool inFieldOfView = fieldOfView >= fieldOfViewMax ||SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= halfFieldOfView;
-				fieldOfViewFade = UpdateFieldOfViewFade(playerID, inFieldOfView, timeSlice);
+				if (m_bFieldOfViewLimited)
+					fieldOfViewFade = UpdateFieldOfViewFade(playerID, SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= m_fHalfFieldOfView, timeSlice);
 			};
 
 			// Clamped: the distance fade is above 1 for most of the range
@@ -164,9 +200,9 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			Widget radarIcon = icon.GetRootWidget();
 
 			// Center the icon on its position
-			FrameSlot.SetPos(radarIcon, (x - iconSize/2), (y - iconSize/2));
+			FrameSlot.SetPos(radarIcon, x - halfIconSize, y - halfIconSize);
 
-			icon.SetRotation(rotation, iconsUpright);
+			icon.SetRotation(rotation, m_bIconsUpright);
 			radarIcon.SetOpacity(opacity);
 		};
 
@@ -189,7 +225,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sizes every icon for RADAR_ICON_SIZE; new icons get it when created.
+	//! Sizes every icon; new icons get the size when created.
 	//! \param[in] iconSize px
 	protected void ResizeRadarIcons(float iconSize)
 	{

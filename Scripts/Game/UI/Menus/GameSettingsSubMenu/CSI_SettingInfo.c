@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	On each CSI settings tab row: tells CSI_SettingInfo which setting is hovered, focused or changed,
 //! 				and previews a hovered color box.
@@ -19,18 +19,25 @@ class CSI_SettingInfoHandler
 	//------------------------------------------------------------------------------------------------
 	protected void OnRowMouseEnter(SCR_ModularButtonComponent comp, bool mouseInput)
 	{
-		ShowThisSetting();
+		QueueShowThisSetting();
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void OnRowFocus(SCR_ModularButtonComponent comp)
 	{
-		ShowThisSetting();
+		QueueShowThisSetting();
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows the new value a frame later: a clicked toolbox reports the change before selecting it.
 	void OnValueChanged()
+	{
+		QueueShowThisSetting();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows the setting a frame later, once. The mouse entering a row also focuses it (vanilla's mouse over to
+	//! focus), which would build the example twice, and a clicked toolbox reports the change before selecting it.
+	protected void QueueShowThisSetting()
 	{
 		ScriptCallQueue callQueue = GetGame().GetCallqueue();
 		callQueue.Remove(ShowThisSetting);
@@ -195,6 +202,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	protected ref array<ref CSI_SettingInfoHandler> m_aHandlers = {};
 	protected ref map<string, string> m_mSettingLabels = new map<string, string>();	//!< setting -> its row's label
+	protected ref map<string, string> m_mSettingDescriptions = new map<string, string>();	//!< setting -> its description, read once
 
 	// Example components, owned by their widgets
 	protected CSI_SettingInfoHudExamples m_HudExamples;
@@ -206,6 +214,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	// Previewed value, e.g. a hovered color box (PreviewSetting)
 	protected static string s_sPreviewSetting;
 	protected static int s_iPreviewValue;
+
+	// Each setting row's value component, found once per tab (FindValueComponent)
+	protected static Widget s_wValueComponentsRoot;
+	protected static ref map<string, SCR_ChangeableComponentBase> s_mValueComponents = new map<string, SCR_ChangeableComponentBase>();
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -241,7 +253,10 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		m_aHandlers.Clear();
 		m_mSettingLabels.Clear();
+		m_mSettingDescriptions.Clear();
 		s_sPreviewSetting = string.Empty;
+		s_mValueComponents.Clear();
+		s_wValueComponentsRoot = null;
 
 		super.HandlerDeattached(w);
 	}
@@ -302,7 +317,15 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			name = SCR_StringHelper.FormatValueNameToUserFriendly(setting);
 
 		m_wName.SetText(name);
-		m_wDescription.SetText(GetAttributeDescription(CSI_GameSettings, setting));
+
+		string description;
+		if (!m_mSettingDescriptions.Find(setting, description))
+		{
+			description = GetAttributeDescription(CSI_GameSettings, setting);
+			m_mSettingDescriptions.Set(setting, description);
+		}
+
+		m_wDescription.SetText(description);
 
 		HideExamples();
 
@@ -396,44 +419,64 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! The examples read many values on every rebuild, so each row's component is only searched for once.
+	//! \param[in] root CSI settings tab root
+	//! \param[in] setting CSI_GameSettings name
+	//! \return the component holding the setting row's value (slider, combo box, spin box or toolbox), null if none
+	protected static SCR_ChangeableComponentBase FindValueComponent(Widget root, string setting)
+	{
+		if (!root)
+			return null;
+
+		// Another tab has other rows
+		if (root != s_wValueComponentsRoot)
+		{
+			s_mValueComponents.Clear();
+			s_wValueComponentsRoot = root;
+		}
+
+		SCR_ChangeableComponentBase component = s_mValueComponents.Get(setting);
+		if (component)
+			return component;
+
+		// Finds the setting row, not its override row (the list comes first)
+		Widget widget = root.FindAnyWidget(setting);
+		if (!widget)
+			return null;
+
+		component = SCR_SliderComponent.Cast(widget.FindHandler(SCR_SliderComponent));
+		if (!component)
+			component = SCR_SelectionWidgetComponent.Cast(widget.FindHandler(SCR_SelectionWidgetComponent));
+
+		if (component)
+			s_mValueComponents.Set(setting, component);
+
+		return component;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \param[in] root CSI settings tab root
 	//! \param[in] setting CSI_GameSettings name
 	//! \param[out] value shown value
 	//! \return false if the setting has no value widget
 	static bool GetWidgetValue(Widget root, string setting, out int value)
 	{
-		if (!root)
+		SCR_ChangeableComponentBase component = FindValueComponent(root, setting);
+		if (!component)
 			return false;
 
-		Widget widget = root.FindAnyWidget(setting);
-		if (!widget)
-			return false;
-
-		SCR_SliderComponent sliderComp = SCR_SliderComponent.Cast(widget.FindHandler(SCR_SliderComponent));
+		SCR_SliderComponent sliderComp = SCR_SliderComponent.Cast(component);
 		if (sliderComp)
 		{
 			value = sliderComp.GetValue();
 			return true;
 		}
 
-		SCR_ComboBoxComponent comboComp = SCR_ComboBoxComponent.Cast(widget.FindHandler(SCR_ComboBoxComponent));
-		if (comboComp)
+		// Combo boxes, spin boxes and toolboxes
+		SCR_SelectionWidgetComponent selectionComp = SCR_SelectionWidgetComponent.Cast(component);
+		if (selectionComp)
 		{
-			value = comboComp.GetCurrentIndex();
-			return true;
-		}
-
-		SCR_SpinBoxComponent spinComp = SCR_SpinBoxComponent.Cast(widget.FindHandler(SCR_SpinBoxComponent));
-		if (spinComp)
-		{
-			value = spinComp.GetCurrentIndex();
-			return true;
-		}
-
-		SCR_ToolboxComponent toolboxComp = SCR_ToolboxComponent.Cast(widget.FindHandler(SCR_ToolboxComponent));
-		if (toolboxComp)
-		{
-			value = toolboxComp.GetCurrentIndex();
+			value = selectionComp.GetCurrentIndex();
 			return true;
 		}
 
@@ -447,38 +490,22 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \return false if the setting has no value widget
 	static bool SetWidgetValue(Widget root, string setting, int value)
 	{
-		if (!root)
+		SCR_ChangeableComponentBase component = FindValueComponent(root, setting);
+		if (!component)
 			return false;
 
-		Widget widget = root.FindAnyWidget(setting);
-		if (!widget)
-			return false;
-
-		SCR_SliderComponent sliderComp = SCR_SliderComponent.Cast(widget.FindHandler(SCR_SliderComponent));
+		SCR_SliderComponent sliderComp = SCR_SliderComponent.Cast(component);
 		if (sliderComp)
 		{
 			sliderComp.SetValue(value);
 			return true;
 		}
 
-		SCR_ComboBoxComponent comboComp = SCR_ComboBoxComponent.Cast(widget.FindHandler(SCR_ComboBoxComponent));
-		if (comboComp)
+		// Combo boxes, spin boxes and toolboxes
+		SCR_SelectionWidgetComponent selectionComp = SCR_SelectionWidgetComponent.Cast(component);
+		if (selectionComp)
 		{
-			comboComp.SetCurrentItem(value, false, true);
-			return true;
-		}
-
-		SCR_SpinBoxComponent spinComp = SCR_SpinBoxComponent.Cast(widget.FindHandler(SCR_SpinBoxComponent));
-		if (spinComp)
-		{
-			spinComp.SetCurrentItem(value, false, true);
-			return true;
-		}
-
-		SCR_ToolboxComponent toolboxComp = SCR_ToolboxComponent.Cast(widget.FindHandler(SCR_ToolboxComponent));
-		if (toolboxComp)
-		{
-			toolboxComp.SetCurrentItem(value, false, true);
+			selectionComp.SetCurrentItem(value, false, true);
 			return true;
 		}
 

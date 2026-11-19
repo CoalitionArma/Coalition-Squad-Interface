@@ -1,10 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, radar and group list every frame. Hidden without
-//! 				a controlled character, in the pause menu and editor, by Auto-hide HUD until revealed, and in mortars.
+//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, radar and group list every frame, and has them
+//! 				read their settings again on a settings update. Hidden without a controlled character, in the
+//! 				pause menu and editor, by Auto-hide HUD until revealed, and in mortars.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_HUD : SCR_InfoDisplayExtended
@@ -16,6 +17,7 @@ class CSI_HUD : SCR_InfoDisplayExtended
 	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_HUDSystem m_CSIHUDSystem;
 	protected bool m_bIsVisible = false;	//!< revealed with CSI_RevealUI; only used with AUTO_HIDE_HUD
+	protected bool m_bAutoHide;				//!< AUTO_HIDE_HUD
 
 	protected CSI_Stamina m_Stamina;
 	protected CSI_Compass m_Compass;
@@ -55,6 +57,11 @@ class CSI_HUD : SCR_InfoDisplayExtended
 		Widget group = m_wRoot.FindAnyWidget("Group");
 		if (group)
 			m_Group = CSI_Group.Cast(group.FindHandler(CSI_Group));
+
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+
+		OnSettingsUpdate();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -63,7 +70,30 @@ class CSI_HUD : SCR_InfoDisplayExtended
 		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.DOWN, OnRevealUIPressed);
 		GetGame().GetInputManager().RemoveActionListener("CSI_RevealUI", EActionTrigger.UP, OnRevealUIReleased);
 
+		if (m_SettingsManager)
+			m_SettingsManager.GetOnSettingsUpdate().Remove(OnSettingsUpdate);
+
 		super.DisplayStopDraw(owner);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Reads the settings used every frame again, here and in the elements. The elements don't follow settings
+	//! updates themselves: the settings tab's HUD example embeds them too and sets them up from the tab's values.
+	protected void OnSettingsUpdate()
+	{
+		if (!m_SettingsManager)
+			return;
+
+		m_bAutoHide = m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD);
+
+		if (m_Stamina)
+			m_Stamina.ApplySettings();
+
+		if (m_Compass)
+			m_Compass.ApplySettings();
+
+		if (m_Radar)
+			m_Radar.ApplySettings();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -80,7 +110,7 @@ class CSI_HUD : SCR_InfoDisplayExtended
 			return;
 
 		// Hidden by Auto-hide HUD until revealed, and in mortars
-		bool show = (m_bIsVisible || !m_SettingsManager.GetSettingBool(CSI_GameSettings.AUTO_HIDE_HUD)) && !m_CSIHUDSystem.GetIsLocalPlayerInMortar();
+		bool show = (m_bIsVisible || !m_bAutoHide) && !m_CSIHUDSystem.GetIsLocalPlayerInMortar();
 		if (m_bShown != show)
 			Show(show);
 

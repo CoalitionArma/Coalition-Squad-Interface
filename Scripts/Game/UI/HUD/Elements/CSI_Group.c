@@ -74,7 +74,7 @@ class CSI_Group : SCR_ScriptedWidgetComponent
 	{
 		array<int> groupArray = m_HUDSystem.GetLocalGroupPlayerIds();
 
-		// Same array reference: no group refresh since the last update
+		// Same array reference: the group hasn't changed since the last update
 		if (m_aStoredGroupPlayerIDs == groupArray)
 			return;
 

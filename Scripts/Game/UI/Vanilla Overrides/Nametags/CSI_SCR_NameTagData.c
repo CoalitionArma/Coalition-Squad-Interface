@@ -1,20 +1,24 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-16
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: names with rank; adds player data, group name, field of view place and what CSI's
-//! 				elements last set; tag position and height from settings; a passenger talking marks their
-//! 				vehicle's tag too.
+//!	\Description: 	CSI changes: names with rank; adds player data, group name, field of view place, what CSI's
+//! 				elements show (UpdateCSIState) and what they last set; tag position and height from settings; a
+//! 				passenger talking marks their vehicle's tag too.
 //! 
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagData : Managed
 {
-	protected CSI_SettingsManager m_SettingsManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	CSI_PlayerData m_PlayerData;	//!< null for AI and players without CSI data
 	string m_sGroupName;			//!< set by GetGroupName
 	float m_fFieldOfViewFraction;	//!< place in the tag's visible angle: 0 center, 1 edge
+
+	// What CSI's elements show, set by UpdateCSIState
+	bool m_bLocalGroupMember;		//!< the tag's player is in the local player's group
+	bool m_bIconOnly;				//!< only the icon shows: the name and group name are cleared
+	Color m_TagColor;				//!< shared color (CSI_NametagSettings) of the name and role icon
 
 	// What CSI's elements last set, by m_aNametagElements index; a widget is only changed when its value differs
 	string m_aElementTexts[10];		//!< text
@@ -35,6 +39,11 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	override void UpdateEntityType()
 	{
+		// A dead player's body is no longer theirs (no player ID), which would make the tag an AI's: plain color, no
+		// CSI data. It stays theirs until it's cleaned up; every name update (RefreshNames) runs this
+		if ((m_eEntityStateFlags & ENameTagEntityState.DEAD) && m_eType == ENameTagEntityType.PLAYER && m_iPlayerID > 0)
+			return;
+
 		super.UpdateEntityType();
 		UpdatePlayerData();
 	}
@@ -44,14 +53,6 @@ modded class SCR_NameTagData : Managed
 	{
 		super.InitDefaults();
 
-		// Cache managers
-		if (!m_SettingsManager || !m_PlayerDataManager)
-		{
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-			m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
-		};
-
-		UpdateAttatchedTo();	// Position from NAMETAG_POSITION instead of HEAD
 		m_PlayerData = null;
 		m_sGroupName = string.Empty;
 	};
@@ -110,7 +111,7 @@ modded class SCR_NameTagData : Managed
 		if (m_GroupManager)
 			group = m_GroupManager.GetPlayerGroup(m_iPlayerID);
 
-		if (!group || !m_SettingsManager || !m_SettingsManager.GetSettingBool(CSI_GameSettings.GROUP_IN_NAMETAG_VISIBLE))
+		if (!group || !CSI_NametagSettings.s_bGroupNames)
 		{
 			m_sGroupName = "";
 			return;
@@ -131,26 +132,43 @@ modded class SCR_NameTagData : Managed
 	//! Update tag position
 	override void UpdateTagPos()
 	{
-		UpdateAttatchedTo();	// Pick up NAMETAG_POSITION changes
 		super.UpdateTagPos();
 
-		// Tag position again, with the height offset from NAMETAG_POSITION_OFFSET (0.1 m steps)
-		vector nametagOffsetVector = "0 0 0";
-		int nametagOffset = 0;
+		// Tag position again: at the head or body by NAMETAG_POSITION, with the NAMETAG_POSITION_OFFSET height.
+		// Vanilla's own head/body switching (m_eAttachedTo) is left to vanilla
+		if (CSI_NametagSettings.s_iTagPosition == ENameTagPosition.HEAD)
+			m_vTagWorldPos = m_vEntHeadPos + CSI_NametagSettings.s_vTagOffset;
+		else
+			m_vTagWorldPos = m_vEntWorldPos + CSI_NametagSettings.s_vTagOffset;
+	}
 
-		if (m_SettingsManager)
-			nametagOffset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION_OFFSET);
+	//------------------------------------------------------------------------------------------------
+	//! Works out what CSI's elements show for this tag. SCR_NameTagZone calls it once before the tag's elements are
+	//! drawn or reset, so the elements only read the result.
+	//! \param[in] zone the zone the tag is drawn in
+	void UpdateCSIState(notnull SCR_NameTagZone zone)
+	{
+		array<int> localGroupPlayerIds = SCR_NameTagDisplay.s_aLocalGroupPlayerIds;
+		m_bLocalGroupMember = localGroupPlayerIds && localGroupPlayerIds.Contains(m_iPlayerID);
 
-		if (m_eAttachedTo == ENameTagPosition.HEAD)
-		{
-			nametagOffsetVector[1] = ((nametagOffset + 1) * 0.1);
-			m_vTagWorldPos = m_vEntHeadPos + nametagOffsetVector;
-		}
-		else if (m_eAttachedTo == ENameTagPosition.BODY)
-		{
-			nametagOffsetVector[1] = ((nametagOffset - 5) * 0.1);
-			m_vTagWorldPos = m_vEntWorldPos + nametagOffsetVector;
-		}
+		// Icon only: AI always (their icon always shows). Players only with CSI data (without it they have no icon)
+		// and role icons shown, beyond the zone's icon-only distance or in the outer part of the field of view
+		if (m_eType == ENameTagEntityType.AI)
+			m_bIconOnly = true;
+		else if (!m_PlayerData || m_eType == ENameTagEntityType.VEHICLE || !CSI_NametagSettings.s_bRoleIcons)
+			m_bIconOnly = false;
+		else
+			m_bIconOnly = m_fDistance > zone.m_fIconOnlyDistanceSq || (CSI_NametagSettings.s_fIconOnlyFieldOfView != 0 && m_fFieldOfViewFraction > 1 - CSI_NametagSettings.s_fIconOnlyFieldOfView);
+
+		// Color: the talking color while talking, from the VON flag rather than the priority state (HIDDEN outranks
+		// VON, so a talking tag fading out would turn back mid-fade; DEAD still wins, as in vanilla). A local group
+		// member gets their fire team's color, or the Standard squad color without one; everyone else the Nametag color
+		if ((m_eEntityStateFlags & ENameTagEntityState.VON) != 0 && (m_eEntityStateFlags & ENameTagEntityState.DEAD) == 0)
+			m_TagColor = CSI_NametagSettings.s_VONColor;
+		else if (!m_PlayerData || !m_bLocalGroupMember)
+			m_TagColor = CSI_NametagSettings.s_NametagColor;
+		else
+			m_TagColor = CSI_NametagSettings.GetColorTeamColor(m_PlayerData.GetColorTeam());
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -162,18 +180,5 @@ modded class SCR_NameTagData : Managed
 		// A possessed AI stays AI but has the possessing player's ID
 		if (m_PlayerDataManager && m_eType != ENameTagEntityType.AI && m_iPlayerID > 0)
 			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Sets m_eAttachedTo from NAMETAG_POSITION (BODY without settings).
-	void UpdateAttatchedTo()
-	{
-		ENameTagPosition nametagPos = ENameTagPosition.BODY;
-
-		if (m_SettingsManager)
-			nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_POSITION);
-
-		m_eAttachedTo = nametagPos;
-		m_eAttachedToLast = nametagPos;
 	}
 }

@@ -1,12 +1,13 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed; hidden and
 //! 				not updated while NAMETAG_VISIBLE is off; NAMETAG_BRIGHTNESS_DIMMING fades it by scene brightness and,
-//! 				after sunset, the sun (NIGHT_OPACITY), and follows a night vision mod's gain.
-//! 
+//! 				after sunset, the sun (NIGHT_OPACITY), and follows a night vision mod's gain. Reads the nametag
+//! 				settings into CSI_NametagSettings on every settings update and holds the local group for the tags.
+//!
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
@@ -29,11 +30,16 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected static const float NIGHT_VISION_BRIGHT_EXPOSURE = 10;		//!< exposure at and above which nametags are at NIGHT_VISION_BRIGHT_OPACITY
 	protected static const float NIGHT_VISION_BRIGHT_OPACITY = 1;
 
+	static ref array<int> s_aLocalGroupPlayerIds;	//!< the local player's group (CSI_HUDSystem's current list), for SCR_NameTagData.UpdateCSIState
+
 	protected TimeAndWeatherManagerEntity m_TimeAndWeatherManager;
 	protected float m_fSunsetAmount;			//!< 0 while the sun is up, 1 once it has fully set
 
 	protected CSI_SettingsManager m_SettingsManager;
+	protected CSI_HUDSystem m_HUDSystem;
 	protected SCR_NameTagZone m_CachedNearZone;
+	protected int m_iNametagRange;				//!< NAMETAG_RANGE
+	protected int m_iNametagMagnification;		//!< NAMETAG_MAGNIFICATION_MULTIPLICATION, percent
 	protected int m_iLastNametagsRange = -1;	//!< last range applied
 	protected bool m_b2DSightsActive = false;
 	protected bool m_bNametagsVisible = true;	//!< NAMETAG_VISIBLE
@@ -47,6 +53,10 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected static const float NAME_REFRESH_INTERVAL = 2;	//!< s between RefreshNames
 	protected float m_fNameRefreshTime;			//!< s until the next RefreshNames
 
+	protected static const float SUN_READ_INTERVAL = 0.5;	//!< s between reads of the sun's height, which moves slowly
+	protected float m_fSunReadTime;				//!< s until the next read of the sun's height
+	protected bool m_bOpacityInputChanged = true;	//!< the scene brightness, exposure, night vision or sun changed since the opacity was last worked out
+
 /*
 #ifdef CVON_COALITION_VON
 	protected static const float CVON_TALKING_CHECK_INTERVAL = 0.25;	//!< s; how often Coalition VON reads its TeamSpeak plugin's talking list
@@ -58,16 +68,23 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
 	{
+		if (!m_SettingsManager)
+			ConnectSettingsManager();
+
 		// Nothing to update while hidden
 		if (!m_bNametagsVisible)
 			return;
 
+		// The local group, for the tags drawn below
+		if (!m_HUDSystem)
+			m_HUDSystem = CSI_HUDSystem.GetInstance();
+
+		if (m_HUDSystem)
+			s_aLocalGroupPlayerIds = m_HUDSystem.GetLocalGroupPlayerIds();
+
 		super.DisplayUpdate(owner, timeSlice);
 
-		if (!m_SettingsManager)
-			m_SettingsManager = CSI_SettingsManager.GetInstance();
-
-		UpdateBrightnessOpacity();
+		UpdateBrightnessOpacity(timeSlice);
 
 		m_fNameRefreshTime -= timeSlice;
 		if (m_fNameRefreshTime <= 0)
@@ -86,12 +103,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 			return;
 
 		bool isZoomed = (SCR_2DPIPSightsComponent.IsPIPActive() || m_b2DSightsActive || SCR_PlayerController.s_pLocalPlayerController.GetIsBinocularsZoomed()) && !m_CurrentPlayerTag.m_CharController.IsFreeLookEnabled();
-		int baseRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
-		int nametagsRange;
+		int nametagsRange = m_iNametagRange;
 		if (isZoomed)
-			nametagsRange = baseRange * m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION) / 100; // increase max distance if player is using a scope or binoculars
-		else
-			nametagsRange = baseRange;
+			nametagsRange = m_iNametagRange * m_iNametagMagnification / 100; // increase max distance if player is using a scope or binoculars
 
 		if (nametagsRange != m_iLastNametagsRange)
 		{
@@ -131,11 +145,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	{
 		super.DisplayStartDraw(owner);
 
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
-		if (m_SettingsManager)
-			m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
-
-		OnSettingsUpdate();
+		ConnectSettingsManager();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -149,14 +159,45 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		// The zone belonged to the config super just dropped
 		m_CachedNearZone = null;
 		m_iLastNametagsRange = -1;
+		s_aLocalGroupPlayerIds = null;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Shows or hides the display for NAMETAG_VISIBLE, reapplies the opacity for NAMETAG_BRIGHTNESS_DIMMING, and
-	//! reapplies element defaults (role icons, their position, size, group names) to tags already shown, which
-	//! vanilla otherwise does only on a zone or state change.
+	//! Follows the settings manager's updates and applies its settings; DisplayUpdate tries again while there is none.
+	protected void ConnectSettingsManager()
+	{
+		m_SettingsManager = CSI_SettingsManager.GetInstance();
+		if (!m_SettingsManager)
+			return;
+
+		m_SettingsManager.GetOnSettingsUpdate().Insert(OnSettingsUpdate);
+		OnSettingsUpdate();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Reads the settings the nametag classes use (CSI_NametagSettings), shows or hides the display for
+	//! NAMETAG_VISIBLE, reapplies the opacity for NAMETAG_BRIGHTNESS_DIMMING, and reapplies element defaults (role
+	//! icons, their position, size, group names) to tags already shown, which vanilla otherwise does only on a zone
+	//! or state change.
 	protected void OnSettingsUpdate()
 	{
+		if (m_SettingsManager)
+		{
+			CSI_NametagSettings.Refresh(m_SettingsManager);
+			m_iNametagRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_RANGE);
+			m_iNametagMagnification = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_MAGNIFICATION_MULTIPLICATION);
+		}
+
+		// The icon-only distance follows NAMTEAG_RANGE_SIMPLIFIED
+		array<ref SCR_NameTagZone> zones = GetNametagZones();
+		if (zones)
+		{
+			foreach (SCR_NameTagZone zone : zones)
+			{
+				zone.UpdateIconOnlyDistance();
+			}
+		}
+
 		foreach (SCR_NameTagData tag : m_aNameTags)
 		{
 			if (tag)
@@ -196,13 +237,14 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Rebuilds every tag's name (with rank) and group name. Vanilla does it only when a tag is hidden and shown
-	//! again, so tags in view would keep an old rank, rank setting or squad until they left view.
+	//! Rebuilds the name (with rank) and group name of the tags in view. Vanilla does it only when a tag is hidden
+	//! and shown again, so they would keep an old rank, rank setting or squad until they left view.
 	protected void RefreshNames()
 	{
 		foreach (SCR_NameTagData tag : m_aNameTags)
 		{
-			if (!tag)
+			// A hidden tag gets both when it's shown again
+			if (!tag || !(tag.m_Flags & ENameTagFlags.VISIBLE))
 				continue;
 
 			tag.m_Flags |= ENameTagFlags.NAME_UPDATE;
@@ -315,8 +357,9 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Reads the scene brightness, sun and night vision, then applies the opacity.
-	protected void UpdateBrightnessOpacity()
+	//! Reads the scene brightness, sun and night vision, then applies the opacity if any of them changed.
+	//! \param[in] timeSlice
+	protected void UpdateBrightnessOpacity(float timeSlice)
 	{
 		if (!m_bDimInDark)
 			return;
@@ -325,19 +368,44 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (!world)
 			return;
 
-		m_fSunsetAmount = GetSunsetAmount();
+		m_fSunReadTime -= timeSlice;
+		if (m_fSunReadTime <= 0)
+		{
+			m_fSunReadTime = SUN_READ_INTERVAL;
 
-		// Camera 0, as the HUD manager
-		m_fSceneBrightness = world.GetCameraSceneMiddleBrightness(0);
+			float sunsetAmount = GetSunsetAmount();
+			if (sunsetAmount != m_fSunsetAmount)
+			{
+				m_fSunsetAmount = sunsetAmount;
+				m_bOpacityInputChanged = true;
+			}
+		}
+
+		// Camera 0, as the HUD manager. Read every frame: night vision is told by the exposure not moving between frames
+		float sceneBrightness = world.GetCameraSceneMiddleBrightness(0);
+		if (sceneBrightness != m_fSceneBrightness)
+		{
+			m_fSceneBrightness = sceneBrightness;
+			m_bOpacityInputChanged = true;
+		}
+
 		float exposure = world.GetCameraHDRBrightness(0);
 		if (exposure <= 0)
 			return;
 
 		// Night vision: the exposure is held at a set value; it ends as soon as auto exposure takes over again
-		m_bNightVision = exposure == m_fLastExposure && IsFixedExposure(exposure);
+		bool nightVision = exposure == m_fLastExposure && IsFixedExposure(exposure);
+		if (nightVision != m_bNightVision || exposure != m_fExposure)
+			m_bOpacityInputChanged = true;
+
+		m_bNightVision = nightVision;
 		m_fLastExposure = exposure;
 		m_fExposure = exposure;
 
+		if (!m_bOpacityInputChanged)
+			return;
+
+		m_bOpacityInputChanged = false;
 		ApplyNametagOpacity();
 	}
 
@@ -388,20 +456,66 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Arma Reforger
-//!	\Description: 	CSI changes: adds SetZoneEnd to resize a zone at runtime.
-//! 
+//!	\Description: 	CSI changes: adds SetZoneEnd to resize a zone at runtime and the zone's icon-only distance, and
+//! 				refreshes a tag's CSI state (SCR_NameTagData.UpdateCSIState) before its elements are drawn or reset.
+//!
 //------------------------------------------------------------------------------------------------
 [BaseContainerProps(), SCR_NameTagZoneTitle()]
 modded class SCR_NameTagZone
 {
+	float m_fIconOnlyDistanceSq = float.MAX;	//!< squared distance beyond which a player's tag shows only its icon; see UpdateIconOnlyDistance
+
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] range zone end in meters
 	void SetZoneEnd(int range)
 	{
 		m_iZoneEnd = range;
 		m_iZoneEndSq = range * range;
+		UpdateIconOnlyDistance();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets m_fIconOnlyDistanceSq for NAMTEAG_RANGE_SIMPLIFIED. The percentage applies to the zone's squared
+	//! distance, so 85% of a 50 m range starts at about 19 m, as Setting Info shows
+	//! (CSI_SettingInfoNametagExamples.GetSimplifiedDistance); keep the two in step.
+	void UpdateIconOnlyDistance()
+	{
+		float scale = CSI_NametagSettings.s_fIconOnlyRange;
+		if (scale == 0)
+		{
+			m_fIconOnlyDistanceSq = float.MAX;
+			return;
+		}
+
+		int zoneStart = m_iZoneStart;
+		if (zoneStart < 1)
+			zoneStart = 1;
+
+		float cutoff = m_iZoneEnd - scale * m_iZoneEnd;
+		m_fIconOnlyDistanceSq = zoneStart + cutoff * (m_iZoneEnd - zoneStart);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void OnZoneChanged(SCR_NameTagData data)
+	{
+		data.UpdateCSIState(this);
+		super.OnZoneChanged(data);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void DrawElements(SCR_NameTagData data)
+	{
+		data.UpdateCSIState(this);
+		super.DrawElements(data);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	override void UpdateElementDefs(SCR_NameTagData data)
+	{
+		data.UpdateCSIState(this);
+		super.UpdateElementDefs(data);
 	}
 }
 

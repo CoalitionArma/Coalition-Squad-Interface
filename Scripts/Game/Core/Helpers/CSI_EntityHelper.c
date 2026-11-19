@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Static helpers for a character's facing and vehicle seat.
 //! 
@@ -25,22 +25,23 @@ class CSI_EntityHelper
 		if (!playerAimingComponent)
 			return 0;
 
-		float yaw = -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
+		// Called every frame for each radar icon: the seat is checked first, so only one aim is read
+		BaseCompartmentSlot compartment;
+		CompartmentAccessComponent compartmentAccess = playerCharacter.GetCompartmentAccessComponent();
+		if (compartmentAccess)
+			compartment = compartmentAccess.GetCompartment();
 
-		BaseCompartmentSlot compartment = GetCharacterVehicleCompartment(playerCharacter);
-		if (compartment)
-		{
-			TurretControllerComponent turretControllerComp = TurretControllerComponent.Cast(compartment.GetController());
-			if (!turretControllerComp)
-				turretControllerComp = compartment.GetAttachedTurret();
+		if (!compartment)
+			return -playerAimingComponent.GetAimingDirectionWorld().ToYaw();
 
-			if (turretControllerComp)
-				yaw = -turretControllerComp.GetTurretComponent().GetAimingDirectionWorld().ToYaw();
-			else
-				yaw = -playerCharacter.GetYawPitchRoll()[0];
-		};
+		TurretControllerComponent turretControllerComp = TurretControllerComponent.Cast(compartment.GetController());
+		if (!turretControllerComp)
+			turretControllerComp = compartment.GetAttachedTurret();
 
-		return yaw;
+		if (turretControllerComp)
+			return -turretControllerComp.GetTurretComponent().GetAimingDirectionWorld().ToYaw();
+
+		return -playerCharacter.GetYawPitchRoll()[0];
 	}
 
 	//------------------------------------------------------------------------------------------------

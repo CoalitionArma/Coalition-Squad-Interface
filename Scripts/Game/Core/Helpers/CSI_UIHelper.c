@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Static UI helpers: resource paths, color team colors (in the chosen set), compass textures, icon names
 //! 				and player names.
@@ -141,28 +141,4 @@ class CSI_UIHelper
 
 		return string.Format("%1 %2", rank, name);
 	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Finds the widgets named widgetString + 0 to widgetString + (count - 1) under root.
-	//! \param[in] root
-	//! \param[in] widgetString name prefix
-	//! \param[in] count
-	//! \return found widgets in index order
-	static array<Widget> GetAllIcons(Widget root, string widgetString, int count)
-	{
-		array<Widget> icons = {};
-
-		if (!root || widgetString.IsEmpty() || count <= 0)
-			return icons;
-
-		for (int e = 0; e < count; e++)
-		{
-			Widget icon = root.FindAnyWidget(widgetString + e.ToString());
-
-			if (icon)
-				icons.Insert(icon);
-		};
-
-		return icons;
-	};
 }

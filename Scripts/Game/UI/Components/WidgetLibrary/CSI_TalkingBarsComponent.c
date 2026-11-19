@@ -166,7 +166,7 @@ class CSI_TalkingBarsComponent : SCR_ScriptedWidgetComponent
 		}
 
 		// Each bar eases between SHORTEST and its tallest height, centered on the middle line
-		clockMs -= (clockMs / CLOCK_WRAP_MS) * CLOCK_WRAP_MS;	// no % in Enforce Script; wrapped before the float conversion
+		clockMs -= (clockMs / CLOCK_WRAP_MS) * CLOCK_WRAP_MS;	// wrapped before the float conversion
 		float time = clockMs * 0.001;
 		float width = BAR_WIDTH * unit;
 		foreach (int i, ImageWidget bar : m_aBars)

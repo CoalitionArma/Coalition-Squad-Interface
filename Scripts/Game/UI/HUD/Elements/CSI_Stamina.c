@@ -1,9 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD stamina bar: fades in while stamina is below full; its color shows the stamina level.
+//! 				CSI_HUD has it read its setting (ApplySettings).
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_Stamina : SCR_ScriptedWidgetComponent
@@ -17,6 +18,8 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 
 	protected ProgressBarWidget m_wStamBar;
 	protected Color m_StamBarColor;	//!< color applied to the bar
+	protected bool m_bVisible;		//!< STAMINA_VISIBLE
+	protected float m_fBarOpacity;	//!< the bar's opacity as Update fades it
 
 	protected static const float FADE_SPEED = 0.3;	//!< opacity per second (full fade about 3 s)
 	protected static const ref Color HIGH_STAMINA_COLOR = new Color(0.035996, 0.091997, 0.050004, 1.000000);		//!< green, above 70%
@@ -42,6 +45,9 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		// Opaque in the layout for editing; starts hidden in game
 		if (m_wStamBar && !SCR_Global.IsEditMode())
 			m_wStamBar.SetOpacity(0);
+
+		if (m_wStamBar)
+			m_fBarOpacity = m_wStamBar.GetOpacity();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -49,18 +55,24 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
+	//! Applies STAMINA_VISIBLE. Called by CSI_HUD on a settings update.
+	void ApplySettings()
+	{
+		if (!m_wStamBar || !m_SettingsManager)
+			return;
+
+		m_bVisible = m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE);
+		if (!m_bVisible)
+			SetBarOpacity(0);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Called every frame by CSI_HUD.
 	//! \param[in] timeSlice
 	void Update(float timeSlice)
 	{
-		if (!m_wStamBar)
+		if (!m_wStamBar || !m_bVisible)
 			return;
-
-		if (!m_SettingsManager.GetSettingBool(CSI_GameSettings.STAMINA_VISIBLE))
-		{
-			m_wStamBar.SetOpacity(0);
-			return;
-		}
 
 		// Full without a character or stamina component (-1), so the bar fades out
 		float stamina = 1;
@@ -75,13 +87,28 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		if (stamina < 0)
 			stamina = 1;
 
+		// Full and faded out: nothing to do until stamina drops
+		if (stamina >= 1 && m_fBarOpacity <= 0)
+			return;
+
 		OnStaminaChange(stamina);
 
 		float fadeStep = FADE_SPEED * timeSlice;
 		if (stamina < 1)
-			m_wStamBar.SetOpacity(Math.Min(m_wStamBar.GetOpacity() + fadeStep, 1));
+			SetBarOpacity(Math.Min(m_fBarOpacity + fadeStep, 1));
 		else
-			m_wStamBar.SetOpacity(Math.Max(m_wStamBar.GetOpacity() - fadeStep, 0));
+			SetBarOpacity(Math.Max(m_fBarOpacity - fadeStep, 0));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] opacity 0 - 1
+	protected void SetBarOpacity(float opacity)
+	{
+		if (opacity == m_fBarOpacity)
+			return;
+
+		m_fBarOpacity = opacity;
+		m_wStamBar.SetOpacity(opacity);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

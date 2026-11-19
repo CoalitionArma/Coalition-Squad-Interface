@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
 //! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager or the group APIs.
@@ -147,12 +147,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Admin: sets a default for players without saved settings.
-	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] value
-	void Owner_SetServerDefault(string setting, int value)
+	//! Admin: sets the defaults for players without saved settings.
+	//! \param[in] values by settings index; a negative value keeps that setting's default as it is
+	void Owner_SetServerDefaults(notnull array<int> values)
 	{
-		Rpc(RpcAsk_SetServerDefault, setting, value);
+		Rpc(RpcAsk_SetServerDefaults, values);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -309,13 +308,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_SetServerDefault(string setting, int value)
+	protected void RpcAsk_SetServerDefaults(array<int> values)
 	{
-		// Only admins, and only known setting names
-		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()) || !CSI_GameSettings.GetSettingsArray().Contains(setting))
+		if (!values || !m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()))
 			return;
 
-		m_SettingsManager.UpdateServerDefault(setting, value);
+		m_SettingsManager.UpdateServerDefaults(values);
 	}
 
 	//------------------------------------------------------------------------------------------------

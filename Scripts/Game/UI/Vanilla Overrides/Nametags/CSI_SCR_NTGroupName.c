@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag element showing the player's group name under their name; used in NametagFriendlies.conf.
 //! 				Left empty for squadmates with Squadmate group names hidden.
@@ -13,9 +13,6 @@ class SCR_NTGroupName : SCR_NTTextBase
 	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
-		m_HUDSystem = CSI_HUDSystem.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
-
 		SCR_NTStateText stateConf = SCR_NTStateText.Cast( GetEntityStateConfig(data) );
 		TextWidget tWidget = TextWidget.Cast( data.m_aNametagElements[index] );
 		if (!stateConf || !tWidget)
@@ -24,7 +21,7 @@ class SCR_NTGroupName : SCR_NTTextBase
 		//-----------------------------------------------------------------------
 		// Font, size (two smaller than the name) and neutral color
 		tWidget.SetFont(m_FontResource);
-		tWidget.SetExactFontSize(GetNametagTextScale() - 2);
+		tWidget.SetExactFontSize(CSI_NametagSettings.s_iTextSize - 2);
 		tWidget.SetColor(CSI_ColorPresets.GetColor(CSI_EColorPreset.GRAY));
 
 		data.GetGroupName();
@@ -46,9 +43,9 @@ class SCR_NTGroupName : SCR_NTTextBase
 			return;
 
 		//-----------------------------------------------------------------------
-		// Set The Text Of The Widget Based On Our Current Distance, only when it changes
+		// Group name, cleared when the tag is icon only or a squadmate's with those hidden; set only when it changes
 		string text = data.m_sGroupName;
-		if (ShouldWeClearText(data) || (!m_SettingsManager.GetSettingBool(CSI_GameSettings.SQUADMATE_GROUP_IN_NAMETAG_VISIBLE) && IsLocalGroupMember(data)))
+		if (data.m_bIconOnly || (data.m_bLocalGroupMember && !CSI_NametagSettings.s_bSquadmateGroupNames))
 			text = string.Empty;
 
 		if (nameUpdate || text != data.m_aElementTexts[index])
