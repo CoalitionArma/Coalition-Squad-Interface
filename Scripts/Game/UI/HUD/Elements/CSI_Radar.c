@@ -24,6 +24,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected ref map<int, float> m_mFieldOfViewFades = new map<int, float>();	//!< field of view fade by player ID, 1 shown to 0 faded out
 	protected float m_fIconSize;				//!< px the icons were last sized to
 	protected array<int> m_aCheckedGroupPlayerIDs;	//!< group list the icons were last checked against (CSI_HUDSystem's, replaced on change)
+	protected float m_fFreeLookReturnTime;			//!< seconds the local icon still follows the weapon aim while the view eases back after freelook
 
 	// Settings, read in ApplySettings
 	protected bool m_bVisible;				//!< RADAR_VISIBLE
@@ -37,6 +38,8 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds
 	protected static const float FIELD_OF_VIEW_FADE_IN_TIME = 0.25;	//!< seconds
 	protected static const float AHEAD_BEARING = 180;					//!< relative bearing of straight ahead (top of the radar)
+	protected static const float FREE_LOOK_RETURN_TIME = 1;			//!< seconds at most the view takes to ease back after freelook
+	protected static const float FREE_LOOK_RETURNED_ANGLE = 1;			//!< degrees from the weapon aim at which the view is back
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -191,7 +194,11 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			// Clamped: the distance fade is above 1 for most of the range
 			float opacity = Math.Clamp(Math.Map(dis, searchRadiusFadeStart, searchRadius, 0.6, 0), 0, 1) * fieldOfViewFade;
-			float rotation = -Math.Mod((CSI_EntityHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
+			float rotation;
+			if (playerID == localPlayerId)
+				rotation = GetLocalIconRotation(playerCharacter, localYaw, timeSlice);
+			else
+				rotation = -Math.Mod((CSI_EntityHelper.GetCharacterYaw(playerCharacter) - localYaw), 360);
 
 			CSI_Icon icon = GetOrCreateRadarIcon(playerID);
 			if (!icon)
@@ -269,6 +276,48 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		m_mRadarIcons.Set(playerID, icon);
 		return icon;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! On foot the view is where the local player faces, so the icon points straight up, except while freelooking:
+	//! then the weapon aim is, which stays put as the view turns. After freelook it follows the weapon aim until the
+	//! view has eased back to it. Both aims trail the view on fast turns, so neither is read otherwise. In a seat,
+	//! the turret aim or vehicle yaw, as for other members.
+	//! \param[in] localCharacter
+	//! \param[in] localYaw the view's yaw, negated
+	//! \param[in] timeSlice
+	//! \return icon rotation in degrees
+	protected float GetLocalIconRotation(notnull SCR_ChimeraCharacter localCharacter, float localYaw, float timeSlice)
+	{
+		if (CSI_EntityHelper.GetCharacterVehicleCompartment(localCharacter))
+		{
+			m_fFreeLookReturnTime = 0;
+			return -Math.Mod((CSI_EntityHelper.GetCharacterYaw(localCharacter) - localYaw), 360);
+		}
+
+		CharacterControllerComponent characterController = localCharacter.GetCharacterController();
+		if (!characterController)
+			return 0;
+
+		bool freeLooking = characterController.IsFreeLookEnabled();
+		if (freeLooking)
+			m_fFreeLookReturnTime = FREE_LOOK_RETURN_TIME;
+		else if (m_fFreeLookReturnTime > 0)
+			m_fFreeLookReturnTime -= timeSlice;
+		else
+			return 0;
+
+		AimingComponent weaponAimingComponent = characterController.GetAimingComponent();
+		if (!weaponAimingComponent)
+			return 0;
+
+		float rotation = -Math.Mod((-weaponAimingComponent.GetAimingDirectionWorld().ToYaw() - localYaw), 360);
+
+		// Eased back: the view is the facing again
+		if (!freeLooking && SCR_Math.DeltaAngle(rotation, 0) < FREE_LOOK_RETURNED_ANGLE)
+			m_fFreeLookReturnTime = 0;
+
+		return rotation;
 	}
 
 	//------------------------------------------------------------------------------------------------
