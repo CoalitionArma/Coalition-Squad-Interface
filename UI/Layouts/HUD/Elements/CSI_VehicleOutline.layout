@@ -1,0 +1,41 @@
+ScaleWidgetClass {
+ Name "VehicleOutlineElement"
+ Slot FrameWidgetSlot "{D5ED58B8F1085217}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 132
+  OffsetRight -132
+  SizeY 132
+  OffsetBottom -132
+ }
+ components {
+  CSI_VehicleOutlineElement "{BB0555B4651CD439}" {
+  }
+ }
+ {
+  FrameWidgetClass "{768FD5C94656342D}" {
+   Name "VehicleOutlineFrame"
+   Slot AlignableSlot "{749D63F21418957D}" {
+    HorizontalAlign 3
+    VerticalAlign 3
+   }
+   {
+    CanvasWidgetClass "{A79EE13410F4190F}" {
+     Name "VehicleOutline"
+     Slot FrameWidgetSlot "{F7E539C869F268B2}" {
+      Anchor 0 0 1 1
+      OffsetLeft 0
+      OffsetTop 0
+      OffsetRight 0
+      OffsetBottom 0
+     }
+     "Ignore Cursor" 1
+     components {
+      CSI_VehicleOutlineComponent "{A926CCAE72330996}" {
+      }
+     }
+    }
+   }
+  }
+ }
+}

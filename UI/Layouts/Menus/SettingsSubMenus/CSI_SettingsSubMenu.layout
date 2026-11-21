@@ -687,6 +687,23 @@ HorizontalLayoutWidgetClass {
             }
            }
           }
+          ButtonWidgetClass "{6A9C2E41B7F10001}" : "{C9DF0E6590F6C388}UI/layouts/WidgetLibrary/SpinBox/WLib_SpinBox.layout" {
+           Name "m_bRadarVehicleOutline"
+           Slot LayoutSlot "{54890CCD61050681}" {
+            Padding 4 4 4 4
+           }
+           components {
+            SCR_SpinBoxComponent "{5472C6CBC0640458}" {
+             m_sLabel "Vehicle outline"
+             m_sLabelLayout "{F003823FF141983C}UI/layouts/Menus/SettingsMenu/CustomWidgets/SettingsLabel.layout"
+             m_aElementNames {
+              "#AR-Settings_Hide" "#AR-Settings_Show"
+             }
+             m_bUseLightArrows 1
+             m_bCycleMode 1
+            }
+           }
+          }
           ButtonWidgetClass "{66C340D034C7D412}" : "{4A41296C0E9A889F}UI/layouts/WidgetLibrary/WLib_Slider.layout" {
            Name "m_iRadarIconSize"
            Slot LayoutSlot "{54890CCC1E6DF11D}" {
@@ -1727,6 +1744,33 @@ HorizontalLayoutWidgetClass {
              }
              components {
               ButtonComponent "{6A9C2E41B7D6003B}" {
+               m_ColorButtonDefault 1 1 1 0.7
+               m_ColorButtonFocused 0.761 0.392 0.078 1
+               m_ColorButtonPressed 0.761 0.392 0.078 1
+               m_ColorChildFocused 0.761 0.392 0.078 1
+               m_ColorChildPressed 0.761 0.392 0.078 1
+               m_ColorChildDisabled 0.8 0.8 0.8 0.1
+               m_ColorButtonHovered 0.761 0.392 0.078 1
+               m_ColorButtonHoveredFocused 0.761 0.392 0.078 1
+              }
+             }
+            }
+           }
+          }
+          SizeLayoutWidgetClass "{6A9C2E41B7F10002}" {
+           Name "m_bRadarVehicleOutline"
+           Slot LayoutSlot "{6A9C2E41B7F10003}" {
+            SizeMode Fill
+           }
+           {
+            CheckBoxWidgetClass "{6A9C2E41B7F10004}" {
+             Name "ServerOverride"
+             Slot AlignableSlot "{6A9C2E41B7F10005}" {
+              HorizontalAlign 3
+              VerticalAlign 3
+             }
+             components {
+              ButtonComponent "{6A9C2E41B7F10006}" {
                m_ColorButtonDefault 1 1 1 0.7
                m_ColorButtonFocused 0.761 0.392 0.078 1
                m_ColorButtonPressed 0.761 0.392 0.078 1

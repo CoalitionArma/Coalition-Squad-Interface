@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-20
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
 //! 				vehicle/mortar state and the sorted group member list.
@@ -21,6 +21,7 @@ class CSI_HUDSystem : GameSystem
 	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< replaced when the group or its order changes; readers compare references
 	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
+	protected IEntity m_LocalVehicle;	//!< topmost entity with seats, null on foot
 	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
@@ -65,6 +66,13 @@ class CSI_HUDSystem : GameSystem
 		super.OnStopped();
 	}
 
+	//------------------------------------------------------------------------------------------------
+	void ~CSI_HUDSystem()
+	{
+		// Clear cached radar vehicle outlines here, not in OnStopped, which also runs on pause
+		CSI_VehicleOutline.ClearCache();
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 GETTER METHODS
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -86,6 +94,13 @@ class CSI_HUDSystem : GameSystem
 	bool GetIsLocalPlayerInVehicle()
 	{
 		return m_bIsLocalPlayerInVehicle;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return topmost entity of the local character's vehicle, null on foot
+	IEntity GetLocalVehicle()
+	{
+		return m_LocalVehicle;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -199,6 +214,7 @@ class CSI_HUDSystem : GameSystem
 	{
 		m_bIsLocalPlayerInVehicle = false;
 		m_bIsLocalPlayerInMortar = false;
+		m_LocalVehicle = null;
 
 		if (!compartment)
 			return;
@@ -208,6 +224,7 @@ class CSI_HUDSystem : GameSystem
 			return;
 
 		m_bIsLocalPlayerInVehicle = true;
+		m_LocalVehicle = vehicle;
 		m_bIsLocalPlayerInMortar = SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)) != null;
 	}
 

@@ -116,6 +116,15 @@ enum CSI_EColorTeam
 }
 
 //------------------------------------------------------------------------------------
+//! A radar vehicle outline piece, each drawn in its own style (CSI_VehicleOutlineComponent)
+enum CSI_EVehicleOutlineKind
+{
+	HULL,	//!< the vehicle and the parts fixed to it, faintest
+	TURRET,	//!< a turret or gun mount
+	GUN,	//!< a mounted gun, strongest
+}
+
+//------------------------------------------------------------------------------------
 enum CSI_EIcon
 {
 	MAN,

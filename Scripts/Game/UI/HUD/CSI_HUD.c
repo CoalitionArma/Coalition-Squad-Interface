@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-21
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, radar and group list every frame, and has them
+//!	\Description: 	HUD InfoDisplay: updates the stamina bar, compass, vehicle outline, radar and group list every frame, and has them
 //! 				read their settings again on a settings update. Hidden without a controlled character, in the
 //! 				pause menu and editor, by Auto-hide HUD until revealed, and in mortars.
 //! 
@@ -21,6 +21,7 @@ class CSI_HUD : SCR_InfoDisplayExtended
 
 	protected CSI_Stamina m_Stamina;
 	protected CSI_Compass m_Compass;
+	protected CSI_VehicleOutlineElement m_VehicleOutline;
 	protected CSI_Radar m_Radar;
 	protected CSI_Group m_Group;
 
@@ -50,9 +51,16 @@ class CSI_HUD : SCR_InfoDisplayExtended
 		if (compass)
 			m_Compass = CSI_Compass.Cast(compass.FindHandler(CSI_Compass));
 
+		Widget vehicleOutline = m_wRoot.FindAnyWidget("VehicleOutlineElement");
+		if (vehicleOutline)
+			m_VehicleOutline = CSI_VehicleOutlineElement.Cast(vehicleOutline.FindHandler(CSI_VehicleOutlineElement));
+
 		Widget radar = m_wRoot.FindAnyWidget("Radar");
 		if (radar)
 			m_Radar = CSI_Radar.Cast(radar.FindHandler(CSI_Radar));
+
+		if (m_Radar)
+			m_Radar.SetVehicleOutline(m_VehicleOutline);
 
 		Widget group = m_wRoot.FindAnyWidget("Group");
 		if (group)
@@ -92,6 +100,9 @@ class CSI_HUD : SCR_InfoDisplayExtended
 		if (m_Compass)
 			m_Compass.ApplySettings();
 
+		if (m_VehicleOutline)
+			m_VehicleOutline.ApplySettings();
+
 		if (m_Radar)
 			m_Radar.ApplySettings();
 	}
@@ -125,6 +136,10 @@ class CSI_HUD : SCR_InfoDisplayExtended
 
 		if (m_Group)
 			m_Group.Update();
+
+		// Before the radar, which centers on the outline
+		if (m_VehicleOutline)
+			m_VehicleOutline.Update(timeSlice);
 
 		if (m_Radar)
 			m_Radar.Update(timeSlice);
