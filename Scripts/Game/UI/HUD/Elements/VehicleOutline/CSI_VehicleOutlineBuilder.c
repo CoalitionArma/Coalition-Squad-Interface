@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Builds the top-down outline of a vehicle's hull, turret or weapon rack over a few frames by
-//! 				tracing down through a grid over it; falls back to its colliders' hull, then its bounds.
+//! 				tracing down through a grid over it, past doors; falls back to its colliders' hull, then its bounds.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_VehicleOutlineBuilder
@@ -31,9 +31,12 @@ class CSI_VehicleOutlineBuilder
 	protected static const float SIMPLIFY_TOLERANCE = 0.04;		//!< m a simplified line may stray from the traced one
 	protected static const float MIN_CONTOUR_AREA = 3;			//!< cells; smaller pieces (mirrors, antennas) are left out
 	protected static const float COLLIDER_BOUNDS_MARGIN = 0.5;	//!< m colliders may reach past the meshes' bounds
-	protected static const float DOORS_CLOSED_TIME = 1;			//!< seconds every door must be closed before tracing (done swinging shut)
+	protected static const int MAX_DOOR_PASSES = 8;				//!< door colliders a trace may look past
+	protected static const float DOOR_STEP = 0.02;				//!< m a trace moves on past a door collider
+	protected static const float BONE_MATCH_SQ = 0.000025;		//!< squared m (5 mm) within which a bone's transform fits a parent bone's
 	protected static const float GUN_SAMPLE_SHARE = 0.85;		//!< of the main gun's length, from its back, where IsGunTraced traces
 	protected static const float GUN_SAMPLE_HEIGHT = 2;			//!< m above and below the gun IsGunTraced traces
+	protected static const int STAGE_CELLS_PER_STEP = 1024;	//!< grid cells a step goes over in the stages after the traces
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -48,15 +51,13 @@ class CSI_VehicleOutlineBuilder
 	protected ref array<int> m_aPieceGunLayers = {};	//!< collider layers of gun pieces below the root (AddPieceGunLayers)
 	protected string m_sShapeKey;					//!< GetShapeKey, empty if it can't be shared
 
-	// Doors
-	protected ref array<BaseCompartmentManagerComponent> m_aCompartmentManagers = {};	//!< whose doors must be closed
-	protected bool m_bDoorOpen;						//!< a door was open at the last UpdateDoors
-	protected float m_fDoorsClosedTime;				//!< seconds every door has been closed
-
-	// Turn-out hatches, open while their seat's occupant is turned out: the seat, the hatch's manager and anim door index
-	protected ref array<BaseCompartmentSlot> m_aTurnOutSlots = {};
-	protected ref array<BaseCompartmentManagerComponent> m_aTurnOutManagers = {};
-	protected ref array<int> m_aTurnOutDoors = {};
+	// Doors are left out of the traces, open or closed: parts with door bones, those bones, parts hanging on a door
+	// (its glass), and whether there are any
+	protected ref array<IEntity> m_aDoorBoneParts = {};
+	protected ref array<ref set<int>> m_aDoorBones = {};	//!< indices in GetBoneNames order, as traces report them
+	protected ref array<ref set<int>> m_aDoorPivots = {};	//!< the same bones' ids (GetBoneIndex), as children's GetPivot report them
+	protected ref array<IEntity> m_aDoorParts = {};
+	protected bool m_bHasDoors;
 
 	// Trace grid in the outline's frame
 	protected vector m_vMins;
@@ -86,7 +87,16 @@ class CSI_VehicleOutlineBuilder
 	protected float m_fFrameCos = 1;	//!< of the frame's turn from the root
 	protected float m_fFrameSin;
 
-	// Grid stages finished one a frame, then marching squares: each edge point's two neighbors and crossing fraction
+	// Grid stages after the traces, a slice of STAGE_CELLS_PER_STEP cells a step
+	protected int m_iStagePass;						//!< pass of the stage in progress
+	protected int m_iStageCell;						//!< next cell of that pass (LinkCells: next row + 1)
+	protected ref array<bool> m_aPassCells = {};	//!< CloseGaps: a pass's result
+	protected ref array<bool> m_aGrownCells = {};	//!< CloseGaps: the grown hits
+	protected ref array<bool> m_aReached = {};		//!< FillHoles: misses reached from the ring
+	protected ref array<int> m_aSpreading = {};		//!< FillHoles: reached misses not spread from yet
+	protected bool m_bFillSeeded;
+
+	// Grid stages, then marching squares: each edge point's two neighbors and crossing fraction
 	protected bool m_bGapsClosed;
 	protected bool m_bHolesFilled;
 	protected bool m_bLinked;
@@ -113,19 +123,12 @@ class CSI_VehicleOutlineBuilder
 		AddParts(root);
 		AddRotors();
 		AddWheels();
-		AddTurnOutSlots(GetVehicle(root));
+		AddDoors();
 
 		// A hull's grid covers only its own model and wheels, cutting off cages around it; turrets and racks cover all parts
 		bool hasBounds;
 		if (!turret && !CSI_VehicleOutline.IsWeaponRack(root))
 			hasBounds = AddBounds(root, true);
-
-		foreach (IEntity part : m_aParts)
-		{
-			BaseCompartmentManagerComponent compartmentManager = BaseCompartmentManagerComponent.Cast(part.FindComponent(BaseCompartmentManagerComponent));
-			if (compartmentManager)
-				m_aCompartmentManagers.Insert(compartmentManager);
-		}
 
 		// Without a model of its own, every part's bounds
 		if (!hasBounds)
@@ -368,32 +371,64 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Notes the vehicle's seats that can turn out, and the hatch each one opens.
-	//! \param[in] vehicle
-	protected void AddTurnOutSlots(notnull IEntity vehicle)
+	//! Notes the parts' door bones, the parts hanging on a door, and whether any collider is named like a door.
+	protected void AddDoors()
 	{
-		array<BaseCompartmentSlot> slots = {};
-		CSI_VehicleOutline.GetSeats(vehicle, slots);
-		foreach (BaseCompartmentSlot slot : slots)
+		foreach (IEntity part : m_aParts)
 		{
-			if (!slot.CanTurnOut())
+			if (!part)
 				continue;
 
-			BaseCompartmentManagerComponent slotManager = slot.GetManager();
-			if (!slotManager)
+			// It swings with the door
+			if (IsOnDoor(part))
+			{
+				m_aDoorParts.Insert(part);
+				m_bHasDoors = true;
+				continue;
+			}
+
+			Animation animation = part.GetAnimation();
+			if (animation)
+			{
+				array<string> boneNames = {};
+				animation.GetBoneNames(boneNames);
+				set<int> doorBones = new set<int>();
+				set<int> doorPivots = new set<int>();
+				foreach (int index, string boneName : boneNames)
+				{
+					// Slot bones hold other entities, which IsOnDoor checks
+					string lowerBone = boneName;
+					lowerBone.ToLower();
+					if (!IsDoorName(lowerBone) || lowerBone.StartsWith("slot_"))
+						continue;
+
+					doorBones.Insert(index);
+					doorPivots.Insert(animation.GetBoneIndex(boneName));
+				}
+
+				if (!doorBones.IsEmpty())
+				{
+					m_aDoorBoneParts.Insert(part);
+					m_aDoorBones.Insert(doorBones);
+					m_aDoorPivots.Insert(doorPivots);
+					m_bHasDoors = true;
+				}
+			}
+
+			Physics physics = part.GetPhysics();
+			if (!physics || m_bHasDoors)
 				continue;
 
-			BaseCompartmentDoor hatch = slotManager.GetDoor(slot.GetTurnOutDoorIndex());
-			if (!hatch)
-				continue;
-
-			BaseCompartmentManagerComponent hatchManager = GetDoorManager(slotManager, hatch);
-			if (!hatchManager)
-				continue;
-
-			m_aTurnOutSlots.Insert(slot);
-			m_aTurnOutManagers.Insert(hatchManager);
-			m_aTurnOutDoors.Insert(hatch.GetAnimDoorIndex());
+			for (int geom = 0, geomCount = physics.GetNumGeoms(); geom < geomCount; geom++)
+			{
+				string geomName = physics.GetGeomName(geom);
+				geomName.ToLower();
+				if (IsDoorName(geomName))
+				{
+					m_bHasDoors = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -526,10 +561,14 @@ class CSI_VehicleOutlineBuilder
 		IEntity child = parent.GetChildren();
 		while (child)
 		{
-			if (child.FindComponent(WeaponComponent) && CSI_VehicleOutline.IsOwnPiece(child))
-				AddSubtreeLayers(child);
-			else
-				AddPieceGunLayers(child);
+			// Gun pieces sit only below outlined parts: crew, their gear and stored items are skipped
+			if (CSI_VehicleOutline.IsOutlinedPart(child))
+			{
+				if (child.FindComponent(WeaponComponent) && CSI_VehicleOutline.IsOwnPiece(child))
+					AddSubtreeLayers(child);
+				else
+					AddPieceGunLayers(child);
+			}
 
 			child = child.GetSibling();
 		}
@@ -626,34 +665,7 @@ class CSI_VehicleOutlineBuilder
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Call every frame while building; an open door restarts the traces.
-	//! \param[in] timeSlice seconds since the last call
-	//! \return true once Step may trace, also once built or if the entity is gone
-	bool UpdateDoors(float timeSlice)
-	{
-		if (m_Outline || !m_Root)
-			return true;
-
-		if (!AreDoorsClosed())
-		{
-			m_bDoorOpen = true;
-			RestartTraces();
-			return false;
-		}
-
-		m_bDoorOpen = false;
-		m_fDoorsClosedTime += timeSlice;
-		return m_fDoorsClosedTime >= DOORS_CLOSED_TIME;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	bool HasOpenDoor()
-	{
-		return m_bDoorOpen;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Runs the next traces once UpdateDoors allows it, and builds the outline after the last one.
+	//! Runs the next traces, and builds the outline after the last one.
 	//! \param[in] maxTraces traces this call may run
 	//! \return true once built (GetOutline), also if the entity is gone
 	bool Step(int maxTraces)
@@ -667,37 +679,34 @@ class CSI_VehicleOutlineBuilder
 			return true;
 		}
 
-		if (m_fDoorsClosedTime < DOORS_CLOSED_TIME)
-			return false;
-
 		UpdateFrame();
 		int traces;
 
-		// Trace the grid, then finish it a stage a frame, as each goes over every cell
+		// Trace the grid, then finish it a slice a step, as each stage goes over every cell
 		if (!m_bGridDone)
 		{
-			FloodGrid(maxTraces);
+			if (FloodGrid(maxTraces))
+				m_bGridDone = MarkEnclosedCells();
+
 			return false;
 		}
 
 		if (!m_bGapsClosed)
 		{
-			CloseGaps();
-			m_bGapsClosed = true;
+			m_bGapsClosed = CloseGaps();
 			return false;
 		}
 
 		if (!m_bHolesFilled)
 		{
-			FillHoles();
-			m_bHolesFilled = true;
+			m_bHolesFilled = FillHoles();
 			return false;
 		}
 
 		if (!m_bLinked)
 		{
-			LinkCells();
-			m_bLinked = true;
+			m_bLinked = LinkCells();
+			return false;
 		}
 
 		// Each edge point, more closely
@@ -745,75 +754,10 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return false if a real door is open (fake ones always report open), except turned-out crew's hatches
-	protected bool AreDoorsClosed()
-	{
-		foreach (BaseCompartmentManagerComponent compartmentManager : m_aCompartmentManagers)
-		{
-			if (!compartmentManager)
-				continue;
-
-			for (int door = 0; compartmentManager.GetDoor(door); door++)
-			{
-				if (!compartmentManager.IsDoorFake(door) && compartmentManager.IsDoorOpen(door) && !IsTurnedOutHatch(compartmentManager, door))
-					return false;
-			}
-		}
-
-		return true;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] compartmentManager
-	//! \param[in] door index in the manager
-	//! \return true if it's the hatch of a seat whose occupant is turned out
-	protected bool IsTurnedOutHatch(notnull BaseCompartmentManagerComponent compartmentManager, int door)
-	{
-		if (m_aTurnOutSlots.IsEmpty())
-			return false;
-
-		BaseCompartmentDoor compartmentDoor = compartmentManager.GetDoor(door);
-		if (!compartmentDoor)
-			return false;
-
-		BaseCompartmentManagerComponent hatchManager = GetDoorManager(compartmentManager, compartmentDoor);
-		int animDoor = compartmentDoor.GetAnimDoorIndex();
-		foreach (int index, BaseCompartmentSlot slot : m_aTurnOutSlots)
-		{
-			if (slot && m_aTurnOutManagers[index] == hatchManager && m_aTurnOutDoors[index] == animDoor && slot.IsOccupantTurnedOut())
-				return true;
-		}
-
-		return false;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected void RestartTraces()
-	{
-		m_fDoorsClosedTime = 0;
-		if (!m_bSeeded)
-			return;
-
-		m_bSeeded = false;
-		m_bGridDone = false;
-		m_bGapsClosed = false;
-		m_bHolesFilled = false;
-		m_bLinked = false;
-		m_iNextEdge = 0;
-		m_aFloodStack.Clear();
-		ClearCells(m_aHits);
-		ClearCells(m_aStamped);
-		ClearCells(m_aVisited);
-		m_mFirstNeighbors.Clear();
-		m_mSecondNeighbors.Clear();
-		m_aEdgeKeys.Clear();
-		m_mEdgeFractions.Clear();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Traces from the empty ring inward, spreading from misses; cells enclosed by hits count as hits untraced.
+	//! Traces from the empty ring inward, spreading from misses (MarkEnclosedCells handles the cells it never reaches).
 	//! \param[in] maxTraces traces this call may run
-	protected void FloodGrid(int maxTraces)
+	//! \return true once every reachable cell is traced
+	protected bool FloodGrid(int maxTraces)
 	{
 		if (!m_bSeeded)
 			SeedFlood();
@@ -853,20 +797,53 @@ class CSI_VehicleOutlineBuilder
 			}
 		}
 
-		if (!m_aFloodStack.IsEmpty())
-			return;
+		return m_aFloodStack.IsEmpty();
+	}
 
-		for (int innerRow = 1; innerRow < m_iRows - 1; innerRow++)
+	//------------------------------------------------------------------------------------------------
+	//! Counts inner cells the flood never reached as hits, as hits enclose them.
+	//! \return true once every cell is done
+	protected bool MarkEnclosedCells()
+	{
+		int count = m_aHits.Count();
+		int end = GetSliceEnd(count);
+		for (int cell = m_iStageCell; cell < end; cell++)
 		{
-			for (int innerColumn = 1; innerColumn < m_iColumns - 1; innerColumn++)
-			{
-				int innerCell = innerRow * m_iColumns + innerColumn;
-				if (!m_aVisited[innerCell])
-					m_aHits[innerCell] = true;
-			}
+			int column = cell % m_iColumns;
+			int row = cell / m_iColumns;
+			if (column > 0 && row > 0 && column < m_iColumns - 1 && row < m_iRows - 1 && !m_aVisited[cell])
+				m_aHits[cell] = true;
 		}
 
-		m_bGridDone = true;
+		return FinishSlice(end, count);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] count cells in the pass
+	//! \return the cell this step's slice stops at
+	protected int GetSliceEnd(int count)
+	{
+		int end = m_iStageCell + STAGE_CELLS_PER_STEP;
+		if (end > count)
+			return count;
+
+		return end;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] end the cell the slice stopped at
+	//! \param[in] count cells in the pass
+	//! \return true once the pass is done, so the next one starts at cell 0
+	protected bool FinishSlice(int end, int count)
+	{
+		if (end < count)
+		{
+			m_iStageCell = end;
+			return false;
+		}
+
+		m_iStageCell = 0;
+		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -967,14 +944,155 @@ class CSI_VehicleOutlineBuilder
 	//! \param[in] z m in the frame
 	//! \param[in] top height in the frame
 	//! \param[in] bottom height in the frame
-	//! \return true if a trace down between the heights hits the root or its parts
+	//! \return true if a trace down between the heights hits the root or its parts, doors aside
 	protected bool TraceSegment(float x, float z, float top, float bottom)
 	{
 		vector column = m_vFrameOrigin + m_vFrameX * x + m_vFrameZ * z;
 		m_TraceParam.Start = column + m_vFrameY * top;
 		m_TraceParam.End = column + m_vFrameY * bottom;
 
-		return m_World.TraceMove(m_TraceParam, null) < 1;
+		if (m_World.TraceMove(m_TraceParam, null) >= 1)
+			return false;
+
+		return !m_bHasDoors || !IsDoorHit() || TracePastDoors();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Traces m_TraceParam's segment again nearest contact first, going on past each door collider.
+	//! \return true if something other than a door lies on it
+	protected bool TracePastDoors()
+	{
+		vector end = m_TraceParam.End;
+		m_TraceParam.Flags = TraceFlags.ENTS;
+
+		bool hit;
+		for (int pass = 0; pass < MAX_DOOR_PASSES; pass++)
+		{
+			float fraction = m_World.TraceMove(m_TraceParam, null);
+			if (fraction >= 1)
+				break;
+
+			if (!IsDoorHit())
+			{
+				hit = true;
+				break;
+			}
+
+			vector doorPoint = m_TraceParam.Start + (end - m_TraceParam.Start) * fraction;
+			if (vector.Distance(doorPoint, end) <= DOOR_STEP)
+				break;
+
+			m_TraceParam.Start = doorPoint + (end - doorPoint).Normalized() * DOOR_STEP;
+		}
+
+		m_TraceParam.Flags = TraceFlags.ENTS | TraceFlags.ANY_CONTACT;
+		return hit;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] entity a part
+	//! \return true if it hangs on a door bone of a part above it (through any entities between), or below a door part
+	protected bool IsOnDoor(notnull IEntity entity)
+	{
+		IEntity child = entity;
+		IEntity parent = entity.GetParent();
+		while (parent)
+		{
+			if (m_aDoorParts.Contains(parent))
+				return true;
+
+			int parentIndex = m_aDoorBoneParts.Find(parent);
+			if (parentIndex >= 0 && IsUnderDoorBone(parent.GetAnimation(), child.GetPivot(), m_aDoorPivots[parentIndex]))
+				return true;
+
+			if (parent == m_Root)
+				return false;
+
+			child = parent;
+			parent = parent.GetParent();
+		}
+
+		return false;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] animation
+	//! \param[in] bone id (GetBoneIndex)
+	//! \param[in] doorBones ids
+	//! \return true if the bone is a door bone, is named like one, or hangs on one (a door's glass slot)
+	protected static bool IsUnderDoorBone(Animation animation, int bone, notnull set<int> doorBones)
+	{
+		if (!animation || bone == -1)
+			return false;
+
+		if (doorBones.Contains(bone))
+			return true;
+
+		array<string> boneNames = {};
+		animation.GetBoneNames(boneNames);
+		foreach (string boneName : boneNames)
+		{
+			if (animation.GetBoneIndex(boneName) != bone)
+				continue;
+
+			string lowerName = boneName;
+			lowerName.ToLower();
+			if (IsDoorName(lowerName))
+				return true;
+
+			break;
+		}
+
+		foreach (int doorBone : doorBones)
+		{
+			if (IsParentBone(animation, bone, doorBone))
+				return true;
+		}
+
+		return false;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! The animation can't name a bone's parent, but a bone's model transform is its local one on top of its parent's.
+	//! \param[in] animation
+	//! \param[in] bone id
+	//! \param[in] parent id of the candidate parent
+	//! \return true if the candidate is the bone's parent
+	protected static bool IsParentBone(notnull Animation animation, int bone, int parent)
+	{
+		vector local[4];
+		vector model[4];
+		vector parentModel[4];
+		if (!animation.GetBoneLocalMatrix(bone, local) || !animation.GetBoneMatrix(bone, model) || !animation.GetBoneMatrix(parent, parentModel))
+			return false;
+
+		return vector.DistanceSq(local[3].Multiply4(parentModel), model[3]) < BONE_MATCH_SQ
+			&& vector.DistanceSq(local[2].Multiply3(parentModel), model[2]) < BONE_MATCH_SQ
+			&& vector.DistanceSq(local[0].Multiply3(parentModel), model[0]) < BONE_MATCH_SQ;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \return true if the last trace hit a door: a part hanging on one, a collider named like one, or one on a door bone
+	protected bool IsDoorHit()
+	{
+		if (m_aDoorParts.Contains(m_TraceParam.TraceEnt))
+			return true;
+
+		string colliderName = m_TraceParam.ColliderName;
+		colliderName.ToLower();
+		if (IsDoorName(colliderName))
+			return true;
+
+		int partIndex = m_aDoorBoneParts.Find(m_TraceParam.TraceEnt);
+		return partIndex >= 0 && m_aDoorBones[partIndex].Contains(m_TraceParam.NodeIndex);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] lowerName a bone or collider name, lowercase
+	//! \return true if it names a door
+	protected static bool IsDoorName(string lowerName)
+	{
+		return lowerName.Contains("door") && !lowerName.Contains("indoor");
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1070,123 +1188,176 @@ class CSI_VehicleOutlineBuilder
 
 	//------------------------------------------------------------------------------------------------
 	//! Fills gaps of up to two cells between hits (grow, then shrink), so racks and railings come out as one shape.
-	protected void CloseGaps()
+	//! \return true once done
+	protected bool CloseGaps()
 	{
-		array<bool> grown = {};
-		SpreadHits(m_aHits, grown, true);
-		SpreadHits(grown, m_aHits, false);
+		if (m_iStagePass == 0 && m_iStageCell == 0)
+		{
+			m_aPassCells.Resize(m_aHits.Count());
+			m_aGrownCells.Resize(m_aHits.Count());
+		}
+
+		// Grow along rows, then columns; shrink likewise
+		bool passDone;
+		switch (m_iStagePass)
+		{
+			case 0: passDone = SpreadHits(m_aHits, m_aPassCells, true, true); break;
+			case 1: passDone = SpreadHits(m_aPassCells, m_aGrownCells, false, true); break;
+			case 2: passDone = SpreadHits(m_aGrownCells, m_aPassCells, true, false); break;
+			case 3: passDone = SpreadHits(m_aPassCells, m_aHits, false, false); break;
+		}
+
+		if (!passDone)
+			return false;
+
+		m_iStagePass++;
+		if (m_iStagePass < 4)
+			return false;
+
+		m_iStagePass = 0;
+		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills the misses CloseGaps shut in, so no shape keeps a hole.
-	protected void FillHoles()
+	//! Fills the misses CloseGaps shut in, so no shape keeps a hole: spreads through misses from the ring, then fills the rest.
+	//! \return true once done
+	protected bool FillHoles()
 	{
-		array<bool> reached = {};
-		reached.Resize(m_aHits.Count());
-		array<int> spreading = {};
-
-		// The ring is all misses: spread from it through misses, diagonally too
-		for (int column = 0; column < m_iColumns; column++)
+		int count = m_aHits.Count();
+		if (!m_bFillSeeded)
 		{
-			PushOpenCell(column, 0, reached, spreading);
-			PushOpenCell(column, m_iRows - 1, reached, spreading);
-		}
+			m_bFillSeeded = true;
+			m_aReached.Clear();
+			m_aReached.Resize(count);
+			m_aSpreading.Clear();
 
-		for (int row = 0; row < m_iRows; row++)
-		{
-			PushOpenCell(0, row, reached, spreading);
-			PushOpenCell(m_iColumns - 1, row, reached, spreading);
-		}
-
-		while (!spreading.IsEmpty())
-		{
-			int last = spreading.Count() - 1;
-			int cell = spreading[last];
-			spreading.Remove(last);
-
-			int cellColumn = cell % m_iColumns;
-			int cellRow = cell / m_iColumns;
-			for (int neighborRow = cellRow - 1; neighborRow <= cellRow + 1; neighborRow++)
+			// The ring is all misses: spread from it through misses, diagonally too
+			for (int column = 0; column < m_iColumns; column++)
 			{
-				for (int neighborColumn = cellColumn - 1; neighborColumn <= cellColumn + 1; neighborColumn++)
+				PushOpenCell(column, 0);
+				PushOpenCell(column, m_iRows - 1);
+			}
+
+			for (int row = 0; row < m_iRows; row++)
+			{
+				PushOpenCell(0, row);
+				PushOpenCell(m_iColumns - 1, row);
+			}
+
+			return false;
+		}
+
+		if (m_iStagePass == 0)
+		{
+			// Each cell looks at its 9 neighbors
+			int budget = STAGE_CELLS_PER_STEP / 9;
+			while (!m_aSpreading.IsEmpty() && budget > 0)
+			{
+				budget--;
+				int last = m_aSpreading.Count() - 1;
+				int cell = m_aSpreading[last];
+				m_aSpreading.Remove(last);
+
+				int cellColumn = cell % m_iColumns;
+				int cellRow = cell / m_iColumns;
+				for (int neighborRow = cellRow - 1; neighborRow <= cellRow + 1; neighborRow++)
 				{
-					PushOpenCell(neighborColumn, neighborRow, reached, spreading);
+					for (int neighborColumn = cellColumn - 1; neighborColumn <= cellColumn + 1; neighborColumn++)
+					{
+						PushOpenCell(neighborColumn, neighborRow);
+					}
 				}
 			}
+
+			if (m_aSpreading.IsEmpty())
+				m_iStagePass = 1;
+
+			return false;
 		}
 
-		foreach (int index, bool isReached : reached)
+		int end = GetSliceEnd(count);
+		for (int index = m_iStageCell; index < end; index++)
 		{
-			if (!isReached)
+			if (!m_aReached[index])
 				m_aHits[index] = true;
 		}
+
+		if (!FinishSlice(end, count))
+			return false;
+
+		m_iStagePass = 0;
+		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! Queues a miss for FillHoles if it isn't reached yet.
 	//! \param[in] column
 	//! \param[in] row
-	//! \param[in] reached by cell
-	//! \param[in] spreading cells reached and not spread from yet
-	protected void PushOpenCell(int column, int row, notnull array<bool> reached, notnull array<int> spreading)
+	protected void PushOpenCell(int column, int row)
 	{
 		if (column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
 			return;
 
 		int cell = row * m_iColumns + column;
-		if (reached[cell] || m_aHits[cell])
+		if (m_aReached[cell] || m_aHits[cell])
 			return;
 
-		reached[cell] = true;
-		spreading.Insert(cell);
+		m_aReached[cell] = true;
+		m_aSpreading.Insert(cell);
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! One slice of a pass growing or shrinking the hits by a cell along rows or columns; outside the grid counts as misses.
 	//! \param[in] from
-	//! \param[out] to from grown or shrunk by a cell; outside the grid counts as misses
-	//! \param[in] grow
-	protected void SpreadHits(notnull array<bool> from, notnull array<bool> to, bool grow)
+	//! \param[out] to
+	//! \param[in] alongRows else along columns
+	//! \param[in] grow else shrink
+	//! \return true once the pass is done
+	protected bool SpreadHits(notnull array<bool> from, notnull array<bool> to, bool alongRows, bool grow)
 	{
-		// Along rows, then along columns
-		array<bool> rows = {};
-		rows.Resize(from.Count());
-		to.Resize(from.Count());
-
-		for (int row = 0; row < m_iRows; row++)
+		int count = from.Count();
+		int end = GetSliceEnd(count);
+		for (int cell = m_iStageCell; cell < end; cell++)
 		{
-			for (int column = 0; column < m_iColumns; column++)
+			bool before;
+			bool after;
+			if (alongRows)
 			{
-				int cell = row * m_iColumns + column;
-				bool left = column > 0 && from[cell - 1];
-				bool right = column < m_iColumns - 1 && from[cell + 1];
-				if (grow)
-					rows[cell] = from[cell] || left || right;
-				else
-					rows[cell] = from[cell] && left && right;
+				int column = cell % m_iColumns;
+				before = column > 0 && from[cell - 1];
+				after = column < m_iColumns - 1 && from[cell + 1];
 			}
+			else
+			{
+				before = cell >= m_iColumns && from[cell - m_iColumns];
+				after = cell + m_iColumns < count && from[cell + m_iColumns];
+			}
+
+			if (grow)
+				to[cell] = from[cell] || before || after;
+			else
+				to[cell] = from[cell] && before && after;
 		}
 
-		for (int row = 0; row < m_iRows; row++)
-		{
-			for (int column = 0; column < m_iColumns; column++)
-			{
-				int cell = row * m_iColumns + column;
-				bool below = row > 0 && rows[cell - m_iColumns];
-				bool above = row < m_iRows - 1 && rows[cell + m_iColumns];
-				if (grow)
-					to[cell] = rows[cell] || below || above;
-				else
-					to[cell] = rows[cell] && below && above;
-			}
-		}
+		return FinishSlice(end, count);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Links the edge points around the hit cells (marching squares).
-	protected void LinkCells()
+	//! Links the edge points around the hit cells (marching squares), a slice of rows a step.
+	//! \return true once done
+	protected bool LinkCells()
 	{
+		int rowsPerStep = STAGE_CELLS_PER_STEP / (m_iColumns + 1);
+		if (rowsPerStep < 1)
+			rowsPerStep = 1;
+
+		int firstRow = m_iStageCell - 1;
+		int endRow = firstRow + rowsPerStep;
+		if (endRow > m_iRows)
+			endRow = m_iRows;
+
 		// Cells run one past the grid on every side, so every line closes
-		for (int row = -1; row < m_iRows; row++)
+		for (int row = firstRow; row < endRow; row++)
 		{
 			for (int column = -1; column < m_iColumns; column++)
 			{
@@ -1220,10 +1391,19 @@ class CSI_VehicleOutlineBuilder
 			}
 		}
 
+		if (endRow < m_iRows)
+		{
+			m_iStageCell = endRow + 1;
+			return false;
+		}
+
+		m_iStageCell = 0;
 		foreach (int key, int neighbor : m_mFirstNeighbors)
 		{
 			m_aEdgeKeys.Insert(key);
 		}
+
+		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1319,7 +1499,7 @@ class CSI_VehicleOutlineBuilder
 		int geomsUsed;
 		foreach (IEntity part : m_aParts)
 		{
-			if (!part)
+			if (!part || m_aDoorParts.Contains(part))
 				continue;
 
 			Physics physics = part.GetPhysics();
@@ -1334,6 +1514,11 @@ class CSI_VehicleOutlineBuilder
 			{
 				geomsSeen++;
 				if (m_aPieceGunLayers.Contains(physics.GetGeomInteractionLayer(geom)))
+					continue;
+
+				string geomName = physics.GetGeomName(geom);
+				geomName.ToLower();
+				if (IsDoorName(geomName))
 					continue;
 
 				geomsUsed++;
@@ -1510,19 +1695,6 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] compartmentManager the manager listing the door
-	//! \param[in] door
-	//! \return the manager whose door it is: for a door reference, the manager it points to
-	protected static BaseCompartmentManagerComponent GetDoorManager(notnull BaseCompartmentManagerComponent compartmentManager, notnull BaseCompartmentDoor door)
-	{
-		CompartmentDoorReference doorReference = CompartmentDoorReference.Cast(door);
-		if (doorReference)
-			return doorReference.GetReferencedDoorCompartmentManager();
-
-		return compartmentManager;
-	}
-
-	//------------------------------------------------------------------------------------------------
 	//! \param[in] entity
 	//! \return its topmost ancestor with seats, or the entity itself without one
 	protected static IEntity GetVehicle(notnull IEntity entity)
@@ -1548,14 +1720,6 @@ class CSI_VehicleOutlineBuilder
 			return false;
 
 		return damageManager.GetState() == EDamageState.DESTROYED;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	protected static void ClearCells(notnull array<bool> cells)
-	{
-		int count = cells.Count();
-		cells.Clear();
-		cells.Resize(count);
 	}
 
 	//------------------------------------------------------------------------------------------------

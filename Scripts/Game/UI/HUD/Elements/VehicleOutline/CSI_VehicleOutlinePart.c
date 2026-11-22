@@ -32,10 +32,10 @@ class CSI_VehicleOutlinePiece
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One outlined part of a vehicle (hull, turret, gun or weapon rack): its entity, turret and
-//! 				outline, or the builder still making it.
+//! 				outline, or on the server the builder still making it.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_VehicleOutlinePart
@@ -51,8 +51,7 @@ class CSI_VehicleOutlinePart
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] entity
 	//! \param[in] turret null for the hull and weapon racks
-	//! \param[in] build start building the outline if it isn't cached yet
-	void CSI_VehicleOutlinePart(notnull IEntity entity, TurretComponent turret, bool build)
+	void CSI_VehicleOutlinePart(notnull IEntity entity, TurretComponent turret)
 	{
 		m_Entity = entity;
 		m_sPrefab = CSI_VehicleOutline.GetPrefabName(entity);
@@ -67,11 +66,10 @@ class CSI_VehicleOutlinePart
 			m_eKind = CSI_EVehicleOutlineKind.TURRET;
 
 		m_Outline = CSI_VehicleOutline.GetCachedPrefab(m_sPrefab);
-		if (!m_Outline && build)
-			StartBuilding();
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! Server only.
 	void StartBuilding()
 	{
 		if (!m_Builder && m_Entity)
@@ -79,18 +77,16 @@ class CSI_VehicleOutlinePart
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Updates the build's doors, then runs one step once they're ready, unless a part already stepped this frame.
-	//! \param[in] timeSlice
+	//! Runs one build step, unless a part already stepped this frame.
 	//! \param[in,out] traced a part stepped this frame; set if this one does
 	//! \param[in] maxTraces traces the step may run, 0 for none this frame
 	//! \return true once built; then call FinishBuild
-	bool StepBuild(float timeSlice, inout bool traced, int maxTraces)
+	bool StepBuild(inout bool traced, int maxTraces)
 	{
-		bool ready = m_Builder.UpdateDoors(timeSlice);
 		if (m_Builder.GetOutline())
 			return true;
 
-		if (!ready || traced || maxTraces <= 0)
+		if (traced || maxTraces <= 0)
 			return false;
 
 		traced = true;

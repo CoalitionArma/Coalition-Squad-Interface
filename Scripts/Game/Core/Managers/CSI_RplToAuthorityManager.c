@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-20
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
 //! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager, CSI_VehicleOutlineSystem or the
@@ -19,6 +19,13 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 	protected CSI_PlayerDataManager m_PlayerDataManager;
 	protected CSI_SettingsManager m_SettingsManager;
+
+	// Owner: values asked for and not yet echoed by the server's broadcast, -1 for none
+	protected int m_iAskedDisplayIcon = -1;
+	protected int m_iAskedRank = -1;
+	protected int m_iAskedSquadLeader = -1;
+
+	protected ref set<ResourceName> m_aSentOutlinePrefabs = new set<ResourceName>();	//!< server only: outlines sent to this player
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SYSTEM INITIALIZATION
@@ -42,11 +49,17 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	void Owner_UpdatePlayerDisplayIcon(PlayerId playerID, CSI_EIcon displayIcon)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-
-		// Only send when the value changed (called every update cycle)
-		if(!playerData || (playerData && displayIcon == playerData.GetDisplayIcon()))
+		if (!playerData)
 			return;
 
+		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
+		if (playerData.GetDisplayIcon() == m_iAskedDisplayIcon)
+			m_iAskedDisplayIcon = -1;
+
+		if (displayIcon == playerData.GetDisplayIcon() || displayIcon == m_iAskedDisplayIcon)
+			return;
+
+		m_iAskedDisplayIcon = displayIcon;
 		Rpc(RpcAsk_UpdatePlayerDisplayIcon, playerID, displayIcon);
 	}
 
@@ -78,11 +91,17 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	void Owner_UpdatePlayerRank(PlayerId playerID, SCR_ECharacterRank rank)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-
-		// Only send when the value changed (called every update cycle)
-		if(!playerData || (playerData && rank == playerData.GetRank()))
+		if (!playerData)
 			return;
 
+		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
+		if (playerData.GetRank() == m_iAskedRank)
+			m_iAskedRank = -1;
+
+		if (rank == playerData.GetRank() || rank == m_iAskedRank)
+			return;
+
+		m_iAskedRank = rank;
 		Rpc(RpcAsk_UpdatePlayerRank, playerID, rank);
 	}
 
@@ -101,11 +120,25 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	void Owner_UpdatePlayerSquadLeader(PlayerId playerID, bool isSL)
 	{
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-
-		// Only send when the value changed (called every update cycle)
-		if(!playerData || (playerData && isSL == playerData.GetIsSquadLeader()))
+		if (!playerData)
 			return;
 
+		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
+		int isSLValue = 0;
+		if (isSL)
+			isSLValue = 1;
+
+		int currentValue = 0;
+		if (playerData.GetIsSquadLeader())
+			currentValue = 1;
+
+		if (currentValue == m_iAskedSquadLeader)
+			m_iAskedSquadLeader = -1;
+
+		if (isSLValue == currentValue || isSLValue == m_iAskedSquadLeader)
+			return;
+
+		m_iAskedSquadLeader = isSLValue;
 		Rpc(RpcAsk_UpdatePlayerSquadLeader, playerID, isSL);
 	}
 
@@ -374,12 +407,16 @@ class CSI_RplToAuthorityManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: sends a vehicle outline to this controller's owner.
+	//! Server: sends a vehicle outline to this controller's owner, once per prefab.
 	//! \param[in] prefab the hull's or turret's prefab
-	//! \param[in] data CSI_VehicleOutline.ToData
-	void SendVehicleOutline(ResourceName prefab, notnull array<float> data)
+	//! \param[in] outline
+	void SendVehicleOutline(ResourceName prefab, notnull CSI_VehicleOutline outline)
 	{
-		Rpc(RpcDo_VehicleOutline, prefab, data);
+		if (m_aSentOutlinePrefabs.Contains(prefab))
+			return;
+
+		m_aSentOutlinePrefabs.Insert(prefab);
+		Rpc(RpcDo_VehicleOutline, prefab, outline.ToData());
 	}
 
 	//------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
 //! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name; talking shows
@@ -11,7 +11,7 @@
 [BaseContainerProps(), SCR_NameTagElementTitle()]
 modded class SCR_NTIconBase
 {
-	protected static const int ICON_KEY_NONE = -3;	//!< no icon loaded; GetIconKey never returns it
+	static const int ICON_KEY_NONE = -3;	//!< no icon loaded; GetIconKey never returns it
 
 	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)

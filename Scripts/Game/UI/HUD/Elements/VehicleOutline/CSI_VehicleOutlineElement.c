@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar HUD element that outlines the player's vehicle, turrets and weapon racks and marks free
-//! 				seats. Outlines come from CSI_VehicleOutlineSystem, or are built here if they don't arrive in time.
+//! 				seats. Outlines come only from the server's CSI_VehicleOutlineSystem.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
@@ -14,11 +14,9 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected static const string CANVAS_NAME = "VehicleOutline";
-	protected static const int OUTLINE_TRACES_PER_FRAME = 64;			//!< traces per frame for a local build
-	protected static const float SERVER_OUTLINE_WAIT = 15;				//!< seconds to wait for the server's outlines before building them here
-	protected static const float CENTER_GAP_ICON_SHARE = 0.45;		//!< dimmed gap around the center, in icon sizes
-	protected static const float CENTER_GAP_CUT_ICON_SHARE = 0.52;	//!< gap left clear for a gunner, in icon sizes
-	protected static const int MAX_TURRET_SEATS = 1;				//!< most seats a gun mount may have to be centered on
+	protected static const float REQUEST_RETRY_TIME = 30;				//!< seconds between asks while the server hasn't sent every outline
+	protected static const float ICON_GAP_SHARE = 0.52;				//!< gap left clear around a gunner's or commander's icon, in icon sizes
+	protected static const float ICON_DIM_SHARE = 0.375;			//!< lines are dimmed under other seat icons out to their ring, in icon sizes
 	protected static const float TAKEN_SEAT_DISTANCE = 0.3;			//!< m; empty seats this close to a taken one aren't marked
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -32,6 +30,11 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	// This frame's state, read by the radar
 	protected bool m_bShown;
 	protected vector m_vCenter;
+	protected bool m_bCenterOnGun;							//!< m_vCenter is the back of the local player's mounted gun
+	protected float m_fSinBase;								//!< of the vehicle's yaw
+	protected float m_fCosBase;
+	protected ref array<float> m_aIconGaps = {};			//!< right, forward per icon the radar leaves a gap around, m; drawn next frame
+	protected ref array<float> m_aIconDims = {};			//!< right, forward per icon the radar dims lines under, m; drawn next frame
 
 	// The vehicle
 	protected IEntity m_OutlineVehicle;						//!< vehicle the outline is for
@@ -40,13 +43,10 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	protected ref array<float> m_aSeatMarks = {};			//!< reused each update
 	protected ref array<vector> m_aTakenSeatPositions = {};	//!< reused each update
 	protected ref array<vector> m_aEmptySeatPositions = {};	//!< reused each update
-	protected CSI_VehicleOutlineSystem m_OutlineSystem;		//!< null unless the server runs here
-	protected float m_fOutlineWaitTime;						//!< seconds since the server was asked for the outlines
+	protected float m_fRequestRetryTime;					//!< seconds until the server is asked again for missing outlines
 
 	// The local player's seat, updated when it changes
 	protected ref CSI_SeatInfo m_LocalSeat = new CSI_SeatInfo();
-	protected bool m_bLocalSeatCenters;						//!< only seat of a mount not on a turret
-	protected bool m_bLocalHeldGun;							//!< its gunner can aim without a sight
 
 	// Settings, read in ApplySettings
 	protected bool m_bEnabled;				//!< RADAR_VISIBLE and RADAR_VEHICLE_OUTLINE
@@ -95,6 +95,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	void Update(float timeSlice)
 	{
 		m_bShown = false;
+		m_bCenterOnGun = false;
 		SCR_ChimeraCharacter localCharacter = m_HUDSystem.GetLocalPlayerCharacter();
 		IEntity vehicle = m_HUDSystem.GetLocalVehicle();
 
@@ -109,20 +110,12 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 		if (vehicle != m_OutlineVehicle)
 			StartVehicleOutline(vehicle);
 
-		if (CSI_EntityHelper.SetSeatInfo(m_LocalSeat, CSI_EntityHelper.GetCharacterVehicleCompartment(localCharacter)))
-			UpdateLocalSeatCenter();
+		CSI_EntityHelper.SetSeatInfo(m_LocalSeat, CSI_EntityHelper.GetCharacterVehicleCompartment(localCharacter));
 
 		// Center on a mounted gun's rear so the vehicle doesn't swing around the radar as the gun turns
-		m_vCenter = GetTurretSeatCenter(localCharacter.GetOrigin());
-
-		// Lines over the player's icon: cut for a gunner, dimmed in other seats
-		bool inTurretSeat = m_LocalSeat.m_bTurretSeat;
-		float gapShare = CENTER_GAP_ICON_SHARE;
-		if (inTurretSeat)
-			gapShare = CENTER_GAP_CUT_ICON_SHARE;
-
-		m_Outline.SetCenterGap(m_fIconSize * gapShare / CSI_Radar.RADAR_SIZE);
-		m_Outline.SetCenterGapCut(inTurretSeat);
+		vector center;
+		m_bCenterOnGun = GetIconPosition(m_LocalSeat, localCharacter.GetOrigin(), center);
+		m_vCenter = center;
 
 		UpdateVehicleOutline(vehicle, timeSlice);
 	}
@@ -141,6 +134,13 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \return true if the center is the back of the local player's mounted gun
+	bool IsCenterOnGun()
+	{
+		return m_bCenterOnGun;
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \return seats of the vehicle and its parts, while the outline shows
 	array<BaseCompartmentSlot> GetSeats()
 	{
@@ -148,63 +148,51 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
-//	 CENTER
+//	 ICONS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Works out whether the local player's seat centers the outline on its gun.
-	protected void UpdateLocalSeatCenter()
+	//! \param[in] seat a character's in the outlined vehicle
+	//! \param[in] origin the character's
+	//! \param[out] position where their icon goes: the back of a one-seat mount's gun at the character's height, else origin
+	//! \return true if it's the gun's back
+	bool GetIconPosition(notnull CSI_SeatInfo seat, vector origin, out vector position)
 	{
-		BaseCompartmentSlot compartment = m_LocalSeat.m_Compartment;
-
-		// Only a one-seat mount that doesn't ride a turret
-		m_bLocalSeatCenters = compartment && GetSeatCount(compartment) <= MAX_TURRET_SEATS && !CSI_VehicleOutline.IsOnTurret(compartment.GetOwner());
-
-		// A turret piece only if its gunner can aim without a sight, like the UAZ's PKM mount
-		m_bLocalHeldGun = false;
-		if (m_bLocalSeatCenters)
-		{
-			TurretControllerComponent turretController = CSI_EntityHelper.GetSeatTurretController(compartment);
-			m_bLocalHeldGun = turretController && !turretController.GetCanAimOnlyInADS();
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] localOrigin the character's origin
-	//! \return back of the seat's mounted gun at the character's height, else localOrigin
-	protected vector GetTurretSeatCenter(vector localOrigin)
-	{
-		TurretComponent seatTurret = m_LocalSeat.m_Turret;
-		if (!m_bLocalSeatCenters || !seatTurret)
-			return localOrigin;
+		position = origin;
+		if (!seat.m_bOnlyMountSeat || !seat.m_Turret)
+			return false;
 
 		foreach (CSI_VehicleOutlinePart part : m_aOutlineParts)
 		{
-			if (part.m_Turret != seatTurret || !part.m_Entity || !part.m_Outline || part.m_Outline.IsEmpty())
+			if (part.m_Turret != seat.m_Turret || !part.m_Entity || !part.m_Outline || part.m_Outline.IsEmpty())
 				continue;
 
-			if (part.m_eKind == CSI_EVehicleOutlineKind.GUN || (part.m_eKind == CSI_EVehicleOutlineKind.TURRET && m_bLocalHeldGun))
+			// A turret piece only if its gunner aims over the gun by hand, like the UAZ's PKM mount
+			if (part.m_eKind == CSI_EVehicleOutlineKind.GUN || (part.m_eKind == CSI_EVehicleOutlineKind.TURRET && seat.m_bHeldGun))
 			{
-				vector gunCenter = GetGunRear(part);
-				gunCenter[1] = localOrigin[1];
-				return gunCenter;
+				position = GetGunRear(part);
+				position[1] = origin[1];
+				return true;
 			}
 		}
 
-		return localOrigin;
+		return false;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] compartment
-	//! \return seats of the turret, mount or vehicle part the compartment belongs to
-	protected int GetSeatCount(notnull BaseCompartmentSlot compartment)
+	//! Leaves the outline's lines out around an icon, or dims them under it, from the next Update. Called by the radar.
+	//! \param[in] position world position of the icon
+	//! \param[in] cut leave lines out around it (a gunner's or commander's), else dim them under it
+	void AddIconGap(vector position, bool cut)
 	{
-		BaseCompartmentManagerComponent compartmentManager = compartment.GetManager();
-		if (!compartmentManager)
-			return 1;
+		array<float> gaps = m_aIconDims;
+		if (cut)
+			gaps = m_aIconGaps;
 
-		array<BaseCompartmentSlot> seats = {};
-		return compartmentManager.GetCompartments(seats);
+		float offsetX = position[0] - m_vCenter[0];
+		float offsetZ = position[2] - m_vCenter[2];
+		gaps.Insert(offsetX * m_fCosBase - offsetZ * m_fSinBase);
+		gaps.Insert(offsetX * m_fSinBase + offsetZ * m_fCosBase);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -227,8 +215,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	//! \param[in] timeSlice
 	protected void UpdateVehicleOutline(notnull IEntity vehicle, float timeSlice)
 	{
-		m_fOutlineWaitTime += timeSlice;
-		UpdateOutlineBuilds(vehicle, timeSlice);
+		TakeServerOutlines(vehicle, timeSlice);
 
 		// Pieces go in the vehicle's ground frame; the outline turns that to the view as a whole
 		vector vehicleTransform[4];
@@ -237,6 +224,8 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 		float baseYaw = Math.Atan2(vehicleTransform[2][0], vehicleTransform[2][2]);
 		float sinBase = Math.Sin(baseYaw);
 		float cosBase = Math.Cos(baseYaw);
+		m_fSinBase = sinBase;
+		m_fCosBase = cosBase;
 		m_Outline.SetRotation(viewYaw - baseYaw);
 
 		foreach (int index, CSI_VehicleOutlinePart part : m_aOutlineParts)
@@ -264,41 +253,43 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 		}
 
 		UpdateSeatMarks(sinBase, cosBase);
+
+		// The radar placed its icons after the last Update
+		float iconShare = m_fIconSize / CSI_Radar.RADAR_SIZE;
+		m_Outline.SetIconGaps(m_aIconGaps, iconShare * ICON_GAP_SHARE, m_aIconDims, iconShare * ICON_DIM_SHARE);
+		m_aIconGaps.Clear();
+		m_aIconDims.Clear();
+
 		m_Outline.Update(CSI_Radar.GetWidthsPerMeter(m_iRange));
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Picks up the server's outlines and builds here those it didn't send in time.
+	//! Takes the outlines the server sent, and asks again every REQUEST_RETRY_TIME while some are missing.
 	//! \param[in] vehicle
 	//! \param[in] timeSlice
-	protected void UpdateOutlineBuilds(notnull IEntity vehicle, float timeSlice)
+	protected void TakeServerOutlines(notnull IEntity vehicle, float timeSlice)
 	{
-		bool traced;
-		int serverBuilding = -1;	// -1 until checked, then 0 or 1
+		bool missing;
 		foreach (CSI_VehicleOutlinePart part : m_aOutlineParts)
 		{
-			if (!part.m_Entity || part.TakeCached())
+			// Only parts with a prefab are sent
+			if (!part.m_Entity || part.m_sPrefab.IsEmpty() || part.TakeCached())
 				continue;
 
-			if (!part.m_Builder)
-			{
-				// Wait while the server may still send it or is building it here
-				if (serverBuilding == -1)
-				{
-					serverBuilding = 0;
-					if (m_fOutlineWaitTime < SERVER_OUTLINE_WAIT || (m_OutlineSystem && m_OutlineSystem.IsOutlining(vehicle)))
-						serverBuilding = 1;
-				}
-
-				if (serverBuilding == 1)
-					continue;
-
-				part.StartBuilding();
-			}
-
-			if (part.StepBuild(timeSlice, traced, OUTLINE_TRACES_PER_FRAME))
-				part.FinishBuild();
+			missing = true;
 		}
+
+		if (!missing)
+			return;
+
+		m_fRequestRetryTime -= timeSlice;
+		if (m_fRequestRetryTime > 0)
+			return;
+
+		m_fRequestRetryTime = REQUEST_RETRY_TIME;
+		CSI_RplToAuthorityManager rplToAuthority = CSI_RplToAuthorityManager.GetInstance();
+		if (rplToAuthority)
+			rplToAuthority.Owner_RequestVehicleOutlines(vehicle);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -352,41 +343,32 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Gets the vehicle's parts and seats and asks the server for missing outlines, or builds them here if it can't ask.
+	//! Gets the vehicle's parts and seats; missing outlines are asked for at once (TakeServerOutlines).
 	//! \param[in] vehicle
 	protected void StartVehicleOutline(notnull IEntity vehicle)
 	{
 		m_OutlineVehicle = vehicle;
-		CSI_VehicleOutline.GetOutlineParts(vehicle, m_aOutlineParts, false);
+		CSI_VehicleOutline.GetOutlineParts(vehicle, m_aOutlineParts);
 		m_Outline.SetPieceCount(m_aOutlineParts.Count());
-		m_fOutlineWaitTime = 0;
-		m_OutlineSystem = CSI_VehicleOutlineSystem.GetInstance();
+		m_fRequestRetryTime = 0;
+		m_aIconGaps.Clear();
+		m_aIconDims.Clear();
 
 		m_aOutlineSeats.Clear();
 		CSI_VehicleOutline.GetSeats(vehicle, m_aOutlineSeats);
-
-		foreach (CSI_VehicleOutlinePart part : m_aOutlineParts)
-		{
-			if (part.m_Outline)
-				continue;
-
-			CSI_RplToAuthorityManager rplToAuthority = CSI_RplToAuthorityManager.GetInstance();
-			if (!rplToAuthority || !rplToAuthority.Owner_RequestVehicleOutlines(vehicle))
-				m_fOutlineWaitTime = SERVER_OUTLINE_WAIT;
-
-			return;
-		}
 	}
 
 	//------------------------------------------------------------------------------------------------
 	protected void HideVehicleOutline()
 	{
+		m_aIconGaps.Clear();
+		m_aIconDims.Clear();
+
 		// The vehicle may be deleted already
 		if (m_aOutlineParts.IsEmpty())
 			return;
 
 		m_OutlineVehicle = null;
-		m_OutlineSystem = null;
 		m_aOutlineParts.Clear();
 		m_aOutlineSeats.Clear();
 

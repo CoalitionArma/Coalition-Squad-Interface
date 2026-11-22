@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Player icon for the group list and radar: role icon, facing arrow and color team,
 //! 				refreshed on player data and settings changes.
@@ -173,7 +173,7 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Rotates the arrow, and the icon too unless upright. Called every frame by the radar, so only changes are set.
 	//! \param[in] yaw degrees
-	//! \param[in] iconUpright RADAR_ICON_ARROWS_ROTATE: only the arrow turns
+	//! \param[in] iconUpright RADAR_ICON_ARROWS_ROTATE: only the arrow turns, if it shows
 	void SetRotation(float yaw, bool iconUpright)
 	{
 		if (!m_bHasAllParts)
@@ -185,7 +185,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			m_wArrow.SetRotation(yaw);
 		}
 
-		if (iconUpright)
+		// Without the arrow, the icon shows the facing
+		if (iconUpright && m_wArrow.IsVisible())
 			yaw = 0;
 
 		if (yaw == m_fIconRotation)

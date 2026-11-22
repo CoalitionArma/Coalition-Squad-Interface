@@ -3,9 +3,10 @@ class CSI_RplBroadcastManagerClass : ScriptComponentClass {}
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-14
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Server to all clients: applies player data changes on the server, then broadcasts them with RpcDo_*.
+//! 				A value the server already has isn't broadcast again, as a client asks until its change comes back.
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_RplBroadcastManager : ScriptComponent
@@ -49,6 +50,10 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerDisplayIcon(PlayerId playerID, CSI_EIcon icon)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetDisplayIcon() == icon)
+			return;
+
 		RpcDo_UpdatePlayerDisplayIcon(playerID, icon);
 		Rpc(RpcDo_UpdatePlayerDisplayIcon, playerID, icon);
 	}
@@ -56,6 +61,10 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerColorTeam(PlayerId playerID, CSI_EColorTeam colorTeam)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetColorTeam() == colorTeam)
+			return;
+
 		RpcDo_UpdatePlayerColorTeam(playerID, colorTeam);
 		Rpc(RpcDo_UpdatePlayerColorTeam, playerID, colorTeam);
 	}
@@ -63,6 +72,10 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerOverrideIcon(PlayerId playerID, CSI_EOverrideIcon overrideIcon)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetOverrideIcon() == overrideIcon)
+			return;
+
 		RpcDo_UpdatePlayerOverrideIcon(playerID, overrideIcon);
 		Rpc(RpcDo_UpdatePlayerOverrideIcon, playerID, overrideIcon);
 	}
@@ -70,6 +83,10 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerRank(PlayerId playerID, SCR_ECharacterRank rank)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetRank() == rank)
+			return;
+
 		RpcDo_UpdatePlayerRank(playerID, rank);
 		Rpc(RpcDo_UpdatePlayerRank, playerID, rank);
 	}
@@ -77,6 +94,10 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerTeamLeader(PlayerId playerID, bool isTL)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetIsTeamLeader() == isTL)
+			return;
+
 		RpcDo_UpdatePlayerTeamLeader(playerID, isTL);
 		Rpc(RpcDo_UpdatePlayerTeamLeader, playerID, isTL);
 	}
@@ -84,8 +105,21 @@ class CSI_RplBroadcastManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void UpdatePlayerSquadLeader(PlayerId playerID, bool isSL)
 	{
+		CSI_PlayerData playerData = GetPlayerData(playerID);
+		if (playerData && playerData.GetIsSquadLeader() == isSL)
+			return;
+
 		RpcDo_UpdatePlayerSquadLeader(playerID, isSL);
 		Rpc(RpcDo_UpdatePlayerSquadLeader, playerID, isSL);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected CSI_PlayerData GetPlayerData(PlayerId playerID)
+	{
+		if (!m_PlayerDataManager)
+			return null;
+
+		return m_PlayerDataManager.GetPlayerData(playerID);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

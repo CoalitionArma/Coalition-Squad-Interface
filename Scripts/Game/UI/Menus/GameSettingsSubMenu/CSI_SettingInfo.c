@@ -188,7 +188,7 @@ class CSI_SettingInfoHandler
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	"Setting Info" panel of the CSI settings tab: the hovered setting's name, description and example
 //! 				(SettingInfoExamples/), plus static helpers the examples share.
@@ -561,8 +561,8 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 	//! \param[in] size px, 0 keeps the layout's size
 	//! \param[in] role
 	//! \param[in] colorTeam
-	//! \param[in] iconRotation degrees
-	//! \param[in] arrowRotation degrees
+	//! \param[in] iconRotation degrees; seat icons, which have no arrow, take arrowRotation
+	//! \param[in] arrowRotation degrees, the facing
 	//! \param[in] opacity
 	static void ShowIcon(Widget root, Widget icon, float size, CSI_EIcon role, CSI_EColorTeam colorTeam, float iconRotation, float arrowRotation, float opacity)
 	{
@@ -589,11 +589,12 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		iconLarge.SetVisible(isVehicleIcon);
 		outlineLarge.SetVisible(isVehicleIcon);
 
+		// Without the arrow, the icon shows the facing
 		if (isVehicleIcon)
 		{
 			iconLarge.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconName);
-			iconLarge.SetRotation(iconRotation);
-			outlineLarge.SetRotation(iconRotation);
+			iconLarge.SetRotation(arrowRotation);
+			outlineLarge.SetRotation(arrowRotation);
 		}
 		else
 		{

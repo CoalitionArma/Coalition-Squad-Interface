@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed; hidden and
 //! 				not updated while NAMETAG_VISIBLE is off; NAMETAG_BRIGHTNESS_DIMMING fades it by scene brightness and,
@@ -234,6 +234,21 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	{
 		super.CleanupTag(data, removeFromArray);
 		data.m_iZoneID = -1;
+
+		// A pooled tag isn't drawn: stop its talking bars, and load its icon again when it's reused
+		for (int index = 0; index < 10; index++)	// m_aNametagElements' size
+		{
+			ImageWidget icon = ImageWidget.Cast(data.m_aNametagElements[index]);
+			if (!icon)
+				continue;
+
+			CSI_TalkingBarsComponent talkingBars = CSI_TalkingBarsComponent.Find(icon);
+			if (talkingBars && talkingBars.IsActive())
+			{
+				talkingBars.SetActive(false);
+				data.m_aElementIconKeys[index] = SCR_NTIconBase.ICON_KEY_NONE;
+			}
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------

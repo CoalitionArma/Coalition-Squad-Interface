@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Server system that builds the radar's vehicle outlines once per prefab, a vehicle at a time with
 //! 				few traces per second, and sends them to players who get in (CSI_RplToAuthorityManager).
@@ -16,7 +16,6 @@ class CSI_VehicleOutlineSystem : GameSystem
 	static const int TRACES_PER_SECOND = 720;				//!< build traces a second, run in steps of TRACES_PER_STEP
 	protected static const int TRACES_PER_STEP = 20;		//!< traces in one build step, at most one step a frame
 	protected static const float SPAWN_SETTLE_TIME = 3;		//!< seconds after registering before outlining, for its parts to spawn
-	protected static const float DOOR_RETRY_TIME = 2;		//!< seconds a vehicle held by an open door waits before a retry
 	protected static const float BUILD_TIMEOUT = 90;		//!< seconds over all tries before a vehicle is dropped
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -181,7 +180,15 @@ class CSI_VehicleOutlineSystem : GameSystem
 			m_fCurrentStartTime = firstTryTime;
 			if (firstTryTime < 0)
 				m_fCurrentStartTime = m_fTime;
-			CSI_VehicleOutline.GetOutlineParts(vehicle, m_aCurrentParts, true);
+
+			// Parts cached since a player asked answer them now; the rest get builders in StepCurrentVehicle
+			CSI_VehicleOutline.GetOutlineParts(vehicle, m_aCurrentParts);
+			foreach (CSI_VehicleOutlinePart part : m_aCurrentParts)
+			{
+				if (part.m_Outline)
+					SendToWaiting(part.m_sPrefab, part.m_Outline);
+			}
+
 			return true;
 		}
 
@@ -193,9 +200,15 @@ class CSI_VehicleOutlineSystem : GameSystem
 	//! \param[in] timeSlice
 	protected void StepCurrentVehicle(float timeSlice)
 	{
-		// Deleted or timed out: free its prefab; waiting players build it themselves
+		// Deleted or timed out: free its prefab and its waiting players, who ask again later
 		if (!m_CurrentVehicle || m_fTime - m_fCurrentStartTime > BUILD_TIMEOUT)
 		{
+			foreach (CSI_VehicleOutlinePart droppedPart : m_aCurrentParts)
+			{
+				if (!droppedPart.m_Outline)
+					m_mWaitingRequesters.Remove(droppedPart.m_sPrefab);
+			}
+
 			ReleasePrefab(m_sCurrentPrefab);
 			EndCurrentVehicle();
 			return;
@@ -208,70 +221,65 @@ class CSI_VehicleOutlineSystem : GameSystem
 			maxTraces = TRACES_PER_STEP;
 
 		int building;
-		int heldByDoor;
 		bool traced;
+		bool builderStarted;
 		foreach (CSI_VehicleOutlinePart part : m_aCurrentParts)
 		{
-			if (!part.m_Builder)
+			if (part.m_Outline)
 				continue;
 
-			// Built meanwhile by the host's radar or for another prefab's part of the same shape
+			// Cached meanwhile by another part of the same prefab
 			if (part.TakeCached())
 			{
 				SendToWaiting(part.m_sPrefab, part.m_Outline);
 				continue;
 			}
 
-			if (part.StepBuild(timeSlice, traced, maxTraces))
+			// One builder made a frame, as each walks the whole vehicle
+			if (!part.m_Builder)
+			{
+				if (!part.m_Entity)
+					continue;
+
+				building++;
+				if (!builderStarted)
+				{
+					part.StartBuilding();
+					builderStarted = true;
+				}
+
+				continue;
+			}
+
+			if (part.StepBuild(traced, maxTraces))
 			{
 				FinishPart(part);
 				continue;
 			}
 
 			building++;
-			if (part.m_Builder.HasOpenDoor())
-				heldByDoor++;
 		}
 
 		if (traced)
 			m_fTraceAllowance -= TRACES_PER_STEP;
 
 		if (building == 0)
-		{
 			EndCurrentVehicle();
-			return;
-		}
-
-		// All parts held by open doors: let ready vehicles go first; one a player waits for stays next
-		if (heldByDoor == building && HasVehicleReady())
-		{
-			QueueVehicle(m_CurrentVehicle, m_sCurrentPrefab, m_fTime + DOOR_RETRY_TIME, HasWaitingRequesters(), m_fCurrentStartTime);
-			EndCurrentVehicle();
-		}
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \return true if a player waits for a part of the current vehicle still being built
-	protected bool HasWaitingRequesters()
-	{
-		foreach (CSI_VehicleOutlinePart part : m_aCurrentParts)
-		{
-			if (part.m_Builder && m_mWaitingRequesters.Contains(part.m_sPrefab))
-				return true;
-		}
-
-		return false;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Keeps a finished outline and sends it to waiting players; a wreck's frees its prefab instead.
+	//! Keeps a finished outline and sends it to waiting players; a wreck's frees its prefab and players instead.
 	//! \param[in] part
 	protected void FinishPart(notnull CSI_VehicleOutlinePart part)
 	{
 		if (part.FinishBuild())
+		{
 			SendToWaiting(part.m_sPrefab, part.m_Outline);
-		else
-			ReleasePrefab(m_sCurrentPrefab);
+			return;
+		}
+
+		m_mWaitingRequesters.Remove(part.m_sPrefab);
+		ReleasePrefab(m_sCurrentPrefab);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -279,19 +287,6 @@ class CSI_VehicleOutlineSystem : GameSystem
 	{
 		m_CurrentVehicle = null;
 		m_aCurrentParts.Clear();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \return true if a queued vehicle may start now
-	protected bool HasVehicleReady()
-	{
-		foreach (float startTime : m_aQueuedStartTimes)
-		{
-			if (startTime <= m_fTime)
-				return true;
-		}
-
-		return false;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -348,18 +343,18 @@ class CSI_VehicleOutlineSystem : GameSystem
 	void RequestOutlines(notnull IEntity vehicle, notnull CSI_RplToAuthorityManager requester)
 	{
 		array<ref CSI_VehicleOutlinePart> parts = {};
-		CSI_VehicleOutline.GetOutlineParts(vehicle, parts, false);
+		CSI_VehicleOutline.GetOutlineParts(vehicle, parts);
 
 		bool missing;
 		foreach (CSI_VehicleOutlinePart part : parts)
 		{
-			// Without a prefab the client builds it itself
+			// Only parts with a prefab are cached and sent
 			if (part.m_sPrefab.IsEmpty())
 				continue;
 
 			if (part.m_Outline)
 			{
-				requester.SendVehicleOutline(part.m_sPrefab, part.m_Outline.ToData());
+				requester.SendVehicleOutline(part.m_sPrefab, part.m_Outline);
 				continue;
 			}
 
@@ -368,6 +363,13 @@ class CSI_VehicleOutlineSystem : GameSystem
 			{
 				waiting = {};
 				m_mWaitingRequesters.Set(part.m_sPrefab, waiting);
+			}
+
+			// Players who left are null
+			for (int index = waiting.Count() - 1; index >= 0; index--)
+			{
+				if (!waiting[index])
+					waiting.Remove(index);
 			}
 
 			if (!waiting.Contains(requester))
@@ -379,23 +381,19 @@ class CSI_VehicleOutlineSystem : GameSystem
 		if (!missing || vehicle == m_CurrentVehicle)
 			return;
 
-		// Next, ahead of the queue
+		// Next, ahead of the queue; an earlier try keeps its timeout
+		float firstTryTime = -1;
 		int queuedIndex = m_aQueuedVehicles.Find(vehicle);
 		if (queuedIndex >= 0)
+		{
+			firstTryTime = m_aQueuedFirstTryTimes[queuedIndex];
 			RemoveQueued(queuedIndex);
+		}
 
 		ResourceName prefab = CSI_VehicleOutline.GetPrefabName(vehicle);
-		QueueVehicle(vehicle, prefab, m_fTime, true, -1);
+		QueueVehicle(vehicle, prefab, m_fTime, true, firstTryTime);
 		if (!prefab.IsEmpty())
 			m_aQueuedPrefabs.Insert(prefab);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] vehicle
-	//! \return true while the vehicle is being outlined or waits in the queue
-	bool IsOutlining(notnull IEntity vehicle)
-	{
-		return vehicle == m_CurrentVehicle || m_aQueuedVehicles.Contains(vehicle);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -407,11 +405,10 @@ class CSI_VehicleOutlineSystem : GameSystem
 		if (!waiting)
 			return;
 
-		array<float> data = outline.ToData();
 		foreach (CSI_RplToAuthorityManager requester : waiting)
 		{
 			if (requester)
-				requester.SendVehicleOutline(prefab, data);
+				requester.SendVehicleOutline(prefab, outline);
 		}
 
 		m_mWaitingRequesters.Remove(prefab);

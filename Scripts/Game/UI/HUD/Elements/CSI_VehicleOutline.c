@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Top-down outline of a vehicle part as closed lines of x, z pairs (m), cached per prefab and shape
 //! 				for the session; plus static helpers for finding parts and their frames.
@@ -96,12 +96,12 @@ class CSI_VehicleOutline
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Caches an outline the server sent.
+	//! Caches an outline the server sent, unless one is cached already (its triangles are kept).
 	//! \param[in] prefab
 	//! \param[in] data in ToData's format
 	static void CacheData(ResourceName prefab, notnull array<float> data)
 	{
-		if (prefab.IsEmpty())
+		if (prefab.IsEmpty() || s_mOutlines.Contains(prefab))
 			return;
 
 		CSI_VehicleOutline outline = new CSI_VehicleOutline();
@@ -212,16 +212,15 @@ class CSI_VehicleOutline
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] vehicle
 	//! \param[out] parts the hull, then each turret, gun mount, mounted gun and weapon rack below it
-	//! \param[in] build start building outlines not cached yet
-	static void GetOutlineParts(notnull IEntity vehicle, notnull array<ref CSI_VehicleOutlinePart> parts, bool build)
+	static void GetOutlineParts(notnull IEntity vehicle, notnull array<ref CSI_VehicleOutlinePart> parts)
 	{
 		parts.Clear();
-		parts.Insert(new CSI_VehicleOutlinePart(vehicle, GetPartTurret(vehicle, true), build));
-		AddPieceParts(vehicle, parts, build);
+		parts.Insert(new CSI_VehicleOutlinePart(vehicle, GetPartTurret(vehicle, true)));
+		AddPieceParts(vehicle, parts);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	protected static void AddPieceParts(notnull IEntity parent, notnull array<ref CSI_VehicleOutlinePart> parts, bool build)
+	protected static void AddPieceParts(notnull IEntity parent, notnull array<ref CSI_VehicleOutlinePart> parts)
 	{
 		IEntity child = parent.GetChildren();
 		while (child)
@@ -231,17 +230,17 @@ class CSI_VehicleOutline
 				// Weapon racks don't turn
 				if (IsWeaponRack(child))
 				{
-					parts.Insert(new CSI_VehicleOutlinePart(child, null, build));
+					parts.Insert(new CSI_VehicleOutlinePart(child, null));
 				}
 				else
 				{
 					// Skip a mount aimed by its gun's turret; only the gun is drawn
 					TurretComponent turret = GetPartTurret(child, false);
 					if (turret && !IsGunMount(child, turret))
-						parts.Insert(new CSI_VehicleOutlinePart(child, turret, build));
+						parts.Insert(new CSI_VehicleOutlinePart(child, turret));
 				}
 
-				AddPieceParts(child, parts, build);
+				AddPieceParts(child, parts);
 			}
 
 			child = child.GetSibling();
@@ -478,14 +477,6 @@ class CSI_VehicleOutline
 			return string.Empty;
 
 		return number;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] entity
-	//! \return true if one of its parents is a turret
-	static bool IsOnTurret(IEntity entity)
-	{
-		return entity && CSI_EntityHelper.GetParentTurret(entity) != null;
 	}
 
 	//------------------------------------------------------------------------------------------------

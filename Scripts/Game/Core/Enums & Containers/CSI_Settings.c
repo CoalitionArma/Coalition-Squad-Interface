@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
 //! 				which applies server overrides on top of these.
@@ -309,7 +309,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away, in meters, squadmates show on the radar while you're on foot. Icons fade out near the edge.")]
 	int m_iRadarRangeOnFoot;
 
-	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in meters, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
+	[Attribute(defvalue: "3", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in meters, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
 	int m_iRadarRangeInVehicle;
 
 	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Draws a top-down outline of the vehicle you're in on the radar, to the radar's scale, so squadmates show in their seats. In a vehicle the radar shows you even without a group.")]
@@ -321,6 +321,6 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking fade from the radar over 2 seconds. 360° shows everyone.")]
 	int m_iRadarFieldOfView;
 
-	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright, except seat icons on a vehicle outline. Off: the whole icon turns.")]
+	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright, except seat icons without an arrow. Off: the whole icon turns.")]
 	int m_bRadarIconArrowsRotate;
 }

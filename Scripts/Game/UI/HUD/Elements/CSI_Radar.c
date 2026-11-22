@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar inside the compass: an icon per group member in range, placed and rotated relative to the
 //! 				local player. Members outside the radar's field of view fade out. With the vehicle outline shown,
@@ -49,6 +49,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	static const int ICON_WIDTH_AND_HEIGHT = 16;						//!< px at 100% RADAR_ICON_SIZE
 	static const float RADAR_SIZE = 132;								//!< radar frame width in layout units
 	protected static const float SIZE_PER_RANGE = 2.725;				//!< radar frame width in ranges
+	protected static const float KEEP_RANGE_SHARE = 1.05;				//!< of the range, up to which an existing icon is kept (hidden)
 	protected static const float FIELD_OF_VIEW_FADE_OUT_TIME = 2;		//!< seconds
 	protected static const float FIELD_OF_VIEW_FADE_IN_TIME = 0.25;	//!< seconds
 	protected static const float AHEAD_BEARING = 180;					//!< relative bearing of straight ahead (top of the radar)
@@ -194,6 +195,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		float radarScale = RADAR_SIZE / (searchRadius * SIZE_PER_RANGE);	// meters to radar px
 		float halfIconSize = m_fIconSize * 0.5;
 		float searchRadiusSq = searchRadius * searchRadius;
+		float keepRadiusSq = searchRadiusSq * KEEP_RANGE_SHARE * KEEP_RANGE_SHARE;
 
 		foreach (PlayerId playerID : radarPlayerIDs)
 		{
@@ -204,16 +206,46 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				continue;
 			};
 
-			vector playerCharacterOrigin = playerCharacter.GetOrigin();
+			// The local player's icon is the center
+			bool isLocalPlayer = playerID == localPlayerId;
+			vector playerCharacterOrigin = localOrigin;
+			if (!isLocalPlayer)
+				playerCharacterOrigin = playerCharacter.GetOrigin();
 
 			// Squared distance avoids a square root for out-of-range members
 			float disSq = vector.DistanceSq(localOrigin, playerCharacterOrigin);
 
-			if (disSq > searchRadiusSq)
+			// An icon is kept a little past the range, at 0 opacity, so a member on the edge doesn't rebuild it each crossing
+			if (disSq > keepRadiusSq || (disSq > searchRadiusSq && !m_mRadarIcons.Get(playerID)))
 			{
 				RemoveRadarIcon(playerID);
 				continue;
 			};
+
+			CSI_Icon icon = GetOrCreateRadarIcon(playerID);
+			if (!icon)
+				continue;
+
+			bool inOutlinedVehicle = m_aOccupantPlayerIDs.Contains(playerID);
+			bool onGunRear = false;
+			CSI_SeatInfo seat = m_LocalSeat;
+			if (isLocalPlayer)
+			{
+				onGunRear = outlineShown && m_VehicleOutline.IsCenterOnGun();
+			}
+			else
+			{
+				seat = GetIconSeat(playerID, playerCharacter);
+
+				// On the outline, a mounted gun's gunner sits on the gun's back, as the local player does
+				if (inOutlinedVehicle)
+				{
+					vector iconPosition;
+					onGunRear = m_VehicleOutline.GetIconPosition(seat, playerCharacterOrigin, iconPosition);
+					playerCharacterOrigin = iconPosition;
+					disSq = vector.DistanceSq(localOrigin, playerCharacterOrigin);
+				}
+			}
 
 			float dis = Math.Sqrt(disSq);
 
@@ -222,7 +254,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			float y = 0;
 			float fieldOfViewFade = 1;
 
-			if (playerID != localPlayerId)
+			if (!isLocalPlayer)
 			{
 				// Bearing relative to the local player's facing
 				float dir = vector.Direction(playerCharacterOrigin, localOrigin).ToYaw();
@@ -240,17 +272,15 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 			// Clamped: the distance fade is above 1 for most of the range
 			float opacity = Math.Clamp(Math.Map(dis, searchRadiusFadeStart, searchRadius, 0.6, 0), 0, 1) * fieldOfViewFade;
 
-			CSI_Icon icon = GetOrCreateRadarIcon(playerID);
-			if (!icon)
-				continue;
-
+			// On a gun's back the icon faces where the player looks, as on foot
 			float rotation;
-			if (playerID == localPlayerId)
-				rotation = GetLocalIconRotation(playerCharacter, localYaw, timeSlice);
+			if (isLocalPlayer)
+				rotation = GetLocalIconRotation(playerCharacter, localYaw, onGunRear, timeSlice);
+			else if (onGunRear)
+				rotation = -Math.Mod((CSI_EntityHelper.GetCharacterYaw(playerCharacter, null, null) - localYaw), 360);
 			else
-				rotation = -Math.Mod((GetIconYaw(playerID, playerCharacter) - localYaw), 360);
+				rotation = -Math.Mod((GetSeatYaw(playerCharacter, seat) - localYaw), 360);
 
-			bool inOutlinedVehicle = m_aOccupantPlayerIDs.Contains(playerID);
 			icon.SetOutsider(m_aPassengerPlayerIDs.Contains(playerID));
 			icon.SetInOutlinedVehicle(inOutlinedVehicle);
 
@@ -258,10 +288,12 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 			// Center the icon on its position
 			FrameSlot.SetPos(radarIcon, x - halfIconSize, y - halfIconSize);
-
-			// Seat icons on the outline have no arrow, so they always turn
-			icon.SetRotation(rotation, m_bIconsUpright && !inOutlinedVehicle);
+			icon.SetRotation(rotation, m_bIconsUpright);
 			radarIcon.SetOpacity(opacity);
+
+			// The outline leaves its lines out around a gunner's or commander's icon and dims them under other seat icons
+			if (inOutlinedVehicle && opacity > 0)
+				m_VehicleOutline.AddIconGap(playerCharacterOrigin, seat.m_bGunnerSeat);
 		};
 
 		// The HUD system replaces the list when the group changes
@@ -300,11 +332,10 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! GetSeatYaw for another member, keeping their seat info by player ID.
-	//! \param[in] playerID
-	//! \param[in] character
-	//! \return negated world yaw in degrees
-	protected float GetIconYaw(PlayerId playerID, notnull SCR_ChimeraCharacter character)
+	//! \param[in] playerID another member's
+	//! \param[in] character theirs
+	//! \return their seat info, kept by player ID while they have an icon
+	protected CSI_SeatInfo GetIconSeat(PlayerId playerID, notnull SCR_ChimeraCharacter character)
 	{
 		CSI_SeatInfo seat = m_mIconSeats.Get(playerID);
 		if (!seat)
@@ -314,7 +345,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 		}
 
 		CSI_EntityHelper.SetSeatInfo(seat, CSI_EntityHelper.GetCharacterVehicleCompartment(character));
-		return GetSeatYaw(character, seat);
+		return seat;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -419,16 +450,20 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 	//! On foot the view is where the local player faces, so the icon points straight up, except while freelooking:
 	//! then the weapon aim is, which stays put as the view turns. After freelook it follows the weapon aim until the
 	//! view has eased back to it. Both aims trail the view on fast turns, so neither is read otherwise. In a seat,
-	//! the turret aim or vehicle yaw, as for other members.
+	//! the turret aim or vehicle yaw, as for other members, except on a gun's back: straight up, where the player looks.
 	//! \param[in] localCharacter
 	//! \param[in] localYaw the view's yaw, negated
+	//! \param[in] onGunRear the icon is on the back of the player's mounted gun
 	//! \param[in] timeSlice
 	//! \return icon rotation in degrees
-	protected float GetLocalIconRotation(notnull SCR_ChimeraCharacter localCharacter, float localYaw, float timeSlice)
+	protected float GetLocalIconRotation(notnull SCR_ChimeraCharacter localCharacter, float localYaw, bool onGunRear, float timeSlice)
 	{
 		if (m_LocalSeat.m_Compartment)
 		{
 			m_fFreeLookReturnTime = 0;
+			if (onGunRear)
+				return 0;
+
 			return -Math.Mod((GetSeatYaw(localCharacter, m_LocalSeat) - localYaw), 360);
 		}
 

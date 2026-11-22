@@ -49,7 +49,7 @@ class CSI_FrameSlotSnapshot
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-20
+//! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General, Compass and Radar settings and the fire team
 //! 				colors: sets the embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows
@@ -1039,11 +1039,6 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		memberIDs.RemoveItem(localPlayerID);
 
 		float iconSize = GetRadarIconSize();
-		// Upright when only arrows turn, except on the outline, where seat icons have no arrow
-		float iconRotation = DEMO_VEHICLE_HEADING;
-		if (GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE) && !outlineShown)
-			iconRotation = 0;
-
 		for (int seat = 0, seatCount = DEMO_VEHICLE_SEATS.Count() / 2; seat < seatCount; seat++)
 		{
 			Widget icon = GetRadarIcon(seat);
@@ -1078,7 +1073,7 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				colorTeam = CSI_SettingInfo.GetPlayerColorTeam(playerID, DEMO_MATE_TEAMS[0]);
 			}
 
-			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, seatIcon, colorTeam, iconRotation, DEMO_VEHICLE_HEADING, 1);
+			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, seatIcon, colorTeam, DEMO_VEHICLE_HEADING, DEMO_VEHICLE_HEADING, 1);
 			if (seat == DEMO_OUTSIDER_SEAT)
 				ShowAsOutsider(icon);
 		}
