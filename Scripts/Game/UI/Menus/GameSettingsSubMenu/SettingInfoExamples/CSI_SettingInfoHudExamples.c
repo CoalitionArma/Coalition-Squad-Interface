@@ -49,7 +49,7 @@ class CSI_FrameSlotSnapshot
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-20
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General, Compass and Radar settings and the fire team
 //! 				colors: sets the embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows
@@ -117,6 +117,22 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	protected static const float FOV_EDGE_DOT_SIZE = 4.2;		//!< px
 	protected static const ResourceName FOV_EDGE_DOT_TEXTURE = "{73B3D8BBB785B5B9}UI/Textures/Common/circleFull.edds";
 
+	// Vehicle outline example: a jeep from above (x, z in m, +z forward), its seats (driver first) and heading (degrees, + is right)
+	protected static const ref array<float> DEMO_VEHICLE_OUTLINE = {
+		-0.75, 2.10, 0.75, 2.10, 0.88, 1.95,
+		0.88, 1.60, 0.95, 1.60, 0.95, 0.90, 0.88, 0.90,
+		0.88, -0.90, 0.95, -0.90, 0.95, -1.60, 0.88, -1.60,
+		0.88, -1.95, 0.70, -2.10, 0.28, -2.10, 0.28, -2.28, -0.28, -2.28, -0.28, -2.10, -0.70, -2.10, -0.88, -1.95,
+		-0.88, -1.60, -0.95, -1.60, -0.95, -0.90, -0.88, -0.90,
+		-0.88, 0.90, -0.95, 0.90, -0.95, 1.60, -0.88, 1.60,
+		-0.88, 1.95};
+	protected static const ref array<float> DEMO_VEHICLE_SEATS = {-0.4, 0.2, 0.4, 0.2, -0.4, -0.8, 0.4, -0.8};
+	protected static const float DEMO_VEHICLE_HEADING = -15;
+	protected static const int DEMO_SQUADMATE_SEAT = 1;
+	protected static const int DEMO_OUTSIDER_SEAT = 2;
+	protected static const int DEMO_EMPTY_SEAT = 3;
+	protected static const string VEHICLE_OUTLINE_WIDGET_NAME = "VehicleOutline";
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -143,6 +159,9 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	protected ref array<string> m_aDemoSquadNames = {};			//!< DEMO_SQUAD_NAMES shuffled when the tab opens
 	protected ref array<Widget> m_aRadarIcons = {};				//!< icons in the HUD's radar frame
 	protected ref array<Widget> m_aRadarFieldOfViewDots = {};	//!< both field of view edges' dots, created on first show
+	protected CSI_VehicleOutlineComponent m_VehicleOutline;		//!< the radar's outline canvas
+	protected ref CSI_VehicleOutline m_DemoVehicleOutline;		//!< DEMO_VEHICLE_OUTLINE, made on first show
+	protected float m_fDemoWidthsPerMeter;						//!< jeep's scale in radar widths per meter
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -169,9 +188,12 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	override void HandlerDeattached(Widget w)
 	{
-		// A pending retry of PlaceSquadView
+		// A pending retry of PlaceSquadView or redraw of the jeep
 		if (GetGame())
+		{
 			GetGame().GetCallqueue().Remove(PlaceSquadView);
+			GetGame().GetCallqueue().Remove(RedrawVehicleOutline);
+		}
 
 		super.HandlerDeattached(w);
 	}
@@ -213,6 +235,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			m_wBearing = TextWidget.Cast(m_wCompass.FindAnyWidget("Bearing"));
 			m_wRadarFrame = m_wCompass.FindAnyWidget("RadarFrame");
 			m_CompassLayoutSlot.Save(m_wCompass);
+
+			m_VehicleOutline = CSI_VehicleOutlineComponent.GetVehicleOutline(VEHICLE_OUTLINE_WIDGET_NAME, m_wCompass);
+			if (!m_VehicleOutline)
+				PrintFormat("CSI_SettingInfoHudExamples: radar canvas '%1' not found, the Vehicle outline example won't draw one", VEHICLE_OUTLINE_WIDGET_NAME, level: LogLevel.WARNING);
 		}
 		else
 		{
@@ -306,7 +332,10 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 	void HideExample()
 	{
 		if (GetGame())
+		{
 			GetGame().GetCallqueue().Remove(PlaceSquadView);
+			GetGame().GetCallqueue().Remove(RedrawVehicleOutline);
+		}
 
 		if (m_wRoot)
 			m_wRoot.SetVisible(false);
@@ -320,6 +349,9 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		{
 			dot.SetVisible(false);
 		}
+
+		if (m_VehicleOutline)
+			m_VehicleOutline.Clear();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -451,6 +483,24 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				caption = string.Format("In vehicles, squadmates within %1 m show on the radar", range);
 			else
 				caption = string.Format("On foot, squadmates within %1 m show on the radar", range);
+
+			return true;
+		}
+
+		if (setting == CSI_GameSettings.RADAR_VEHICLE_OUTLINE)
+		{
+			ShowHud(true, false, false, 1, true);
+			if (!GetValue(CSI_GameSettings.RADAR_VISIBLE))
+			{
+				caption = "Radar is hidden";
+				return true;
+			}
+
+			ShowVehicleOutline(value);
+			if (value)
+				caption = "Your vehicle, to the radar's scale, with squadmates in their seats";
+			else
+				caption = "Hidden; squadmates still show in their seats";
 
 			return true;
 		}
@@ -932,6 +982,128 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 			FrameSlot.SetSize(dot, FOV_EDGE_DOT_SIZE, FOV_EDGE_DOT_SIZE);
 			m_aRadarFieldOfViewDots.Insert(dot);
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows a jeep on the radar at the tab's in-vehicle range, with the local player driving at the center.
+	//! \param[in] outlineShown draw the jeep's outline
+	protected void ShowVehicleOutline(bool outlineShown)
+	{
+		int range = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE, GetValue(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE));
+		float metersToUnits = RADAR_RANGE_PX * m_fCompassZoom / range;
+
+		// The jeep's axes in the view
+		float heading = DEMO_VEHICLE_HEADING * Math.DEG2RAD;
+		float rightX = Math.Cos(heading);
+		float rightZ = Math.Sin(heading);
+		float forwardX = -Math.Sin(heading);
+		float forwardZ = Math.Cos(heading);
+
+		// The driver's seat is the radar's center
+		float offsetRight = -(rightX * DEMO_VEHICLE_SEATS[0] + rightZ * DEMO_VEHICLE_SEATS[1]);
+		float offsetForward = -(forwardX * DEMO_VEHICLE_SEATS[0] + forwardZ * DEMO_VEHICLE_SEATS[1]);
+
+		if (m_VehicleOutline && outlineShown)
+		{
+			if (!m_DemoVehicleOutline)
+			{
+				array<float> contour = {};
+				contour.Copy(DEMO_VEHICLE_OUTLINE);
+				m_DemoVehicleOutline = new CSI_VehicleOutline();
+				m_DemoVehicleOutline.AddContour(contour);
+			}
+
+			m_VehicleOutline.SetColor(CSI_ColorPresets.GetColor(GetValue(CSI_GameSettings.COMPASS_COLOR)));
+			m_VehicleOutline.SetPieceCount(1);
+			m_VehicleOutline.SetPiece(0, m_DemoVehicleOutline, rightX, rightZ, forwardX, forwardZ, offsetRight, offsetForward);
+
+			// The empty seat's ring
+			float emptyX = DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2];
+			float emptyZ = DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2 + 1];
+			array<float> emptySeats = {rightX * emptyX + rightZ * emptyZ + offsetRight, forwardX * emptyX + forwardZ * emptyZ + offsetForward};
+			m_VehicleOutline.SetSeats(emptySeats);
+
+			m_fDemoWidthsPerMeter = CSI_Radar.GetWidthsPerMeter(range);
+			m_VehicleOutline.Update(m_fDemoWidthsPerMeter);
+
+			// Redraw once the compass is laid out at its new size
+			GetGame().GetCallqueue().Remove(RedrawVehicleOutline);
+			GetGame().GetCallqueue().CallLater(RedrawVehicleOutline, 10);
+		}
+
+		array<int> memberIDs = {};
+		CSI_SettingInfo.GetPreviewGroupMembers(memberIDs, RADAR_ICON_COUNT + 1);
+
+		// The squadmate is a preview member other than the local player
+		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
+		memberIDs.RemoveItem(localPlayerID);
+
+		float iconSize = GetRadarIconSize();
+		// Upright when only arrows turn, except on the outline, where seat icons have no arrow
+		float iconRotation = DEMO_VEHICLE_HEADING;
+		if (GetValue(CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE) && !outlineShown)
+			iconRotation = 0;
+
+		for (int seat = 0, seatCount = DEMO_VEHICLE_SEATS.Count() / 2; seat < seatCount; seat++)
+		{
+			Widget icon = GetRadarIcon(seat);
+			if (!icon)
+				continue;
+
+			if (seat == DEMO_EMPTY_SEAT || (seat == DEMO_OUTSIDER_SEAT && !outlineShown))
+			{
+				icon.SetVisible(false);
+				continue;
+			}
+
+			float seatX = DEMO_VEHICLE_SEATS[seat * 2];
+			float seatZ = DEMO_VEHICLE_SEATS[seat * 2 + 1];
+			float right = rightX * seatX + rightZ * seatZ + offsetRight;
+			float forward = forwardX * seatX + forwardZ * seatZ + offsetForward;
+			PlaceInRadar(icon, right * metersToUnits, -forward * metersToUnits);
+
+			CSI_EIcon seatIcon = CSI_EIcon.PASSANGER;
+			PlayerId playerID = 0;
+			CSI_EColorTeam colorTeam = CSI_EColorTeam.NONE;
+			if (seat == 0)
+			{
+				seatIcon = CSI_EIcon.DRIVER;
+				colorTeam = CSI_SettingInfo.GetPlayerColorTeam(localPlayerID, CSI_EColorTeam.NONE);
+			}
+			else if (seat == DEMO_SQUADMATE_SEAT)
+			{
+				if (!memberIDs.IsEmpty())
+					playerID = memberIDs[0];
+
+				colorTeam = CSI_SettingInfo.GetPlayerColorTeam(playerID, DEMO_MATE_TEAMS[0]);
+			}
+
+			CSI_SettingInfo.ShowIcon(m_wSettingsRoot, icon, iconSize, seatIcon, colorTeam, iconRotation, DEMO_VEHICLE_HEADING, 1);
+			if (seat == DEMO_OUTSIDER_SEAT)
+				ShowAsOutsider(icon);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Shows a seat icon as the radar shows a player outside the group: nametag color, no seat ring.
+	//! \param[in] icon
+	protected void ShowAsOutsider(notnull Widget icon)
+	{
+		Widget seatRing = icon.FindAnyWidget("Outline_Large");
+		if (seatRing)
+			seatRing.SetVisible(false);
+
+		Widget iconFrame = icon.FindAnyWidget("IconFrame");
+		if (iconFrame)
+			iconFrame.SetColor(CSI_ColorPresets.GetColor(CSI_ColorPresets.GetNonClashingPreset(GetValue(CSI_GameSettings.NAMETAG_COLOR), GetValue(CSI_GameSettings.COLOR_TEAM_SET))));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Draws the jeep again if the canvas changed size since ShowVehicleOutline.
+	protected void RedrawVehicleOutline()
+	{
+		if (m_VehicleOutline)
+			m_VehicleOutline.Update(m_fDemoWidthsPerMeter);
 	}
 
 	//------------------------------------------------------------------------------------------------

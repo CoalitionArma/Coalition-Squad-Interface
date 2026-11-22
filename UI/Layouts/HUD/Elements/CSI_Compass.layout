@@ -60,6 +60,20 @@ ScaleWidgetClass {
         SizeMode Fill
        }
        {
+        ScaleWidgetClass "{5772E8435EA0E1E7}" : "{CA69EBAFDB01EA92}UI/Layouts/HUD/Elements/CSI_VehicleOutline.layout" {
+         Name "VehicleOutlineElement"
+         Slot FrameWidgetSlot "{D5ED58B8F1085217}" {
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0.964
+          SizeX 0
+          OffsetRight 0
+          SizeY -1.929
+          OffsetBottom 0
+         }
+         "Z Order" 0
+        }
         ScaleWidgetClass "{66B8C3E49230831B}" : "{D45CA5F9BA346BF7}UI/Layouts/HUD/Elements/CSI_Radar.layout" {
          Name "Radar"
          Slot FrameWidgetSlot "{66B8C3DFC9AE8CC6}" {

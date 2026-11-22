@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: clicking a player tile opens the CSI player settings panel (group leader and team
 //! 				leaders) instead of the options combo.
@@ -19,12 +19,8 @@ modded class SCR_PlayerTileButtonComponent
 	{
 		m_TileButton = tileButton;
 
-		if (!m_TileButton)
-			return;
-
-		Widget rootFrame = m_TileButton.GetRootFrame(m_wRoot);
-		if (rootFrame)
-			m_PlayerSettings = rootFrame.FindAnyWidget("PlayersSettings");
+		if (m_TileButton)
+			m_PlayerSettings = m_TileButton.GetPlayerSettingsPanel(m_wRoot);
 	}
 
 	//------------------------------------------------------------------------------------------------

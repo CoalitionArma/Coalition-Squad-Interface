@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI's user settings module (the CSI tab in Settings). Read values through CSI_SettingsManager,
 //! 				which applies server overrides on top of these.
@@ -50,6 +50,7 @@ class CSI_GameSettings : ModuleGameSettings
 	const static string NAMETAG_COLOR = "m_iNametagOtherColor";	// once Other nametag color; the field name keeps saved settings
 	const static string COLOR_TEAM_SET = "m_iColorTeamSet";
 	const static string NAMETAG_VON_COLOR = "m_iNametagVONColor";
+	const static string RADAR_VEHICLE_OUTLINE = "m_bRadarVehicleOutline";
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 SETTINGS ARRAY (USED FOR AUTHORITY OVERRIDE OF SETTINGS)
@@ -95,7 +96,8 @@ class CSI_GameSettings : ModuleGameSettings
 		STANDARD_SQUAD_COLOR,
 		NAMETAG_COLOR,
 		COLOR_TEAM_SET,
-		NAMETAG_VON_COLOR
+		NAMETAG_VON_COLOR,
+		RADAR_VEHICLE_OUTLINE
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -115,7 +117,8 @@ class CSI_GameSettings : ModuleGameSettings
 		NAMETAG_LOS_VISIBLE,
 		AUTO_HIDE_HUD,
 		NAMETAG_BRIGHTNESS_DIMMING,
-		SQUADMATE_GROUP_IN_NAMETAG_VISIBLE
+		SQUADMATE_GROUP_IN_NAMETAG_VISIBLE,
+		RADAR_VEHICLE_OUTLINE
 	};
 
 	//------------------------------------------------------------------------------------------------
@@ -258,7 +261,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "85", uiwidget: UIWidgets.Slider, params: "0 100 1", desc: "Distant tags show only the role icon, not the name. Higher values start this closer to you; 0% turns it off. Only works with Role icons shown.")]
 	int m_iNametagRangeSimplifiedPercentage;
 
-	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while you look through a scope or binoculars. 100% keeps the normal range.")]
+	[Attribute(defvalue: "200", uiwidget: UIWidgets.Slider, params: "10 500 10", desc: "Multiplies the nametag range while you look through a scope or binoculars. 100% keeps the normal range.")]
 	int m_iNametagMagnificationMultiplication;
 
 	[Attribute(defvalue: "125", uiwidget: UIWidgets.Slider, params: "5 145 5", desc: "Nametags show only within this angle around where you're looking. It's full width up close and narrows to nothing at the edge of the range.")]
@@ -300,7 +303,7 @@ class CSI_GameSettings : ModuleGameSettings
 	int m_bBearingVisible;
 
 	// Radar
-	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nearby squadmates inside the compass, with you in the middle and where you're looking at the top. Shows in groups of 2 or more.")]
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Shows nearby squadmates inside the compass, with you in the middle and where you're looking at the top. Shows in groups of 2 or more, and in vehicles while Vehicle outline is shown.")]
 	int m_bRadarVisible;
 
 	[Attribute(defvalue: "25", uiwidget: UIWidgets.Slider, params: "5 100 1", desc: "How far away, in meters, squadmates show on the radar while you're on foot. Icons fade out near the edge.")]
@@ -309,12 +312,15 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "4", uiwidget: UIWidgets.Slider, params: "1 10 1", desc: "How far away, in meters, squadmates show on the radar while you're in a vehicle. Kept short to show who's in your vehicle and in which seat.")]
 	int m_iRadarRangeInVehicle;
 
+	[Attribute(defvalue: "1", uiwidget: UIWidgets.CheckBox, desc: "Draws a top-down outline of the vehicle you're in on the radar, to the radar's scale, so squadmates show in their seats. In a vehicle the radar shows you even without a group.")]
+	int m_bRadarVehicleOutline;
+
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Size of squadmate icons on the radar. 100% is the normal size.")]
 	int m_iRadarIconSize;
 
 	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking fade from the radar over 2 seconds. 360° shows everyone.")]
 	int m_iRadarFieldOfView;
 
-	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright. Off: the whole icon turns.")]
+	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright, except seat icons on a vehicle outline. Off: the whole icon turns.")]
 	int m_bRadarIconArrowsRotate;
 }

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	CSI tab in Settings: server overrides (set by admins, locked for others), server defaults for players
 //! 				without saved settings, settings nested under their switch, and the Setting Info and Server Admin panels.
@@ -694,6 +694,7 @@ class CSI_SettingsSubMenu: SCR_SettingsSubMenuBase
 		TStringArray radar = {
 			CSI_GameSettings.RADAR_RANGE_ON_FOOT,
 			CSI_GameSettings.RADAR_RANGE_IN_VEHICLE,
+			CSI_GameSettings.RADAR_VEHICLE_OUTLINE,
 			CSI_GameSettings.RADAR_ICON_SIZE,
 			CSI_GameSettings.RADAR_FIELD_OF_VIEW,
 			CSI_GameSettings.RADAR_ICON_ARROWS_ROTATE};

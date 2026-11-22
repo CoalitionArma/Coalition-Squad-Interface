@@ -3,7 +3,7 @@ class CSI_SettingsManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Effective CSI settings for the local player: their own values with server overrides applied.
 //! 				Also holds the admin-set server overrides, max group size and server default settings, saved
@@ -360,23 +360,35 @@ class CSI_SettingsManager : ScriptComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! Server: stores one setting's default for players without saved settings.
-	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] value
-	void UpdateServerDefault(string setting, int value)
+	//! Server: stores the settings' defaults for players without saved settings, in one update.
+	//! \param[in] values by settings index; a negative value keeps that setting's default as it is
+	void UpdateServerDefaults(notnull array<int> values)
 	{
 		if (!Replication.IsServer())
 			return;
 
-		int index = CSI_GameSettings.GetSettingsArray().Find(setting);
-		if (index == -1 || value < 0)
+		int settingsCount = CSI_GameSettings.GetSettingsArray().Count();
+		bool changed;
+		foreach (int index, int value : values)
+		{
+			// More values than settings: sent by a newer version
+			if (index >= settingsCount)
+				break;
+
+			if (value < 0)
+				continue;
+
+			// First default: one entry per setting, none set yet
+			while (m_aSettingsDefaultValues.Count() < settingsCount)
+				m_aSettingsDefaultValues.Insert(NO_SERVER_DEFAULT);
+
+			m_aSettingsDefaultValues.Set(index, value);
+			changed = true;
+		}
+
+		if (!changed)
 			return;
 
-		// First default: one entry per setting, none set yet
-		while (m_aSettingsDefaultValues.Count() < CSI_GameSettings.GetSettingsArray().Count())
-			m_aSettingsDefaultValues.Insert(NO_SERVER_DEFAULT);
-
-		m_aSettingsDefaultValues.Set(index, value);
 		Replication.BumpMe();
 
 		// onRplName only runs on clients, so update here too

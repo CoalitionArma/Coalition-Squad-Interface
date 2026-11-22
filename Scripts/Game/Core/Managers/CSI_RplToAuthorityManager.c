@@ -3,10 +3,11 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-20
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
-//! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager or the group APIs.
+//! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager, CSI_VehicleOutlineSystem or the
+//! 				group APIs; the server sends vehicle outlines back to the owner (RpcDo_VehicleOutline).
 //! 
 //------------------------------------------------------------------------------------------------
 class CSI_RplToAuthorityManager : ScriptComponent
@@ -147,12 +148,11 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Admin: sets a default for players without saved settings.
-	//! \param[in] setting CSI_GameSettings name
-	//! \param[in] value
-	void Owner_SetServerDefault(string setting, int value)
+	//! Admin: sets the defaults for players without saved settings.
+	//! \param[in] values by settings index; a negative value keeps that setting's default as it is
+	void Owner_SetServerDefaults(notnull array<int> values)
 	{
-		Rpc(RpcAsk_SetServerDefault, setting, value);
+		Rpc(RpcAsk_SetServerDefaults, values);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -160,6 +160,20 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	void Owner_ClearServerDefaults()
 	{
 		Rpc(RpcAsk_ClearServerDefaults);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Asks the server for the radar outlines of the vehicle's hull and turrets.
+	//! \param[in] vehicle
+	//! \return false if the vehicle isn't replicated
+	bool Owner_RequestVehicleOutlines(notnull IEntity vehicle)
+	{
+		RplComponent rplComponent = RplComponent.Cast(vehicle.FindComponent(RplComponent));
+		if (!rplComponent)
+			return false;
+
+		Rpc(RpcAsk_RequestVehicleOutlines, rplComponent.Id());
+		return true;
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -309,13 +323,12 @@ class CSI_RplToAuthorityManager : ScriptComponent
 
 	//------------------------------------------------------------------------------------------------
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void RpcAsk_SetServerDefault(string setting, int value)
+	protected void RpcAsk_SetServerDefaults(array<int> values)
 	{
-		// Only admins, and only known setting names
-		if (!m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()) || !CSI_GameSettings.GetSettingsArray().Contains(setting))
+		if (!values || !m_SettingsManager || !SCR_Global.IsAdmin(GetSenderPlayerID()))
 			return;
 
-		m_SettingsManager.UpdateServerDefault(setting, value);
+		m_SettingsManager.UpdateServerDefaults(values);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -329,6 +342,22 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	protected void RpcAsk_RequestVehicleOutlines(RplId vehicleId)
+	{
+		RplComponent rplComponent = RplComponent.Cast(Replication.FindItem(vehicleId));
+		if (!rplComponent)
+			return;
+
+		IEntity vehicle = rplComponent.GetEntity();
+		CSI_VehicleOutlineSystem outlineSystem = CSI_VehicleOutlineSystem.GetInstance();
+		if (!vehicle || !outlineSystem)
+			return;
+
+		outlineSystem.RequestOutlines(vehicle, this);
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! Server: ID of the player who sent the RpcAsk_ (this controller's owner).
 	//! \return 0 if the owner isn't a player controller
 	protected int GetSenderPlayerID()
@@ -338,6 +367,30 @@ class CSI_RplToAuthorityManager : ScriptComponent
 			return 0;
 
 		return controller.GetPlayerId();
+	}
+
+//=============================================================================================================================================================================================================================================================================================================================================================
+//	 SERVER TO OWNER METHODS
+//=============================================================================================================================================================================================================================================================================================================================================================
+
+	//------------------------------------------------------------------------------------------------
+	//! Server: sends a vehicle outline to this controller's owner.
+	//! \param[in] prefab the hull's or turret's prefab
+	//! \param[in] data CSI_VehicleOutline.ToData
+	void SendVehicleOutline(ResourceName prefab, notnull array<float> data)
+	{
+		Rpc(RpcDo_VehicleOutline, prefab, data);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	[RplRpc(RplChannel.Reliable, RplRcver.Owner)]
+	protected void RpcDo_VehicleOutline(string prefab, array<float> data)
+	{
+		if (!data || data.IsEmpty())
+			return;
+
+		CSI_VehicleOutline.CacheData(prefab, data);
+
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

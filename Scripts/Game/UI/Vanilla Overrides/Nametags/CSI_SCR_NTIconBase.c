@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
 //! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name; talking shows
@@ -13,15 +13,9 @@ modded class SCR_NTIconBase
 {
 	protected static const int ICON_KEY_NONE = -3;	//!< no icon loaded; GetIconKey never returns it
 
-	protected CSI_HUDSystem m_HUDSystem;
-	protected CSI_SettingsManager m_SettingsManager;
-
 	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)
 	{
-		m_HUDSystem = CSI_HUDSystem.GetInstance();
-		m_SettingsManager = CSI_SettingsManager.GetInstance();
-
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget)
 			return;
@@ -32,10 +26,9 @@ modded class SCR_NTIconBase
 
 		//-----------------------------------------------------------------------
 		// Hide Unused Role Icon Widgets
-		CSI_ENametagIconPosition nametagPos = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_ROLE_ICON_POSITION);
 		// AI always show their icon (their tags are icon only); players' follow ROLE_IN_NAMETAG_VISIBLE
-		bool showIcon = data.m_eType == ENameTagEntityType.AI || m_SettingsManager.GetSettingBool(CSI_GameSettings.ROLE_IN_NAMETAG_VISIBLE);
-		if (iWidget.GetName() != ("RoleIcon" + SCR_Enum.GetEnumName(CSI_ENametagIconPosition, nametagPos)) || !showIcon)
+		bool showIcon = data.m_eType == ENameTagEntityType.AI || CSI_NametagSettings.s_bRoleIcons;
+		if (m_sWidgetName != CSI_NametagSettings.s_sRoleIconWidgetName || !showIcon)
 		{
 			data.SetVisibility(iWidget, false, 0, false);
 			iWidget.SetVisible(false);	// UpdateElement skips hidden icons
@@ -48,8 +41,7 @@ modded class SCR_NTIconBase
 
 		//-----------------------------------------------------------------------
 		// Set Static Scale Of The Icon
-		int scale = GetNametagImageScale();
-		iWidget.SetSize(scale, scale);
+		iWidget.SetSize(CSI_NametagSettings.s_iIconSize, CSI_NametagSettings.s_iIconSize);
 
 		//-----------------------------------------------------------------------
 		// Actually Make The Widget Visible
@@ -60,6 +52,10 @@ modded class SCR_NTIconBase
 	override void UpdateElement(SCR_NameTagData data, int index)
 	{
 		super.UpdateElement(data, index);
+
+		// Only the RoleIcon widget in use shows; SetDefaults hid the others
+		if (m_sWidgetName != CSI_NametagSettings.s_sRoleIconWidgetName)
+			return;
 
 		ImageWidget iWidget = ImageWidget.Cast( data.m_aNametagElements[index] );
 		if (!iWidget || !iWidget.IsVisible())
@@ -102,10 +98,10 @@ modded class SCR_NTIconBase
 
 			//-----------------------------------------------------------------------
 			// Color Updates For VON/Color Teams
-			SetWidgetCSIColor(data, index);
+			SetElementColor(data, index, data.m_TagColor);
 		} else {
 			// No CSI data: AI icon for AI, else empty
-			SetElementColor(data, index, GetNametagColor(CSI_GameSettings.NAMETAG_COLOR));
+			SetElementColor(data, index, CSI_NametagSettings.s_NametagColor);
 
 			if (loadIcon)
 			{
@@ -157,7 +153,6 @@ modded class SCR_NTIconBase
 			return -1;
 		}
 
-		int iconTheme = m_SettingsManager.GetSettingInt(CSI_GameSettings.ICON_THEME);
-		return (data.m_ePriorityEntityState << 16) | (iconTheme << 8) | data.m_PlayerData.GetDisplayIcon();
+		return (data.m_ePriorityEntityState << 16) | (CSI_NametagSettings.s_iIconTheme << 8) | data.m_PlayerData.GetDisplayIcon();
 	}
 }

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-19
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible: shows the
 //! 				setting's panel with the local player's nametag, laid out and colored for the tab's values.
@@ -63,6 +63,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 	protected Widget m_wSettingsRoot;	//!< CSI settings tab root, for the selected values
 	protected ref array<Widget> m_aPanels = {};
+	protected CSI_TalkingBarsComponent m_TalkingBars;	//!< bars animating in the shown example, stopped when it's hidden
 
 	// FieldOfView
 	protected ref array<Widget> m_aFieldOfViewEdgeDots = {};	//!< both edges' dots, created on first show
@@ -251,6 +252,11 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	void HideExample()
 	{
+		if (m_TalkingBars)
+			m_TalkingBars.SetActive(false);
+
+		m_TalkingBars = null;
+
 		if (m_wRoot)
 			m_wRoot.SetVisible(false);
 
@@ -858,6 +864,9 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 			if (talkingBars)
 				talkingBars.SetActive(visible && talking);
+
+			if (talkingBars && visible && talking)
+				m_TalkingBars = talkingBars;
 
 			if (!visible)
 				continue;

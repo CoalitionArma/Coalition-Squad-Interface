@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-21
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Player icon for the group list and radar: role icon, facing arrow and color team,
 //! 				refreshed on player data and settings changes.
@@ -27,6 +27,8 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 	protected bool m_bHasAllParts;	//!< all widgets above were found
 	protected float m_fArrowRotation;	//!< degrees last set (SetRotation)
 	protected float m_fIconRotation;
+	protected bool m_bOutsider;		//!< outside the local group: nametag color, no seat ring unless driving
+	protected bool m_bInOutlinedVehicle;	//!< in the radar's outlined vehicle: turret seats show no arrow
 
 	[Attribute(defvalue: "false", uiwidget: UIWidgets.CheckBox)]
 	bool m_bIsRadarWidget;	//!< radar icons show the arrow on turreted seats
@@ -86,6 +88,26 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 		m_bIsRadarWidget = isRadarWidget;
 	}
 
+	//------------------------------------------------------------------------------------------------
+	void SetInOutlinedVehicle(bool inside)
+	{
+		if (inside == m_bInOutlinedVehicle)
+			return;
+
+		m_bInOutlinedVehicle = inside;
+		DataUpdate();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	void SetOutsider(bool outsider)
+	{
+		if (outsider == m_bOutsider)
+			return;
+
+		m_bOutsider = outsider;
+		DataUpdate();
+	}
+
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT UPDATE
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -131,6 +153,15 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 			return;
 
 		SetIconWidget(m_PlayerData.GetDisplayIcon());
+
+		// Outsiders take the nametag color, as their nametags do
+		if (m_bOutsider)
+		{
+			int teamSet = m_SettingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
+			int nametagPreset = m_SettingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_COLOR);
+			m_wIconFrame.SetColor(CSI_ColorPresets.GetColor(CSI_ColorPresets.GetNonClashingPreset(nametagPreset, teamSet)));
+			return;
+		}
 
 		m_wIconFrame.SetColor(CSI_UIHelper.ConvertColorTeamToColor(m_PlayerData.GetColorTeam()));
 	}
@@ -189,16 +220,17 @@ class CSI_Icon : SCR_ScriptedWidgetComponent
 
 			m_wIconLarge.SetVisible(true);
 
-			// Radar: turreted seats show the turret arrow instead of the outline
+			// Radar: turreted seats show the turret arrow instead of the outline, except in the outlined vehicle
 			bool isTurreted = (icon == CSI_EIcon.GUNNER || icon == CSI_EIcon.COMMANDER);
 
-			if (isTurreted && m_bIsRadarWidget)
+			if (isTurreted && m_bIsRadarWidget && !m_bInOutlinedVehicle)
 			{
 				m_wArrow.SetVisible(true);
 				m_wOutlineLarge.SetVisible(false);
 			} else {
+				// Outsiders' seats have no ring, except the driver's
 				m_wArrow.SetVisible(false);
-				m_wOutlineLarge.SetVisible(true);
+				m_wOutlineLarge.SetVisible(!m_bOutsider || icon == CSI_EIcon.DRIVER || icon == CSI_EIcon.HELIPILOT);
 			};
 
 		} else {
