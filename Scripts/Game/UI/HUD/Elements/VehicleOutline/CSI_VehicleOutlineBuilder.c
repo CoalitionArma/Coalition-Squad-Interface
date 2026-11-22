@@ -4,7 +4,8 @@
 //! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Builds the top-down outline of a vehicle's hull, turret or weapon rack over a few frames by
-//! 				tracing down through a grid over it, past doors; falls back to its colliders' hull, then its bounds.
+//! 				tracing down through a grid over it, past doors, leaving out a hull's small spurs such as mirrors;
+//! 				falls back to its colliders' hull, then its bounds.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_VehicleOutlineBuilder
@@ -30,6 +31,8 @@ class CSI_VehicleOutlineBuilder
 	protected static const float TRACK_WIDTH = 0.5;				//!< m, a track's width
 	protected static const float SIMPLIFY_TOLERANCE = 0.04;		//!< m a simplified line may stray from the traced one
 	protected static const float MIN_CONTOUR_AREA = 3;			//!< cells; smaller pieces (mirrors, antennas) are left out
+	protected static const float MAX_SPUR_LENGTH = 0.8;			//!< m; a hull's bits up to two cells thin sticking out no longer than this (mirrors) are left out
+	protected static const float MAX_SPUR_AREA = 0.25;			//!< square m; larger such bits are kept
 	protected static const float COLLIDER_BOUNDS_MARGIN = 0.5;	//!< m colliders may reach past the meshes' bounds
 	protected static const int MAX_DOOR_PASSES = 8;				//!< door colliders a trace may look past
 	protected static const float DOOR_STEP = 0.02;				//!< m a trace moves on past a door collider
@@ -44,6 +47,7 @@ class CSI_VehicleOutlineBuilder
 
 	protected IEntity m_Root;
 	protected TurretComponent m_Turret;				//!< the frame follows its aim; null for a hull or weapon rack
+	protected bool m_bHull;							//!< the vehicle's own outline, not a turret's, gun's or weapon rack's
 	protected ref array<IEntity> m_aParts = {};		//!< the root and its parts with physics, without pieces of their own below it
 	protected ref TraceParam m_TraceParam;
 	protected ref CSI_VehicleOutline m_Outline;		//!< set once built
@@ -95,6 +99,8 @@ class CSI_VehicleOutlineBuilder
 	protected ref array<bool> m_aReached = {};		//!< FillHoles: misses reached from the ring
 	protected ref array<int> m_aSpreading = {};		//!< FillHoles: reached misses not spread from yet
 	protected bool m_bFillSeeded;
+	protected ref set<int> m_aEdgeHits = new set<int>();	//!< FillHoles: a hull's hits next to misses reached from the ring
+	protected ref array<bool> m_aSpurs = {};		//!< RemoveSpurs: hits left out as small spurs; their edges aren't refined
 
 	// Grid stages, then marching squares: each edge point's two neighbors and crossing fraction
 	protected bool m_bGapsClosed;
@@ -126,8 +132,9 @@ class CSI_VehicleOutlineBuilder
 		AddDoors();
 
 		// A hull's grid covers only its own model and wheels, cutting off cages around it; turrets and racks cover all parts
+		m_bHull = !turret && !CSI_VehicleOutline.IsWeaponRack(root);
 		bool hasBounds;
-		if (!turret && !CSI_VehicleOutline.IsWeaponRack(root))
+		if (m_bHull)
 			hasBounds = AddBounds(root, true);
 
 		// Without a model of its own, every part's bounds
@@ -1286,11 +1293,16 @@ class CSI_VehicleOutlineBuilder
 			return false;
 
 		m_iStagePass = 0;
+
+		// In the same step, so it takes no step of its own
+		if (m_bHull)
+			RemoveSpurs();
+
 		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Queues a miss for FillHoles if it isn't reached yet.
+	//! Queues a miss for FillHoles if it isn't reached yet, and notes a hull's hits next to it (its outer edge).
 	//! \param[in] column
 	//! \param[in] row
 	protected void PushOpenCell(int column, int row)
@@ -1299,11 +1311,208 @@ class CSI_VehicleOutlineBuilder
 			return;
 
 		int cell = row * m_iColumns + column;
-		if (m_aReached[cell] || m_aHits[cell])
+		if (m_aHits[cell])
+		{
+			if (m_bHull)
+				m_aEdgeHits.Insert(cell);
+
+			return;
+		}
+
+		if (m_aReached[cell])
 			return;
 
 		m_aReached[cell] = true;
 		m_aSpreading.Insert(cell);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Leaves out a hull's small spurs such as mirrors: outer edge hits that no full 3 by 3 block of hits covers (what an
+	//! opening, shrink then grow a cell, would take off), grouped, where a group is small, meets the body in one place
+	//! and holds no wheel. Only edge hits can be thin, as any other hit centers a full block.
+	protected void RemoveSpurs()
+	{
+		m_aSpurs.Resize(m_aHits.Count());
+
+		set<int> thin = new set<int>();
+		foreach (int cell : m_aEdgeHits)
+		{
+			if (!IsInFullBlock(cell % m_iColumns, cell / m_iColumns))
+				thin.Insert(cell);
+		}
+
+		set<int> grouped = new set<int>();
+		foreach (int thinCell : thin)
+		{
+			if (!grouped.Contains(thinCell))
+				GroupSpur(thinCell, thin, grouped);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] column
+	//! \param[in] row
+	//! \return true if the cell lies in a 3 by 3 block of hits
+	protected bool IsInFullBlock(int column, int row)
+	{
+		for (int centerRow = row - 1; centerRow <= row + 1; centerRow++)
+		{
+			for (int centerColumn = column - 1; centerColumn <= column + 1; centerColumn++)
+			{
+				if (IsFullBlockCenter(centerColumn, centerRow))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] column
+	//! \param[in] row
+	//! \return true if the cell and its 8 neighbors are all hits
+	protected bool IsFullBlockCenter(int column, int row)
+	{
+		if (column < 1 || row < 1 || column > m_iColumns - 2 || row > m_iRows - 2)
+			return false;
+
+		for (int blockRow = row - 1; blockRow <= row + 1; blockRow++)
+		{
+			int rowStart = blockRow * m_iColumns;
+			if (!m_aHits[rowStart + column - 1] || !m_aHits[rowStart + column] || !m_aHits[rowStart + column + 1])
+				return false;
+		}
+
+		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Gathers the spur a thin cell belongs to, diagonal neighbors too, and leaves it out if it's small, holds no wheel
+	//! and meets the body in one place only (a thin stretch between two thicker ones, like a tail boom's, is kept).
+	//! \param[in] first a thin cell not grouped yet
+	//! \param[in] thin every thin cell
+	//! \param[in,out] grouped the thin cells grouped so far
+	protected void GroupSpur(int first, notnull set<int> thin, notnull set<int> grouped)
+	{
+		grouped.Insert(first);
+		array<int> spur = {first};
+		int minColumn = first % m_iColumns;
+		int maxColumn = minColumn;
+		int minRow = first / m_iColumns;
+		int maxRow = minRow;
+		bool hasWheel = false;
+		for (int index = 0; index < spur.Count(); index++)
+		{
+			int cell = spur[index];
+			int column = cell % m_iColumns;
+			int row = cell / m_iColumns;
+			if (column < minColumn)
+				minColumn = column;
+
+			if (column > maxColumn)
+				maxColumn = column;
+
+			if (row < minRow)
+				minRow = row;
+
+			if (row > maxRow)
+				maxRow = row;
+
+			if (m_aStamped[cell])
+				hasWheel = true;
+
+			for (int neighborRow = row - 1; neighborRow <= row + 1; neighborRow++)
+			{
+				for (int neighborColumn = column - 1; neighborColumn <= column + 1; neighborColumn++)
+				{
+					if (neighborColumn < 0 || neighborRow < 0 || neighborColumn >= m_iColumns || neighborRow >= m_iRows)
+						continue;
+
+					int neighbor = neighborRow * m_iColumns + neighborColumn;
+					if (!thin.Contains(neighbor) || grouped.Contains(neighbor))
+						continue;
+
+					grouped.Insert(neighbor);
+					spur.Insert(neighbor);
+				}
+			}
+		}
+
+		float length = (Math.Max(maxColumn - minColumn, maxRow - minRow) + 1) * m_fCellSize;
+		float area = spur.Count() * m_fCellSize * m_fCellSize;
+		if (hasWheel || length > MAX_SPUR_LENGTH || area > MAX_SPUR_AREA || CountBodyContacts(spur, thin) > 1)
+			return;
+
+		foreach (int spurCell : spur)
+		{
+			m_aHits[spurCell] = false;
+			m_aSpurs[spurCell] = true;
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] spur its cells
+	//! \param[in] thin every thin cell; the body is the hits that aren't
+	//! \return separate places where the spur meets the body
+	protected int CountBodyContacts(notnull array<int> spur, notnull set<int> thin)
+	{
+		// The spur's cells next to the body
+		set<int> contacts = new set<int>();
+		foreach (int cell : spur)
+		{
+			int column = cell % m_iColumns;
+			int row = cell / m_iColumns;
+			for (int neighborRow = row - 1; neighborRow <= row + 1; neighborRow++)
+			{
+				for (int neighborColumn = column - 1; neighborColumn <= column + 1; neighborColumn++)
+				{
+					if (neighborColumn < 0 || neighborRow < 0 || neighborColumn >= m_iColumns || neighborRow >= m_iRows)
+						continue;
+
+					int neighbor = neighborRow * m_iColumns + neighborColumn;
+					if (m_aHits[neighbor] && !thin.Contains(neighbor))
+						contacts.Insert(cell);
+				}
+			}
+		}
+
+		// Groups of touching contact cells
+		int groups = 0;
+		set<int> counted = new set<int>();
+		foreach (int contact : contacts)
+		{
+			if (counted.Contains(contact))
+				continue;
+
+			groups++;
+			counted.Insert(contact);
+			array<int> stack = {contact};
+			while (!stack.IsEmpty())
+			{
+				int last = stack.Count() - 1;
+				int current = stack[last];
+				stack.Remove(last);
+				int currentColumn = current % m_iColumns;
+				int currentRow = current / m_iColumns;
+				for (int touchingRow = currentRow - 1; touchingRow <= currentRow + 1; touchingRow++)
+				{
+					for (int touchingColumn = currentColumn - 1; touchingColumn <= currentColumn + 1; touchingColumn++)
+					{
+						if (touchingColumn < 0 || touchingRow < 0 || touchingColumn >= m_iColumns || touchingRow >= m_iRows)
+							continue;
+
+						int touching = touchingRow * m_iColumns + touchingColumn;
+						if (!contacts.Contains(touching) || counted.Contains(touching))
+							continue;
+
+						counted.Insert(touching);
+						stack.Insert(touching);
+					}
+				}
+			}
+		}
+
+		return groups;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1407,7 +1616,8 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Finds where the outline crosses the edge point's cell edge; wheel and track edges stay in the middle.
+	//! Finds where the outline crosses the edge point's cell edge; wheel and track edges stay in the middle, as do
+	//! edges next to a spur left out, where traces would find the spur.
 	//! \param[in] key GetEdgeKey
 	protected void RefineEdge(int key)
 	{
@@ -1424,6 +1634,9 @@ class CSI_VehicleOutlineBuilder
 
 		bool startHit = IsHit(column, row) == 1;
 		if ((startHit && IsStamped(column, row)) || (!startHit && IsStamped(endColumn, endRow)))
+			return;
+
+		if (IsSpur(column, row) || IsSpur(endColumn, endRow))
 			return;
 
 		float startX = GetSampleX(column);
@@ -1628,6 +1841,18 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
+	//! \param[in] column
+	//! \param[in] row
+	//! \return true if RemoveSpurs left the cell out
+	protected bool IsSpur(int column, int row)
+	{
+		if (m_aSpurs.IsEmpty() || column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
+			return false;
+
+		return m_aSpurs[row * m_iColumns + column];
+	}
+
+	//------------------------------------------------------------------------------------------------
 	//! \param[in] column of the edge's first trace (-1 to m_iColumns)
 	//! \param[in] row of the edge's first trace (-1 to m_iRows)
 	//! \param[in] alongZ the edge runs to the next row, else to the next column
@@ -1664,8 +1889,10 @@ class CSI_VehicleOutlineBuilder
 		bool alongZ;
 		DecodeEdgeKey(key, column, row, alongZ);
 
-		float fraction = 0.5;
-		m_mEdgeFractions.Find(key, fraction);
+		// Unrefined edges stay in the middle; Find clears the value when the key is missing
+		float fraction;
+		if (!m_mEdgeFractions.Find(key, fraction))
+			fraction = 0.5;
 
 		float x = GetSampleX(column);
 		float z = GetSampleZ(row);
