@@ -3,7 +3,7 @@ class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-21
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
 //! 				The server registers a player's data when they connect, clears their group-specific data when
@@ -20,6 +20,7 @@ class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 	protected ref map<PlayerId, ref CSI_PlayerData> m_mPlayerDataMap = new map<PlayerId, ref CSI_PlayerData>;	//!< keyed by player ID
 	protected ref map<PlayerId, int> m_mLastGroupIDs = new map<PlayerId, int>;	//!< server only: player ID to the last group they joined
 	protected ref map<PlayerId, WorldTimestamp> m_mDataExpiries = new map<PlayerId, WorldTimestamp>;	//!< server only: disconnected player ID to when their data expires
+	protected bool m_bDataExpiryCheckQueued;	//!< server only: CheckDataExpiry is in the callqueue
 
 	protected CSI_RplBroadcastManager m_RplBroadcastManager;
 
@@ -242,12 +243,19 @@ class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 		ScriptCallQueue callqueue = GetGame().GetCallqueue();
 		if (m_mDataExpiries.IsEmpty())
 		{
-			callqueue.Remove(CheckDataExpiry);
+			if (m_bDataExpiryCheckQueued)
+				callqueue.Remove(CheckDataExpiry);
+
+			m_bDataExpiryCheckQueued = false;
 			return;
 		}
 
-		if (callqueue.GetRemainingTime(CheckDataExpiry) < 0)
-			callqueue.CallLater(CheckDataExpiry, DATA_CHECK_INTERVAL * 1000, true);
+		// Tracked here: a repeating call that runs late reads a negative GetRemainingTime while it runs
+		if (m_bDataExpiryCheckQueued)
+			return;
+
+		callqueue.CallLater(CheckDataExpiry, DATA_CHECK_INTERVAL * 1000, true);
+		m_bDataExpiryCheckQueued = true;
 	}
 
 	//------------------------------------------------------------------------------------------------
