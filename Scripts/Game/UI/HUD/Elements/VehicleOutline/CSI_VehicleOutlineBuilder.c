@@ -83,6 +83,8 @@ class CSI_VehicleOutlineBuilder
 	protected vector m_vFrameZ;
 	protected vector m_vFrameOrigin;
 	protected vector m_vFramePivot;		//!< CSI_VehicleOutline.GetFramePivot's, in the root's space
+	protected float m_fFrameCos = 1;	//!< of the frame's turn from the root
+	protected float m_fFrameSin;
 
 	// Grid stages finished one a frame, then marching squares: each edge point's two neighbors and crossing fraction
 	protected bool m_bGapsClosed;
@@ -915,6 +917,22 @@ class CSI_VehicleOutlineBuilder
 		m_vFrameY = frame[1];
 		m_vFrameZ = frame[2];
 		m_vFrameOrigin = frame[3];
+
+		if (!m_Turret)
+			return;
+
+		float frameYaw = CSI_VehicleOutline.GetFrameYaw(m_Root, m_Turret);
+		m_fFrameCos = Math.Cos(frameYaw);
+		m_fFrameSin = Math.Sin(frameYaw);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] x m in the frame
+	//! \param[in] z m in the frame
+	//! \return the point in the root's space, at y 0
+	protected vector FrameToRoot(float x, float z)
+	{
+		return Vector(m_vFramePivot[0] + x * m_fFrameCos + z * m_fFrameSin, 0, m_vFramePivot[2] - x * m_fFrameSin + z * m_fFrameCos);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -968,6 +986,10 @@ class CSI_VehicleOutlineBuilder
 	//! \return true if the column passes through a rotor's blades, with the heights to skip
 	protected bool GetRotorBand(float x, float z, out float bandTop, out float bandBottom, out bool traceAbove)
 	{
+		if (m_aRotors.IsEmpty())
+			return false;
+
+		vector point = FrameToRoot(x, z);
 		bool inBand;
 		for (int i = 0, count = m_aRotors.Count(); i < count; i += 3)
 		{
@@ -975,8 +997,8 @@ class CSI_VehicleOutlineBuilder
 			vector axis = m_aRotors[i + 1];
 			float radius = m_aRotors[i + 2][0];
 			bool isMain = m_aRotors[i + 2][1] != 0;
-			float offsetX = x - position[0];
-			float offsetZ = z - position[2];
+			float offsetX = point[0] - position[0];
+			float offsetZ = point[2] - position[2];
 
 			float top, bottom;
 			bool above;
@@ -1033,9 +1055,13 @@ class CSI_VehicleOutlineBuilder
 	//! \return true if the point is on a wheel or track seen from above
 	protected bool IsOnWheel(float x, float z)
 	{
+		if (m_aWheelRectangles.IsEmpty())
+			return false;
+
+		vector point = FrameToRoot(x, z);
 		for (int i = 0, count = m_aWheelRectangles.Count(); i < count; i += 4)
 		{
-			if (x >= m_aWheelRectangles[i] && x <= m_aWheelRectangles[i + 1] && z >= m_aWheelRectangles[i + 2] && z <= m_aWheelRectangles[i + 3])
+			if (point[0] >= m_aWheelRectangles[i] && point[0] <= m_aWheelRectangles[i + 1] && point[2] >= m_aWheelRectangles[i + 2] && point[2] <= m_aWheelRectangles[i + 3])
 				return true;
 		}
 
@@ -1326,12 +1352,18 @@ class CSI_VehicleOutlineBuilder
 					if (part != m_Root)
 						point = m_Root.CoordToLocal(point.Multiply4(partTransform));
 
-					// Into the frame; kept near the meshes, in case a collider's bounds are in another space
+					// Into the frame; kept near the meshes if there are any, in case a collider's bounds are in another space
 					point = point - m_vFramePivot;
 					float x = point[0] * cosYaw - point[2] * sinYaw;
 					float z = point[0] * sinYaw + point[2] * cosYaw;
-					points.Insert(Math.Clamp(x, m_vMins[0] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[0] + COLLIDER_BOUNDS_MARGIN));
-					points.Insert(Math.Clamp(z, m_vMins[2] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[2] + COLLIDER_BOUNDS_MARGIN));
+					if (m_iColumns > 0)
+					{
+						x = Math.Clamp(x, m_vMins[0] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[0] + COLLIDER_BOUNDS_MARGIN);
+						z = Math.Clamp(z, m_vMins[2] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[2] + COLLIDER_BOUNDS_MARGIN);
+					}
+
+					points.Insert(x);
+					points.Insert(z);
 				}
 			}
 		}
