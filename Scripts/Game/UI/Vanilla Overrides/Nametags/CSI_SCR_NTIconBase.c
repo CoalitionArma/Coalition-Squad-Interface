@@ -69,9 +69,14 @@ modded class SCR_NTIconBase
 		if (data.m_PlayerData)
 		{
 			//-----------------------------------------------------------------------
+			// Color Updates For VON/Color Teams
+			SetElementColor(data, index, data.m_TagColor);
+			
+			//-----------------------------------------------------------------------
 			// State icons first, then the CSI display icon (MAN uses the pointer)
 			if (loadIcon)
 			{
+				
 				// Talking: CSI_TalkingBars over an empty icon
 				bool talking = data.m_ePriorityEntityState == ENameTagEntityState.VON;
 				SetTalkingBars(iWidget, talking);
@@ -95,10 +100,6 @@ modded class SCR_NTIconBase
 					}
 				};
 			}
-
-			//-----------------------------------------------------------------------
-			// Color Updates For VON/Color Teams
-			SetElementColor(data, index, data.m_TagColor);
 		} else {
 			// No CSI data: AI icon for AI, else empty
 			SetElementColor(data, index, CSI_NametagSettings.s_NametagColor);
