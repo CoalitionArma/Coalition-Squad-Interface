@@ -31,8 +31,9 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	protected bool m_bShown;
 	protected vector m_vCenter;
 	protected bool m_bCenterOnGun;							//!< m_vCenter is the back of the local player's mounted gun
-	protected float m_fSinBase;								//!< of the vehicle's yaw
-	protected float m_fCosBase;
+	protected vector m_vLocalCenter;						//!< m_vCenter in the vehicle's space
+	protected float m_fSinTurn;								//!< of the outline's turn from the vehicle's heading to the view
+	protected float m_fCosTurn = 1;
 	protected ref array<float> m_aIconGaps = {};			//!< right, forward per icon the radar leaves a gap around, m; drawn next frame
 	protected ref array<float> m_aIconDims = {};			//!< right, forward per icon the radar dims lines under, m; drawn next frame
 
@@ -185,14 +186,33 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	//! \param[in] cut leave lines out around it (a gunner's or commander's), else dim them under it
 	void AddIconGap(vector position, bool cut)
 	{
+		if (!m_OutlineVehicle)
+			return;
+
 		array<float> gaps = m_aIconDims;
 		if (cut)
 			gaps = m_aIconGaps;
 
-		float offsetX = position[0] - m_vCenter[0];
-		float offsetZ = position[2] - m_vCenter[2];
-		gaps.Insert(offsetX * m_fCosBase - offsetZ * m_fSinBase);
-		gaps.Insert(offsetX * m_fSinBase + offsetZ * m_fCosBase);
+		vector offset = m_OutlineVehicle.CoordToLocal(position) - m_vLocalCenter;
+		gaps.Insert(offset[0]);
+		gaps.Insert(offset[2]);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Where a point in the outlined vehicle lies on the radar: level in the vehicle's space, as the outline is drawn.
+	//! \param[in] position world
+	//! \param[out] right m right of the radar's center
+	//! \param[out] down m below the radar's center
+	void GetRadarOffset(vector position, out float right, out float down)
+	{
+		right = 0;
+		down = 0;
+		if (!m_OutlineVehicle)
+			return;
+
+		vector offset = m_OutlineVehicle.CoordToLocal(position) - m_vLocalCenter;
+		right = offset[0] * m_fCosTurn - offset[2] * m_fSinTurn;
+		down = -(offset[0] * m_fSinTurn + offset[2] * m_fCosTurn);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -217,16 +237,17 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	{
 		TakeServerOutlines(vehicle, timeSlice);
 
-		// Pieces go in the vehicle's ground frame; the outline turns that to the view as a whole
+		// Everything goes in the vehicle's own space, level whatever its pitch and roll; the outline turns that to the
+		// view by the vehicle's heading as a whole
 		vector vehicleTransform[4];
 		vehicle.GetWorldTransform(vehicleTransform);
 		float viewYaw = -m_HUDSystem.GetLocalYaw() * Math.DEG2RAD;
 		float baseYaw = Math.Atan2(vehicleTransform[2][0], vehicleTransform[2][2]);
-		float sinBase = Math.Sin(baseYaw);
-		float cosBase = Math.Cos(baseYaw);
-		m_fSinBase = sinBase;
-		m_fCosBase = cosBase;
-		m_Outline.SetRotation(viewYaw - baseYaw);
+		float turn = viewYaw - baseYaw;
+		m_fSinTurn = Math.Sin(turn);
+		m_fCosTurn = Math.Cos(turn);
+		m_Outline.SetRotation(turn);
+		m_vLocalCenter = vehicle.CoordToLocal(m_vCenter);
 
 		foreach (int index, CSI_VehicleOutlinePart part : m_aOutlineParts)
 		{
@@ -236,23 +257,17 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 				continue;
 			}
 
-			// The outline's frame on the ground: the entity's own, turned to a turret's aim
+			// The outline's frame: the entity's own, turned to a turret's aim, in the vehicle's space
 			vector frame[4];
 			CSI_VehicleOutline.GetWorldFrame(part.m_Entity, part.m_Turret, part.m_vFramePivot, frame);
-			float offsetX = frame[3][0] - m_vCenter[0];
-			float offsetZ = frame[3][2] - m_vCenter[2];
+			vector axisX = vehicle.VectorToLocal(frame[0]);
+			vector axisZ = vehicle.VectorToLocal(frame[2]);
+			vector offset = vehicle.CoordToLocal(frame[3]) - m_vLocalCenter;
 
-			m_Outline.SetPiece(index, part.m_Outline,
-				frame[0][0] * cosBase - frame[0][2] * sinBase,
-				frame[2][0] * cosBase - frame[2][2] * sinBase,
-				frame[0][0] * sinBase + frame[0][2] * cosBase,
-				frame[2][0] * sinBase + frame[2][2] * cosBase,
-				offsetX * cosBase - offsetZ * sinBase,
-				offsetX * sinBase + offsetZ * cosBase,
-				part.m_eKind);
+			m_Outline.SetPiece(index, part.m_Outline, axisX[0], axisZ[0], axisX[2], axisZ[2], offset[0], offset[2], part.m_eKind);
 		}
 
-		UpdateSeatMarks(sinBase, cosBase);
+		UpdateSeatMarks(vehicle);
 
 		// The radar placed its icons after the last Update
 		float iconShare = m_fIconSize / CSI_Radar.RADAR_SIZE;
@@ -294,9 +309,8 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Marks empty seats, except those at a taken seat (a vehicle may list two seats in one place).
-	//! \param[in] sinBase sine of the vehicle's yaw
-	//! \param[in] cosBase cosine of the vehicle's yaw
-	protected void UpdateSeatMarks(float sinBase, float cosBase)
+	//! \param[in] vehicle
+	protected void UpdateSeatMarks(notnull IEntity vehicle)
 	{
 		m_aSeatMarks.Clear();
 		m_aTakenSeatPositions.Clear();
@@ -333,10 +347,9 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 			if (nearTaken)
 				continue;
 
-			float offsetX = position[0] - m_vCenter[0];
-			float offsetZ = position[2] - m_vCenter[2];
-			m_aSeatMarks.Insert(offsetX * cosBase - offsetZ * sinBase);
-			m_aSeatMarks.Insert(offsetX * sinBase + offsetZ * cosBase);
+			vector offset = vehicle.CoordToLocal(position) - m_vLocalCenter;
+			m_aSeatMarks.Insert(offset[0]);
+			m_aSeatMarks.Insert(offset[2]);
 		}
 
 		m_Outline.SetSeats(m_aSeatMarks);

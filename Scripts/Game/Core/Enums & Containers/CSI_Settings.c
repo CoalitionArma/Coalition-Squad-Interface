@@ -318,7 +318,7 @@ class CSI_GameSettings : ModuleGameSettings
 	[Attribute(defvalue: "100", uiwidget: UIWidgets.Slider, params: "10 300 10", desc: "Size of squadmate icons on the radar. 100% is the normal size.")]
 	int m_iRadarIconSize;
 
-	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking fade from the radar over 2 seconds. 360° shows everyone.")]
+	[Attribute(defvalue: "360", uiwidget: UIWidgets.Slider, params: "5 360 5", desc: "Squadmates outside this angle around where you're looking fade from the radar over 2 seconds; those in your vehicle always show. 360° shows everyone.")]
 	int m_iRadarFieldOfView;
 
 	[Attribute(defvalue: "0", uiwidget: UIWidgets.CheckBox, desc: "On: only the arrow turns to show where each squadmate faces and the icon stays upright, except seat icons without an arrow. Off: the whole icon turns.")]

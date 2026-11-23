@@ -4,7 +4,7 @@
 //! \Last Updated: 	2026-11-22
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar inside the compass: an icon per group member in range, placed and rotated relative to the
-//! 				local player. Members outside the radar's field of view fade out. With the vehicle outline shown,
+//! 				local player. Members outside the radar's field of view fade out, except those in the local player's vehicle. With the vehicle outline shown,
 //! 				it also shows everyone aboard without a group, centered on the outline. CSI_HUD has it read its
 //! 				settings (ApplySettings).
 //!
@@ -169,6 +169,7 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 
 		PlayerManager playerManager = GetGame().GetPlayerManager();
 		array<int> groupPlayerIDs = m_HUDSystem.GetLocalGroupPlayerIds();
+		IEntity localVehicle = m_HUDSystem.GetLocalVehicle();
 
 		CSI_EntityHelper.SetSeatInfo(m_LocalSeat, CSI_EntityHelper.GetCharacterVehicleCompartment(localCharacter));
 
@@ -265,8 +266,23 @@ class CSI_Radar : SCR_ScriptedWidgetComponent
 				x = Math.Sin(relDir) * disT;
 				y = Math.Cos(relDir) * disT;
 
+				// On the outline, level in the vehicle's space as the outline is drawn, whatever its pitch and roll
+				if (inOutlinedVehicle)
+				{
+					float right, down;
+					m_VehicleOutline.GetRadarOffset(playerCharacterOrigin, right, down);
+					x = right * radarScale;
+					y = down * radarScale;
+				}
+
+				// Players in the local player's vehicle always show; out of it, they fade from fully shown
 				if (m_bFieldOfViewLimited)
-					fieldOfViewFade = UpdateFieldOfViewFade(playerID, SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= m_fHalfFieldOfView, timeSlice);
+				{
+					if (localVehicle && seat.m_Compartment && seat.m_Compartment.GetVehicle() == localVehicle)
+						m_mFieldOfViewFades.Set(playerID, 1);
+					else
+						fieldOfViewFade = UpdateFieldOfViewFade(playerID, SCR_Math.DeltaAngle(relDirDegrees, AHEAD_BEARING) <= m_fHalfFieldOfView, timeSlice);
+				}
 			};
 
 			// Clamped: the distance fade is above 1 for most of the range
