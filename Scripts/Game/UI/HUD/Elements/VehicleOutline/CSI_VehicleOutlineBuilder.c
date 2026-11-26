@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-25
+//! \Last Updated: 	2026-11-26
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Builds the top-down outline of a vehicle's hull, turret or weapon rack over a few frames by
 //! 				tracing down through a grid over it, past doors, leaving out a hull's small spurs such as mirrors;
@@ -33,7 +33,6 @@ class CSI_VehicleOutlineBuilder
 	protected static const float MIN_CONTOUR_AREA = 3;			//!< cells; smaller pieces (mirrors, antennas) are left out
 	protected static const float MAX_SPUR_LENGTH = 0.8;			//!< m; a hull's bits up to two cells thin sticking out no longer than this (mirrors) are left out
 	protected static const float MAX_SPUR_AREA = 0.25;			//!< square m; larger such bits are kept
-	protected static const float COLLIDER_BOUNDS_MARGIN = 0.5;	//!< m colliders may reach past the meshes' bounds
 	protected static const int MAX_DOOR_PASSES = 8;				//!< door colliders a trace may look past
 	protected static const float DOOR_STEP = 0.02;				//!< m a trace moves on past a door collider
 	protected static const float BONE_MATCH_SQ = 0.000025;		//!< squared m (5 mm) within which a bone's transform fits a parent bone's
@@ -1695,9 +1694,9 @@ class CSI_VehicleOutlineBuilder
 			if (!physics)
 				continue;
 
-			vector partTransform[4];
-			if (part != m_Root)
-				part.GetWorldTransform(partTransform);
+			// Direct bounds are in the body's physics space
+			vector bodyTransform[4];
+			physics.GetDirectWorldTransform(bodyTransform);
 
 			for (int geom = 0, geomCount = physics.GetNumGeoms(); geom < geomCount; geom++)
 			{
@@ -1708,7 +1707,7 @@ class CSI_VehicleOutlineBuilder
 				geomsUsed++;
 
 				vector geomTransform[4];
-				physics.GetGeomTransform(geom, geomTransform);
+				physics.GetGeomDirectTransform(geom, geomTransform);
 
 				vector mins, maxs;
 				physics.GetGeomDirectBounds(geom, mins, maxs);
@@ -1717,22 +1716,10 @@ class CSI_VehicleOutlineBuilder
 
 				for (int corner = 0; corner < 8; corner++)
 				{
-					vector point = GetBoxCorner(mins, maxs, corner).Multiply4(geomTransform);
-					if (part != m_Root)
-						point = m_Root.CoordToLocal(point.Multiply4(partTransform));
-
-					// Into the frame; kept near the meshes if there are any, in case a collider's bounds are in another space
+					vector point = m_Root.CoordToLocal(GetBoxCorner(mins, maxs, corner).Multiply4(geomTransform).Multiply4(bodyTransform));
 					vector framePoint = RootToFrame(point);
-					float x = framePoint[0];
-					float z = framePoint[2];
-					if (m_iColumns > 0)
-					{
-						x = Math.Clamp(x, m_vMins[0] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[0] + COLLIDER_BOUNDS_MARGIN);
-						z = Math.Clamp(z, m_vMins[2] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[2] + COLLIDER_BOUNDS_MARGIN);
-					}
-
-					points.Insert(x);
-					points.Insert(z);
+					points.Insert(framePoint[0]);
+					points.Insert(framePoint[2]);
 				}
 			}
 		}

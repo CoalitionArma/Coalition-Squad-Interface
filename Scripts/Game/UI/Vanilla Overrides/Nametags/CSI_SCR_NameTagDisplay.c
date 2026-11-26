@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-25
+//! \Last Updated: 	2026-11-26
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed; hidden and
 //! 				not updated while NAMETAG_VISIBLE is off; NAMETAG_BRIGHTNESS_DIMMING fades it by scene brightness and,
@@ -13,7 +13,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 {
 	protected static const float UNDIMMED_OPACITY = 0.85;	//!< opacity with NAMETAG_BRIGHTNESS_DIMMING off
 	protected static const float OPACITY_THROTTLE = 0.01;	//!< smallest opacity change applied
-	protected static const float SUN_SET_HEIGHT = 0.1;	//!< sun direction height at which it has fully set (vanilla night mode's default)
+	protected static const float SUN_SET_HEIGHT = 0.1;	//!< sun direction height at which it has fully set
 	protected static const float NIGHT_OPACITY = 0.2;	//!< highest opacity once the sun has set, wherever the player looks (the night sky reads brighter than the ground)
 
 	// Dim in the dark: opacity by scene brightness, linear between points. About 0.15 and up is daylight, 0.03 a lit

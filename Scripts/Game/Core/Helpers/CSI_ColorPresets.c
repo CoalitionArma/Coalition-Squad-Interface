@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-26
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	The colors a color setting can pick (CSI_EColorPreset; CSI_ColorPickerComponent shows them) and
 //! 				the fire team color sets (CSI_EColorTeamSet). Read a setting's color with GetSettingColor, a
@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------------------------
 class CSI_ColorPresets
 {
-	protected static const int VON_FALLBACK_PRESET = CSI_EColorPreset.AMBER;	//!< talking color when the setting's can't be used (vanilla's talking color)
+	protected static const int VON_FALLBACK_PRESET = CSI_EColorPreset.AMBER;	//!< talking color when the setting's can't be used
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] preset CSI_EColorPreset value
@@ -19,7 +19,7 @@ class CSI_ColorPresets
 	{
 		switch (preset)
 		{
-			// First row: the bright vanilla map marker colors
+			// First row: bright colors
 			case CSI_EColorPreset.AMBER :			return new Color(0.947, 0.651, 0.136, 1);
 			case CSI_EColorPreset.ORANGE :			return new Color(0.761, 0.392, 0.078, 1);	// the UI orange
 			case CSI_EColorPreset.RED :				return new Color(0.855, 0.027, 0.028, 1);
