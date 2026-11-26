@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Server system that builds the radar's vehicle outlines once per prefab, a vehicle at a time with
 //! 				few traces per second, and sends them to players who get in (CSI_RplToAuthorityManager).
@@ -13,7 +13,7 @@ class CSI_VehicleOutlineSystem : GameSystem
 //	 CONSTANTS
 //=============================================================================================================================================================================================================================================================================================================================================================
 
-	static const int TRACES_PER_SECOND = 720;				//!< build traces a second, run in steps of TRACES_PER_STEP
+	protected static const int TRACES_PER_SECOND = 720;		//!< build traces a second, run in steps of TRACES_PER_STEP
 	protected static const int TRACES_PER_STEP = 20;		//!< traces in one build step, at most one step a frame
 	protected static const float SPAWN_SETTLE_TIME = 3;		//!< seconds after registering before outlining, for its parts to spawn
 	protected static const float BUILD_TIMEOUT = 90;		//!< seconds over all tries before a vehicle is dropped
@@ -27,11 +27,7 @@ class CSI_VehicleOutlineSystem : GameSystem
 	protected float m_fTime;						//!< seconds since the system started
 	protected float m_fTraceAllowance;				//!< traces saved up, at most two steps' worth
 
-	// Queue, oldest first: vehicle, prefab, earliest start and first try time (-1 if untried)
-	protected ref array<IEntity> m_aQueuedVehicles = {};
-	protected ref array<ResourceName> m_aQueuedVehiclePrefabs = {};
-	protected ref array<float> m_aQueuedStartTimes = {};
-	protected ref array<float> m_aQueuedFirstTryTimes = {};
+	protected ref array<ref CSI_QueuedVehicle> m_aQueue = {};	//!< vehicles waiting to be outlined, oldest first
 	protected ref set<ResourceName> m_aQueuedPrefabs = new set<ResourceName>();	//!< vehicle prefabs queued or outlined, so each is done once
 
 	// The vehicle being outlined
@@ -145,12 +141,12 @@ class CSI_VehicleOutlineSystem : GameSystem
 		if (!entity)
 			return;
 
-		int index = m_aQueuedVehicles.Find(entity.GetOwner());
+		int index = FindQueued(entity.GetOwner());
 		if (index < 0)
 			return;
 
-		ReleasePrefab(m_aQueuedVehiclePrefabs[index]);
-		RemoveQueued(index);
+		ReleasePrefab(m_aQueue[index].m_sPrefab);
+		m_aQueue.RemoveOrdered(index);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -158,15 +154,16 @@ class CSI_VehicleOutlineSystem : GameSystem
 	//! \return false if none may start yet
 	protected bool StartNextVehicle()
 	{
-		for (int index = 0; index < m_aQueuedVehicles.Count(); index++)
+		for (int index = 0; index < m_aQueue.Count(); index++)
 		{
-			if (m_aQueuedStartTimes[index] > m_fTime)
+			CSI_QueuedVehicle queued = m_aQueue[index];
+			if (queued.m_fStartTime > m_fTime)
 				continue;
 
-			IEntity vehicle = m_aQueuedVehicles[index];
-			ResourceName prefab = m_aQueuedVehiclePrefabs[index];
-			float firstTryTime = m_aQueuedFirstTryTimes[index];
-			RemoveQueued(index);
+			IEntity vehicle = queued.m_Vehicle;
+			ResourceName prefab = queued.m_sPrefab;
+			float firstTryTime = queued.m_fFirstTryTime;
+			m_aQueue.RemoveOrdered(index);
 			index--;
 
 			if (!vehicle)
@@ -221,7 +218,7 @@ class CSI_VehicleOutlineSystem : GameSystem
 			maxTraces = TRACES_PER_STEP;
 
 		int building;
-		bool traced;
+		bool stepped;
 		bool builderStarted;
 		foreach (CSI_VehicleOutlinePart part : m_aCurrentParts)
 		{
@@ -251,7 +248,7 @@ class CSI_VehicleOutlineSystem : GameSystem
 				continue;
 			}
 
-			if (part.StepBuild(traced, maxTraces))
+			if (part.StepBuild(stepped, maxTraces))
 			{
 				FinishPart(part);
 				continue;
@@ -260,7 +257,7 @@ class CSI_VehicleOutlineSystem : GameSystem
 			building++;
 		}
 
-		if (traced)
+		if (stepped)
 			m_fTraceAllowance -= TRACES_PER_STEP;
 
 		if (building == 0)
@@ -297,29 +294,25 @@ class CSI_VehicleOutlineSystem : GameSystem
 	//! \param[in] firstTryTime when its first try started, -1 if it hasn't been tried
 	protected void QueueVehicle(notnull IEntity vehicle, ResourceName prefab, float startTime, bool first, float firstTryTime)
 	{
-		if (!first)
-		{
-			m_aQueuedVehicles.Insert(vehicle);
-			m_aQueuedVehiclePrefabs.Insert(prefab);
-			m_aQueuedStartTimes.Insert(startTime);
-			m_aQueuedFirstTryTimes.Insert(firstTryTime);
-			return;
-		}
-
-		m_aQueuedVehicles.InsertAt(vehicle, 0);
-		m_aQueuedVehiclePrefabs.InsertAt(prefab, 0);
-		m_aQueuedStartTimes.InsertAt(startTime, 0);
-		m_aQueuedFirstTryTimes.InsertAt(firstTryTime, 0);
+		CSI_QueuedVehicle queued = new CSI_QueuedVehicle(vehicle, prefab, startTime, firstTryTime);
+		if (first)
+			m_aQueue.InsertAt(queued, 0);
+		else
+			m_aQueue.Insert(queued);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] index into the queue
-	protected void RemoveQueued(int index)
+	//! \param[in] vehicle
+	//! \return its index in m_aQueue, -1 if it isn't queued
+	protected int FindQueued(IEntity vehicle)
 	{
-		m_aQueuedVehicles.RemoveOrdered(index);
-		m_aQueuedVehiclePrefabs.RemoveOrdered(index);
-		m_aQueuedStartTimes.RemoveOrdered(index);
-		m_aQueuedFirstTryTimes.RemoveOrdered(index);
+		foreach (int index, CSI_QueuedVehicle queued : m_aQueue)
+		{
+			if (queued.m_Vehicle == vehicle)
+				return index;
+		}
+
+		return -1;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -383,11 +376,11 @@ class CSI_VehicleOutlineSystem : GameSystem
 
 		// Next, ahead of the queue; an earlier try keeps its timeout
 		float firstTryTime = -1;
-		int queuedIndex = m_aQueuedVehicles.Find(vehicle);
+		int queuedIndex = FindQueued(vehicle);
 		if (queuedIndex >= 0)
 		{
-			firstTryTime = m_aQueuedFirstTryTimes[queuedIndex];
-			RemoveQueued(queuedIndex);
+			firstTryTime = m_aQueue[queuedIndex].m_fFirstTryTime;
+			m_aQueue.RemoveOrdered(queuedIndex);
 		}
 
 		ResourceName prefab = CSI_VehicleOutline.GetPrefabName(vehicle);
@@ -427,5 +420,30 @@ class CSI_VehicleOutlineSystem : GameSystem
 			return null;
 
 		return CSI_VehicleOutlineSystem.Cast(world.FindSystem(CSI_VehicleOutlineSystem));
+	}
+}
+
+//------------------------------------------------------------------------------------------------
+//!
+//! \Author: 		Njpatman
+//! \Last Updated: 	2026-11-25
+//! \Source: 		Coalition Squad Interface
+//!	\Description: 	A vehicle waiting in CSI_VehicleOutlineSystem's build queue.
+//!
+//------------------------------------------------------------------------------------------------
+class CSI_QueuedVehicle
+{
+	IEntity m_Vehicle;
+	ResourceName m_sPrefab;			//!< the vehicle's
+	float m_fStartTime;				//!< earliest start, in the system's time
+	float m_fFirstTryTime;			//!< when its first try started, -1 if untried
+
+	//------------------------------------------------------------------------------------------------
+	void CSI_QueuedVehicle(IEntity vehicle, ResourceName prefab, float startTime, float firstTryTime)
+	{
+		m_Vehicle = vehicle;
+		m_sPrefab = prefab;
+		m_fStartTime = startTime;
+		m_fFirstTryTime = firstTryTime;
 	}
 }

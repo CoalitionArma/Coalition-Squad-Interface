@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Nametag examples (CSI_SettingInfoNametags.layout) for the Nametags settings and Rank Visible: shows the
 //! 				setting's panel with the local player's nametag, laid out and colored for the tab's values.
@@ -429,7 +429,7 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 		if (percentage >= 100)
 			return "Always icon";
 
-		float range = GetValue(CSI_GameSettings.NAMETAG_RANGE);
+		int range = GetValue(CSI_GameSettings.NAMETAG_RANGE);
 		float distance = GetSimplifiedDistance(percentage, range);
 		if (distance >= range)
 			return "Never simplified within range";
@@ -439,14 +439,13 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Distance where nametags drop to icon only.
+	//! Distance where nametags drop to icon only, as in game (the Near zone starts at 0).
 	//! \param[in] percentage NAMTEAG_RANGE_SIMPLIFIED value
 	//! \param[in] range meters
 	//! \return meters; range or more means never within range
-	protected float GetSimplifiedDistance(int percentage, float range)
+	protected float GetSimplifiedDistance(int percentage, int range)
 	{
-		float cutoff = range * (1 - percentage * 0.01);
-		return Math.Sqrt(1 + cutoff * (range - 1));
+		return Math.Sqrt(CSI_NametagSettings.GetIconOnlyDistanceSq(percentage * 0.01, 0, range));
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -802,11 +801,11 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 
 		int localPlayerID = SCR_PlayerController.GetLocalPlayerId();
 
-		// In-game text and icon sizes, scaled for the example
-		int scaleStep = Math.ClampInt(GetValue(CSI_GameSettings.NAMTEAG_SCALE) / 20, 0, 5);
-		int textSize = (8 + scaleStep) * previewScale;
-		int groupTextSize = (6 + scaleStep) * previewScale;
-		int iconSize = (12 + scaleStep * 2) * previewScale;
+		// In-game text and icon sizes (the group name is 2 smaller), scaled for the example
+		int scale = GetValue(CSI_GameSettings.NAMTEAG_SCALE);
+		int textSize = CSI_NametagSettings.GetTextSize(scale) * previewScale;
+		int groupTextSize = (CSI_NametagSettings.GetTextSize(scale) - 2) * previewScale;
+		int iconSize = CSI_NametagSettings.GetIconSize(scale) * previewScale;
 		Color groupColor = CSI_ColorPresets.GetColor(CSI_EColorPreset.GRAY);
 		Color textColor;
 		if (talking)
@@ -878,17 +877,9 @@ class CSI_SettingInfoNametagExamples : SCR_ScriptedWidgetComponent
 				else
 					iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "VON");
 			}
-			else if (role == CSI_EIcon.MAN)
-			{
-				iconWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
-			}
 			else
 			{
-				string iconName = CSI_SettingInfo.GetIconName(m_wSettingsRoot, role, true);
-				if (role == CSI_EIcon.DRIVER)
-					iconName = iconName + "_ALT";
-
-				iconWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconName);
+				CSI_UIHelper.LoadSimpleRoleIcon(iconWidget, role, GetValue(CSI_GameSettings.ICON_THEME));
 			}
 
 			iconWidget.SetSize(iconSize, iconSize);

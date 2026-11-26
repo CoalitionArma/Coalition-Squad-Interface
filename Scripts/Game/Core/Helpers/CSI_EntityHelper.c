@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Static helpers for a character's facing and vehicle seat, and CSI_SeatInfo.
 //! 
@@ -19,11 +19,10 @@ class CSI_EntityHelper
 	//! Fills the seat info for a compartment; returns early if it's unchanged.
 	//! \param[in] seat
 	//! \param[in] compartment null on foot
-	//! \return true if the seat changed
-	static bool SetSeatInfo(notnull CSI_SeatInfo seat, BaseCompartmentSlot compartment)
+	static void SetSeatInfo(notnull CSI_SeatInfo seat, BaseCompartmentSlot compartment)
 	{
 		if (compartment && compartment == seat.m_Compartment)
-			return false;
+			return;
 
 		seat.m_Compartment = compartment;
 		seat.m_Turret = null;
@@ -34,17 +33,17 @@ class CSI_EntityHelper
 		seat.m_bRemoteCandidate = false;
 		seat.m_SeatBone = -1;
 		if (!compartment)
-			return true;
+			return;
 
-		seat.m_bGunnerSeat = compartment.GetType() == ECompartmentType.TURRET;
+		seat.m_bGunnerSeat = compartment.GetType() == ECompartmentType.TURRET && !IsCommanderSeat(compartment);
 
 		TurretControllerComponent turretController = GetSeatTurretController(compartment);
 		if (!turretController)
-			return true;
+			return;
 
 		seat.m_Turret = turretController.GetTurretComponent();
 		if (!seat.m_Turret)
-			return true;
+			return;
 
 		if (compartment.GetOwner())
 			seat.m_ParentTurret = GetParentTurret(compartment.GetOwner());
@@ -55,15 +54,13 @@ class CSI_EntityHelper
 		// Only a seat in a bone-turned turret's own prefab can be a remote station's
 		IEntity turretEntity = seat.m_Turret.GetOwner();
 		if (!turretEntity || compartment.GetOwner() != turretEntity || seat.m_Turret.HasRootRotation())
-			return true;
+			return;
 
 		seat.m_bRemoteCandidate = true;
 		Animation animation = turretEntity.GetAnimation();
 		EntitySlotInfo seatPoint = compartment.GetPassengerPointInfo();
 		if (animation && seatPoint)
 			seat.m_SeatBone = animation.GetBoneIndex(seatPoint.GetBoneName());
-
-		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -141,6 +138,18 @@ class CSI_EntityHelper
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] compartment
+	//! \return true for a commander's seat, found by name
+	static bool IsCommanderSeat(notnull BaseCompartmentSlot compartment)
+	{
+		if (compartment.GetCompartmentName() == "Commander")
+			return true;
+
+		UIInfo uiInfo = compartment.GetUIInfo();
+		return uiInfo && uiInfo.GetName() == "#AR-VehiclePosition_Commander";
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] compartment
 	//! \return the controller of the turret or mounted gun the seat aims, null for other seats
 	static TurretControllerComponent GetSeatTurretController(notnull BaseCompartmentSlot compartment)
 	{
@@ -149,18 +158,6 @@ class CSI_EntityHelper
 			turretController = compartment.GetAttachedTurret();
 
 		return turretController;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] compartment
-	//! \return the turret the seat aims, null for other seats
-	static TurretComponent GetSeatTurret(notnull BaseCompartmentSlot compartment)
-	{
-		TurretControllerComponent turretController = GetSeatTurretController(compartment);
-		if (!turretController)
-			return null;
-
-		return turretController.GetTurretComponent();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -201,7 +198,7 @@ class CSI_EntityHelper
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	A character's seat as the radar and vehicle outline need it, filled by CSI_EntityHelper.SetSeatInfo.
 //!
@@ -211,7 +208,7 @@ class CSI_SeatInfo
 	BaseCompartmentSlot m_Compartment;	//!< null on foot
 	TurretComponent m_Turret;			//!< the turret the seat aims, null for other seats
 	TurretComponent m_ParentTurret;		//!< turret that the seat's turret rides on, null if none
-	bool m_bGunnerSeat;					//!< a gunner's or commander's seat, not a pilot's that fires the vehicle's guns
+	bool m_bGunnerSeat;					//!< a gunner's seat, not a commander's or a pilot's that fires the vehicle's guns
 	bool m_bOnlyMountSeat;				//!< the only seat of a turret or mount that doesn't ride another turret
 	bool m_bHeldGun;					//!< its turret can be aimed without a sight
 	bool m_bRemoteCandidate;			//!< may be a remote station's seat (IsRemoteSeat decides)

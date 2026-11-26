@@ -49,7 +49,7 @@ class CSI_FrameSlotSnapshot
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD examples (CSI_SettingInfoHud.layout) for the General, Compass and Radar settings and the fire team
 //! 				colors: sets the embedded CSI_HUD.layout's widgets from the tab's values and creates its own group rows
@@ -992,16 +992,13 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 		int range = CSI_GameSettings.ClampToLimits(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE, GetValue(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE));
 		float metersToUnits = RADAR_RANGE_PX * m_fCompassZoom / range;
 
-		// The jeep's axes in the view
+		// The jeep's axes in the view: right in [0], forward in [2]
 		float heading = DEMO_VEHICLE_HEADING * Math.DEG2RAD;
-		float rightX = Math.Cos(heading);
-		float rightZ = Math.Sin(heading);
-		float forwardX = -Math.Sin(heading);
-		float forwardZ = Math.Cos(heading);
+		vector axisX = Vector(Math.Cos(heading), 0, -Math.Sin(heading));
+		vector axisZ = Vector(Math.Sin(heading), 0, Math.Cos(heading));
 
 		// The driver's seat is the radar's center
-		float offsetRight = -(rightX * DEMO_VEHICLE_SEATS[0] + rightZ * DEMO_VEHICLE_SEATS[1]);
-		float offsetForward = -(forwardX * DEMO_VEHICLE_SEATS[0] + forwardZ * DEMO_VEHICLE_SEATS[1]);
+		vector offset = -axisX * DEMO_VEHICLE_SEATS[0] - axisZ * DEMO_VEHICLE_SEATS[1];
 
 		if (m_VehicleOutline && outlineShown)
 		{
@@ -1015,12 +1012,11 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 
 			m_VehicleOutline.SetColor(CSI_ColorPresets.GetColor(GetValue(CSI_GameSettings.COMPASS_COLOR)));
 			m_VehicleOutline.SetPieceCount(1);
-			m_VehicleOutline.SetPiece(0, m_DemoVehicleOutline, rightX, rightZ, forwardX, forwardZ, offsetRight, offsetForward);
+			m_VehicleOutline.SetPiece(0, m_DemoVehicleOutline, axisX, axisZ, offset);
 
 			// The empty seat's ring
-			float emptyX = DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2];
-			float emptyZ = DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2 + 1];
-			array<float> emptySeats = {rightX * emptyX + rightZ * emptyZ + offsetRight, forwardX * emptyX + forwardZ * emptyZ + offsetForward};
+			vector emptySeat = axisX * DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2] + axisZ * DEMO_VEHICLE_SEATS[DEMO_EMPTY_SEAT * 2 + 1] + offset;
+			array<float> emptySeats = {emptySeat[0], emptySeat[2]};
 			m_VehicleOutline.SetSeats(emptySeats);
 
 			m_fDemoWidthsPerMeter = CSI_Radar.GetWidthsPerMeter(range);
@@ -1051,11 +1047,8 @@ class CSI_SettingInfoHudExamples : SCR_ScriptedWidgetComponent
 				continue;
 			}
 
-			float seatX = DEMO_VEHICLE_SEATS[seat * 2];
-			float seatZ = DEMO_VEHICLE_SEATS[seat * 2 + 1];
-			float right = rightX * seatX + rightZ * seatZ + offsetRight;
-			float forward = forwardX * seatX + forwardZ * seatZ + offsetForward;
-			PlaceInRadar(icon, right * metersToUnits, -forward * metersToUnits);
+			vector seatPosition = axisX * DEMO_VEHICLE_SEATS[seat * 2] + axisZ * DEMO_VEHICLE_SEATS[seat * 2 + 1] + offset;
+			PlaceInRadar(icon, seatPosition[0] * metersToUnits, -seatPosition[2] * metersToUnits);
 
 			CSI_EIcon seatIcon = CSI_EIcon.PASSANGER;
 			PlayerId playerID = 0;

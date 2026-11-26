@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: the "Near" zone's range comes from NAMETAG_RANGE, multiplied while zoomed; hidden and
 //! 				not updated while NAMETAG_VISIBLE is off; NAMETAG_BRIGHTNESS_DIMMING fades it by scene brightness and,
@@ -45,9 +45,8 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	protected bool m_bNametagsVisible = true;	//!< NAMETAG_VISIBLE
 	protected bool m_bDimInDark = true;			//!< NAMETAG_BRIGHTNESS_DIMMING
 	protected float m_fSceneBrightness = 1;		//!< camera's scene middle brightness at the last update
-	protected float m_fLastExposure = -1;		//!< HDR exposure at the last update
 	protected bool m_bNightVision;				//!< a night vision mod holds the exposure
-	protected float m_fExposure = 1;			//!< camera's HDR exposure at the last update
+	protected float m_fExposure = -1;			//!< camera's HDR exposure at the last update, -1 before the first
 	protected float m_fAppliedOpacity = -1;		//!< opacity last applied
 
 	protected static const float NAME_REFRESH_INTERVAL = 2;	//!< s between RefreshNames
@@ -55,7 +54,6 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 
 	protected static const float SUN_READ_INTERVAL = 0.5;	//!< s between reads of the sun's height, which moves slowly
 	protected float m_fSunReadTime;				//!< s until the next read of the sun's height
-	protected bool m_bOpacityInputChanged = true;	//!< the scene brightness, exposure, night vision or sun changed since the opacity was last worked out
 
 	//------------------------------------------------------------------------------------------------
 	override void DisplayUpdate(IEntity owner, float timeSlice)
@@ -213,16 +211,14 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Also clears the tag's zone. Vanilla leaves it set, so a state change still reaching the pooled tag (talking,
-	//! death, a passenger talking to their vehicle's tag) ran UpdateTagElements, whose SetVisibility showed the
-	//! widget again: a tag no longer updated, stuck where it was on screen.
+	//! Also clears the tag's zone, so a later state change can't show the pooled tag again.
 	override void CleanupTag(notnull SCR_NameTagData data, bool removeFromArray = true)
 	{
 		super.CleanupTag(data, removeFromArray);
 		data.m_iZoneID = -1;
 
 		// A pooled tag isn't drawn: stop its talking bars, and load its icon again when it's reused
-		for (int index = 0; index < 10; index++)	// m_aNametagElements' size
+		for (int index = 0; index < SCR_NameTagData.ELEMENT_COUNT; index++)
 		{
 			ImageWidget icon = ImageWidget.Cast(data.m_aNametagElements[index]);
 			if (!icon)
@@ -358,7 +354,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Reads the scene brightness, sun and night vision, then applies the opacity if any of them changed.
+	//! Reads the scene brightness, sun and night vision, then applies the opacity (ApplyNametagOpacity skips small changes).
 	//! \param[in] timeSlice
 	protected void UpdateBrightnessOpacity(float timeSlice)
 	{
@@ -373,40 +369,20 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 		if (m_fSunReadTime <= 0)
 		{
 			m_fSunReadTime = SUN_READ_INTERVAL;
-
-			float sunsetAmount = GetSunsetAmount();
-			if (sunsetAmount != m_fSunsetAmount)
-			{
-				m_fSunsetAmount = sunsetAmount;
-				m_bOpacityInputChanged = true;
-			}
+			m_fSunsetAmount = GetSunsetAmount();
 		}
 
 		// Camera 0, as the HUD manager. Read every frame: night vision is told by the exposure not moving between frames
-		float sceneBrightness = world.GetCameraSceneMiddleBrightness(0);
-		if (sceneBrightness != m_fSceneBrightness)
-		{
-			m_fSceneBrightness = sceneBrightness;
-			m_bOpacityInputChanged = true;
-		}
+		m_fSceneBrightness = world.GetCameraSceneMiddleBrightness(0);
 
 		float exposure = world.GetCameraHDRBrightness(0);
 		if (exposure <= 0)
 			return;
 
 		// Night vision: the exposure is held at a set value; it ends as soon as auto exposure takes over again
-		bool nightVision = exposure == m_fLastExposure && IsFixedExposure(exposure);
-		if (nightVision != m_bNightVision || exposure != m_fExposure)
-			m_bOpacityInputChanged = true;
-
-		m_bNightVision = nightVision;
-		m_fLastExposure = exposure;
+		m_bNightVision = exposure == m_fExposure && IsFixedExposure(exposure);
 		m_fExposure = exposure;
 
-		if (!m_bOpacityInputChanged)
-			return;
-
-		m_bOpacityInputChanged = false;
 		ApplyNametagOpacity();
 	}
 }
@@ -414,7 +390,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: adds SetZoneEnd to resize a zone at runtime and the zone's icon-only distance, and
 //! 				refreshes a tag's CSI state (SCR_NameTagData.UpdateCSIState) before its elements are drawn or reset.
@@ -423,7 +399,7 @@ modded class SCR_NameTagDisplay : SCR_InfoDisplayExtended
 [BaseContainerProps(), SCR_NameTagZoneTitle()]
 modded class SCR_NameTagZone
 {
-	float m_fIconOnlyDistanceSq = float.MAX;	//!< squared distance beyond which a player's tag shows only its icon; see UpdateIconOnlyDistance
+	float m_fIconOnlyDistanceSq = float.MAX;	//!< squared distance beyond which a player's tag shows only its icon (CSI_NametagSettings.GetIconOnlyDistanceSq)
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] range zone end in meters
@@ -435,24 +411,10 @@ modded class SCR_NameTagZone
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Sets m_fIconOnlyDistanceSq for NAMTEAG_RANGE_SIMPLIFIED. The percentage applies to the zone's squared
-	//! distance, so 85% of a 50 m range starts at about 19 m, as Setting Info shows
-	//! (CSI_SettingInfoNametagExamples.GetSimplifiedDistance); keep the two in step.
+	//! Sets m_fIconOnlyDistanceSq for NAMTEAG_RANGE_SIMPLIFIED.
 	void UpdateIconOnlyDistance()
 	{
-		float scale = CSI_NametagSettings.s_fIconOnlyRange;
-		if (scale == 0)
-		{
-			m_fIconOnlyDistanceSq = float.MAX;
-			return;
-		}
-
-		int zoneStart = m_iZoneStart;
-		if (zoneStart < 1)
-			zoneStart = 1;
-
-		float cutoff = m_iZoneEnd - scale * m_iZoneEnd;
-		m_fIconOnlyDistanceSq = zoneStart + cutoff * (m_iZoneEnd - zoneStart);
+		m_fIconOnlyDistanceSq = CSI_NametagSettings.GetIconOnlyDistanceSq(CSI_NametagSettings.s_fIconOnlyRange, m_iZoneStart, m_iZoneEnd);
 	}
 
 	//------------------------------------------------------------------------------------------------

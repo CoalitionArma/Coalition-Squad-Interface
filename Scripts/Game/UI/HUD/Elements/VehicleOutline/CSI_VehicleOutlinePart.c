@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One hull, turret, gun or weapon rack outline drawn by CSI_VehicleOutlineComponent, with its
 //! 				placement and cached layout.
@@ -11,11 +11,17 @@ class CSI_VehicleOutlinePiece
 {
 	ref CSI_VehicleOutline m_Outline;
 	CSI_EVehicleOutlineKind m_eKind;
-	ref array<float> m_aTransform = {1, 0, 0, 1, 0, 0};	//!< SetPiece's rightX, rightZ, forwardX, forwardZ, offsetRight, offsetForward
-	ref array<float> m_aLaidOutTransform = {};			//!< m_aTransform when last laid out
+
+	// SetPiece's placement, m: a point (x, z) goes to m_vAxisX * x + m_vAxisZ * z + m_vOffset (right in [0], forward in [2])
+	vector m_vAxisX = vector.Right;
+	vector m_vAxisZ = vector.Forward;
+	vector m_vOffset;
+	vector m_vLaidOutAxisX;								//!< m_vAxisX when last laid out
+	vector m_vLaidOutAxisZ;								//!< m_vAxisZ when last laid out
+	vector m_vLaidOutOffset;							//!< m_vOffset when last laid out
 	bool m_bLaidOut;									//!< the layout below is current
 
-	// Layout in px from the canvas center, in SetRotation's frame (y down): line runs, one feather band each, and the fill
+	// Layout in px from the canvas center, in SetRotation's frame (y down): line runs, one band each, and the fill
 	ref array<ref array<float>> m_aRuns = {};
 	ref array<int> m_aRunBands = {};
 	ref array<bool> m_aRunsClosed = {};
@@ -28,11 +34,10 @@ class CSI_VehicleOutlinePiece
 	ref TriMeshDrawCommand m_Fill;
 }
 
-
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	One outlined part of a vehicle (hull, turret, gun or weapon rack): its entity, turret and
 //! 				outline, or on the server the builder still making it.
@@ -78,18 +83,18 @@ class CSI_VehicleOutlinePart
 
 	//------------------------------------------------------------------------------------------------
 	//! Runs one build step, unless a part already stepped this frame.
-	//! \param[in,out] traced a part stepped this frame; set if this one does
+	//! \param[in,out] stepped a part stepped this frame; set if this one does
 	//! \param[in] maxTraces traces the step may run, 0 for none this frame
 	//! \return true once built; then call FinishBuild
-	bool StepBuild(inout bool traced, int maxTraces)
+	bool StepBuild(inout bool stepped, int maxTraces)
 	{
 		if (m_Builder.GetOutline())
 			return true;
 
-		if (traced || maxTraces <= 0)
+		if (stepped || maxTraces <= 0)
 			return false;
 
-		traced = true;
+		stepped = true;
 		return m_Builder.Step(maxTraces);
 	}
 

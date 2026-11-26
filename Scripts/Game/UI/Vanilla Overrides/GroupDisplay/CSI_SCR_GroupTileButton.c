@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: player tiles show CSI names, role icons (vanilla's without CSI data) and color teams;
 //! 				members are listed in CSI's sorted order; a squadmate's CSI change updates the tiles shown, and
@@ -11,6 +11,11 @@
 //------------------------------------------------------------------------------------------------
 modded class SCR_GroupTileButton
 {
+	// Player tile widgets
+	protected static const string PLAYER_NAME_WIDGET_NAME = "PlayerName";
+	protected static const string LOADOUT_ICON_WIDGET_NAME = "LoadoutIcon";
+	protected static const string LINE_BACKGROUND_WIDGET_NAME = "LineBackground";
+
 	protected ref array<CSI_PlayerData> m_aSubscribedPlayerData = {};	//!< squadmates' data whose changes refresh the group's details
 	protected ref array<Widget> m_aPlayerTiles = {};	//!< the tiles shown, in m_aPlayerComponentsList order
 	protected ref Color m_LineBackgroundColor;			//!< a tile line's color in the layout, for members without a fire team
@@ -119,7 +124,7 @@ modded class SCR_GroupTileButton
 		loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget("LoadoutIcon"));
 		ImageWidget m_wIconSymbol = ImageWidget.Cast(playerTile.FindAnyWidget("TaskIconSymbol"));
 		ImageWidget platformIcon = ImageWidget.Cast(playerTile.FindAnyWidget("PlatformIcon"));
-		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));	// CSI: tinted by color team
+		SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget(LINE_BACKGROUND_WIDGET_NAME));	// CSI: tinted by color team
 
 		playerButton = ButtonWidget.Cast(playerTile.FindAnyWidget("PlayerButton"));
 		if (!playerButton)
@@ -227,14 +232,7 @@ modded class SCR_GroupTileButton
 		// Remove first so repeated setups don't stack subscriptions
 		playerData.GetOnDataUpdate().Remove(OnPlayerDataUpdate);
 
-		CSI_EIcon displayIcon = playerData.GetDisplayIcon();
-		string iconString = CSI_UIHelper.GetIconString(displayIcon, true, displayIcon == CSI_EIcon.DRIVER);
-
-		// MAN uses the pointer icon
-		if (iconString == "MAN_ICON")
-			loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
-		else
-			loadoutIcon.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, iconString);
+		CSI_UIHelper.LoadSimpleRoleIcon(loadoutIcon, playerData.GetDisplayIcon());
 
 		if (!isLocalPlayerInGroup)
 			return true;
@@ -262,25 +260,37 @@ modded class SCR_GroupTileButton
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! The group's members in CSI's sorted order (SL, color teams, unassigned), then those without CSI data.
+	//! The players RefreshPlayers makes tiles for, in order: the leader, then the others in CSI's sorted order (SL,
+	//! color teams, unassigned), then those without CSI data.
 	//! \param[in] group
 	//! \return player IDs
-	protected array<int> GetSortedPlayerIDs(notnull SCR_AIGroup group)
+	protected array<int> GetTilePlayerIDs(notnull SCR_AIGroup group)
 	{
+		array<int> tilePlayerIDs = {};
+		int leaderID = group.GetLeaderID();
+		if (leaderID >= 0)
+			tilePlayerIDs.Insert(leaderID);
+
 		array<int> groupPlayerIDs = group.GetPlayerIDs();
-		array<int> playerIDs = {};
+		array<int> sortedPlayerIDs = {};
 		CSI_HUDSystem hudSystem = CSI_HUDSystem.GetInstance();
 		if (hudSystem)
-			playerIDs = hudSystem.GetSortedGroupArray(groupPlayerIDs);
+			sortedPlayerIDs = hudSystem.GetSortedGroupArray(groupPlayerIDs);
 
 		// GetSortedGroupArray skips members without CSI data
 		foreach (int groupPlayerID : groupPlayerIDs)
 		{
-			if (!playerIDs.Contains(groupPlayerID))
-				playerIDs.Insert(groupPlayerID);
+			if (!sortedPlayerIDs.Contains(groupPlayerID))
+				sortedPlayerIDs.Insert(groupPlayerID);
 		}
 
-		return playerIDs;
+		foreach (int playerID : sortedPlayerIDs)
+		{
+			if (playerID != leaderID)
+				tilePlayerIDs.Insert(playerID);
+		}
+
+		return tilePlayerIDs;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -299,18 +309,7 @@ modded class SCR_GroupTileButton
 		if (!group.GetPlayerIDs().Contains(SCR_PlayerController.GetLocalPlayerId()))
 			return false;
 
-		// The tiles RefreshPlayers creates: the leader's, then the others in sorted order
-		array<int> tilePlayerIDs = {};
-		int leaderID = group.GetLeaderID();
-		if (leaderID >= 0)
-			tilePlayerIDs.Insert(leaderID);
-
-		foreach (int playerID : GetSortedPlayerIDs(group))
-		{
-			if (playerID != leaderID)
-				tilePlayerIDs.Insert(playerID);
-		}
-
+		array<int> tilePlayerIDs = GetTilePlayerIDs(group);
 		int tileCount = tilePlayerIDs.Count();
 		if (tileCount != m_aPlayerComponentsList.Count() || tileCount != m_aPlayerTiles.Count())
 			return false;
@@ -325,9 +324,9 @@ modded class SCR_GroupTileButton
 		foreach (int i, int tilePlayerID : tilePlayerIDs)
 		{
 			Widget playerTile = m_aPlayerTiles[i];
-			TextWidget playerName = TextWidget.Cast(playerTile.FindAnyWidget("PlayerName"));
-			ImageWidget loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget("LoadoutIcon"));
-			SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget("LineBackground"));
+			TextWidget playerName = TextWidget.Cast(playerTile.FindAnyWidget(PLAYER_NAME_WIDGET_NAME));
+			ImageWidget loadoutIcon = ImageWidget.Cast(playerTile.FindAnyWidget(LOADOUT_ICON_WIDGET_NAME));
+			SmartPanelWidget lineBackground = SmartPanelWidget.Cast(playerTile.FindAnyWidget(LINE_BACKGROUND_WIDGET_NAME));
 			SetPlayerTileCSIData(playerName, loadoutIcon, lineBackground, tilePlayerID, true);
 		}
 
@@ -445,24 +444,19 @@ modded class SCR_GroupTileButton
 			children = leaderList.GetChildren();
 		}
 
-		// CSI: list members in CSI's sorted order (SL, color teams, unassigned), then those without CSI data
-		array<int> playerIDs = GetSortedPlayerIDs(group);
-
+		// CSI: the leader, then the others in CSI's sorted order (GetTilePlayerIDs)
+		array<int> playerIDs = GetTilePlayerIDs(group);
 		Widget playerTile;
 
 		int leaderID = group.GetLeaderID();
-		if (leaderID >= 0)
-		{
-			playerTile = GetGame().GetWorkspace().CreateWidgets(m_textLayout, leaderList);
-			SetupPlayerTile(playerTile, leaderID);
-		}
-
 		foreach (int playerID : playerIDs)
 		{
+			// CSI: the leader's tile goes in the leader list
+			Widget tileList = playerList;
 			if (playerID == leaderID)
-				continue;
+				tileList = leaderList;
 
-			playerTile = GetGame().GetWorkspace().CreateWidgets(m_textLayout, playerList);
+			playerTile = GetGame().GetWorkspace().CreateWidgets(m_textLayout, tileList);
 			SetupPlayerTile(playerTile, playerID);
 		}
 

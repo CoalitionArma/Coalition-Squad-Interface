@@ -3,7 +3,7 @@ class CSI_PlayerDataManagerClass : SCR_BaseGameModeComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-21
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Every player's CSI_PlayerData, kept in sync by CSI_RplBroadcastManager and sent to joining clients.
 //! 				The server registers a player's data when they connect, clears their group-specific data when
@@ -56,7 +56,7 @@ class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 	{
 		super.OnPlayerConnected(playerId);
 
-		// Back in time: their data stays
+		// Reconnected within DATA_RETENTION_TIME: keep their data
 		if (m_mDataExpiries.Contains(playerId))
 		{
 			m_mDataExpiries.Remove(playerId);
@@ -199,20 +199,13 @@ class CSI_PlayerDataManager : SCR_BaseGameModeComponent
 	//! \param[in] playerID
 	void ClearGroupSpecificData(PlayerId playerID)
 	{
-		CSI_PlayerData playerData = GetPlayerData(playerID);
-
-		if (!playerData || !m_RplBroadcastManager)
+		if (!GetPlayerData(playerID) || !m_RplBroadcastManager)
 			return;
 
-		// Only what is set is broadcast, which for most players is nothing
-		if (playerData.GetColorTeam() != CSI_EColorTeam.NONE)
-			m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
-
-		if (playerData.GetOverrideIcon() != CSI_EOverrideIcon.AUTO)
-			m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
-
-		if (playerData.GetIsTeamLeader())
-			m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, false);
+		// The broadcast manager skips values already cleared, which for most players is all of them
+		m_RplBroadcastManager.UpdatePlayerColorTeam(playerID, CSI_EColorTeam.NONE);
+		m_RplBroadcastManager.UpdatePlayerOverrideIcon(playerID, CSI_EOverrideIcon.AUTO);
+		m_RplBroadcastManager.UpdatePlayerTeamLeader(playerID, false);
 	}
 
 	//------------------------------------------------------------------------------------------------

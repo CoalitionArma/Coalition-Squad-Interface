@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: names with rank; adds player data, group name, field of view place, what CSI's
 //! 				elements show (UpdateCSIState) and what they last set; tag position and height from settings; a
@@ -10,7 +10,8 @@
 //------------------------------------------------------------------------------------------------
 modded class SCR_NameTagData : Managed
 {
-	protected CSI_PlayerDataManager m_PlayerDataManager;
+	static const int ELEMENT_COUNT = 10;	//!< size of vanilla's m_aNametagElements
+
 	CSI_PlayerData m_PlayerData;	//!< null for AI and players without CSI data
 	string m_sGroupName;			//!< set by GetGroupName
 	float m_fFieldOfViewFraction;	//!< place in the tag's visible angle: 0 center, 1 edge
@@ -21,17 +22,17 @@ modded class SCR_NameTagData : Managed
 	Color m_TagColor;				//!< shared color (CSI_NametagSettings) of the name and role icon
 
 	// What CSI's elements last set, by m_aNametagElements index; a widget is only changed when its value differs
-	string m_aElementTexts[10];		//!< text
-	int m_aElementIconKeys[10];		//!< role icon, see SCR_NTIconBase.GetIconKey; 0 until set
-	Color m_aElementColors[10];		//!< shared color; null until set
+	string m_aElementTexts[ELEMENT_COUNT];		//!< text
+	int m_aElementIconKeys[ELEMENT_COUNT];		//!< role icon, see SCR_NTIconBase.GetIconKey; 0 until set
+	Color m_aElementColors[ELEMENT_COUNT];		//!< shared color; null until set
 
 	//------------------------------------------------------------------------------------------------
 	override void ActivateEntityState(ENameTagEntityState state)
 	{
 		super.ActivateEntityState(state);
 
-		// A passenger's own tag is hidden, so their vehicle's tag shows them talking (vanilla VoN and Coalition VON
-		// both mark the passenger); vanilla's ruleset ends it VON_STOP_TIME after the last mark
+		// A passenger's own tag is hidden, so their vehicle's tag shows them talking; vanilla's ruleset ends it
+		// VON_STOP_TIME after the last mark
 		if (state == ENameTagEntityState.VON && m_VehicleParent && !(m_VehicleParent.m_Flags & ENameTagFlags.DELETED))
 			m_VehicleParent.ActivateEntityState(state);
 	}
@@ -160,9 +161,7 @@ modded class SCR_NameTagData : Managed
 		else
 			m_bIconOnly = m_fDistance > zone.m_fIconOnlyDistanceSq || (CSI_NametagSettings.s_fIconOnlyFieldOfView != 0 && m_fFieldOfViewFraction > 1 - CSI_NametagSettings.s_fIconOnlyFieldOfView);
 
-		// Color: the talking color while talking, from the VON flag rather than the priority state (HIDDEN outranks
-		// VON, so a talking tag fading out would turn back mid-fade; DEAD still wins, as in vanilla). A local group
-		// member gets their fire team's color, or the Standard squad color without one; everyone else the Nametag color
+		// Color: talking (VON flag, unless dead), else the fire team's or Standard squad color in the local group, else Nametag color
 		if ((m_eEntityStateFlags & ENameTagEntityState.VON) != 0 && (m_eEntityStateFlags & ENameTagEntityState.DEAD) == 0)
 			m_TagColor = CSI_NametagSettings.s_VONColor;
 		else if (!m_PlayerData || !m_bLocalGroupMember)
@@ -174,11 +173,11 @@ modded class SCR_NameTagData : Managed
 	//------------------------------------------------------------------------------------------------
 	protected void UpdatePlayerData()
 	{
-		m_PlayerDataManager = CSI_PlayerDataManager.GetInstance();
+		CSI_PlayerDataManager playerDataManager = CSI_PlayerDataManager.GetInstance();
 		m_PlayerData = null;
 
 		// A possessed AI stays AI but has the possessing player's ID
-		if (m_PlayerDataManager && m_eType != ENameTagEntityType.AI && m_iPlayerID > 0)
-			m_PlayerData = m_PlayerDataManager.GetPlayerData(m_iPlayerID);
+		if (playerDataManager && m_eType != ENameTagEntityType.AI && m_iPlayerID > 0)
+			m_PlayerData = playerDataManager.GetPlayerData(m_iPlayerID);
 	}
 }

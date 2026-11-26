@@ -188,7 +188,7 @@ class CSI_SettingInfoHandler
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	"Setting Info" panel of the CSI settings tab: the hovered setting's name, description and example
 //! 				(SettingInfoExamples/), plus static helpers the examples share.
@@ -202,7 +202,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 	protected ref array<ref CSI_SettingInfoHandler> m_aHandlers = {};
 	protected ref map<string, string> m_mSettingLabels = new map<string, string>();	//!< setting -> its row's label
-	protected ref map<string, string> m_mSettingDescriptions = new map<string, string>();	//!< setting -> its description, read once
 
 	// Example components, owned by their widgets
 	protected CSI_SettingInfoHudExamples m_HudExamples;
@@ -253,7 +252,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		m_aHandlers.Clear();
 		m_mSettingLabels.Clear();
-		m_mSettingDescriptions.Clear();
 		s_sPreviewSetting = string.Empty;
 		s_mValueComponents.Clear();
 		s_wValueComponentsRoot = null;
@@ -317,15 +315,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 			name = SCR_StringHelper.FormatValueNameToUserFriendly(setting);
 
 		m_wName.SetText(name);
-
-		string description;
-		if (!m_mSettingDescriptions.Find(setting, description))
-		{
-			description = GetAttributeDescription(CSI_GameSettings, setting);
-			m_mSettingDescriptions.Set(setting, description);
-		}
-
-		m_wDescription.SetText(description);
+		m_wDescription.SetText(GetAttributeDescription(CSI_GameSettings, setting));
 
 		HideExamples();
 
@@ -581,7 +571,7 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 		// Vehicle seat icons are always simple and drawn large without an arrow
 		bool isVehicleIcon = CSI_UIHelper.m_aVehicleIcons.Contains(role);
 		bool simpleIcon = isVehicleIcon || GetValue(root, CSI_GameSettings.ICON_TYPE) != CSI_EIconType.REGULAR;
-		string iconName = GetIconName(root, role, simpleIcon);
+		string iconName = CSI_UIHelper.GetIconString(role, simpleIcon, false, GetValue(root, CSI_GameSettings.ICON_THEME));
 
 		iconWidget.SetVisible(!isVehicleIcon);
 		outlineWidget.SetVisible(!isVehicleIcon && simpleIcon);
@@ -614,24 +604,6 @@ class CSI_SettingInfo : SCR_ScriptedWidgetComponent
 
 		icon.SetOpacity(opacity);
 		icon.SetVisible(true);
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Imageset name of a role icon, in the tab's icon theme.
-	//! \param[in] root CSI settings tab root
-	//! \param[in] role
-	//! \param[in] simpleIcon
-	//! \return
-	static string GetIconName(Widget root, CSI_EIcon role, bool simpleIcon)
-	{
-		string iconName = SCR_Enum.GetEnumName(CSI_EIcon, role);
-		if (!CSI_UIHelper.m_aNonThemedRegularIcons.Contains(role) && !CSI_UIHelper.m_aVehicleIcons.Contains(role))
-			iconName = SCR_Enum.GetEnumName(CSI_EIconTheme, GetValue(root, CSI_GameSettings.ICON_THEME)) + " " + iconName;
-
-		if (simpleIcon)
-			iconName = iconName + "_ICON";
-
-		return iconName;
 	}
 
 	//------------------------------------------------------------------------------------------------

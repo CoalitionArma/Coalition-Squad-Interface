@@ -1,11 +1,11 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	The settings CSI's nametag classes use for every tag on every frame, read once per settings
 //! 				update (SCR_NameTagDisplay.OnSettingsUpdate) into plain values and shared colors, so drawing a
-//! 				tag looks nothing up.
+//! 				tag looks nothing up; also the size and icon-only distance formulas, which Setting Info shares.
 //!
 //------------------------------------------------------------------------------------------------
 class CSI_NametagSettings
@@ -36,7 +36,7 @@ class CSI_NametagSettings
 	static ref Color s_StandardSquadColor = new Color(1, 1, 1, 1);	//!< STANDARD_SQUAD_COLOR as drawn
 	static ref Color s_VONColor = new Color(1, 1, 1, 1);				//!< NAMETAG_VON_COLOR as drawn (CSI_ColorPresets.GetVONPreset)
 
-	protected static ref map<int, Color> s_mColorTeamColors = new map<int, Color>();				//!< the chosen set's color per CSI_EColorTeam
+	protected static int s_iColorTeamSet;	//!< COLOR_TEAM_SET, a CSI_EColorTeamSet
 	protected static ref map<int, ref Color> s_mPresetColors = new map<int, ref Color>();			//!< one instance per CSI_EColorPreset
 	protected static ref map<int, ref Color> s_mColorTeamSetColors = new map<int, ref Color>();	//!< one instance per fire team and set
 
@@ -49,11 +49,46 @@ class CSI_NametagSettings
 	//! \return the fire team's color in the chosen set, the Standard squad color for NONE
 	static Color GetColorTeamColor(CSI_EColorTeam colorTeam)
 	{
-		Color color = s_mColorTeamColors.Get(colorTeam);
-		if (color)
-			return color;
+		if (colorTeam == CSI_EColorTeam.NONE)
+			return s_StandardSquadColor;
 
-		return s_StandardSquadColor;
+		return GetColorTeamSetColor(colorTeam, s_iColorTeamSet);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] scale NAMTEAG_SCALE value (0-100 in steps of 20)
+	//! \return name font size (8-13)
+	static int GetTextSize(int scale)
+	{
+		return 8 + Math.ClampInt(scale / 20, 0, 5);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] scale NAMTEAG_SCALE value (0-100 in steps of 20)
+	//! \return icon size in px (12-22)
+	static int GetIconSize(int scale)
+	{
+		return 12 + Math.ClampInt(scale / 20, 0, 5) * 2;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Squared distance beyond which a player's tag shows only its icon. The share applies to the zone's squared
+	//! distance, so 85% of a 50 m range starts at about 19 m.
+	//! \param[in] share NAMTEAG_RANGE_SIMPLIFIED as a share (0-1); 0 turns it off
+	//! \param[in] zoneStart meters
+	//! \param[in] zoneEnd meters
+	//! \return float.MAX for a share of 0
+	static float GetIconOnlyDistanceSq(float share, int zoneStart, int zoneEnd)
+	{
+		if (share == 0)
+			return float.MAX;
+
+		int start = zoneStart;
+		if (start < 1)
+			start = 1;
+
+		float cutoff = zoneEnd - share * zoneEnd;
+		return start + cutoff * (zoneEnd - start);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -92,23 +127,14 @@ class CSI_NametagSettings
 		s_vTagOffset = tagOffset;
 
 		// Colors as drawn: a nametag color that matches a fire team color shows Gray, the talking color stands out
-		int teamSet = settingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
+		s_iColorTeamSet = settingsManager.GetSettingInt(CSI_GameSettings.COLOR_TEAM_SET);
 		int standardSquadPreset = settingsManager.GetSettingInt(CSI_GameSettings.STANDARD_SQUAD_COLOR);
 		int nametagPreset = settingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_COLOR);
 		int vonPreset = settingsManager.GetSettingInt(CSI_GameSettings.NAMETAG_VON_COLOR);
 
-		s_NametagColor = GetPresetColor(CSI_ColorPresets.GetNonClashingPreset(nametagPreset, teamSet));
-		s_StandardSquadColor = GetPresetColor(CSI_ColorPresets.GetNonClashingPreset(standardSquadPreset, teamSet));
-		s_VONColor = GetPresetColor(CSI_ColorPresets.GetVONPreset(vonPreset, teamSet, standardSquadPreset, nametagPreset));
-
-		array<int> colorTeams = {};
-		SCR_Enum.GetEnumValues(CSI_EColorTeam, colorTeams);
-		s_mColorTeamColors.Clear();
-		foreach (int colorTeam : colorTeams)
-		{
-			if (colorTeam != CSI_EColorTeam.NONE)
-				s_mColorTeamColors.Insert(colorTeam, GetColorTeamSetColor(colorTeam, teamSet));
-		}
+		s_NametagColor = GetPresetColor(CSI_ColorPresets.GetNonClashingPreset(nametagPreset, s_iColorTeamSet));
+		s_StandardSquadColor = GetPresetColor(CSI_ColorPresets.GetNonClashingPreset(standardSquadPreset, s_iColorTeamSet));
+		s_VONColor = GetPresetColor(CSI_ColorPresets.GetVONPreset(vonPreset, s_iColorTeamSet, standardSquadPreset, nametagPreset));
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -141,39 +167,5 @@ class CSI_NametagSettings
 		}
 
 		return color;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] scale NAMTEAG_SCALE value
-	//! \return font size (8-13)
-	protected static int GetTextSize(int scale)
-	{
-		switch (scale)
-		{
-			case 0 : return 8;
-			case 20 : return 9;
-			case 40 : return 10;
-			case 60 : return 11;
-			case 80 : return 12;
-		}
-
-		return 13;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \param[in] scale NAMTEAG_SCALE value
-	//! \return icon size in px (12-22)
-	protected static int GetIconSize(int scale)
-	{
-		switch (scale)
-		{
-			case 0 : return 12;
-			case 20 : return 14;
-			case 40 : return 16;
-			case 60 : return 18;
-			case 80 : return 20;
-		}
-
-		return 22;
 	}
 }

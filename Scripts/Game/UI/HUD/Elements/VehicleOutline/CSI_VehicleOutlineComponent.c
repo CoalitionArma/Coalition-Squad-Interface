@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Draws vehicle outlines (CSI_VehicleOutline) on a canvas: a piece per hull, turret or gun,
 //! 				faded out just inside the compass ring and left out around or dimmed under given icons, and a ring per
@@ -54,13 +54,13 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	protected static const float REDRAW_DISTANCE = 0.3;			//!< px a point may move before the outline is drawn again
 	protected static const int LAYOUT_RETRY_MS = 10;			//!< retry while the canvas isn't laid out
 
-	// m_aLineColors layout: by kind, then band (the feather bands, then the same dimmed), then pass
+	// m_aLineColors layout: by kind, then band (the feather bands, then the same dimmed), then pass (GetLineColor)
 	protected static const int FEATHER_BAND_COUNT = 3;
-	protected static const int BAND_COUNT = 6;
+	protected static const int BAND_COUNT = FEATHER_BAND_COUNT * 2;
+	protected static const int BAND_HIDDEN = -1;				//!< nothing drawn: in a cut or past the clip circle
 	protected static const int PASS_RIM = 0;
 	protected static const int PASS_SOFT_EDGE = 1;
-	protected static const int PASS_LINE = 2;
-	protected static const int PASS_COUNT = 3;
+	protected static const int PASS_COUNT = 3;					//!< rim, soft edge, then the line
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 RUNTIME VARIABLES
@@ -70,10 +70,8 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	protected ref array<ref CSI_VehicleOutlinePiece> m_aPieces = {};	//!< the first m_iPieceCount are shown
 	protected int m_iPieceCount;
 	protected ref array<float> m_aSeats = {};		//!< right, forward per empty seat, m
-	protected ref array<float> m_aGaps = {};		//!< right, forward per icon that lines are left out around, m
-	protected float m_fGapShare;					//!< the gaps' radius, share of the canvas width
-	protected ref array<float> m_aDims = {};		//!< right, forward per icon that lines are dimmed under, m
-	protected float m_fDimShare;					//!< their radius, share of the canvas width
+	protected ref array<float> m_aCuts = {};		//!< right, forward, radius per icon that lines are left out around, m
+	protected ref array<float> m_aDims = {};		//!< right, forward, radius per icon that lines are dimmed under, m
 	protected float m_fWidthsPerMeter;				//!< canvas widths per meter
 
 	// Packed colors, set by SetColor
@@ -92,7 +90,7 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	protected float m_fDrawnWidthsPerMeter;
 	protected float m_fDrawnRotation;
 	protected ref array<float> m_aDrawnSeats = {};
-	protected ref array<float> m_aLaidOutGaps = {};	//!< the gaps every laid out piece is cut by
+	protected ref array<float> m_aLaidOutCuts = {};	//!< the cuts every laid out piece is split by
 	protected ref array<float> m_aLaidOutDims = {};	//!< the icons every laid out piece is dimmed under
 
 	// The draw in progress, px
@@ -101,10 +99,8 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	protected float m_fFeatherStart;
 	protected float m_fFeatherMiddle;
 	protected float m_fClipRadius;
-	protected float m_fGapRadius;
-	protected ref array<float> m_aGapPoints = {};		//!< x, y per laid out gap, from the canvas center in SetRotation's frame
-	protected float m_fDimRadius;
-	protected ref array<float> m_aDimPoints = {};		//!< x, y per laid out dimming icon, from the canvas center in SetRotation's frame
+	protected ref array<float> m_aCutCircles = {};		//!< x, y, radius per laid out cut, from the canvas center in SetRotation's frame
+	protected ref array<float> m_aDimCircles = {};		//!< x, y, radius per laid out dimming icon, from the canvas center in SetRotation's frame
 
 	// Reused each draw: the commands, the seat rings (absolute px), and scratch arrays
 	protected ref array<ref CanvasWidgetCommand> m_aCommands = {};
@@ -183,17 +179,14 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Places a piece in SetRotation's frame, in meters from the canvas center.
+	//! Places a piece in SetRotation's frame: its point (x, z) goes to axisX * x + axisZ * z + offset, right in [0] and forward in [2].
 	//! \param[in] index below SetPieceCount's count
 	//! \param[in] outline null draws nothing for it (still building)
-	//! \param[in] rightX right = rightX * x + rightZ * z + offsetRight
-	//! \param[in] rightZ
-	//! \param[in] forwardX forward = forwardX * x + forwardZ * z + offsetForward
-	//! \param[in] forwardZ
-	//! \param[in] offsetRight m
-	//! \param[in] offsetForward m
+	//! \param[in] axisX
+	//! \param[in] axisZ
+	//! \param[in] offset m from the canvas center
 	//! \param[in] kind sets its style
-	void SetPiece(int index, CSI_VehicleOutline outline, float rightX, float rightZ, float forwardX, float forwardZ, float offsetRight, float offsetForward, CSI_EVehicleOutlineKind kind = CSI_EVehicleOutlineKind.HULL)
+	void SetPiece(int index, CSI_VehicleOutline outline, vector axisX, vector axisZ, vector offset, CSI_EVehicleOutlineKind kind = CSI_EVehicleOutlineKind.HULL)
 	{
 		if (index >= m_iPieceCount)
 			return;
@@ -207,12 +200,9 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			m_bRedraw = true;
 		}
 
-		piece.m_aTransform[0] = rightX;
-		piece.m_aTransform[1] = rightZ;
-		piece.m_aTransform[2] = forwardX;
-		piece.m_aTransform[3] = forwardZ;
-		piece.m_aTransform[4] = offsetRight;
-		piece.m_aTransform[5] = offsetForward;
+		piece.m_vAxisX = axisX;
+		piece.m_vAxisZ = axisZ;
+		piece.m_vOffset = offset;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -225,30 +215,18 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 
 	//------------------------------------------------------------------------------------------------
 	//! Keeps icons drawn over the outline readable: lines are left out around some and dimmed under others.
-	//! \param[in] gaps right, forward per icon that lines are left out around, m from the canvas center in SetRotation's frame
-	//! \param[in] gapRadius share of the canvas width
-	//! \param[in] dims right, forward per icon that lines are dimmed under, m from the canvas center in SetRotation's frame
-	//! \param[in] dimRadius share of the canvas width
-	void SetIconGaps(notnull array<float> gaps, float gapRadius, notnull array<float> dims, float dimRadius)
+	//! \param[in] cuts right, forward, radius per icon that lines are left out around, m from the canvas center in SetRotation's frame
+	//! \param[in] dims the same per icon that lines are dimmed under
+	void SetIconGaps(notnull array<float> cuts, notnull array<float> dims)
 	{
-		m_aGaps.Copy(gaps);
+		m_aCuts.Copy(cuts);
 		m_aDims.Copy(dims);
-		if (gapRadius == m_fGapShare && dimRadius == m_fDimShare)
-			return;
-
-		m_fGapShare = gapRadius;
-		m_fDimShare = dimRadius;
-		m_bRelayout = true;
-		m_bRedraw = true;
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] seats right, forward per empty seat, m from the canvas center in SetRotation's frame
 	void SetSeats(notnull array<float> seats)
 	{
-		if (seats.Count() != m_aSeats.Count())
-			m_bRedraw = true;
-
 		m_aSeats.Copy(seats);
 	}
 
@@ -317,7 +295,7 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 
 		m_iPieceCount = 0;
 		m_aSeats.Clear();
-		m_aGaps.Clear();
+		m_aCuts.Clear();
 		m_aDims.Clear();
 		m_bRedraw = true;
 
@@ -339,9 +317,9 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			return true;
 		}
 
-		// Gaps and dimmed icons are split into the laid out lines
+		// Cut and dimming icons are split into the laid out lines
 		float pixelsPerMeter = m_fWidthsPerMeter * width;
-		if (HavePointsMoved(m_aGaps, m_aLaidOutGaps, pixelsPerMeter) || HavePointsMoved(m_aDims, m_aLaidOutDims, pixelsPerMeter))
+		if (HavePointsMoved(m_aCuts, m_aLaidOutCuts, pixelsPerMeter) || HavePointsMoved(m_aDims, m_aLaidOutDims, pixelsPerMeter))
 		{
 			m_bRelayout = true;
 			return true;
@@ -361,12 +339,12 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			}
 
 			// Farthest a point can have moved, in meters
-			array<float> transform = piece.m_aTransform;
-			array<float> laidOut = piece.m_aLaidOutTransform;
-			float axesChange = Math.AbsFloat(transform[0] - laidOut[0]) + Math.AbsFloat(transform[1] - laidOut[1])
-				+ Math.AbsFloat(transform[2] - laidOut[2]) + Math.AbsFloat(transform[3] - laidOut[3]);
-			float offsetChange = Math.AbsFloat(transform[4] - laidOut[4]) + Math.AbsFloat(transform[5] - laidOut[5]);
-			if ((axesChange * piece.m_Outline.GetRadius() + offsetChange) * pixelsPerMeter > REDRAW_DISTANCE)
+			vector axisXChange = piece.m_vAxisX - piece.m_vLaidOutAxisX;
+			vector axisZChange = piece.m_vAxisZ - piece.m_vLaidOutAxisZ;
+			vector offsetChange = piece.m_vOffset - piece.m_vLaidOutOffset;
+			float axesChange = Math.AbsFloat(axisXChange[0]) + Math.AbsFloat(axisZChange[0]) + Math.AbsFloat(axisXChange[2]) + Math.AbsFloat(axisZChange[2]);
+			float offsetDistance = Math.AbsFloat(offsetChange[0]) + Math.AbsFloat(offsetChange[2]);
+			if ((axesChange * piece.m_Outline.GetRadius() + offsetDistance) * pixelsPerMeter > REDRAW_DISTANCE)
 			{
 				piece.m_bLaidOut = false;
 				changed = true;
@@ -382,19 +360,19 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] points right, forward pairs, m
-	//! \param[in] drawnPoints the same when last drawn
+	//! \param[in] points m: right, forward per point, plus a radius per circle
+	//! \param[in] drawnPoints the same when last drawn or laid out
 	//! \param[in] pixelsPerMeter
-	//! \return true if a point was added or removed, or moved more than REDRAW_DISTANCE
+	//! \return true if a point was added or removed, or any value changed more than REDRAW_DISTANCE
 	protected static bool HavePointsMoved(notnull array<float> points, notnull array<float> drawnPoints, float pixelsPerMeter)
 	{
-		if (points.Count() != drawnPoints.Count())
+		int valueCount = points.Count();
+		if (valueCount != drawnPoints.Count())
 			return true;
 
-		for (int point = 0, valueCount = points.Count() - 1; point < valueCount; point += 2)
+		for (int value = 0; value < valueCount; value++)
 		{
-			float change = Math.AbsFloat(points[point] - drawnPoints[point]) + Math.AbsFloat(points[point + 1] - drawnPoints[point + 1]);
-			if (change * pixelsPerMeter > REDRAW_DISTANCE)
+			if (Math.AbsFloat(points[value] - drawnPoints[value]) * pixelsPerMeter > REDRAW_DISTANCE)
 				return true;
 		}
 
@@ -423,8 +401,6 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 		m_fFeatherStart = FEATHER_START * width;
 		m_fFeatherMiddle = FEATHER_MIDDLE * width;
 		m_fClipRadius = CLIP_RADIUS * width;
-		m_fGapRadius = m_fGapShare * width;
-		m_fDimRadius = m_fDimShare * width;
 
 		// Hidden pieces too, so none keeps a layout made for another size
 		if (m_bRelayout)
@@ -434,12 +410,12 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 				hiddenPiece.m_bLaidOut = false;
 			}
 
-			m_aLaidOutGaps.Copy(m_aGaps);
+			m_aLaidOutCuts.Copy(m_aCuts);
 			m_aLaidOutDims.Copy(m_aDims);
 		}
 
-		ToPixels(m_aLaidOutGaps, pixelsPerMeter, m_aGapPoints);
-		ToPixels(m_aLaidOutDims, pixelsPerMeter, m_aDimPoints);
+		ToPixels(m_aLaidOutCuts, pixelsPerMeter, m_aCutCircles);
+		ToPixels(m_aLaidOutDims, pixelsPerMeter, m_aDimCircles);
 
 		float cosTurn = Math.Cos(m_fRotation);
 		float sinTurn = Math.Sin(m_fRotation);
@@ -475,8 +451,12 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	//! \param[in] pixelsPerMeter
 	protected void LayOutPiece(notnull CSI_VehicleOutlinePiece piece, float pixelsPerMeter)
 	{
-		array<float> transform = piece.m_aTransform;
-		piece.m_aLaidOutTransform.Copy(transform);
+		vector axisX = piece.m_vAxisX;
+		vector axisZ = piece.m_vAxisZ;
+		vector offset = piece.m_vOffset;
+		piece.m_vLaidOutAxisX = axisX;
+		piece.m_vLaidOutAxisZ = axisZ;
+		piece.m_vLaidOutOffset = offset;
 		piece.m_bLaidOut = true;
 		piece.m_iRunCount = 0;
 		piece.m_aFillPoints.Clear();
@@ -496,8 +476,8 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			{
 				float x = contour[i];
 				float z = contour[i + 1];
-				float pointX = (transform[0] * x + transform[1] * z + transform[4]) * pixelsPerMeter;
-				float pointY = -(transform[2] * x + transform[3] * z + transform[5]) * pixelsPerMeter;
+				float pointX = (axisX[0] * x + axisZ[0] * z + offset[0]) * pixelsPerMeter;
+				float pointY = -(axisX[2] * x + axisZ[2] * z + offset[2]) * pixelsPerMeter;
 				m_aPoints.Insert(pointX);
 				m_aPoints.Insert(pointY);
 				farthestSq = Math.Max(farthestSq, pointX * pointX + pointY * pointY);
@@ -543,7 +523,6 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 		}
 
 		float lineWidth = GetLineWidth(piece.m_eKind, width);
-		int colorIndex = piece.m_eKind * BAND_COUNT * PASS_COUNT;
 		for (int pass = 0; pass < PASS_COUNT; pass++)
 		{
 			if (pass == PASS_SOFT_EDGE && piece.m_eKind == CSI_EVehicleOutlineKind.GUN)
@@ -557,7 +536,7 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 
 			for (int run = 0; run < piece.m_iRunCount; run++)
 			{
-				AddLine(piece.m_aTurnedRuns[run], piece.m_aRunsClosed[run], passWidth, m_aLineColors[colorIndex + piece.m_aRunBands[run] * PASS_COUNT + pass]);
+				AddLine(piece.m_aTurnedRuns[run], piece.m_aRunsClosed[run], passWidth, GetLineColor(piece.m_eKind, piece.m_aRunBands[run], pass));
 			}
 		}
 	}
@@ -711,23 +690,30 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Adds m_aPoints, a closed line, to the piece as runs that each stay in one band, cut off at the clip circle and in the gaps.
+	//! Adds m_aPoints, a closed line, to the piece as runs that each stay in one band, cut off at the clip circle and in the cuts.
 	//! \param[in] piece
 	//! \param[in] farthestSq the farthest point's squared distance from the center
 	protected void AddRuns(notnull CSI_VehicleOutlinePiece piece, float farthestSq)
 	{
-		int pointCount = m_aPoints.Count() / 2;
-		if (pointCount < 2)
+		if (m_aPoints.Count() / 2 < 2)
 			return;
 
 		// All before the feather and clear of the icons: one closed line
-		if (farthestSq < m_fFeatherStart * m_fFeatherStart && IsClearOf(m_aGapPoints, m_fGapRadius) && IsClearOf(m_aDimPoints, m_fDimRadius))
+		if (farthestSq < m_fFeatherStart * m_fFeatherStart && IsClearOf(m_aCutCircles) && IsClearOf(m_aDimCircles))
 		{
 			StartRun(piece, 0, true).InsertAll(m_aPoints);
 			return;
 		}
 
-		// Split each edge where it crosses a band's circle
+		SplitEdges();
+		JoinRuns(piece);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Splits m_aPoints' edges where they cross a band's circle into m_aSegments, with each one's band in m_aSegmentBands.
+	protected void SplitEdges()
+	{
+		int pointCount = m_aPoints.Count() / 2;
 		m_aSegments.Clear();
 		m_aSegmentBands.Clear();
 		for (int edge = 0; edge < pointCount; edge++)
@@ -744,8 +730,8 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			AddCrossings(fromX, fromY, deltaX, deltaY, m_fFeatherStart);
 			AddCrossings(fromX, fromY, deltaX, deltaY, m_fFeatherMiddle);
 			AddCrossings(fromX, fromY, deltaX, deltaY, m_fClipRadius);
-			AddCircleCrossings(fromX, fromY, deltaX, deltaY, m_aGapPoints, m_fGapRadius);
-			AddCircleCrossings(fromX, fromY, deltaX, deltaY, m_aDimPoints, m_fDimRadius);
+			AddCircleCrossings(fromX, fromY, deltaX, deltaY, m_aCutCircles);
+			AddCircleCrossings(fromX, fromY, deltaX, deltaY, m_aDimCircles);
 			m_aSplits.Sort();
 
 			for (int split = 0, splitCount = m_aSplits.Count() - 1; split < splitCount; split++)
@@ -763,7 +749,13 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 				m_aSegmentBands.Insert(GetBand(fromX + middle * deltaX, fromY + middle * deltaY));
 			}
 		}
+	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Adds m_aSegments to the piece as runs of one band each, leaving out hidden ones.
+	//! \param[in] piece
+	protected void JoinRuns(notnull CSI_VehicleOutlinePiece piece)
+	{
 		int segmentCount = m_aSegmentBands.Count();
 		if (segmentCount == 0)
 			return;
@@ -782,7 +774,7 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 		// One band all around
 		if (first < 0)
 		{
-			if (m_aSegmentBands[0] >= BAND_COUNT)
+			if (m_aSegmentBands[0] == BAND_HIDDEN)
 				return;
 
 			array<float> loop = StartRun(piece, m_aSegmentBands[0], true);
@@ -796,12 +788,12 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 		}
 
 		array<float> run;
-		int runBand = -1;
+		int runBand = BAND_HIDDEN;
 		for (int step = 0; step < segmentCount; step++)
 		{
 			int current = (first + step) % segmentCount;
 			int band = m_aSegmentBands[current];
-			if (band >= BAND_COUNT)
+			if (band == BAND_HIDDEN)
 			{
 				run = null;
 				continue;
@@ -856,16 +848,12 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	//! \param[in] fromY
 	//! \param[in] deltaX
 	//! \param[in] deltaY
-	//! \param[in] centers x, y per circle, px from the canvas center
-	//! \param[in] radius px
-	protected void AddCircleCrossings(float fromX, float fromY, float deltaX, float deltaY, notnull array<float> centers, float radius)
+	//! \param[in] circles x, y, radius per circle, px from the canvas center
+	protected void AddCircleCrossings(float fromX, float fromY, float deltaX, float deltaY, notnull array<float> circles)
 	{
-		if (radius <= 0)
-			return;
-
-		for (int center = 0, valueCount = centers.Count() - 1; center < valueCount; center += 2)
+		for (int circle = 0, valueCount = circles.Count() - 2; circle < valueCount; circle += 3)
 		{
-			AddCrossings(fromX - centers[center], fromY - centers[center + 1], deltaX, deltaY, radius);
+			AddCrossings(fromX - circles[circle], fromY - circles[circle + 1], deltaX, deltaY, circles[circle + 2]);
 		}
 	}
 
@@ -973,20 +961,16 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] centers x, y per circle, px from the canvas center
-	//! \param[in] radius px
+	//! \param[in] circles x, y, radius per circle, px from the canvas center
 	//! \return true if no edge of m_aPoints, a closed line, comes into any of the circles
-	protected bool IsClearOf(notnull array<float> centers, float radius)
+	protected bool IsClearOf(notnull array<float> circles)
 	{
-		if (radius <= 0)
-			return true;
-
-		float radiusSq = radius * radius;
 		int pointCount = m_aPoints.Count() / 2;
-		for (int center = 0, valueCount = centers.Count() - 1; center < valueCount; center += 2)
+		for (int circle = 0, valueCount = circles.Count() - 2; circle < valueCount; circle += 3)
 		{
-			float centerX = centers[center];
-			float centerY = centers[center + 1];
+			float centerX = circles[circle];
+			float centerY = circles[circle + 1];
+			float radiusSq = circles[circle + 2] * circles[circle + 2];
 			for (int edge = 0; edge < pointCount; edge++)
 			{
 				int next = (edge + 1) % pointCount;
@@ -1014,11 +998,11 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] x px from the center
 	//! \param[in] y px from the center
-	//! \return a feather band, plus FEATHER_BAND_COUNT under a dimming icon; BAND_COUNT where nothing is drawn (in a gap or past the clip circle)
+	//! \return a feather band, plus FEATHER_BAND_COUNT under a dimming icon; BAND_HIDDEN in a cut or past the clip circle
 	protected int GetBand(float x, float y)
 	{
-		if (IsInCircle(x, y, m_aGapPoints, m_fGapRadius))
-			return BAND_COUNT;
+		if (IsInCircle(x, y, m_aCutCircles))
+			return BAND_HIDDEN;
 
 		float distanceSq = x * x + y * y;
 		int band;
@@ -1029,9 +1013,9 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 		else if (distanceSq < m_fClipRadius * m_fClipRadius)
 			band = 2;
 		else
-			return BAND_COUNT;
+			return BAND_HIDDEN;
 
-		if (IsInCircle(x, y, m_aDimPoints, m_fDimRadius))
+		if (IsInCircle(x, y, m_aDimCircles))
 			band += FEATHER_BAND_COUNT;
 
 		return band;
@@ -1040,17 +1024,16 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] x px from the canvas center
 	//! \param[in] y px from the canvas center
-	//! \param[in] centers x, y per circle, px from the canvas center
-	//! \param[in] radius px
+	//! \param[in] circles x, y, radius per circle, px from the canvas center
 	//! \return true if the point is inside any of the circles
-	protected static bool IsInCircle(float x, float y, notnull array<float> centers, float radius)
+	protected static bool IsInCircle(float x, float y, notnull array<float> circles)
 	{
-		float radiusSq = radius * radius;
-		for (int center = 0, valueCount = centers.Count() - 1; center < valueCount; center += 2)
+		for (int circle = 0, valueCount = circles.Count() - 2; circle < valueCount; circle += 3)
 		{
-			float deltaX = x - centers[center];
-			float deltaY = y - centers[center + 1];
-			if (deltaX * deltaX + deltaY * deltaY < radiusSq)
+			float deltaX = x - circles[circle];
+			float deltaY = y - circles[circle + 1];
+			float radius = circles[circle + 2];
+			if (deltaX * deltaX + deltaY * deltaY < radius * radius)
 				return true;
 		}
 
@@ -1058,16 +1041,17 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] points right, forward pairs, m
+	//! \param[in] circles right, forward, radius per circle, m
 	//! \param[in] pixelsPerMeter
-	//! \param[out] pixels the same as x, y pairs, px from the canvas center in SetRotation's frame
-	protected static void ToPixels(notnull array<float> points, float pixelsPerMeter, notnull array<float> pixels)
+	//! \param[out] pixels the same as x, y, radius, px from the canvas center in SetRotation's frame
+	protected static void ToPixels(notnull array<float> circles, float pixelsPerMeter, notnull array<float> pixels)
 	{
 		pixels.Clear();
-		for (int point = 0, valueCount = points.Count() - 1; point < valueCount; point += 2)
+		for (int circle = 0, valueCount = circles.Count() - 2; circle < valueCount; circle += 3)
 		{
-			pixels.Insert(points[point] * pixelsPerMeter);
-			pixels.Insert(-points[point + 1] * pixelsPerMeter);
+			pixels.Insert(circles[circle] * pixelsPerMeter);
+			pixels.Insert(-circles[circle + 1] * pixelsPerMeter);
+			pixels.Insert(circles[circle + 2] * pixelsPerMeter);
 		}
 	}
 
@@ -1096,6 +1080,16 @@ class CSI_VehicleOutlineComponent : SCR_ScriptedWidgetComponent
 			return TURRET_LINE_OPACITY;
 
 		return HULL_LINE_OPACITY;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] kind
+	//! \param[in] band below BAND_COUNT
+	//! \param[in] pass below PASS_COUNT
+	//! \return packed color, from m_aLineColors
+	protected int GetLineColor(CSI_EVehicleOutlineKind kind, int band, int pass)
+	{
+		return m_aLineColors[(kind * BAND_COUNT + band) * PASS_COUNT + pass];
 	}
 
 	//------------------------------------------------------------------------------------------------

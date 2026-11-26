@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Radar HUD element that outlines the player's vehicle, turrets and weapon racks and marks free
 //! 				seats. Outlines come only from the server's CSI_VehicleOutlineSystem.
@@ -15,7 +15,8 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 
 	protected static const string CANVAS_NAME = "VehicleOutline";
 	protected static const float REQUEST_RETRY_TIME = 30;				//!< seconds between asks while the server hasn't sent every outline
-	protected static const float ICON_GAP_SHARE = 0.52;				//!< gap left clear around a gunner's or commander's icon, in icon sizes
+	protected static const float ICON_GAP_SHARE = 0.52;				//!< gap left clear around a gunner's icon, in icon sizes
+	protected static const float ICON_TIGHT_GAP_SHARE = 0.36;		//!< the same around a gunner's icon without its ring (the icon reaches 0.687 of the ring's radius)
 	protected static const float ICON_DIM_SHARE = 0.375;			//!< lines are dimmed under other seat icons out to their ring, in icon sizes
 	protected static const float TAKEN_SEAT_DISTANCE = 0.3;			//!< m; empty seats this close to a taken one aren't marked
 
@@ -34,8 +35,8 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	protected vector m_vLocalCenter;						//!< m_vCenter in the vehicle's space
 	protected float m_fSinTurn;								//!< of the outline's turn from the vehicle's heading to the view
 	protected float m_fCosTurn = 1;
-	protected ref array<float> m_aIconGaps = {};			//!< right, forward per icon the radar leaves a gap around, m; drawn next frame
-	protected ref array<float> m_aIconDims = {};			//!< right, forward per icon the radar dims lines under, m; drawn next frame
+	protected ref array<float> m_aIconCuts = {};			//!< right, forward, radius per icon the radar leaves lines out around, m; drawn next frame
+	protected ref array<float> m_aIconDims = {};			//!< right, forward, radius per icon the radar dims lines under, m; drawn next frame
 
 	// The vehicle
 	protected IEntity m_OutlineVehicle;						//!< vehicle the outline is for
@@ -52,7 +53,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	// Settings, read in ApplySettings
 	protected bool m_bEnabled;				//!< RADAR_VISIBLE and RADAR_VEHICLE_OUTLINE
 	protected int m_iRange;					//!< RADAR_RANGE_IN_VEHICLE in meters; 0 until the settings arrive
-	protected float m_fIconSize;			//!< px, the radar icons' (RADAR_ICON_SIZE)
+	protected float m_fIconMeters;			//!< the radar icons' size (RADAR_ICON_SIZE) in m at m_iRange's scale
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 ELEMENT INITIALIZATION
@@ -84,7 +85,14 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 
 		m_bEnabled = m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VISIBLE) && m_SettingsManager.GetSettingBool(CSI_GameSettings.RADAR_VEHICLE_OUTLINE);
 		m_iRange = m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_RANGE_IN_VEHICLE);
-		m_fIconSize = CSI_Radar.ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+
+		// The icons' px size in meters at the range's scale
+		m_fIconMeters = 0;
+		if (m_iRange > 0)
+		{
+			float iconPixels = CSI_Radar.ICON_WIDTH_AND_HEIGHT * (m_SettingsManager.GetSettingInt(CSI_GameSettings.RADAR_ICON_SIZE) * 0.01);
+			m_fIconMeters = iconPixels / CSI_Radar.RADAR_SIZE / CSI_Radar.GetWidthsPerMeter(m_iRange);
+		}
 
 		if (m_Outline)
 			m_Outline.SetColor(CSI_ColorPresets.GetSettingColor(CSI_GameSettings.COMPASS_COLOR));
@@ -183,19 +191,27 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	//! Leaves the outline's lines out around an icon, or dims them under it, from the next Update. Called by the radar.
 	//! \param[in] position world position of the icon
-	//! \param[in] cut leave lines out around it (a gunner's or commander's), else dim them under it
-	void AddIconGap(vector position, bool cut)
+	//! \param[in] cut leave lines out around it (a gunner's), else dim them under it
+	//! \param[in] ringed the icon shows its seat ring
+	void AddIconGap(vector position, bool cut, bool ringed)
 	{
 		if (!m_OutlineVehicle)
 			return;
 
-		array<float> gaps = m_aIconDims;
+		array<float> circles = m_aIconDims;
+		float radiusShare = ICON_DIM_SHARE;
 		if (cut)
-			gaps = m_aIconGaps;
+		{
+			circles = m_aIconCuts;
+			radiusShare = ICON_TIGHT_GAP_SHARE;
+			if (ringed)
+				radiusShare = ICON_GAP_SHARE;
+		}
 
 		vector offset = m_OutlineVehicle.CoordToLocal(position) - m_vLocalCenter;
-		gaps.Insert(offset[0]);
-		gaps.Insert(offset[2]);
+		circles.Insert(offset[0]);
+		circles.Insert(offset[2]);
+		circles.Insert(radiusShare * m_fIconMeters);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -237,8 +253,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	{
 		TakeServerOutlines(vehicle, timeSlice);
 
-		// Everything goes in the vehicle's own space, level whatever its pitch and roll; the outline turns that to the
-		// view by the vehicle's heading as a whole
+		// In the vehicle's own space, level whatever its pitch and roll, turned to the view by its heading only
 		vector vehicleTransform[4];
 		vehicle.GetWorldTransform(vehicleTransform);
 		float viewYaw = -m_HUDSystem.GetLocalYaw() * Math.DEG2RAD;
@@ -253,7 +268,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 		{
 			if (!part.m_Entity || !part.m_Outline)
 			{
-				m_Outline.SetPiece(index, null, 1, 0, 0, 1, 0, 0, part.m_eKind);
+				m_Outline.SetPiece(index, null, vector.Right, vector.Forward, vector.Zero, part.m_eKind);
 				continue;
 			}
 
@@ -264,15 +279,14 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 			vector axisZ = vehicle.VectorToLocal(frame[2]);
 			vector offset = vehicle.CoordToLocal(frame[3]) - m_vLocalCenter;
 
-			m_Outline.SetPiece(index, part.m_Outline, axisX[0], axisZ[0], axisX[2], axisZ[2], offset[0], offset[2], part.m_eKind);
+			m_Outline.SetPiece(index, part.m_Outline, axisX, axisZ, offset, part.m_eKind);
 		}
 
 		UpdateSeatMarks(vehicle);
 
 		// The radar placed its icons after the last Update
-		float iconShare = m_fIconSize / CSI_Radar.RADAR_SIZE;
-		m_Outline.SetIconGaps(m_aIconGaps, iconShare * ICON_GAP_SHARE, m_aIconDims, iconShare * ICON_DIM_SHARE);
-		m_aIconGaps.Clear();
+		m_Outline.SetIconGaps(m_aIconCuts, m_aIconDims);
+		m_aIconCuts.Clear();
 		m_aIconDims.Clear();
 
 		m_Outline.Update(CSI_Radar.GetWidthsPerMeter(m_iRange));
@@ -364,7 +378,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 		CSI_VehicleOutline.GetOutlineParts(vehicle, m_aOutlineParts);
 		m_Outline.SetPieceCount(m_aOutlineParts.Count());
 		m_fRequestRetryTime = 0;
-		m_aIconGaps.Clear();
+		m_aIconCuts.Clear();
 		m_aIconDims.Clear();
 
 		m_aOutlineSeats.Clear();
@@ -374,7 +388,7 @@ class CSI_VehicleOutlineElement : SCR_ScriptedWidgetComponent
 	//------------------------------------------------------------------------------------------------
 	protected void HideVehicleOutline()
 	{
-		m_aIconGaps.Clear();
+		m_aIconCuts.Clear();
 		m_aIconDims.Clear();
 
 		// The vehicle may be deleted already

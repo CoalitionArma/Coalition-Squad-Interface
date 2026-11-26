@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: tag field of view from NAMETAG_FIELD_OF_VIEW, with each drawn tag's distance from the
 //! 				center of the view recorded as a share of it; the line of sight check can be turned off and
@@ -31,8 +31,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Also ends the talking state on fading and hidden tags. Vanilla only counts VON_STOP_TIME down in
-	//! UpdateVisibleTag, so a tag that lost line of sight while its player talked stayed talking until it showed again.
+	//! Also times out the talking state of fading and hidden tags.
 	override protected bool DisableTag(SCR_NameTagData data, float timeSlice)
 	{
 		UpdateVONTimeout(data, timeSlice);
@@ -72,9 +71,7 @@ modded class SCR_NameTagRulesetFriendlies : SCR_NameTagRulesetBase
 		if (CSI_NametagSettings.s_fIconOnlyFieldOfView == 0 || !CSI_NametagSettings.s_bRoleIcons || data.m_eType != ENameTagEntityType.PLAYER)
 			return true;
 
-		// CSI: how far the drawn tag is from the center of the view, as a share of its visible angle. Super's angle
-		// (m_fAngleToScreenCenter) is to the neck and counts height 0.3 times, so the names stayed in a tall zone
-		// that sat below the center of the screen for a tag on the torso
+		// CSI: the drawn tag's true angle from the center of the view, as a share of its visible angle
 		float visibleAngle = Math.InverseLerp(m_ZoneCfg.m_fFarthestZoneRangePow2, 0, data.m_fDistance) * (m_iMaxAngle / 2);
 		if (visibleAngle > 0)
 			data.m_fFieldOfViewFraction = GetAngleToViewCenter(data.m_vTagWorldPos) / visibleAngle;

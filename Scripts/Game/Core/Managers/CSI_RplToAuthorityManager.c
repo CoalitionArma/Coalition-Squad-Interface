@@ -3,7 +3,7 @@ class CSI_RplToAuthorityManagerClass : ScriptComponentClass {};
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client to server bridge on each player controller: Owner_* sends RpcAsk_* to the server,
 //! 				which hands off to CSI_RplBroadcastManager, CSI_SettingsManager, CSI_VehicleOutlineSystem or the
@@ -48,19 +48,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerDisplayIcon(PlayerId playerID, CSI_EIcon displayIcon)
 	{
+		// Called every update cycle: only a change is sent
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		if (!playerData)
-			return;
-
-		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
-		if (playerData.GetDisplayIcon() == m_iAskedDisplayIcon)
-			m_iAskedDisplayIcon = -1;
-
-		if (displayIcon == playerData.GetDisplayIcon() || displayIcon == m_iAskedDisplayIcon)
-			return;
-
-		m_iAskedDisplayIcon = displayIcon;
-		Rpc(RpcAsk_UpdatePlayerDisplayIcon, playerID, displayIcon);
+		if (playerData && ShouldAsk(playerData.GetDisplayIcon(), displayIcon, m_iAskedDisplayIcon))
+			Rpc(RpcAsk_UpdatePlayerDisplayIcon, playerID, displayIcon);
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -90,19 +81,10 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerRank(PlayerId playerID, SCR_ECharacterRank rank)
 	{
+		// Called every update cycle: only a change is sent
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		if (!playerData)
-			return;
-
-		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
-		if (playerData.GetRank() == m_iAskedRank)
-			m_iAskedRank = -1;
-
-		if (rank == playerData.GetRank() || rank == m_iAskedRank)
-			return;
-
-		m_iAskedRank = rank;
-		Rpc(RpcAsk_UpdatePlayerRank, playerID, rank);
+		if (playerData && ShouldAsk(playerData.GetRank(), rank, m_iAskedRank))
+			Rpc(RpcAsk_UpdatePlayerRank, playerID, rank);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -119,27 +101,28 @@ class CSI_RplToAuthorityManager : ScriptComponent
 	//------------------------------------------------------------------------------------------------
 	void Owner_UpdatePlayerSquadLeader(PlayerId playerID, bool isSL)
 	{
+		// Called every update cycle: only a change is sent
 		CSI_PlayerData playerData = m_PlayerDataManager.GetPlayerData(playerID);
-		if (!playerData)
-			return;
+		if (playerData && ShouldAsk(playerData.GetIsSquadLeader(), isSL, m_iAskedSquadLeader))
+			Rpc(RpcAsk_UpdatePlayerSquadLeader, playerID, isSL);
+	}
 
-		// Only send when the value changed (called every update cycle), once until the server's broadcast echoes it
-		int isSLValue = 0;
-		if (isSL)
-			isSLValue = 1;
+	//------------------------------------------------------------------------------------------------
+	//! Asks for a value once until the server's broadcast echoes it.
+	//! \param[in] current the value the server last broadcast
+	//! \param[in] wanted
+	//! \param[in,out] asked value asked for and not yet echoed, -1 for none
+	//! \return true if wanted should be asked for
+	protected bool ShouldAsk(int current, int wanted, inout int asked)
+	{
+		if (current == asked)
+			asked = -1;
 
-		int currentValue = 0;
-		if (playerData.GetIsSquadLeader())
-			currentValue = 1;
+		if (wanted == current || wanted == asked)
+			return false;
 
-		if (currentValue == m_iAskedSquadLeader)
-			m_iAskedSquadLeader = -1;
-
-		if (isSLValue == currentValue || isSLValue == m_iAskedSquadLeader)
-			return;
-
-		m_iAskedSquadLeader = isSLValue;
-		Rpc(RpcAsk_UpdatePlayerSquadLeader, playerID, isSL);
+		asked = wanted;
+		return true;
 	}
 
 	//------------------------------------------------------------------------------------------------

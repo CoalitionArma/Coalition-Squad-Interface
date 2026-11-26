@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-20
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system feeding the HUD and nametags: the locally controlled character, yaw,
 //! 				vehicle/mortar state and the sorted group member list.
@@ -19,10 +19,8 @@ class CSI_HUDSystem : GameSystem
 	protected SCR_ChimeraCharacter m_LocalPlayerCharacter;	//!< locally controlled character
 	protected SCR_CompartmentAccessComponent m_LocalCompartmentAccess;	//!< local character's, listened to for vehicle and mortar state
 	protected ref array<int> m_aLocalGroupPlayerIds = {};	//!< replaced when the group or its order changes; readers compare references
-	protected bool m_bIsLocalPlayerInVehicle;
 	protected bool m_bIsLocalPlayerInMortar;
 	protected IEntity m_LocalVehicle;	//!< topmost entity with seats, null on foot
-	protected int m_iLocalGroupCount;
 	protected float m_fLocalYaw;
 
 	protected static const float REFRESH_INTERVAL = 0.5;	//!< seconds between group refreshes
@@ -93,7 +91,7 @@ class CSI_HUDSystem : GameSystem
 	//------------------------------------------------------------------------------------------------
 	bool GetIsLocalPlayerInVehicle()
 	{
-		return m_bIsLocalPlayerInVehicle;
+		return m_LocalVehicle != null;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -112,7 +110,7 @@ class CSI_HUDSystem : GameSystem
 	//------------------------------------------------------------------------------------------------
 	int GetLocalGroupCount()
 	{
-		return m_iLocalGroupCount;
+		return m_aLocalGroupPlayerIds.Count();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -212,7 +210,6 @@ class CSI_HUDSystem : GameSystem
 	//! \param[in] compartment the local character's seat, null if it isn't in one
 	protected void UpdateLocalVehicleState(BaseCompartmentSlot compartment)
 	{
-		m_bIsLocalPlayerInVehicle = false;
 		m_bIsLocalPlayerInMortar = false;
 		m_LocalVehicle = null;
 
@@ -223,7 +220,6 @@ class CSI_HUDSystem : GameSystem
 		if (!vehicle)
 			return;
 
-		m_bIsLocalPlayerInVehicle = true;
 		m_LocalVehicle = vehicle;
 		m_bIsLocalPlayerInMortar = SCR_MortarMuzzleComponent.Cast(vehicle.FindComponent(SCR_MortarMuzzleComponent)) != null;
 	}
@@ -239,7 +235,6 @@ class CSI_HUDSystem : GameSystem
 			if (!m_aLocalGroupPlayerIds.IsEmpty())
 				m_aLocalGroupPlayerIds = {};
 
-			m_iLocalGroupCount = 0;
 			return;
 		}
 
@@ -247,8 +242,6 @@ class CSI_HUDSystem : GameSystem
 		array<int> sortedPlayerIds = GetSortedGroupArray(playersGroup.GetPlayerIDs());
 		if (!SCR_ArrayHelperT<int>.AreEqual(sortedPlayerIds, m_aLocalGroupPlayerIds))
 			m_aLocalGroupPlayerIds = sortedPlayerIds;
-
-		m_iLocalGroupCount = m_aLocalGroupPlayerIds.Count();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -321,7 +314,7 @@ class CSI_HUDSystem : GameSystem
 		foreach (int sortedKey : sortedKeys)
 		{
 			// The place in the group is what's left of the key
-			playersGroupArray.Insert(playerIDs[sortedKey - (sortedKey / SORT_KEY_STEP) * SORT_KEY_STEP]);
+			playersGroupArray.Insert(playerIDs[sortedKey % SORT_KEY_STEP]);
 		}
 
 		return playersGroupArray;

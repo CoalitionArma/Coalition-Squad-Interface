@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	HUD stamina bar: fades in while stamina is below full; its color shows the stamina level.
 //! 				CSI_HUD has it read its setting (ApplySettings).
@@ -19,7 +19,6 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 	protected ProgressBarWidget m_wStamBar;
 	protected Color m_StamBarColor;	//!< color applied to the bar
 	protected bool m_bVisible;		//!< STAMINA_VISIBLE
-	protected float m_fBarOpacity;	//!< the bar's opacity as Update fades it
 
 	protected static const float FADE_SPEED = 0.3;	//!< opacity per second (full fade about 3 s)
 	protected static const ref Color HIGH_STAMINA_COLOR = new Color(0.035996, 0.091997, 0.050004, 1.000000);		//!< green, above 70%
@@ -45,9 +44,6 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 		// Opaque in the layout for editing; starts hidden in game
 		if (m_wStamBar && !SCR_Global.IsEditMode())
 			m_wStamBar.SetOpacity(0);
-
-		if (m_wStamBar)
-			m_fBarOpacity = m_wStamBar.GetOpacity();
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================
@@ -88,27 +84,25 @@ class CSI_Stamina : SCR_ScriptedWidgetComponent
 			stamina = 1;
 
 		// Full and faded out: nothing to do until stamina drops
-		if (stamina >= 1 && m_fBarOpacity <= 0)
+		float opacity = m_wStamBar.GetOpacity();
+		if (stamina >= 1 && opacity <= 0)
 			return;
 
 		OnStaminaChange(stamina);
 
 		float fadeStep = FADE_SPEED * timeSlice;
 		if (stamina < 1)
-			SetBarOpacity(Math.Min(m_fBarOpacity + fadeStep, 1));
+			SetBarOpacity(Math.Min(opacity + fadeStep, 1));
 		else
-			SetBarOpacity(Math.Max(m_fBarOpacity - fadeStep, 0));
+			SetBarOpacity(Math.Max(opacity - fadeStep, 0));
 	}
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] opacity 0 - 1
 	protected void SetBarOpacity(float opacity)
 	{
-		if (opacity == m_fBarOpacity)
-			return;
-
-		m_fBarOpacity = opacity;
-		m_wStamBar.SetOpacity(opacity);
+		if (opacity != m_wStamBar.GetOpacity())
+			m_wStamBar.SetOpacity(opacity);
 	}
 
 //=============================================================================================================================================================================================================================================================================================================================================================

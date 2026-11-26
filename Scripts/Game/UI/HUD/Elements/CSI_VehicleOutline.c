@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Top-down outline of a vehicle part as closed lines of x, z pairs (m), cached per prefab and shape
 //! 				for the session; plus static helpers for finding parts and their frames.
@@ -259,7 +259,7 @@ class CSI_VehicleOutline
 	//! \param[in] entity a vehicle's descendant
 	//! \param[in] turret GetPartTurret's
 	//! \return true for a mount aimed by its gun's turret (the M1025's ring)
-	static bool IsGunMount(notnull IEntity entity, notnull TurretComponent turret)
+	protected static bool IsGunMount(notnull IEntity entity, notnull TurretComponent turret)
 	{
 		IEntity gun = turret.GetOwner();
 		if (!gun || gun == entity)
@@ -380,7 +380,8 @@ class CSI_VehicleOutline
 
 		float frameYaw = GetFrameYaw(entity, turret);
 		vector pivot;
-		float bestScore = -1;
+		float bestScore;
+		bool found;
 		foreach (string boneName : boneNames)
 		{
 			string lowerName = boneName;
@@ -399,15 +400,16 @@ class CSI_VehicleOutline
 			if (gunNumbers.Contains(GetBoneNumber(lowerName)))
 				score -= Math.PI2;
 
-			if (bestScore != -1 && score > bestScore - YAW_BONE_TIE)
+			if (found && score > bestScore - YAW_BONE_TIE)
 				continue;
 
+			found = true;
 			bestScore = score;
 			pivot = boneMatrix[3];
 		}
 
 		vector gunParent;
-		if (bestScore == -1 && GetGunParentOrigin(entity, gunBones, gunParent))
+		if (!found && GetGunParentOrigin(entity, gunBones, gunParent))
 			pivot = gunParent;
 
 		pivot[1] = 0;

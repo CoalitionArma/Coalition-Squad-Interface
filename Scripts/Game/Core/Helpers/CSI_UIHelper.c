@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-19
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
-//!	\Description: 	Static UI helpers: resource paths, color team colors (in the chosen set), compass textures, icon names
+//!	\Description: 	Static UI helpers: resource paths, color team colors (in the chosen set), compass textures, role icons
 //! 				and player names.
 //! 
 //------------------------------------------------------------------------------------------------
@@ -84,20 +84,29 @@ class CSI_UIHelper
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Imageset entry name in CSI_ICONS; themed icons follow the ICON_THEME setting.
+	//! Imageset entry name in CSI_ICONS.
 	//! \param[in] icon
 	//! \param[in] isSimpleIcon non-circular version ("_ICON")
 	//! \param[in] isAltIcon alternative version ("_ALT")
+	//! \param[in] theme CSI_EIconTheme of themed icons; -1 for the ICON_THEME setting
 	//! \return e.g. "CLASSIC MEDIC_ICON"
-	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false)
+	static string GetIconString(CSI_EIcon icon, bool isSimpleIcon = false, bool isAltIcon = false, int theme = -1)
 	{
-		string iconString;
-		CSI_EIconTheme theme = CSI_SettingsManager.GetInstance().GetSettingInt(CSI_GameSettings.ICON_THEME);
+		string iconString = SCR_Enum.GetEnumName(CSI_EIcon, icon);
 
-		if (m_aNonThemedRegularIcons.Contains(icon) || m_aVehicleIcons.Contains(icon))
-			iconString = string.Format("%1", SCR_Enum.GetEnumName(CSI_EIcon, icon));
-		else
-			iconString = string.Format("%1 %2", SCR_Enum.GetEnumName(CSI_EIconTheme, theme), SCR_Enum.GetEnumName(CSI_EIcon, icon));
+		if (!m_aNonThemedRegularIcons.Contains(icon) && !m_aVehicleIcons.Contains(icon))
+		{
+			int iconTheme = theme;
+			if (iconTheme < 0)
+			{
+				iconTheme = CSI_EIconTheme.CLASSIC;
+				CSI_SettingsManager settingsManager = CSI_SettingsManager.GetInstance();
+				if (settingsManager)
+					iconTheme = settingsManager.GetSettingInt(CSI_GameSettings.ICON_THEME);
+			}
+
+			iconString = SCR_Enum.GetEnumName(CSI_EIconTheme, iconTheme) + " " + iconString;
+		}
 
 		if (isSimpleIcon)
 			iconString = iconString + "_ICON";
@@ -106,6 +115,20 @@ class CSI_UIHelper
 			iconString = iconString + "_ALT";
 
 		return iconString;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Loads a role's simple icon, as nametags and the group menu show it: vanilla's pointer for MAN, the
+	//! alternative image for DRIVER.
+	//! \param[in] image
+	//! \param[in] icon
+	//! \param[in] theme CSI_EIconTheme of themed icons; -1 for the ICON_THEME setting
+	static void LoadSimpleRoleIcon(notnull ImageWidget image, CSI_EIcon icon, int theme = -1)
+	{
+		if (icon == CSI_EIcon.MAN)
+			image.LoadImageFromSet(0, VANILLA_NAMETAG_ICONS, "pointer-small");
+		else
+			image.LoadImageFromSet(0, CSI_ICONS, GetIconString(icon, true, icon == CSI_EIcon.DRIVER, theme));
 	}
 
 	//------------------------------------------------------------------------------------------------

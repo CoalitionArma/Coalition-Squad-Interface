@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Arma Reforger
 //!	\Description: 	CSI changes: shows the player's CSI role or state icon in the RoleIcon widget picked by
 //! 				NAMETAG_ROLE_ICON_POSITION, sized by NAMTEAG_SCALE and colored like the name; talking shows
@@ -12,6 +12,8 @@
 modded class SCR_NTIconBase
 {
 	static const int ICON_KEY_NONE = -3;	//!< no icon loaded; GetIconKey never returns it
+	protected static const int ICON_KEY_EMPTY = -1;	//!< a player without CSI data: the empty icon
+	protected static const int ICON_KEY_AI = -2;	//!< AI without CSI data: vanilla's AI icon
 
 	//------------------------------------------------------------------------------------------------
 	override void SetDefaults(SCR_NameTagData data, int index)
@@ -71,12 +73,11 @@ modded class SCR_NTIconBase
 			//-----------------------------------------------------------------------
 			// Color Updates For VON/Color Teams
 			SetElementColor(data, index, data.m_TagColor);
-			
+
 			//-----------------------------------------------------------------------
-			// State icons first, then the CSI display icon (MAN uses the pointer)
+			// State icons first, then the CSI display icon
 			if (loadIcon)
 			{
-				
 				// Talking: CSI_TalkingBars over an empty icon
 				bool talking = data.m_ePriorityEntityState == ENameTagEntityState.VON;
 				SetTalkingBars(iWidget, talking);
@@ -86,18 +87,7 @@ modded class SCR_NTIconBase
 					case (data.m_ePriorityEntityState == ENameTagEntityState.UNCONSCIOUS)	: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "unconscious"); break;
 					case (data.m_ePriorityEntityState == ENameTagEntityState.DEAD) 		: iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "death"); break;
 					case (talking) : break;
-					default : {
-						bool setAlt = false;
-						CSI_EIcon displayIcon = data.m_PlayerData.GetDisplayIcon();
-
-						if (displayIcon == CSI_EIcon.DRIVER)
-							setAlt = true;
-
-						if (displayIcon == CSI_EIcon.MAN)
-							iWidget.LoadImageFromSet(0, CSI_UIHelper.VANILLA_NAMETAG_ICONS, "pointer-small");
-						else
-							iWidget.LoadImageFromSet(0, CSI_UIHelper.CSI_ICONS, CSI_UIHelper.GetIconString(displayIcon, true, setAlt));
-					}
+					default : CSI_UIHelper.LoadSimpleRoleIcon(iWidget, data.m_PlayerData.GetDisplayIcon(), CSI_NametagSettings.s_iIconTheme);
 				};
 			}
 		} else {
@@ -143,15 +133,15 @@ modded class SCR_NTIconBase
 
 	//------------------------------------------------------------------------------------------------
 	//! \param[in] data
-	//! \return what the icon shows: state, icon theme and display icon with CSI data, else -2 for AI and -1
+	//! \return what the icon shows: state, icon theme and display icon with CSI data, else ICON_KEY_AI or ICON_KEY_EMPTY
 	protected int GetIconKey(SCR_NameTagData data)
 	{
 		if (!data.m_PlayerData)
 		{
 			if (data.m_eType == ENameTagEntityType.AI)
-				return -2;
+				return ICON_KEY_AI;
 
-			return -1;
+			return ICON_KEY_EMPTY;
 		}
 
 		return (data.m_ePriorityEntityState << 16) | (CSI_NametagSettings.s_iIconTheme << 8) | data.m_PlayerData.GetDisplayIcon();

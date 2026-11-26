@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Talking bars (CSI_TalkingBars.layout): five bars that bounce out from their middle line, the
 //! 				middle one tallest and first, shown in place of an icon while a player talks. Created beside the
@@ -89,7 +89,7 @@ class CSI_TalkingBarsComponent : SCR_ScriptedWidgetComponent
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] active true shows and animates the bars every frame, false hides them
+	//! \param[in] active true shows and animates the bars (at most every ANIMATE_INTERVAL_MS), false hides them
 	void SetActive(bool active)
 	{
 		if (active == m_bActive)
@@ -166,7 +166,7 @@ class CSI_TalkingBarsComponent : SCR_ScriptedWidgetComponent
 		}
 
 		// Each bar eases between SHORTEST and its tallest height, centered on the middle line
-		clockMs -= (clockMs / CLOCK_WRAP_MS) * CLOCK_WRAP_MS;	// wrapped before the float conversion
+		clockMs = clockMs % CLOCK_WRAP_MS;	// wrapped before the float conversion
 		float time = clockMs * 0.001;
 		float width = BAR_WIDTH * unit;
 		foreach (int i, ImageWidget bar : m_aBars)

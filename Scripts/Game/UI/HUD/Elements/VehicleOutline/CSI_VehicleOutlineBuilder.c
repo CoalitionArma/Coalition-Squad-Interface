@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-22
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Builds the top-down outline of a vehicle's hull, turret or weapon rack over a few frames by
 //! 				tracing down through a grid over it, past doors, leaving out a hull's small spurs such as mirrors;
@@ -46,22 +46,21 @@ class CSI_VehicleOutlineBuilder
 //=============================================================================================================================================================================================================================================================================================================================================================
 
 	protected IEntity m_Root;
+	protected BaseWorld m_World;					//!< the root's
 	protected TurretComponent m_Turret;				//!< the frame follows its aim; null for a hull or weapon rack
 	protected bool m_bHull;							//!< the vehicle's own outline, not a turret's, gun's or weapon rack's
 	protected ref array<IEntity> m_aParts = {};		//!< the root and its parts with physics, without pieces of their own below it
 	protected ref TraceParam m_TraceParam;
 	protected ref CSI_VehicleOutline m_Outline;		//!< set once built
 	protected bool m_bCacheable;					//!< the outline may be kept for the prefab (not a wreck)
-	protected ref array<int> m_aPieceGunLayers = {};	//!< collider layers of gun pieces below the root (AddPieceGunLayers)
 	protected string m_sShapeKey;					//!< GetShapeKey, empty if it can't be shared
 
-	// Doors are left out of the traces, open or closed: parts with door bones, those bones, parts hanging on a door
-	// (its glass), and whether there are any
-	protected ref array<IEntity> m_aDoorBoneParts = {};
-	protected ref array<ref set<int>> m_aDoorBones = {};	//!< indices in GetBoneNames order, as traces report them
-	protected ref array<ref set<int>> m_aDoorPivots = {};	//!< the same bones' ids (GetBoneIndex), as children's GetPivot report them
-	protected ref array<IEntity> m_aDoorParts = {};
-	protected bool m_bHasDoors;
+	// Doors, left out of the traces open or closed
+	protected ref array<IEntity> m_aDoorBoneParts = {};		//!< parts with door bones
+	protected ref array<ref set<int>> m_aDoorBones = {};	//!< per door bone part, its door bones' indices in GetBoneNames order, as traces report them
+	protected ref array<ref set<int>> m_aDoorPivots = {};	//!< per door bone part, the same bones' ids (GetBoneIndex), as children's GetPivot report them
+	protected ref array<IEntity> m_aDoorParts = {};			//!< parts hanging on a door (its glass)
+	protected bool m_bHasDoors;								//!< a door bone, a door part or a collider named like a door
 
 	// Trace grid in the outline's frame
 	protected vector m_vMins;
@@ -76,41 +75,40 @@ class CSI_VehicleOutlineBuilder
 	protected bool m_bSeeded;						//!< the flood has started
 	protected bool m_bGridDone;
 
-	// Root space: rotors to skip (position, axis, (radius, is main)), wheels and tracks to stamp (min x, max x, min z, max z)
-	protected ref array<vector> m_aRotors = {};
-	protected bool m_bSkids;	//!< a helicopter on skids, left out of the traces
-	protected ref array<float> m_aWheelRectangles = {};
+	// Root space: rotors to skip, wheels and tracks to stamp
+	protected ref array<vector> m_aRotors = {};			//!< 3 per rotor: position, axis, then (radius, 1 if main else 0, 0)
+	protected bool m_bSkids;							//!< a helicopter on skids, left out of the traces
+	protected ref array<float> m_aWheelRectangles = {};	//!< 4 per wheel or track: min x, max x, min z, max z
 
 	// The frame in the world, set each step
-	protected BaseWorld m_World;
 	protected vector m_vFrameX;
 	protected vector m_vFrameY;
 	protected vector m_vFrameZ;
 	protected vector m_vFrameOrigin;
 	protected vector m_vFramePivot;		//!< CSI_VehicleOutline.GetFramePivot's, in the root's space
-	protected float m_fFrameCos = 1;	//!< of the frame's turn from the root
-	protected float m_fFrameSin;
+	protected float m_fFrameCos;		//!< of the frame's turn from the root
+	protected float m_fFrameSin;		//!< of the frame's turn from the root
 
 	// Grid stages after the traces, a slice of STAGE_CELLS_PER_STEP cells a step
-	protected int m_iStagePass;						//!< pass of the stage in progress
-	protected int m_iStageCell;						//!< next cell of that pass (LinkCells: next row + 1)
-	protected ref array<bool> m_aPassCells = {};	//!< CloseGaps: a pass's result
-	protected ref array<bool> m_aGrownCells = {};	//!< CloseGaps: the grown hits
+	protected int m_iStagePass;						//!< pass of the stage in progress; each stage leaves this and m_iStageCell at 0
+	protected int m_iStageCell;						//!< next cell of that pass
+	protected ref array<bool> m_aPassCells = {};	//!< CloseGaps: the array its passes alternate with m_aHits
 	protected ref array<bool> m_aReached = {};		//!< FillHoles: misses reached from the ring
 	protected ref array<int> m_aSpreading = {};		//!< FillHoles: reached misses not spread from yet
-	protected bool m_bFillSeeded;
+	protected bool m_bFillSeeded;					//!< FillHoles: the spread has started
 	protected ref set<int> m_aEdgeHits = new set<int>();	//!< FillHoles: a hull's hits next to misses reached from the ring
 	protected ref array<bool> m_aSpurs = {};		//!< RemoveSpurs: hits left out as small spurs; their edges aren't refined
+	protected int m_iLinkRow = -1;					//!< LinkCells: next row, from -1 as cells run one past the grid
 
-	// Grid stages, then marching squares: each edge point's two neighbors and crossing fraction
+	// Stages done, then marching squares
 	protected bool m_bGapsClosed;
 	protected bool m_bHolesFilled;
 	protected bool m_bLinked;
-	protected ref map<int, int> m_mFirstNeighbors = new map<int, int>();
-	protected ref map<int, int> m_mSecondNeighbors = new map<int, int>();
-	protected ref array<int> m_aEdgeKeys = {};
-	protected int m_iNextEdge;
-	protected ref map<int, float> m_mEdgeFractions = new map<int, float>();
+	protected ref map<int, int> m_mFirstNeighbors = new map<int, int>();	//!< edge point key (GetEdgeKey) to the first edge point linked to it
+	protected ref map<int, int> m_mSecondNeighbors = new map<int, int>();	//!< edge point key to the second edge point linked to it
+	protected ref array<int> m_aEdgeKeys = {};								//!< every edge point's key, in the order they are refined
+	protected int m_iNextEdge;												//!< index in m_aEdgeKeys of the next edge point to refine
+	protected ref map<int, float> m_mEdgeFractions = new map<int, float>();	//!< edge point key to where the outline crosses its cell edge (0 to 1); missing if unrefined
 
 //=============================================================================================================================================================================================================================================================================================================================================================
 //	 INITIALIZATION
@@ -123,42 +121,73 @@ class CSI_VehicleOutlineBuilder
 	void CSI_VehicleOutlineBuilder(notnull IEntity root, TurretComponent turret, vector framePivot)
 	{
 		m_Root = root;
+		m_World = root.GetWorld();
 		m_Turret = turret;
 		m_vFramePivot = framePivot;
+		m_bHull = !turret && !CSI_VehicleOutline.IsWeaponRack(root);
 		m_aParts.Insert(root);
 		AddParts(root);
 		AddRotors();
 		AddWheels();
 		AddDoors();
+		UpdateFrame();
 
+		// A turret's main gun, merged into it (MergePhysics), isn't a part
+		bool isGun = root.FindComponent(WeaponComponent) != null;
+		IEntity turretGun;
+		if (turret && !isGun)
+			turretGun = GetMainGun(root);
+
+		if (!InitBounds(turretGun))
+			return;
+
+		// Finer for turrets, finest for guns, whose barrels are thin
+		float minCellSize = HULL_CELL_SIZE;
+		if (isGun)
+			minCellSize = GUN_CELL_SIZE;
+		else if (turret)
+			minCellSize = TURRET_CELL_SIZE;
+
+		InitGrid(minCellSize);
+		InitTrace(isGun, turretGun);
+
+		// A part of the same shape was built already: nothing to trace
+		m_sShapeKey = GetShapeKey(minCellSize);
+		CSI_VehicleOutline shared = CSI_VehicleOutline.GetShared(m_sShapeKey);
+		if (!shared)
+			return;
+
+		m_Outline = shared;
+		m_bCacheable = !IsWrecked();
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sets the trace grid's bounds in the outline's frame.
+	//! \param[in] turretGun the turret's main gun, null if none
+	//! \return false if nothing has bounds
+	protected bool InitBounds(IEntity turretGun)
+	{
 		// A hull's grid covers only its own model and wheels, cutting off cages around it; turrets and racks cover all parts
-		m_bHull = !turret && !CSI_VehicleOutline.IsWeaponRack(root);
 		bool hasBounds;
 		if (m_bHull)
-			hasBounds = AddBounds(root, true);
+			hasBounds = AddBounds(m_Root, true);
 
 		// Without a model of its own, every part's bounds
 		if (!hasBounds)
 		{
-			foreach (IEntity boundsPart : m_aParts)
+			foreach (IEntity part : m_aParts)
 			{
-				if (AddBounds(boundsPart, !hasBounds))
+				if (AddBounds(part, !hasBounds))
 					hasBounds = true;
 			}
 		}
 
-		// A turret's main gun too: merged into it (MergePhysics), it isn't a part but may reach past the turret
-		IEntity turretGun;
-		if (turret && !root.FindComponent(WeaponComponent))
-			turretGun = GetMainGun(root);
-
+		// The turret's main gun may reach past the turret
 		if (turretGun && !m_aParts.Contains(turretGun) && AddBounds(turretGun, !hasBounds))
 			hasBounds = true;
 
-		AddPieceGunLayers(root);
-
 		if (!hasBounds)
-			return;
+			return false;
 
 		// Wheels and tracks sit at the edge, maybe past the meshes
 		for (int wheel = 0, wheelCount = m_aWheelRectangles.Count() / 4; wheel < wheelCount; wheel++)
@@ -169,37 +198,31 @@ class CSI_VehicleOutlineBuilder
 			m_vMaxs[2] = Math.Max(m_vMaxs[2], m_aWheelRectangles[wheel * 4 + 3]);
 		}
 
-		// Finer for turrets, finest for guns, whose barrels are thin
-		float minCellSize = HULL_CELL_SIZE;
-		if (root.FindComponent(WeaponComponent))
-			minCellSize = GUN_CELL_SIZE;
-		else if (turret)
-			minCellSize = TURRET_CELL_SIZE;
+		if (!m_Turret)
+			return true;
 
 		// A turret's frame turns with its aim: cover its bounds both as they are and turned by the aim
-		if (turret)
+		vector rootMins = m_vMins;
+		vector rootMaxs = m_vMaxs;
+		m_vMins = rootMins - m_vFramePivot;
+		m_vMaxs = rootMaxs - m_vFramePivot;
+		for (int corner = 0; corner < 8; corner++)
 		{
-			float frameYaw = CSI_VehicleOutline.GetFrameYaw(root, turret);
-			float cosYaw = Math.Cos(frameYaw);
-			float sinYaw = Math.Sin(frameYaw);
-			vector mins = m_vMins - m_vFramePivot;
-			vector maxs = m_vMaxs - m_vFramePivot;
-			m_vMins = mins;
-			m_vMaxs = maxs;
-
-			for (int corner = 0; corner < 4; corner++)
-			{
-				// Corners 0, 1, 4 and 5: the bottom four
-				vector point = GetBoxCorner(mins, maxs, (corner & 1) + (corner & 2) * 2);
-				float x = point[0] * cosYaw - point[2] * sinYaw;
-				float z = point[0] * sinYaw + point[2] * cosYaw;
-				m_vMins[0] = Math.Min(m_vMins[0], x);
-				m_vMins[2] = Math.Min(m_vMins[2], z);
-				m_vMaxs[0] = Math.Max(m_vMaxs[0], x);
-				m_vMaxs[2] = Math.Max(m_vMaxs[2], z);
-			}
+			vector point = RootToFrame(GetBoxCorner(rootMins, rootMaxs, corner));
+			m_vMins[0] = Math.Min(m_vMins[0], point[0]);
+			m_vMins[2] = Math.Min(m_vMins[2], point[2]);
+			m_vMaxs[0] = Math.Max(m_vMaxs[0], point[0]);
+			m_vMaxs[2] = Math.Max(m_vMaxs[2], point[2]);
 		}
 
+		return true;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Sizes the trace grid to its bounds.
+	//! \param[in] minCellSize m
+	protected void InitGrid(float minCellSize)
+	{
 		vector size = m_vMaxs - m_vMins;
 		m_fCellSize = Math.Max(minCellSize, Math.Max(size[0], size[2]) / MAX_CELLS);
 
@@ -210,9 +233,16 @@ class CSI_VehicleOutlineBuilder
 		m_aHits.Resize(cellCount);
 		m_aStamped.Resize(cellCount);
 		m_aVisited.Resize(cellCount);
+	}
 
+	//------------------------------------------------------------------------------------------------
+	//! Sets up the grid's traces.
+	//! \param[in] isGun the root is a weapon
+	//! \param[in] turretGun the turret's main gun, null if none
+	protected void InitTrace(bool isGun, IEntity turretGun)
+	{
 		// Sphere traces for a turret, whose barrel may be thinner than a cell
-		if (turret)
+		if (m_Turret)
 		{
 			TraceSphere sweep = new TraceSphere();
 			sweep.Radius = m_fCellSize * SWEEP_RADIUS;
@@ -224,25 +254,16 @@ class CSI_VehicleOutlineBuilder
 		}
 
 		m_TraceParam.Flags = TraceFlags.ENTS | TraceFlags.ANY_CONTACT;
-		m_TraceParam.LayerMask = GetTraceLayers();
+		m_TraceParam.LayerMask = EPhysicsLayerPresets.Projectile;
 		if (m_aParts.Count() == 1)
-			m_TraceParam.Include = root;
+			m_TraceParam.Include = m_Root;
 		else
 			m_TraceParam.IncludeArray = m_aParts;
 
-		// Add the part layers only if the traces miss the turret's gun: a merged gun may collide only there
-		if (turretGun && !IsGunTraced(turretGun))
+		// Every part layer too for a gun, as weapons collide on their own layers, and for a turret whose traces miss its
+		// main gun, as a merged gun may collide only there
+		if (isGun || (turretGun && !IsGunTraced(turretGun)))
 			m_TraceParam.LayerMask = m_TraceParam.LayerMask | GetPartLayers();
-
-		// A part of the same shape was built already: nothing to trace
-		m_sShapeKey = GetShapeKey(minCellSize);
-		CSI_VehicleOutline shared = CSI_VehicleOutline.GetShared(m_sShapeKey);
-		if (!shared)
-			return;
-
-		m_Outline = shared;
-		m_bCacheable = !IsWrecked();
-
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -428,9 +449,7 @@ class CSI_VehicleOutlineBuilder
 
 			for (int geom = 0, geomCount = physics.GetNumGeoms(); geom < geomCount; geom++)
 			{
-				string geomName = physics.GetGeomName(geom);
-				geomName.ToLower();
-				if (IsDoorName(geomName))
+				if (IsDoorName(physics.GetGeomName(geom)))
 				{
 					m_bHasDoors = true;
 					break;
@@ -476,17 +495,6 @@ class CSI_VehicleOutlineBuilder
 		}
 
 		return true;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! \return projectile layers, plus every part layer for a gun (weapons collide on their own layers)
-	protected int GetTraceLayers()
-	{
-		int layers = EPhysicsLayerPresets.Projectile;
-		if (!m_Root.FindComponent(WeaponComponent))
-			return layers;
-
-		return layers | GetPartLayers();
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -557,13 +565,14 @@ class CSI_VehicleOutlineBuilder
 
 		m_TraceParam.Start = point + vector.Up * GUN_SAMPLE_HEIGHT;
 		m_TraceParam.End = point - vector.Up * GUN_SAMPLE_HEIGHT;
-		return m_Root.GetWorld().TraceMove(m_TraceParam, null) < 1;
+		return m_World.TraceMove(m_TraceParam, null) < 1;
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Notes the collider layers of gun pieces below the parent, so AddColliderHull skips their merged copies.
+	//! Adds the collider layers of gun pieces below the parent, so AddColliderHull skips their merged copies.
 	//! \param[in] parent
-	protected void AddPieceGunLayers(notnull IEntity parent)
+	//! \param[in,out] layers each once
+	protected static void AddPieceGunLayers(notnull IEntity parent, notnull array<int> layers)
 	{
 		IEntity child = parent.GetChildren();
 		while (child)
@@ -572,9 +581,9 @@ class CSI_VehicleOutlineBuilder
 			if (CSI_VehicleOutline.IsOutlinedPart(child))
 			{
 				if (child.FindComponent(WeaponComponent) && CSI_VehicleOutline.IsOwnPiece(child))
-					AddSubtreeLayers(child);
+					AddSubtreeLayers(child, layers);
 				else
-					AddPieceGunLayers(child);
+					AddPieceGunLayers(child, layers);
 			}
 
 			child = child.GetSibling();
@@ -582,8 +591,10 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] entity whose colliders' layers, and its descendants', go into m_aPieceGunLayers
-	protected void AddSubtreeLayers(notnull IEntity entity)
+	//! Adds the collider layers of the entity and its descendants.
+	//! \param[in] entity
+	//! \param[in,out] layers each once
+	protected static void AddSubtreeLayers(notnull IEntity entity, notnull array<int> layers)
 	{
 		Physics physics = entity.GetPhysics();
 		if (physics)
@@ -591,15 +602,15 @@ class CSI_VehicleOutlineBuilder
 			for (int geom = 0, geomCount = physics.GetNumGeoms(); geom < geomCount; geom++)
 			{
 				int layer = physics.GetGeomInteractionLayer(geom);
-				if (!m_aPieceGunLayers.Contains(layer))
-					m_aPieceGunLayers.Insert(layer);
+				if (!layers.Contains(layer))
+					layers.Insert(layer);
 			}
 		}
 
 		IEntity child = entity.GetChildren();
 		while (child)
 		{
-			AddSubtreeLayers(child);
+			AddSubtreeLayers(child, layers);
 			child = child.GetSibling();
 		}
 	}
@@ -692,9 +703,7 @@ class CSI_VehicleOutlineBuilder
 		// Trace the grid, then finish it a slice a step, as each stage goes over every cell
 		if (!m_bGridDone)
 		{
-			if (FloodGrid(maxTraces))
-				m_bGridDone = MarkEnclosedCells();
-
+			m_bGridDone = FloodGrid(maxTraces);
 			return false;
 		}
 
@@ -704,9 +713,13 @@ class CSI_VehicleOutlineBuilder
 			return false;
 		}
 
+		// Spurs go in the step that fills the last holes, taking no step of their own
 		if (!m_bHolesFilled)
 		{
 			m_bHolesFilled = FillHoles();
+			if (m_bHolesFilled && m_bHull)
+				RemoveSpurs();
+
 			return false;
 		}
 
@@ -719,9 +732,8 @@ class CSI_VehicleOutlineBuilder
 		// Each edge point, more closely
 		while (m_iNextEdge < m_aEdgeKeys.Count() && traces < maxTraces)
 		{
-			RefineEdge(m_aEdgeKeys[m_iNextEdge]);
+			traces += RefineEdge(m_aEdgeKeys[m_iNextEdge]);
 			m_iNextEdge++;
-			traces += REFINE_STEPS;
 		}
 
 		if (m_iNextEdge < m_aEdgeKeys.Count())
@@ -761,7 +773,7 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Traces from the empty ring inward, spreading from misses (MarkEnclosedCells handles the cells it never reaches).
+	//! Traces from the empty ring inward, spreading from misses (FillHoles fills the cells it never reaches).
 	//! \param[in] maxTraces traces this call may run
 	//! \return true once every reachable cell is traced
 	protected bool FloodGrid(int maxTraces)
@@ -805,24 +817,6 @@ class CSI_VehicleOutlineBuilder
 		}
 
 		return m_aFloodStack.IsEmpty();
-	}
-
-	//------------------------------------------------------------------------------------------------
-	//! Counts inner cells the flood never reached as hits, as hits enclose them.
-	//! \return true once every cell is done
-	protected bool MarkEnclosedCells()
-	{
-		int count = m_aHits.Count();
-		int end = GetSliceEnd(count);
-		for (int cell = m_iStageCell; cell < end; cell++)
-		{
-			int column = cell % m_iColumns;
-			int row = cell / m_iColumns;
-			if (column > 0 && row > 0 && column < m_iColumns - 1 && row < m_iRows - 1 && !m_aVisited[cell])
-				m_aHits[cell] = true;
-		}
-
-		return FinishSlice(end, count);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -890,20 +884,15 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Places the outline's frame in the world for this step's traces.
+	//! Places the outline's frame in the world and reads its turn from the root, for this step's traces.
 	protected void UpdateFrame()
 	{
-		m_World = m_Root.GetWorld();
-
 		vector frame[4];
 		CSI_VehicleOutline.GetWorldFrame(m_Root, m_Turret, m_vFramePivot, frame);
 		m_vFrameX = frame[0];
 		m_vFrameY = frame[1];
 		m_vFrameZ = frame[2];
 		m_vFrameOrigin = frame[3];
-
-		if (!m_Turret)
-			return;
 
 		float frameYaw = CSI_VehicleOutline.GetFrameYaw(m_Root, m_Turret);
 		m_fFrameCos = Math.Cos(frameYaw);
@@ -917,6 +906,15 @@ class CSI_VehicleOutlineBuilder
 	protected vector FrameToRoot(float x, float z)
 	{
 		return Vector(m_vFramePivot[0] + x * m_fFrameCos + z * m_fFrameSin, 0, m_vFramePivot[2] - x * m_fFrameSin + z * m_fFrameCos);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! \param[in] point in the root's space
+	//! \return the point in the frame
+	protected vector RootToFrame(vector point)
+	{
+		vector offset = point - m_vFramePivot;
+		return Vector(offset[0] * m_fFrameCos - offset[2] * m_fFrameSin, offset[1], offset[0] * m_fFrameSin + offset[2] * m_fFrameCos);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -970,6 +968,7 @@ class CSI_VehicleOutlineBuilder
 	protected bool TracePastDoors()
 	{
 		vector end = m_TraceParam.End;
+		TraceFlags flags = m_TraceParam.Flags;
 		m_TraceParam.Flags = TraceFlags.ENTS;
 
 		bool hit;
@@ -992,7 +991,7 @@ class CSI_VehicleOutlineBuilder
 			m_TraceParam.Start = doorPoint + (end - doorPoint).Normalized() * DOOR_STEP;
 		}
 
-		m_TraceParam.Flags = TraceFlags.ENTS | TraceFlags.ANY_CONTACT;
+		m_TraceParam.Flags = flags;
 		return hit;
 	}
 
@@ -1042,9 +1041,7 @@ class CSI_VehicleOutlineBuilder
 			if (animation.GetBoneIndex(boneName) != bone)
 				continue;
 
-			string lowerName = boneName;
-			lowerName.ToLower();
-			if (IsDoorName(lowerName))
+			if (IsDoorName(boneName))
 				return true;
 
 			break;
@@ -1085,9 +1082,7 @@ class CSI_VehicleOutlineBuilder
 		if (m_aDoorParts.Contains(m_TraceParam.TraceEnt))
 			return true;
 
-		string colliderName = m_TraceParam.ColliderName;
-		colliderName.ToLower();
-		if (IsDoorName(colliderName))
+		if (IsDoorName(m_TraceParam.ColliderName))
 			return true;
 
 		int partIndex = m_aDoorBoneParts.Find(m_TraceParam.TraceEnt);
@@ -1095,10 +1090,12 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! \param[in] lowerName a bone or collider name, lowercase
+	//! \param[in] name a bone or collider name, any case
 	//! \return true if it names a door
-	protected static bool IsDoorName(string lowerName)
+	protected static bool IsDoorName(string name)
 	{
+		string lowerName = name;
+		lowerName.ToLower();
 		return lowerName.Contains("door") && !lowerName.Contains("indoor");
 	}
 
@@ -1199,18 +1196,15 @@ class CSI_VehicleOutlineBuilder
 	protected bool CloseGaps()
 	{
 		if (m_iStagePass == 0 && m_iStageCell == 0)
-		{
 			m_aPassCells.Resize(m_aHits.Count());
-			m_aGrownCells.Resize(m_aHits.Count());
-		}
 
-		// Grow along rows, then columns; shrink likewise
+		// Grow along rows, then columns; shrink likewise; each pass from one array into the other
 		bool passDone;
 		switch (m_iStagePass)
 		{
 			case 0: passDone = SpreadHits(m_aHits, m_aPassCells, true, true); break;
-			case 1: passDone = SpreadHits(m_aPassCells, m_aGrownCells, false, true); break;
-			case 2: passDone = SpreadHits(m_aGrownCells, m_aPassCells, true, false); break;
+			case 1: passDone = SpreadHits(m_aPassCells, m_aHits, false, true); break;
+			case 2: passDone = SpreadHits(m_aHits, m_aPassCells, true, false); break;
 			case 3: passDone = SpreadHits(m_aPassCells, m_aHits, false, false); break;
 		}
 
@@ -1226,7 +1220,8 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Fills the misses CloseGaps shut in, so no shape keeps a hole: spreads through misses from the ring, then fills the rest.
+	//! Fills the misses the ring doesn't reach through misses (holes CloseGaps shut in, cells FloodGrid never reached),
+	//! so no shape keeps a hole: spreads through misses from the ring, then fills the rest.
 	//! \return true once done
 	protected bool FillHoles()
 	{
@@ -1250,8 +1245,6 @@ class CSI_VehicleOutlineBuilder
 				PushOpenCell(0, row);
 				PushOpenCell(m_iColumns - 1, row);
 			}
-
-			return false;
 		}
 
 		if (m_iStagePass == 0)
@@ -1293,11 +1286,6 @@ class CSI_VehicleOutlineBuilder
 			return false;
 
 		m_iStagePass = 0;
-
-		// In the same step, so it takes no step of its own
-		if (m_bHull)
-			RemoveSpurs();
-
 		return true;
 	}
 
@@ -1307,7 +1295,7 @@ class CSI_VehicleOutlineBuilder
 	//! \param[in] row
 	protected void PushOpenCell(int column, int row)
 	{
-		if (column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
+		if (!IsInGrid(column, row))
 			return;
 
 		int cell = row * m_iColumns + column;
@@ -1327,13 +1315,13 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Leaves out a hull's small spurs such as mirrors: outer edge hits that no full 3 by 3 block of hits covers (what an
-	//! opening, shrink then grow a cell, would take off), grouped, where a group is small, meets the body in one place
-	//! and holds no wheel. Only edge hits can be thin, as any other hit centers a full block.
+	//! Leaves out a hull's small spurs such as mirrors, grouped from its thin outer edge hits (GroupSpur).
 	protected void RemoveSpurs()
 	{
 		m_aSpurs.Resize(m_aHits.Count());
 
+		// Thin: no full 3 by 3 block of hits covers it, so an opening (shrink, then grow a cell) would take it off; only
+		// edge hits can be thin, as any other hit centers a full block
 		set<int> thin = new set<int>();
 		foreach (int cell : m_aEdgeHits)
 		{
@@ -1387,23 +1375,20 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Gathers the spur a thin cell belongs to, diagonal neighbors too, and leaves it out if it's small, holds no wheel
-	//! and meets the body in one place only (a thin stretch between two thicker ones, like a tail boom's, is kept).
+	//! Gathers a thin cell's spur and leaves it out if it's small, holds no wheel and meets the body in one place.
 	//! \param[in] first a thin cell not grouped yet
 	//! \param[in] thin every thin cell
 	//! \param[in,out] grouped the thin cells grouped so far
 	protected void GroupSpur(int first, notnull set<int> thin, notnull set<int> grouped)
 	{
-		grouped.Insert(first);
-		array<int> spur = {first};
+		array<int> spur = GetTouchingGroup(first, thin, grouped);
 		int minColumn = first % m_iColumns;
 		int maxColumn = minColumn;
 		int minRow = first / m_iColumns;
 		int maxRow = minRow;
 		bool hasWheel = false;
-		for (int index = 0; index < spur.Count(); index++)
+		foreach (int cell : spur)
 		{
-			int cell = spur[index];
 			int column = cell % m_iColumns;
 			int row = cell / m_iColumns;
 			if (column < minColumn)
@@ -1420,24 +1405,9 @@ class CSI_VehicleOutlineBuilder
 
 			if (m_aStamped[cell])
 				hasWheel = true;
-
-			for (int neighborRow = row - 1; neighborRow <= row + 1; neighborRow++)
-			{
-				for (int neighborColumn = column - 1; neighborColumn <= column + 1; neighborColumn++)
-				{
-					if (neighborColumn < 0 || neighborRow < 0 || neighborColumn >= m_iColumns || neighborRow >= m_iRows)
-						continue;
-
-					int neighbor = neighborRow * m_iColumns + neighborColumn;
-					if (!thin.Contains(neighbor) || grouped.Contains(neighbor))
-						continue;
-
-					grouped.Insert(neighbor);
-					spur.Insert(neighbor);
-				}
-			}
 		}
 
+		// A thin stretch between two thicker ones, like a tail boom's, meets the body twice and is kept
 		float length = (Math.Max(maxColumn - minColumn, maxRow - minRow) + 1) * m_fCellSize;
 		float area = spur.Count() * m_fCellSize * m_fCellSize;
 		if (hasWheel || length > MAX_SPUR_LENGTH || area > MAX_SPUR_AREA || CountBodyContacts(spur, thin) > 1)
@@ -1466,7 +1436,7 @@ class CSI_VehicleOutlineBuilder
 			{
 				for (int neighborColumn = column - 1; neighborColumn <= column + 1; neighborColumn++)
 				{
-					if (neighborColumn < 0 || neighborRow < 0 || neighborColumn >= m_iColumns || neighborRow >= m_iRows)
+					if (!IsInGrid(neighborColumn, neighborRow))
 						continue;
 
 					int neighbor = neighborRow * m_iColumns + neighborColumn;
@@ -1484,35 +1454,45 @@ class CSI_VehicleOutlineBuilder
 			if (counted.Contains(contact))
 				continue;
 
+			GetTouchingGroup(contact, contacts, counted);
 			groups++;
-			counted.Insert(contact);
-			array<int> stack = {contact};
-			while (!stack.IsEmpty())
+		}
+
+		return groups;
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Gathers the first cell and the cells of the set joined to it through touching cells, diagonal neighbors too.
+	//! \param[in] first a cell of the set not taken yet
+	//! \param[in] cells the set
+	//! \param[in,out] taken cells already in a group; the new group's are added
+	//! \return the new group's cells
+	protected array<int> GetTouchingGroup(int first, notnull set<int> cells, notnull set<int> taken)
+	{
+		taken.Insert(first);
+		array<int> group = {first};
+		for (int index = 0; index < group.Count(); index++)
+		{
+			int column = group[index] % m_iColumns;
+			int row = group[index] / m_iColumns;
+			for (int neighborRow = row - 1; neighborRow <= row + 1; neighborRow++)
 			{
-				int last = stack.Count() - 1;
-				int current = stack[last];
-				stack.Remove(last);
-				int currentColumn = current % m_iColumns;
-				int currentRow = current / m_iColumns;
-				for (int touchingRow = currentRow - 1; touchingRow <= currentRow + 1; touchingRow++)
+				for (int neighborColumn = column - 1; neighborColumn <= column + 1; neighborColumn++)
 				{
-					for (int touchingColumn = currentColumn - 1; touchingColumn <= currentColumn + 1; touchingColumn++)
-					{
-						if (touchingColumn < 0 || touchingRow < 0 || touchingColumn >= m_iColumns || touchingRow >= m_iRows)
-							continue;
+					if (!IsInGrid(neighborColumn, neighborRow))
+						continue;
 
-						int touching = touchingRow * m_iColumns + touchingColumn;
-						if (!contacts.Contains(touching) || counted.Contains(touching))
-							continue;
+					int neighbor = neighborRow * m_iColumns + neighborColumn;
+					if (!cells.Contains(neighbor) || taken.Contains(neighbor))
+						continue;
 
-						counted.Insert(touching);
-						stack.Insert(touching);
-					}
+					taken.Insert(neighbor);
+					group.Insert(neighbor);
 				}
 			}
 		}
 
-		return groups;
+		return group;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1560,13 +1540,12 @@ class CSI_VehicleOutlineBuilder
 		if (rowsPerStep < 1)
 			rowsPerStep = 1;
 
-		int firstRow = m_iStageCell - 1;
-		int endRow = firstRow + rowsPerStep;
+		int endRow = m_iLinkRow + rowsPerStep;
 		if (endRow > m_iRows)
 			endRow = m_iRows;
 
 		// Cells run one past the grid on every side, so every line closes
-		for (int row = firstRow; row < endRow; row++)
+		for (int row = m_iLinkRow; row < endRow; row++)
 		{
 			for (int column = -1; column < m_iColumns; column++)
 			{
@@ -1600,13 +1579,10 @@ class CSI_VehicleOutlineBuilder
 			}
 		}
 
-		if (endRow < m_iRows)
-		{
-			m_iStageCell = endRow + 1;
+		m_iLinkRow = endRow;
+		if (m_iLinkRow < m_iRows)
 			return false;
-		}
 
-		m_iStageCell = 0;
 		foreach (int key, int neighbor : m_mFirstNeighbors)
 		{
 			m_aEdgeKeys.Insert(key);
@@ -1616,10 +1592,10 @@ class CSI_VehicleOutlineBuilder
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Finds where the outline crosses the edge point's cell edge; wheel and track edges stay in the middle, as do
-	//! edges next to a spur left out, where traces would find the spur.
+	//! Finds where the outline crosses the edge point's cell edge, unless it's next to a wheel, track or spur left out.
 	//! \param[in] key GetEdgeKey
-	protected void RefineEdge(int key)
+	//! \return traces run
+	protected int RefineEdge(int key)
 	{
 		int column, row;
 		bool alongZ;
@@ -1632,12 +1608,13 @@ class CSI_VehicleOutlineBuilder
 		else
 			endColumn++;
 
+		// Wheels and tracks aren't traced, and traces would find a spur left out: those edges stay in the middle
 		bool startHit = IsHit(column, row) == 1;
 		if ((startHit && IsStamped(column, row)) || (!startHit && IsStamped(endColumn, endRow)))
-			return;
+			return 0;
 
 		if (IsSpur(column, row) || IsSpur(endColumn, endRow))
-			return;
+			return 0;
 
 		float startX = GetSampleX(column);
 		float startZ = GetSampleZ(row);
@@ -1656,6 +1633,7 @@ class CSI_VehicleOutlineBuilder
 		}
 
 		m_mEdgeFractions.Set(key, (low + high) * 0.5);
+		return REFINE_STEPS;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1703,10 +1681,8 @@ class CSI_VehicleOutlineBuilder
 	protected bool AddColliderHull()
 	{
 		array<float> points = {};
-
-		float frameYaw = CSI_VehicleOutline.GetFrameYaw(m_Root, m_Turret);
-		float cosYaw = Math.Cos(frameYaw);
-		float sinYaw = Math.Sin(frameYaw);
+		array<int> pieceGunLayers = {};
+		AddPieceGunLayers(m_Root, pieceGunLayers);
 
 		int geomsSeen;
 		int geomsUsed;
@@ -1726,12 +1702,7 @@ class CSI_VehicleOutlineBuilder
 			for (int geom = 0, geomCount = physics.GetNumGeoms(); geom < geomCount; geom++)
 			{
 				geomsSeen++;
-				if (m_aPieceGunLayers.Contains(physics.GetGeomInteractionLayer(geom)))
-					continue;
-
-				string geomName = physics.GetGeomName(geom);
-				geomName.ToLower();
-				if (IsDoorName(geomName))
+				if (pieceGunLayers.Contains(physics.GetGeomInteractionLayer(geom)) || IsDoorName(physics.GetGeomName(geom)))
 					continue;
 
 				geomsUsed++;
@@ -1751,9 +1722,9 @@ class CSI_VehicleOutlineBuilder
 						point = m_Root.CoordToLocal(point.Multiply4(partTransform));
 
 					// Into the frame; kept near the meshes if there are any, in case a collider's bounds are in another space
-					point = point - m_vFramePivot;
-					float x = point[0] * cosYaw - point[2] * sinYaw;
-					float z = point[0] * sinYaw + point[2] * cosYaw;
+					vector framePoint = RootToFrame(point);
+					float x = framePoint[0];
+					float z = framePoint[2];
 					if (m_iColumns > 0)
 					{
 						x = Math.Clamp(x, m_vMins[0] - COLLIDER_BOUNDS_MARGIN, m_vMaxs[0] + COLLIDER_BOUNDS_MARGIN);
@@ -1819,7 +1790,7 @@ class CSI_VehicleOutlineBuilder
 	//! \return 1 if the trace there hit, 0 if it missed or is outside the grid
 	protected int IsHit(int column, int row)
 	{
-		if (column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
+		if (!IsInGrid(column, row))
 			return 0;
 
 		if (m_aHits[row * m_iColumns + column])
@@ -1834,7 +1805,7 @@ class CSI_VehicleOutlineBuilder
 	//! \return true if a wheel or track filled the cell rather than a trace
 	protected bool IsStamped(int column, int row)
 	{
-		if (column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
+		if (!IsInGrid(column, row))
 			return false;
 
 		return m_aStamped[row * m_iColumns + column];
@@ -1846,10 +1817,16 @@ class CSI_VehicleOutlineBuilder
 	//! \return true if RemoveSpurs left the cell out
 	protected bool IsSpur(int column, int row)
 	{
-		if (m_aSpurs.IsEmpty() || column < 0 || row < 0 || column >= m_iColumns || row >= m_iRows)
+		if (m_aSpurs.IsEmpty() || !IsInGrid(column, row))
 			return false;
 
 		return m_aSpurs[row * m_iColumns + column];
+	}
+
+	//------------------------------------------------------------------------------------------------
+	protected bool IsInGrid(int column, int row)
+	{
+		return column >= 0 && row >= 0 && column < m_iColumns && row < m_iRows;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -1859,6 +1836,7 @@ class CSI_VehicleOutlineBuilder
 	//! \return a key for the edge's point
 	protected int GetEdgeKey(int column, int row, bool alongZ)
 	{
+		// Twice the cell's index in a grid one cell wider on every side, plus 1 along z
 		int key = ((row + 1) * (m_iColumns + 2) + column + 1) * 2;
 		if (alongZ)
 			key++;

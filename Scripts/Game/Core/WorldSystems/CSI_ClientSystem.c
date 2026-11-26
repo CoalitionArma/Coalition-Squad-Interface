@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 //!
 //! \Author: 		Njpatman
-//! \Last Updated: 	2026-11-15
+//! \Last Updated: 	2026-11-25
 //! \Source: 		Coalition Squad Interface
 //!	\Description: 	Client world system: reports the local player's display icon, rank and squad leader status to
 //! 				the server, scanning the inventory for specialty icons when it changes.
@@ -161,7 +161,7 @@ class CSI_ClientSystem : GameSystem
 				name = uiInfo.GetName();
 
 			// Commander and copilot seats by name, others by compartment type
-			if (name == "#AR-VehiclePosition_Commander" || comartmentName == "Commander")
+			if (CSI_EntityHelper.IsCommanderSeat(compartment))
 				displayIcon = CSI_EIcon.COMMANDER;
 			else {
 				switch (compartmentType)
